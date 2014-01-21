@@ -29,42 +29,42 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @ORM\Column(name="username", type="string", length=255)
      */
-    protected $username;
+    private $username;
 
     /**
      * @var string $password
      *
      * @ORM\Column(name="password", type="string", length=255)
      */
-    protected $password;
+    private $password;
 
     /**
      * @var string $salt
      *
      * @ORM\Column(name="salt", type="string", length=255)
      */
-    protected $salt;
+    private $salt;
 
     /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
      */
-    protected $active;
+    private $active;
 
     /**
      * @var string $sessionID
      *
      * @ORM\Column(name="sessionID", type="string", length=50)
      */
-    protected $sessionID;
+    private $sessionID;
 
     /**
      * @var string $language
      *
      * @ORM\Column(name="language", type="string", length=2)
      */
-    protected $language;
+    private $language;
 
     /**
      * se utilizó user_roles para no hacer conflicto al aplicar ->toArray en getRoles()
@@ -74,7 +74,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
-    protected $user_role;
+    private $user_role;
 
     /**
      * Get id
@@ -233,7 +233,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getUserRoles() {
+    public function getUserRole() {
         return $this->user_role;
     }
 
