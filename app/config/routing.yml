@@ -1,0 +1,20 @@
+UtilBundle:
+    resource: "@UtilBundle/Resources/config/routing.yml"
+    prefix:   /
+
+UserBundle:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   
+
+TicketingBundle:
+    resource: "@TicketingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#TicketingBundle:
+#    resource: "@TicketingBundle/Resources/config/routing.yml"
+#    prefix:   /
+
+# Internal routing configuration to handle ESI
+#_internal:
+#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#   prefix:   /_internal

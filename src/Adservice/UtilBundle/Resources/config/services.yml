@@ -1,0 +1,9 @@
+parameters:
+#    util.example.class: Adservice\UtilBundle\Example
+
+services:
+    default.language:
+        class: Adservice\UtilBundle\Controller\ServiceController
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: setDefaultLanguage }

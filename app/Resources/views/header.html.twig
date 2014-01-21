@@ -1,0 +1,40 @@
+<div class="MainHeader">
+    <h1 id="MainTitle">AD Service  // alexb@grupeina.com --  0ya195986</h1>
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+
+                <h5>AD-Service ticketing system | Sistema de ticketing AD-Service | Système du ticketing AD-Service | AD-Service тикет система</h5>
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td><a href="#{#{{ path('formTicket') }}#}" value="en">{% trans %}New ticket{% endtrans %}</a></td>
+                        <td>{% trans %}My tickets{% endtrans %}</td>
+                        <td>{% trans %}Technical information{% endtrans %}</td>
+                        <td align="center">
+                            <a href="{{ path('changeLanguage', { 'lang': 'en'}) }}" value="en"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', { 'lang': 'es'}) }}" value="es"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', { 'lang': 'fr'}) }}" value="fr"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            <a href="{{ path('changeLanguage', { 'lang': 'ca'}) }}" value="ca"><img src="{{ asset('bundles/util/images/flags/flag_catalonia.png') }}"></a>
+                            <a href="{{ path('changeLanguage', { 'lang': 'ru'}) }}" value="ru"><img src="{{ asset('bundles/util/images/flags/flag_russia.png') }}"></a>
+                        </td>
+                        <td align="center">
+                            {% if app.user.username is defined %}
+                                <button class="btn pull-right">{% trans %}Welcome{% endtrans %},    {{ app.security.getToken().getUser().getUsername() }} </button>
+                                <a class="btn pull-right" href="{{ path('logout') }}">
+                                    {% trans %}Logout{% endtrans %}
+                                </a>
+                            {% else %}
+                                <a class="btn pull-right" href="{{ path('login') }}">
+                                    {% trans %}Not logged in{% endtrans %}
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

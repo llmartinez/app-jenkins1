@@ -1,0 +1,7 @@
+#############################
+#   APDO. RUTAS GENÉRICAS   #
+#############################
+
+changeLanguage:
+    pattern: /lang/{lang}
+    defaults: { _controller: UtilBundle:Generic:changeLanguage }

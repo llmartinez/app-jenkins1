@@ -1,0 +1,48 @@
+# Pantalla principal
+New ticket: Nou ticket
+My tickets: Els meus tickets
+Technical information: Informació tècnica
+Select language: Sel·leccionar idioma
+Logout: Tancar la sessió
+Not logged in: Sessió no iniciada
+Welcome: Benvingut
+
+# Titulos
+Login: Iniciar sessió
+
+# Login
+Username: Nom d'usuari
+Password: Contraclau
+
+# Index
+Start menu: Pàgina principal
+New ticket: Nou ticket
+Ticket list: Llista de tickets
+User configuration: Configuració de l'usuari
+
+# Formulario de ticket
+Brand: Marca
+Model: Model
+Version: Versió
+System: Sistema
+Subsystem: Subsistema
+Description: Descripció
+Photo attachment: Foto adjunta
+I want a technical expert to call me back: Vull que un tècnic expert em truqui
+Upload: Pujar
+Send ticket: Enviar ticket
+Fill the following fields before sending the ticket: Empleni els següents camps abans d'enviar el ticket
+
+Select brand first: Sel·leccionar marca primer
+Select model first: Sel·leccionar model primer
+Select system first: Sel·leccionar sistema primer
+
+Brand not specified: Marca no especificada
+Model not specified: Model no especificat
+Version not specified: Versió no especificada
+System not specified: Sistema no especificat
+Subsystem not specified: Subsistema no especificat
+
+Loading models from: Carregant models de
+Loading versions from: Carregant versions de
+Loading subsystems from: Carregant subsistemes de

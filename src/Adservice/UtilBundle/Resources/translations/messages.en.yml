@@ -1,0 +1,48 @@
+# Pantalla principal
+New ticket: New ticket
+My tickets: My tickets
+Technical information: Technical information
+Select language: Select language
+Logout: Logout
+Not logged in: Not logged in
+Welcome: Welcome
+
+# Titulos
+Login: Login
+
+# Login
+Username: Username
+Password: Password
+
+# Index
+Start menu: Start page
+New ticket: New ticket
+Ticket list: Ticket list
+User configuration: User configuration
+
+# Formulario de ticket
+Brand: Brand
+Model: Model
+Version: Version
+System: System
+Subsystem: Subsystem
+Description: Description
+Photo attachment: Photo attachment
+I want a technical expert to call me back: I want a technical expert to call me back
+Upload: Upload
+Send ticket: Send ticket
+Fill the following fields before sending the ticket: Fill the following fields before sending the ticket
+
+Select brand first: Select brand first
+Select model first: Select model first
+Select system first: Select system first
+
+Brand not specified: Brand not specified
+Model not specified: Model not specified
+Version not specified: Version not specified
+System not specified: System not specified
+Subsystem not specified: Subsystem not specified
+
+Loading models from: Loading models from
+Loading versions from: Loading versions from
+Loading subsystems from: Loading subsystems from

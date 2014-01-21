@@ -1,0 +1,46 @@
+/* 
+    Document   : header
+    Created on : 21-ene-2014, 10:11:21
+    Author     : dani
+    Description:
+        stylesheet para ADService
+*/
+
+/*
+    BODY
+*/
+
+html {
+    background-color:  #285e8e;
+}
+#MainBody {
+    background-color: transparent;
+    margin: 20px;
+}
+
+#MainHeader {
+    background-color:  transparent;
+}
+
+#MainContent {
+    background-color:  white;
+    padding: 20px;
+    color: #000;
+}
+
+#MainFooter {
+    background-color: darkgray;
+    color: #fff;
+    padding: 20px;
+}
+
+/*
+    HEADER
+*/
+#MainTitle {
+    color: azure;
+}
+
+.navbar {
+    background-color: azure;
+}

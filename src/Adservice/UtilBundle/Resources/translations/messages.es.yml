@@ -1,0 +1,48 @@
+# Pantalla principal
+New ticket: Nuevo ticket
+My tickets: Mis tickets
+Technical information: Información técnica
+Select language: Seleccionar idioma
+Logout: Cerrar sesión
+Not logged in: Sessión no iniciada
+Welcome: Bienvenido
+
+# Titulos
+Login: Iniciar sesión
+
+# Login
+Username: Nombre de usuario
+Password: Contraseña
+
+# Index
+Start menu: Página inicial
+New ticket: Nuevo ticket
+Ticket list: Listado de tickets
+User configuration: Configuración del usuario
+
+# Formulario de ticket
+Brand: Marca
+Model: Modelo
+Version: Versión
+System: Sistema
+Subsystem: Subsistema
+Description: Descripción
+Photo attachment: Foto adjunta
+I want a technical expert to call me back: Quiero que un técnico experto me llame
+Upload: Subir
+Send ticket: Enviar ticket
+Fill the following fields before sending the ticket: Rellene los siguientes campos antes de enviar el ticket
+
+Select brand first: Seleccionar marca primero
+Select model first: Seleccionar modelo primero
+Select system first: Seleccionar sistema primero
+
+Brand not specified: Marca no especificada
+Model not specified: Modelo no especificado
+Version not specified: Versión no especificada
+System not specified: Sistema no especificado
+Subsystem not specified: Subsistema no especificado
+
+Loading models from: Cargando modelos de
+Loading versions from: Cargando versiones de
+Loading subsystems from: Cargando subsistemas de
