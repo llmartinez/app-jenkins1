@@ -27,7 +27,7 @@ class Pedidoelec
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
-
+    
 
     /**
      * Get id
