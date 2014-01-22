@@ -1,3 +1,26 @@
-UsuarioBundle_homepage:
-    pattern:  /hello/{name}
+##############################
+#   APDO. RUTAS PARA LOGIN   #
+##############################
+       
+login:
+    pattern:  /login
+    defaults: { _controller: UsuarioBundle:Login:login }
+
+login_check:
+    pattern:  /login_check
+    defaults: { _controller: UsuarioBundle:Login:login }
+    
+logout:
+    pattern:  /logout
+    
+
+##############################
+#   APDO. RUTAS USUARIO      #
+##############################
+usuario_index:
+    pattern: /index
     defaults: { _controller: UsuarioBundle:Default:index }
+    
+profile:
+    pattern:  /perfil
+    defaults: { _controller: UsuarioBundle:Default:perfil }
