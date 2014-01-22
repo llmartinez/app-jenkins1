@@ -21,6 +21,6 @@ usuario_index:
     pattern: /index
     defaults: { _controller: UsuarioBundle:Default:index }
     
-profile:
+usuario_perfil:
     pattern:  /perfil
     defaults: { _controller: UsuarioBundle:Default:perfil }
