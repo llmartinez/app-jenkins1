@@ -1,3 +1,10 @@
-loged in!!!!!
+{% extends '::layout.html.twig' %}
 
-LISTADO MENU:
+{% block body %}
+
+
+Menu de USUARIO <br>
+
+<a href="{{ path("usuario_perfil") }}">Perfil usuario</a><br>
+
+{% endblock%}
