@@ -35,7 +35,6 @@ class Socio
      */
     private $pedidoelec;
 
-
     /**
      * Get id
      *
@@ -77,5 +76,5 @@ class Socio
 
     public function getPedidoelec() {
         return $this->pedidoelec;
-    }
+    }    
 }
