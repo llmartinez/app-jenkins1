@@ -1,0 +1,21 @@
+##############################
+#   APDO. RUTAS PARA LOGIN   #
+##############################
+       
+login:
+    pattern:  /login
+    defaults: { _controller: UserBundle:Login:login }
+
+login_check:
+    pattern:  /login_check
+    defaults: { _controller: UserBundle:Login:login }
+    
+logout:
+    pattern:  /logout
+    
+##############################
+#   APDO. RUTAS USER      #
+##############################
+user_index:
+    pattern: /index
+    defaults: { _controller: UserBundle:Default:index }
