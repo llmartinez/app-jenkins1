@@ -1,0 +1,20 @@
+################################
+#   GESTIÓN DE TICKETS   #
+################################
+
+newTicket:
+    pattern:  /ticket
+    defaults: { _controller: TicketBundle:Ticket:newTicket }
+    
+#listTicket:
+#    pattern:  /ticket/{id_ticket}
+#    defaults: { _controller: TicketBundle:Ticket:listTicket }
+    
+newPost:
+    pattern:  /messages/{id_ticket}
+    defaults: { _controller: TicketBundle:Post:newPost }
+    
+newIncidence:
+    pattern:  /incidence/{id_ticket}
+    defaults: { _controller: TicketBundle:Incidence:newIncidence }
+  

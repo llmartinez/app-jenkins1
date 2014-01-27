@@ -415,9 +415,9 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Add user_roles
      *
-     * @param Secur\LoginBundle\Entity\Role $userRoles
+     * @param Role $userRoles
      */
-    public function addRole(\Secur\LoginBundle\Entity\Role $userRoles) {
+    public function addRole(Role $userRoles) {
         $this->user_role[] = $userRoles;
     }
 

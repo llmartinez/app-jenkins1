@@ -10,8 +10,9 @@
                 <!-- header -->
                 <table width="100%" border="0">
                     <tr>
-                        <td><a href="#{#{{ path('formTicket') }}#}" value="en">{% trans %}New ticket{% endtrans %}</a></td>
-                        <td>{% trans %}My tickets{% endtrans %}</td>
+                        <td><a href="{{ path('newTicket') }}" > {% trans %} New ticket {% endtrans %}</a></td>
+                        <td><a href="#"> {% trans %} Tickets {% endtrans %} </a></td>
+                        <td><a href="#"> {% trans %} Incidencias {% endtrans %} </a></td>
                         <td>{% trans %}Technical information{% endtrans %}</td>
                         <td align="center">
                             <a href="{{ path('changeLanguage', { 'lang': 'en'}) }}" value="en"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
