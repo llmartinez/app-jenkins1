@@ -1,8 +1,8 @@
 <div class="MainHeader">
-    <h1 id="MainTitle">AD Service  // alexb@grupeina.com --  0ya195986</h1>
+    <h1 id="MainTitle">AD Service  // rguasch@grupeina.com --  0ya195986</h1>
     <div class="span4 offset2" style="margin-top:15px;">
     </div>
-    <div class="navbar">
+    <div class="navbar" style="padding:10px;">
         <div class="navbar-inner">
             <div class="span4 offset2">
 
@@ -22,10 +22,12 @@
                         </td>
                         <td align="center">
                             {% if app.user.username is defined %}
+
                                 <button class="btn pull-right">{% trans %}Welcome{% endtrans %},    {{ app.security.getToken().getUser().getUsername() }} </button>
                                 <a class="btn pull-right" href="{{ path('logout') }}">
                                     {% trans %}Logout{% endtrans %}
                                 </a>
+                           
                             {% else %}
                                 <a class="btn pull-right" href="{{ path('login') }}">
                                     {% trans %}Not logged in{% endtrans %}

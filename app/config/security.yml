@@ -8,7 +8,7 @@ security:
             form_login:
                 login_path: /login
                 check_path: /login_check
-                default_target_path: /profile
+                default_target_path: /index
                 always_use_default_target_path: true
             logout:
                 path: logout

@@ -4,7 +4,12 @@ namespace Adservice\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
+
+use Adservice\UtilBundle\Entity\Region;
+use Adservice\UtilBundle\Entity\Province;
 
 /**
  * Adservice\UserBundle\Entity\User
@@ -29,42 +34,122 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @ORM\Column(name="username", type="string", length=255)
      */
-    protected $username;
+    private $username;
 
     /**
      * @var string $password
      *
      * @ORM\Column(name="password", type="string", length=255)
      */
-    protected $password;
-
+    private $password;
+    
     /**
      * @var string $salt
      *
      * @ORM\Column(name="salt", type="string", length=255)
      */
-    protected $salt;
+    private $salt;
+    
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+    
+    /**
+     * @var string $surname
+     *
+     * @ORM\Column(name="surname", type="string", length=255)
+     */
+    private $surname;
+    
+    /**
+     * @var string $city
+     *
+     * @ORM\Column(name="city", type="string", length=255)
+     */
+    private $city;
+    
+    /**
+     * @var string $phone_number_1
+     *
+     * @ORM\Column(name="phone_number_1", type="string", length=9)
+     */
+    private $phone_number_1;
+        
+    /**
+     * @var string $phone_number_2
+     *
+     * @ORM\Column(name="phone_number_2", type="string", length=9)
+     */
+    private $phone_number_2;
+    
+    /**
+     * @var string $movile_number_1
+     *
+     * @ORM\Column(name="movile_number_1", type="string", length=9)
+     */
+    private $movile_number_1;
+    
+    /**
+     * @var string $movile_number_2
+     *
+     * @ORM\Column(name="movile_number_2", type="string", length=9)
+     */    
+    private $movile_number_2;
+    
+    /**
+     * @var string $fax
+     *
+     * @ORM\Column(name="fax", type="string", length=9)
+     */    
+    private $fax;
+    
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email_1", type="string", length=255)
+     * @Assert\Email()
+     */
+    private $email_1;
+    
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email_2", type="string", length=255)
+     * @Assert\Email()
+     */
+    private $email_2;
+
+    /**
+     * @var string $dni
+     *
+     * @ORM\Column(name="dni", type="string", length=9)
+     */
+    private $dni;
+    
 
     /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
      */
-    protected $active;
+    private $active;
 
     /**
      * @var string $sessionID
      *
      * @ORM\Column(name="sessionID", type="string", length=50)
      */
-    protected $sessionID;
+    private $sessionID;
 
     /**
      * @var string $language
      *
      * @ORM\Column(name="language", type="string", length=2)
      */
-    protected $language;
+    private $language;
 
     /**
      * se utilizó user_roles para no hacer conflicto al aplicar ->toArray en getRoles()
@@ -74,8 +159,22 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
-    protected $user_role;
-
+    private $user_role;
+    
+    /**
+     * @var string $region
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     */
+    private $region;
+    
+    /**
+     * @var string $province
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
+     */
+    private $province;
+    
     /**
      * Get id
      *
@@ -193,6 +292,104 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->language;
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getSurname() {
+        return $this->surname;
+    }
+
+    public function getCity() {
+        return $this->city;
+    }
+
+    public function getProvince() {
+        return $this->province;
+    }
+
+    public function getPhoneNumber1() {
+        return $this->phone_number_1;
+    }
+
+    public function getPhoneNumber2() {
+        return $this->phone_number_2;
+    }
+
+    public function getMovileNumber1() {
+        return $this->movile_number_1;
+    }
+
+    public function getMovileNumber2() {
+        return $this->movile_number_2;
+    }
+
+    public function getFax() {
+        return $this->fax;
+    }
+
+    public function getEmail1() {
+        return $this->email_1;
+    }
+
+    public function getEmail2() {
+        return $this->email_2;
+    }
+
+    public function getDni() {
+        return $this->dni;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setSurname($surname) {
+        $this->surname = $surname;
+    }
+
+    public function setCity($city) {
+        $this->city = $city;
+    }
+
+    public function setProvince(\Adservice\UtilBundle\Entity\Province $province) {
+        $this->province = $province;
+    }
+
+    public function setPhoneNumber1($phone_number_1) {
+        $this->phone_number_1 = $phone_number_1;
+    }
+
+    public function setPhoneNumber2($phone_number_2) {
+        $this->phone_number_2 = $phone_number_2;
+    }
+
+    public function setMovileNumber1($movile_number_1) {
+        $this->movile_number_1 = $movile_number_1;
+    }
+
+    public function setMovileNumber2($movile_number_2) {
+        $this->movile_number_2 = $movile_number_2;
+    }
+
+    public function setFax($fax) {
+        $this->fax = $fax;
+    }
+
+    public function setEmail1($email_1) {
+        $this->email_1 = $email_1;
+    }
+
+    public function setEmail2($email_2) {
+        $this->email_2 = $email_2;
+    }
+
+    public function setDni($dni) {
+        $this->dni = $dni;
+    }
+
+    
+        
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
 //        return md5($this->getUsername()) == md5($user->getUsername());
         return $this->getUsername() == $user->getUsername();
@@ -233,7 +430,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getUserRoles() {
+    public function getUserRole() {
         return $this->user_role;
     }
 
@@ -275,5 +472,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
                 $this->active, $this->sessionID, $this->language, $this->user_role ) = \json_decode(
                 $serialized);
     }
+    
+    public function getRegion() {
+        return $this->region;
+    }
 
+    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+        $this->region = $region;
+    }
+    
 }

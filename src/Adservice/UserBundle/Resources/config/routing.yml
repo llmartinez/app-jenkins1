@@ -1,19 +1,7 @@
-############################
-#   APDO. RUTAS PÚBLICAS   #
-############################
-
-login_ok:
-    pattern:  /
-    defaults: { _controller: UserBundle:Login:home }
-
 ##############################
 #   APDO. RUTAS PARA LOGIN   #
 ##############################
-   
-profile:
-    pattern:  /profile
-    defaults: { _controller: UserBundle:Login:profile }
-    
+       
 login:
     pattern:  /login
     defaults: { _controller: UserBundle:Login:login }
@@ -25,4 +13,17 @@ login_check:
 logout:
     pattern:  /logout
     
+##############################
+#   APDO. RUTAS USER         #
+##############################
+user_index:
+    pattern: /index
+    defaults: { _controller: UserBundle:Default:index }
     
+user_profile:
+    pattern: /profile
+    defaults: { _controller: UserBundle:Default:profile }
+
+user_provinces: 
+    pattern: /provincesFromRegion
+    defaults: { _controller: UserBundle:Default:provincesFromRegion }
