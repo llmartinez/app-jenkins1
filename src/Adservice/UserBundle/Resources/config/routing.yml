@@ -14,8 +14,16 @@ logout:
     pattern:  /logout
     
 ##############################
-#   APDO. RUTAS USER      #
+#   APDO. RUTAS USER         #
 ##############################
 user_index:
     pattern: /index
     defaults: { _controller: UserBundle:Default:index }
+    
+user_profile:
+    pattern: /profile
+    defaults: { _controller: UserBundle:Default:profile }
+
+user_provinces: 
+    pattern: /provincesFromRegion
+    defaults: { _controller: UserBundle:Default:provincesFromRegion }
