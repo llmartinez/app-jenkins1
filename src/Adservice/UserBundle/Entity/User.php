@@ -4,9 +4,12 @@ namespace Adservice\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+use Doctrine\ORM\Mapping as ORM;
+
+use Adservice\UtilBundle\Entity\Region;
+use Adservice\UtilBundle\Entity\Province;
 
 /**
  * Adservice\UserBundle\Entity\User
@@ -67,13 +70,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
-    
-    /**
-     * @var string $province
-     *
-     * @ORM\Column(name="province", type="string", length=255)
-     */
-    private $province;
     
     /**
      * @var string $phone_number_1
@@ -164,7 +160,21 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * )
      */
     private $user_role;
-
+    
+    /**
+     * @var string $region
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     */
+    private $region;
+    
+    /**
+     * @var string $province
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
+     */
+    private $province;
+    
     /**
      * Get id
      *
@@ -342,7 +352,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->city = $city;
     }
 
-    public function setProvince($province) {
+    public function setProvince(\Adservice\UtilBundle\Entity\Province $province) {
         $this->province = $province;
     }
 
@@ -378,6 +388,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->dni = $dni;
     }
 
+    
         
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
 //        return md5($this->getUsername()) == md5($user->getUsername());
@@ -461,5 +472,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
                 $this->active, $this->sessionID, $this->language, $this->user_role ) = \json_decode(
                 $serialized);
     }
+    
+    public function getRegion() {
+        return $this->region;
+    }
 
+    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+        $this->region = $region;
+    }
+    
 }
