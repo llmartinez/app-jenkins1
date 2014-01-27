@@ -57,29 +57,4 @@ class DefaultController extends Controller
         ));
     }
     
-    
-//    public function provincesFromRegionAction(){
-//        $em = $this->getDoctrine()->getEntityManager();
-//        $petition = $this->getRequest();
-//        $id_region = $petition->request->get('id_region');
-//
-//        $em = $this->getDoctrine()->getEntityManager();
-////        echo $id_region;die;
-//        $region = $em->getRepository("UtilBundle:Region")->find($id_region);
-//        echo $region->getNombre();die;
-////        $provinces = $em->getRepository("UtilBundle:Province")->findBy(array('region' => $region));
-////        $provinces = $em->getRepository("UtilBundle:Province")->findAll();
-////        
-////         echo "<pre>";
-////         print_r($provinces);
-////         echo "</pre>";
-////die;
-////        return new Response(json_encode($return),$return['responseCode']); 
-//        return new Response(json_encode($provinces), $status=200);
-////        echo "hola";
-//
-////         return new Response(json_encode($provinces), 200); //200 = response OK
-////        return $provinces;
-//                
-//    }
 }
