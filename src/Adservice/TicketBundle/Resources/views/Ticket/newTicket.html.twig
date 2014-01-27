@@ -1,0 +1,38 @@
+{% extends "TicketBundle:Default:ticket.html.twig" %}
+
+{% block content %}
+
+    <h3>Nuevo Ticket (Taller)</h3>
+    
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-8 contact-form">
+                <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post">
+                    <div class="row">
+                             
+                        <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
+                            
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        
+                         <div class="form-group">    
+                             Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 form-group">
+                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+{% endblock %}

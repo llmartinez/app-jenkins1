@@ -10,6 +10,6 @@ class DefaultController extends Controller
     
     public function indexAction()
     {
-        echo "hola";die;
+        return $this->render('UserBundle:Default:index.html.twig');
     }
 }

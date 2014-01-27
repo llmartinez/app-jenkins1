@@ -2,9 +2,17 @@
 
 {% block body %}
 
+<table>
+    <tr>
+        <th>Menu de USUARIO </th>
+        <th>Menu de Incidencias </th>
+    </tr>    
+    
+    <tr>
+        <td>{#<a href="{{ path("usuario_perfil") }}">Perfil usuario</a><br>#}</td>
+        <td><a href="{{ path("newTicket") }}">Incidencias usuario</a><br></td>
+    </tr>
+</table>
 
-Menu de USUARIO <br>
-
-{#<a href="{{ path("usuario_perfil") }}">Perfil usuario</a><br>#}
 
 {% endblock%}
