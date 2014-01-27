@@ -43,9 +43,10 @@ class PostController extends Controller{
         $title = $messages[0]->getTicket()->getTitle();
 
         return $this->render('TicketBundle:Post:newPost.html.twig', array('tickets'    => $tickets, 
-                                                                              'title'      => $title, 
-                                                                              'messages'   => $messages, 
-                                                                              'form' => $form->createView(),
-                                                                            ));
+                                                                          'id_ticket' => $id_ticket,
+                                                                          'title'      => $title, 
+                                                                          'messages'   => $messages, 
+                                                                          'form' => $form->createView(),
+                                                                        ));
      }
 }

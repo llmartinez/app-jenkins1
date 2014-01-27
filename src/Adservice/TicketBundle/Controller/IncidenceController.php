@@ -9,8 +9,8 @@ use Adservice\TicketBundle\Form\IncidenceType;
 
 class IncidenceController extends Controller{
 
-     public function newIncidenceAction($id_ticket)
-     {
+    public function newIncidenceAction($id_ticket)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         
@@ -34,7 +34,7 @@ class IncidenceController extends Controller{
             
             $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
             
-            return $this->render('TicketBundle:Incidence:mainIncidence.html.twig', array('incidences' => $incidences, 
+            return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, 
                                                                                          'incidence' => $incidence));
         }        
         
@@ -44,5 +44,15 @@ class IncidenceController extends Controller{
                                                                                  'posts' => $posts,
                                                                                  'form' => $form->createView(),
                                                                               ));
-     }
+    }
+     
+    public function listIncidenceAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
+            
+        return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, 
+                                                                                         ));
+    }
 }

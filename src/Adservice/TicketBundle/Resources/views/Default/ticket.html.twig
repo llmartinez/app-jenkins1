@@ -45,18 +45,3 @@
 </div>
     
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
-    
-    <script>
-        $(document).ready(function(){
-            //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').change(function (){
-                var url_ajax = "{{ path("user_provinces") }}";
-                populate_province(url_ajax);
-            });
-        });
-    </script>
-{% endblock %}
