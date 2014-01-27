@@ -34,6 +34,8 @@ class TicketController extends Controller{
             //campos de TICKET
             $ticket->setUser($user);
             $ticket->setDateCreated(new \DateTime(\date("Y-m-d")));
+            $ticket->setUserModified($user);
+            $ticket->setDateModified(new \DateTime(\date("Y-m-d")));
             $ticket->setStatus($status);
             $em->persist($ticket);
 
@@ -48,7 +50,7 @@ class TicketController extends Controller{
 
             $sesion = $request->getSession();
 
-            return $this->render('TicketBundle:Post:newPost.html.twig', array('tickets' => $ticket, 'messages' => $message));
+            return $this->redirect($this->generateUrl('newPost', array('id_ticket' => $ticket->getId())));
             }
            
          //$tickets = $em->getRepository('TicketBundle:Ticket')->findAll();

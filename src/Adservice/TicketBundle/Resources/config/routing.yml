@@ -17,4 +17,8 @@ newPost:
 newIncidence:
     pattern:  /incidence/{id_ticket}
     defaults: { _controller: TicketBundle:Incidence:newIncidence }
+    
+listIncidence:
+    pattern:  /incidence/
+    defaults: { _controller: TicketBundle:Incidence:listIncidence }
   

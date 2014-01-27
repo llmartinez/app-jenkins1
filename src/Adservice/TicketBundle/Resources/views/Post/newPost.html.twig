@@ -36,7 +36,7 @@
         </div>
     {% endfor %}
     </section>
-    <form action="{{ path('newPost', {'id_ticket' : messages[0].ticket.id}) }}" id="contact" class="form" role="form" method="post">
+    <form action="{{ path('newPost', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
     
         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
         
