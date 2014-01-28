@@ -15,7 +15,7 @@ class UserType extends AbstractType
 //            ->add('password', 'repeated', array(
 //                  'type' => 'password',
 //                  'invalid_message' => 'Las dos contraseñas deben coincidir',
-//                  'options' => array('label' => 'Contraseña')
+//                  'options' => array('always_empty' => false)
 //            ))    
             ->add('name')
             ->add('surname')
@@ -33,6 +33,7 @@ class UserType extends AbstractType
             ->add('language')
             ->add('region')
             ->add('province')
+            ->add('user_role')    
         ;
     }
 
