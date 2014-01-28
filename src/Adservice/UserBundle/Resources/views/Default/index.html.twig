@@ -2,16 +2,35 @@
 
 {% block body %}
 
-<table>
-    <tr>
-        <th>Menu de USUARIO </th>
-        <th>Menu de Incidencias </th>
-    </tr>    
-    
-    <tr>
-        <td><a href="{{ path("user_profile") }}">Perfil usuario</a><br></td>
-        <td><a href="{{ path("newTicket") }}">Incidencias usuario</a><br></td>
-    </tr>
-</table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <table>
+            <tr>
+                <th>Menu ADMIN</th>
+            </tr>    
+            <tr>
+                <td>
+                    <a href="{{ path("user_profile") }}">Mi perfil</a><br>
+                    <a href="{{ path("user_list") }}">Listado Usuarios AD-Service</a><br>
+                    <a href="#">Listado Incidencias AD-Service</a><br>
+                    <a href="{{ path("newTicket") }}">Crear una incidencia como ADMIN</a><br>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') %}
+        <table>
+            <tr>
+                <th>Menu de USUARIO </th>
+            </tr>    
+            <tr>
+                <td>
+                    <a href="{{ path("user_profile") }}">Mi perfil</a><br>
+                    <a href="#">Mis tickets</a><br>
+                    <a href="#">Mis incidencias</a><br>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
 
 {% endblock%}

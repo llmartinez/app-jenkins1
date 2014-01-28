@@ -2,13 +2,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        
         <title>{% block title %}Ticketing{% endblock %} | AD Service</title>
         
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     
         {% block stylesheets %}{% endblock %}
-            
         {% block javascripts %}{% endblock %}
     </head>
     
@@ -16,18 +14,19 @@
     <body id="MainBody">
         
         {% block header %} 
-
             {% include '::header.html.twig'%}
-
         {% endblock %} 
               
          
-        <div id="MainContent">{% block body %}{% endblock %}</div>
+        <div id="MainContent">
+            {% block body %}{% endblock %}
+        </div>
         
-        {% block footer %}
-            {% include '::footer.html.twig'%}
-        {% endblock %}
+        <footer id="MainFooter">
+            {% block footer %}
+                {% include '::footer.html.twig'%}
+            {% endblock %}
+        </footer>
         
     </body>
-        
 </html>

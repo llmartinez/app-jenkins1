@@ -1,39 +1,40 @@
 <div class="MainHeader">
-    <h1 id="MainTitle">AD Service  // rguasch@grupeina.com --  0ya195986</h1>
     <div class="span4 offset2" style="margin-top:15px;">
     </div>
     <div class="navbar" style="padding:10px;">
         <div class="navbar-inner">
             <div class="span4 offset2">
-
-                <h5>AD-Service ticketing system | Sistema de ticketing AD-Service | Système du ticketing AD-Service | AD-Service тикет система</h5>
                 <!-- header -->
                 <table width="100%" border="0">
                     <tr>
-                        <td><a href="{{ path('newTicket') }}" > {% trans %} New ticket {% endtrans %}</a></td>
-                        <td><a href="#"> {% trans %} Tickets {% endtrans %} </a></td>
-                        <td><a href="#"> {% trans %} Incidencias {% endtrans %} </a></td>
-                        <td>{% trans %}Technical information{% endtrans %}</td>
-                        <td align="center">
+                        <td align="right">
+                            {% if app.user.username is defined %}
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">{{ app.security.getToken().getUser().getUsername() }}</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="{{ path('user_index') }}">{% trans %}Indicie Usuario{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('newTicket') }}" > {% trans %}New ticket{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="#">{% trans %}Tickets{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="#">{% trans %}Incidencias{% endtrans %}</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="{{ path('logout') }}"> {% trans %}Logout{% endtrans %}</a></li>
+                                </ul>
+                            </div>
+                            {% else %}
+                            <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>
+                            {% endif %}
+
                             <a href="{{ path('changeLanguage', { 'lang': 'en'}) }}" value="en"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'es'}) }}" value="es"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'fr'}) }}" value="fr"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'ca'}) }}" value="ca"><img src="{{ asset('bundles/util/images/flags/flag_catalonia.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'ru'}) }}" value="ru"><img src="{{ asset('bundles/util/images/flags/flag_russia.png') }}"></a>
-                        </td>
-                        <td align="center">
-                            {% if app.user.username is defined %}
-
-                                <button class="btn pull-right">{% trans %}Welcome{% endtrans %},    {{ app.security.getToken().getUser().getUsername() }} </button>
-                                <a class="btn pull-right" href="{{ path('logout') }}">
-                                    {% trans %}Logout{% endtrans %}
-                                </a>
-                           
-                            {% else %}
-                                <a class="btn pull-right" href="{{ path('login') }}">
-                                    {% trans %}Not logged in{% endtrans %}
-                                </a>
-                            {% endif %}
                         </td>
                     </tr>
                 </table>
