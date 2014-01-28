@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h3>Nuevo Ticket (Taller)</h3>
+    <h3>Nuevo Ticket</h3>
     
     <div class="container">
         <div class="row">
@@ -10,9 +10,9 @@
             <div class="col-sm-8 contact-form">
                 <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post">
                     <div class="row">
-                             
+                        
                         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
-                            
+                        
                         <div class="col-xs-6 col-md-6 form-group">    
                             Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
                         </div>

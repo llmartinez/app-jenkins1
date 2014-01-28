@@ -2,17 +2,25 @@
 
 {% block content %}
 
-    <h3>Incidencias (Asesor)</h3>
-    
-    <div class="container">
-        
-        {% for incidence in incidences %}
-        
-            <p>Titulo  {{ incidence.ticket.title }} </p>
-            <p>Taller  {{ incidence.ticket.user.username }} </p>
-            <p>Solucion  {{ incidence.solution }} </p>
-            <hr>
-        {% endfor %}
-        
+    <h3>Incidencias</h3>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div>
+        <p> <a class="btn btn-primary " href="{{ path('newIncidence') }}">Nueva Incidencia</a></p>
+    </div>
+    {% endif %}
+    <div class="tblContainer">
+        <table class="table table-striped table-bordered">
+            {% for incidence in incidences %}
+            <tr>    
+                <td>
+                    <p>Titulo:  {{ incidence.ticket }} </p>
+                    <p>Taller:  {{ incidence.ticket.user }} </p>
+                    <p>Ultima Modificacion:  {{ incidence.ticket.dateModified | date("d-m-Y")}} </p>
+                    
+                    <a class="btn btn-primary pull-right" href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}">Editar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>    
 {% endblock %}

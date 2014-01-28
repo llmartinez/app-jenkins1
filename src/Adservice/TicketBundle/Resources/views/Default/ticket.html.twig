@@ -26,7 +26,7 @@
                     {% for ticket in tickets %}
                     <tr>
                         <td>{{ ticket.dateCreated | date("d-m-Y") }}</td>
-                        <td>{{ ticket.user.email1 | length > 9 ?  ticket.user.email1 | slice(0, 9) ~ '...' : ticket.user.email1 }}</td>
+                        <td>{{ ticket.user.username | length > 9 ?  ticket.user.username | slice(0, 9) ~ '...' : ticket.user.username }}</td>
                         <td><a href="{{ path('newPost', { 'id_ticket' : ticket.id }) }}"> 
                             {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}
                         </a></td>

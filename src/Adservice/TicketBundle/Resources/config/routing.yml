@@ -3,22 +3,33 @@
 ################################
 
 newTicket:
-    pattern:  /ticket
+    pattern:  /ticket/new
     defaults: { _controller: TicketBundle:Ticket:newTicket }
+ 
+editTicket:
+    pattern:  /ticket/edit/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:editTicket } 
     
-#listTicket:
-#    pattern:  /ticket/{id_ticket}
-#    defaults: { _controller: TicketBundle:Ticket:listTicket }
+listTicket:
+    pattern:  /ticket
+    defaults: { _controller: TicketBundle:Ticket:listTicket }
     
 newPost:
     pattern:  /messages/{id_ticket}
     defaults: { _controller: TicketBundle:Post:newPost }
-    
+        
 newIncidence:
-    pattern:  /incidence/{id_ticket}
+    pattern:  /incidence/new
     defaults: { _controller: TicketBundle:Incidence:newIncidence }
+    
+createIncidence:
+    pattern:  /incidence/create/{id_ticket}
+    defaults: { _controller: TicketBundle:Incidence:createIncidence }
+
+editIncidence:
+    pattern:  /incidence/edit/{id_incidence}
+    defaults: { _controller: TicketBundle:Incidence:editIncidence } 
     
 listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
-  

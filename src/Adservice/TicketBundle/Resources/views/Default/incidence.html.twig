@@ -9,7 +9,7 @@
     				
         <div class="widget-header">
                 <i class="icon-th-list"></i>
-                <h3>Seguimiento de tickets</h3>
+                <h3>Historial de incidencias</h3>
         </div> <!-- /widget-header -->
 
         <div class="widget-content" >
@@ -19,8 +19,10 @@
                     {% for incidence in incidences %}
                     <tr>
                         <td>
-                            <p class="subtitle" >{{ incidence.ticket.user.username }} : ~ </p> 
-                            <p>{{ incidence.ticket.title }}</p> 
+                            <p class="subtitle" >{{ incidence.ticket.user }} : ~ </p> 
+                            <a href="{{ path('editIncidence', { 'id_incidence' : incidence.id }) }}"> 
+                            {{ incidence.description | length > 50 ?  incidence.description | slice(0, 50) ~ '...' : incidence.description }}
+                        </a></td>
                         </td>
                     </tr>
                     {% endfor %}

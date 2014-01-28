@@ -38,7 +38,7 @@ class Ticket
     /**
      * @var integer $status
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Status")
      */
     private $status;
 
@@ -124,7 +124,7 @@ class Ticket
     /**
      * Set status
      *
-     * @param integer $status
+     * @param \Adservice\TicketBundle\Entity\Status $status
      */
     public function setStatus($status)
     {
@@ -198,7 +198,7 @@ class Ticket
      */
     public function getDateModified()
     {
-        return $this->date_modified;
+        return $this->dateModified;
     }
 
     /**
@@ -206,7 +206,7 @@ class Ticket
      *
      * @param \Adservice\UserBundle\Entity\User $userModified
      */
-    public function setUserModified($userModified)
+    public function setUserModified(\Adservice\UserBundle\Entity\User $userModified)
     {
         $this->userModified = $userModified;
     }

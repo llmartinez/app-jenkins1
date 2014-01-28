@@ -112,6 +112,11 @@ html {
     margin-right: -2px;
     font-size: 16px;
 }
+
+.tblContainer {
+    width: 100%;
+}
+
  /*
     FORMULARIO NUEVO
  */
