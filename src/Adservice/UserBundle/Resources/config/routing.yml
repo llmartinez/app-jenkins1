@@ -24,6 +24,13 @@ user_profile:
     pattern: /profile
     defaults: { _controller: UserBundle:Default:profile }
 
+user_list:
+    pattern: /
+    defaults: { _controller: UserBundle:Default:userList }
+
+##############################
+#       RUTAS AJAX           #
+##############################
 user_provinces: 
     pattern: /provincesFromRegion
     defaults: { _controller: UserBundle:Default:provincesFromRegion }
