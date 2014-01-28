@@ -1,5 +1,5 @@
 ################################
-#   GESTIÓN DE TICKETS   #
+#   GESTIÓN DE TICKETS         #
 ################################
 
 newTicket:
@@ -10,13 +10,21 @@ editTicket:
     pattern:  /ticket/edit/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:editTicket } 
     
+findTicket:
+    pattern:  /ticket/find
+    defaults: { _controller: TicketBundle:Ticket:findTicket } 
+    
+showTicket:
+    pattern:  /ticket/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:showTicket }
+    
 listTicket:
     pattern:  /ticket
     defaults: { _controller: TicketBundle:Ticket:listTicket }
-    
-newPost:
-    pattern:  /messages/{id_ticket}
-    defaults: { _controller: TicketBundle:Post:newPost }
+      
+################################
+#    GESTIÓN DE INCIDENCIAS    #
+################################        
         
 newIncidence:
     pattern:  /incidence/new
@@ -29,6 +37,10 @@ createIncidence:
 editIncidence:
     pattern:  /incidence/edit/{id_incidence}
     defaults: { _controller: TicketBundle:Incidence:editIncidence } 
+    
+showIncidence:
+    pattern:  /incidence/{id_incidence}
+    defaults: { _controller: TicketBundle:Incidence:showIncidence }    
     
 listIncidence:
     pattern:  /incidence/

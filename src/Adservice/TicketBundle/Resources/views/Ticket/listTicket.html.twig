@@ -4,26 +4,43 @@
 
     <h3>Tickets</h3>
     
-    <div>
-        <p> <a class="btn btn-primary " href="{{ path('newTicket') }}">Nuevo Ticket</a></p>
-    </div>
-    
     <div class="tblContainer">
-        <table class="table table-striped table-bordered">
-        {% if tickets | length == 0 %}
-            <fieldset>No tienes ningun ticket.</fieldset>
+        
+        <div>
+            <p> <a class="btn btn-primary " href="{{ path('newTicket') }}">Nuevo Ticket</a>
+        </div>
+    
+        {# Busca un ticket #}
+        
+        <form action="{{ path('listTicket') }}" id="contact" class="form" role="form" method="post">
+            <div class="col-xs-6 col-md-6 form-group">    
+                Buscar por ID: <input type='text' id='id_ticket' name='id_ticket'>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+        
+        {# Si encuentra un ticket #}
+        
+        {% if ticket is not null %}
+            {% if ticket.id is not null %}
+                <table class="table table-striped table-bordered">
+                    <tr><td>
+                        <p>Ticket #{{ ticket.id }} ( {{ ticket.dateCreated | date("d-m-Y") }}) -> {{ ticket.status }}
+                            <a class="btn btn-primary pull-right"  href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">Ver</a> </p> 
+                    </td></tr>
+                </table>
+            {% endif %}
         {% else %}
-            {% for ticket in tickets %}
-            <tr>    
-                <td>
-                    <p>Titulo:  {{ ticket.title }} </p>
-                    <p>Taller:  {{ ticket.user.username }} </p>
-                    <p>Fecha:  {{ ticket.dateCreated | date("d-m-Y") }} </p>
-                    <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+            <table class="table table-striped table-bordered">
+                <tr><td>
+                    <p>El Ticket que has buscado no existe.</p> 
+                </td></tr>
+            </table>
         {% endif %}
+        
     </div>    
 {% endblock %}

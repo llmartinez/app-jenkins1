@@ -11,7 +11,7 @@ use Adservice\TicketBundle\Entity\Post;
 
 class IncidenceController extends Controller{
 
-    
+  
     public function newIncidenceAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -82,9 +82,12 @@ class IncidenceController extends Controller{
         $incidence = new Incidence();
         
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+        
+        $inc = $em->getRepository('TicketBundle:Incidence')->findOneBy( array('ticket' => $ticket->getId()));
 
-        if($em->getRepository('TicketBundle:Incidence')->findOneBy( array('ticket' => $ticket->getId()))){
-            return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, ));
+        if(isset($inc)){
+           
+            return $this->redirect($this->generateUrl('editIncidence', array('id_incidence' => $inc->getId())));
         }
         
         $incidence->setTicket($ticket);
@@ -95,14 +98,16 @@ class IncidenceController extends Controller{
               
             $form->bindRequest($request);
             
+            $ticket->setStatus($em->getRepository('TicketBundle:Status')->findOneBy( array('status' => 'Cerrado')));
+            
             $em->persist($incidence);
 
             $em->flush();
 
             $sesion = $request->getSession();
             
-            return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, 
-                                                                                         'incidence' => $incidence));
+            return $this->redirect($this->generateUrl('listIncidence', array('incidences' => $incidences, 
+                                                                             'incidence' => $incidence)));
         }
         
         $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
@@ -118,11 +123,11 @@ class IncidenceController extends Controller{
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-        
+       
         $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
-        
+
         $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
-        
+
         $form = $this->createForm(new IncidenceType(), $incidence);
         
         if ($request->getMethod() == 'POST') {
@@ -153,6 +158,18 @@ class IncidenceController extends Controller{
                                                                                        'form' => $form->createView(),
                                                                               ));
     }
+    
+    public function showIncidenceAction($id_incidence)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
+            
+        $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
+            
+        return $this->render('TicketBundle:Incidence:showIncidence.html.twig', array('incidences' => $incidences, 
+                                                                                     'incidence' => $incidence, ));
+    }    
     
     public function listIncidenceAction()
     {

@@ -20,8 +20,8 @@
                     <tr>
                         <td>
                             <p class="subtitle" >{{ incidence.ticket.user }} : ~ </p> 
-                            <a href="{{ path('editIncidence', { 'id_incidence' : incidence.id }) }}"> 
-                            {{ incidence.description | length > 50 ?  incidence.description | slice(0, 50) ~ '...' : incidence.description }}
+                            <a href="{{ path('showIncidence', { 'id_incidence' : incidence.id }) }}"> 
+                            {{ incidence.ticket.title | length > 50 ?  incidence.ticket.title | slice(0, 50) ~ '...' : incidence.ticket.title }}
                         </a></td>
                         </td>
                     </tr>
