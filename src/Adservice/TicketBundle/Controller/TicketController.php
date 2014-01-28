@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Form\TicketType;
 use Adservice\TicketBundle\Entity\Post;
+use Adservice\TicketBundle\Form\PostType;
 /*
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,174 +53,114 @@ class TicketController extends Controller{
 
             return $this->redirect($this->generateUrl('newPost', array('id_ticket' => $ticket->getId())));
             }
-           
-         //$tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
-         $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
          
-         return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' => $tickets, 'form' => $form->createView(), ));
-         
-    }
- 
-}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-/*
-    
-    public function homeAction(){
-        return $this->render('TicketBundle:Default:index.html.twig', array());
+         return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' =>  $this->loadTicket(), 
+                                                                                'form' => $form->createView(), ));
     }
     
-    public function formAction($id = null){
-        // Recojo el manejador de entidades
+     public function editTicketAction($id_ticket)
+    {
         $em = $this->getDoctrine()->getEntityManager();
-        
-        // Recojo el objeto request
         $request = $this->getRequest();
+
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+
+        $form = $this->createForm(new TicketType(), $ticket);
         
-        // Miro si ha sido enviado el formulario y tengo que procesar los datos, o bien tengo que mostrarlo
-        if ($request->request->all()){
-            // Creo una instancia del ticket
-            $ticket = new Ticket();
-            
-            // Recojo los campos y los archivos
-            $formFields = $request->request->all();
-            
-            // Guardo el ticket en la BBDD
-            $ticket->setVehicle($em->getRepository('TicketBundle:Version')->findOneById($formFields['version']));
-            $ticket->setSystem($em->getRepository('TicketBundle:Subsystem')->findOneById($formFields['subsystem']));
-            $ticket->setTime(time());
-            $ticket->setDescription($formFields['description']);
-            $ticket->setUser($em->getRepository('TicketBundle:User')->findOneById($this->get('security.context')->getToken()->getUser()->getId()));
-            if (isset($formFields['call'])){
-                $ticket->setCallme(1);
-            } else {
-                $ticket->setCallme(0);
-            }
-            $ticket->setStatus(0);
+        if ($request->getMethod() == 'POST') {
+              
+            $form->bindRequest($request);
             
             $em->persist($ticket);
+
             $em->flush();
+
+            $sesion = $request->getSession();
             
-            for($f=1; $f<=3; $f++){
-                $currentFile = $this->getRequest()->files->get('file'.$f);
-                if ($currentFile != null){
-                    // He encontrado el archivo, voy a renombrarlo y a moverlo al directorio temporal
-                    $fileName = time().".";
-                    $fileOriginalName = $currentFile->getClientOriginalName();
-                    $currentFile->move('bundles/Ticket/temp', $fileName.$fileOriginalName);
-                    $ext = explode('.', $fileOriginalName);
-                    $ext = $ext[count($ext)-1];
-                    // Ahora lo abro y lo meto dentro de la BBDD
-                    $fileContents = file_get_contents('bundles/Ticket/temp/'.$fileName.$fileOriginalName);
-                    
-                    $file = new File();
-                    $file->setName(str_replace('.'.$ext, '', $fileOriginalName));
-                    $file->setExtension($ext);
-                    $file->setTimestamp(time());
-                    $file->setTicket($em->getRepository('TicketBundle:Ticket')->findOneById($ticket->getId()));
-                    $file->setFile(base64_encode($fileContents));
-                    
-                    $em->persist($file);
-                    $em->flush();
-                }
-            }
+            return $this->render('TicketBundle:Ticket:listTicket.html.twig', array( loadTicket(), 
+                                                                                         'ticket' => $ticket));
         }
         
-        // Recojo de entrada las marcas y los sistemas
-        $makes    = $em->getRepository('TicketBundle:Make')->findBy(array(), array('name' => 'ASC'));
-        $systems  = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-
-        // Devuelvo el formulario
-        return $this->render('TicketBundle:Ticket:Form.html.twig', 
-            array(
-                'makes'=>$makes,
-                'systems'=>$systems
-            )
-        );
+        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $ticket->getId()));
+        
+        $users = $em->getRepository('UserBundle:User')->findAll();
+        
+        return $this->render('TicketBundle:Ticket:editTicket.html.twig', array( 'tickets' => $this->loadTicket(),
+                                                                                'ticket' => $ticket, 
+                                                                                'posts' => $posts,
+                                                                                'users' => $users,
+                                                                                'form' => $form->createView(),
+                                                                              ));
     }
     
-    public function getModelsAction($make){
-        // Recojo el manejador de entidades.
+    public function showTicketAction($id_ticket)
+    {
         $em = $this->getDoctrine()->getEntityManager();
-        
-        // Recojo id y nombre de todos los modelos a partir de una marca, ordenado alfabéticamente.
-        $qb = $em->createQueryBuilder();
-        $rsModels = $qb
-            ->select('m.id', 'm.name')
-            ->from('TicketBundle:Model', 'm')
-            ->where('m.make = '.$make)
-            ->orderBy('m.name', 'desc')
-            ->getQuery()->execute();
-        
-        // Paso a JSON el resultado para leerlo por AJAX en la vista.
-        $jsonEncoder = new JsonEncoder();
-        $response = $jsonEncoder->encode($rsModels, 'json');
-        
-        // Retorno JSON
-        return new Response($response);
-    }
-    
-    public function getVersionsAction($model){
-        // Recojo el manejador de entidades.
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        // Recojo id y nombre de todas las versiones a partir de un modelo, ordenado alfabéticamente.
-        $qb = $em->createQueryBuilder();
-        $rsVersion = $qb
-            ->select('v.id', 'v.name')
-            ->from('TicketBundle:Version', 'v')
-            ->where('v.model = '.$model)
-            ->orderBy('v.name', 'desc')
-            ->getQuery()->execute();
-        
-        // Paso a JSON el resultado para leerlo por AJAX en la vista.
-        $jsonEncoder = new JsonEncoder();
-        $response = $jsonEncoder->encode($rsVersion, 'json');
-        
-        // Retorno JSON
-        return new Response($response);
-    }
-    
-    public function getSubsysAction($sys){
-        // Recojo el manejador de entidades.
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        // Recojo id y nombre de todas las versiones a partir de un modelo, ordenado alfabéticamente.
-        $qb = $em->createQueryBuilder();
-        $rsSubsys = $qb
-            ->select('s.id', 's.name')
-            ->from('TicketBundle:Subsystem', 's')
-            ->where('s.system = '.$sys)
-            ->orderBy('s.name', 'desc')
-            ->getQuery()->execute();
-        
-        // Paso a JSON el resultado para leerlo por AJAX en la vista.
-        $jsonEncoder = new JsonEncoder();
-        $response = $jsonEncoder->encode($rsSubsys, 'json');
-        
-        // Retorno JSON
-        return new Response($response);
-    }
-    
-    public function uploadImageAction(){
         $request = $this->getRequest();
-        $mypost = $_POST;
-        $file = $request->request->get('file');
-        $E = 0;
-        return new Response('OK!');
+        
+        $post = new Post();
+        
+        $form = $this->createForm(new PostType(), $post);
+        
+        if ($request->getMethod() == 'POST') {
+                
+            $form->bindRequest($request);
+
+            //campos de POST
+            $post->setTicket($em->getRepository('TicketBundle:Ticket')->find($id_ticket));
+            
+            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
+            
+            $post->setUser($user);
+            
+            $em->persist($post);
+
+            $em->flush();
+
+            $sesion = $request->getSession();
+
+        }
+        
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+
+        $messages = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
+
+        $title = $messages[0]->getTicket()->getTitle();
+
+        return $this->render('TicketBundle:Ticket:showTicket.html.twig', array('tickets'    =>  $this->loadTicket(), 
+                                                                          'ticket'    => $ticket, 
+                                                                          'id_ticket' => $id_ticket,
+                                                                          'title'      => $title, 
+                                                                          'messages'   => $messages, 
+                                                                          'form' => $form->createView(),
+                                                                        ));
+     }    
+     
+    public function listTicketAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        
+        $ticket = new Ticket();
+        
+        if ($request->getMethod() == 'POST') {
+            if($id_ticket == $request->get('id_ticket')){
+                $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+            }
+        }   
+            
+        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket, 
+                                                                               'tickets' => $this->loadTicket(), ));
     }
- */
+    
+    public function loadTicket()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        //Rellenando la lista de tickets abiertos
+        $open = $em->getRepository('TicketBundle:Status')->find(0);
+       
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => $open));
+        
+        return $tickets;
+    }
+}

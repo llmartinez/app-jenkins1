@@ -19,8 +19,8 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a class="btn pull-left" href="{{ path('user_index') }}">{% trans %}Indicie Usuario{% endtrans %}</a></li>
                                     <li><a class="btn pull-left" href="{{ path('newTicket') }}" > {% trans %}New ticket{% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="#">{% trans %}Tickets{% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="#">{% trans %}Incidencias{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listTicket') }}">{% trans %}Tickets{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listIncidence') }}">{% trans %}Incidencias{% endtrans %}</a></li>
                                     <li><a href="#"></a></li>
                                     <li class="divider"></li>
                                     <li><a class="btn pull-left" href="{{ path('logout') }}"> {% trans %}Logout{% endtrans %}</a></li>
@@ -29,7 +29,7 @@
                             {% else %}
                                 <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>
                             {% endif %}
-
+                            
                             <a href="{{ path('changeLanguage', { 'lang': 'en'}) }}" value="en"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'es'}) }}" value="es"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
                             <a href="{{ path('changeLanguage', { 'lang': 'fr'}) }}" value="fr"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>

@@ -1,28 +1,34 @@
-{% extends "TicketBundle:Default:ticket.html.twig" %}
+{% extends "TicketBundle:Default:incidence.html.twig" %}
 
 {% block content %}
 
-    <h3>Nuevo Ticket</h3>
+    <h3>Nueva Incidencia</h3><h4> {{ ticket.title }} </h4> 
     
-    <div class="container">
+    <div class="tblContainer">
         <div class="row">
 
             <div class="col-sm-8 contact-form">
-                <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post">
+                <form action="{{ path('createIncidence', { 'id_ticket' : ticket.id }) }}" id="contact" class="form" role="form" method="post">
                     <div class="row">
-                        
+                             
                         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
-                        
+                            
                         <div class="col-xs-6 col-md-6 form-group">    
-                            Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+                            Estado {{ form_widget(form.status, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                         
                         <div class="col-xs-6 col-md-6 form-group">    
                             Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                         
-                         <div class="form-group">    
-                             Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
+                        <div class="btn100">    
+                            Descripcion {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5'} }) }}
+                        </div>
+                        
+                        <div class="btn100">    
+                            Solucion {{ form_widget(form.solution, { 'value': posts[ posts | length-1 ].message ,
+                                                                     'attr': { 'class': 'form-control', 
+                                                                               'rows': '5' } }) }}
                         </div>
                     </div>
                     <br />

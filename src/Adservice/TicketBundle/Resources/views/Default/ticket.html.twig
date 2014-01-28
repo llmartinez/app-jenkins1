@@ -23,15 +23,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% if tickets | length == 0 %}
+                    <tr><td>No tienes ningun ticket abierto</td></tr>
+                {% else %}
                     {% for ticket in tickets %}
                     <tr>
                         <td>{{ ticket.dateCreated | date("d-m-Y") }}</td>
-                        <td>{{ ticket.user.email1 | length > 9 ?  ticket.user.email1 | slice(0, 9) ~ '...' : ticket.user.email1 }}</td>
-                        <td><a href="{{ path('newPost', { 'id_ticket' : ticket.id }) }}"> 
+                        <td>{{ ticket.user.username | length > 9 ?  ticket.user.username | slice(0, 9) ~ '...' : ticket.user.username }}</td>
+                        <td><a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> 
                             {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}
                         </a></td>
                     </tr>
                     {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
         </div> <!-- /widget-content -->

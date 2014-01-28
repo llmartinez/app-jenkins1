@@ -1,0 +1,82 @@
+{% extends "TicketBundle:Default:ticket.html.twig" %}
+
+{% block content %}
+
+    <h3><a href="{{ path('listTicket') }}">Tickets:</a> {{ title }}</h3>
+    
+   {# Datos del TICKET #}
+                
+        <div class="tblContainer">
+        <table class="table table-striped table-bordered">
+            <tr>    
+                <td>
+                    <p>Taller:  {{ ticket.user.username }}</p>
+                    <p>Fecha:  {{ ticket.dateCreated | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
+                </td><td>    
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>    
+    
+    
+{# mensajes del TICKET #}
+    
+{% if messages[0].ticket.status.id == 1 %}
+
+        <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CERRADO<a>
+                
+    {% else %}
+        <section class="ac-container" >
+        {% for message in messages %}
+            <div id="post{{ message.id }}">
+
+            {# Marca con un color diferente los mensajes del usuario #}
+                
+                {% if message.user.id == app.security.getToken().getUser().getId() %}
+                    <label for="ac-{{ loop.index }}" style="background: azure;"> {{ message.user }}</label>
+                {% else %}
+                    <label for="ac-{{ loop.index }}"> {{ message.user }}</label>
+                {% endif %}
+
+            {# Cambia el css del ultimo mensaje para que aparezca abierto #}
+                    
+                {% if loop.last %}
+
+                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" checked /> 
+                    <article class="ac-medium">
+
+                {% else %}
+
+                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" />
+                    <article class="ac-small">
+
+                {% endif %}
+
+                    <p>{{ message.message }} </p>
+                </article>
+            </div>
+        {% endfor %}
+        </section>
+        <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
+
+            <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
+
+            <section class="ac-container" >
+                <h5>Responde: </h5>
+                <div>
+                    {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
+                    <button class="btn btn-primary pull-right btn100" type="submit">Enviar</button>
+                </div>
+            </section>
+        </form>
+        
+        {% if is_granted('ROLE_ADMIN') %}
+        
+            <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': messages[0].ticket.id }) }}">CERRAR TICKET<a>
+        
+        {% endif %}
+    {% endif %}
+{% endblock %}

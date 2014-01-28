@@ -37,16 +37,19 @@ class PostController extends Controller{
         }
         //Rellenando la lista de mensajes
         $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
+        
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         $messages = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
 
         $title = $messages[0]->getTicket()->getTitle();
 
         return $this->render('TicketBundle:Post:newPost.html.twig', array('tickets'    => $tickets, 
+                                                                          'ticket'    => $ticket, 
                                                                           'id_ticket' => $id_ticket,
                                                                           'title'      => $title, 
                                                                           'messages'   => $messages, 
                                                                           'form' => $form->createView(),
                                                                         ));
-     }
+     }      
 }

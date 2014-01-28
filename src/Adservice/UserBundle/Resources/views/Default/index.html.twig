@@ -11,8 +11,8 @@
                 <td>
                     <a href="{{ path("user_profile") }}">Mi perfil</a><br>
                     <a href="{{ path("user_list") }}">Listado Usuarios AD-Service</a><br>
-                    <a href="#">Listado Incidencias AD-Service</a><br>
-                    <a href="{{ path("newTicket") }}">Crear una incidencia como ADMIN</a><br>
+                    <a href="{{ path("listIncidence") }}">Listado Incidencias AD-Service</a><br>
+                    <a href="{{ path("newIncidence") }}">Crear una incidencia como ADMIN</a><br>
                 </td>
             </tr>
         </table>
@@ -26,8 +26,8 @@
             <tr>
                 <td>
                     <a href="{{ path("user_profile") }}">Mi perfil</a><br>
-                    <a href="#">Mis tickets</a><br>
-                    <a href="#">Mis incidencias</a><br>
+                    <a href="{{ path("listTicket") }}">Mis tickets</a><br>
+                    <a href="{{ path("listIncidence") }}">Mis incidencias</a><br>
                 </td>
             </tr>
         </table>

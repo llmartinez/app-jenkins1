@@ -1,24 +1,47 @@
 ################################
-#   GESTIÓN DE TICKETS   #
+#   GESTIÓN DE TICKETS         #
 ################################
 
 newTicket:
-    pattern:  /ticket
+    pattern:  /ticket/new
     defaults: { _controller: TicketBundle:Ticket:newTicket }
+ 
+editTicket:
+    pattern:  /ticket/edit/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:editTicket } 
     
-#listTicket:
-#    pattern:  /ticket/{id_ticket}
-#    defaults: { _controller: TicketBundle:Ticket:listTicket }
+findTicket:
+    pattern:  /ticket/find
+    defaults: { _controller: TicketBundle:Ticket:findTicket } 
     
-newPost:
-    pattern:  /messages/{id_ticket}
-    defaults: { _controller: TicketBundle:Post:newPost }
+showTicket:
+    pattern:  /ticket/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:showTicket }
     
+listTicket:
+    pattern:  /ticket
+    defaults: { _controller: TicketBundle:Ticket:listTicket }
+      
+################################
+#    GESTIÓN DE INCIDENCIAS    #
+################################        
+        
 newIncidence:
-    pattern:  /incidence/{id_ticket}
+    pattern:  /incidence/new
     defaults: { _controller: TicketBundle:Incidence:newIncidence }
+    
+createIncidence:
+    pattern:  /incidence/create/{id_ticket}
+    defaults: { _controller: TicketBundle:Incidence:createIncidence }
+
+editIncidence:
+    pattern:  /incidence/edit/{id_incidence}
+    defaults: { _controller: TicketBundle:Incidence:editIncidence } 
+    
+showIncidence:
+    pattern:  /incidence/{id_incidence}
+    defaults: { _controller: TicketBundle:Incidence:showIncidence }    
     
 listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
-  
