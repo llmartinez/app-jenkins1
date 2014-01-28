@@ -25,8 +25,20 @@ user_profile:
     defaults: { _controller: UserBundle:Default:profile }
 
 user_list:
-    pattern: /
+    pattern: /list
     defaults: { _controller: UserBundle:Default:userList }
+    
+user_edit:
+    pattern: /edit/{id}
+    defaults: { _controller: UserBundle:Default:editUser }
+
+user_delete:
+    pattern: /delete/{id}
+    defaults: { _controller: UserBundle:Default:deleteUser }
+
+user_new:
+    pattern: /new
+    defaults: { _controller: UserBundle:Default:newUser }
 
 ##############################
 #       RUTAS AJAX           #

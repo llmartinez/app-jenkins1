@@ -138,13 +138,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $active;
 
     /**
-     * @var string $sessionID
-     *
-     * @ORM\Column(name="sessionID", type="string", length=50)
-     */
-    private $sessionID;
-
-    /**
      * @var string $language
      *
      * @ORM\Column(name="language", type="string", length=2)
@@ -254,24 +247,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getActive() {
         return $this->active;
-    }
-
-    /**
-     * Set sessionID
-     *
-     * @param string $sessionID
-     */
-    public function setSessionID($sessionID) {
-        $this->sessionID = $sessionID;
-    }
-
-    /**
-     * Get sessionID
-     *
-     * @return string 
-     */
-    public function getSessionID() {
-        return $this->sessionID;
     }
 
     /**
@@ -405,7 +380,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function __toString() {
-        return $this->getUsername();
+        return $this->getName() .' '. $this->getSurname();
     }
 
     public function __construct() {
@@ -460,7 +435,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function serialize() {
         return \json_encode(
                 array($this->id, $this->username, $this->password, $this->salt,
-                    $this->active, $this->sessionID, $this->language, $this->user_role));
+                    $this->active, $this->language, $this->user_role));
     }
 
     /**
@@ -469,7 +444,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function unserialize($serialized) {
         list($this->id, $this->username, $this->password, $this->salt,
-                $this->active, $this->sessionID, $this->language, $this->user_role ) = \json_decode(
+                $this->active, $this->language, $this->user_role ) = \json_decode(
                 $serialized);
     }
     

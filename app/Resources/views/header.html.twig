@@ -27,7 +27,7 @@
                                 </ul>
                             </div>
                             {% else %}
-                            <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>
+                                <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>
                             {% endif %}
 
                             <a href="{{ path('changeLanguage', { 'lang': 'en'}) }}" value="en"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>

@@ -2,48 +2,87 @@
 
 {% block body %}
     
+    <table class="table" style="width: 50%; margin-left: 450px;">
+        <tr>
+            <td align="right"><a href="{{ path('user_new') }}" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un usuario</a></td>
+        </tr>
+    </table>
+
     <table class="table table-hover" style="width: 50%; margin-left: 450px;"> 
         <thead>
-          <tr>
-            <th>#</th>
-            <th>User Name</th>
-            <th>First Name</th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
-          </tr>
+            <tr>
+                <th>#</th>
+                <th>User Name</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
-            {% for user_admin in users_role_admin %}
-                <tr>
-                    <td>{{ user_admin.id }}</td>
-                    <td>{{ user_admin.username }} <span class="label label-primary">Admin</span></td>
-                    <td>{{ user_admin.name }} </td>
-                    <td>{{ user_admin.surname}}</td>
-                    <td>{{ user_admin.email1 }}</td>
-                    <td>{{ user_admin.phoneNumber1 }}</td>
-                    <td>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
-                    </td>
-                </tr>
-            {% endfor %}
-            {% for user in users_role_user %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.surname}}</td>
-                    <td>{{ user.email1 }}</td>
-                    <td>{{ user.phoneNumber1 }}</td>
-                    <td>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
-                    </td>
-                </tr>
-            {% endfor %}
+                {% for user_admin in users_role_admin %}
+            <tr>
+                <td>{{ user_admin.id }}</td>
+                <td>{{ user_admin.username }} <span class="label label-primary">Admin</span></td>
+                <td>{{ user_admin.name }} </td>
+                <td>{{ user_admin.surname}}</td>
+                <td>{{ user_admin.email1 }}</td>
+                <td>{{ user_admin.phoneNumber1 }}</td>
+                <td>
+                    <a href="{{ path("user_edit", { 'id':user_admin.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user_admin.id }}"></span></a>
+                </td>
+            </tr>
+                {% endfor %}
+                {% for user in users_role_user %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.surname}}</td>
+                <td>{{ user.email1 }}</td>
+                <td>{{ user.phoneNumber1 }}</td>
+                <td>
+                    <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+                </td>
+            </tr>
+                {% endfor %}
         </tbody>
-      </table>
-                           
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
+                </div>
+                <div class="modal-body">
+                    Estas seguro que quieres eliminar este usuario?                    
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 {% endblock%}
+    
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $('#MainContent').find('.glyphicon-trash').click(function(){
+                var user_id = $(this).data('id');
+                confirm_delete_user_modal(user_id);
+            })
+        });
+    </script>
+{% endblock %}
