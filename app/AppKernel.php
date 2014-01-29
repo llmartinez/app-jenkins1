@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Adservice\UtilBundle\UtilBundle(),
             new Adservice\UserBundle\UserBundle(),
             new Adservice\TicketBundle\TicketBundle(),
+            new Adservice\PartnerBundle\PartnerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
