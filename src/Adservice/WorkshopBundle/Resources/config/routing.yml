@@ -1,0 +1,25 @@
+##############################
+#   APDO. RUTAS WORKSHOP     #
+##############################
+workshop_list:
+    pattern:  /list
+    defaults: { _controller: WorkshopBundle:Default:list }
+    
+workshop_edit:
+    pattern: /edit/{id}
+    defaults: { _controller: WorkshopBundle:Default:editWorkshop }
+
+workshop_delete:
+    pattern: /delete/{id}
+    defaults: { _controller: WorkshopBundle:Default:deleteWorkshop }
+
+workshop_new:
+    pattern: /new
+    defaults: { _controller: WorkshopBundle:Default:newWorkshop }
+
+##############################
+#       RUTAS AJAX           #
+##############################
+user_provinces: 
+    pattern: /provincesFromRegion
+    defaults: { _controller: UtilBundle:Default:provincesFromRegion }
