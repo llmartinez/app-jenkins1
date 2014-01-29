@@ -231,3 +231,7 @@ html {
     color: gray;
     font-size: 0.9em;
 }
+
+.comment {
+    margin-left: 25px;
+}

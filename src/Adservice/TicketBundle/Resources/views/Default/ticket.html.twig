@@ -31,23 +31,23 @@
                     </thead>
                     <tbody>
                         {% for ticket in tickets %}
-                        <tr>
-                            <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
-                            <td>{{ ticket.createdBy.username | length > 9 ?  ticket.createdBy.username | slice(0, 9) ~ '...' : ticket.createdBy.username }}</td>
-                            <td>
-                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> 
+                            
+                            {% if (ticket.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                            
+                            <tr>
+                                <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
+                                <td>{{ ticket.createdBy.username | length > 9 ?  ticket.createdBy.username | slice(0, 9) ~ '...' : ticket.createdBy.username }}</td>
+                                <td>
+                                    <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> 
 
-                                    <b style='color:black'>#{{ ticket.id }}:</b> 
-                                    {#
-                                    {% if ticket.modifiedBy.id != app.security.getToken().getUser().getId() %}
-                                        <a style="color:red" title="Tienes mensajes sin responder" href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">
-                                    {% endif %}
-                                    #}
-                                    {{ ticket.title | length > 19 ?  ticket.title | slice(0, 19) ~ '...' : ticket.title }} 
+                                        <b style='color:black'>#{{ ticket.id }}:</b> 
+                                      
+                                        {{ ticket.title | length > 19 ?  ticket.title | slice(0, 19) ~ '...' : ticket.title }} 
 
-                                </a>
-                            </td>
-                        </tr>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 {% endif %}

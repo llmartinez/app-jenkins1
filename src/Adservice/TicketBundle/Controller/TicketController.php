@@ -199,18 +199,29 @@ class TicketController extends Controller{
         
         if ($request->getMethod() == 'POST') {
             
-            $id_ticket=$request->get('id_ticket');
+            $id_ticket = $request->get('id_ticket');
             
             if($id_ticket){
                 $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
             }
-        }   
-            
-        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket, 
-                                                                               'tickets' => $this->loadTicket(), ));
+        }  
+        
+        $tickets = $this->loadTicket();
+        $lastPosts = array();
+        
+        foreach ($tickets as $t)
+        {
+             $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $t->getId()));
+             
+             $lastPosts[$t->getId()] = $posts[count($posts)-1];
+        }
+        
+       return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket, 
+                                                                              'lastPosts' => $lastPosts, 
+                                                                              'tickets' => $tickets, ));
     }
     
-    public function loadTicket()
+    private function loadTicket()
     {
         $em = $this->getDoctrine()->getEntityManager();
         //Rellenando la lista de tickets abiertos
@@ -221,3 +232,5 @@ class TicketController extends Controller{
         return $tickets;
     }
 }
+
+/* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());
