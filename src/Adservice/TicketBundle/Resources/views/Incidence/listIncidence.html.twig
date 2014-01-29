@@ -13,14 +13,17 @@
             {% for incidence in incidences %}
             <tr>    
                 <td>
-                    <p><b>Titulo:</b>  {{ incidence.ticket }} -- <b>Taller:</b>  {{ incidence.ticket.user }}</p>
-                    <p><b>Ultima Modificacion:</b>  {{ incidence.ticket.dateModified | date("d-m-Y")}} </p>
-                    <p><b>Estado de la incidencia:</b>  {{ incidence.status }} </p>
-                </td><td>    
                     <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-primary pull-right" href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}">Editar</a>
-                    {% endif %}
+
+                    <a class="btn pull-right">{{ incidence.status }} </a>
+                    
+                    <p>
+                        <b style='color:black'>#{{ incidence.ticket.id }}:</b>  
+                        {{ incidence.ticket.title | length > 150 ?  incidence.ticket.title | slice(0, 150) ~ '...' : incidence.ticket.title }} 
+                    </p>
+                    <b>Ultima Modificacion:</b>  {{ incidence.ModifiedBy.username }}
+                    - {{ incidence.ticket.modifiedAt | date("d/m/Y")}}
+                    
                 </td>
             </tr>
             {% endfor %}

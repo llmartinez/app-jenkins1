@@ -29,7 +29,7 @@
             {% if ticket.id is not null %}
                 <table class="table table-striped table-bordered">
                     <tr><td>
-                        <p>Ticket #{{ ticket.id }} ( {{ ticket.dateCreated | date("d-m-Y") }}) -> {{ ticket.status }}
+                        <p>Ticket #{{ ticket.id }} ( {{ ticket.createdAt | date("d-m-Y") }}) -> {{ ticket.status }}
                             <a class="btn btn-primary pull-right"  href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">Ver</a> </p> 
                     </td></tr>
                 </table>

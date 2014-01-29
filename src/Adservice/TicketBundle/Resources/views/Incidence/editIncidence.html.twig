@@ -17,7 +17,7 @@
                             Taller <select class="form-control" id="user" name="user"><option value=0>Selecciona Taller..</option>
                                 
                             {% for user in users %} <option 
-                                                        {% if incidence.ticket.user == user %} selected="true" {% endif %}
+                                                        {% if incidence.ticket.createdBy == user %} selected="true" {% endif %}
                                                         value="{{ user.id }}"
                                                     > {{ user }} </option> 
                             {% endfor %}

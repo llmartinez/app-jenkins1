@@ -2,11 +2,8 @@
 
 {% block content %}
 
-    <h3>
-        <a href="{{ path('listTicket') }}">Tickets:</a> 
-        
-        {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} 
-    </h3>
+    <h3><a href="{{ path('listTicket') }}">Tickets:</a> 
+    {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }}  </h3>
     
    {# Datos del TICKET #}
                 
@@ -15,12 +12,9 @@
             <tr>    
                 <td>                    
                     {% if is_granted('ROLE_ADMIN') %}
-                        
                         <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
                     {% endif %}
-                        
                     <p>Taller:  {{ ticket.createdBy.username }}</p>
-                    
                     <p>Fecha:  {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
                 </td>
             </tr>
@@ -30,54 +24,39 @@
     
 {# mensajes del TICKET #}
     
-        <section class="ac-container" >
-            
         {% for message in posts %}
-            
-            <div id="post{{ message.id }}">
+                
+            <fieldset>
 
             {# Marca con un color diferente los mensajes del usuario #}
                 
                 {% if message.createdBy.id == app.security.getToken().getUser().getId() %}
                 
-                    <label for="ac-{{ loop.index }}" style="background: azure;"> {{ message.createdBy.username }}</label>
+                    <legend style="background: azure;"> {{ message.createdBy.username }}</legend>
                     
                 {% else %}
                     
-                    <label for="ac-{{ loop.index }}"> {{ message.createdBy.username }}</label>
+                    <legend> {{ message.createdBy.username }}</legend>
                 {% endif %}
 
-            {# Cambia el css del ultimo mensaje para que aparezca abierto #}
+                    <p> {{ message.message }} </p>
                     
-                {% if loop.last %}
-
-                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" checked /> 
-                    <article class="ac-medium">
-
-                {% else %}
-
-                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" />
-                    <article class="ac-small">
-
-                {% endif %}
-                    <p> {{ message.message | length > 200 ?  message.message | slice(0, 200) ~ '...' : message.message }} </p>
-                </article>
-            </div>
+            </fieldset>
+               
         {% endfor %}
                 
-                <a class="pull-right" href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver Todo</a>
-        </section>
-               
+        <hr>
         {% if ticket.status.id == 1 %}
 
             <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CERRADO<a>
-                
-        {% else %}        
+
+        {% else %}
+                    
             <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
 
                 <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
 
-                <section class="ac-container" >
+                <section>
                     <h5>Responde: </h5>
                     <div>
                         {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
@@ -85,7 +64,7 @@
                     </div>
                 </section>
             </form>
-        
+
             {% if is_granted('ROLE_ADMIN') %}
 
                 <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CERRAR TICKET<a>

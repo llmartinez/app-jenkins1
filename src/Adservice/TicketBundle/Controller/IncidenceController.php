@@ -18,6 +18,7 @@ class IncidenceController extends Controller{
         $request = $this->getRequest();
         
         $users = $em->getRepository('UserBundle:User')->findAll();
+        //$users = $em->getRepository('UserBundle:User')->findBy(array('user_role' => 'ROLE_ADMINy'));
         
         $incidence = new Incidence();
         
@@ -32,27 +33,37 @@ class IncidenceController extends Controller{
             
             $ticket = new Ticket();
             $ticket->setTitle($request->get('title'));
-            $ticket->setUser($user);
-            $ticket->setUserModified($user);
-            $ticket->setDateCreated(new \DateTime());
-            $ticket->setDateModified(new \DateTime());
+            $ticket->setCreatedBy($user);
+            $ticket->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $ticket->setModifiedBy($user);
+            $ticket->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $ticket->setStatus($incidence->getStatus());
             $ticket->setImportance($incidence->getImportance());
             $em->persist($ticket);
             
             $post = new Post();
             $post->setTicket($ticket);
-            $post->setUser($user);
+            $post->setCreatedBy($user);
+            $post->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $post->setModifiedBy($user);
+            $post->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $post->setMessage($incidence->getDescription());
             $em->persist($post);
             
             $post2 = new Post();
             $post2->setTicket($ticket);
-            $post2->setUser($asesor);
+            $post2->setCreatedBy($asesor);
+            $post2->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $post2->setModifiedBy($asesor);
+            $post2->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $post2->setMessage($incidence->getSolution());
             $em->persist($post2);
                         
             $incidence->setTicket($ticket);
+            $incidence->setCreatedBy($asesor);
+            $incidence->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $incidence->setModifiedBy($asesor);
+            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $em->persist($incidence);
 
             $em->flush();
@@ -98,8 +109,16 @@ class IncidenceController extends Controller{
               
             $form->bindRequest($request);
             
+            $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
+            
+            $ticket->setModifiedBy($asesor);
+            $ticket->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $ticket->setStatus($em->getRepository('TicketBundle:Status')->findOneBy( array('status' => 'Cerrado')));
             
+            $incidence->setCreatedBy($asesor);
+            $incidence->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $incidence->setModifiedBy($asesor);
+            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $em->persist($incidence);
 
             $em->flush();
@@ -134,6 +153,11 @@ class IncidenceController extends Controller{
               
             $form->bindRequest($request);
             
+            $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
+            
+            $incidence->setModifiedBy($asesor);
+            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            
             $em->persist($incidence);
 
             $em->flush();
@@ -166,9 +190,12 @@ class IncidenceController extends Controller{
         $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
             
         $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
+        
+        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $incidence->getTicket()->getId()));
             
         return $this->render('TicketBundle:Incidence:showIncidence.html.twig', array('incidences' => $incidences, 
-                                                                                     'incidence' => $incidence, ));
+                                                                                     'incidence' => $incidence, 
+                                                                                     'posts' => $posts, ));
     }    
     
     public function listIncidenceAction()

@@ -9,7 +9,7 @@
     				
         <div class="widget-header">
                 <i class="icon-th-list"></i>
-                <h3>Seguimiento de tickets</h3>
+                <h3>Seguimiento de ticekting</h3>
         </div> <!-- /widget-header -->
 
         <div class="widget-content" >
@@ -19,8 +19,8 @@
                     {% for post in posts %}
                     <tr>
                         <td>
-                            <p class="subtitle" >{{ post.user }} : ~ </p> 
-                            <p>{{ post.message }}</p> 
+                            <p class="subtitle" >{{ post.createdBy }} : ~ </p> 
+                            <p>{{ post.message | length > 100 ?  post.message | slice(0, 100) ~ '...' : post.message }}</p> 
                         </td>
                     </tr>
                     {% endfor %}

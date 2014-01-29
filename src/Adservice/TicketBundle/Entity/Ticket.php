@@ -22,20 +22,6 @@ class Ticket
     private $id;
 
     /**
-     * @var string $user
-     *
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
-     */
-    private $user;
-
-    /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
-    /**
      * @var integer $status
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Status")
@@ -50,26 +36,40 @@ class Ticket
     private $importance;
 
     /**
-     * @var date $dateCreated
-     *
-     * @ORM\Column(name="date_created", type="date")
-     */
-    private $dateCreated;
-
-    /**
-     * @var date $dateModified
-     *
-     * @ORM\Column(name="date_modified", type="date")
-     */
-    private $dateModified;
-
-    /**
-     * @var string $user_modified
+     * @var string $created_by
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $userModified;
+    private $created_by;
 
+    /**
+     * @var date $created_at
+     *
+     * @ORM\Column(name="date_created", type="date")
+     */
+    private $created_at;
+
+    /**
+     * @var date $modified_at
+     *
+     * @ORM\Column(name="date_modified", type="date")
+     */
+    private $modified_at;
+
+    /**
+     * @var string $modified_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $modified_by;
+
+
+    /**
+     * @var string $title
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
 
     /**
      * Get id
@@ -79,46 +79,6 @@ class Ticket
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Adservice\UserBundle\Entity\User $user
-     */
-    public function setUser(\Adservice\UserBundle\Entity\User $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return string 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -161,64 +121,105 @@ class Ticket
         return $this->importance;
     }
 
+
     /**
-     * Set dateCreated
+     * Set created_by
      *
-     * @param date $dateCreated
+     * @param \Adservice\UserBundle\Entity\User $created_by
      */
-    public function setDateCreated($dateCreated)
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
     {
-        $this->dateCreated = $dateCreated;
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get dateCreated
-     *
-     * @return date 
-     */
-    public function getDateCreated()
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * Set date_modified
-     *
-     * @param date $dateModified
-     */
-    public function setDateModified($dateModified)
-    {
-        $this->dateModified = $dateModified;
-    }
-
-    /**
-     * Get dateModified
-     *
-     * @return date 
-     */
-    public function getDateModified()
-    {
-        return $this->dateModified;
-    }
-
-    /**
-     * Set userModified
-     *
-     * @param \Adservice\UserBundle\Entity\User $userModified
-     */
-    public function setUserModified(\Adservice\UserBundle\Entity\User $userModified)
-    {
-        $this->userModified = $userModified;
-    }
-
-    /**
-     * Get userModified
+     * Get created_by
      *
      * @return string 
      */
-    public function getUserModified()
+    public function getCreatedBy()
     {
-        return $this->userModified;
+        return $this->created_by;
+    }
+    
+    /**
+     * Set created_at
+     *
+     * @param datetime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return datetime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set modified_at
+     *
+     * @param datetime $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modified_at = $modifiedAt;
+    }
+
+    /**
+     * Get modified_at
+     *
+     * @return datetime 
+     */
+    public function getModifiedAt()
+    {
+        return $this->modified_at;
+    }
+
+    /**
+     * Set modified_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $modified_by
+     */
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $modified_by)
+    {
+        $this->modified_by = $modified_by;
+    }
+
+    /**
+     * Get modified_by
+     *
+     * @return string 
+     */
+    public function getModifiedBy()
+    {
+        return $this->modified_by;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
     
     public function __toString() {

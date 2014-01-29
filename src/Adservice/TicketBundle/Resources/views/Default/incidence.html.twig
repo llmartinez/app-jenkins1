@@ -15,18 +15,31 @@
         <div class="widget-content" >
 
             <table class="table table-striped table-bordered">
+                {% if incidences | length == 0 %}
+                
+                    <tr><td>No tienes ninguna incidencia</td></tr>
+                    
+                {% else %}
                 <tbody>
                     {% for incidence in incidences %}
                     <tr>
                         <td>
-                            <p class="subtitle" >{{ incidence.ticket.user }} : ~ </p> 
-                            <a href="{{ path('showIncidence', { 'id_incidence' : incidence.id }) }}"> 
-                            {{ incidence.ticket.title | length > 50 ?  incidence.ticket.title | slice(0, 50) ~ '...' : incidence.ticket.title }}
-                        </a></td>
+                            <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>
+
+                            <a class="btn pull-right">{{ incidence.status }} </a>
+
+                            <p>
+                                <b style='color:black'>#{{ incidence.ticket.id }}:</b>  
+                                {{ incidence.ticket.title | length > 30 ?  incidence.ticket.title | slice(0, 30) ~ '...' : incidence.ticket.title }} 
+                            </p>
+                            <b>Ultima Modificacion:</b>  {{ incidence.ticket.createdBy.username }}
+                            - {{ incidence.ticket.modifiedAt | date("d/m/Y")}}  ({{ incidence.status }})
+
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
+                {% endif %}
             </table>
         </div> <!-- /widget-content -->
     </div> <!-- /widget -->

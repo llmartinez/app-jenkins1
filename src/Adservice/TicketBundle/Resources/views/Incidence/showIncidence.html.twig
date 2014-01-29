@@ -1,4 +1,4 @@
-{% extends "TicketBundle:Default:incidence.html.twig" %}
+{% extends "TicketBundle:Default:post.html.twig" %}
 
 {% block content %}
 
@@ -8,13 +8,28 @@
         <table class="table table-striped table-bordered">
             <tr>    
                 <td>
-                    <p><b>Titulo:</b>  {{ incidence.ticket }} -- <b>Taller:</b>  {{ incidence.ticket.user }}</p>
-                    <p><b>Ultima Modificacion:</b>  {{ incidence.ticket.dateModified | date("d-m-Y")}} </p>
                     {% if is_granted('ROLE_ADMIN') %}
+                        
                         <a class="btn btn-primary pull-right" href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}">Editar</a>
                     {% endif %}
-                    <p><b>Descripcion:</b>  {{ incidence.description }} </p>
+                        
+                    <p><b>Taller:</b>  {{ incidence.ticket.createdBy.username }}</p>
+                    
+                    <p><b>Ultima Modificacion:</b>  {{ incidence.ModifiedAt | date("d-m-Y")}} 
+                        ( {{ incidence.ModifiedBy.username }} )</p>
+                    
                     <p><b>Estado de la incidencia:</b>  {{ incidence.status }} </p>
+                    
+                    <fieldset>
+                        <legend>{{ incidence.ticket.title | length > 100 ?  incidence.ticket.title | slice(0, 100) ~ '...' : incidence.ticket.title }}</legend>
+                        
+                        <p><b>Descripcion:</b>  {{ incidence.description }} </p>
+                        <p>
+                            <b>Seguimiento:</b> {{ posts | length }} mensajes 
+                            <a href='{{ path('showPost', { 'id_ticket': incidence.ticket.id }) }}'>Ver mas</a>
+                        </p>
+                        <p><b>Solucion:</b>  {{ incidence.solution }}</p>
+                    </fieldset>
                 </td>
             </tr>
         </table>
