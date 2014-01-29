@@ -1,0 +1,18 @@
+##############################
+#   APDO. RUTAS PARTNER      #
+##############################
+partner_list:
+    pattern:  /list
+    defaults: { _controller: PartnerBundle:Default:list }
+    
+partner_edit:
+    pattern: /edit/{id}
+    defaults: { _controller: PartnerBundle:Default:editPartner }
+
+partner_delete:
+    pattern: /delete/{id}
+    defaults: { _controller: PartnerBundle:Default:deletePartner }
+
+partner_new:
+    pattern: /new
+    defaults: { _controller: PartnerBundle:Default:newPartner }

@@ -83,7 +83,11 @@ class DefaultController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editUserAction($id) {
-
+        
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+            throw new AccessDeniedException();
+        }
+        
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         
@@ -127,6 +131,7 @@ class DefaultController extends Controller {
         
          if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+            $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $this->saveUser($em, $user);
             
             return $this->redirect($this->generateUrl('user_list'));
@@ -150,7 +155,8 @@ class DefaultController extends Controller {
         $password = $encoder->encodePassword($user->getPassword(), $salt);
         $user->setPassword($password);
         $user->setSalt($salt);
-        
+        $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+        $user->setModifyBy($this->get('security.context')->getToken()->getUser());
 
         $em->persist($user);
         $em->flush();

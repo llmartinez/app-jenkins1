@@ -169,6 +169,27 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $province;
     
     /**
+     * @var datetime $created_at
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @var datetime $modified_at
+     *
+     * @ORM\Column(name="modified_at", type="datetime")
+     */
+    private $modified_at;
+
+    /**
+     * @var integer $modify_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $modify_by;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -362,11 +383,8 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function setDni($dni) {
         $this->dni = $dni;
     }
-
-    
         
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
-//        return md5($this->getUsername()) == md5($user->getUsername());
         return $this->getUsername() == $user->getUsername();
     }
 
@@ -375,8 +393,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function getRoles() {
-//        return array('ROLE_USUARIO');
-        return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array  <--------- ???????????????
+        return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array 
     }
 
     public function __toString() {
@@ -454,6 +471,65 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
     public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
         $this->region = $region;
+    }
+    
+    /**
+     * Set created_at
+     *
+     * @param datetime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return datetime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set modified_at
+     *
+     * @param datetime $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt) {            
+        $this->modified_at = $modifiedAt;
+    }
+
+    /**
+     * Get modified_at
+     *
+     * @return datetime 
+     */
+    public function getModifiedAt()
+    {
+        return $this->modified_at;
+    }
+
+    /**
+     * Set modify_by
+     *
+     * @param user $modify_by
+     */
+    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
+    {
+        $this->modify_by = $user;
+    }
+
+    /**
+     * Get modify_by
+     *
+     * @return integer 
+     */
+    public function getModifyBy()
+    {
+        return $this->modify_by;
     }
     
 }

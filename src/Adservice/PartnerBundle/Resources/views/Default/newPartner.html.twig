@@ -1,0 +1,30 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <h1>NEW partner</h1>
+
+    <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        {{ form_rest(form) }}
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script> 
+    
+    <script>
+        $(document).ready(function(){
+            //si clickamos el combobox de las regiones repoblamos la de las provincias
+            $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').change(function (){
+                var url_ajax = "{{ path("user_provinces") }}";
+                populate_province(url_ajax);
+            });
+        });
+    </script>
+{% endblock %}
