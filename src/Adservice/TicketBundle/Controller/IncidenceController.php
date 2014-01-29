@@ -201,9 +201,21 @@ class IncidenceController extends Controller{
     public function listIncidenceAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
         
+        $incidence = new Incidence();
+        
+        if ($request->getMethod() == 'POST') {
+            
+            $id_incidence=$request->get('id_incidence');
+            
+            if($id_incidence){
+                $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
+            }
+        }   
         $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
             
-        return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, ));
+        return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidence' => $incidence,
+                                                                                     'incidences' => $incidences, ));
     }
 }

@@ -5,7 +5,7 @@
     <h3>
         <a href="{{ path('listTicket') }}">Tickets:</a> 
         
-        {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} 
+        #{{ ticket.id }} - {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} 
     </h3>
     
    {# Datos del TICKET #}
@@ -30,43 +30,49 @@
     
 {# mensajes del TICKET #}
     
+                
+                
         <section class="ac-container" >
             
-        {% for message in posts %}
+        {% set nPosts = posts | length %}
             
-            <div id="post{{ message.id }}">
+        {% for i in 2..1 %}
+            {% if posts[nPosts-i] is defined %}
+                <div id="post{{ posts[nPosts-i].id }}">
 
-            {# Marca con un color diferente los mensajes del usuario #}
-                
-                {% if message.createdBy.id == app.security.getToken().getUser().getId() %}
-                
-                    <label for="ac-{{ loop.index }}" style="background: azure;"> {{ message.createdBy.username }}</label>
-                    
-                {% else %}
-                    
-                    <label for="ac-{{ loop.index }}"> {{ message.createdBy.username }}</label>
-                {% endif %}
+                {# Marca con un color diferente los mensajes del usuario #}
 
-            {# Cambia el css del ultimo mensaje para que aparezca abierto #}
-                    
-                {% if loop.last %}
+                    {% if posts[nPosts-i].createdBy.id == app.security.getToken().getUser().getId() %}
 
-                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" checked /> 
-                    <article class="ac-medium">
+                        <label for="ac-{{ loop.index }}" style="background: azure;"> {{ posts[nPosts-i].createdBy.username }}</label>
 
-                {% else %}
+                    {% else %}
 
-                    <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" />
-                    <article class="ac-small">
+                        <label for="ac-{{ loop.index }}"> {{ posts[nPosts-i].createdBy.username }}</label>
+                    {% endif %}
 
-                {% endif %}
-                    <p> {{ message.message | length > 200 ?  message.message | slice(0, 200) ~ '...' : message.message }} </p>
-                </article>
-            </div>
+                {# Cambia el css del ultimo mensaje para que aparezca abierto #}
+
+                    {% if loop.last %}
+
+                        <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" checked /> 
+                        <article class="ac-medium">
+
+                    {% else %}
+
+                        <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" />
+                        <article class="ac-small">
+
+                    {% endif %}
+                        <p> {{ posts[nPosts-i].message | length > 200 ?  posts[nPosts-i].message | slice(0, 200) ~ '...' : posts[nPosts-i].message }} </p>
+                    </article>
+                </div>
+            {% endif %}
         {% endfor %}
                 
-                <a class="pull-right" href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver Todo</a>
         </section>
+
+        <a class='comment' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver Comentarios ({{ nPosts }})</a>
                
         {% if ticket.status.id == 1 %}
 

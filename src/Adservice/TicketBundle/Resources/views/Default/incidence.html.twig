@@ -22,21 +22,23 @@
                 {% else %}
                 <tbody>
                     {% for incidence in incidences %}
-                    <tr>
-                        <td>
-                            <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>
+                        {% if (incidence.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                        <tr>
+                            <td>
+                                <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>
 
-                            <a class="btn pull-right">{{ incidence.status }} </a>
+                                <a class="btn pull-right">{{ incidence.status }} </a>
 
-                            <p>
-                                <b style='color:black'>#{{ incidence.ticket.id }}:</b>  
-                                {{ incidence.ticket.title | length > 30 ?  incidence.ticket.title | slice(0, 30) ~ '...' : incidence.ticket.title }} 
-                            </p>
-                            <b>Ultima Modificacion:</b>  {{ incidence.ticket.createdBy.username }}
-                            - {{ incidence.ticket.modifiedAt | date("d/m/Y")}}  ({{ incidence.status }})
+                                <p>
+                                    <b style='color:black'>#{{ incidence.id }}:</b>  
+                                    {{ incidence.ticket.title | length > 30 ?  incidence.ticket.title | slice(0, 30) ~ '...' : incidence.ticket.title }} 
+                                </p>
+                                <b>Ultima Modificacion:</b>  {{ incidence.createdBy.username }}
+                                - {{ incidence.modifiedAt | date("d/m/Y")}}  ({{ incidence.status }})
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
                 {% endif %}
