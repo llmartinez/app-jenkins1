@@ -16,7 +16,7 @@
                         <div class="col-xs-6 col-md-6 form-group">    
                             Taller <select class="form-control" id="user" name="user"><option value=0>Selecciona Taller..</option>
                                 
-                            {% for user in users %} <option value="{{ user.id }}"> {{ user }} </option> {% endfor %}
+                            {% for user in users %} <option value="{{ user.id }}"> {{ user.username }} </option> {% endfor %}
                                 
                             </select>
                         </div>

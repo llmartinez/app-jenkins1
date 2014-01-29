@@ -9,7 +9,7 @@ class PostType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder->add('ticket')
-                ->add('user')
+                ->add('createdBy')
                 ->add('message', 'textarea')
                 ;
     }

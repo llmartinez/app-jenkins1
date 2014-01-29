@@ -21,6 +21,10 @@ showTicket:
 listTicket:
     pattern:  /ticket
     defaults: { _controller: TicketBundle:Ticket:listTicket }
+    
+showPost:
+    pattern:  /post/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:showPost }
       
 ################################
 #    GESTIÓN DE INCIDENCIAS    #

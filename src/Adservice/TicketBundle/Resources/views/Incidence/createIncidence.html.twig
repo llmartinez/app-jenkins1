@@ -1,8 +1,8 @@
-{% extends "TicketBundle:Default:incidence.html.twig" %}
+{% extends "TicketBundle:Default:post.html.twig" %}
 
 {% block content %}
 
-    <h3>Nueva Incidencia</h3><h4> {{ ticket.title }} </h4> 
+    <h3>Nueva Incidencia</h3><h4> {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }}  </h4> 
     
     <div class="tblContainer">
         <div class="row">
@@ -11,7 +11,7 @@
                 <form action="{{ path('createIncidence', { 'id_ticket' : ticket.id }) }}" id="contact" class="form" role="form" method="post">
                     <div class="row">
                              
-                        <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
+                        <input type="hidden" id="asesor" name="asesor" value="{{ app.security.getToken().getUser().getId() }}">
                             
                         <div class="col-xs-6 col-md-6 form-group">    
                             Estado {{ form_widget(form.status, { 'attr': {'class': 'form-control'} }) }}

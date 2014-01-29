@@ -56,6 +56,34 @@ class Incidence
      */
     private $solution;
 
+    /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
+     * @var date $created_at
+     *
+     * @ORM\Column(name="date_created", type="date")
+     */
+    private $created_at;
+
+    /**
+     * @var date $modified_at
+     *
+     * @ORM\Column(name="date_modified", type="date")
+     */
+    private $modified_at;
+
+    /**
+     * @var string $modified_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $modified_by;
+
 
     /**
      * Get id
@@ -166,4 +194,85 @@ class Incidence
     {
         return $this->solution;
     }
+    
+    /**
+     * Set created_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return string 
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+    
+    /**
+     * Set created_at
+     *
+     * @param datetime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return datetime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set modified_at
+     *
+     * @param datetime $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modified_at = $modifiedAt;
+    }
+
+    /**
+     * Get modified_at
+     *
+     * @return datetime 
+     */
+    public function getModifiedAt()
+    {
+        return $this->modified_at;
+    }
+
+    /**
+     * Set modified_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $modifiedBy
+     */
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $modifiedBy)
+    {
+        $this->modified_by = $modifiedBy;
+    }
+
+    /**
+     * Get modified_by
+     *
+     * @return string 
+     */
+    public function getModifiedBy()
+    {
+        return $this->modified_by;
+    }
+    
 }
