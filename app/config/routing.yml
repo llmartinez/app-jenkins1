@@ -1,3 +1,7 @@
+WorkshopBundle:
+    resource: "@WorkshopBundle/Resources/config/routing.yml"
+    prefix:   /workshop
+
 PartnerBundle:
     resource: "@PartnerBundle/Resources/config/routing.yml"
     prefix:   /partner

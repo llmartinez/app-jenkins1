@@ -8,8 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Adservice\UserBundle\Form\UserType;
 use Adservice\UserBundle\Entity\User;
-use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
+
 
 class DefaultController extends Controller {
 
@@ -123,7 +122,9 @@ class DefaultController extends Controller {
     }
     
     public function newUserAction(){
-        
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+            throw new AccessDeniedException();
+        }
         $user  = new User();
         $request = $this->getRequest();
         $form = $this->createForm(new UserType(), $user);
