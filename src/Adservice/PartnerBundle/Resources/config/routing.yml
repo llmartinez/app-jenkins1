@@ -16,3 +16,10 @@ partner_delete:
 partner_new:
     pattern: /new
     defaults: { _controller: PartnerBundle:Default:newPartner }
+    
+##############################
+#       RUTAS AJAX           #
+##############################
+user_provinces: 
+    pattern: /provincesFromRegion
+    defaults: { _controller: UtilBundle:Default:provincesFromRegion }    

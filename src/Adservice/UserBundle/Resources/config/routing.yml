@@ -45,4 +45,4 @@ user_new:
 ##############################
 user_provinces: 
     pattern: /provincesFromRegion
-    defaults: { _controller: UserBundle:Default:provincesFromRegion }
+    defaults: { _controller: UtilBundle:Default:provincesFromRegion }
