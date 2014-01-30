@@ -5,6 +5,7 @@ namespace Adservice\TicketBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Adservice\TicketBundle\Entity\Ticket;
+use Adservice\TicketBundle\Entity\TicketRepository;
 use Adservice\TicketBundle\Form\TicketType;
 use Adservice\TicketBundle\Entity\Post;
 use Adservice\TicketBundle\Form\PostType;
@@ -105,88 +106,16 @@ class TicketController extends Controller{
     
     public function showTicketAction($id_ticket)
     {
-        $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         
-        $post = new Post();
-        
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        
-        $form = $this->createForm(new PostType(), $post);
-        
-        if ($request->getMethod() == 'POST') {
-                
-            $form->bindRequest($request);
-
-            //Define User
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            
-            //Define Post
-            $post->setTicket($ticket);
-            
-            $post->setCreatedBy($user);
-            $post->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $post->setModifiedBy($user);
-            $post->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            
-            $em->persist($post);
-
-            $em->flush();
-
-            $sesion = $request->getSession();
-
-        }
-        
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
-        
-        return $this->render('TicketBundle:Ticket:showTicket.html.twig', array('tickets'    =>  $this->loadTicket(), 
-                                                                             'ticket'    => $ticket, 
-                                                                             'id_ticket' => $id_ticket,
-                                                                             'posts'   => $posts, 
-                                                                             'form' => $form->createView(),
-                                                                          ));
+        return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
     }      
      
     public function showPostAction($id_ticket)
     {
-        $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         
-        $post = new Post();
-        
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        
-        $form = $this->createForm(new PostType(), $post);
-        
-        if ($request->getMethod() == 'POST') {
-                
-            $form->bindRequest($request);
-
-            //Define User
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            
-            //Define Post    
-            $post->setCreatedBy($user);
-            $post->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $post->setModifiedBy($user);
-            $post->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            
-            $em->persist($post);
-
-            $em->flush();
-
-            $sesion = $request->getSession();
-
-        }
-        
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
-        
-        return $this->render('TicketBundle:Ticket:showPost.html.twig', array('tickets'    =>  $this->loadTicket(), 
-                                                                             'ticket'    => $ticket, 
-                                                                             'id_ticket' => $id_ticket,
-                                                                             'posts'   => $posts, 
-                                                                             'form' => $form->createView(),
-                                                                          ));
+        return $this->render('TicketBundle:Ticket:showPost.html.twig', $this->createPost($request, $id_ticket));
     }   
     
     
@@ -224,13 +153,54 @@ class TicketController extends Controller{
     private function loadTicket()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        //Rellenando la lista de tickets abiertos
-        $open = $em->getRepository('TicketBundle:Status')->find(0);
-       
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => $open));
         
-        return $tickets;
+        //Rellenando la lista de tickets abiertos
+        $ticketsFiltered = $em->getRepository('TicketBundle:Ticket')->findTicketFiltered($this->get('security.context'));
+        
+        return $ticketsFiltered;
+    }
+    
+    private function createPost($request, $id_ticket){
+        
+        $em = $this->getDoctrine()->getEntityManager();
+                
+        $post = new Post();
+        
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+        
+        $form = $this->createForm(new PostType(), $post);
+        
+        if ($request->getMethod() == 'POST') {
+                
+            $form->bindRequest($request);
+
+            //Define User
+            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
+            
+            //Define Post
+            $post->setTicket($ticket);
+            
+            $post->setCreatedBy($user);
+            $post->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $post->setModifiedBy($user);
+            $post->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            
+            $em->persist($post);
+
+            $em->flush();
+
+            $sesion = $request->getSession();
+
+        }
+        
+        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
+        
+        $array = array('form' => $form->createView(),
+                       'tickets'    =>  $this->loadTicket(),
+                       'ticket' => $ticket,
+                       'id_ticket' => $id_ticket,
+                       'posts' => $posts, 
+                      );
+        return $array;
     }
 }
-
-/* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());

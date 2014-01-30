@@ -27,8 +27,70 @@
         </table>
     </div>    
     
+    {# mensajes del TICKET #}
     
-{# mensajes del TICKET #}
+        {% set nPosts = posts | length %}
+            
+        {% for i in 2..1 %}
+        <div class='txtContainer'>
+            {% if posts[nPosts-i] is defined %}
+                
+            <fieldset>
+
+            {# Marca con un color diferente los mensajes del usuario #}
+                
+                {% if posts[nPosts-i].createdBy.id == app.security.getToken().getUser().getId() %}
+                
+                    <legend style="background: azure;"> {{ posts[nPosts-i].createdBy.username }}</legend>
+                    
+                {% else %}
+                    
+                    <legend> {{ posts[nPosts-i].createdBy.username }}</legend>
+                {% endif %}
+
+                    <p> {{ posts[nPosts-i].message }} </p>
+                    
+            </fieldset>
+            {% endif %}
+        </div>
+        {% endfor %}   
+
+        <a class='pull-right' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver todos ({{ nPosts }})</a>
+
+        {% if ticket.status.id == 1 %}
+
+            <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CERRADO<a>
+
+        {% else %}
+                    
+            <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
+
+                <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
+
+                <section>
+                    <h5>Responde: </h5>
+                    <div>
+                        {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
+                        <button class="btn btn-primary pull-right btn100" type="submit">Enviar</button>
+                    </div>
+                </section>
+            </form>
+
+            {% if is_granted('ROLE_ADMIN') %}
+
+                <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CERRAR TICKET<a>
+
+            {% endif %}
+        {% endif %}
+{% endblock %}
+                     
+                        
+                        
+                        
+                        
+                        
+                        
+{# mensajes del TICKET (version MIN)
     
                 
                 
@@ -39,8 +101,8 @@
         {% for i in 2..1 %}
             {% if posts[nPosts-i] is defined %}
                 <div id="post{{ posts[nPosts-i].id }}">
-
-                {# Marca con un color diferente los mensajes del usuario #}
+#}
+                {# Marca con un color diferente los mensajes del usuario 
 
                     {% if posts[nPosts-i].createdBy.id == app.security.getToken().getUser().getId() %}
 
@@ -50,8 +112,8 @@
 
                         <label for="ac-{{ loop.index }}"> {{ posts[nPosts-i].createdBy.username }}</label>
                     {% endif %}
-
-                {# Cambia el css del ultimo mensaje para que aparezca abierto #}
+#}
+                {# Cambia el css del ultimo mensaje para que aparezca abierto 
 
                     {% if loop.last %}
 
@@ -99,3 +161,5 @@
             {% endif %}
         {% endif %}
 {% endblock %}
+
+#}
