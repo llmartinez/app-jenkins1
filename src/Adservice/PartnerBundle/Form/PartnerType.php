@@ -17,6 +17,7 @@ class PartnerType extends AbstractType {
                 ->add('fax')
                 ->add('address')
                 ->add('postal_code')
+                ->add('active', 'checkbox', array('required' => false))
                 ->add('province')
                 ->add('region')
         ;

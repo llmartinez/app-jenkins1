@@ -12,6 +12,9 @@ use Adservice\UserBundle\Entity\User;
 
 class DefaultController extends Controller {
 
+    /**
+     * Welcome function, redirige al html del menu de usuario
+     */
     public function indexAction() {
         return $this->render('UserBundle:Default:index.html.twig');
     }
@@ -27,6 +30,7 @@ class DefaultController extends Controller {
         $petition = $this->getRequest();
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
+        $original_password = $user->getPassword();
         $form = $this->createForm(new UserType(), $user);
 
         if (!$user)
@@ -36,7 +40,7 @@ class DefaultController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->saveUser($em, $user);
+            if ($form->isValid()) $this->saveUser($em, $user, $original_password);
             return $this->redirect($this->generateUrl('user_index'));
         }
 
@@ -48,14 +52,13 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Recupera todos los usuarios segun su rol
-     * @return type
+     * Recupera todos los usuarios y los separa por su rol
      */
     public function userListAction() {
         
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        }
+        
         $em = $this->getDoctrine()->getEntityManager();
         $all_users = $em->getRepository("UserBundle:User")->findAll();
 
@@ -76,7 +79,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Obtener los datos del usuario a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN
+     * Obtener los datos del usuario a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * El ROLE_USER debe usar el profileAction (solo se puede editar a si mismo)
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
@@ -88,16 +91,17 @@ class DefaultController extends Controller {
         }
         
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository("UserBundle:User")->find($id);
-        
-        if (!$user) throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        if (!$user) throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
+        $original_password = $user->getPassword();
+        
         $petition = $this->getRequest();
         $form = $this->createForm(new UserType(), $user);
-        
+
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->saveUser($em, $user);
+            if ($form->isValid()) $this->saveUser($em, $user, $original_password);
             return $this->redirect($this->generateUrl('user_list'));
         }
 
@@ -106,6 +110,12 @@ class DefaultController extends Controller {
                                                                             'form'       => $form->createView()));
     }
     
+    /**
+     * Elimina el usuario con la $id de la bbdd
+     * @param Int $id
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
     public function deleteUserAction($id){
         
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
@@ -121,6 +131,11 @@ class DefaultController extends Controller {
         return $this->redirect($this->generateUrl('user_list'));
     }
     
+    /**
+     * Crea un nuevo usuario en la bbdd
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function newUserAction(){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
@@ -145,19 +160,28 @@ class DefaultController extends Controller {
     
     /**
      * Hace el save de un usuario
+     * Si $user->getPassword() == NULL indica que no se quiere modificar y se mantienen el que habia (viene del formulario y esta en blanco)
+     * Si $user->getPassword() != NULL indica que si que lo queremos cambiar y se tiene que codificar con el nuevo salt (viene del formulario y NO esta en blanco)
      * @param EntityManager $em
      * @param User $user
+     * @param String $original_password password existente en la bbdd
      */
-    private function saveUser($em, $user){
-        
-        //codificamos el password
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-        $salt = md5(time());
-        $password = $encoder->encodePassword($user->getPassword(), $salt);
-        $user->setPassword($password);
-        $user->setSalt($salt);
+    private function saveUser($em, $user, $original_password=null){
+
+        if($user->getPassword() != null){
+            //password nuevo, se codifica con el nuevo salt
+            $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+            $salt = md5(time());
+            $password = $encoder->encodePassword($user->getPassword(), $salt);
+            $user->setPassword($password);
+            $user->setSalt($salt);
+        }else{
+            //el password no se modifica
+            $user->setPassword($original_password);
+        }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $user->setModifyBy($this->get('security.context')->getToken()->getUser());
+        
 
         $em->persist($user);
         $em->flush();

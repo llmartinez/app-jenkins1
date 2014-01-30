@@ -23,7 +23,7 @@ class WorkshopType extends AbstractType
             ->add('email_2','email')
             ->add('observations')
             ->add('partner')
-            ->add('active')
+            ->add('active', 'checkbox', array('required' => false))
             ->add('adservice_plus')
             ->add('test')
             ->add('typology')
