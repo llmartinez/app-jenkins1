@@ -25,7 +25,7 @@
 {# mensajes del TICKET #}
     
         {% for message in posts %}
-                
+        <div class='txtContainer'>        
             <fieldset>
 
             {# Marca con un color diferente los mensajes del usuario #}
@@ -42,7 +42,7 @@
                     <p> {{ message.message }} </p>
                     
             </fieldset>
-               
+        </div>         
         {% endfor %}
                 
         <hr>
@@ -52,7 +52,7 @@
 
         {% else %}
                     
-            <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
+            <form action="{{ path('showPost', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
 
                 <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
 
