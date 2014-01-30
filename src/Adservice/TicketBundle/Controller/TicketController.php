@@ -231,6 +231,6 @@ class TicketController extends Controller{
         
         return $tickets;
     }
+    
 }
 
-/* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());

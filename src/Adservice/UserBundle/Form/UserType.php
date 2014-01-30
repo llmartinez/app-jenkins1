@@ -11,12 +11,12 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('password')
-//            ->add('password', 'repeated', array(
-//                  'type' => 'password',
-//                  'invalid_message' => 'Las dos contraseñas deben coincidir',
-//                  'options' => array('always_empty' => false)
-//            ))    
+            ->add('password', 'repeated', array('type'              => 'password',
+                                                'invalid_message'   => 'Las dos contraseñas deben coincidir',
+                                                'first_name'        => 'Contraseña',
+                                                'second_name'       => 'Repite Contraseña',
+                                                'required'          => false
+            ))
             ->add('name')
             ->add('surname')
             ->add('dni')
@@ -28,7 +28,7 @@ class UserType extends AbstractType
             ->add('fax')
             ->add('email_1', 'email')
             ->add('email_2', 'email')
-            ->add('active')
+            ->add('active', 'checkbox', array('required' => false))
             ->add('language')
             ->add('region')
             ->add('province')

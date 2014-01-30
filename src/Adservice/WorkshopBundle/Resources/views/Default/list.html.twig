@@ -29,7 +29,7 @@
             {% for workshop in all_workshops %}
             <tr>
                 <td>{{ workshop.id }}</td>
-                <td>{{ workshop.name }} </td>
+                <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ workshop.partner}}</td>
                 <td>{{ workshop.address }}</td>
                 <td>{{ workshop.email1 }}</td>

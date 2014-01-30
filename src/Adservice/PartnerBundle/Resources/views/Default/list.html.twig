@@ -24,7 +24,7 @@
             {% for partner in all_partners %}
             <tr>
                 <td>{{ partner.id }}</td>
-                <td>{{ partner.name }} </td>
+                <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1 }}</td>
                 <td>{{ partner.address }}</td>

@@ -9,10 +9,6 @@ changeLanguage:
 ###########################
 #   APDO. JQUERY - AJAX   #
 ###########################
-_select_province:
-    pattern: /_select_province
-    defaults: { _controller: UtilBUndle:Default:_selectProvince }
-
 user_provinces: 
     pattern: /provincesFromRegion
     defaults: { _controller: UtilBundle:Default:provincesFromRegion }

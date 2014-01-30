@@ -96,6 +96,13 @@ class Partner{
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
      */
     private $province;
+    
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
 
     /**
      * @var datetime $created_at
@@ -326,7 +333,24 @@ class Partner{
     {
         return $this->province;
     }
+    
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     */
+    public function setActive($active) {
+        $this->active = $active;
+    }
 
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive() {
+        return $this->active;
+    }
     /**
      * Set created_at
      *
