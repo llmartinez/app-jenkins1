@@ -22,7 +22,8 @@
                         </div>
                         
                         <div class="btn100">    
-                            Descripcion {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5'} }) }}
+                            Descripcion {{ form_widget(form.description, { 'value': posts[0].message ,
+                                                                           'attr': {'class': 'form-control', 'rows': '5'} }) }}
                         </div>
                         
                         <div class="btn100">    

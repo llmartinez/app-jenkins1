@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Adservice\TicketBundle\Entity\Ticket
  *
  * @ORM\Table(name="ticket")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\TicketRepository")
  */
 class Ticket
 {
