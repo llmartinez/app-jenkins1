@@ -12,3 +12,12 @@ changeLanguage:
 user_provinces: 
     pattern: /provincesFromRegion
     defaults: { _controller: UtilBundle:Default:provincesFromRegion }
+    
+#############################
+#   APDO. FILE              #
+#############################
+
+upload:
+    pattern: /upload
+    defaults: { _controller: UtilBundle:Document:upload }
+    

@@ -22,9 +22,7 @@ class TicketRepository extends EntityRepository
                 SELECT t FROM TicketBundle:Ticket t
                 WHERE t.status = :status
             ');
-            
-            $consulta->setParameter('status', 0);
-            
+           
         }else{
             
             $consulta = $em->createQuery('
@@ -33,10 +31,10 @@ class TicketRepository extends EntityRepository
                 AND t.created_by = :user
             ');
             
-            $consulta->setParameter('status', 0);
-            
             $consulta->setParameter('user', $security->getToken()->getUser());
         }
+           
+        $consulta->setParameter('status', 0);
         
 	return $consulta->getResult();
     }

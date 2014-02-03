@@ -21,6 +21,29 @@
                             Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                         
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Coche 
+                            <select class="form-control" id="user" name="brand"><option value=0>Selecciona Marca..</option>
+                                
+                                {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
+                            </select>
+                            <select class="form-control" id="user" name="model"><option value=0>Selecciona Modelo..</option>
+                                
+                                {% for model in models %} <option value="{{ model.id }}"> {{ model }} </option>  {% endfor %}
+                            </select>
+                            <select class="form-control" id="user" name="version"><option value=0>Selecciona Version..</option>
+                                
+                                {% for version in versions %} <option value="{{ version.id }}"> {{ version }} </option>  {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">    
+                             Detalles Coche
+                             <input type="text" class='form-control' id='year' name='year'>
+                             <input type="text" class='form-control' id='vin' name='vin'>
+                             <input type="text" class='form-control' id='plateNumber' name='plateNumber'>
+                        </div>
+                        
                          <div class="form-group">    
                              Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
                         </div>

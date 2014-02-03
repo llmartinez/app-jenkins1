@@ -3,7 +3,7 @@
 ################################
 
 newTicket:
-    pattern:  /ticket/new
+    pattern:  /ticket/new/
     defaults: { _controller: TicketBundle:Ticket:newTicket }
  
 editTicket:
@@ -11,19 +11,23 @@ editTicket:
     defaults: { _controller: TicketBundle:Ticket:editTicket } 
     
 findTicket:
-    pattern:  /ticket/find
+    pattern:  /ticket/find/
     defaults: { _controller: TicketBundle:Ticket:findTicket } 
     
 showTicket:
-    pattern:  /ticket/{id_ticket}
+    pattern:  /ticket/show/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
     
 listTicket:
-    pattern:  /ticket
+    pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
     
+################################
+#    GESTIÓN DE POSTS          #
+################################  
+
 showPost:
-    pattern:  /post/{id_ticket}
+    pattern:  /post/show/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
       
 ################################
@@ -31,7 +35,7 @@ showPost:
 ################################        
         
 newIncidence:
-    pattern:  /incidence/new
+    pattern:  /incidence/new/
     defaults: { _controller: TicketBundle:Incidence:newIncidence }
     
 createIncidence:
@@ -43,7 +47,7 @@ editIncidence:
     defaults: { _controller: TicketBundle:Incidence:editIncidence } 
     
 showIncidence:
-    pattern:  /incidence/{id_incidence}
+    pattern:  /incidence/show/{id_incidence}
     defaults: { _controller: TicketBundle:Incidence:showIncidence }    
     
 listIncidence:

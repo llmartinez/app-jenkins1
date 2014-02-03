@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Adservice\TicketBundle\TicketBundle(),
             new Adservice\PartnerBundle\PartnerBundle(),
             new Adservice\WorkshopBundle\WorkshopBundle(),
+            new Adservice\CarBundle\CarBundle(),
             new Adservice\PopupBundle\PopupBundle(),
         );
 
