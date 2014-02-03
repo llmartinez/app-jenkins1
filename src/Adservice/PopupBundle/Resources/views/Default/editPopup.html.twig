@@ -1,0 +1,14 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ popup }}(EDIT)</h1>
+
+    <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_widget(form) }}
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
+
+{% endblock%}
