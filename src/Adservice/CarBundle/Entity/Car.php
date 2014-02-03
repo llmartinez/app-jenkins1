@@ -1,16 +1,16 @@
 <?php
 
-namespace Adservice\TicketBundle\Entity;
+namespace Adservice\CarBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\TicketBundle\Entity\Ticket
+ * Adservice\CarBundle\Entity\Car
  *
- * @ORM\Table(name="ticket")
- * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\TicketRepository")
+ * @ORM\Table(name="car")
+ * @ORM\Entity
  */
-class Ticket
+class Car
 {
     /**
      * @var integer $id
@@ -22,32 +22,33 @@ class Ticket
     private $id;
 
     /**
-     * @var integer $status
+     * @var integer $version
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Status")
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
      */
-    private $status;
+    private $version;
 
     /**
-     * @var integer $importance
+     * @var integer $year
      *
-     * @ORM\Column(name="importance", type="integer")
+     * @ORM\Column(name="year", type="integer")
      */
-    private $importance;
-    
+    private $year;
+
     /**
-     * @var integer $workshop
+     * @var integer $vin
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop")
+     * @ORM\Column(name="vin", type="integer")
      */
-    private $workshop;
-    
+    private $vin;
+
     /**
-     * @var integer $car
+     * @var integer $plateNumber
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car")
+     * @ORM\Column(name="plateNumber", type="integer")
      */
-    private $car;
+    private $plateNumber;
+
     /**
      * @var string $created_by
      *
@@ -75,15 +76,7 @@ class Ticket
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
     private $modified_by;
-
-
-    /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
+    
     /**
      * Get id
      *
@@ -95,89 +88,86 @@ class Ticket
     }
 
     /**
-     * Set status
+     * Set version
      *
-     * @param \Adservice\TicketBundle\Entity\Status $status
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
      */
-    public function setStatus($status)
+    public function setVersion($version)
     {
-        $this->status = $status;
+        $this->version = $version;
     }
 
     /**
-     * Get status
+     * Get version
      *
      * @return integer 
      */
-    public function getStatus()
+    public function getVersion()
     {
-        return $this->status;
+        return $this->version;
     }
 
     /**
-     * Set importance
+     * Set year
      *
-     * @param integer $importance
+     * @param integer $year
      */
-    public function setImportance($importance)
+    public function setYear($year)
     {
-        $this->importance = $importance;
+        $this->year = $year;
     }
 
     /**
-     * Get importance
-     *
-     * @return integer 
-     */
-    public function getImportance()
-    {
-        return $this->importance;
-    }
-
-    /**
-     * Set workshop
-     *
-     * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
-     * 
-     */
-    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop)
-    {
-        $this->workshop = $workshop;
-    }
-
-    /**
-     * Get workshop
+     * Get year
      *
      * @return integer 
      */
-    public function getWorkshop()
+    public function getYear()
     {
-        return $this->workshop;
+        return $this->year;
     }
 
-
     /**
-     * Set car
+     * Set vin
      *
-     * @param \Adservice\CarBundle\Entity\Car $car
-     * 
+     * @param integer $vin
      */
-    public function setCar(\Adservice\CarBundle\Entity\Car $car)
+    public function setVin($vin)
     {
-        $this->car = $car;
+        $this->vin = $vin;
     }
 
     /**
-     * Get car
+     * Get vin
      *
      * @return integer 
      */
-    public function getCar()
+    public function getVin()
     {
-        return $this->car;
+        return $this->vin;
     }
 
+    /**
+     * Set plateNumber
+     *
+     * @param integer $plateNumber
+     */
+    public function setPlateNumber($plateNumber)
+    {
+        $this->plateNumber = $plateNumber;
+    }
 
+    /**
+     * Get plateNumber
+     *
+     * @return integer 
+     */
+    public function getPlateNumber()
+    {
+        return $this->plateNumber;
+    }
+    
+    
     /**
      * Set created_by
      *
@@ -257,29 +247,15 @@ class Ticket
     {
         return $this->modified_by;
     }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
     
     public function __toString() {
-        return $this->title;
+        $version = $this->getVersion();
+        $model = $this->getVersion()->getModel();
+        $brand = $model->getBrand();
+        $year = $this->year;
+        $car = $brand.' '.$model.' '.$version;
+        
+        return $car;
     }
 
 }

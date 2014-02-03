@@ -48,7 +48,16 @@
                     <legend> {{ posts[nPosts-i].createdBy.username }}</legend>
                 {% endif %}
 
-                    <p> {{ posts[nPosts-i].message }} </p>
+                    <div class="colDer"> 
+                        <p> {{ posts[nPosts-i].message }} </p> 
+                    
+                    </div>
+                        
+                    <div class="colIzq">
+                        
+                        {% include 'TicketBundle:Ticket:showDocument.html.twig' with {'documents': documents, 'msg_id': posts[nPosts-i].id} %}
+                        
+                    </div>
                     
             </fieldset>
             {% endif %}

@@ -1,3 +1,7 @@
+CarBundle:
+    resource: "@CarBundle/Resources/config/routing.yml"
+    prefix:   /
+
 WorkshopBundle:
     resource: "@WorkshopBundle/Resources/config/routing.yml"
     prefix:   /workshop
