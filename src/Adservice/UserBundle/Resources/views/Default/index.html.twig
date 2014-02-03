@@ -12,6 +12,7 @@
                     <a href="{{ path("user_profile") }}">Mi perfil</a><br>
                     <a href="{{ path("partner_list") }}">Listado Socios AD-Service</a><br>            
                     <a href="{{ path("user_list") }}">Listado Usuarios AD-Service</a><br>
+                    <a href="{{ path("popup_list") }}">Listado Popups AD-Service</a><br>
                     <a href="{{ path("workshop_list") }}">Listado Talleres AD-Service</a><br>
                     <a href="{{ path("listIncidence") }}">Listado Incidencias AD-Service</a><br>
                     <a href="{{ path("newIncidence") }}">Crear una incidencia como ADMIN</a><br>
@@ -34,5 +35,46 @@
             </tr>
         </table>
     {% endif %}
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+{#                    <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>#}
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>          
+                </div>
+               {# <div class="modal-footer">
+                    <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                </div>#}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+
+{% endblock%}
+
+
+{% block javascripts %}
+    
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $(window).load(function(){
+                var first_time = localStorage['visited'];
+                if (!first_time) {
+                    localStorage['visited'] = false;
+                    var url_ajax = "{{ path("popup_get") }}";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
 
 {% endblock%}

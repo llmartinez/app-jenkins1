@@ -14,6 +14,10 @@ use Adservice\UtilBundle\Entity\Province;
 
 class DefaultController extends Controller {
 
+    /**
+     * Listado de todos los socios de la bbdd
+     * @throws AccessDeniedException
+     */
     public function listAction() {
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
@@ -25,9 +29,15 @@ class DefaultController extends Controller {
 
         return $this->render('PartnerBundle:Default:list.html.twig', array('all_partners' => $all_partners));
     }
-
+    
+    /**
+     * Crea un socio en la bbdd
+     * @throws AccessDeniedException
+     */
     public function newPartnerAction() {
-        
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+            throw new AccessDeniedException();
+        }
         $partner = new Partner();
         $request = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
@@ -74,6 +84,12 @@ class DefaultController extends Controller {
                                                                                   'form'       => $form->createView()));
     }
     
+    /**
+     * Elimina el socio con $id de la bbdd
+     * @param Int $id
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
     public function deletePartnerAction($id){
         
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){

@@ -29,7 +29,7 @@
             {% for workshop in all_workshops %}
             <tr>
                 <td>{{ workshop.id }}</td>
-                <td>{{ workshop.name }} </td>
+                <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ workshop.partner}}</td>
                 <td>{{ workshop.address }}</td>
                 <td>{{ workshop.email1 }}</td>
@@ -37,7 +37,7 @@
                 <td>{{ workshop.observations }}</td>
                 <td>{{ workshop.active }}</td>
                 <td>{{ workshop.adservicePlus }}</td>
-                <td>{{ workshop.updateAt | date('Y-m-d')}}</td>
+                <td>{{ workshop.updateAt | date('d-m-Y')}}</td>
                 <td>
                     <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
@@ -78,8 +78,8 @@
     <script>
         $(document).ready(function() {
             $('#MainContent').find('.glyphicon-trash').click(function() {
-                var user_id = $(this).data('id');
-                confirm_delete_user_modal(user_id);
+                var workshop_id = $(this).data('id');
+                confirm_delete_workshop_modal(workshop_id);
             })
         });
     </script>

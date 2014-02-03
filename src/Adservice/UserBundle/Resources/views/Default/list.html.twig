@@ -24,7 +24,7 @@
                 {% for user_admin in users_role_admin %}
             <tr>
                 <td>{{ user_admin.id }}</td>
-                <td>{{ user_admin.username }} <span class="label label-primary">Admin</span></td>
+                <td>{{ user_admin.username }} <span class="label label-primary">Admin</span>{% if user_admin.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ user_admin.name }} </td>
                 <td>{{ user_admin.surname}}</td>
                 <td>{{ user_admin.email1 }}</td>
@@ -38,7 +38,7 @@
                 {% for user in users_role_user %}
             <tr>
                 <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
+                <td>{{ user.username }} {% if user.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.surname}}</td>
                 <td>{{ user.email1 }}</td>

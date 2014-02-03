@@ -1,6 +1,9 @@
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
     prefix:   /
+PopupBundle:
+    resource: "@PopupBundle/Resources/config/routing.yml"
+    prefix:   /popup
 
 WorkshopBundle:
     resource: "@WorkshopBundle/Resources/config/routing.yml"

@@ -5,6 +5,7 @@
     <h1>{{ user }}(EDIT)</h1>
 
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_errors(form) }}
             {{ form_widget(form) }}
         <p>
             <button type="submit">Save</button>
