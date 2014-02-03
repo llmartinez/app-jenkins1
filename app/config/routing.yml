@@ -1,3 +1,7 @@
+PopupBundle:
+    resource: "@PopupBundle/Resources/config/routing.yml"
+    prefix:   /popup
+
 WorkshopBundle:
     resource: "@WorkshopBundle/Resources/config/routing.yml"
     prefix:   /workshop

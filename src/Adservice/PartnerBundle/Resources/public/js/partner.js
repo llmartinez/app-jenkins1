@@ -1,4 +1,14 @@
 /**
+ * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar
+ * @param int user_id
+ */
+function confirm_delete_partner_modal(partner_id) {
+    var custom_href = $('.modal-footer').find('a').attr('href');
+    custom_href = custom_href.replace('foo', partnery_id);
+    $('.modal-footer').find('a').attr('href', custom_href);
+}
+
+/**
  * Funcion que rellena (populate) el combo de las provincias segun la comunidad autonoma seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */

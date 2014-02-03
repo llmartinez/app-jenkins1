@@ -7,7 +7,7 @@ changeLanguage:
     defaults: { _controller: UtilBundle:Generic:changeLanguage }
     
 ###########################
-#   APDO. JQUERY - AJAX   #
+#   APDO. AJAX   #
 ###########################
 user_provinces: 
     pattern: /provincesFromRegion

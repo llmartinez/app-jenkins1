@@ -9,35 +9,35 @@
 </table>
 
 {% if all_partners|length > 0  %}
-    <table class="table table-hover" style="width: 50%; margin-left: 450px;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Partner Name</th>
-                <th>Phone Number</th>
-                <th>Email1</th>
-                <th>address</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table table-hover" style="width: 50%; margin-left: 450px;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Partner Name</th>
+            <th>Phone Number</th>
+            <th>Email1</th>
+            <th>address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
             {% for partner in all_partners %}
-            <tr>
-                <td>{{ partner.id }}</td>
-                <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
-                <td>{{ partner.phoneNumber1}}</td>
-                <td>{{ partner.email1 }}</td>
-                <td>{{ partner.address }}</td>
-                <td>
-                    <a href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ partner.id }}</td>
+            <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+            <td>{{ partner.phoneNumber1}}</td>
+            <td>{{ partner.email1 }}</td>
+            <td>{{ partner.address }}</td>
+            <td>
+                <a href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>
+            </td>
+        </tr>
             {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 {% else %}
-    No hay socios!!
+No hay socios!!
 {% endif %}
 
 <!-- Modal -->
@@ -63,14 +63,14 @@
 
 {% block javascripts %}
     {{ parent() }}
-<script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
 
-<script>
-    $(document).ready(function() {
-        $('#MainContent').find('.glyphicon-trash').click(function() {
-            var user_id = $(this).data('id');
-            confirm_delete_user_modal(user_id);
-        })
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $('#MainContent').find('.glyphicon-trash').click(function() {
+                var partner_id = $(this).data('id');
+                confirm_delete_partner_modal(partner_id);
+            })
+        });
+    </script>
 {% endblock %}

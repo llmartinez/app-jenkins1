@@ -169,6 +169,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $province;
     
     /**
+     * @var string $workshop
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop")
+     */
+    private $workshop;
+    
+    /**
      * @var datetime $created_at
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -471,6 +478,14 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
     public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
         $this->region = $region;
+    }
+    
+    public function getWorkshop() {
+        return $this->workshop;
+    }
+
+    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop) {
+        $this->workshop = $workshop;
     }
     
     /**
