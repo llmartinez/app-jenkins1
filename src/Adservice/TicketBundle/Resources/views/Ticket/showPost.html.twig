@@ -14,7 +14,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
                     {% endif %}
-                    <p>Taller:  {{ ticket.createdBy.username }}</p>
+                    <p>Taller:  {{ ticket.owner.username }}</p>
                     <p>Fecha:  {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
                 </td>
             </tr>
@@ -30,13 +30,13 @@
 
             {# Marca con un color diferente los mensajes del usuario #}
                 
-                {% if message.createdBy.id == app.security.getToken().getUser().getId() %}
+                {% if message.owner.id == app.security.getToken().getUser().getId() %}
                 
-                    <legend style="background: azure;"> {{ message.createdBy.username }}
+                    <legend style="background: azure;"> {{ message.owner.username }}
                     
                 {% else %}
                     
-                    <legend> {{ message.createdBy.username }}
+                    <legend> {{ message.owner.username }}
                 {% endif %}
                     </legend>
                         

@@ -21,10 +21,10 @@
         
         {% for ticket in tickets %}
         {# Comprueba que el usuario pueda ver ese ticket #}
-        {% if (ticket.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+        {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
         
             {# Comprueba que el ultimo post no sea del usuario #}
-            {% if lastPosts[ticket.id].createdBy.id != app.security.getToken().getUser().getId() %}
+            {% if lastPosts[ticket.id].owner.id != app.security.getToken().getUser().getId() %}
         
                     <p>Ticket #{{ ticket.id }} pendiente de respuesta..
                         <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">Ver</a>
@@ -38,7 +38,7 @@
             <tr><td>
                 {% if ticket is not null%}
                     {% if ticket.id is not null %}
-                        {% if (ticket.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                        {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
 
                             <p>Ticket #{{ ticket.id }} ( {{ ticket.createdAt | date("d-m-Y") }}) -> {{ ticket.status }}
                                     <a class="btn btn-primary pull-right"  href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">Ver</a> </p> 

@@ -22,7 +22,7 @@
                 {% else %}
                 <tbody>
                     {% for incidence in incidences %}
-                        {% if (incidence.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                        {% if (incidence.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
                         <tr>
                             <td>
                                 <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>
@@ -33,7 +33,7 @@
                                     <b style='color:black'>#{{ incidence.id }}:</b>  
                                     {{ incidence.ticket.title | length > 30 ?  incidence.ticket.title | slice(0, 30) ~ '...' : incidence.ticket.title }} 
                                 </p>
-                                <b>Ultima Modificacion:</b>  {{ incidence.createdBy.username }}
+                                <b>Ultima Modificacion:</b>  {{ incidence.owner.username }}
                                 - {{ incidence.modifiedAt | date("d/m/Y")}}  ({{ incidence.status }})
 
                             </td>

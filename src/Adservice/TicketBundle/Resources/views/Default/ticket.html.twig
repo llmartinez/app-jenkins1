@@ -32,11 +32,11 @@
                     <tbody>
                         {% for ticket in tickets %}
                             
-                            {% if (ticket.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
                             
                             <tr>
                                 <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
-                                <td>{{ ticket.createdBy.username | length > 9 ?  ticket.createdBy.username | slice(0, 9) ~ '...' : ticket.createdBy.username }}</td>
+                                <td>{{ ticket.owner.username | length > 9 ?  ticket.owner.username | slice(0, 9) ~ '...' : ticket.owner.username }}</td>
                                 <td>
                                     <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> 
 
