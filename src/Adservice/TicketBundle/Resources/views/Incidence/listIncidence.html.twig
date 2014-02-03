@@ -29,7 +29,7 @@
             <tr><td>
                 {% if incidence is not null%}
                     {% if incidence.id is not null %}
-                        {% if (incidence.ticket.createdBy.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                        {% if (incidence.ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
 
                             <p>Incidencia #{{ incidence.id }} ( {{ incidence.createdAt | date("d-m-Y") }}) -> {{ incidence.status }}
                                     <a class="btn btn-primary pull-right"  href="{{ path('showIncidence', { 'id_incidence' : incidence.id }) }}">Ver</a> </p> 

@@ -36,12 +36,11 @@ class Post
     private $message;
 
     /**
-     * @var string $created_by
+     * @var string $owner
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $created_by;
-
+    private $owner;
     /**
      * @var date $created_at
      *
@@ -114,23 +113,23 @@ class Post
     }
     
     /**
-     * Set $created_by
+     * Set $owner
      *
-     * @param \Adservice\UserBundle\Entity\User $created_by
+     * @param \Adservice\UserBundle\Entity\User $owner
      */
-    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
+    public function setOwner(\Adservice\UserBundle\Entity\User $owner)
     {
-        $this->created_by = $created_by;
+        $this->owner = $owner;
     }
 
     /**
-     * Get created_by
+     * Get owner
      *
      * @return \Adservice\UserBundle\Entity\User
      */
-    public function getCreatedBy()
+    public function getOwner()
     {
-        return $this->created_by;
+        return $this->owner;
     }
 
     /**

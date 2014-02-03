@@ -14,36 +14,33 @@
                         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
                         
                         <div class="col-xs-6 col-md-6 form-group">    
-                            Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+                            Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
                         </div>
                         
                         <div class="col-xs-6 col-md-6 form-group">    
                             Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
-                        
+                        <div>
                         <div class="col-xs-6 col-md-6 form-group">    
-                            Coche 
-                            <select class="form-control" id="user" name="brand"><option value=0>Selecciona Marca..</option>
+                            Marca 
+                            <select class="form-control" id="idBrand" name="brand"><option value=0>Selecciona Marca..</option>
                                 
                                 {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
                             </select>
-                            <select class="form-control" id="user" name="model"><option value=0>Selecciona Modelo..</option>
-                                
-                                {% for model in models %} <option value="{{ model.id }}"> {{ model }} </option>  {% endfor %}
-                            </select>
-                            <select class="form-control" id="user" name="version"><option value=0>Selecciona Version..</option>
-                                
-                                {% for version in versions %} <option value="{{ version.id }}"> {{ version }} </option>  {% endfor %}
-                            </select>
+                            Modelo
+                            <select class="form-control" id="idModel" name="model"><option value=0>Selecciona Modelo..</option></select>
+                            Version
+                            <select class="form-control" id="idVersion" name="version"><option value=0>Selecciona Version..</option></select>
                         </div>
-                        
-                        <div class="form-group">    
-                             Detalles Coche
-                             <input type="text" class='form-control' id='year' name='year'>
-                             <input type="text" class='form-control' id='vin' name='vin'>
-                             <input type="text" class='form-control' id='plateNumber' name='plateNumber'>
+                         <div class="col-xs-6 col-md-6 form-group">
+                             
+                             Año<input type="text" placeholder="Introduce Año" class='form-control' id='year' name='year'>
+                             
+                             Bastidor<input type="text" placeholder="Introduce Bastidor" class='form-control' id='vin' name='vin'>
+                             
+                             Matricula<input type="text" placeholder="Introduce Matricula" class='form-control' id='plateNumber' name='plateNumber'>
                         </div>
-                        
+                        </div>
                          <div class="form-group">    
                              Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
                         </div>
@@ -59,3 +56,5 @@
             </div>
         </div>    
 {% endblock %}
+    
+  

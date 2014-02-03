@@ -18,7 +18,7 @@ class IncidenceController extends Controller{
         $request = $this->getRequest();
         
         $users = $em->getRepository('UserBundle:User')->findAll();
-        //$users = $em->getRepository('UserBundle:User')->findBy(array('user_role' => 'ROLE_ADMINy'));
+        //$users = $em->getRepository('UserBundle:User')->findBy(array('user_role' => 'ROLE_ADMIN'));
         
         $incidence = new Incidence();
         
@@ -33,40 +33,22 @@ class IncidenceController extends Controller{
             
             $ticket = new Ticket();
             $ticket->setTitle($request->get('title'));
-            $ticket->setCreatedBy($user);
-            $ticket->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $ticket->setModifiedBy($user);
-            $ticket->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $ticket->setStatus($incidence->getStatus());
             $ticket->setImportance($incidence->getImportance());
-            $em->persist($ticket);
+            $ticket = saveEntity($ticket, $user, false);
             
             $post = new Post();
             $post->setTicket($ticket);
-            $post->setCreatedBy($user);
-            $post->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $post->setModifiedBy($user);
-            $post->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $post->setMessage($incidence->getDescription());
-            $em->persist($post);
+            $post = saveEntity($post,$user, false);
             
             $post2 = new Post();
             $post2->setTicket($ticket);
-            $post2->setCreatedBy($asesor);
-            $post2->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $post2->setModifiedBy($asesor);
-            $post2->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $post2->setMessage($incidence->getSolution());
-            $em->persist($post2);
+            $post2 = saveEntity($post2,$asesor, false);
                         
             $incidence->setTicket($ticket);
-            $incidence->setCreatedBy($asesor);
-            $incidence->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $incidence->setModifiedBy($asesor);
-            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $em->persist($incidence);
-
-            $em->flush();
+            $incidence = newEntity($incidence,$asesor);
 
             $sesion = $request->getSession();
             
@@ -111,17 +93,10 @@ class IncidenceController extends Controller{
             
             $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
             
-            $ticket->setModifiedBy($asesor);
-            $ticket->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $ticket->setStatus($em->getRepository('TicketBundle:Status')->findOneBy( array('status' => 'Cerrado')));
-            
-            $incidence->setCreatedBy($asesor);
-            $incidence->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $incidence->setModifiedBy($asesor);
-            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $em->persist($incidence);
-
-            $em->flush();
+            $ticket = saveEntity($ticket,$asesor, false);
+             
+            $incidence = saveEntity($incidence,$asesor);
 
             $sesion = $request->getSession();
             
@@ -155,8 +130,7 @@ class IncidenceController extends Controller{
             
             $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
             
-            $incidence->setModifiedBy($asesor);
-            $incidence->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $incidence = saveEntity($incidence,$asesor);
             
             $em->persist($incidence);
 
@@ -217,5 +191,13 @@ class IncidenceController extends Controller{
             
         return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidence' => $incidence,
                                                                                      'incidences' => $incidences, ));
+    }
+    
+    public function saveEntity($em, $entity, $auto_flush=true){
+        $em->setModifiedBy($entity);
+        $em->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+        $em->persist($em);
+        if($auto_flush) $em->flush(); 
+        return $em;
     }
 }

@@ -28,7 +28,7 @@ class TicketRepository extends EntityRepository
             $consulta = $em->createQuery('
                 SELECT t FROM TicketBundle:Ticket t
                 WHERE t.status = :status
-                AND t.created_by = :user
+                AND t.owner = :user
             ');
             
             $consulta->setParameter('user', $security->getToken()->getUser());
