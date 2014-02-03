@@ -23,9 +23,9 @@ class DefaultController extends Controller {
     }
 
     public function newWorkshopAction() {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        }
+        
         $workshop  = new Workshop();
         $request = $this->getRequest();
         $form = $this->createForm(new WorkshopType(), $workshop);
