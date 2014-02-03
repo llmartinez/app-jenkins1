@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Adservice\WorkshopBundle\WorkshopBundle(),
             new Adservice\CarBundle\CarBundle(),
             new Adservice\PopupBundle\PopupBundle(),
+            new Adservice\SystemBundle\SystemBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
