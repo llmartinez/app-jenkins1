@@ -63,8 +63,15 @@ class DefaultController extends Controller {
         
         $em = $this->getDoctrine()->getEntityManager();
         $all_users = $em->getRepository("UserBundle:User")->findAll();
-
+//        $admin = $em->getRepository("UserBundle:User")->find(1);
+//        $all_roles = $em->getRepository("UserBundle:Role")->findAll();
+////        var_dump($admin->getUserRole()->user_role);
+//        $role = $admin->getRoles();
+//        var_dump($role[0]->getName());
+//        die;
+        
         $users_role_admin = array();
+        $users_role_assessor = array();
         $users_role_user = array();
 
         foreach ($all_users as $user) {
@@ -73,27 +80,18 @@ class DefaultController extends Controller {
                 $users_role_admin[] = $user;
             } elseif ($role[0]->getRole() == "ROLE_USER") {
                 $users_role_user[] = $user;
+            } elseif ($role[0]->getRole() == "ROLE_ASSESSOR") {
+                $users_role_assessor[] = $user;
             }
         }
         
         
-//        $statisticRepo = new \Adservice\StatisticBundle\Entity\StatisticRepository($em);
-//        $statisticRepo = new StatisticRepository($em);
-//        $statisticRepo = new StatisticRepository($em, $class);
-//        $num_users_adservice = $statisticRepo->getNumUsers($this);
-        
-//        $num_users_adservice = $em->getRepository("StatisticBundle:Statistic")->getNumUsers();
-//        var_dump($num_users_adservice);
-
-
-        
-// OK        
-//        $em = $this->getDoctrine()->getEntityManager();
-//        $num_users_adservice = $em->getRepository('StatisticBundle:Statistic')->getNumUsers();
-//        var_dump($num_users_adservice);
-
-        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin' => $users_role_admin,
-                                                                        'users_role_user'  => $users_role_user));
+        return $this->render('UserBundle:Default:list.html.twig', array(
+//                                                                        'all_users'             => $all_users
+                                                                        'users_role_admin'      => $users_role_admin,
+                                                                        'users_role_user'       => $users_role_user,
+                                                                        'users_role_assessor'   => $users_role_assessor
+                                                                        ));
     }
 
     /**
