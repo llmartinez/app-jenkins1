@@ -31,14 +31,14 @@ class Car
     /**
      * @var integer $year
      *
-     * @ORM\Column(name="year", type="integer")
+     * @ORM\Column(name="year", type="integer", length=4)
      */
     private $year;
 
     /**
      * @var integer $vin
      *
-     * @ORM\Column(name="vin", type="integer")
+     * @ORM\Column(name="vin", type="integer", length=17)
      */
     private $vin;
 
