@@ -2,12 +2,13 @@
 
 namespace Adservice\UserBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
-use Doctrine\ORM\Mapping as ORM;
-
+use Adservice\UtilBundle\Entity\Country;
+use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 
@@ -42,70 +43,70 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
-    
+
     /**
      * @var string $salt
      *
      * @ORM\Column(name="salt", type="string", length=255)
      */
     private $salt;
-    
+
     /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
+
     /**
      * @var string $surname
      *
      * @ORM\Column(name="surname", type="string", length=255)
      */
     private $surname;
-    
+
     /**
      * @var string $city
      *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
-    
+
     /**
      * @var string $phone_number_1
      *
      * @ORM\Column(name="phone_number_1", type="string", length=9)
      */
     private $phone_number_1;
-        
+
     /**
      * @var string $phone_number_2
      *
      * @ORM\Column(name="phone_number_2", type="string", length=9)
      */
     private $phone_number_2;
-    
+
     /**
      * @var string $movile_number_1
      *
      * @ORM\Column(name="movile_number_1", type="string", length=9)
      */
     private $movile_number_1;
-    
+
     /**
      * @var string $movile_number_2
      *
      * @ORM\Column(name="movile_number_2", type="string", length=9)
-     */    
+     */
     private $movile_number_2;
-    
+
     /**
      * @var string $fax
      *
      * @ORM\Column(name="fax", type="string", length=9)
-     */    
+     */
     private $fax;
-    
+
     /**
      * @var string $email
      *
@@ -113,7 +114,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @Assert\Email()
      */
     private $email_1;
-    
+
     /**
      * @var string $email
      *
@@ -128,7 +129,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="dni", type="string", length=9)
      */
     private $dni;
-    
 
     /**
      * @var boolean $active
@@ -136,13 +136,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
-
-    /**
-     * @var string $language
-     *
-     * @ORM\Column(name="language", type="string", length=2)
-     */
-    private $language;
 
     /**
      * se utilizó user_roles para no hacer conflicto al aplicar ->toArray en getRoles()
@@ -153,28 +146,42 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * )
      */
     private $user_role;
-    
+
     /**
      * @var string $region
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
      */
     private $region;
-    
+
     /**
      * @var string $province
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
      */
     private $province;
-    
+
     /**
      * @var string $workshop
      *
      * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop")
      */
     private $workshop;
-    
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
+     * @var string $language
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Language")
+     */
+    private $language;
+
     /**
      * @var datetime $created_at
      *
@@ -195,7 +202,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
     private $modify_by;
-    
+
     /**
      * Get id
      *
@@ -282,7 +289,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $language
      */
-    public function setLanguage($language) {
+    public function setLanguage(\Adservice\UtilBundle\Entity\Language $language) {
         $this->language = $language;
     }
 
@@ -390,7 +397,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function setDni($dni) {
         $this->dni = $dni;
     }
-        
+
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
         return $this->getUsername() == $user->getUsername();
     }
@@ -404,7 +411,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function __toString() {
-        return $this->getName() .' '. $this->getSurname();
+        return $this->getName() . ' ' . $this->getSurname();
     }
 
     public function __construct() {
@@ -471,7 +478,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
                 $this->active, $this->language, $this->user_role ) = \json_decode(
                 $serialized);
     }
-    
+
     public function getRegion() {
         return $this->region;
     }
@@ -479,7 +486,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
         $this->region = $region;
     }
-    
+
     public function getWorkshop() {
         return $this->workshop;
     }
@@ -487,14 +494,21 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop) {
         $this->workshop = $workshop;
     }
-    
+
+    public function getCountry() {
+        return $this->country;
+    }
+
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
     /**
      * Set created_at
      *
      * @param datetime $createdAt
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->created_at = $createdAt;
     }
 
@@ -503,8 +517,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return datetime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
@@ -513,7 +526,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param datetime $modifiedAt
      */
-    public function setModifiedAt($modifiedAt) {            
+    public function setModifiedAt($modifiedAt) {
         $this->modified_at = $modifiedAt;
     }
 
@@ -522,8 +535,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return datetime 
      */
-    public function getModifiedAt()
-    {
+    public function getModifiedAt() {
         return $this->modified_at;
     }
 
@@ -532,8 +544,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param user $modify_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
-    {
+    public function setModifyBy(\Adservice\UserBundle\Entity\User $user) {
         $this->modify_by = $user;
     }
 
@@ -542,9 +553,8 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return integer 
      */
-    public function getModifyBy()
-    {
+    public function getModifyBy() {
         return $this->modify_by;
     }
-    
+
 }
