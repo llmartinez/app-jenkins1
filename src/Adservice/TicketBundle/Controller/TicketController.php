@@ -19,6 +19,7 @@ use Adservice\UtilBundle\Entity\DocumentRepository;
 use Adservice\UtilBundle\Form\DocumentType;
 
 use Adservice\CarBundle\Entity\Car;
+use Adservice\CarBundle\Form\CarType;
 
 /*
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -32,56 +33,76 @@ class TicketController extends Controller{
      */
     public function newTicketAction() {
         
-         $em = $this->getDoctrine()->getEntityManager();
-         $request = $this->getRequest();
-         
-         $ticket = new Ticket();
-        
-         $form = $this->createForm(new TicketType(), $ticket);
-        
-         if ($request->getMethod() == 'POST') {
-                
-            $form->bindRequest($request);
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
+        $ticket = new Ticket();
+        $car = new Car();
+        $post = new Post();
+        $document = new Document();
+        
+        //Define Forms
+        $form = $this->createForm(new TicketType(), $ticket);
+        $formC = $this->createForm(new CarType(), $car);
+        $formP = $this->createForm(new PostType(), $post);
+        $formD = $this->createForm(new DocumentType(), $document);
+
+        if ($request->getMethod() == 'POST') {
+                
             //campos comunes
             $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            $status = $em->getRepository('TicketBundle:Status')->find(0);
-            $version = $em->getRepository('CarBundle:Version')->find(array($request->get('version')));
+            $status = $em->getRepository('TicketBundle:Status')->find('0');
+            $security = $this->get('security.context');
             
-            //campos de CAR
-            $car = DefaultC::newEntity(new Car(),$user); 
-            $car->setVersion($version);
-            $car->setVin($request->get('vin'));
-            $car->setPlateNumber($request->get('plateNumber'));
-            $car->setYear($request->get('year'));
+            //Define CAR
+            $formC->bindRequest($request);
+            $car = DefaultC::newEntity($car,$user); 
             DefaultC::saveEntity($em, $car, $user, false);
             
-            //campos de TICKET
+            //Define TICKET
+            $form->bindRequest($request);
             $ticket= DefaultC::newEntity($ticket,$user); 
+            if($security->isGranted('ROLE_ADMIN')){
+                $ticket->setWorkshop($request->get('workshop'));
+            }else{
+                $ticket->setWorkshop($user->getWorkshop());
+            }
             $ticket->setStatus($status);
             $ticket->setCar($car);
             DefaultC::saveEntity($em, $ticket, $user, false);
             
-            //campos de POST
-            $post = DefaultC::newEntity(new Post(),$user); 
+            //Define POST
+            $formP->bindRequest($request);
+            $post = DefaultC::newEntity($post,$user); 
             $post->setTicket($ticket);
-            $post->setMessage($request->get('message'));
-            DefaultC::saveEntity($em, $post, $user);
+            DefaultC::saveEntity($em, $post, $user, false);
+            
+            //Define Document
+            $formD->bindRequest($request);
+            $document->setPost($post);
+            
+            if ($document->getFile() != "")
+            {
+                $em->persist($document);
+            }
+            
+            $em->flush();
 
             $sesion = $request->getSession();
 
             return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
-            }
+        }
          
-         $brands = $em->getRepository('CarBundle:Brand')->findAll();
-         $models = $em->getRepository('CarBundle:Model')->findAll();
-         $versions = $em->getRepository('CarBundle:Version')->findAll();
-            
-         return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' =>  $this->loadTicket(), 
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $models = $em->getRepository('CarBundle:Model')->findAll();
+
+        return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' =>  $this->loadTicket(), 
                                                                                 'form' => $form->createView(), 
+                                                                                'formC' => $formC->createView(),
+                                                                                'formP' => $formP->createView(), 
+                                                                                'formD' => $formD->createView(), 
                                                                                 'brands' => $brands, 
-                                                                                'models' => $models,
-                                                                                'versions' => $versions, ));
+                                                                                'models' => $models, ));
     }
     
     /**
@@ -235,7 +256,7 @@ class TicketController extends Controller{
         $form = $this->createForm(new PostType(), $post);
         
         //Define Form de documents        
-        $formF = $this->createForm(new DocumentType(), $document);
+        $formD = $this->createForm(new DocumentType(), $document);
         
         if ($request->getMethod() == 'POST') {
                 
@@ -243,15 +264,14 @@ class TicketController extends Controller{
             
             //Define User
             $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            $date = new \DateTime(\date("Y-m-d H:i:s"));
       
             //Define Post
-            $post = DefaultC::newEntity($ticket,$user);
+            $post = DefaultC::newEntity($post,$user);
             $post->setTicket($ticket);
             DefaultC::saveEntity($em, $post, $user, false);
             
             //Define Document
-            $formF->bindRequest($request);
+            $formD->bindRequest($request);
             $document->setPost($post);
             
             if ($document->getFile() != "")
@@ -270,7 +290,7 @@ class TicketController extends Controller{
         $documents = $em->getRepository('UtilBundle:Document')->findDocumentFiltered($posts);
         
         $array = array('form' => $form->createView(),
-                       'formF' => $formF->createView(),
+                       'formD' => $formD->createView(),
                        'tickets'    =>  $this->loadTicket(),
                        'ticket' => $ticket,
                        'id_ticket' => $id_ticket,

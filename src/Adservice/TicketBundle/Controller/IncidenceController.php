@@ -102,10 +102,12 @@ class IncidenceController extends Controller{
             $form->bindRequest($request);
             
             $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
+            $status = $em->getRepository('TicketBundle:Status')->find($request->get('status'));
             
-            $ticket->setStatus($em->getRepository('TicketBundle:Status')->findOneBy( array('status' => 'Cerrado')));
+            $ticket->setStatus($status);
             DefaultC::saveEntity($em, $ticket, $asesor, false);
             
+            $incidence = DefaultC::newEntity($incidence, $asesor);
             DefaultC::saveEntity($em, $incidence, $asesor);
 
             $sesion = $request->getSession();

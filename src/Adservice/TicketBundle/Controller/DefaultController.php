@@ -24,7 +24,7 @@ class DefaultController extends Controller
      * @param EntityManager $em
      * @param Class $entity
      * @param Bool $auto_flush true: aplica cambios en BBDD
-     * @return EntityManager
+     * @return Bool
      */
     public static function saveEntity($em, $entity, $user, $auto_flush=true)
     {
