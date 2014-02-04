@@ -57,4 +57,22 @@
         </div>    
 {% endblock %}
     
-  
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/car/js/car.js') }}"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#idBrand').change(function() {
+                var url_ajax = "{{ path("car_model") }}";
+                fill_model(url_ajax);
+            });
+            
+            $('#idModel').change(function() {
+                var url_ajax = "{{ path("car_version") }}";
+                fill_version(url_ajax);
+            });
+        });
+    </script>
+    
+{% endblock %}

@@ -1,3 +1,10 @@
-CarBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CarBundle:Default:index }
+###########################
+#   APDO. AJAX   #
+###########################
+car_model: 
+    pattern: /carModel
+    defaults: { _controller: CarBundle:Default:carModel }
+    
+car_version: 
+    pattern: /carVersion
+    defaults: { _controller: CarBundle:Default:carVersion }
