@@ -29,10 +29,11 @@ class UserType extends AbstractType
             ->add('email_1', 'email')
             ->add('email_2', 'email')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('language')
             ->add('workshop')
             ->add('region')
             ->add('province')
+            ->add('country')
+            ->add('language')
             ->add('user_role')    
         ;
     }
