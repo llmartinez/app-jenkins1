@@ -12,9 +12,12 @@ use Adservice\TicketBundle\Form\TicketType;
 
 use Adservice\TicketBundle\Entity\Post;
 use Adservice\TicketBundle\Form\PostType;
+
 use Adservice\UtilBundle\Entity\Document;
 use Adservice\UtilBundle\Entity\DocumentRepository;
 use Adservice\UtilBundle\Form\DocumentType;
+
+use Adservice\CarBundle\Entity\Car;
 
 /*
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -22,6 +25,14 @@ use Symfony\Component\HttpFoundation\Response;
 */
 class TicketController extends Controller{
 
+    public function saveEntity($em, $entity, $user, $auto_flush=true)
+    {
+        $entity->setModifiedBy($user);
+        $entity->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+        $em->persist($entity); 
+        if($auto_flush) $em->flush(); 
+        return true;
+    }
     public function newTicketAction() {
         
          $em = $this->getDoctrine()->getEntityManager();
@@ -39,39 +50,33 @@ class TicketController extends Controller{
             $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
             $date = new \DateTime(\date("Y-m-d H:i:s"));
 
-            $status = $em->getRepository('TicketBundle:Status')->findOneBy(array('status' => 'Abierto'));
-
-            //campos de TICKET
-            $ticket->setStatus($status);
-            $ticket->setCreatedBy($user);
-            $ticket->setCreatedAt($date);
-            $ticket->setModifiedBy($user);
-            $ticket->setModifiedAt($date);
-            $em->persist($ticket);
-
+            $status = $em->getRepository('TicketBundle:Status')->find(0);
+            $version = $em->getRepository('CarBundle:Version')->find(array($request->get('version')));
+            
             //campos de CAR
             $car = new Car();
-            $car->setVersion($request->get('version'));
+            $car->setVersion($version);
             $car->setVin($request->get('vin'));
             $car->setPlateNumber($request->get('plateNumber'));
             $car->setYear($request->get('year'));
-            $car->setCreatedBy($user);
+            $car->setOwner($user);
             $car->setCreatedAt($date);
-            $car->setModifiedBy($user);
-            $car->setModifiedAt($date);
-            $em->persist($car);
+            $this->saveEntity($em, $car, $user, false);
+            
+            //campos de TICKET
+            $ticket->setStatus($status);
+            $ticket->setCar($car);
+            $ticket->setOwner($user);
+            $ticket->setCreatedAt($date);
+            $this->saveEntity($em, $ticket, $user, false);
             
             //campos de POST
             $post = new Post();
             $post->setTicket($ticket);
             $post->setMessage($request->get('message'));
-            $post->setCreatedBy($user);
+            $post->setOwner($user);
             $post->setCreatedAt($date);
-            $post->setModifiedBy($user);
-            $post->setModifiedAt($date);
-            $em->persist($post);
-
-            $em->flush();
+            $this->saveEntity($em, $post, $user);
 
             $sesion = $request->getSession();
 
@@ -99,36 +104,41 @@ class TicketController extends Controller{
         $form = $this->createForm(new TicketType(), $ticket);
         
         if ($request->getMethod() == 'POST') {
-              
+            
             $form->bindRequest($request);
             
             $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
             $asesor = $em->getRepository('UserBundle:User')->find($request->get('asesor'));
+            $version = $em->getRepository('CarBundle:Version')->find(array($request->get('version')));
             
-            $date = new \DateTime(\date("Y-m-d H:i:s"));
+            //campos de CAR
+            $car = $em->getRepository('CarBundle:Car')->find($ticket->getCar()->getId());
+            $car->setVersion($version);
+            $car->setVin($request->get('vin'));
+            $car->setPlateNumber($request->get('plateNumber'));
+            $car->setYear($request->get('year'));
+            $this->saveEntity($em, $car, $user, false);
             
-            $ticket->setCreatedBy($user);
-            $ticket->setModifiedBy($asesor);
-            $ticket->setModifiedAt($date);
-            
-            $em->persist($ticket);
-
-            $em->flush();
+            $this->saveEntity($em, $ticket, $asesor);
 
             $sesion = $request->getSession();
             
-            return $this->render('TicketBundle:Ticket:listTicket.html.twig', array( 'tickets' => $this->loadTicket(), 
-                                                                                    'ticket' => $ticket));
+            return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
         }
         
         $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $ticket->getId()));
-        
         $users = $em->getRepository('UserBundle:User')->findAll();
-        
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $models = $em->getRepository('CarBundle:Model')->findAll();
+        $versions = $em->getRepository('CarBundle:Version')->findAll();
+            
         return $this->render('TicketBundle:Ticket:editTicket.html.twig', array( 'tickets' => $this->loadTicket(),
                                                                                 'ticket' => $ticket, 
                                                                                 'posts' => $posts,
-                                                                                'users' => $users,
+                                                                                'users' => $users, 
+                                                                                'brands' => $brands, 
+                                                                                'models' => $models,
+                                                                                'versions' => $versions,
                                                                                 'form' => $form->createView(),
                                                                               ));
     }
@@ -221,12 +231,9 @@ class TicketController extends Controller{
             //Define Post
             $post->setTicket($ticket);
             
-            $post->setCreatedBy($user);
+            $post->setOwner($user); 
             $post->setCreatedAt($date);
-            $post->setModifiedBy($user);
-            $post->setModifiedAt($date);
-            
-            $em->persist($post);
+            $this->saveEntity($em, $post, $user, false);
             
             //Define Document
             $formF->bindRequest($request);
@@ -257,4 +264,5 @@ class TicketController extends Controller{
                       );
         return $array;
     }
+
 }

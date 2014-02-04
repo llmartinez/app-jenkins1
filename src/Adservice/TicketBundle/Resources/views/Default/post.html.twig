@@ -19,7 +19,7 @@
                     {% for post in posts %}
                     <tr>
                         <td>
-                            <p class="subtitle" >{{ post.createdBy }} : ~ </p> 
+                            <p class="subtitle" >{{ post.owner }} : ~ </p> 
                             <p>{{ post.message | length > 100 ?  post.message | slice(0, 100) ~ '...' : post.message }}</p> 
                         </td>
                     </tr>

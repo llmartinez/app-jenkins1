@@ -3,17 +3,28 @@
 namespace Adservice\StatisticBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Adservice\StatisticBundle\Entity\Statistic;
 
+class DefaultController extends Controller {
 
-class DefaultController extends Controller
-{
-    
     /**
-     * Estadisticas chorras en modo de prueba
+     * Listado de estadisticas...muy chorras...
      */
-    public function generalStatisticsAction(){
+    public function listAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $num_users_adservice = $em->getRepository("StatisticBundle:StatisticRepository")->getNumUsers();
+
+
+        $statistic = new Statistic();
         
+        $statistic->setNumUsers($statistic->getNumUsersInAdservice($em));
+        $statistic->setNumTickets($statistic->getTicketsInAdservice($em));
+        $statistic->setNumIncidences($statistic->getIncidencesInAdservice($em));
+        $statistic->setNumOpenTickets($statistic->getNumTicketsByStatus($em, 'open'));
+        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close'));
+        $statistic->setNumOpenIncidences($statistic->getNumIncidencesByStatus($em, 'open'));
+        $statistic->setNumClosedIncidences($statistic->getNumIncidencesByStatus($em, 'close'));
+        $statistic->setUserWithMaxPost($statistic->getUserWithMaxNumPost($em));
+        
+        return $this->render('StatisticBundle:Default:list.html.twig', array('statistic' => $statistic));
     }
 }

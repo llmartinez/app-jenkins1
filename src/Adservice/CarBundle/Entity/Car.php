@@ -43,18 +43,18 @@ class Car
     private $vin;
 
     /**
-     * @var integer $plateNumber
+     * @var string $plateNumber
      *
-     * @ORM\Column(name="plateNumber", type="integer")
+     * @ORM\Column(name="plateNumber", type="string", length=255)
      */
     private $plateNumber;
 
     /**
-     * @var string $created_by
+     * @var string $owner
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $created_by;
+    private $owner;
 
     /**
      * @var date $created_at
@@ -150,7 +150,7 @@ class Car
     /**
      * Set plateNumber
      *
-     * @param integer $plateNumber
+     * @param string $plateNumber
      */
     public function setPlateNumber($plateNumber)
     {
@@ -160,33 +160,32 @@ class Car
     /**
      * Get plateNumber
      *
-     * @return integer 
+     * @return string 
      */
     public function getPlateNumber()
     {
         return $this->plateNumber;
     }
-    
-    
+       
     /**
-     * Set created_by
+     * Set owner
      *
-     * @param \Adservice\UserBundle\Entity\User $created_by
+     * @param \Adservice\UserBundle\Entity\User $owner
      */
-    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
+    public function setOwner(\Adservice\UserBundle\Entity\User $owner)
     {
-        $this->created_by = $created_by;
+        $this->owner = $owner;
     }
 
     /**
-     * Get created_by
+     * Get owner
      *
      * @return string 
      */
-    public function getCreatedBy()
+    public function getOwner()
     {
-        return $this->created_by;
-    }
+        return $this->owner;
+    } 
     
     /**
      * Set created_at
@@ -249,13 +248,15 @@ class Car
     }
     
     public function __toString() {
-        $version = $this->getVersion();
-        $model = $this->getVersion()->getModel();
+        
+        return $this->plateNumber;
+       /* $version = $this->version;
+        $model = $version->getModel();
         $brand = $model->getBrand();
         $year = $this->year;
         $car = $brand.' '.$model.' '.$version;
         
-        return $car;
+        return $car;*/
     }
 
 }
