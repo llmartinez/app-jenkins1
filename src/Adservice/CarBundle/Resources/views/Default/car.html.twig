@@ -1,0 +1,71 @@
+<div>
+    <div class="col-xs-6 col-md-6 form-group">    
+        <label for="idBrand">Marca</label> 
+            <select class="form-control" id="idBrand" name="brand"><option value=0>Selecciona Marca..</option>
+
+            {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
+            </select>
+        <label for="idModel">Modelo</label> 
+            <select class="form-control" id="idModel" name="model"><option value=0>Selecciona Modelo..</option></select>
+            
+        <label for="idVersion">Version</label> 
+            <select class="form-control" id="idVersion" name="version"><option value=0>Selecciona Version..</option></select>
+    </div>
+     <div class="col-xs-6 col-md-6 form-group">
+
+         <label for="year">Año</label> 
+             <input type="number" placeholder="Introduce Año" class='form-control' id='year' name='year' 
+                    value="{{ "now"|date("Y") }}" min="{{ 1800 }}" max="{{ "now"|date("Y")+1 }}">
+
+         <label for="vin">Bastidor</label> 
+             <input type="text" placeholder="Introduce Bastidor" class='form-control' id='vin' name='vin' maxlength="17">
+
+         <label for="plateNumber">Matricula</label> 
+             <input type="text" placeholder="Introduce Matricula" class='form-control' id='plateNumber' name='plateNumber'>
+    </div>
+</div>
+
+
+<script src="{{ asset('bundles/car/js/car.js') }}"></script>
+
+<script>
+        $(document).ready(function() {
+            //cambiar model en funcion de brand
+            $('#idBrand').change(function() {
+                var url_ajax = "{{ path("car_model") }}";
+                fill_model(url_ajax);
+            });
+            
+            //cambiar version en funcion de model
+            $('#idModel').change(function() {
+                var url_ajax = "{{ path("car_version") }}";
+                fill_version(url_ajax);
+            });
+            
+            //Validacion al hacer submit de todos los campos del coche
+            $( "form" ).submit(function( event ) {
+                var msg="";
+                //Comprueba que se haya seleccionado el vehiculo
+                $('select').each(function(){
+                    if($(this).val()==0){
+                        msg+='\n   - '+$(this)[0][0].text;
+                    }
+                });
+                //Comprueba que el numero de bastidor sea de 17 caracteres
+                if($('#vin').val().length!=17){
+                    msg+='\n   - vin(17 caracteres)';
+                }
+                //Comprueba que la matricula sea valida
+                var RegExPattern = /(\d{4}-[\D\w]{3}|[\D\w]{1,2}-\d{4}-[\D\\w]{2})/;
+                if ($("#plateNumber").val().match(RegExPattern)==null){
+                    msg+='\n   - plateNumber';
+                }
+                //Si ha habido algun error lo muestra por pantalla e interrumpe el submit
+                if(msg!=""){
+                    alert('Error: '+msg);
+                    event.preventDefault();
+                }
+                event.preventDefault();
+            });
+        });
+</script>

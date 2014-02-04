@@ -20,27 +20,9 @@
                         <div class="col-xs-6 col-md-6 form-group">    
                             Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
-                        <div>
-                        <div class="col-xs-6 col-md-6 form-group">    
-                            Marca 
-                            <select class="form-control" id="idBrand" name="brand"><option value=0>Selecciona Marca..</option>
-                                
-                                {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
-                            </select>
-                            Modelo
-                            <select class="form-control" id="idModel" name="model"><option value=0>Selecciona Modelo..</option></select>
-                            Version
-                            <select class="form-control" id="idVersion" name="version"><option value=0>Selecciona Version..</option></select>
-                        </div>
-                         <div class="col-xs-6 col-md-6 form-group">
-                             
-                             Año<input type="text" placeholder="Introduce Año" class='form-control' id='year' name='year'>
-                             
-                             Bastidor<input type="text" placeholder="Introduce Bastidor" class='form-control' id='vin' name='vin'>
-                             
-                             Matricula<input type="text" placeholder="Introduce Matricula" class='form-control' id='plateNumber' name='plateNumber'>
-                        </div>
-                        </div>
+                        
+                        {% include 'CarBundle:Default:car.html.twig'%}
+                        
                          <div class="form-group">    
                              Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
                         </div>
@@ -55,24 +37,4 @@
                 </div>
             </div>
         </div>    
-{% endblock %}
-    
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/car/js/car.js') }}"></script>
-    
-    <script>
-        $(document).ready(function() {
-            $('#idBrand').change(function() {
-                var url_ajax = "{{ path("car_model") }}";
-                fill_model(url_ajax);
-            });
-            
-            $('#idModel').change(function() {
-                var url_ajax = "{{ path("car_version") }}";
-                fill_version(url_ajax);
-            });
-        });
-    </script>
-    
 {% endblock %}
