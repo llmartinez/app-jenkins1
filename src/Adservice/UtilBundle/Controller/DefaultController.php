@@ -22,10 +22,8 @@ class DefaultController extends Controller
         $petition = $this->getRequest();
         $id_region = $petition->request->get('id_region');
 
-        $em = $this->getDoctrine()->getEntityManager();
         $provinces = $em->getRepository("UtilBundle:Province")->findBy(array('region' => $id_region));
 
         return new Response(json_encode($provinces), $status=200);
-                
     }
 }

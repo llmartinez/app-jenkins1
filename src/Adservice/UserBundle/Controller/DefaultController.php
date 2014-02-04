@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Adservice\UserBundle\Form\UserType;
 use Adservice\UserBundle\Entity\User;
+//use Adservice\StatisticBundle\Entity\Statistic;
+use Adservice\StatisticBundle\Entity\StatisticRepository;
 
 
 class DefaultController extends Controller {
@@ -73,6 +75,22 @@ class DefaultController extends Controller {
                 $users_role_user[] = $user;
             }
         }
+        
+        
+//        $statisticRepo = new \Adservice\StatisticBundle\Entity\StatisticRepository($em);
+//        $statisticRepo = new StatisticRepository($em);
+//        $statisticRepo = new StatisticRepository($em, $class);
+//        $num_users_adservice = $statisticRepo->getNumUsers($this);
+        
+//        $num_users_adservice = $em->getRepository("StatisticBundle:Statistic")->getNumUsers();
+//        var_dump($num_users_adservice);
+
+
+        
+// OK        
+//        $em = $this->getDoctrine()->getEntityManager();
+//        $num_users_adservice = $em->getRepository('StatisticBundle:Statistic')->getNumUsers();
+//        var_dump($num_users_adservice);
 
         return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin' => $users_role_admin,
                                                                         'users_role_user'  => $users_role_user));

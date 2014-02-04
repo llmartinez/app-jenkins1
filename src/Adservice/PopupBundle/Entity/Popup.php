@@ -4,7 +4,7 @@ namespace Adservice\PopupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\UserBundle\Entity\User;
-use Adservice\PopupBundle\Entity\Popup;
+//use Adservice\PopupBundle\Entity\Popup;
 use Adservice\PopupBundle\Entity\PopupRepository;
 
 /**

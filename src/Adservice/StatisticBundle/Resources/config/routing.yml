@@ -1,0 +1,3 @@
+listStatistics:
+    pattern:  /list
+    defaults: { _controller: StatisticBundle:Default:list }

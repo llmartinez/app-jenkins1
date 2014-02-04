@@ -1,0 +1,43 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+<table class="table table-hover" style="width: 70%; margin-left: 290px;">
+    <tbody>
+        <tr>
+            <td>Número de Usuarios en ADService</td>
+            <td>{{ statistic.getNumUsers }}</td>
+        </tr>
+        <tr>
+            <td>Usuario con mas posts en ADService</td>
+            <td>{{ statistic.getUserWithMaxPost[0].owner }} ({{ statistic.getUserWithMaxPost.num_post }} posts)</td>
+        </tr>
+        <tr>
+            <td>Número de Tickets en ADService</td>
+            <td>{{ statistic.getNumTickets }}</td>
+        </tr>
+        <tr>
+            <td>Número de Tickets Abiertos en ADService</td>
+            <td>{{ statistic.getNumOpenTickets }}</td>
+        </tr>
+        <tr>
+            <td>Número de Tickets Cerrados en ADService</td>
+            <td>{{ statistic.getNumClosedTickets }}</td>
+        </tr>
+        <tr>
+            <td>Número de Incidencias en ADService</td>
+            <td>{{ statistic.getNumIncidences }}</td>
+        </tr>
+        <tr>
+            <td>Número de Incidencias Abiertas en ADService</td>
+            <td>{{ statistic.getNumOpenIncidences }}</td>
+        </tr>
+        <tr>
+            <td>Número de Incidencias Cerradas en ADService</td>
+            <td>{{ statistic.getNumClosedIncidences }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+{% endblock %}
