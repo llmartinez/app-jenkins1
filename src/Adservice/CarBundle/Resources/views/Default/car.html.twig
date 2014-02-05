@@ -1,35 +1,43 @@
-<div>
-    <div class="col-xs-6 col-md-6 form-group">    
-        <label for="idBrand">Marca</label> 
-            <select class="form-control" id="idBrand" name="brand"><option value=0>Selecciona Marca..</option>
+<div class="col-xs-6 col-md-6 form-group">
+                            
+        <label for="idBrand">Brand</label> 
+        <select class="form-control" id="idBrand" name="brand"><option value=0>Select Brand..</option>
 
-            {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
-            </select>
-        <label for="idModel">Modelo</label> 
-            <select class="form-control" id="idModel" name="model"><option value=0>Selecciona Modelo..</option></select>
-            
-        <label for="idVersion">Version</label> 
-            <select class="form-control" id="idVersion" name="version"><option value=0>Selecciona Version..</option></select>
-    </div>
-     <div class="col-xs-6 col-md-6 form-group">
+        {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
+        </select>
 
-         <label for="year">Año</label> 
-             <input type="number" placeholder="Introduce Año" class='form-control' id='year' name='year' 
-                    value="{{ "now"|date("Y") }}" min="{{ 1800 }}" max="{{ "now"|date("Y")+1 }}">
+        <label for="idModel">Model</label> 
+        <select class="form-control" id="idModel" name="model"><option value=0>Select Model..</option></select>
 
-         <label for="vin">Bastidor</label> 
-             <input type="text" placeholder="Introduce Bastidor" class='form-control' id='vin' name='vin' maxlength="17">
+        <label for="new_car_form_version">Version</label> 
+        {{ form_widget(formC.version, { 'attr': {'class': 'form-control'} }) }}
 
-         <label for="plateNumber">Matricula</label> 
-             <input type="text" placeholder="Introduce Matricula" class='form-control' id='plateNumber' name='plateNumber'>
-    </div>
 </div>
 
+<div class="col-xs-6 col-md-6 form-group">
+    
+        <label for="new_car_form_year">Year</label>
+        {{ form_widget(formC.year, { 'attr': { 'class': 'form-control', 
+                                               'value': "now"|date("Y"), 
+                                               'min': '1800',
+                                               'max': "now"|date("Y")+1 , } }) }}
+        <label for="new_car_form_vin">Vin</label>
+        {{ form_widget(formC.vin, { 'attr': { 'class': 'form-control', 
+                                              'placeholder': 'Insert Vin'} }) }}
+
+        <label for="new_car_form_plateNumber">Plate Number <a id="txt_plateNumber"></a></label>
+        {{ form_widget(formC.plateNumber, { 'attr': { 'class': 'form-control', 
+                                                  'placeholder': 'Insert Plate Number'} }) }}
+</div>
 
 <script src="{{ asset('bundles/car/js/car.js') }}"></script>
 
 <script>
         $(document).ready(function() {
+            // Limpiamos el combo de version del formulario
+            $('#new_car_form_version').empty();
+            $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
+            
             //cambiar model en funcion de brand
             $('#idBrand').change(function() {
                 var url_ajax = "{{ path("car_model") }}";
@@ -52,20 +60,18 @@
                     }
                 });
                 //Comprueba que el numero de bastidor sea de 17 caracteres
-                if($('#vin').val().length!=17){
-                    msg+='\n   - vin(17 caracteres)';
+                if ($("#new_car_form_vin").val()==0){    //if($('#vin').val().length!=17){
+                    msg+='\n   - Introduce vin (17 caracteres)';
                 }
-                //Comprueba que la matricula sea valida
-                var RegExPattern = /(\d{4}-[\D\w]{3}|[\D\w]{1,2}-\d{4}-[\D\\w]{2})/;
-                if ($("#plateNumber").val().match(RegExPattern)==null){
-                    msg+='\n   - plateNumber';
+                //Comprueba que la matricula no este vacia
+                if ($("#new_car_form_plateNumber").val()==0){
+                    msg+='\n   - Introduce plateNumber';
                 }
                 //Si ha habido algun error lo muestra por pantalla e interrumpe el submit
                 if(msg!=""){
-                    alert('Error: '+msg);
-                    event.preventDefault();
+                    alert('Error: '+msg);   
+                    event.preventDefault();                 
                 }
-                event.preventDefault();
             });
         });
 </script>

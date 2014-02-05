@@ -15,7 +15,7 @@ function fill_model(url_ajax) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#idModel').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Selecciona Modelo..</option>");
+            $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Select Modelo..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=idModel]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });      
@@ -41,11 +41,11 @@ function fill_version(url_ajax) {
         dataType: "json",
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
-            $('#idVersion').empty();
+            $('#new_car_form_version').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=idVersion]').append("<option value=0>Selecciona Version..</option>");
+            $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=idVersion]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });      
         },
         error: function() {

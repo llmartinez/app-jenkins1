@@ -3,38 +3,51 @@
 {% block content %}
 
     <h3>Nuevo Ticket</h3>
-    
+    {#
+    {% if app.session.hasFlash('info') %}
+        <p class="info">{{ app.session.getFlash('info') }}</p>
+    {% endif %}
+    #}
+        
     <div class="container">
         <div class="row">
 
             <div class="col-sm-8 contact-form">
-                <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post">
+                <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
                     <div class="row">
                         
                         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
                         
-                        <div class="col-xs-6 col-md-6 form-group">    
-                            Titulo {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
+                        <div class="col-xs-6 col-md-6 form-group">   
+                            <label for="new_ticket_form_title">Title</label>  
+                            {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
                         </div>
                         
                         <div class="col-xs-6 col-md-6 form-group">    
-                            Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                            <label for="new_ticket_form_importance">Importance</label> 
+                            {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
+                        
+                       
                         
                         {% include 'CarBundle:Default:car.html.twig'%}
                         
-                         <div class="form-group">    
-                             Desc <textarea class='form-control' id='message' name='message' rows=5></textarea>
-                        </div>
+                        <div class="form-group">    
+                            <label for="new_post_form_message">Message</label>
+                             {{ form_widget(formP.message, { 'attr': {'class': 'form-control', 'rows': '5'} }) }}
+                       </div>
+                        
+                            {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+                        
                     </div>
                     <br />
                     <div class="row">
                         <div class="col-xs-12 col-md-12 form-group">
                             <button class="btn btn-primary pull-right" type="submit">Submit</button>
-                            </form>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </div>    
+        </div>
+    </div>    
 {% endblock %}
