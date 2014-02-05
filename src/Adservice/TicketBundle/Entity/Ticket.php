@@ -3,6 +3,7 @@
 namespace Adservice\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Adservice\UserBundle\Entity\User;
 
 /**
  * Adservice\TicketBundle\Entity\Ticket
@@ -76,6 +77,12 @@ class Ticket
      */
     private $modified_by;
 
+    /**
+     * @var string $owner
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $assigned_to;
 
     /**
      * @var string $title
@@ -251,11 +258,32 @@ class Ticket
     /**
      * Get modified_by
      *
-     * @return string 
+     * @return user 
      */
     public function getModifiedBy()
     {
         return $this->modified_by;
+    }
+    
+    /**
+     * Set assigned_to
+     *
+     * @param \Adservice\UserBundle\Entity\User $assigned_to
+     */
+    public function setAssignedTo(\Adservice\UserBundle\Entity\User $assigned_to=null)
+    {
+        $this->assigned_to = $assigned_to;
+    }
+
+
+    /**
+     * Get assigned_to
+     *
+     * @return string 
+     */
+    public function getAssignedTo()
+    {
+        return $this->assigned_to;
     }
 
     /**

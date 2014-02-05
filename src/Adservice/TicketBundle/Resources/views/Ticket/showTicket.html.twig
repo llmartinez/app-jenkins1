@@ -2,11 +2,8 @@
 
 {% block content %}
 
-    <h3>
-        <a href="{{ path('listTicket') }}">Tickets:</a> 
-        
-        #{{ ticket.id }} - {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} 
-    </h3>
+    <h3><a href="{{ path('listTicket') }}">Tickets:</a> 
+    #{{ ticket.id }}</h3>
     
    {# Datos del TICKET #}
                 
@@ -16,17 +13,44 @@
                 <td>                    
                     {% if is_granted('ROLE_ADMIN') %}
                         
-                        <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
+                        {% if ticket.assignedTo is not null %}
+                        
+                            {% if ticket.assignedTo == app.security.getToken().getUser() %}
+                        
+                                <a class="btn btn-primary pull-right" 
+                                   href="{{ path('assignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
+                                    Ignore </a>
+
+                                <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"> Edit </a>
+                            {% else %}
+                            
+                                <a class="btn btn-primary pull-right" style="background-color:gray">Ticket assigned to other assessor</a>
+                            
+                            {% endif %}
+                            
+                        {% else %}
+                            
+                            <a class="btn btn-primary pull-right" id="assign" 
+                               href="{{ path('assignTicket', { 'id_ticket': ticket.id }) }}" > 
+                                Assign </a>
+                            
+                        {% endif %}
                     {% endif %}
                         
-                    <p>Taller:  {{ ticket.owner.username }}</p>
+                    <p> <label>Title:        </label> {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} </p>
                     
-                    <p>Fecha:  {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
+                    <p> <label>Date:         </label> {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
                     
-                    <p>Coche:  {{ ticket.car.version.model.brand }} 
-                               {{ ticket.car.version.model }} {{ ticket.car.version }} ({{ ticket.car.year }})</p>
+                    <p> <label>Workshop:     </label> {{ ticket.workshop }} -- 
+                        <label>Required by:  </label> {{ ticket.owner    }}         </p>
+                    
+                    <p> <label>Car:          </label> {{ ticket.car.version.model.brand }} 
+                                                      {{ ticket.car.version.model }} 
+                                                      {{ ticket.car.version }} 
+                                                     ({{ ticket.car.year }})        </p>
                         
-                    <p>Matricula: {{ ticket.car.plateNumber }}, N.Bastidor: {{ ticket.car.vin }}</p>
+                    <p> <label>PlateNumber:  </label> {{ ticket.car.plateNumber  }} -- 
+                        <label>VIN:          </label> {{ ticket.car.vin          }} </p>
                 </td>
             </tr>
         </table>
@@ -44,138 +68,62 @@
 
             {# Marca con un color diferente los mensajes del usuario #}
                 
-                {% if posts[nPosts-i].owner.id == app.security.getToken().getUser().getId() %}
+                {% if posts[nPosts-i].owner == app.security.getToken().getUser() %}
                 
-                    <legend style="background: azure;"> {{ posts[nPosts-i].owner.username }}</legend>
+                    <legend style="background: azure;"> {{ posts[nPosts-i].owner.username }}
                     
                 {% else %}
                     
-                    <legend> {{ posts[nPosts-i].owner.username }}</legend>
+                    <legend> {{ posts[nPosts-i].owner.username }}
                 {% endif %}
+                    
+                    </legend>
 
                     <div class="colDer"> 
                         <p> {{ posts[nPosts-i].message }} </p> 
-                    
                     </div>
                         
                     <div class="colIzq">
-                        
                         {% include 'TicketBundle:Ticket:showDocument.html.twig' with {'documents': documents, 'msg_id': posts[nPosts-i].id} %}
-                        
                     </div>
-                    
             </fieldset>
             {% endif %}
         </div>
         {% endfor %}   
 
-        <a class='pull-right' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver todos ({{ nPosts }})</a>
+        <a class='pull-right' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>View All ({{ nPosts }})</a>
 
         {% if ticket.status.id == 1 %}
 
-            <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CERRADO<a>
+            <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CLOSED</a>
 
         {% else %}
-                    
-            <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
+            
+        {# comprueba que el asesor tenga asignado el ticket #}
+            {% if ticket.assignedTo != null or (app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+            
+            {# formulario de respuesta de POST #}
+                <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
-                <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
+                    <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
 
-                <section>
-                    <h5>Responde: </h5>
-                    <div>
-                        {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
-                            
-                        {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
-                        <button class="btn btn-primary pull-right btn100" type="submit">Enviar</button>
-                    </div>
-                </section>
-            </form>
+                    <section>
+                        <h5>Reply: </h5>
+                        <div>
+                            {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
+                        </div>
+                    </section>
 
-            {% if is_granted('ROLE_ADMIN') %}
+                    {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
-                <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CERRAR TICKET<a>
+                    <button class="btn btn-primary pull-right btn100" type="submit">Submit</button>
+                </form>
 
+                {% if is_granted('ROLE_ADMIN') %}
+
+                    <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CLOSE TICKET<a>
+
+                {% endif %}
             {% endif %}
         {% endif %}
 {% endblock %}
-                     
-                        
-                        
-                        
-                        
-                        
-                        
-{# mensajes del TICKET (version MIN)
-    
-                
-                
-        <section class="ac-container" >
-            
-        {% set nPosts = posts | length %}
-            
-        {% for i in 2..1 %}
-            {% if posts[nPosts-i] is defined %}
-                <div id="post{{ posts[nPosts-i].id }}">
-#}
-                {# Marca con un color diferente los mensajes del usuario 
-
-                    {% if posts[nPosts-i].owner.id == app.security.getToken().getUser().getId() %}
-
-                        <label for="ac-{{ loop.index }}" style="background: azure;"> {{ posts[nPosts-i].owner.username }}</label>
-
-                    {% else %}
-
-                        <label for="ac-{{ loop.index }}"> {{ posts[nPosts-i].owner.username }}</label>
-                    {% endif %}
-#}
-                {# Cambia el css del ultimo mensaje para que aparezca abierto 
-
-                    {% if loop.last %}
-
-                        <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" checked /> 
-                        <article class="ac-medium">
-
-                    {% else %}
-
-                        <input id="ac-{{ loop.index }}" name="accordion-1" type="checkbox" />
-                        <article class="ac-small">
-
-                    {% endif %}
-                        <p> {{ posts[nPosts-i].message | length > 200 ?  posts[nPosts-i].message | slice(0, 200) ~ '...' : posts[nPosts-i].message }} </p>
-                    </article>
-                </div>
-            {% endif %}
-        {% endfor %}
-                
-        </section>
-
-        <a class='comment' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>Ver Comentarios ({{ nPosts }})</a>
-               
-        {% if ticket.status.id == 1 %}
-
-            <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CERRADO<a>
-                
-        {% else %}        
-            <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post">
-
-                <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
-
-                <section class="ac-container" >
-                    <h5>Responde: </h5>
-                    <div>
-                        {{ form_widget(form.message, { 'attr': {'class': 'ac-message', 'rows': '7'} }) }}
-                        <button class="btn btn-primary pull-right btn100" type="submit">Enviar</button>
-                    </div>
-                </section>
-            </form>
-        
-            {% if is_granted('ROLE_ADMIN') %}
-
-                <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CERRAR TICKET<a>
-
-            {% endif %}
-        {% endif %}
-{% endblock %}
-
-#}

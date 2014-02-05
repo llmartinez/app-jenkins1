@@ -136,6 +136,14 @@ html {
     margin-top:15px;
 }
 
+ /*
+    LISTADO TICKETS 
+ */
+.colList {
+    float: left;
+    width: 50%;
+}
+
 /*
     LISTA MENSAJES
 */

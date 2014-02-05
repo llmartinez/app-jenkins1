@@ -3,19 +3,24 @@
 {% block content %}
 
     <h3><a href="{{ path('listTicket') }}">Tickets:</a> 
-    {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }}  </h3>
+        <a href="{{ path('showTicket', { 'id_ticket': ticket.id }) }}">#{{ ticket.id }}</a>  
+        - {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }}  
+    </h3>
     
    {# Datos del TICKET #}
                 
-        <div class="tblContainer">
+    <div class="tblContainer">
         <table class="table table-striped table-bordered">
             <tr>    
                 <td>                    
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}">Editar</a>
-                    {% endif %}
-                    <p>Taller:  {{ ticket.owner.username }}</p>
-                    <p>Fecha:  {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
+                    {% endif %}                        
+                    <p> <label>Title:        </label> {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} --
+                        <label>Date:         </label> {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
+                    
+                    <p> <label>Workshop:     </label> {{ ticket.workshop }} -- 
+                        <label>Required by:  </label> {{ ticket.owner    }}         </p>
                 </td>
             </tr>
         </table>

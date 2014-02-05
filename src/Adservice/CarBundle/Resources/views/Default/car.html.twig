@@ -1,4 +1,4 @@
- <div class="col-xs-6 col-md-6 form-group">
+<div class="col-xs-6 col-md-6 form-group">
                             
         <label for="idBrand">Brand</label> 
         <select class="form-control" id="idBrand" name="brand"><option value=0>Select Brand..</option>
@@ -25,7 +25,7 @@
         {{ form_widget(formC.vin, { 'attr': { 'class': 'form-control', 
                                               'placeholder': 'Insert Vin'} }) }}
 
-        <label for="new_car_form_plateNumber">Plate Number</label>
+        <label for="new_car_form_plateNumber">Plate Number <a id="txt_plateNumber"></a></label>
         {{ form_widget(formC.plateNumber, { 'attr': { 'class': 'form-control', 
                                                   'placeholder': 'Insert Plate Number'} }) }}
 </div>
@@ -60,17 +60,17 @@
                     }
                 });
                 //Comprueba que el numero de bastidor sea de 17 caracteres
-                if ($("#vin").val()==0){    //if($('#vin').val().length!=17){
+                if ($("#new_car_form_vin").val()==0){    //if($('#vin').val().length!=17){
                     msg+='\n   - Introduce vin (17 caracteres)';
                 }
                 //Comprueba que la matricula no este vacia
-                if ($("#plateNumber").val()==0){
+                if ($("#new_car_form_plateNumber").val()==0){
                     msg+='\n   - Introduce plateNumber';
                 }
                 //Si ha habido algun error lo muestra por pantalla e interrumpe el submit
                 if(msg!=""){
-                    alert('Error: '+msg);
-                    event.preventDefault();
+                    alert('Error: '+msg);   
+                    event.preventDefault();                 
                 }
             });
         });

@@ -22,6 +22,10 @@ listTicket:
     pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
     
+assignTicket:
+    pattern:  /ticket/assign/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:assignTicket }
+    
 ################################
 #    GESTIÓN DE POSTS          #
 ################################  
@@ -53,3 +57,4 @@ showIncidence:
 listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
+    
