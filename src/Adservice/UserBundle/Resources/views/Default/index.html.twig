@@ -5,18 +5,26 @@
     {% if is_granted('ROLE_ADMIN') %}
         <table>
             <tr>
-                <th>Menu ADMIN</th>
+                <th>{% trans %}user.index.menu.admin_title{% endtrans %}</th>
             </tr>    
             <tr>
                 <td>
-                    <a href="{{ path("user_profile") }}">Mi perfil</a><br>
+{#                    <a href="{{ path("user_profile") }}">Mi perfil</a><br>
                     <a href="{{ path("partner_list") }}">Listado Socios AD-Service</a><br>            
                     <a href="{{ path("user_list") }}">Listado Usuarios AD-Service</a><br>
                     <a href="{{ path("popup_list") }}">Listado Popups AD-Service</a><br>
                     <a href="{{ path("workshop_list") }}">Listado Talleres AD-Service</a><br>
                     <a href="{{ path("listIncidence") }}">Listado Incidencias AD-Service</a><br>
                     <a href="{{ path("newIncidence") }}">Crear una incidencia como ADMIN</a><br>
-                    <a href="{{ path("listStatistics") }}">Listado de estadísticas de Ad-Service</a><br>
+                    <a href="{{ path("listStatistics") }}">Listado de estadísticas de Ad-Service</a><br>#}
+                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
+                    <a href="{{ path("partner_list") }}">{% trans %}user.index.menu.list_partners{% endtrans %}</a><br>
+                    <a href="{{ path("user_list") }}">{% trans %}user.index.menu.list_users{% endtrans %}</a><br>
+                    <a href="{{ path("popup_list") }}">{% trans %}user.index.menu.list_popups{% endtrans %}</a><br>
+                    <a href="{{ path("workshop_list") }}">{% trans %}user.index.menu.list_workshops{% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.list_incidences{% endtrans %}</a><br>
+                    <a href="{{ path("listStatistics") }}">{% trans %}user.index.menu.list_statistics{% endtrans %}</a><br>
+                    <a href="{{ path("newIncidence") }}">{% trans %}user.index.menu.create_incidence_admin{% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -25,13 +33,13 @@
     {% if is_granted('ROLE_USER') %}
         <table>
             <tr>
-                <th>Menu de USUARIO </th>
+                <th>{% trans %}user.index.menu.user_title{% endtrans %}</th>
             </tr>    
             <tr>
                 <td>
-                    <a href="{{ path("user_profile") }}">Mi perfil</a><br>
-                    <a href="{{ path("listTicket") }}">Mis tickets</a><br>
-                    <a href="{{ path("listIncidence") }}">Mis incidencias</a><br>
+                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
+                    <a href="{{ path("listTicket") }}">{% trans %}user.index.menu.my_tickets{% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.my_incidences{% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
