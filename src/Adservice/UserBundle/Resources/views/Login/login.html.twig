@@ -10,7 +10,7 @@
                 </div>
                 <div class="panel-body">
 {#                    <form accept-charset="UTF-8" role="form">#}
-                    <form action="{{ path('login_check') }}" method="post">
+                    <form action="{{ path('user_login_check') }}" method="post">
                         {% if error %}
                             <div>{{ error.message }}</div>
                         {% endif %}

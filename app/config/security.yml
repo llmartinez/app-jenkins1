@@ -6,13 +6,13 @@ security:
             anonymous: true
 #            provider: user_db
             form_login:
-                login_path: /login
-                check_path: /login_check
-                default_target_path: /index
+                login_path: user_login
+                check_path: user_login_check
+                default_target_path: user_index
                 always_use_default_target_path: true
             logout:
-                path: logout
-                target: /
+                path: user_logout
+                target: user_login
             security: true
             remember_me:
                 key:      "%secret%"
@@ -25,16 +25,18 @@ security:
             entity: { class: Adservice\UserBundle\Entity\User, property: username }
     
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
+        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER]
+        ROLE_ASSESSOR: ROLE_USER
+#        ROLE_ADMIN: ROLE_USER
+#        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
 
     access_control:
-      - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr)/user/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/ticket/edit, roles: [ROLE_ADMIN] }
       - { path: ^/incidence/new, roles: [ROLE_ADMIN] }
       - { path: ^/incidence/create, roles: [ROLE_ADMIN] }
       - { path: ^/incidence/edit, roles: [ROLE_ADMIN] }
-      - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }
+      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ADMIN] }
 
     encoders: 
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
