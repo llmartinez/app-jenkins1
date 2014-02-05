@@ -1,35 +1,35 @@
 StatisticBundle:
     resource: "@StatisticBundle/Resources/config/routing.yml"
-    prefix:   /statistic
+    prefix:   /{_locale}/statistic
 
 SystemBundle:
     resource: "@SystemBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}/
 
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}/
     
 PopupBundle:
     resource: "@PopupBundle/Resources/config/routing.yml"
-    prefix:   /popup
+    prefix:   /{_locale}/popup
 
 WorkshopBundle:
     resource: "@WorkshopBundle/Resources/config/routing.yml"
-    prefix:   /workshop
+    prefix:   /{_locale}/workshop
 
 PartnerBundle:
     resource: "@PartnerBundle/Resources/config/routing.yml"
-    prefix:   /partner
+    prefix:   /{_locale}/partner
 
 TicketBundle:
     resource: "@TicketBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}/
 
 UserBundle:
     resource: "@UserBundle/Resources/config/routing.yml"
-    prefix:   /
-
+    prefix:   /{_locale}/
+            
 UtilBundle:
     resource: "@UtilBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}/

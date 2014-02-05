@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
+
 use Adservice\UserBundle\Form\UserType;
 use Adservice\UserBundle\Entity\User;
 //use Adservice\StatisticBundle\Entity\Statistic;
@@ -18,6 +20,18 @@ class DefaultController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
+        
+//        $session_locale = $this->getRequest()->getLocale();
+//        $user_locale = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+//        var_dump($session_locale);
+//        var_dump($user_locale);
+////        $this->getRequest()->setLocale('fr_FR');
+//        if($session_locale != null){
+//            $this->getRequest()->setLocale($session_locale);
+//        }else{
+//            $this->getRequest()->setLocale($user_locale);
+//        }
+            
         return $this->render('UserBundle:Default:index.html.twig');
     }
 
