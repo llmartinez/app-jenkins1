@@ -15,7 +15,7 @@ function fill_model(url_ajax) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#idModel').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Select Modelo..</option>");
+            $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Select Model..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=idModel]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });      

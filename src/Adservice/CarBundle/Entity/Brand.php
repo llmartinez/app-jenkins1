@@ -34,6 +34,13 @@ class Brand
      * @ORM\Column(name="idTecDoc", type="integer")
      */
     private $idTecDoc;
+    
+    /**
+     * @var string $models
+     *
+     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Model", mappedBy="brand")
+     */
+    private $models;
 
 
     /**
@@ -88,5 +95,29 @@ class Brand
     
     public function __toString() {
         return $this->name;
+    }
+    public function __construct()
+    {
+        $this->models = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add models
+     *
+     * @param Adservice\CarBundle\Entity\Model $models
+     */
+    public function addModel(\Adservice\CarBundle\Entity\Model $models)
+    {
+        $this->models[] = $models;
+    }
+
+    /**
+     * Get models
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getModels()
+    {
+        return $this->models;
     }
 }

@@ -60,7 +60,14 @@ class Post
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $modified_by;
+    private $modified_by;   
+    
+    /**
+     * @var string $document
+     *
+     * @ORM\OneToOne(targetEntity="Adservice\UtilBundle\Entity\Document", mappedBy="post")
+     */
+    private $document;  
 
     /**
      * Get id
@@ -190,5 +197,35 @@ class Post
     public function getModifiedAt()
     {
         return $this->modified_at;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return date 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set document
+     *
+     * @param Adservice\UtilBundle\Entity\Document $document
+     */
+    public function setDocument(\Adservice\UtilBundle\Entity\Document $document)
+    {
+        $this->document = $document;
+    }
+
+    /**
+     * Get document
+     *
+     * @return Adservice\UtilBundle\Entity\Document 
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }

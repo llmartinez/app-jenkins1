@@ -14,8 +14,8 @@ class DefaultController extends Controller {
         $id_brand = $petition->request->get('id_brand');
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
         
-        $model = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
-        return new Response(json_encode($model), $status = 200);
+        $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
+        return new Response(json_encode($models), $status = 200);
     }
     
     public function carVersionAction() {

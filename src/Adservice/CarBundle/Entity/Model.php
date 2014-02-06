@@ -34,6 +34,13 @@ class Model implements \JsonSerializable
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      */
     private $brand;
+    
+    /**
+     * @var string $version
+     *
+     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Version", mappedBy="model")
+     */
+    private $version;
 
     /**
      * @var integer $idTecDoc
@@ -122,5 +129,29 @@ class Model implements \JsonSerializable
             'id' => $this->getId(),
             'name' => $this->getName()
         ];
+    }
+    public function __construct()
+    {
+        $this->version = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add version
+     *
+     * @param Adservice\CarBundle\Entity\Version $version
+     */
+    public function addVersion(\Adservice\CarBundle\Entity\Version $version)
+    {
+        $this->version[] = $version;
+    }
+
+    /**
+     * Get version
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }
