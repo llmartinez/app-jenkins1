@@ -11,13 +11,12 @@
         <table class="table table-striped table-bordered">
             <tr>    
                 <td>                    
-                    {% if is_granted('ROLE_ADMIN') %}
-                        
+                    {% if is_granted('ROLE_ASSESSOR') %}
                         {% if ticket.assignedTo is not null %}
                         
                             {% if ticket.assignedTo == app.security.getToken().getUser() %}
                         
-                                <a class="btn btn-primary pull-right" 
+                                <a class="btn btn-primary pull-right"
                                    href="{{ path('assignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
                                     Ignore </a>
 
@@ -100,7 +99,8 @@
         {% else %}
             
         {# comprueba que el asesor tenga asignado el ticket #}
-            {% if ticket.assignedTo != null or (app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+            {% if is_granted('ROLE_ASSESSOR') and ticket.assignedTo is not null and ticket.assignedTo == app.security.getToken().getUser() 
+               or app.security.getToken().getUser().getWorkshop() == ticket.workshop%}
             
             {# formulario de respuesta de POST #}
                 <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
@@ -119,7 +119,7 @@
                     <button class="btn btn-primary pull-right btn100" type="submit">Submit</button>
                 </form>
 
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_ASSESSOR') %}
 
                     <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CLOSE TICKET<a>
 

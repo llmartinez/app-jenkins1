@@ -32,11 +32,11 @@ security:
 
     access_control:
       - { path: ^/(es|en|fr)/user/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/ticket/edit, roles: [ROLE_ADMIN] }
-      - { path: ^/incidence/new, roles: [ROLE_ADMIN] }
-      - { path: ^/incidence/create, roles: [ROLE_ADMIN] }
-      - { path: ^/incidence/edit, roles: [ROLE_ADMIN] }
-      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ADMIN] }
+      - { path: ^/ticket/edit, roles: [ROLE_ASSESSOR] }
+      - { path: ^/incidence/new, roles: [ROLE_ASSESSOR] }
+      - { path: ^/incidence/create, roles: [ROLE_ASSESSOR] }
+      - { path: ^/incidence/edit, roles: [ROLE_ASSESSOR] }
+      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ASSESSOR, ROLE_ADMIN] }
 
     encoders: 
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
