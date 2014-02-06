@@ -26,6 +26,11 @@ assignTicket:
     pattern:  /ticket/assign/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:assignTicket }
     
+# Ajax    
+fill_tickets:
+    pattern:  /ticket/ajax
+    defaults: { _controller: TicketBundle:Ticket:fill_tickets }
+    
 ################################
 #    GESTIÓN DE POSTS          #
 ################################  

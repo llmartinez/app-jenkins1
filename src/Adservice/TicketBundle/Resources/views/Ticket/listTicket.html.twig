@@ -14,7 +14,7 @@
                 <div class="col-xs-6 col-md-6 form-group">
 
                     <label>Search by</label>
-                    <br>ID: <input type='text' id='id_ticket' name='id_ticket'>
+                    <br>ID_Ticket: <input type='text' id='id_ticket' name='id_ticket'>
                     <br><button class="btn btn-primary pull-right" type="submit"> Submit </button>
                 </div>
             </form>
@@ -25,7 +25,7 @@
                 <tr><td>
                     {% if ticket is not null%}
                         {% if ticket.id is not null %}
-                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ASSESSOR') %}
                                 
                                     <a class="btn btn-primary pull-right"  href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> View </a> 
                                 
@@ -60,11 +60,12 @@
 {# Muestra una lista de tickets sin responder #}
     <div>
         {% for ticket in tickets %}
-        
             {# Comprueba que el usuario pueda ver ese ticket #}
-            {% if (ticket.workshop.id == app.security.getToken().getUser().getWorkshop().getId()) or is_granted('ROLE_ADMIN') %}
-        
+            {% if ( ticket.workshop.id   ==    app.security.getToken().getUser().getWorkshop().getId())
+               or ( ticket.assignedTo  is null and is_granted('ROLE_ASSESSOR'))
+               or ( ticket.assignedTo    ==    app.security.getToken().getUser()) %}
                 {# Comprueba que el ultimo post no sea del usuario #}
+            
                 {% if lastPosts[ticket.id].owner.id != app.security.getToken().getUser().getId() %}
         
                     <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..

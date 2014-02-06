@@ -5,11 +5,19 @@
 <!-- TABLA TICKETS -->
 
 <div class="colIzq">
+    
+    <select id="slct_historyTickets" class="form-control">
+    
+        <option value="all" selected> Show all tickets      </option>
+        <option value="assign"      > Show assigned tickets </option>
+        
+    </select>
+        
     <div class="widget stacked widget-table action-table">
     				
         <div class="widget-header">
                 <i class="icon-th-list"></i>
-                <h3>Historial Tickets</h3>
+                <h3>Tickets History</h3>
         </div> <!-- /widget-header -->
 
         <div class="widget-content" >
@@ -18,37 +26,19 @@
                 
                 {% if tickets | length == 0 %}
                 
-                    <tr><td>No tienes ningun ticket abierto</td></tr>
+                    <tr><td>You don't have any open ticket..</td></tr>
                     
                 {% else %}
                     
                     <thead>
                         <tr>
-                            <th>{% trans %}Fecha{% endtrans %}</th>
-                            <th>{% trans %}Taller{% endtrans %}</th>
+                            <th>{% trans %}Date{% endtrans %}</th>
+                            <th>{% trans %}Workshop{% endtrans %}</th>
                             <th>{% trans %}Ticket{% endtrans %}</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for ticket in tickets %}
-                            
-                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
-                            
-                            <tr>
-                                <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
-                                <td>{{ ticket.owner.username | length > 9 ?  ticket.owner.username | slice(0, 9) ~ '...' : ticket.owner.username }}</td>
-                                <td>
-                                    <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> 
-
-                                        <b style='color:black'>#{{ ticket.id }}:</b> 
-                                      
-                                        {{ ticket.title | length > 19 ?  ticket.title | slice(0, 19) ~ '...' : ticket.title }} 
-
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endif %}
-                        {% endfor %}
+                    <tbody id="ticketBody">
+                        
                     </tbody>
                 {% endif %}
             </table>
@@ -61,5 +51,28 @@
 <div class="colDer">
     {% block content %}{% endblock  %}
 </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket.js') }}"></script>
+
+    {# ruta para Ajax #}
+    <input id='route' type='hidden' value="{{ path("showTicket", { 'id_ticket': "PLACEHOLDER" }) }}">
+    <script>
+        $(document).ready(function() {
+            
+            //carga la tabla de tickets
+            var url_ajax = "{{ path("fill_tickets") }}";
+            fill_tickets(url_ajax);
+            
+            $('#slct_historyTickets').click(function() {
+                var url_ajax = "{{ path("fill_tickets") }}";
+                fill_tickets(url_ajax);
+            });
+        });
+    </script>
     
 {% endblock %}

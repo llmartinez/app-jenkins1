@@ -136,6 +136,18 @@ html {
     margin-top:15px;
 }
 
+.error {
+  color: white;
+  background: none repeat scroll 0 0 #F00;
+  clear: both;
+  font-size: 140%;
+  font-weight: bold;
+  width: 630px;
+  margin: 0 0 1em 6px;
+  padding: 5px;
+  padding-left: 0.4em;
+}
+
  /*
     LISTADO TICKETS 
  */
