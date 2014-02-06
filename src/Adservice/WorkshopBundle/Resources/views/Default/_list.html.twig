@@ -1,5 +1,5 @@
 {% if all_workshops|length > 0  %}
-    <table class="table table-hover" style="width: 70%; margin-left: 290px;">
+    <table class="table table-hover table-list-search" style="width: 70%; margin-left: 290px;">
         <thead>
             <tr>
                 <th>#</th>
@@ -62,6 +62,7 @@
 {% block javascripts %}
     
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -69,6 +70,9 @@
                 var workshop_id = $(this).data('id');
                 confirm_delete_workshop_modal(workshop_id);
             })
+            
+            //util.js
+            table_filter();
         });
     </script>
 {% endblock %}
