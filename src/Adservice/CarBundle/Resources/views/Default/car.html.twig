@@ -1,10 +1,7 @@
 <div class="col-xs-6 col-md-6 form-group">
                             
         <label for="idBrand">Brand</label> 
-        <select class="form-control" id="idBrand" name="brand"><option value=0>Select Brand..</option>
-
-        {% for brand in brands %} <option value="{{ brand.id }}"> {{ brand }} </option>  {% endfor %}
-        </select>
+        <select class="form-control" id="idBrand" name="brand"></select>
 
         <label for="idModel">Model</label> 
         <select class="form-control" id="idModel" name="model"><option value=0>Select Model..</option></select>
@@ -35,48 +32,45 @@
 <script>
         $(document).ready(function() {
             // Limpiamos el combo de version del formulario
-            if ($('form[id=contact]').find('select[id=new_car_form_version]').find('option[selected]').val() != 0){
-                
-                $('select[id=idBrand]').empty();
-                var brands = "<option value=0>Select Brand..</option>";
+            $('select[id=new_car_form_version]').empty();
+            var opt_versions = "<option value=0>Select Version..</option>";   
+            
+            // Limpiamos el combo de brand del formulario
+            $('select[id=idBrand]').empty();
+                var opt_brands = "<option value=0>Select Brand..</option>";
+                //Añadimos todos los options de brand
                 {% for brand in brands %}
-                            
-                        brands = brands + '<option value="{{ brand.id }}" ';
-                        {% if ticket.car.version.model.brand == brand %} 
-                            brands = brands + 'selected="true"'; 
-                        {% endif %}
-                        brands = brands + '> {{ brand.name }} </option>';
+
+                    opt_brands = opt_brands + '<option value="{{ brand.id }}" ';
+                    {% if ticket.car is not null 
+                      and ticket.car.version.model.brand == brand %}  opt_brands = opt_brands + 'selected="true"'; {% endif %}
+                    opt_brands = opt_brands + '> {{ brand.name }} </option>';
+
                 {% endfor %}
-                $('form[id=contact]').find('select[id=idBrand]').append(brands);
-                
+            $('form[id=contact]').find('select[id=idBrand]').append(opt_brands);
+             
+            {% if ticket.car is not null %}    
                 $('select[id=idModel]').empty();
-                var models = "<option value=0>Select Model..</option>";
-                {% for model in models %}
+                    var opt_models = "<option value=0>Select Model..</option>";
+                    {% for model in models %}
                             
-                        models = models + '<option value="{{ model.id }}" ';
-                        {% if ticket.car.version.model == model %} 
-                            models = models + 'selected="true"'; 
-                        {% endif %}
-                        models = models + '> {{ model.name }} </option>';
-                {% endfor %}
-                    
-                $('form[id=contact]').find('select[id=idModel]').append(models);
+                        opt_models = opt_models + '<option value="{{ model.id }}" ';
+                        {% if ticket.car.version.model == model %} opt_models = opt_models + 'selected="true"'; {% endif %}
+                        opt_models = opt_models + '> {{ model.name }} </option>';
+                        
+                    {% endfor %}
+                $('form[id=contact]').find('select[id=idModel]').append(opt_models);
                 
-                $('select[id=new_car_form_version]').empty();
-                var versions = "<option value=0>Select Version..</option>";
-                {% for version in versions %}
+                    var opt_versions = "<option value=0>Select Version..</option>";
+                    {% for version in versions %}
                             
-                        versions = versions + '<option value="{{ version.id }}" ';
-                        {% if ticket.car.version == version %} 
-                            versions = versions + 'selected="true"'; 
-                        {% endif %}
-                        versions = versions + '> {{ version.name }} </option>';
-                {% endfor %}
-                $('form[id=contact]').find('select[id=new_car_form_version]').append(versions);
-            }else{
-                $('#new_car_form_version').empty();
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
-            }
+                        opt_versions = opt_versions + '<option value="{{ version.id }}" ';
+                        {% if ticket.car.version == version %} opt_versions = opt_versions + 'selected="true"'; {% endif %}
+                        opt_versions = opt_versions + '> {{ version.name }} </option>';
+                        
+                    {% endfor %}
+           {% endif %}
+            $('form[id=contact]').find('select[id=new_car_form_version]').append(opt_versions);
             
             //cambiar model en funcion de brand
             $('#idBrand').change(function() {
