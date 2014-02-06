@@ -1,76 +1,90 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    
-{% if all_popups|length > 0  %}
-    <table class="table" style="width: 50%; margin-left: 450px;">
-        <tr>
-            <td align="right"><a href="{{ path('popup_new') }}" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un popup nuevo</a></td>
-        </tr>
-    </table>
 
-    <table class="table table-hover" style="width: 50%; margin-left: 450px;"> 
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+{% if all_popups|length > 0  %}
+<table class="table" style="width: 50%; margin-left: 450px;">
+    <tr>
+        <td align="right">
+            <div class="input-group">
+                <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
+                <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                </span>
+            </div>
+            </br>
+            <a href="{{ path('popup_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un popup nuevo</a>
+        </td>
+    </tr>
+</table>
+
+<table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;"> 
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
                 {% for popup in all_popups %}
-            <tr>
-                <td>{{ popup.id }}</td>
-                <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
-                <td>{{ popup.description }} </td>
-                <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
-                <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
-                <td>
-                    <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></span></a>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ popup.id }}</td>
+            <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+            <td>{{ popup.description }} </td>
+            <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
+            <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
+            <td>
+                <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></span></a>
+            </td>
+        </tr>
                 {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 {% else %}
-    No hay popups!!!!
+No hay popups!!!!
 {% endif%}
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Eliminar popup</h4>
-                </div>
-                <div class="modal-body">
-                    Estas seguro que quieres eliminar este popup?                    
-                </div>
-                <div class="modal-footer">
-                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar popup</h4>
+            </div>
+            <div class="modal-body">
+                Estas seguro que quieres eliminar este popup?                    
+            </div>
+            <div class="modal-footer">
+                <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 {% endblock%}
-    
+
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/popup/js/popup.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#MainContent').find('.glyphicon-trash').click(function() {
-                var popup_id = $(this).data('id');
-                confirm_delete_popup_modal(popup_id);
-            })
-        });
-    </script>
+<script src="{{ asset('bundles/popup/js/popup.js') }}"></script>
+<script src="{{ asset('bundles/util/js/util.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#MainContent').find('.glyphicon-trash').click(function() {
+            var popup_id = $(this).data('id');
+            confirm_delete_popup_modal(popup_id);
+        })
+
+        //util.js
+        table_filter();
+    });
+</script>
 
 {% endblock %}
