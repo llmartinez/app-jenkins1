@@ -338,6 +338,16 @@ class TicketController extends Controller{
 
         return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
     }
+    
+    public function assignListTicketAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        
+        return $this->render('TicketBundle:Ticket:assignList.html.twig', array('workshops' => $workshops));
+        
+    }
+    
+    
     /**/
     public function fill_ticketsAction() {
         $em = $this->getDoctrine()->getEntityManager();

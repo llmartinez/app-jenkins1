@@ -21,7 +21,11 @@ showTicket:
 listTicket:
     pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
-    
+
+assignListTicket:
+    pattern:  /ticket/assignList/
+    defaults: { _controller: TicketBundle:Ticket:assignListTicket }    
+
 assignTicket:
     pattern:  /ticket/assign/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:assignTicket }

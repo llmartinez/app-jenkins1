@@ -1,0 +1,35 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <h3>Selecciona el Taller</h3>
+    {% if workshops|length > 0  %}
+        <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Workshop Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for workshop in workshops %}
+                    <tr>
+                        <td>{{ workshop.id }}</td>
+                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                        <td>{{ workshop.email1}}</td>
+                        <td>{{ workshop.contact }}</td>
+                        <td>
+                            <a href="{{ path("partner_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-ok-circle"></span></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        No hay talleres!!
+    {% endif %}
+
+{% endblock %}
