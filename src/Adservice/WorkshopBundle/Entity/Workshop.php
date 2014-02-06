@@ -126,10 +126,18 @@ class Workshop
 
     /**
      * @var string $partner
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner")
+     * 
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="workshops")
      */
     private $partner;
+    
+    /**
+     *
+     * @var string $users 
+     * 
+     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="workshop")
+     */
+    private $users;
 
     /**
      * @var boolean $active
@@ -731,4 +739,28 @@ class Workshop
         return $this->getName();
     }
     
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add users
+     *
+     * @param Adservice\UserBundle\Entity\User $users
+     */
+    public function addUser(\Adservice\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }
