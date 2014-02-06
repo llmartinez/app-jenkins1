@@ -156,7 +156,6 @@ class TicketController extends Controller{
         }
         
         $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
-        
                 
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
         $models = $em->getRepository('CarBundle:Model')->findByBrand($car->getVersion()->getModel()->getBrand()->getId());

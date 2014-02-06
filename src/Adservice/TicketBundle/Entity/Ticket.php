@@ -39,7 +39,7 @@ class Ticket implements \JsonSerializable
     /**
      * @var integer $workshop
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop", mappedBy="ticket")
+     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop", inversedBy="tickets")
      */
     private $workshop;
     
