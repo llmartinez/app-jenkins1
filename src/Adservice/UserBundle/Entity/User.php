@@ -160,11 +160,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
      */
     private $province;
-
+    
     /**
-     * @var string $workshop
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop")
+     * @var string $workshp
+     * 
+     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="users")
      */
     private $workshop;
 

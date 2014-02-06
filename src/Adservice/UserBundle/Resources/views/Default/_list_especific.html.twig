@@ -1,0 +1,17 @@
+{% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }} 
+            {% if role == 'admin' %}<span class="label label-primary">Admin</span>{% endif %}
+            {% if role == 'assessor' %}<span class="label label-success">Assessor</span>{% endif %}
+            {% if user.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.surname}}</td>
+        <td>{{ user.email1 }}</td>
+        <td>{{ user.phoneNumber1 }}</td>
+        <td>
+            <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+        </td>
+    </tr>
+{% endfor %}

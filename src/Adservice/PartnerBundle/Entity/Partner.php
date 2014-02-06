@@ -3,12 +3,14 @@
 namespace Adservice\PartnerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
-
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
+use Adservice\WorkshopBundle\Entity\Workshop;
+
 
 /**
  * Adservice\PartnerBundle\Entity\Partner
@@ -103,6 +105,14 @@ class Partner{
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
+    
+    /**
+     *
+     * @var string $workshops 
+     * 
+     * @ORM\OneToMany(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", mappedBy="partner")
+     */
+    private $workshops;
 
     /**
      * @var datetime $created_at
@@ -124,7 +134,10 @@ class Partner{
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
     private $modify_by;
-
+    
+    public function __construct() {
+        $this->workshops = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -412,5 +425,25 @@ class Partner{
     
     public function __toString() {
         return $this->getName();
+    }
+
+    /**
+     * Add workshops
+     *
+     * @param Adservice\WorkshopBundle\Entity\Workshop $workshops
+     */
+    public function addWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshops)
+    {
+        $this->workshops[] = $workshops;
+    }
+
+    /**
+     * Get workshops
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkshops()
+    {
+        return $this->workshops;
     }
 }
