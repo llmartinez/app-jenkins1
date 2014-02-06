@@ -102,15 +102,13 @@ class TicketController extends Controller{
         }
          
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
-        $models = $em->getRepository('CarBundle:Model')->findAll();
 
         return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' =>  $this->loadTicket(), 
                                                                                 'form' => $form->createView(), 
                                                                                 'formC' => $formC->createView(),
                                                                                 'formP' => $formP->createView(), 
                                                                                 'formD' => $formD->createView(), 
-                                                                                'brands' => $brands, 
-                                                                                'models' => $models, ));
+                                                                                'brands' => $brands, ));
     }
     
     /**
@@ -122,48 +120,57 @@ class TicketController extends Controller{
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
+        
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+        $car = $ticket->getCar();
+        
+        
 
         $form = $this->createForm(new TicketType(), $ticket);
-        
+        $formC = $this->createForm(new CarType(), $car);
+           
         if ($request->getMethod() == 'POST') {
-            
-            $form->bindRequest($request);
             
             $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
             $asesor = $em->getRepository('UserBundle:User')->find($request->get('asesor'));
-            $version = $em->getRepository('CarBundle:Version')->find(array($request->get('version')));
-             
-            //campos de CAR
-            $car = $em->getRepository('CarBundle:Car')->find($ticket->getCar()->getId());
-            $car->setVersion($version);
-            $car->setVin($request->get('vin'));
-            $car->setPlateNumber($request->get('plateNumber'));
-            $car->setYear($request->get('year'));
-            DefaultC::saveEntity($em, $car, $user, false);
+             //Define CAR
+            $formC->bindRequest($request);
             
-            DefaultC::saveEntity($em, $ticket, $asesor);
+            if ($car->getVersion()!="")
+            {
+                $car = DefaultC::newEntity($car,$user); 
+                DefaultC::saveEntity($em, $car, $user, false);
+                
+                $form->bindRequest($request);
+                DefaultC::saveEntity($em, $ticket, $asesor);
 
-            $sesion = $request->getSession();
+                $sesion = $request->getSession();
             
-            return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                
+            }else{
+                
+                $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
+            }
+            
         }
         
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $ticket->getId()));
-        $users = $em->getRepository('UserBundle:User')->findAll();
+        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        
+                
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
-        $models = $em->getRepository('CarBundle:Model')->findAll();
-        $versions = $em->getRepository('CarBundle:Version')->findAll();
-            
-        return $this->render('TicketBundle:Ticket:editTicket.html.twig', array( 'tickets' => $this->loadTicket(),
-                                                                                'ticket' => $ticket, 
-                                                                                'posts' => $posts,
-                                                                                'users' => $users, 
-                                                                                'brands' => $brands, 
-                                                                                'models' => $models,
-                                                                                'versions' => $versions,
+        $models = $em->getRepository('CarBundle:Model')->findByBrand($car->getVersion()->getModel()->getBrand()->getId());
+        $versions = $em->getRepository('CarBundle:Version')->findByModel($car->getVersion()->getModel()->getId());
+                    
+        return $this->render('TicketBundle:Ticket:editTicket.html.twig', array( 
                                                                                 'form' => $form->createView(),
+                                                                                'formC' => $formC->createView(),
+                                                                                'tickets' => $this->loadTicket(),
+                                                                                'ticket' => $ticket, 
+                                                                                'workshops' => $workshops, 
+                                                                                'brands' => $brands,  
+                                                                                'models' => $models,
+                                                                                'versions' => $versions
                                                                               ));
     }
     
