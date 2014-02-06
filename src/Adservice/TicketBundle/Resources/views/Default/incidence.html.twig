@@ -22,7 +22,7 @@
                 {% else %}
                 <tbody>
                     {% for incidence in incidences %}
-                        {% if (incidence.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ADMIN') %}
+                        {% if (incidence.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ASSESSOR') %}
                         <tr>
                             <td>
                                 <a class="btn btn-primary pull-right" href="{{ path('showIncidence', { 'id_incidence': incidence.id }) }}">Ver</a>

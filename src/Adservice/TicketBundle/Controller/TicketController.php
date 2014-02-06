@@ -59,17 +59,15 @@ class TicketController extends Controller{
             //Define CAR
             $formC->bindRequest($request);
             
-            //if ($car->getVersion()!="")
-            //{
-                //echo 'bien';die;
-            
+            if ($car->getVersion()!="")
+            {
                 $car = DefaultC::newEntity($car,$user); 
                 DefaultC::saveEntity($em, $car, $user, false);
 
                 //Define TICKET
                 $form->bindRequest($request);
                 $ticket= DefaultC::newEntity($ticket,$user); 
-                if($security->isGranted('ROLE_ADMIN')){
+                if($security->isGranted('ROLE_ASSESSOR')){
                     //$ticket->setWorkshop($request->get('workshop'));
                 }else{
                     $ticket->setWorkshop($user->getWorkshop());
@@ -98,6 +96,9 @@ class TicketController extends Controller{
                 $sesion = $request->getSession();
 
                 return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+            }else{
+                $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
+            }
         }
          
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
@@ -336,5 +337,17 @@ class TicketController extends Controller{
         $em->flush();
 
         return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
+    }
+    /**/
+    public function fill_ticketsAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        
+        $option = $petition->request->get('option');
+        
+        if($option == 'all') $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
+        if($option == 'assign') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
+        
+        return new Response(json_encode($tickets), $status = 200);
     }
 }

@@ -8,7 +8,7 @@
         <table class="table table-striped table-bordered">
             <tr>    
                 <td>
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_ASSESSOR') %}
                         
                         <a class="btn btn-primary pull-right" href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}">Editar</a>
                     {% endif %}

@@ -16,7 +16,7 @@ class TicketRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         
-        if ($security->isGranted('ROLE_ADMIN'))
+        if ($security->isGranted('ROLE_ASSESSOR'))
         {
             $consulta = $em->createQuery('
                 SELECT t FROM TicketBundle:Ticket t
@@ -41,7 +41,7 @@ class TicketRepository extends EntityRepository
 }
 /* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());
  * 
- * ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+ * ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
             throw new AccessDeniedException();
 
  */

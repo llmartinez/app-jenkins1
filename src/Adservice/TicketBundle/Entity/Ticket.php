@@ -11,7 +11,7 @@ use Adservice\UserBundle\Entity\User;
  * @ORM\Table(name="ticket")
  * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\TicketRepository")
  */
-class Ticket
+class Ticket implements \JsonSerializable
 {
     /**
      * @var integer $id
@@ -309,5 +309,13 @@ class Ticket
     public function __toString() {
         return $this->title;
     }
-
+    
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'workshop' => $this->getWorkshop()->getName(),
+            'date' => $this->getCreatedAt()->format('d/m/Y'),
+            'title' => $this->getTitle()
+        ];
+    }
 }
