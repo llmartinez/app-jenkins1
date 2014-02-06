@@ -60,18 +60,20 @@
 {# Muestra una lista de tickets sin responder #}
     <div>
         {% for ticket in tickets %}
-            {# Comprueba que el usuario pueda ver ese ticket #}
-            {% if ( ticket.workshop.id   ==    app.security.getToken().getUser().getWorkshop().getId())
-               or ( ticket.assignedTo  is null and is_granted('ROLE_ASSESSOR'))
-               or ( ticket.assignedTo    ==    app.security.getToken().getUser()) %}
-                {# Comprueba que el ultimo post no sea del usuario #}
-            
-                {% if lastPosts[ticket.id].owner.id != app.security.getToken().getUser().getId() %}
+            {# Comprueba que el usuario pueda ver ese ticket y que el ultimo post no sea del usuario #}
+            {# Si : talleres de usuario y ticket 
+                    ticket asignado a un asesor
+               Y  : el ultimo en responder != usuario logueado
+            #}
+            {% if ( ticket.workshop.id   ==    app.security.getToken().getUser().getWorkshop().getId() 
+                    or  
+                    ticket.assignedTo   ==    app.security.getToken().getUser() 
+                  )
+               and  lastPosts[ticket.id].owner.id != app.security.getToken().getUser().getId() %}
         
-                    <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..
-                        <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">    Show            </a></p>
-                    
-                {% endif %}   
+               <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..
+                   <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">    Show            </a></p>
+                      
             {% endif %}
         {% endfor %}
     </div>           

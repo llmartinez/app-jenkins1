@@ -103,7 +103,7 @@ class TicketController extends Controller{
          
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
 
-        return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'tickets' =>  $this->loadTicket(), 
+        return $this->render('TicketBundle:Ticket:newTicket.html.twig', array( 'ticket' =>  $ticket, 
                                                                                 'form' => $form->createView(), 
                                                                                 'formC' => $formC->createView(),
                                                                                 'formP' => $formP->createView(), 
@@ -156,6 +156,7 @@ class TicketController extends Controller{
         }
         
         $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        
                 
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
         $models = $em->getRepository('CarBundle:Model')->findByBrand($car->getVersion()->getModel()->getBrand()->getId());
@@ -353,6 +354,7 @@ class TicketController extends Controller{
         
         if($option == 'all') $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
         if($option == 'assign') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'ignore') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
         
         return new Response(json_encode($tickets), $status = 200);
     }
