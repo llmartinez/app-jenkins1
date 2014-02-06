@@ -73,6 +73,7 @@ class DefaultController extends Controller {
         $petition = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
         
+        
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
             if ($form->isValid()) $this->savePartner($em, $partner);

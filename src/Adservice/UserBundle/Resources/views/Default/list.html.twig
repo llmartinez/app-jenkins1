@@ -21,75 +21,59 @@
         </tr>
     </thead>
     <tbody>
-        {#{% debug all_users[1].userRole %}
-    {% if all_users|length > 0 %}
-        {% for user in all_users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <span class="label label-primary">Admin</span>
-                {% elseif is_granted('ROLE_ASSESSOR') %}
-                    <span class="label label-success">Assessor</span>
-                {% endif %}
-                {% if user.active == false %}<span class="label label-danger">Inactive</span>{% endif %}
-            </td>
-            <td>{{ user.name }} </td>
-            <td>{{ user.surname}}</td>
-            <td>{{ user.email1 }}</td>
-            <td>{{ user.phoneNumber1 }}</td>
-            <td>
-                <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
-            </td>
-        </tr>
-        {% endfor %}
-    {% else %}
-        No hay usuarios!
-    {% endif %}#}
+        {% if  users_role_admin is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users:users_role_admin, role:'admin'} %} {% endif %}
+        {% if  users_role_assessor is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_assessor, role:'assessor'} %} {% endif %}
+        {% if  users_role_user is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_user, role:'user'} %} {% endif %}
+        {% if  users is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users, role:'user'} %} {% endif %}
 
-        {% for user_admin in users_role_admin %}
-            <tr>
-                <td>{{ user_admin.id }}</td>
-                <td>{{ user_admin.username }} <span class="label label-primary">Admin</span>{% if user_admin.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
-                <td>{{ user_admin.name }} </td>
-                <td>{{ user_admin.surname}}</td>
-                <td>{{ user_admin.email1 }}</td>
-                <td>{{ user_admin.phoneNumber1 }}</td>
-                <td>
-                    <a href="{{ path("user_edit", { 'id':user_admin.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user_admin.id }}"></span></a>
-                </td>
-            </tr>
-        {% endfor %}
-        {% for user in users_role_user %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }} {% if user.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.surname}}</td>
-                <td>{{ user.email1 }}</td>
-                <td>{{ user.phoneNumber1 }}</td>
-                <td>
-                    <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
-                </td>
-            </tr>
-        {% endfor %}
-        {% for user in users_role_assessor %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}<span class="label label-success">Assessor</span></td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.surname}}</td>
-                <td>{{ user.email1 }}</td>
-                <td>{{ user.phoneNumber1 }}</td>
-                <td>
-                    <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
-                </td>
-            </tr>
-        {% endfor %}
+        {#{% if users_role_admin|length > 0 %}
+            {% for user_admin in users_role_admin %}
+                <tr>
+                    <td>{{ user_admin.id }}</td>
+                    <td>{{ user_admin.username }} <span class="label label-primary">Admin</span>{% if user_admin.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                    <td>{{ user_admin.name }} </td>
+                    <td>{{ user_admin.surname}}</td>
+                    <td>{{ user_admin.email1 }}</td>
+                    <td>{{ user_admin.phoneNumber1 }}</td>
+                    <td>
+                        <a href="{{ path("user_edit", { 'id':user_admin.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user_admin.id }}"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        {% if users_role_user|length > 0 %}
+            {% for user in users_role_user %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }} {% if user.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.surname}}</td>
+                    <td>{{ user.email1 }}</td>
+                    <td>{{ user.phoneNumber1 }}</td>
+                    <td>
+                        <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        {% if users_role_assessor|length > 0 %}
+            {% for user in users_role_assessor %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}<span class="label label-success">Assessor</span></td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.surname}}</td>
+                    <td>{{ user.email1 }}</td>
+                    <td>{{ user.phoneNumber1 }}</td>
+                    <td>
+                        <a href="{{ path("user_edit", { 'id':user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}#}
     </tbody>
 </table>
 
