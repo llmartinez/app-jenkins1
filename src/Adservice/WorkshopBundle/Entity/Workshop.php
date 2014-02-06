@@ -195,6 +195,13 @@ class Workshop
      */
     private $conflictive;
 
+        /**
+     * @var integer $tickets
+     *
+     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
+     */
+    private $tickets;
+    
     /**
      * @var datetime $created_at
      *
@@ -762,5 +769,25 @@ class Workshop
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add tickets
+     *
+     * @param Adservice\TicketBundle\Entity\Ticket $tickets
+     */
+    public function addTicket(\Adservice\TicketBundle\Entity\Ticket $tickets)
+    {
+        $this->tickets[] = $tickets;
+    }
+
+    /**
+     * Get tickets
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
     }
 }

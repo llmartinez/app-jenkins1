@@ -39,7 +39,7 @@ class Ticket implements \JsonSerializable
     /**
      * @var integer $workshop
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop")
+     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop", inversedBy="tickets")
      */
     private $workshop;
     
@@ -89,8 +89,22 @@ class Ticket implements \JsonSerializable
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;
-
+    private $title;    
+    
+    /**
+     * @var string $posts
+     *
+     * @ORM\OneToMany(targetEntity="Adservice\TicketBundle\Entity\Post", mappedBy="ticket")
+     */
+    private $posts;  
+    
+    /**
+     * @var string $cars
+     *
+     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
+     */
+    private $cars;
+    
     /**
      * Get id
      *
@@ -317,5 +331,49 @@ class Ticket implements \JsonSerializable
             'date' => $this->getCreatedAt()->format('d/m/Y'),
             'title' => $this->getTitle()
         ];
+    }
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add posts
+     *
+     * @param Adservice\WorkshopBundle\Entity\Post $posts
+     */
+    public function addPost(\Adservice\WorkshopBundle\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+    }
+
+    /**
+     * Get posts
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Add cars
+     *
+     * @param Adservice\CarBundle\Entity\Car $cars
+     */
+    public function addCar(\Adservice\CarBundle\Entity\Car $cars)
+    {
+        $this->cars[] = $cars;
+    }
+
+    /**
+     * Get cars
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCars()
+    {
+        return $this->cars;
     }
 }
