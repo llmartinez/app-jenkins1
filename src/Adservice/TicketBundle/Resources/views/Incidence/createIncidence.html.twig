@@ -2,8 +2,14 @@
 
 {% block content %}
 
-    <h3>Nueva Incidencia</h3><h4> {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }}  </h4> 
-    
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Create Incidence</li>
+    </ol>
+
+    <h3>New Incidence</h3>
+
     <div class="tblContainer">
         <div class="row">
 

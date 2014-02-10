@@ -20,9 +20,9 @@ function fill_incidences(url_ajax) {
                 var route = $('#route').val(); 
                 route = route.replace("PLACEHOLDER", elm.id );
                 $('#incidenceBody').append("<tr><td><a class='btn btn-primary pull-right' href='" + route + "'>Ver</a>"
-                                            + "<b style='color:black'>#" + elm.id + ": </b>"
-                                            + elm.title
-                                            + "Last Modification: " + elm.date + "(" + elm.status + ")</tr>");
+                                            + "<p><b style='color:black'>#" + elm.id + ": </b>"
+                                            + elm.title + "</p>"
+                                            + "<b>Last Modification</b>: " + elm.date + " (" + elm.status + ")</tr>");
             }); 
            
         },

@@ -7,6 +7,7 @@ use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Adservice\UserBundle\Entity\User;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Entity\TicketRepository;
@@ -54,15 +55,17 @@ class TicketController extends Controller {
             $status = $em->getRepository('TicketBundle:Status')->find('0');
             $security = $this->get('security.context');
 
-            //Define CAR
+            $form->bindRequest($request);
             $formC->bindRequest($request);
+            $formP->bindRequest($request);
+            $formD->bindRequest($request);
 
             if ($car->getVersion() != "") {
+                //Define CAR
                 $car = DefaultC::newEntity($car, $user);
                 DefaultC::saveEntity($em, $car, $user, false);
 
                 //Define TICKET
-                $form->bindRequest($request);
                 $ticket = DefaultC::newEntity($ticket, $user);
                 if ($security->isGranted('ROLE_ASSESSOR')) {
                     //$ticket->setWorkshop($request->get('workshop'));
@@ -74,13 +77,11 @@ class TicketController extends Controller {
                 DefaultC::saveEntity($em, $ticket, $user, false);
 
                 //Define POST
-                $formP->bindRequest($request);
                 $post = DefaultC::newEntity($post, $user);
                 $post->setTicket($ticket);
                 DefaultC::saveEntity($em, $post, $user, false);
 
                 //Define Document
-                $formD->bindRequest($request);
                 $document->setPost($post);
 
                 if ($document->getFile() != "") {
