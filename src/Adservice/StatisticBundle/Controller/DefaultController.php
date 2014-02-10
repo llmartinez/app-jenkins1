@@ -25,7 +25,6 @@ class DefaultController extends Controller {
         $statistic->setNumClosedIncidences($statistic->getNumIncidencesByStatus($em, 'close'));
         $statistic->setUserWithMaxPost($statistic->getUserWithMaxNumPost($em));
         
-        var_dump($statistic);die;
         return $this->render('StatisticBundle:Default:list.html.twig', array('statistic' => $statistic));
     }
 }
