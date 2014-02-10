@@ -208,17 +208,9 @@ class TicketController extends Controller {
         }
 
         $tickets = $this->loadTicket();
-        $lastPosts = array();
-
-        foreach ($tickets as $t) {
-            $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $t->getId()));
-
-            $lastPosts[$t->getId()] = $posts[count($posts) - 1];
-        }
-
-        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket,
-                    'lastPosts' => $lastPosts,
-                    'tickets' => $tickets,));
+        
+       return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket, 
+                                                                              'tickets' => $tickets, ));
     }
 
     /**
@@ -288,47 +280,15 @@ class TicketController extends Controller {
                 
             }
         }
-
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
-
-        $documents = $em->getRepository('UtilBundle:Document')->findDocumentFiltered($posts);
-
+        
         $array = array('form' => $form->createView(),
-            'formD' => $formD->createView(),
-            'tickets' => $this->loadTicket(),
-            'ticket' => $ticket,
-            'id_ticket' => $id_ticket,
-            'posts' => $posts,
-            'documents' => $documents,
-        );
+                       'formD' => $formD->createView(),
+                       'tickets'    =>  $this->loadTicket(),
+                       'ticket' => $ticket,
+                       'id_ticket' => $id_ticket,
+                      );
         return $array;
     }
-
-    /**
-     * Asigna/desasigna un asesor a un ticket
-     * @param integer $id_ticket
-     * @param integer $user
-     * @return url
-     */
-//    public function assignTicketAction($id_ticket) {
-//        $em = $this->getDoctrine()->getEntityManager();
-//        $request = $this->getRequest();
-//        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-//        $user = new User();
-//        
-//        if ($ticket->getAssignedTo()==null){
-//            $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
-//            $ticket->setAssignedTo($user);
-//            
-//        }else{
-//            $ticket->setAssignedTo(null);
-//        }
-//        
-//        $em->persist($ticket);
-//        $em->flush();
-//
-//        return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
-//    }
 
     public function workshopListAction() {
         $em = $this->getDoctrine()->getEntityManager();
@@ -362,11 +322,10 @@ class TicketController extends Controller {
      * @param Int $id_ticket 
      * @param Int $id_user
      */
-    private function assignUserToTicket($id_ticket, $id_user=null){
+    public function assignUserToTicketAction($id_ticket, $id_user=null){
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        
         if($id_user != null){
             $user = $em->getRepository('UserBundle:User')->find($id_user);
             $ticket->setAssignedTo($user);
@@ -377,6 +336,7 @@ class TicketController extends Controller {
         $em->persist($ticket);
         $em->flush();
         
+        return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
     }
 
     /**/
@@ -387,9 +347,11 @@ class TicketController extends Controller {
 
         $option = $petition->request->get('option');
         
-        if($option == 'all') $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
-        if($option == 'assign') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
-        if($option == 'ignore') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
+        if($option == 'all'     ) $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
+        if($option == 'ignore'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
+        if($option == 'assign'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'owner'   ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'workshop') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
         
         return new Response(json_encode($tickets), $status = 200);
     }

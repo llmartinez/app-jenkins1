@@ -22,11 +22,11 @@ class Status
     private $id;
 
     /**
-     * @var string $status
+     * @var string $name
      *
-     * @ORM\Column(name="status", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $status;
+    private $name;
 
 
     /**
@@ -40,26 +40,26 @@ class Status
     }
 
     /**
-     * Set status
+     * Set name
      *
-     * @param string $status
+     * @param string $name
      */
-    public function setStatus($status)
+    public function setName($name)
     {
-        $this->status = $status;
+        $this->name = $name;
     }
 
     /**
-     * Get status
+     * Get name
      *
      * @return string 
      */
-    public function getStatus()
+    public function getName()
     {
-        return $this->status;
+        return $this->name;
     }
     
     public function __toString() {
-        return $this->status;
+        return $this->name;
     }
 }

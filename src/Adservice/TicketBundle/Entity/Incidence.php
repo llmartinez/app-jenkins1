@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="incidence")
  * @ORM\Entity
  */
-class Incidence
+class Incidence implements \JsonSerializable
 {
     /**
      * @var integer $id
@@ -62,6 +62,13 @@ class Incidence
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
     private $owner;
+
+    /**
+     * @var string $workshop
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop")
+     */
+    private $workshop;
 
     /**
      * @var date $created_at
@@ -216,6 +223,26 @@ class Incidence
     }
     
     /**
+     * Set workshop
+     *
+     * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
+     */
+    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop)
+    {
+        $this->workshop = $workshop;
+    }
+
+    /**
+     * Get workshop
+     *
+     * @return string 
+     */
+    public function getWorkshop()
+    {
+        return $this->workshop;
+    }
+    
+    /**
      * Set created_at
      *
      * @param datetime $createdAt
@@ -275,4 +302,12 @@ class Incidence
         return $this->modified_by;
     }
     
+    public function jsonSerialize() {
+        return [
+            'id'        => $this->getId(),
+            'title'     => $this->getTicket()->getTitle(),
+            'date'      => $this->getModifiedAt()->format('d/m/Y'),
+            'status'    => $this->getStatus()->getName()
+        ];
+    }
 }

@@ -36,9 +36,9 @@ class Car
     private $year;
 
     /**
-     * @var integer $vin
+     * @var string $vin
      *
-     * @ORM\Column(name="vin", type="integer", length=17)
+     * @ORM\Column(name="vin", type="string", length=255)
      */
     private $vin;
 
@@ -130,7 +130,7 @@ class Car
     /**
      * Set vin
      *
-     * @param integer $vin
+     * @param string $vin
      */
     public function setVin($vin)
     {
@@ -140,7 +140,7 @@ class Car
     /**
      * Get vin
      *
-     * @return integer 
+     * @return string 
      */
     public function getVin()
     {

@@ -13,6 +13,12 @@ function fill_tickets(url_ajax) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#ticketBody').empty();
+            /*
+            if(data.length==0){
+                $('#ticketHead').empty();
+                $('#ticketHead').append("<th>You don't have any ticket..</th>");
+            }
+            */
             $.each(data, function(idx, elm) {
                 var route = $('#route').val(); 
                 route = route.replace("PLACEHOLDER", elm.id );
@@ -26,33 +32,3 @@ function fill_tickets(url_ajax) {
         }
     });
 } 
-
-/**
- * Cam
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function assignement(url_ajax) {
-    
-    var option = $('#assignement').val();
-    
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: {option: option},
-        dataType: "json",
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#ticketBody').empty();
-            $.each(data, function(idx, elm) {
-                var route = $('#route').val(); 
-                route = route.replace("PLACEHOLDER", elm.id );
-                $('#ticketBody').append("<tr> <td>" + elm.date + "</td><td>" + elm.workshop + "</td>"
-                                       +"<td>#"+ elm.id +": <a href='"+route+"'>" + elm.title +  "</a></td></tr>");
-            }); 
-           
-        },
-        error: function() {
-            console.log("Error al cargar tickets...");
-        }
-    });
-}

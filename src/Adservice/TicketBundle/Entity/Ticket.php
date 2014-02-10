@@ -320,29 +320,12 @@ class Ticket implements \JsonSerializable
         return $this->title;
     }
     
-    public function __toString() {
-        return $this->title;
-    }
-    
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'workshop' => $this->getWorkshop()->getName(),
-            'date' => $this->getCreatedAt()->format('d/m/Y'),
-            'title' => $this->getTitle()
-        ];
-    }
-    public function __construct()
-    {
-        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Add posts
      *
-     * @param Adservice\WorkshopBundle\Entity\Post $posts
+     * @param Post $posts
      */
-    public function addPost(\Adservice\WorkshopBundle\Entity\Post $posts)
+    public function addPost($posts)
     {
         $this->posts[] = $posts;
     }
@@ -375,5 +358,23 @@ class Ticket implements \JsonSerializable
     public function getCars()
     {
         return $this->cars;
+    }
+    
+    public function __toString() {
+        return $this->title;
+    }
+    
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'workshop' => $this->getWorkshop()->getName(),
+            'date' => $this->getCreatedAt()->format('d/m/Y'),
+        ];
     }
 }
