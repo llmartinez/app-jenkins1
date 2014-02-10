@@ -11,7 +11,7 @@ class CarType extends AbstractType
         $builder
                 ->add('version')
                 ->add('year', 'integer')
-                ->add('vin', 'text')
+                ->add('vin')
                 ->add('plateNumber')
                 ;
     }

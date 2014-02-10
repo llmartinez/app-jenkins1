@@ -219,17 +219,8 @@ class TicketController extends Controller{
         }  
         
         $tickets = $this->loadTicket();
-        $lastPosts = array();
-        
-        foreach ($tickets as $t)
-        {
-             $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $t->getId()));
-             
-             $lastPosts[$t->getId()] = $posts[count($posts)-1];
-        }
         
        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket, 
-                                                                              'lastPosts' => $lastPosts, 
                                                                               'tickets' => $tickets, ));
     }
     
@@ -305,17 +296,11 @@ class TicketController extends Controller{
 
         }
         
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
-        
-        $documents = $em->getRepository('UtilBundle:Document')->findDocumentFiltered($posts);
-        
         $array = array('form' => $form->createView(),
                        'formD' => $formD->createView(),
                        'tickets'    =>  $this->loadTicket(),
                        'ticket' => $ticket,
                        'id_ticket' => $id_ticket,
-                       'posts' => $posts, 
-                       'documents' => $documents,
                       );
         return $array;
     }
@@ -352,9 +337,11 @@ class TicketController extends Controller{
         
         $option = $petition->request->get('option');
         
-        if($option == 'all') $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
-        if($option == 'assign') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
-        if($option == 'ignore') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
+        if($option == 'all'     ) $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
+        if($option == 'ignore'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
+        if($option == 'assign'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'owner'   ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'workshop') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
         
         return new Response(json_encode($tickets), $status = 200);
     }

@@ -7,11 +7,15 @@
 <div class="colIzq">
     
     <select id="slct_historyTickets" class="form-control">
-    
-        <option value="ignore" selected > Show not assigned tickets     </option>
-        <option value="assign"          > Show assigned tickets         </option>
-        <option value="all"             > Show all tickets              </option>
         
+        {% if is_granted('ROLE_ASSESSOR') %}
+            <option value="ignore" selected > Show not assigned tickets     </option>
+            <option value="assign"          > Show assigned tickets         </option>
+            <option value="all"             > Show all tickets              </option>
+        {% else %}
+            <option value="owner" selected  > Show your tickets             </option>
+            <option value="workshop"        > Show tickets in your workshop </option>
+        {% endif %}
     </select>
         
     <div class="widget stacked widget-table action-table">
@@ -25,23 +29,16 @@
 
             <table class="table table-striped table-bordered">
                 
-                {% if ticket | length == 0 %}
-                
-                    <tr><td>You don't have any open ticket..</td></tr>
-                    
-                {% else %}
-                    
-                    <thead>
+                    <thead id="ticketHead">
                         <tr>
-                            <th>{% trans %}Date{% endtrans %}</th>
-                            <th>{% trans %}Workshop{% endtrans %}</th>
-                            <th>{% trans %}Ticket{% endtrans %}</th>
+                            <th>{% trans %} Date     {% endtrans %}</th>
+                            <th>{% trans %} Workshop {% endtrans %}</th>
+                            <th>{% trans %} Ticket   {% endtrans %}</th>
                         </tr>
                     </thead>
                     <tbody id="ticketBody">
                         
                     </tbody>
-                {% endif %}
             </table>
         </div> <!-- /widget-content -->
     </div> <!-- /widget -->

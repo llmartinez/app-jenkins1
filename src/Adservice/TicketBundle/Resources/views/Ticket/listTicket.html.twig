@@ -29,20 +29,8 @@
                                 
                                     <a class="btn btn-primary pull-right"  href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"> View </a> 
                                 
-                                    <p> <label>Title:        </label> {{ ticket.title | length > 100 ?  ticket.title | slice(0, 100) ~ '...' : ticket.title }} </p>
-
-                                    <p> <label>Date:         </label> {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
-
-                                    <p> <label>Workshop:     </label> {{ ticket.workshop }}         </p>
-                                    
-                                    <p> <label>Required by:  </label> {{ ticket.owner    }}         </p>
-
-                                    <p> <label>Car:          </label> {{ ticket.car.version.model.brand }} 
-                                                                      {{ ticket.car.version.model }} 
-                                                                      {{ ticket.car.version }} 
-                                                                     ({{ ticket.car.year }})        </p>
-                                    <p> <label>PlateNumber:  </label> {{ ticket.car.plateNumber  }} -- 
-                                        <label>VIN:          </label> {{ ticket.car.vin          }} </p>
+                                    {# muestra los datos del ticket #}    
+                                    {% include 'TicketBundle:Default:includes/_data_ticket.html.twig' %}
                                     </p> 
 
                             {% else %}
@@ -61,15 +49,13 @@
     <div>
         {% for ticket in tickets %}
             {# Comprueba que el usuario pueda ver ese ticket y que el ultimo post no sea del usuario #}
-            {# Si : talleres de usuario y ticket 
-                    ticket asignado a un asesor
+            {% set user = app.security.getToken().getUser() %}
+            {% set lastPost = ticket.posts | length -1%}
+            {# Si : coinciden (talleres de usuario y ticket o ticket asignado a un asesor)
                Y  : el ultimo en responder != usuario logueado
             #}
-            {% if ( ticket.workshop.id   ==    app.security.getToken().getUser().getWorkshop().getId() 
-                    or  
-                    ticket.assignedTo   ==    app.security.getToken().getUser() 
-                  )
-               and  lastPosts[ticket.id].owner.id != app.security.getToken().getUser().getId() %}
+            {% if ( ticket.workshop == user.getWorkshop()   or   ticket.assignedTo == user ) 
+               and  ticket.posts[lastPost].owner.id != user.getId() %}
         
                <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..
                    <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">    Show            </a></p>

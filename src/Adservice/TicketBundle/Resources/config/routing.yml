@@ -63,3 +63,9 @@ listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
     
+# Ajax    
+fill_incidences:
+    pattern:  /incidence/ajax
+    defaults: { _controller: TicketBundle:Incidence:fill_incidences }
+    
+    

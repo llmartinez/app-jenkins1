@@ -3,6 +3,7 @@
 namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 use Adservice\TicketBundle\Entity\Incidence;
 use Adservice\TicketBundle\Form\IncidenceType;
@@ -215,4 +216,20 @@ class IncidenceController extends Controller{
                                                                                      'incidences' => $incidences, ));
     }
 
+    /**/
+    public function fill_incidencesAction() {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        
+        $option = $petition->request->get('option');
+        
+        
+        if($option == 'all'     ) $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
+        if($option == 'owner'   ) $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
+        if($option == 'workshop') $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
+        
+
+        return new Response(json_encode($incidences), $status = 200);
+    }
 }
