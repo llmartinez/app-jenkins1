@@ -6,7 +6,7 @@
             {% if ticket.assignedTo == app.security.getToken().getUser() %}
 
                 <a class="btn btn-primary pull-right"
-                   href="{{ path('assignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
+                   href="{{ path('assignUserToTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
                     Ignore </a>
 
                 <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"> Edit </a>
@@ -19,7 +19,7 @@
         {% else %}
 
             <a class="btn btn-primary pull-right" id="assign" 
-               href="{{ path('assignTicket', { 'id_ticket': ticket.id }) }}" > 
+               href="{{ path('assignUserToTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" > 
                 Assign </a>
 
         {% endif %}

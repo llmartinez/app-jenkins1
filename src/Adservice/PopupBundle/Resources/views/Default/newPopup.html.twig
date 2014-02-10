@@ -2,7 +2,11 @@
 
 {% block body %}
 
-    <h1>NEW popup</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('popup_list') }}">List of Popups</a></li>
+      <li class="active">New Popup</li>
+    </ol>
 
     <form action="{{ path('popup_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}
