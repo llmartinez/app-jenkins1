@@ -2,7 +2,11 @@
 
 {% block content %}
 
-    <h3>Edit Ticket</h3>
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
+    </ol>
     
     <div class="tblContainer">
         <div class="row">
@@ -37,15 +41,15 @@
                             Importance {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                             
-                            <legend>Vehiculo</legend>
-                        
+                            <legend>Car</legend>
                             {% include 'CarBundle:Default:car.html.twig'%}
+                            {% include 'CarBundle:Default:edit_car.html.twig'%}
                     </div>
                     <br />
                     <div class="row">
                         <div class="col-xs-12 col-md-12 form-group">
                             <button class="btn btn-primary pull-right" type="submit">Submit</button>
-                            <a class="btn btn-primary pull-right" href="{{ path('listTicket') }}">Cancel</a>
+                            <a class="btn btn-primary pull-right" href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">Cancel</a>
                             </form>
                         </div>
                     </div>

@@ -8,7 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Adservice\TicketBundle\Entity\Incidence;
 use Adservice\TicketBundle\Form\IncidenceType;
 use Adservice\TicketBundle\Entity\Ticket;
+use Adservice\TicketBundle\Entity\TicketRepository;
+use Adservice\TicketBundle\Form\TicketType;
 use Adservice\TicketBundle\Entity\Post;
+use Adservice\CarBundle\Entity\Car;
+use Adservice\CarBundle\Form\CarType;
 
 use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
 
@@ -23,51 +27,74 @@ class IncidenceController extends Controller{
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         
-        $users = $em->getRepository('UserBundle:User')->findAll();
-        
         $incidence = new Incidence();
+        $ticket = new Ticket();
+        $car = new Car();
         
+        //Define Forms
         $form = $this->createForm(new IncidenceType(), $incidence);
+        $formT = $this->createForm(new TicketType(), $ticket);
+        $formC = $this->createForm(new CarType(), $car);
         
         if ($request->getMethod() == 'POST') {
-              
+            //campos comunes
+            $security = $this->get('security.context');
+            $user = $security->getToken()->getUser();
+           
             $form->bindRequest($request);
-            
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
-            
-            $ticket = DefaultC::newEntity(new Ticket(),$user);
-            $ticket->setTitle($request->get('title'));
-            $ticket->setStatus($incidence->getStatus());
-            $ticket->setImportance($incidence->getImportance());
-            DefaultC::saveEntity($em, $ticket, $user, false);
-                        
-            $post = DefaultC::newEntity(new Post(),$asesor);
-            $post->setTicket($ticket);
-            $post->setMessage($incidence->getDescription());
-            DefaultC::saveEntity($em, $post, $user, false);
-            
-            $post2 = DefaultC::newEntity(new Post(),$asesor);
-            $post2->setTicket($ticket);
-            $post2->setMessage($incidence->getSolution());
-            DefaultC::saveEntity($em, $post2, $asesor, false);
-                        
-            $incidence = DefaultC::newEntity($incidence,$asesor);
-            $incidence->setTicket($ticket);
-            DefaultC::saveEntity($em, $incidence, $asesor);
+            $formC->bindRequest($request);
+            $formT->bindRequest($request);
 
-            $sesion = $request->getSession();
+            if (($car->getVersion() != "") && ($request->get('workshop') != 0)) {
+                
+                $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($request->get('workshop'));
+                
+                //Define CAR
+                $car = DefaultC::newEntity($car, $user);
+                DefaultC::saveEntity($em, $car, $user, false);
+                
+                //Define INCIDENCE
+                $incidence = DefaultC::newEntity($incidence,$user);
+                $incidence->setTicket($ticket);
+                $incidence->setWorkshop($workshop);
+                DefaultC::saveEntity($em, $incidence, $user, false);
+                
+                //Define TICKET
+                $ticket = DefaultC::newEntity($ticket, $user);
+                $ticket->setCar($car);
+                $ticket->setWorkshop($incidence->getWorkshop());
+                $ticket->setStatus($incidence->getStatus());
+                $ticket->setImportance($incidence->getImportance());
+                DefaultC::saveEntity($em, $ticket, $user, false);
+                        
+                $post = DefaultC::newEntity(new Post(),$user);
+                $post->setTicket($ticket);
+                $post->setMessage($incidence->getDescription());
+                DefaultC::saveEntity($em, $post, $user, false);
+
+                $post2 = DefaultC::newEntity(new Post(),$user);
+                $post2->setTicket($ticket);
+                $post2->setMessage($incidence->getSolution());
+                DefaultC::saveEntity($em, $post2, $user, false);
+                
+                $em->flush();  
+
+                $sesion = $request->getSession();
             
-            $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
-            
-            return $this->redirect($this->generateUrl('listIncidence', array('incidences' => $incidences, )));
-        }        
+                return $this->redirect($this->generateUrl('showIncidence', array('id_incidence' => $incidence->getId())));
+            } else {
+                $this->get('session')->setFlash('error', '¡Error! Hay campos sin introducir');
+            }
+        }
         
-        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
+        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
         
-        return $this->render('TicketBundle:Incidence:newIncidence.html.twig', array('incidences' => $incidences, 
-                                                                                    'form' => $form->createView(),
-                                                                                    'users' => $users,
+        return $this->render('TicketBundle:Incidence:newIncidence.html.twig', array('form'      => $form->createView(),
+                                                                                    'formT'     => $formT->createView(),
+                                                                                    'formC'     => $formC->createView(),
+                                                                                    'workshops' => $workshops,
+                                                                                    'brands' => $brands,
                                                                                  ));
     }
     

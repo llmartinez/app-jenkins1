@@ -2,7 +2,11 @@
 
 {% block content %}
 
-    <h3>Edita Incidencia</h3>
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listIncidence') }}">List of Incidences</a></li>
+      <li class="active"><a href="{{ path('showIncidence', {'id_incidence': incidence.id}) }}">#{{ incidence.id }}</a> Edit</li>
+    </ol>
     
     <div class="tblContainer">
         <div class="row">
@@ -51,7 +55,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-12 form-group">
                             <button class="btn btn-primary pull-right" type="submit">Submit</button>
-                            <a class="btn btn-primary pull-right" href="{{ path('listIncidence') }}">Cancelar</a>
+                            <a class="btn btn-primary pull-right" href="{{ path('showIncidence', {'id_incidence': incidence.id}) }}">Cancelar</a>
                             </form>
                         </div>
                     </div>
