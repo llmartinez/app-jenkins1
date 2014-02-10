@@ -1,8 +1,12 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-
-    <h1>NEW partner</h1>
+    
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('partner_list') }}">List of Partners</a></li>
+      <li class="active">New Partner</li>
+    </ol>
 
     <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}

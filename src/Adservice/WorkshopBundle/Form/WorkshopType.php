@@ -5,6 +5,9 @@ namespace Adservice\WorkshopBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
+use Adservice\UserBundle\Entity\User;
+use Adservice\UserBundle\Form\UserType;
+
 class WorkshopType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
@@ -33,7 +36,7 @@ class WorkshopType extends AbstractType
             ->add('conflictive')
             ->add('province')
             ->add('region')
-            
+            ->add('users')
         ;
     }
 
