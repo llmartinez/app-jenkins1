@@ -7,6 +7,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller {
 
+    /**
+     * Funcion Ajax que devuelve un listado de modelos filtrados a partir de la marca ($brand)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function carModelAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
@@ -18,6 +22,10 @@ class DefaultController extends Controller {
         return new Response(json_encode($models), $status = 200);
     }
     
+    /**
+     * Funcion Ajax que devuelve un listado de versiones filtrados a partir del modelo ($model)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function carVersionAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();

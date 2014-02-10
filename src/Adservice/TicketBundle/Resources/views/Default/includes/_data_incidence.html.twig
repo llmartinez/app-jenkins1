@@ -13,5 +13,6 @@
     <p> <label>Created By:          </label>  {{ incidence.owner }}                                                  </p>
     <p> <label>Created At:          </label>  {{ incidence.createdAt | date("d-m-Y") }}  ( {{ incidence.status }} )  </p>
     
-    <p> <label>Related to ticket:   </label> #{{ incidence.ticket.id }}         </p>
+    <p> <label>Related to ticket:   </label> #{{ incidence.ticket.id }}  
+                                             <a href="{{ path('showTicket', {'id_ticket': incidence.ticket.id }) }}">View</a></p>
     

@@ -243,7 +243,10 @@ class IncidenceController extends Controller{
                                                                                      'incidences' => $incidences, ));
     }
 
-    /**/
+    /**
+     * Funcion Ajax que devuelve un listado de incidencias filtradas a partir de una opcion de un combo ($option)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function fill_incidencesAction() {
         
         $em = $this->getDoctrine()->getEntityManager();
