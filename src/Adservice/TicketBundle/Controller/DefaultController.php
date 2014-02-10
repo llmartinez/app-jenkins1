@@ -34,6 +34,4 @@ class DefaultController extends Controller
         if($auto_flush) $em->flush(); 
         return true;
     }
-    
-
 }

@@ -122,8 +122,6 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $car = $ticket->getCar();
 
-
-
         $form = $this->createForm(new TicketType(), $ticket);
         $formC = $this->createForm(new CarType(), $car);
 
@@ -156,15 +154,15 @@ class TicketController extends Controller {
         $versions = $em->getRepository('CarBundle:Version')->findByModel($car->getVersion()->getModel()->getId());
 
         return $this->render('TicketBundle:Ticket:editTicket.html.twig', array(
-                    'form' => $form->createView(),
-                    'formC' => $formC->createView(),
-                    'tickets' => $this->loadTicket(),
-                    'ticket' => $ticket,
-                    'workshops' => $workshops,
-                    'brands' => $brands,
-                    'models' => $models,
-                    'versions' => $versions
-        ));
+                                                                                'form' => $form->createView(),
+                                                                                'formC' => $formC->createView(),
+                                                                                'tickets' => $this->loadTicket(),
+                                                                                'ticket' => $ticket,
+                                                                                'workshops' => $workshops,
+                                                                                'brands' => $brands,
+                                                                                'models' => $models,
+                                                                                'versions' => $versions
+                                                                    ));
     }
 
     /**
@@ -340,8 +338,10 @@ class TicketController extends Controller {
         return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
     }
 
-    /**/
-
+    /**
+     * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function fill_ticketsAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
