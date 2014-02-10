@@ -2,7 +2,11 @@
 
 {% block body %}
 
-    <h1>{{ workshop }}(EDIT)</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('workshop_list') }}">list of Workshops</a></li>
+      <li class="active">Edit Workshop ({{ workshop }})</li>
+    </ol>
 
     <form action="{{ path("workshop_edit", { 'id':workshop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
             {{ form_widget(form) }}

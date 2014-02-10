@@ -22,13 +22,17 @@ listTicket:
     pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
 
-assignListTicket:
-    pattern:  /ticket/assignList/
-    defaults: { _controller: TicketBundle:Ticket:assignListTicket }    
+ticketWorkshopList:
+    pattern:  /ticket/workshopList/
+    defaults: { _controller: TicketBundle:Ticket:workshopList }    
 
-assignTicket:
-    pattern:  /ticket/assign/{id_ticket}
-    defaults: { _controller: TicketBundle:Ticket:assignTicket }
+ticketsFromWorkshop:
+    pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}
+    defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop }
+    
+#assignTicket:
+#    pattern:  /ticket/assign/{id_ticket}
+#    defaults: { _controller: TicketBundle:Ticket:assignTicket }
     
 # Ajax    
 fill_tickets:

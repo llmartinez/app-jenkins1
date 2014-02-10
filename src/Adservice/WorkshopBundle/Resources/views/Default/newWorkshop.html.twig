@@ -2,7 +2,11 @@
 
 {% block body %}
 
-    <h1>NEW workshop</h1>
+        <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('workshop_list') }}">list of Workshops</a></li>
+      <li class="active">New Workshop</li>
+    </ol>
 
     <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}

@@ -2,7 +2,11 @@
 
 {% block body %}
 
-    <h3>Selecciona el Taller</h3>
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li class="active">List of Workshops</li>
+    </ol>
+
     {% if workshops|length > 0  %}
         <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
             <thead>
@@ -22,7 +26,7 @@
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
                         <td>
-                            <a href="{{ path("partner_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-ok-circle"></span></a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}"><span class="glyphicon glyphicon-ok-circle"></span></a>
                         </td>
                     </tr>
                 {% endfor %}
