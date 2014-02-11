@@ -8,10 +8,45 @@
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
-                            {% trans %}header.welcome{% endtrans %}
+                            {% trans %} header.welcome {% endtrans %}
                         </td>
                         <td align="right">
                             {% if app.user.username is defined %}
+<<<<<<< HEAD
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">{{ app.security.getToken().getUser().getUsername() }}</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="{{ path('user_index') }}">   {% trans %}Indicie Usuario  {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('newTicket') }}" >   {% trans %}New ticket       {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listTicket') }}">   {% trans %}Tickets          {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listIncidence') }}">{% trans %}Incidencias      {% endtrans %}</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="{{ path('user_logout') }}">  {% trans %}Logout           {% endtrans %}</a></li>
+                                </ul>
+                            </div>
+                           {# {% else %}
+                                <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>#}
+                            {% endif %}
+                            {#
+                               app.request.getPathInfo()
+                               app.request.attributes.get('_route')            -- listIncidence 
+                            #}
+                            <a href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            {# 
+                              {% set location = 'ticket' %}
+                              <a href="{{ path('redirect', {'_locale': 'en', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
+                              <a href="{{ path('redirect', {'_locale': 'es', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
+                              <a href="{{ path('redirect', {'_locale': 'fr', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            #}
+=======
                                 <!-- Split button -->
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default">{{ app.security.getToken().getUser().getUsername() }}</button>
@@ -39,6 +74,7 @@
                             <a href="{{ path(app.request.attributes.get('_route'), { '_locale': 'es'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
                             <a href="{{ path(app.request.attributes.get('_route'), { '_locale': 'fr'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>#}
 
+>>>>>>> upstream/developers
                         </td>
                     </tr>
                 </table>

@@ -2,9 +2,9 @@
 #   APDO. RUTAS GENÉRICAS   #
 #############################
 
-#change_language:
-#    pattern: /lang/{locale}
-#    defaults: { _controller: UtilBundle:Language:changeLanguage }
+changeLanguage:
+    pattern: /lang/{lang}/
+    defaults: { _controller: UtilBundle:Language:changeLanguage }
     
 ###########################
 #   APDO. AJAX   #
