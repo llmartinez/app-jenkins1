@@ -113,6 +113,21 @@ class Partner{
      * @ORM\OneToMany(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", mappedBy="partner")
      */
     private $workshops;
+    
+//    /**
+//     *
+//     * @var string $users
+//     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+//     */
+//    private $users;
+    
+    
+    /**
+     *
+     * @var type 
+     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+     */
+    private $users;
 
     /**
      * @var datetime $created_at
@@ -137,6 +152,7 @@ class Partner{
     
     public function __construct() {
         $this->workshops = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -445,5 +461,25 @@ class Partner{
     public function getWorkshops()
     {
         return $this->workshops;
+    }
+
+    /**
+     * Add users
+     *
+     * @param Adservice\UserBundle\Entity\User $users
+     */
+    public function addUser(\Adservice\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

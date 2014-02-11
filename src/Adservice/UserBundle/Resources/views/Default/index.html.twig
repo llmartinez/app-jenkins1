@@ -27,6 +27,23 @@
         </table>
     {% endif %}
 
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <table>
+            <tr>
+                <th>{% trans %}user.index.menu.assessor_title{% endtrans %}</th>
+            </tr>    
+            <tr>
+                <td>
+                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
+                    <a href="{{ path("listTicket") }}">{% trans %}user.index.menu.my_tickets{% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.my_incidences{% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %}Listado de Tickets{% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %}Listado de Incidencias{% endtrans %}</a><br>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
     {% if is_granted('ROLE_USER') %}
         <table>
             <tr>
@@ -61,7 +78,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
 
 {% endblock%}
 
@@ -73,9 +89,12 @@
     <script>
         $(document).ready(function(){
             $(window).load(function(){
+                //recuperamos "visited" de la session, 
+                //si no existe es que es la primera vez que entramos i mostraremos el popup
+                //si existe valdrá "true" i ya no se mostrará el popup
                 var first_time = localStorage['visited'];
-                if (!first_time) {
-                    localStorage['visited'] = false;
+                if (first_time == 'false') {
+                    localStorage['visited'] = true;
                     var url_ajax = "{{ path("popup_get") }}";
                     find_popup(url_ajax);
                 }
