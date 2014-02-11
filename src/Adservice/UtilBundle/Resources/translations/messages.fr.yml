@@ -1,5 +1,6 @@
 header.welcome: ADService France
 
+<<<<<<< HEAD
 user.index.menu.admin_title:            MENU ADMIN
 user.index.menu.user_title:             MENU UTILISATEUR
 user.index.menu.my_profile:             Mon profil
@@ -9,6 +10,18 @@ user.index.menu.list_popups:            Liste des Popups ADService
 user.index.menu.list_workshops:         Liste des ateliers AdService
 user.index.menu.list_incidences:        Liste des questions AdService
 user.index.menu.list_statistics:        Liste des statistiques AdService
+=======
+user.index.menu.admin_title: MENU ADMIN
+user.index.menu.assessor_title: MENU CONSEILLER
+user.index.menu.user_title: MENU UTILISATEUR
+user.index.menu.my_profile: Mon profil
+user.index.menu.list_partners: Liste des partenaires AdService
+user.index.menu.list_users: Liste des utilisateurs AdService
+user.index.menu.list_popups: Liste des Popups ADService
+user.index.menu.list_workshops: Liste des ateliers AdService
+user.index.menu.list_incidences: Liste des questions AdService
+user.index.menu.list_statistics: Liste des statistiques AdService
+>>>>>>> upstream/developers
 user.index.menu.create_incidence_admin: Créer un impact en tant qu'administrateur
 user.index.menu.my_tickets:             Mon Tickets
 user.index.menu.my_incidences:          Mon questions

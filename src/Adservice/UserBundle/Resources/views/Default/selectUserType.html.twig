@@ -1,0 +1,17 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    <br/>
+    <table class="table" style="width: 50%; margin-left: 450px;">
+        <tr>
+            <td align="center">
+                <a href="{{ path('user_new', {'type':'admin'}) }}" class="btn btn-primary">Admin</a>
+                <a href="{{ path('user_new', {'type':'assessor'}) }}" class="btn btn-primary">Assessor</a>
+                <a href="{{ path('user_new', {'type':'user'}) }}" class="btn btn-primary">User</a>
+            </td>
+        </tr>
+    </table>
+    
+    </br>
+    </br>
+{% endblock%}

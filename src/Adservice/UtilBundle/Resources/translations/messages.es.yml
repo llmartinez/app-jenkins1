@@ -1,6 +1,7 @@
 header.welcome: ADService España
 
 user.index.menu.admin_title:            MENU ADMIN
+user.index.menu.assessor_title:         MENU ASESOR
 user.index.menu.user_title:             MENU USUARIO
 user.index.menu.my_profile:             Mi Perfil
 user.index.menu.list_partners:          Listado de Socios ADService
@@ -38,7 +39,7 @@ login.title: Acceso usuarios AD Service
 login.check: Recuerdame
 logout: Cerrar sesión
 #HEADER
-index: Índice usuario
+index: Home
 newTicket : Nuevo ticket
 ticket: Tickets
 incidence: Incidencias

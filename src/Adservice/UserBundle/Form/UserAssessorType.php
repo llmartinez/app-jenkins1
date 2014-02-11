@@ -5,7 +5,7 @@ namespace Adservice\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class UserType extends AbstractType
+class UserAssessorType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -29,11 +29,10 @@ class UserType extends AbstractType
             ->add('email_1', 'email')
             ->add('email_2', 'email')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('workshop')
             ->add('region')
             ->add('province')
             ->add('country')
-            ->add('language')
+            ->add('partner') 
         ;
     }
 

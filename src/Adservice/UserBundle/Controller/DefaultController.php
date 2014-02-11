@@ -7,12 +7,12 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
-
+use Adservice\UserBundle\Form\UserAdminType;
+use Adservice\UserBundle\Form\UserAssessorType;
 use Adservice\UserBundle\Form\UserType;
 use Adservice\UserBundle\Entity\User;
 //use Adservice\StatisticBundle\Entity\Statistic;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
-
 
 class DefaultController extends Controller {
 
@@ -20,19 +20,6 @@ class DefaultController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-        
-//        $session_locale = $this->getRequest()->getLocale();
-//        $user_locale = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
-//        var_dump($session_locale);
-//        var_dump($user_locale);
-////        $this->getRequest()->setLocale('fr_FR');
-//        if($session_locale != null){
-//            $this->getRequest()->setLocale($session_locale);
-//        }else{
-//            $this->getRequest()->setLocale($user_locale);
-//        }
-        
-            
         return $this->render('UserBundle:Default:index.html.twig');
     }
 
@@ -57,39 +44,40 @@ class DefaultController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->saveUser($em, $user, $original_password);
+            if ($form->isValid())
+                $this->saveUser($em, $user, $original_password);
             return $this->redirect($this->generateUrl('user_index'));
         }
 
 
-        return $this->render('UserBundle:Default:profile.html.twig', array('user'       => $user,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()
+        return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user,
+                    'form_name' => $form->getName(),
+                    'form' => $form->createView()
         ));
     }
 
+    public function selectNewUserAction() {
+        return $this->render('UserBundle:Default:selectUserType.html.twig');
+    }
+
     /**
-     * Recupera todos los usuarios y los separa por su rol
+     * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
     public function userListAction() {
-        
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        
+
         $em = $this->getDoctrine()->getEntityManager();
-        $all_users = $em->getRepository("UserBundle:User")->findAll();
-//        $admin = $em->getRepository("UserBundle:User")->find(1);
-//        $all_roles = $em->getRepository("UserBundle:Role")->findAll();
-////        var_dump($admin->getUserRole()->user_role);
-//        $role = $admin->getRoles();
-//        var_dump($role[0]->getName());
-//        die;
+        $logged_user = $this->getLoggedUser();
+        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
         
+
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
 
-        foreach ($all_users as $user) {
+        foreach ($users as $user) {
             $role = $user->getRoles();
             if ($role[0]->getRole() == "ROLE_ADMIN") {
                 $users_role_admin[] = $user;
@@ -99,14 +87,14 @@ class DefaultController extends Controller {
                 $users_role_assessor[] = $user;
             }
         }
-        
-        
+
+
         return $this->render('UserBundle:Default:list.html.twig', array(
 //                                                                        'all_users'             => $all_users
-                                                                        'users_role_admin'      => $users_role_admin,
-                                                                        'users_role_user'       => $users_role_user,
-                                                                        'users_role_assessor'   => $users_role_assessor
-                                                                        ));
+                    'users_role_admin' => $users_role_admin,
+                    'users_role_user' => $users_role_user,
+                    'users_role_assessor' => $users_role_assessor
+        ));
     }
 
     /**
@@ -116,105 +104,144 @@ class DefaultController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editUserAction($id) {
-        
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $user = $em->getRepository("UserBundle:User")->find($id);
-        if (!$user) throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-        $original_password = $user->getPassword();
+        if (!$user)throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
         
+        $original_password = $user->getPassword();
+
         $petition = $this->getRequest();
-        $form = $this->createForm(new UserType(), $user);
+        $role = $user->getRoles();
+        if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminType(), $user);
+        elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAssessorType(), $user);
+        elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserType(), $user);
+            
+//        $form = $this->createForm(new UserType(), $user);
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->saveUser($em, $user, $original_password);
+            if ($form->isValid())
+                $this->saveUser($em, $user, $original_password);
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:Default:editUser.html.twig', array('user'       => $user,
-                                                                            'form_name'  => $form->getName(),
-                                                                            'form'       => $form->createView()));
+        return $this->render('UserBundle:Default:editUser.html.twig', array('user' => $user,
+                    'form_name' => $form->getName(),
+                    'form' => $form->createView()));
     }
-    
+
     /**
      * Elimina el usuario con la $id de la bbdd
      * @param Int $id
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteUserAction($id){
-        
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+    public function deleteUserAction($id) {
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
-        if (!$user) throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-        
+        if (!$user)
+            throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
+
         $em->remove($user);
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('user_list'));
     }
-    
+
     /**
      * Crea un nuevo usuario en la bbdd
      * @return type
      * @throws AccessDeniedException
      */
-    public function newUserAction(){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+    public function newUserAction($type) {
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        $user  = new User();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = new User();
+
+        //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
+        if ($type == 'admin') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserAdminType(), $user);
+            $user_type = 'admin';
+        } elseif ($type == 'assessor') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserAssessorType(), $user);
+            $user_type = 'assessor';
+        } elseif ($type == 'user') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserType(), $user);
+            $user_type = 'user';
+        }
+
         $request = $this->getRequest();
-        $form = $this->createForm(new UserType(), $user);
         $form->bindRequest($request);
-        
-         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+
+        if ($form->isValid()) {
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+//            $partner = $form->getData('partner');
             $this->saveUser($em, $user);
-            
+
             return $this->redirect($this->generateUrl('user_list'));
-         }
-        
-        return $this->render('UserBundle:Default:newUser.html.twig', array('user'       => $user,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()));
+        }
+
+        return $this->render('UserBundle:Default:newUser.html.twig', array('user' => $user,
+                                                                           'user_type' => $user_type,
+                                                                           'form_name' => $form->getName(),
+                                                                           'form' => $form->createView()));
     }
-    
+
     /**
      * Hace el save de un usuario
-     * Si $user->getPassword() == NULL indica que no se quiere modificar y se mantienen el que habia (viene del formulario y esta en blanco)
-     * Si $user->getPassword() != NULL indica que si que lo queremos cambiar y se tiene que codificar con el nuevo salt (viene del formulario y NO esta en blanco)
+     * Si $original_password == NULL indica que no se quiere modificar y se mantienen el que habia (viene del formulario y esta en blanco)
+     * Si $original_password != NULL indica que si que lo queremos cambiar y se tiene que codificar con el nuevo salt (viene del formulario y NO esta en blanco)
      * @param EntityManager $em
      * @param User $user
      * @param String $original_password password existente en la bbdd
      */
-    private function saveUser($em, $user, $original_password=null){
+    private function saveUser($em, $user, $original_password = null) {
 
-        if($user->getPassword() != null){
+        if ($user->getPassword() != null) {
             //password nuevo, se codifica con el nuevo salt
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
             $salt = md5(time());
             $password = $encoder->encodePassword($user->getPassword(), $salt);
             $user->setPassword($password);
             $user->setSalt($salt);
-        }else{
+        } else {
             //el password no se modifica
             $user->setPassword($original_password);
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $user->setModifyBy($this->get('security.context')->getToken()->getUser());
-        
 
         $em->persist($user);
         $em->flush();
+    }
+    
+    /**
+     * Devuelve el usuario logeado
+     * @return User
+     */
+    private function getLoggedUser(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
+        return $em->getRepository('UserBundle:User')->find($id_logged_user);
     }
 }
