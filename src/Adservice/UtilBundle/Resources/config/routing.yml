@@ -3,8 +3,8 @@
 #############################
 
 changeLanguage:
-    pattern: /lang/{lang}
-    defaults: { _controller: UtilBundle:Generic:changeLanguage }
+    pattern: /lang/{lang}/
+    defaults: { _controller: UtilBundle:Language:changeLanguage }
     
 ###########################
 #   APDO. AJAX   #

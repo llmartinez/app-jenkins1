@@ -31,6 +31,7 @@ class DefaultController extends Controller {
 //        }else{
 //            $this->getRequest()->setLocale($user_locale);
 //        }
+        
             
         return $this->render('UserBundle:Default:index.html.twig');
     }

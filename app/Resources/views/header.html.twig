@@ -8,7 +8,7 @@
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
-                            {% trans %}header.welcome{% endtrans %}
+                            {% trans %} header.welcome {% endtrans %}
                         </td>
                         <td align="right">
                             {% if app.user.username is defined %}
@@ -20,36 +20,31 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a class="btn pull-left" href="{{ path('user_index') }}">{% trans %}Indicie Usuario{% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('newTicket') }}" > {% trans %}New ticket{% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('listTicket') }}">{% trans %}Tickets{% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('listIncidence') }}">{% trans %}Incidencias{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('user_index') }}">   {% trans %}Indicie Usuario  {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('newTicket') }}" >   {% trans %}New ticket       {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listTicket') }}">   {% trans %}Tickets          {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('listIncidence') }}">{% trans %}Incidencias      {% endtrans %}</a></li>
                                     <li><a href="#"></a></li>
                                     <li class="divider"></li>
-                                    <li><a class="btn pull-left" href="{{ path('user_logout') }}"> {% trans %}Logout{% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('user_logout') }}">  {% trans %}Logout           {% endtrans %}</a></li>
                                 </ul>
                             </div>
                            {# {% else %}
                                 <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>#}
                             {% endif %}
-                            
-                            <a href="{{ path('user_index', { '_locale': 'en'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
-                            <a href="{{ path('user_index', { '_locale': 'es'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
-                            <a href="{{ path('user_index', { '_locale': 'fr'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
-                            
-                           {# <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'en'})) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
-                            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
-                            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'fr'})) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            {#
+                               app.request.getPathInfo()
+                               app.request.attributes.get('_route')            -- listIncidence 
                             #}
-                           {# <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'ca'})) }}">Català</a></li>
-                            <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'en'})) }}">English</a></li>#}
-                            
-{#                            <a href="{{ path('change_language', { '_locale': 'en'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>#}
-{#                            <a href="{{ path('change_language', { '_locale': 'es'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>#}
-{#                            <a href="{{ path('change_language', { '_locale': 'fr'}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>#}
-                            
-                            {#<a href="{{ path('changeLanguage', { 'lang': 'ca'}) }}" value="ca"><img src="{{ asset('bundles/util/images/flags/flag_catalonia.png') }}"></a>
-                            <a href="{{ path('changeLanguage', { 'lang': 'ru'}) }}" value="ru"><img src="{{ asset('bundles/util/images/flags/flag_russia.png') }}"></a>#}
+                            <a href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
+                            <a href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            {# 
+                              {% set location = 'ticket' %}
+                              <a href="{{ path('redirect', {'_locale': 'en', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
+                              <a href="{{ path('redirect', {'_locale': 'es', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
+                              <a href="{{ path('redirect', {'_locale': 'fr', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            #}
                         </td>
                     </tr>
                 </table>

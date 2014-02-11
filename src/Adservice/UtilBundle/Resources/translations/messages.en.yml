@@ -1,19 +1,31 @@
 header.welcome: ADService England
 
-user.index.menu.admin_title: ADMIN MENU
-user.index.menu.user_title: USER MENU
-user.index.menu.my_profile: My Profile
-user.index.menu.list_partners: List of partners AdService
-user.index.menu.list_users: List of users AdService
-user.index.menu.list_popups: List of popups AdService
-user.index.menu.list_workshops: List of workshops AdService
-user.index.menu.list_incidences: List of incidences AdService
-user.index.menu.list_statistics: List of statistics AdService
+
+user.index.menu.admin_title:            ADMIN MENU
+user.index.menu.user_title:             USER MENU
+user.index.menu.my_profile:             My Profile
+user.index.menu.list_partners:          List of partners AdService
+user.index.menu.list_users:             List of users AdService
+user.index.menu.list_popups:            List of popups AdService
+user.index.menu.list_workshops:         List of workshops AdService
+user.index.menu.list_incidences:        List of incidences AdService
+user.index.menu.list_statistics:        List of statistics AdService
 user.index.menu.create_incidence_admin: Create incidence as Admin
-user.index.menu.my_tickets: My Tickets
-user.index.menu.my_incidences: My Incidences
+user.index.menu.my_tickets:             My Tickets
+user.index.menu.my_incidences:          My Incidences
 
+# COMUNES
+date:     Date
+workshop: Workshop
+ticket:   Ticket
 
+#TICKET
+ticket.history.title:     Tickets History  
+ticket.opt.assigned :     Show assigned tickets 
+ticket.opt.not_assigned : Show not assigned tickets          
+ticket.opt.all:           Show all tickets              
+ticket.opt.owner:         Show your tickets             
+ticket.opt.workshop:      Show tickets in your workshop
 
 
 ############################

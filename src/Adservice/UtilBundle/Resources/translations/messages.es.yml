@@ -1,17 +1,30 @@
 header.welcome: ADService España
 
-user.index.menu.admin_title: MENU ADMIN
-user.index.menu.user_title: MENU USUARIO
-user.index.menu.my_profile: Mi Perfil
-user.index.menu.list_partners: Listado de Socios ADService
-user.index.menu.list_users: Listado de Usuarios ADService
-user.index.menu.list_popups: Listado de Popups ADService
-user.index.menu.list_workshops: Listado de Talleres ADService
-user.index.menu.list_incidences: Listado de Incidencias ADService
-user.index.menu.list_statistics: Listado de Estadísticas ADService
+user.index.menu.admin_title:            MENU ADMIN
+user.index.menu.user_title:             MENU USUARIO
+user.index.menu.my_profile:             Mi Perfil
+user.index.menu.list_partners:          Listado de Socios ADService
+user.index.menu.list_users:             Listado de Usuarios ADService
+user.index.menu.list_popups:            Listado de Popups ADService
+user.index.menu.list_workshops:         Listado de Talleres ADService
+user.index.menu.list_incidences:        Listado de Incidencias ADService
+user.index.menu.list_statistics:        Listado de Estadísticas ADService
 user.index.menu.create_incidence_admin: Crear Incidencia como Admin
-user.index.menu.my_tickets: Mis Tickets
-user.index.menu.my_incidences: Mis Incidencias
+user.index.menu.my_tickets:             Mis Tickets
+user.index.menu.my_incidences:          Mis Incidencias
+
+# COMUNES
+date:     Fecha
+workshop: Taller
+ticket:   Ticket
+
+#TICKET
+ticket.history.title:     Historial de Tickets  
+ticket.opt.assigned :     Tickets asignados 
+ticket.opt.not_assigned : Tickets sin asignar          
+ticket.opt.all:           Muestra todos los Tickets              
+ticket.opt.owner:         Tus tickets             
+ticket.opt.workshop:      Tickets de tu taller
 
 
 ############################
