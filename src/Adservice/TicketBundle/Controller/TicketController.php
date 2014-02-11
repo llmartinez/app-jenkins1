@@ -346,13 +346,19 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
+        $emTicket = $em->getRepository('TicketBundle:Ticket');
         $option = $petition->request->get('option');
         
-        if($option == 'all'     ) $tickets = $em->getRepository('TicketBundle:Ticket')->findAll();
-        if($option == 'ignore'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => null));
-        if($option == 'assign'  ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId()));
-        if($option == 'owner'   ) $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
-        if($option == 'workshop') $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
+        //Admin
+        if($option == 'all'         ) $tickets = $emTicket->findAll();
+        if($option == 'all_open'    ) $tickets = $emTicket->findBy(array('status'      => 0));
+        if($option == 'all_closed'  ) $tickets = $emTicket->findBy(array('status'      => 1));
+        //Assessor
+        if($option == 'ignore'      ) $tickets = $emTicket->findBy(array('assigned_to' => null, 'status' => 0));
+        if($option == 'assign'      ) $tickets = $emTicket->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId(), 'status' => 0));
+        //User
+        if($option == 'owner'  ) $tickets = $emTicket->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId(), 'status' => 0));
+        if($option == 'workshop'    ) $tickets = $emTicket->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId(), 'status' => 0));
         
         return new Response(json_encode($tickets), $status = 200);
     }

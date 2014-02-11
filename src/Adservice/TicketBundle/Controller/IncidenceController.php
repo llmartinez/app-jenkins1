@@ -197,16 +197,10 @@ class IncidenceController extends Controller{
     public function showIncidenceAction($id_incidence)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        
-        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
             
         $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
-        
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $incidence->getTicket()->getId()));
             
-        return $this->render('TicketBundle:Incidence:showIncidence.html.twig', array('incidences' => $incidences, 
-                                                                                     'incidence' => $incidence, 
-                                                                                     'posts' => $posts, ));
+        return $this->render('TicketBundle:Incidence:showIncidence.html.twig', array('incidence' => $incidence, ));
     }    
     
     /**

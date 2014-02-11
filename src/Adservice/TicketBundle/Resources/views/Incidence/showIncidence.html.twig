@@ -3,8 +3,8 @@
 {% block content %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('listIncidence') }}">List of Incidences</a></li>
+      <li><a href="{{ path('user_index'   ) }}"> {% trans %} home           {% endtrans %} </a></li>
+      <li><a href="{{ path('listIncidence') }}"> {% trans %} incidence.list {% endtrans %} </a></li>
       <li class="active">#{{ incidence.id }}</li>
     </ol>
 
