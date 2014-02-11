@@ -11,7 +11,7 @@
 
     {% if workshop.tickets|length > 0  %}
         
-            <table class="table table-hover" style="width: 50%; margin-left: 450px;">
+            <table class="table table-hover" style="width: 70%; margin-left: 250px;">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -19,41 +19,27 @@
                         <th>Importance</th>
                         <th>Owner</th>
                         <th>Assigned</th>
-                        <th>Assign</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for ticket in workshop.tickets %}
-                        <form action="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}" method="post" >
-                            <tr>
-                                <td>{{ ticket.id }}</td>
-                                <td>{{ ticket.title }} </td>
-                                <td>{{ ticket.importance}}</td>
-                                <td>{{ ticket.owner }}</td>
-                                <td>{{ ticket.assignedTo }}</td>
-                                <td>
-                                    <select class="combobox" id="id_user" name="id_user">
-                                        <option value="null">Sin asignar...</option>
-                                        {% for user in workshop.users %}
-                                            {% if ticket.assignedTo == user %}
-                                                <option selected="selected" value={{ user.id }} >{{ user }}</option>
-                                            {% else %}
-                                                <option value={{ user.id }}>{{ user }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="hidden" name="id_ticket" value={{ ticket.id }}>
-                                    <button type="submit" class="btn btn-primary" id="submitAssingTickets">Asignar</button>
-                                </td>
-                            </tr> 
-                        </form>
+                         <tr>
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.title }} </td>
+                            <td>{{ ticket.importance}}</td>
+                            <td>{{ ticket.owner }}</td>
+                            <td>{{ ticket.assignedTo }}</td>
+                            <td>
+                                <a href="{{ path('editTicket', {'id_ticket':ticket.id}) }}" title="Editar Ticket"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="{{ path('assignTicket', {'id_ticket':ticket.id})}}" title="Asignar Ticket"><span class="glyphicon glyphicon-user"></span></a>
+                                <a href="#" title="Eliminar Ticket"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
-       
+
     {% else %}
         No hay tickets!!
     {% endif %}
