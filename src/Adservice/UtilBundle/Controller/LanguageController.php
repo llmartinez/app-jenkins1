@@ -40,4 +40,13 @@ class LanguageController extends Controller{
 //        echo "changeLanguage";
 //    }
     
+//    public function changeLanguageAction($locale){
+////        echo $locale;die;
+////        $this->get('session')->setLocale($locale);
+//        $this->getRequest()->setLocale($locale);
+//        $request = $this->getRequest();
+//        return $this->redirect($request->headers->get('referer'));
+//        
+//    }
+    
 }

@@ -1,6 +1,7 @@
 header.welcome: ADService France
 
 user.index.menu.admin_title: MENU ADMIN
+user.index.menu.assessor_title: MENU CONSEILLER
 user.index.menu.user_title: MENU UTILISATEUR
 user.index.menu.my_profile: Mon profil
 user.index.menu.list_partners: Liste des partenaires AdService

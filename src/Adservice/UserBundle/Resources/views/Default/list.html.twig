@@ -18,7 +18,8 @@
                     </span>
                 </div>
                 </br>
-                <a href="{{ path('user_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un usuario nuevo</a>
+{#                <a href="{{ path('user_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un usuario nuevo</a>#}
+                <a href="{{ path('user_select_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un usuario nuevo</a>
             </td>
         </tr>
     </table>
@@ -67,17 +68,17 @@
 
 {% block javascripts %}
     {{ parent() }}
-<script src="{{ asset('bundles/user/js/user.js') }}"></script>
-<script src="{{ asset('bundles/util/js/util.js') }}"></script>
-<script>
-    $(document).ready(function() {
-        $('#MainContent').find('.glyphicon-trash').click(function() {
-            var user_id = $(this).data('id');
-            confirm_delete_user_modal(user_id);
-        })
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#MainContent').find('.glyphicon-trash').click(function() {
+                var user_id = $(this).data('id');
+                confirm_delete_user_modal(user_id);
+            })
 
-        //util.js
-        table_filter();
-    });
-</script>
+            //util.js
+            table_filter();
+        });
+    </script>
 {% endblock %}

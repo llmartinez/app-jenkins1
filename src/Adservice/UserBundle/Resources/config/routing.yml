@@ -37,8 +37,12 @@ user_delete:
     defaults: { _controller: UserBundle:Default:deleteUser }
 
 user_new:
-    pattern: /user/new
+    pattern: /user/new/{type}
     defaults: { _controller: UserBundle:Default:newUser }
+    
+user_select_new:
+    pattern: /user/selectNewUser
+    defaults: { _controller: UserBundle:Default:selectNewUser }
 
 ##############################
 #       RUTAS AJAX           #

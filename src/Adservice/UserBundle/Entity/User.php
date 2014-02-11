@@ -11,15 +11,15 @@ use Adservice\UtilBundle\Entity\Country;
 use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
+use Adservice\PartnerBundle\Entity\Partner;
 
 /**
  * Adservice\UserBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\UserBundle\Entity\UserRepository")
  */
 class User implements UserInterface, AdvancedUserInterface, \Serializable {
-//class User implements UserInterface {
 
     /**
      * @var integer $id
@@ -181,6 +181,21 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Language")
      */
     private $language;
+    
+//    /**
+//     *
+//     * @var string $partner
+//     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
+//     */
+//    private $partner;
+    
+    
+    /**
+     *
+     * @var type 
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
+     */
+    private $partner;
 
     /**
      * @var datetime $created_at
@@ -556,5 +571,14 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function getModifyBy() {
         return $this->modify_by;
     }
+    
+    public function getPartner() {
+        return $this->partner;
+    }
+
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+        $this->partner = $partner;
+    }
+
 
 }
