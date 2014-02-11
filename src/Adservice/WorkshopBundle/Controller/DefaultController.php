@@ -11,33 +11,42 @@ use Adservice\WorkshopBundle\Entity\Typology;
 
 class DefaultController extends Controller {
 
+    /**
+     * Devuelve todos los talleres segun el usuario logeado
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function listAction() {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
+        
+        $logged_user = $this->get('security.context')->getToken()->getUser();
+        
         $em = $this->getDoctrine()->getEntityManager();
-        $all_workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
+        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
 
-
-        return $this->render('WorkshopBundle:Default:list.html.twig', array('all_workshops' => $all_workshops));
+        return $this->render('WorkshopBundle:Default:list.html.twig', array('workshops' => $workshops));
     }
 
     public function newWorkshopAction() {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
         
+        $logged_user = $this->get('security.context')->getToken()->getUser();
         $workshop  = new Workshop();
         $request = $this->getRequest();
         $form = $this->createForm(new WorkshopType(), $workshop);
         $form->bindRequest($request);
         
-         if ($form->isValid()) {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+            $workshop->setPartner($logged_user->getPartner());
             $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $this->saveWorkshop($em, $workshop);
             
             return $this->redirect($this->generateUrl('workshop_list'));
-         }
+        }
         
         return $this->render('WorkshopBundle:Default:newWorkshop.html.twig', array('workshop'   => $workshop,
                                                                                    'form_name'  => $form->getName(),

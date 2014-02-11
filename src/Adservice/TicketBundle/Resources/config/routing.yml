@@ -29,11 +29,15 @@ ticketWorkshopList:
 ticketsFromWorkshop:
     pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}
     defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop }
+
+assignTicket:
+    pattern: /ticket/assingTicket/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
     
 assignUserToTicket:
-    pattern:  /ticket/assign/{id_ticket}/{id_user}
-    defaults: { _controller: TicketBundle:Ticket:assignUserToTicket, id_user: null  }
-    
+    pattern:  /ticket/assign/{id_ticket}/
+    defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
+
 # Ajax    
 fill_tickets:
     pattern:  /ticket/ajax
@@ -70,7 +74,7 @@ showIncidence:
 listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
-    
+
 # Ajax    
 fill_incidences:
     pattern:  /incidence/ajax

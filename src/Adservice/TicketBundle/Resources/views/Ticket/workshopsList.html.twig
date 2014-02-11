@@ -2,10 +2,10 @@
 
 {% block body %}
 
-    <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Workshops</li>
-    </ol>
+<ol class="breadcrumb">
+    <li><a href="{{ path('user_index') }}">Home</a></li>
+    <li class="active">List of Workshops</li>
+</ol>
 
     {% if workshops|length > 0  %}
         <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
@@ -15,7 +15,7 @@
                     <th>Workshop Name</th>
                     <th>Email</th>
                     <th>Contact</th>
-                    <th>Actions</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +25,12 @@
                         <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
+ {#                       <td>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Asignar</a>
+                        </td>#}
                         <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}"><span class="glyphicon glyphicon-ok-circle"></span></a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Tickets</a> |
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Lsitado de Incidencias</a>
                         </td>
                     </tr>
                 {% endfor %}

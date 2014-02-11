@@ -69,32 +69,27 @@ class DefaultController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $logged_user = $this->getLoggedUser();
+        $logged_user = $this->get('security.context')->getToken()->getUser();
         $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
         
 
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
-
+        
+        //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
-            if ($role[0]->getRole() == "ROLE_ADMIN") {
-                $users_role_admin[] = $user;
-            } elseif ($role[0]->getRole() == "ROLE_USER") {
-                $users_role_user[] = $user;
-            } elseif ($role[0]->getRole() == "ROLE_ASSESSOR") {
-                $users_role_assessor[] = $user;
-            }
+            if ($role[0]->getRole() == "ROLE_ADMIN")        $users_role_admin[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
         }
 
 
-        return $this->render('UserBundle:Default:list.html.twig', array(
-//                                                                        'all_users'             => $all_users
-                    'users_role_admin' => $users_role_admin,
-                    'users_role_user' => $users_role_user,
-                    'users_role_assessor' => $users_role_assessor
-        ));
+        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin' => $users_role_admin,
+                                                                        'users_role_user' => $users_role_user,
+                                                                        'users_role_assessor' => $users_role_assessor
+                                                                       ));
     }
 
     /**
@@ -233,15 +228,5 @@ class DefaultController extends Controller {
 
         $em->persist($user);
         $em->flush();
-    }
-    
-    /**
-     * Devuelve el usuario logeado
-     * @return User
-     */
-    private function getLoggedUser(){
-        $em = $this->getDoctrine()->getEntityManager();
-        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-        return $em->getRepository('UserBundle:User')->find($id_logged_user);
     }
 }
