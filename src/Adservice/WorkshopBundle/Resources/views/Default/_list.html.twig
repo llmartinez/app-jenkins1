@@ -1,4 +1,4 @@
-{% if all_workshops|length > 0  %}
+{% if workshops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 70%; margin-left: 290px;">
         <thead>
             <tr>
@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-                {% for workshop in all_workshops %}
+                {% for workshop in workshops %}
             <tr>
                 <td>{{ workshop.id }}</td>
                 <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>

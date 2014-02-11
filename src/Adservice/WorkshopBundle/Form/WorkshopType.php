@@ -5,9 +5,6 @@ namespace Adservice\WorkshopBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-use Adservice\UserBundle\Entity\User;
-use Adservice\UserBundle\Form\UserType;
-
 class WorkshopType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
@@ -25,18 +22,16 @@ class WorkshopType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email')
             ->add('observations')
-            ->add('partner')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('adservice_plus','checkbox', array('required' => false))
-            ->add('test','checkbox', array('required' => false))
+            ->add('adservice_plus', 'checkbox', array('required' => false))
+            ->add('test', 'checkbox', array('required' => false))
             ->add('typology')
             ->add('update_at')
             ->add('lowdate_at')
             ->add('endtest_at')
-            ->add('conflictive')
+            ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')
             ->add('region')
-            ->add('users')
         ;
     }
 

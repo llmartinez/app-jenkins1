@@ -289,9 +289,14 @@ class TicketController extends Controller {
         return $array;
     }
 
+    /**
+     * Obtiene todos los talleres del usuario logeado
+     */
     public function workshopListAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+
+        $logged_user = $this->get('security.context')->getToken()->getUser();
+        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
 
         return $this->render('TicketBundle:Ticket:workshopsList.html.twig', array('workshops' => $workshops));
     }
@@ -305,27 +310,27 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
-        $petition = $this->getRequest();
-        if ($petition->getMethod() == 'POST') {
-            $id_ticket = $petition->get('id_ticket');
-            $id_user = $petition->get('id_user');
-            $this->assignUserToTicket($id_ticket, $id_user);
-        }
-
         return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array('workshop' => $workshop));
 
     }
     
     /**
      * Asigna un ticket a un usuario si se le pasa un $id_usuario, sino se pone a null
-     * @param Int $id_ticket 
+     * @param Int $id_ticket puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
     public function assignUserToTicketAction($id_ticket, $id_user=null){
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        if($id_user != null){
+
+        //id_user puede venir por parametro o por post
+        if ($id_user == null) {
+            $petition = $this->getRequest();
+            $id_user = $petition->get('id_user'); //<<<<-------------------------------------------------------------- refactoring per a la de YA
+        }
+
+        //si no viene ni por parametro ni por post, es que lo queremos desasignar
+        if ($id_user != null){
             $user = $em->getRepository('UserBundle:User')->find($id_user);
             $ticket->setAssignedTo($user);
         }else{
@@ -335,8 +340,28 @@ class TicketController extends Controller {
         $em->persist($ticket);
         $em->flush();
         
-        return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
+        return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
+        
     }
+    
+    /**
+     * Busca los posibles usuarios al cual podemos asingar un ticket
+     * @param type $id_ticket
+     * @return type
+     */
+    public function assignTicketSelectUserAction($id_ticket){
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+        $users = $this->getUsersToAssingFromTicket($ticket);
+        
+        return $this->render('TicketBundle:Ticket:assignTicket.html.twig', array('ticket' => $ticket,
+                                                                                 'users'  => $users
+                                                                               )); 
+        
+    }
+    
 
     /**
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
@@ -361,6 +386,25 @@ class TicketController extends Controller {
         if($option == 'workshop'    ) $tickets = $emTicket->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId(), 'status' => 0));
         
         return new Response(json_encode($tickets), $status = 200);
+    }
+    
+    /**
+     * Devuelve todos los usuarios que podran ser asignados a un ticket (admins i asesores has nuevo aviso)
+     * @param type $id_ticket
+     */
+    private function getUsersToAssingFromTicket($ticket){
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
+        $partner = $em->getRepository('PartnerBundle:Partner')->find($workshop->getPartner()->getId());
+
+        $users_for_assign = array();
+        foreach ($partner->getUsers() as $user) {
+            $role = $user->getRoles();
+            if (($role[0]->getRole() == "ROLE_ADMIN") || ($role[0]->getRole() == "ROLE_ASSESSOR") ){
+                $users_for_assign[] = $user;
+            }
+        }
+        return $users_for_assign;
     }
 
 }
