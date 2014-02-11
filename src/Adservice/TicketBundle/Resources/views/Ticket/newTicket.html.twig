@@ -2,13 +2,16 @@
 
 {% block content %}
 
-    <h3>Nuevo Ticket</h3>
-    
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active">New ticket</li>
+    </ol>
+
     {% if app.session.hasFlash('error') %}
         <p class="error">{{ app.session.getFlash('error') }}</p>
     {% endif %}
     
-        
     <div class="container">
         <div class="row">
 
@@ -16,7 +19,7 @@
                 <form action="{{ path('newTicket') }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
                     <div class="row">
                         
-                        <legend>Datos del ticket</legend>
+                        <legend>Ticket Data</legend>
                         
                         <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
                         
@@ -30,7 +33,7 @@
                             {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                         
-                        <legend>Vehiculo</legend>
+                        <legend>Car</legend>
                         
                         {% include 'CarBundle:Default:car.html.twig'%}
                         

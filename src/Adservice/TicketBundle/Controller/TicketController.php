@@ -7,6 +7,7 @@ use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Adservice\UserBundle\Entity\User;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Entity\TicketRepository;
@@ -54,15 +55,17 @@ class TicketController extends Controller {
             $status = $em->getRepository('TicketBundle:Status')->find('0');
             $security = $this->get('security.context');
 
-            //Define CAR
+            $form->bindRequest($request);
             $formC->bindRequest($request);
+            $formP->bindRequest($request);
+            $formD->bindRequest($request);
 
             if ($car->getVersion() != "") {
+                //Define CAR
                 $car = DefaultC::newEntity($car, $user);
                 DefaultC::saveEntity($em, $car, $user, false);
 
                 //Define TICKET
-                $form->bindRequest($request);
                 $ticket = DefaultC::newEntity($ticket, $user);
                 if ($security->isGranted('ROLE_ASSESSOR')) {
                     //$ticket->setWorkshop($request->get('workshop'));
@@ -74,13 +77,11 @@ class TicketController extends Controller {
                 DefaultC::saveEntity($em, $ticket, $user, false);
 
                 //Define POST
-                $formP->bindRequest($request);
                 $post = DefaultC::newEntity($post, $user);
                 $post->setTicket($ticket);
                 DefaultC::saveEntity($em, $post, $user, false);
 
                 //Define Document
-                $formD->bindRequest($request);
                 $document->setPost($post);
 
                 if ($document->getFile() != "") {
@@ -121,8 +122,6 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $car = $ticket->getCar();
 
-
-
         $form = $this->createForm(new TicketType(), $ticket);
         $formC = $this->createForm(new CarType(), $car);
 
@@ -155,15 +154,15 @@ class TicketController extends Controller {
         $versions = $em->getRepository('CarBundle:Version')->findByModel($car->getVersion()->getModel()->getId());
 
         return $this->render('TicketBundle:Ticket:editTicket.html.twig', array(
-                    'form' => $form->createView(),
-                    'formC' => $formC->createView(),
-                    'tickets' => $this->loadTicket(),
-                    'ticket' => $ticket,
-                    'workshops' => $workshops,
-                    'brands' => $brands,
-                    'models' => $models,
-                    'versions' => $versions
-        ));
+                                                                                'form' => $form->createView(),
+                                                                                'formC' => $formC->createView(),
+                                                                                'tickets' => $this->loadTicket(),
+                                                                                'ticket' => $ticket,
+                                                                                'workshops' => $workshops,
+                                                                                'brands' => $brands,
+                                                                                'models' => $models,
+                                                                                'versions' => $versions
+                                                                    ));
     }
 
     /**
@@ -339,8 +338,10 @@ class TicketController extends Controller {
         return $this->render('TicketBundle:Ticket:showTicket.html.twig', $this->createPost($request, $id_ticket));
     }
 
-    /**/
-
+    /**
+     * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function fill_ticketsAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();

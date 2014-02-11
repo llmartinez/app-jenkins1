@@ -1,0 +1,28 @@
+<script>
+    $(document).ready(function() {
+
+        {% if ticket.car is not null %}    
+            $('select[id=idModel]').empty();
+                var opt_models = "<option value=0>Select Model..</option>";
+                {% for model in models %}
+
+                    opt_models = opt_models + '<option value="{{ model.id }}" ';
+                    {% if ticket.car.version.model == model %} opt_models = opt_models + 'selected="true"'; {% endif %}
+                    opt_models = opt_models + '> {{ model.name }} </option>';
+
+                {% endfor %}
+            $('form[id=contact]').find('select[id=idModel]').append(opt_models);
+
+                var opt_versions = "<option value=0>Select Version..</option>";
+                {% for version in versions %}
+
+                    opt_versions = opt_versions + '<option value="{{ version.id }}" ';
+                    {% if ticket.car.version == version %} opt_versions = opt_versions + 'selected="true"'; {% endif %}
+                    opt_versions = opt_versions + '> {{ version.name }} </option>';
+
+                {% endfor %}
+       {% endif %}
+           
+        $('form[id=contact]').find('select[id=new_car_form_version]').append(opt_versions);
+    });
+</script>           
