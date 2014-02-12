@@ -382,20 +382,20 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $emTicket = $em->getRepository('TicketBundle:Ticket');
+        $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $option = $petition->request->get('option');
         $user = $this->get('security.context')->getToken()->getUser();
         
         //Admin
-        if ($option == 'all'       ) $tickets = $emTicket->findAll();
-        if ($option == 'all_open'  ) $tickets = $emTicket->findAllOpen($emTicket, $user);
-        if ($option == 'all_closed') $tickets = $emTicket->findBy(array('status' => 1));
+        if ($option == 'all'       ) $tickets = $repoTicket->findAll();
+        if ($option == 'all_open'  ) $tickets = $this->findAllOpen($repoTicket, $user);
+        if ($option == 'all_closed') $tickets = $repoTicket->findBy(array('status' => 1));
         //Assessor
-        if ($option == 'ignore'    ) $tickets = $emTicket->findBy(array('assigned_to' => null, 'status' => 0));
-        if ($option == 'assign'    ) $tickets = $emTicket->findBy(array('assigned_to' => $user->getId() , 'status' => 0));
+        if ($option == 'ignore'    ) $tickets = $repoTicket->findBy(array('assigned_to' => null, 'status' => 0));
+        if ($option == 'assign'    ) $tickets = $repoTicket->findBy(array('assigned_to' => $user->getId() , 'status' => 0));
         //User
-        if ($option == 'owner'     ) $tickets = $emTicket->findBy(array('owner' => $user->getId(), 'status' => 0));
-        if ($option == 'workshop'  ) $tickets = $emTicket->findBy(array('workshop' => $user->getWorkshop()->getId(), 'status' => 0));
+        if ($option == 'owner'     ) $tickets = $repoTicket->findBy(array('owner' => $user->getId(), 'status' => 0));
+        if ($option == 'workshop'  ) $tickets = $repoTicket->findBy(array('workshop' => $user->getWorkshop()->getId(), 'status' => 0));
 
         return new Response(json_encode($tickets), $status = 200);
     }
