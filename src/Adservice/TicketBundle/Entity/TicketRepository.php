@@ -13,13 +13,16 @@ use Doctrine\ORM\EntityRepository;
 class TicketRepository extends EntityRepository
 {
     
-    
-    public function findAllOpen($emTicket, $user)
+    public function findAllOpen($repoTicket, $user, $bool)
     {
-        $tickets = $emTicket->findBy(array('status' => 0, 
-                                           'partner' => $user->getPartner()));
-        
-        return $tickets;
+        echo 'bool'.$bool;die;
+        $workshops = $user->getPartner()->getWorkshops();
+        foreach ($workshops as $workshop) {
+            
+            $tickets = $repoTicket->findBy(array('status' => $bool,
+                                                 'workshop' => $workshop->getId()));
+            if ($tickets != null) return $tickets;
+        }
     }
     
     public function findTicketFiltered($security)

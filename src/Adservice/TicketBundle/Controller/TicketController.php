@@ -377,8 +377,8 @@ class TicketController extends Controller {
         
         //Admin
         if ($option == 'all'       ) $tickets = $repoTicket->findAll();
-        if ($option == 'all_open'  ) $tickets = $this->findAllOpen($repoTicket, $user);
-        if ($option == 'all_closed') $tickets = $repoTicket->findBy(array('status' => 1));
+        if ($option == 'all_open'  ) $tickets = $repoTicket->findAllOpen($repoTicket, $user, true);
+        if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($repoTicket, $user, false);
         //Assessor
         if ($option == 'ignore'    ) $tickets = $repoTicket->findBy(array('assigned_to' => null, 'status' => 0));
         if ($option == 'assign'    ) $tickets = $repoTicket->findBy(array('assigned_to' => $user->getId() , 'status' => 0));
