@@ -797,4 +797,24 @@ class Workshop
     {
         return $this->tickets;
     }
+    
+    /**
+     * Add incidences
+     *
+     * @param Adservice\TicketBundle\Entity\Incidence $incidences
+     */
+    public function addIncidence(\Adservice\TicketBundle\Entity\Incidence $incidence)
+    {
+        $this->incidences[] = $incidence;
+    }
+
+    /**
+     * Get incidences
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getIncidences()
+    {
+        return $this->incidences;
+    }
 }

@@ -159,7 +159,6 @@ class Ticket implements \JsonSerializable
      * Set workshop
      *
      * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
-     * 
      */
     public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop)
     {
