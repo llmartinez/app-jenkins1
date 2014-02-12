@@ -3,8 +3,8 @@
 {% block content %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('listIncidence') }}">List of Incidences</a></li>
+      <li><a href="{{ path('user_index'   ) }}"> {% trans %} home           {% endtrans %} </a></li>
+      <li><a href="{{ path('listIncidence') }}"> {% trans %} incidence.list {% endtrans %} </a></li>
       <li class="active">#{{ incidence.id }}</li>
     </ol>
 
@@ -25,7 +25,7 @@
                         
                         <p><b>Descripcion:</b>  {{ incidence.description }} </p>
                         <p>
-                            <b>Seguimiento:</b> {{ posts | length }} mensajes 
+                            <b>Seguimiento:</b> {{ incidence.ticket.posts | length }} mensajes 
                             <a href='{{ path('showPost', { 'id_ticket': incidence.ticket.id }) }}'>Ver mas</a>
                         </p>
                         <p><b>Solucion:</b>  {{ incidence.solution }}</p>

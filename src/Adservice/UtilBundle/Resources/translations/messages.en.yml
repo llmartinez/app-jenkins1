@@ -15,17 +15,30 @@ user.index.menu.my_tickets:             My Tickets
 user.index.menu.my_incidences:          My Incidences
 
 # COMUNES
-date:     Date
-workshop: Workshop
-ticket:   Ticket
+home:      Home 
+date:      Date
+workshop:  Workshop
+ticket:    Ticket
+car:       Car
+post:      Post
+incidence: Incidence
 
 #TICKET
 ticket.history.title:     Tickets History  
 ticket.opt.assigned :     Show assigned tickets 
 ticket.opt.not_assigned : Show not assigned tickets          
-ticket.opt.all:           Show all tickets              
+ticket.opt.all:           Show all tickets                   
+ticket.opt.all_open:      Show all tickets opened                  
+ticket.opt.all_closed:    Show all tickets closed             
 ticket.opt.owner:         Show your tickets             
 ticket.opt.workshop:      Show tickets in your workshop
+
+#INCIDENCE
+incidence.history.title:  Incidence History         
+incidence.opt.all:        Show all incidences          
+incidence.opt.owner:      Show your incidences             
+incidence.opt.workshop:   Show incidences in your workshop     
+incidence.list:           List of Incidences
 
 
 ############################
