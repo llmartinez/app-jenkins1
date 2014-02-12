@@ -19,6 +19,8 @@
                         <div id="colList">
                         <legend>Ticket data</legend>
                         
+                            <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"> Edit </a>
+                            
                             {# muestra los datos del ticket #}    
                             {% include 'TicketBundle:Default:includes/_data_ticket.html.twig' %}
                         </div>

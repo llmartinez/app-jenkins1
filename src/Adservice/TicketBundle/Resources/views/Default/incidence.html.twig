@@ -8,18 +8,17 @@
     <select id="slct_historyIncidences" class="form-control">
         
         {% if is_granted('ROLE_ASSESSOR') %}
-            <option value="all"             > Show all incidences              </option>
-            <option value="owner" selected  > Show your incidences             </option>
+            <option value="all"             > {% trans %} incidence.opt.all       {% endtrans %} </option>
+            <option value="owner" selected  > {% trans %} incidence.opt.owner     {% endtrans %} </option>
         {% else %}
-            <option value="workshop"        > Show incidences in your workshop </option>
+            <option value="workshop"        > {% trans %} incidence.opt.workshop  {% endtrans %} </option>
         {% endif %}
     </select>
     
     <div class="widget stacked widget-table action-table">
     				
         <div class="widget-header">
-                <i class="icon-th-list"></i>
-                <h3>Incidence History</h3>
+            <i class="icon-th-list"></i> <h3> {% trans %} incidence.history.title {% endtrans %} </h3>
         </div> <!-- /widget-header -->
 
         <div class="widget-content" >

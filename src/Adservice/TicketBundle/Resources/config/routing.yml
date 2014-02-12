@@ -38,6 +38,10 @@ assignUserToTicket:
     pattern:  /ticket/assign/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
 
+autoAssignTicket:
+    pattern: /ticket/assingAssesor/{id_ticket}/{id_user}
+    defaults: { _controller: TicketBundle:Ticket:autoAssignTicket, id_user: null }
+    
 # Ajax    
 fill_tickets:
     pattern:  /ticket/ajax

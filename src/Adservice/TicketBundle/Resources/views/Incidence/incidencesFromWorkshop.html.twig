@@ -15,25 +15,26 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Ticket Title</th>
-                        <th>Importance</th>
+                        <th>Ticket</th>
+                        <th>Description</th>
+                        <th>Solution</th>
                         <th>Owner</th>
-                        <th>Assigned</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for ticket in workshop.incidences %}
+                    {% for incidence in workshop.incidences %}
                          <tr>
-                            <td>{{ ticket.id }}</td>
-                            <td>{{ ticket.title }} </td>
-                            <td>{{ ticket.importance}}</td>
-                            <td>{{ ticket.owner }}</td>
-                            <td>{{ ticket.assignedTo }}</td>
+                            <td>{{ incidence.id }}</td>
+                            <td>{{ incidence.ticket.id }} </td>
+                            <td>{{ incidence.description }} </td>
+                            <td>{{ incidence.solution}}</td>
+                            <td>{{ incidence.owner }}</td>
+                            <td>{{ incidence.status }}</td>
                             <td>
-                                <a href="{{ path('editTicket', {'id_ticket':ticket.id}) }}" title="Editar Ticket"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a href="{{ path('assignTicket', {'id_ticket':ticket.id})}}" title="Asignar Ticket"><span class="glyphicon glyphicon-user"></span></a>
-                                <a href="#" title="Eliminar Ticket"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+                                <a href="{{ path('editIncidence', {'id_incidence':incidence.id}) }}" title="Editar Ticket"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="#" title="Eliminar Incidencia"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ incidence.id }}"></span></a>
                             </td>
                         </tr>
                     {% endfor %}
