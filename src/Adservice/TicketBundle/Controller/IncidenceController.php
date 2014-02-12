@@ -247,4 +247,15 @@ class IncidenceController extends Controller{
 
         return new Response(json_encode($incidences), $status = 200);
     }
+    
+    /**
+     * Obtiene el listado de todas las incidencias de un workshop
+     * @param type $id_workshop
+     */
+    public function getIncidencesFromWorkshopAction($id_workshop){
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+        
+        return $this->render('TicketBundle:Incidence:incidencesFromWorkshop.html.twig', array('workshop' => $workshop));
+    }
 }

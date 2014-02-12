@@ -78,6 +78,10 @@ showIncidence:
 listIncidence:
     pattern:  /incidence/
     defaults: { _controller: TicketBundle:Incidence:listIncidence }
+    
+incidencesFromWorkshop:
+    pattern:  /incidence/getIncidencesFromWorkshop/{id_workshop}
+    defaults: { _controller: TicketBundle:Incidence:getIncidencesFromWorkshop }
 
 # Ajax    
 fill_incidences:

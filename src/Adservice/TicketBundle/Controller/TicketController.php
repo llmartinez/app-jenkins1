@@ -325,19 +325,8 @@ class TicketController extends Controller {
             $petition = $this->getRequest();
             $id_user = $petition->get('id_user'); //<<<<-------------------------------------------------------------- refactoring per a la de YA
         }
-
-//        //si no viene ni por parametro ni por post, es que lo queremos desasignar
-//        if ($id_user != null){
-//            $user = $em->getRepository('UserBundle:User')->find($id_user);
-//            $ticket->setAssignedTo($user);
-//        }else{
-//            $ticket->setAssignedTo(null);
-//        }
-//           $em->persist($ticket);
-//        $em->flush();     
+  
         $this->assignTicket($ticket, $user);
-
-
 
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
         return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
@@ -429,12 +418,6 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         ($user != null) ? $ticket->setAssignedTo($user) : $ticket->setAssignedTo(null);
-        
-//        if ($user != null) {
-//            $ticket->setAssignedTo($user);
-//        } else {
-//            $ticket->setAssignedTo(null);
-//        }
         
         $em->persist($ticket);
         $em->flush();

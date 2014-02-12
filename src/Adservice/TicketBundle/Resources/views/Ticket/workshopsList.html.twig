@@ -25,12 +25,9 @@
                         <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
- {#                       <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Asignar</a>
-                        </td>#}
                         <td>
                             <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Tickets</a> |
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Lsitado de Incidencias</a>
+                            <a href="{{ path("incidencesFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Incidencias</a>
                         </td>
                     </tr>
                 {% endfor %}
