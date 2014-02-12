@@ -44,14 +44,14 @@ class Post
     /**
      * @var date $created_at
      *
-     * @ORM\Column(name="date_created", type="date")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $created_at;
 
     /**
      * @var date $modified_at
      *
-     * @ORM\Column(name="date_modified", type="date")
+     * @ORM\Column(name="modified_at", type="datetime")
      */
     private $modified_at;
 

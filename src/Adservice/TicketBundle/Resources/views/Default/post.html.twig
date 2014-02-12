@@ -1,7 +1,7 @@
 {% extends "::layout.html.twig" %}
 
 {% block body %}
-{% if incidence is not null %} {% set posts = incidence.ticket.posts %}
+{% if incidence is defined %}  {% set posts = incidence.ticket.posts %}
 {% else %}                     {% set posts = ticket.posts %}
 {% endif %}
 <!-- TABLA POSTS -->
