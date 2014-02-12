@@ -319,15 +319,25 @@ class TicketController extends Controller {
     public function assignUserToTicketAction($id_ticket, $id_user = null) {
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-
+        
         //id_user puede venir por parametro o por post
         if ($id_user == null) {
             $petition = $this->getRequest();
-            $id_user = $petition->get('id_user'); //<<<<-------------------------------------------------------------- refactoring per a la de YA
+            $id_user = $petition->get('id_user');
         }
-  
-        $this->assignTicket($ticket, $user);
-
+        
+        //si $id_user != null ---> viene de parametro de la funcion o de POST y queremos asignar
+        //si $id_user == null ---> queremos desasignar
+        if ($id_user != null) {
+            $user = $em->getRepository('UserBundle:User')->find($id_user);
+            $this->assignTicket($ticket, $user);
+        }else{
+            $this->assignTicket($ticket, null);
+        }
+        
+        //<--------------------------------------------------------------------------------------------------TODO hacer refactoring, no mola los 2 if(user=null)...
+        
+        
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
         return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
     }
