@@ -1,7 +1,6 @@
 {% extends "::layout.html.twig" %}
 
 {% block body %}
-
 <!-- TABLA TICKETS -->
 
 <div class="colIzq">
@@ -9,12 +8,12 @@
     <select id="slct_historyTickets" class="form-control">
         
         {% if is_granted('ROLE_ASSESSOR') %}
-            <option value="ignore" selected > Show not assigned tickets     </option>
-            <option value="assign"          > Show assigned tickets         </option>
-            <option value="all"             > Show all tickets              </option>
+            <option value="ignore" selected >{% trans %} ticket.opt.not_assigned {% endtrans %}</option>
+            <option value="assign"          >{% trans %} ticket.opt.assigned     {% endtrans %}</option>
+            <option value="all"             >{% trans %} ticket.opt.all          {% endtrans %}</option>
         {% else %}
-            <option value="owner" selected  > Show your tickets             </option>
-            <option value="workshop"        > Show tickets in your workshop </option>
+            <option value="owner" selected  >{% trans %} ticket.opt.owner        {% endtrans %}</option>
+            <option value="workshop"        >{% trans %} ticket.opt.workshop     {% endtrans %}</option>
         {% endif %}
     </select>
         
@@ -22,7 +21,7 @@
     				
         <div class="widget-header">
                 <i class="icon-th-list"></i>
-                <h3>Tickets History</h3>
+                <h3>{% trans %} ticket.history.title {% endtrans %}</h3>
         </div> <!-- /widget-header -->
 
         <div class="widget-content" >
@@ -31,9 +30,9 @@
                 
                     <thead id="ticketHead">
                         <tr>
-                            <th>{% trans %} Date     {% endtrans %}</th>
-                            <th>{% trans %} Workshop {% endtrans %}</th>
-                            <th>{% trans %} Ticket   {% endtrans %}</th>
+                            <th>{% trans %} date     {% endtrans %}</th>
+                            <th>{% trans %} workshop {% endtrans %}</th>
+                            <th>{% trans %} ticket   {% endtrans %}</th>
                         </tr>
                     </thead>
                     <tbody id="ticketBody">

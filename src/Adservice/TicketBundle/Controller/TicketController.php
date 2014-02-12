@@ -320,6 +320,7 @@ class TicketController extends Controller {
      * @param Int $id_user
      */
     public function assignUserToTicketAction($id_ticket, $id_user=null){
+        
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
@@ -358,7 +359,7 @@ class TicketController extends Controller {
         
         return $this->render('TicketBundle:Ticket:assignTicket.html.twig', array('ticket' => $ticket,
                                                                                  'users'  => $users
-                                                                               )); 
+                                                                                )); 
         
     }
     

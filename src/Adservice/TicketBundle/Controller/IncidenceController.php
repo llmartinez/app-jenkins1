@@ -107,48 +107,39 @@ class IncidenceController extends Controller{
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-        
-        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
-
         $incidence = new Incidence();
-        
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         
-        $inc = $em->getRepository('TicketBundle:Incidence')->findOneBy( array('ticket' => $ticket->getId()));
-
-        if(isset($inc)){
-           
-            return $this->redirect($this->generateUrl('editIncidence', array('id_incidence' => $inc->getId())));
-        }
+        $inc_setted = $em->getRepository('TicketBundle:Incidence')->findOneBy( array('ticket' => $ticket->getId()));
+        
+        if(isset($inc_setted)) return $this->redirect($this->generateUrl('editIncidence', array('id_incidence' => $inc_setted->getId())));
         
         $incidence->setTicket($ticket);
-        
         $form = $this->createForm(new IncidenceType(), $incidence);
         
         if ($request->getMethod() == 'POST') {
               
             $form->bindRequest($request);
             
-            $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
-            $status = $em->getRepository('TicketBundle:Status')->find($request->get('status'));
+            echo $incidence->getStatus();
+            die;
             
-            $ticket->setStatus($status);
-            DefaultC::saveEntity($em, $ticket, $asesor, false);
+            //campos comunes
+            $security = $this->get('security.context');
+            $user = $security->getToken()->getUser();
             
-            $incidence = DefaultC::newEntity($incidence, $asesor);
-            DefaultC::saveEntity($em, $incidence, $asesor);
+            $ticket->setStatus($incidence->getStatus());
+            DefaultC::saveEntity($em, $ticket, $user, false);
+            
+            $incidence = DefaultC::newEntity($incidence, $user);
+            DefaultC::saveEntity($em, $incidence, $user);
 
             $sesion = $request->getSession();
             
-            return $this->redirect($this->generateUrl('listIncidence', array('incidences' => $incidences, 
-                                                                             'incidence' => $incidence)));
+            return $this->redirect($this->generateUrl('listIncidence', array('incidence' => $incidence)));
         }
         
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $id_ticket));
-        
-        return $this->render('TicketBundle:Incidence:createIncidence.html.twig', array('incidences' => $incidences, 
-                                                                                       'ticket' => $ticket, 
-                                                                                       'posts' => $posts,
+        return $this->render('TicketBundle:Incidence:createIncidence.html.twig', array('ticket' => $ticket, 
                                                                                        'form' => $form->createView(),
                                                                               ));
     }
@@ -261,5 +252,16 @@ class IncidenceController extends Controller{
         
 
         return new Response(json_encode($incidences), $status = 200);
+    }
+    
+    /**
+     * Obtiene el listado de todas las incidencias de un workshop
+     * @param type $id_workshop
+     */
+    public function getIncidencesFromWorkshopAction($id_workshop){
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+
+        return $this->render('TicketBundle:Incidence:incidencesFromWorkshop.html.twig', array('workshop' => $workshop));
     }
 }

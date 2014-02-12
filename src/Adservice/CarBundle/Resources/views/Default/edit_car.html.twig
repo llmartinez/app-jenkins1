@@ -13,6 +13,7 @@
                 {% endfor %}
             $('form[id=contact]').find('select[id=idModel]').append(opt_models);
 
+            $('select[id=new_car_form_version]').empty();
                 var opt_versions = "<option value=0>Select Version..</option>";
                 {% for version in versions %}
 
