@@ -12,6 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
+    
+    
+    public function findAllOpen($emTicket, $user)
+    {
+        $tickets = $emTicket->findBy(array('status' => 0, 
+                                           'partner' => $user->getPartner()));
+        
+        return $tickets;
+    }
+    
     public function findTicketFiltered($security)
     {
         $em = $this->getEntityManager();
