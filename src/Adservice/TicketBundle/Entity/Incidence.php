@@ -64,7 +64,7 @@ class Incidence implements \JsonSerializable
     private $owner;
 
     /**
-     * @var string $workshop
+     * @var integer $workshop
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop")
      */
@@ -235,7 +235,7 @@ class Incidence implements \JsonSerializable
     /**
      * Get workshop
      *
-     * @return string 
+     * @return integer 
      */
     public function getWorkshop()
     {
