@@ -6,7 +6,7 @@
     <property name="builddir" value="${workspace}/app/build" />
 
     <!--<target name="build"
-          depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
+    depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
     <target name="build"    
             depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
 
@@ -59,8 +59,10 @@
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="phploc">
             <arg value="--log-csv" />
-            <arg value="${builddir}/logs/phploc.csv" />
-            <arg path="${sourcedir}" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg value="--exclude"/>
+            <arg value="include/library" />
+            <arg path="${basedir}"/>
         </exec>
     </target>
 
@@ -139,7 +141,7 @@
         </exec>
     </target>
 
-<!--    <target name="vendors" description="Update vendors">
+    <!--    <target name="vendors" description="Update vendors">
         <exec executable="php" failonerror="true">
             <arg value="composer.phar" />
             <arg value="update" />
