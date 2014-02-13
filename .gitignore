@@ -15,7 +15,7 @@ web/uploads/*
 composer.phar
 
 # -- PHPUnit ------------------------------------------
-app/phpunit.xml  
+# -- app/phpunit.xml
 
 # -- Editores -----------------------------------------
 # vim
