@@ -151,8 +151,8 @@
     </target>-->
     
     <target name="vendors" description="Update vendors">
-        <exec executable="bin/vendors" failonerror="true">
-            <arg value="install --reinstall" />
+        <exec executable="${basedir}/bin/vendors" failonerror="true">
+            <arg value="install" />
         </exec>
     </target>
 
