@@ -8,8 +8,8 @@
 <!--    <target name="build"
             depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
             
-    <target name="build"    
-    depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+    <!--    <target name="build"    
+    depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
 
     <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
@@ -150,7 +150,7 @@
         </exec>
     </target>
     
-<!--    <target name="vendors" description="Update vendors">
+    <!--    <target name="vendors" description="Update vendors">
         <exec executable="${basedir}/bin/vendors" failonerror="true">
             <arg value="install" />
         </exec>
@@ -162,5 +162,7 @@
             <arg path="app/config/parameters.ini" />
         </exec>
     </target>
-
+    
+    <target name="build"
+            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
 </project>
