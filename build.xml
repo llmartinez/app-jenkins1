@@ -143,7 +143,7 @@
         </exec>
     </target>
 
-<!--    <target name="vendors" description="Update vendors">
+    <!--    <target name="vendors" description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
             <arg value="composer.phar" />
             <arg value="install" />
@@ -155,17 +155,25 @@
             <arg value="install" />
         </exec>
     </target>-->
-
+    
+    <target name="vendors"
+        description="Update vendors">
+        <exec executable="bin/vendors" failonerror="true">
+            <arg value="update" />
+        </exec>
+    </target>
+    
     <target name="parameters" description="Copy parameters">
         <exec executable="cp" failonerror="true">
             <arg path="app/config/parameters.ini.dist" />
             <arg path="app/config/parameters.ini" />
         </exec>
     </target>
-    
+    <target name="build" depends="clean,vendors,parallelTasks,phpunit,phpcb"/>
+
     <!--    <target name="build"
     depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
     
-    <target name="build"    
-            depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+<!--    <target name="build"    
+            depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
 </project>
