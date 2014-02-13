@@ -5,8 +5,8 @@
     <property name="sourcedir" value="${basedir}/src" />
     <property name="builddir" value="${workspace}/app/build" />
 
-<!--    <target name="build"
-            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
+    <!--    <target name="build"
+    depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
             
     <!--    <target name="build"    
     depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
@@ -143,12 +143,12 @@
         </exec>
     </target>
 
-    <target name="vendors" description="Update vendors">
+<!--    <target name="vendors" description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
-            <!--<arg value="composer.phar" />-->
+            <arg value="composer.phar" />
             <arg value="install" />
         </exec>
-    </target>
+    </target>-->
     
     <!--    <target name="vendors" description="Update vendors">
         <exec executable="${basedir}/bin/vendors" failonerror="true">
@@ -163,6 +163,9 @@
         </exec>
     </target>
     
-    <target name="build"
-            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+    <!--    <target name="build"
+    depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
+    
+    <target name="build"    
+            depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
 </project>
