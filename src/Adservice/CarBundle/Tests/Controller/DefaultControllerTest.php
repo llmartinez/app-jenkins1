@@ -1,17 +1,28 @@
 <?php
 
-namespace Adservice\CarBundle\Tests\Controller;
+namespace Adservice\CarBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Validator\ValidatorFactory;
+use Adservice\CarBundle\Entity\Brand;
 
-class DefaultControllerTest extends WebTestCase
-{
-    public function testIndex()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/hello/Fabien');
-
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
+class DefaultControllerTest extends \PHPUnit_Framework_TestCase
+{        
+    private $validator;
+        
+    protected function setUp() {
+        $this->validator = ValidatorFactory::buildDefault()->getValidator();
+    }
+    
+    private function validar(Brand $brand){
+        $errores = $this->validator->validate($brand);
+        $error = $errores[0];
+        return array($errores, $error);
+    }
+    
+    public function testValidarName() {
+        $brand = new Brand();
+        $brand->setName('Brand1');
+        $name = $brand->getName();
+        $this->assertEquals('Brand1', $name, 'Se asigna name a $brand');
     }
 }
