@@ -137,12 +137,12 @@
         </exec>
     </target>
 
-    <target name="vendors" description="Update vendors">
+<!--    <target name="vendors" description="Update vendors">
         <exec executable="php" failonerror="true">
             <arg value="composer.phar" />
             <arg value="update" />
         </exec>
-    </target>
+    </target>-->
 
     <target name="parameters" description="Copy parameters">
         <exec executable="cp" failonerror="true">
