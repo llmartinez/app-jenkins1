@@ -152,7 +152,7 @@
     
     <target name="vendors" description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
-            <arg value="install" />
+            <arg value="install --reinstall" />
         </exec>
     </target>
 
