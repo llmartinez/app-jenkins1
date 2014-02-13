@@ -58,7 +58,7 @@
             {# Si : coinciden (talleres de usuario y ticket o ticket asignado a un asesor)
                Y  : el ultimo en responder != usuario logueado
             #}
-            {% if ( ticket.workshop == user.getWorkshop()   or   ticket.assignedTo == user ) 
+            {% if ( ticket.owner == user   or   ticket.assignedTo == user ) 
                and  ticket.posts[lastPost].owner.id != user.getId() %}
         
                <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..

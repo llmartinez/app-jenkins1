@@ -11,6 +11,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Entity\TicketRepository;
 use Adservice\TicketBundle\Form\TicketType;
+use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
 use Adservice\CarBundle\Form\CarType;
 use Adservice\TicketBundle\Entity\Post;
@@ -381,26 +382,22 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $emTicket = $em->getRepository('TicketBundle:Ticket');
+        $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $option = $petition->request->get('option');
+        $user = $this->get('security.context')->getToken()->getUser();
+        $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
+        $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
         //Admin
-        if ($option == 'all')
-            $tickets = $emTicket->findAll();
-        if ($option == 'all_open')
-            $tickets = $emTicket->findBy(array('status' => 0));
-        if ($option == 'all_closed')
-            $tickets = $emTicket->findBy(array('status' => 1));
+        if ($option == 'all'       ) $tickets = $repoTicket->findAll();
+        if ($option == 'all_open'  ) $tickets = $repoTicket->findAll($user, $open);
+        if ($option == 'all_closed') $tickets = $repoTicket->findAll($user, $closed);
         //Assessor
-        if ($option == 'ignore')
-            $tickets = $emTicket->findBy(array('assigned_to' => null, 'status' => 0));
-        if ($option == 'assign')
-            $tickets = $emTicket->findBy(array('assigned_to' => $this->get('security.context')->getToken()->getUser()->getId(), 'status' => 0));
+        if ($option == 'assign'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 0);
+        if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1);
         //User
-        if ($option == 'owner')
-            $tickets = $emTicket->findBy(array('owner' => $this->get('security.context')->getToken()->getUser()->getId(), 'status' => 0));
-        if ($option == 'workshop')
-            $tickets = $emTicket->findBy(array('workshop' => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId(), 'status' => 0));
+        if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
+        if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
 
         return new Response(json_encode($tickets), $status = 200);
     }

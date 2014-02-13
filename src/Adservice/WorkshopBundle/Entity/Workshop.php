@@ -36,14 +36,14 @@ class Workshop
     /**
      * @var string $address
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
      * @var string $city
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
@@ -71,7 +71,7 @@ class Workshop
     /**
      * @var integer $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer")
+     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
      */
     private $phone_number_2;
 
@@ -85,14 +85,14 @@ class Workshop
     /**
      * @var integer $movile_phone_2
      *
-     * @ORM\Column(name="movile_phone_2", type="integer")
+     * @ORM\Column(name="movile_phone_2", type="integer", nullable=true)
      */
     private $movile_phone_2;
 
     /**
      * @var integer $fax
      *
-     * @ORM\Column(name="fax", type="integer")
+     * @ORM\Column(name="fax", type="integer", nullable=true)
      */
     private $fax;
 
@@ -106,21 +106,21 @@ class Workshop
     /**
      * @var string $email_2
      *
-     * @ORM\Column(name="email_2", type="string", length=255)
+     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
      */
     private $email_2;
 
     /**
      * @var string $contact
      *
-     * @ORM\Column(name="contact", type="string", length=255)
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
      */
     private $contact;
 
     /**
      * @var string $observations
      *
-     * @ORM\Column(name="observations", type="string", length=255)
+     * @ORM\Column(name="observations", type="string", length=255, nullable=true)
      */
     private $observations;
 
@@ -149,14 +149,14 @@ class Workshop
     /**
      * @var boolean $adservice_plus
      *
-     * @ORM\Column(name="adservice_plus", type="boolean")
+     * @ORM\Column(name="adservice_plus", type="boolean", nullable=true)
      */
     private $adservice_plus;
 
     /**
      * @var boolean $test
      *
-     * @ORM\Column(name="test", type="boolean")
+     * @ORM\Column(name="test", type="boolean", nullable=true)
      */
     private $test;
 
@@ -184,14 +184,14 @@ class Workshop
     /**
      * @var datetime $endtest_at
      *
-     * @ORM\Column(name="endtest_at", type="datetime")
+     * @ORM\Column(name="endtest_at", type="datetime", nullable=true)
      */
     private $endtest_at;
 
     /**
      * @var boolean $conflictive
      *
-     * @ORM\Column(name="conflictive", type="boolean")
+     * @ORM\Column(name="conflictive", type="boolean", nullable=true)
      */
     private $conflictive;
 

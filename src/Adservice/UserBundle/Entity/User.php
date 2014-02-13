@@ -68,42 +68,42 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $city
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
      * @var string $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="string", length=9)
+     * @ORM\Column(name="phone_number_1", type="string", length=9, nullable=true)
      */
     private $phone_number_1;
 
     /**
      * @var string $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="string", length=9)
+     * @ORM\Column(name="phone_number_2", type="string", length=9, nullable=true)
      */
     private $phone_number_2;
 
     /**
      * @var string $movile_number_1
      *
-     * @ORM\Column(name="movile_number_1", type="string", length=9)
+     * @ORM\Column(name="movile_number_1", type="string", length=9, nullable=true)
      */
     private $movile_number_1;
 
     /**
      * @var string $movile_number_2
      *
-     * @ORM\Column(name="movile_number_2", type="string", length=9)
+     * @ORM\Column(name="movile_number_2", type="string", length=9, nullable=true)
      */
     private $movile_number_2;
 
     /**
      * @var string $fax
      *
-     * @ORM\Column(name="fax", type="string", length=9)
+     * @ORM\Column(name="fax", type="string", length=9, nullable=true)
      */
     private $fax;
 
@@ -118,7 +118,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $email
      *
-     * @ORM\Column(name="email_2", type="string", length=255)
+     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
      * @Assert\Email()
      */
     private $email_2;
