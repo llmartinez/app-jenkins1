@@ -144,7 +144,7 @@
     </target>
 
     <target name="vendors" description="Update vendors">
-        <exec executable="php" failonerror="true">
+        <exec executable="php bin/vendors" failonerror="true">
             <!--<arg value="composer.phar" />-->
             <arg value="install" />
         </exec>
