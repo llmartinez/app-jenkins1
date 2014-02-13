@@ -1,4 +1,4 @@
-<phpunit bootstrap="app/bootstrap.php" backupGlobals="false" backupStaticAttributes="false" strict="true" verbose="true">
+<phpunit bootstrap="app/bootstrap.php.cache" backupGlobals="false" backupStaticAttributes="false" strict="true" verbose="true">
     <testsuites>
         <testsuite name="ADService">
             <directory suffix="Test.php">tests/unit/</directory>
