@@ -127,7 +127,7 @@
         <exec executable="phpunit" failonerror="true">
             <!--<arg value="-c" />-->
             <!--<arg path="${basedir}/app/phpunit.xml" />-->
-            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml serving" />
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
         </exec>
     </target>
 
