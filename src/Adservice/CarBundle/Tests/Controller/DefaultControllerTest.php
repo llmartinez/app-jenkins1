@@ -16,6 +16,8 @@ class DefaultControllerTest extends \PHPUnit_Framework_TestCase
     
     public function testIsTrue(){
         $this->assertTrue(true);
+        $this->assertFalse(false);
+        
     }
     
 //    private function validar(Brand $brand){
