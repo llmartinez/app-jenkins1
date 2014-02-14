@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare"/>
+            depends="prepare, parameters, vendors"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -25,7 +25,23 @@
         <mkdir dir="${builddir}/coverage"/>
         <mkdir dir="${builddir}/logs"/>
         <mkdir dir="${builddir}/pdepend"/>
-        <mkdir dir="${builddir}/docs/*"/>
+        <mkdir dir="${builddir}/docs/"/>
+    </target>
+
+    <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
+    <target name="parameters" description="Copy parameters">
+        <exec executable="cp" failonerror="true">
+            <arg path="app/config/parameters.ini.dist" />
+            <arg path="app/config/parameters.ini" />
+        </exec>
+    </target>
+    
+    <!--INSTALAMOS LOS VENDORS DE SYMFONY2-->    
+    <target name="vendors"
+            description="Update vendors">
+        <exec executable="bin/vendors" failonerror="true">
+            <arg value="update" />
+        </exec>
     </target>
 
 </project>
