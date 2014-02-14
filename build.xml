@@ -169,12 +169,13 @@
             <arg path="app/config/parameters.ini" />
         </exec>
     </target>
-    <target name="build" depends="clean,vendors,phpunit,phpcb"/>
+    
+    <!--<target name="build" depends="clean,vendors,phpunit,phpcb"/>-->
     <!--<target name="build" depends="clean,vendors,parallelTasks,phpunit,phpcb"/>-->
 
 
-    <!--    <target name="build"
-    depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
+        <target name="build"
+    depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
     
 <!--    <target name="build"    
             depends="prepare,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>-->
