@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors"/>
+            depends="prepare, parameters, vendors, lint"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -42,6 +42,21 @@
         <exec executable="bin/vendors" failonerror="true">
             <arg value="update" />
         </exec>
+    </target>
+    
+    
+    <target name="lint" description="Perform syntax check of sourcecode files">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+            <fileset dir="${basedir}/src/">
+                <include name="**/*Test.php" />
+                <modified />
+            </fileset>
+        </apply>
     </target>
 
 </project>
