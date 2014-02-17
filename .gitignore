@@ -56,7 +56,7 @@ tmtags
 
 # netbeans
 nbproject/
-build/
+# -- build/
 nbbuild/
 dist/
 nbdist/
