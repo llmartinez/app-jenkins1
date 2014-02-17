@@ -15,7 +15,7 @@
         <delete dir="${builddir}/coverage"/>
         <delete dir="${builddir}/logs"/>
         <delete dir="${builddir}/pdepend"/>
-        <delete dir="${builddir}/docs/"/>
+        <delete dir="${builddir}/docs/*"/>
     </target>
     
     <!--CREAMOS LAS CARPETAS QUE NECESITA JENKINS-->
