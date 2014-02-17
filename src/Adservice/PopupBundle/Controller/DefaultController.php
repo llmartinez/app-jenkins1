@@ -20,7 +20,7 @@ class DefaultController extends Controller {
         $popup = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, true);
         return new Response(json_encode($popup), $status = 200);
     }
-rurtyurtyurtyu
+
     public function popupListAction() {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
