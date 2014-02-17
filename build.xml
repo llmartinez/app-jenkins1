@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci"/>
+            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -92,6 +92,22 @@
             <arg value="${builddir}/phpmd.xml" />
             <arg value="--reportfile" />
             <arg value="${builddir}/logs/pmd.xml" />
+        </exec>
+    </target>
+    
+    <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="phpcs">
+            <arg value="--standard=Symfony2" />
+            <arg path="${sourcedir}" />
+        </exec>
+    </target>
+    
+    <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec executable="phpcs" output="/dev/null">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${builddir}/logs/checkstyle.xml" />
+            <arg value="--standard=Symfony2" />
+            <arg path="${sourcedir}" />
         </exec>
     </target>
     
