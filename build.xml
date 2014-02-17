@@ -85,4 +85,14 @@
         </exec>
     </target>
     
+    <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <exec executable="phpmd">
+            <arg path="${sourcedir}" />
+            <arg value="xml" />
+            <arg value="${workspace}/app/phpmd.xml" />
+            <arg value="--reportfile" />
+            <arg value="${builddir}/logs/pmd.xml" />
+        </exec>
+    </target>
+    
 </project>
