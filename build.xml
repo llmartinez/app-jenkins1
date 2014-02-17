@@ -81,7 +81,7 @@
         <exec executable="phpmd">
             <arg path="${basedir}/src" />
             <arg value="text" />
-            <arg value="${workspace}/app/phpmd.xml" />
+            <arg value="${builddir}/phpmd.xml" />
         </exec>
     </target>
     
