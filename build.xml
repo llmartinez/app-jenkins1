@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci"/>
+            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -111,4 +111,11 @@
         </exec>
     </target>
     
+    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <exec executable="phpcpd">
+            <arg value="--log-pmd" />
+            <arg value="${builddir}/logs/pmd-cpd.xml" />
+            <arg path="${sourcedir}" />
+        </exec>
+    </target>
 </project>
