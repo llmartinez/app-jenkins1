@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors, lint"/>
+            depends="prepare, parameters, vendors, lint, phploc"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -15,7 +15,7 @@
         <delete dir="${builddir}/coverage"/>
         <delete dir="${builddir}/logs"/>
         <delete dir="${builddir}/pdepend"/>
-        <delete dir="${builddir}/docs/*"/>
+        <delete dir="${builddir}/docs/"/>
     </target>
     
     <!--CREAMOS LAS CARPETAS QUE NECESITA JENKINS-->
@@ -57,6 +57,17 @@
                 <modified />
             </fileset>
         </apply>
+    </target>
+    
+    <!-- TAMAÑO DE LA APLICACION -->
+    <target name="phploc" description="Measure project size using PHPLOC">
+        <exec executable="phploc">
+            <arg value="--log-csv" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg value="--exclude"/>
+            <arg value="include/library" />
+            <arg path="${basedir}"/>
+        </exec>
     </target>
 
 </project>
