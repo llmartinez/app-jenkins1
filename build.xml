@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors, lint, phploc"/>
+            depends="prepare, parameters, vendors, lint, phploc, pdepend"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -64,6 +64,15 @@
         <exec executable="phploc">
             <arg value="--log-csv" />
             <arg value="${builddir}/logs/phploc.csv" />
+            <arg path="${sourcedir}" />
+        </exec>
+    </target>
+    
+    <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+        <exec executable="pdepend">
+            <arg value="--jdepend-xml=${builddir}/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${builddir}/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${builddir}/pdepend/overview-pyramid.svg" />
             <arg path="${sourcedir}" />
         </exec>
     </target>
