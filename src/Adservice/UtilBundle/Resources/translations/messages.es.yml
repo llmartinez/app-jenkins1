@@ -16,6 +16,9 @@ user.index.menu.my_incidences:          Mis Incidencias
 
 # COMUNES
 home:      Índice
+admin:     Admin
+assessor:  Asesor
+user:      Usuario
 date:      Fecha
 workshop:  Taller
 ticket:    Ticket
