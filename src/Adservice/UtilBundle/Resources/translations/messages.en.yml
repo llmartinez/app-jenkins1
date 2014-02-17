@@ -16,6 +16,9 @@ user.index.menu.my_incidences:          My Incidences
 
 # COMUNES
 home:      Home 
+admin:     Admin
+assessor:  Assessor
+user:      User
 date:      Date
 workshop:  Workshop
 ticket:    Ticket

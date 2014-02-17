@@ -6,17 +6,17 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\UserBundle\Entity\User;
 
-class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
+class Admins extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 6; }
+    public function getOrder(){ return 7; }
     
     public function load(ObjectManager $manager) {
         $users = array(
             array(  'username'        => 'Admin', 
                     'password'        => 'mcobJtS8ExG2JAUrEg3VzeLlgyxyyviEr5/uO+vel5stbf3TeHTJxZoHUZqfVHOqON1QNKcm5PXemcz9rW4BZg==' ,
                     'salt'            => '79bc6981377363689c90b9c7d6962da9',
-                    'name'            => 'Super',
-                    'surname'         => 'Admin',
+                    'name'            => 'Admin',
+                    'surname'         => '1',
                     'city'            => 'Badalona',
                     'phone_number_1'  => '123456789',
                     'phone_number_2'  => '987654321',
@@ -35,7 +35,7 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
                     'workshop'        => null,
                     'country'         => 'Spain',
                     'language'        => 'es_ES',
-                    'partner'         => null,
+                    'partner'         => 'AD Barcelona',
                     'user_role'       => 'ROLE_ADMIN',
                  )
         );
@@ -62,6 +62,7 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt($user['modified_at']);
             $entidad->setCountry($this->getReference($user['country']));
             $entidad->setLanguage($this->getReference($user['language']));
+            $entidad->setPartner($this->getReference($user['partner']));
             $entidad->addRole($this->getReference($user['user_role']));
             $manager->persist($entidad);
             

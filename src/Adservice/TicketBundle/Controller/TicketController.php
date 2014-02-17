@@ -90,8 +90,6 @@ class TicketController extends Controller {
 
                 $em->flush();
 
-                $sesion = $request->getSession();
-
                 return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
             } else {
                 $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
@@ -350,7 +348,6 @@ class TicketController extends Controller {
      */
     public function assignTicketSelectUserAction($id_ticket) {
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $users = $this->getUsersToAssingFromTicket($ticket);
 
@@ -398,7 +395,7 @@ class TicketController extends Controller {
         //User
         if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
         if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
-
+ 
         return new Response(json_encode($tickets), $status = 200);
     }
 

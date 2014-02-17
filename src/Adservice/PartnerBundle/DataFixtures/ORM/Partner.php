@@ -8,7 +8,7 @@ use Adservice\PartnerBundle\Entity\Partner;
 
 class Partners extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 7; }
+    public function getOrder(){ return 6; }
     
     public function load(ObjectManager $manager) {
         $partners = array(
@@ -74,7 +74,6 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt($partner['modified_at']);
             $entidad->setRegion($this->getReference($partner['region']));
             $entidad->setProvince($this->getReference($partner['province']));
-            $entidad->setModifyBy($this->getReference($partner['modify_by']));
             $manager->persist($entidad);
             
             $this->addReference($entidad->getName(), $entidad);
