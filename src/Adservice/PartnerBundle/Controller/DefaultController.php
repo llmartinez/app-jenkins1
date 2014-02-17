@@ -29,7 +29,6 @@ class DefaultController extends Controller {
 
         return $this->render('PartnerBundle:Default:list.html.twig', array('all_partners' => $all_partners));
     }
-    
     /**
      * Crea un socio en la bbdd
      * @throws AccessDeniedException
