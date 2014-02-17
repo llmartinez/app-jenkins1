@@ -13,6 +13,7 @@ class UserRepository extends EntityRepository
      */
     public function findByPartner($partner)
     {
+        
         //users que dependen directamente del partner
         $em = $this->getEntityManager();
         $query = $em->createQuery("SELECT u 
@@ -24,10 +25,12 @@ class UserRepository extends EntityRepository
         
         //users que dependen del taller
         $workshops = $partner->getWorkshops();
-        foreach ($workshops as $workshop) {
-            $users_workshop = $workshop->getUsers();
-            foreach ($users_workshop as $user_workshop) {
-                array_push($users, $user_workshop);
+        if (count($workshops)>0){
+            foreach ($workshops as $workshop) {
+                $users_workshop = $workshop->getUsers();
+                foreach ($users_workshop as $user_workshop) {
+                    array_push($users, $user_workshop);
+                }
             }
         }
 

@@ -9,19 +9,19 @@
     {% if is_granted('ROLE_ADMIN') %}
         <table>
             <tr>
-                <th>{% trans %}user.index.menu.admin_title{% endtrans %}</th>
+                <th>{% trans %} user.index.menu.admin_title {% endtrans %}</th>
             </tr>    
             <tr>
                 <td>
-                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
-                    <a href="{{ path("partner_list") }}">{% trans %}user.index.menu.list_partners{% endtrans %}</a><br>
-                    <a href="{{ path("user_list") }}">{% trans %}user.index.menu.list_users{% endtrans %}</a><br>
-                    <a href="{{ path("popup_list") }}">{% trans %}user.index.menu.list_popups{% endtrans %}</a><br>
-                    <a href="{{ path("workshop_list") }}">{% trans %}user.index.menu.list_workshops{% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.list_incidences{% endtrans %}</a><br>
-                    <a href="{{ path("listStatistics") }}">{% trans %}user.index.menu.list_statistics{% endtrans %}</a><br>
-                    <a href="{{ path("newIncidence") }}">{% trans %}user.index.menu.create_incidence_admin{% endtrans %}</a><br>
-                    <a href="{{ path("ticketWorkshopList") }}">{% trans %}Asignar Tickets a Usuarios{% endtrans %}</a><br>
+                    <a id="profile"            href="{{ path("user_profile"      ) }}">{% trans %} user.index.menu.my_profile            {% endtrans %}</a><br>
+                    <a id="partner_list"       href="{{ path("partner_list"      ) }}">{% trans %} user.index.menu.list_partners         {% endtrans %}</a><br>
+                    <a id="user_list"          href="{{ path("user_list"         ) }}">{% trans %} user.index.menu.list_users            {% endtrans %}</a><br>
+                    <a id="popup_list"         href="{{ path("popup_list"        ) }}">{% trans %} user.index.menu.list_popups           {% endtrans %}</a><br>
+                    <a id="workshop_list"      href="{{ path("workshop_list"     ) }}">{% trans %} user.index.menu.list_workshops        {% endtrans %}</a><br>
+                    <a id="listIncidence"      href="{{ path("listIncidence"     ) }}">{% trans %} user.index.menu.list_incidences       {% endtrans %}</a><br>
+                    <a id="listStatistics"     href="{{ path("listStatistics"    ) }}">{% trans %} user.index.menu.list_statistics       {% endtrans %}</a><br>
+                    <a id="newIncidence"       href="{{ path("newIncidence"      ) }}">{% trans %} user.index.menu.create_incidence_admin{% endtrans %}</a><br>
+                    <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList") }}">{% trans %} Asignar Tickets a Usuarios            {% endtrans %}</a><br>
                     {#<a href="{{ path("ticket_list") }}">{% trans %}Listado de Tickets{% endtrans %}</a><br>
                     <a href="{{ path("incidence_list") }}">{% trans %}Listado de Incidencias{% endtrans %}</a><br>#}
                 </td>
@@ -32,30 +32,30 @@
     {% if is_granted('ROLE_ASSESSOR') %}
         <table>
             <tr>
-                <th>{% trans %}user.index.menu.assessor_title{% endtrans %}</th>
+                <th>{% trans %} user.index.menu.assessor_title {% endtrans %}</th>
             </tr>    
             <tr>
                 <td>
-                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
-                    <a href="{{ path("listTicket") }}">{% trans %}user.index.menu.my_tickets{% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.my_incidences{% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %}Listado de Tickets{% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %}Listado de Incidencias{% endtrans %}</a><br>
+                    <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
+                    <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.my_tickets    {% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %} user.index.menu.my_incidences {% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %} Listado de Tickets            {% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %} Listado de Incidencias        {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
     {% endif %}
 
     {% if is_granted('ROLE_USER') %}
-        <table>
+        <table id="tbl_user" name ="tbl_user">
             <tr>
-                <th>{% trans %}user.index.menu.user_title{% endtrans %}</th>
+                <th>{% trans %} user.index.menu.user_title {% endtrans %}</th>
             </tr>    
             <tr>
                 <td>
-                    <a href="{{ path("user_profile") }}">{% trans %}user.index.menu.my_profile{% endtrans %}</a><br>
-                    <a href="{{ path("listTicket") }}">{% trans %}user.index.menu.my_tickets{% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %}user.index.menu.my_incidences{% endtrans %}</a><br>
+                    <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
+                    <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.my_tickets    {% endtrans %}</a><br>
+                    <a href="{{ path("listIncidence") }}">{% trans %} user.index.menu.my_incidences {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>

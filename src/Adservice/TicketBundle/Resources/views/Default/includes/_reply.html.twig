@@ -1,6 +1,6 @@
 {# muestra el estado del ticekt y permite responder y cerrarlo #}
 
-    {% if ticket.status.id == 1 %}
+    {% if ticket.status == 'closed' %}
 
         <a class="btn btn-primary pull-right btn100" style="background-color:gray">TICKET CLOSED</a>
 

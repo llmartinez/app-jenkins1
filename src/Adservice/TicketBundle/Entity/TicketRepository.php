@@ -17,7 +17,6 @@ class TicketRepository extends EntityRepository
     {
         $workshops = $user->getPartner()->getWorkshops();
         foreach ($workshops as $workshop) {
-            
             $tickets = $this->findBy(array('status' => $status->getId(),
                                            'workshop' => $workshop->getId()));
             if ($tickets != null) return $tickets;

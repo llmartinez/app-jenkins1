@@ -33,6 +33,10 @@ UserBundle:
 UtilBundle:
     resource: "@UtilBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
+    
+_login:
+    pattern:  /
+    defaults: { _controller: UserBundle:Login:login }
 
 #redirect:
 #    pattern: /{_locale}/{_location}/

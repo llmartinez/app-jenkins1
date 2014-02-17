@@ -17,12 +17,10 @@ user.index.menu.my_tickets:             Mon Tickets
 user.index.menu.my_incidences:          Mon questions
 
 # COMUNES
-
-date:     Date
-workshop: Atelier
-ticket:   Billet
-
 home:      Index 
+admin:     Admin
+assessor:  Conseiller
+user:      Utilisateur
 date:      Date
 workshop:  Atelier
 ticket:    Billet
