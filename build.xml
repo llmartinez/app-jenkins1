@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
     <target name="build"
-            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit"/>
+            depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -125,4 +125,22 @@
             <arg path="${basedir}/app/phpunit.xml" />
         </exec>
     </target>
+    
+    <target name="phpdoc" description="Generate API documentation using phpDox">
+        <exec executable="phpdoc">
+            <arg line="-d '${sourcedir}' -t '${builddir}/docs' --title='Tempo' " />
+        </exec>
+    </target>
+    
+    <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb">
+            <arg value="--log" />
+            <arg path="${builddir}/logs" />
+            <arg value="--source" />
+            <arg path="${sourcedir}" />
+            <arg value="--output" />
+            <arg path="${builddir}/code-browser" />
+        </exec>
+    </target>
+    
 </project>
