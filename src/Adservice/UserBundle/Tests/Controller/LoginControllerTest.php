@@ -1,5 +1,4 @@
 <?php
-
 namespace Adservice\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
