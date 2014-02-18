@@ -4,16 +4,16 @@ namespace Adservice\UserBundle\Tests\Controller;
 
 class TestFunctions
 {
-    public static function linkTo($client, $crawler, $_this, $location)
-    {
-       $link = $crawler->filter($location)->link();
-       $crawler = $client->click($link);
-       
-       $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
-        '- Se muestra la pantalla del link a "'.$location.'" (status 200) '
-        );
-       return $crawler;
-    }
+//    public static function linkTo($client, $crawler, $_this, $location)
+//    {
+//       $link = $crawler->filter($location)->link();
+//       $crawler = $client->click($link);
+//       
+//       $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
+//        '- Se muestra la pantalla del link a "'.$location.'" (status 200) '
+//        );
+//       return $crawler;
+//    }
 }
 
 /******************************************************
