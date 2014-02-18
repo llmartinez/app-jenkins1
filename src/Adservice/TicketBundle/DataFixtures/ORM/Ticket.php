@@ -13,8 +13,8 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
         $tickets = array(
             array(  'status'      => 'closed'           ,     
-                    'workshop'    => 'Taller AD Bcn'    ,
-                    'car'         => 'B-1593-BB'        ,
+                    'workshop'    => 'workshop1'        ,
+                    'car'         => 'T-1111-TT'        ,
                     'owner'       => 'user1'            ,
                     'modified_by' => 'user1'            ,
                     'assigned_to' => 'assessor1'        ,
@@ -24,8 +24,8 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
                     'title'       => 'Fallo al frenar'  ,
                  ),
             array(  'status'      => 'open'             ,     
-                    'workshop'    => 'Taller AD Bcn'    ,
-                    'car'         => 'B-7849-TB'        ,
+                    'workshop'    => 'workshop1'        ,
+                    'car'         => 'T-1111-TT'        ,
                     'owner'       => 'user1'            ,
                     'modified_by' => 'user1'            ,
                     'assigned_to' => 'assessor1'        ,
