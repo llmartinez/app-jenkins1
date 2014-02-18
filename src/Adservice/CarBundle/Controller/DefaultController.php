@@ -14,7 +14,7 @@ class DefaultController extends Controller {
     public function carModelAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-        echo "hola";
+        
         $id_brand = $petition->request->get('id_brand');
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
         
