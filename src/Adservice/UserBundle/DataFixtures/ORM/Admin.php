@@ -17,19 +17,12 @@ class Admins extends AbstractFixture implements OrderedFixtureInterface {
                     'salt'            => '79bc6981377363689c90b9c7d6962da9',
                     'name'            => 'Admin',
                     'surname'         => '1',
-                    'city'            => 'Badalona',
-                    'phone_number_1'  => '123456789',
-                    'phone_number_2'  => '987654321',
-                    'movile_number_1' => '784951623',
-                    'movile_number_2' => '326159847',
                     'fax'             => '147258369',
                     'email_1'         => 'admin@admin.es',
-                    'email_2'         => 'admin@admin.com',
                     'dni'             => '00000000A',
                     'active'          => '1',
                     'region'          => 'Catalunya',
                     'province'        => 'Barcelona',
-                    'modify_by'       => null,
                     'created_at'      => new \DateTime(),
                     'modified_at'     => new \DateTime(),
                     'workshop'        => null,
@@ -62,7 +55,12 @@ class Admins extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt($user['modified_at']);
             $entidad->setCountry($this->getReference($user['country']));
             $entidad->setLanguage($this->getReference($user['language']));
-            $entidad->setPartner($this->getReference($user['partner']));
+            if($this->getReference($user['partner']) != null){
+                $entidad->setPartner($this->getReference($user['partner']));
+            }
+            if($this->getReference($user['workshop']) != null ) {
+                $entidad->setWorkshop($this->getReference($user['workshop']));
+            }
             $entidad->addRole($this->getReference($user['user_role']));
             $manager->persist($entidad);
             
