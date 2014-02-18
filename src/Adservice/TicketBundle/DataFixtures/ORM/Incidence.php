@@ -15,7 +15,7 @@ class Incidences extends AbstractFixture implements OrderedFixtureInterface {
             array(  'ticket'      => 'Fallo al frenar'  ,
                     'status'      => 'closed'           , 
                     'owner'       => 'assessor1'        ,    
-                    'workshop'    => 'Taller AD Bcn'    ,
+                    'workshop'    => 'workshop1'    ,
                     'modified_by' => 'assessor1'        ,
                     'importance'  => '1'                ,
                     'description' => 'Falla algo en las ruedas, se decidió probar el testigo del ABS en la instrumentación. '                ,

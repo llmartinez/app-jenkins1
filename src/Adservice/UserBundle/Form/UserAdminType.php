@@ -9,6 +9,17 @@ class UserAdminType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
+        $builder = $this->getbasicUserType($builder);
+        $builder->add('partner');
+    }
+
+    public function getName()
+    {
+        return 'adservice_userbundle_usertype';
+    }
+    
+     public static function getbasicUserType($builder)
+    {
         $builder
             ->add('username')
             ->add('password', 'repeated', array('type'              => 'password',
@@ -32,12 +43,8 @@ class UserAdminType extends AbstractType
             ->add('region')
             ->add('province')
             ->add('country')
-            ->add('partner')
+            ->add('language')
         ;
-    }
-
-    public function getName()
-    {
-        return 'adservice_userbundle_usertype';
+        return $builder;
     }
 }

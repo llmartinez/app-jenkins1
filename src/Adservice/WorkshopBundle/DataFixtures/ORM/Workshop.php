@@ -11,104 +11,26 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
     public function getOrder(){ return 9; }
     
     public function load(ObjectManager $manager) {
-        $workshops = array(
-            array(  'name'            => 'Taller AD Bcn' , 
-                    'phone_number_1'  => '111111111',
-                    'movile_number_1' => '111111111',
-                    'email_1'         => 'ad@workshop.es',
-                    'adservice_plus'  => '0',
-                    'active'          => '1',
-                    'update_at'       => new \DateTime(),
-                    'lowdate_at'      => new \DateTime(), 
-                    'created_at'      => new \DateTime(),
-                    'modified_at'     => new \DateTime(),
-                    'region'          => 'Catalunya',
-                    'province'        => 'Barcelona',
-                    'modify_by'       => 'SuperAdmin',
-                    'partner'         => 'AD Barcelona',
-                    'typology'        => 'Autoservice AD',
-                 ),
-            array(  'name'            => 'Garage AD Bcn' , 
-                    'phone_number_1'  => '111111111',
-                    'movile_number_1' => '111111111',
-                    'email_1'         => 'ad@workshop.es',
-                    'adservice_plus'  => '0',
-                    'active'          => '1',
-                    'update_at'       => new \DateTime(),
-                    'lowdate_at'      => new \DateTime(), 
-                    'created_at'      => new \DateTime(),
-                    'modified_at'     => new \DateTime(),
-                    'region'          => 'Catalunya',
-                    'province'        => 'Barcelona',
-                    'modify_by'       => 'SuperAdmin',
-                    'partner'         => 'AD Barcelona',
-                    'typology'        => 'Garage AD',
-                 ),
-            array(  'name'            => 'Taller AD Madrid' ,
-                    'phone_number_1'  => '111111111',
-                    'movile_number_1' => '111111111',
-                    'email_1'         => 'ad@workshop.es',
-                    'adservice_plus'  => '0',
-                    'active'          => '1',
-                    'update_at'       => new \DateTime(),
-                    'lowdate_at'      => new \DateTime(), 
-                    'created_at'      => new \DateTime(),
-                    'modified_at'     => new \DateTime(),
-                    'region'          => 'Madrid',
-                    'province'        => 'Madrid ',
-                    'modify_by'       => 'SuperAdmin',
-                    'partner'         => 'AD Madrid',
-                    'typology'        => 'Autoservice AD',
-                 ),
-            array(  'name'            => 'Garage AD Madrid'  ,
-                    'phone_number_1'  => '111111111',
-                    'movile_number_1' => '111111111',
-                    'email_1'         => 'ad@workshop.es',
-                    'adservice_plus'  => '0',
-                    'active'          => '1',
-                    'update_at'       => new \DateTime(),
-                    'lowdate_at'      => new \DateTime(), 
-                    'created_at'      => new \DateTime(),
-                    'modified_at'     => new \DateTime(),
-                    'region'          => 'Madrid',
-                    'province'        => 'Madrid ',
-                    'modify_by'       => 'SuperAdmin',
-                    'partner'         => 'AD Madrid',
-                    'typology'        => 'Garage AD',
-                 ),
-            array(  'name'            => 'Taller AD Canarias'  ,
-                    'phone_number_1'  => '111111111',
-                    'movile_number_1' => '111111111', 
-                    'email_1'         => 'ad@workshop.es',
-                    'adservice_plus'  => '0',
-                    'active'          => '1',
-                    'update_at'       => new \DateTime(),
-                    'lowdate_at'      => new \DateTime(), 
-                    'created_at'      => new \DateTime(),
-                    'modified_at'     => new \DateTime(),
-                    'region'          => 'Canarias',
-                    'province'        => 'Sta. Cruz de Tenerife',
-                    'modify_by'       => 'SuperAdmin',
-                    'partner'         => 'AD Canarias',
-                    'typology'        => 'Carrosserie AD',
-                 ),
-        );
-        foreach ($workshops as $workshop) {
+        
+        $typologies = array('Autoservice AD', 'Garage AD', 'Carrosserie AD');
+                
+        for($i=1;$i<=3;$i++) 
+        {
             $entidad = new Workshop();
-            $entidad->setName($workshop['name']);
-            $entidad->setPhoneNumber1($workshop['phone_number_1']);
-            $entidad->setMovilePhone1($workshop['movile_number_1']);
-            $entidad->setEmail1($workshop['email_1']);
-            $entidad->setActive($workshop['active']);
-            $entidad->setUpdateAt($workshop['update_at']);
-            $entidad->setLowdateAt($workshop['lowdate_at']);
-            $entidad->setCreatedAt($workshop['created_at']);
-            $entidad->setModifiedAt($workshop['modified_at']);
-            $entidad->setRegion($this->getReference($workshop['region']));
-            $entidad->setProvince($this->getReference($workshop['province']));
-            $entidad->setModifyBy($this->getReference($workshop['modify_by']));
-            $entidad->setPartner($this->getReference($workshop['partner']));
-            $entidad->setTypology($this->getReference($workshop['typology']));
+            $entidad->setName('workshop'.$i);
+            $entidad->setPhoneNumber1($i.$i.$i.$i.$i.$i.$i.$i.$i);
+            $entidad->setMovilePhone1($i.$i.$i.$i.$i.$i.$i.$i.$i);
+            $entidad->setEmail1('workshop'.$i.'@workshop.es');
+            $entidad->setActive('1');
+            $entidad->setUpdateAt(new \DateTime());
+            $entidad->setLowdateAt(new \DateTime());
+            $entidad->setCreatedAt(new \DateTime());
+            $entidad->setModifiedAt(new \DateTime());
+            $entidad->setRegion($this->getReference('Catalunya'));
+            $entidad->setProvince($this->getReference('Barcelona'));
+            $entidad->setModifyBy($this->getReference('superadmin'));
+            $entidad->setPartner($this->getReference('partner'.$i));
+            $entidad->setTypology($this->getReference($typologies[$i-1]));
             $manager->persist($entidad);
             
             $this->addReference($entidad->getName(), $entidad);
