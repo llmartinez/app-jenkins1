@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\PartnerBundle\Entity\Partner;
+use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Partners extends AbstractFixture implements OrderedFixtureInterface {
     
@@ -20,14 +21,14 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setFax($i.$i.$i.$i.$i.$i.$i.$i.$i+2);
             $entidad->setEmail1('partner'.$i.'@partner.es');
             $entidad->setEmail2('partner'.$i.'@partner.com');
-            $entidad->setAddress('address '.$i);
-            $entidad->setPostalCode('08080');
+            $entidad->setAddress(Data::getDireccion());
+            $entidad->setPostalCode(Data::getCodigoPostal());
             $entidad->setActive('1');
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());
             $entidad->setModifyBy($this->getReference('superadmin'));
-            $entidad->setRegion($this->getReference('Catalunya'));
-            $entidad->setProvince($this->getReference('Barcelona'));
+            $entidad->setRegion($this->getReference(Data::getRegions()));
+            $entidad->setProvince($this->getReference(Data::getProvinces()));
             $manager->persist($entidad);
             
             $this->addReference($entidad->getName(), $entidad);

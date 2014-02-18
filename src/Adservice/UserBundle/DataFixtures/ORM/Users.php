@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\UserBundle\Entity\User;
+use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Users extends AbstractFixture implements OrderedFixtureInterface {
     
@@ -35,12 +36,12 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setEmail1     ('test'.$i.'@'.$type.'.es');
             $entidad->setDni        ($i.$i.$i.$i.$i.$i.$i.$i.'T');
             $entidad->setActive     ('1');
-            $entidad->setRegion     ($_this->getReference('Catalunya'));
-            $entidad->setProvince   ($_this->getReference('Barcelona'));
+            $entidad->setRegion     ($_this->getReference(Data::getRegions()));
+            $entidad->setProvince   ($_this->getReference(Data::getProvinces()));
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
-            $entidad->setCountry    ($_this->getReference('Spain'));
-            $entidad->setLanguage   ($_this->getReference('es_ES'));
+            $entidad->setCountry    ($_this->getReference(Data::getCountries()));
+            $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
             if($partner != null){
                 $entidad->setPartner($_this->getReference($partner.$i));
             }

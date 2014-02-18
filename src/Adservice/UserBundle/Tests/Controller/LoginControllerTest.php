@@ -55,7 +55,7 @@ class LoginControllerTest extends WebTestCase
         //link a la pagina de perfil
         $crawler = TestFunctions::linkTo($client, $crawler, $_this, 'table tr td a#profile');
         //comprueba que coincida el nombre de usuario con el logeado
-        $_this->assertEquals('Admin', $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'), 
+        $_this->assertEquals('admin', $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'), 
                 'El usuario se ha registrado correctamente y sus datos se han guardado en la base de datos'
         );
         //link de vuelta al inicio
