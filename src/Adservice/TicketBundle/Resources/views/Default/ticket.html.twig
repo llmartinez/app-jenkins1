@@ -1,0 +1,79 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+<!-- TABLA TICKETS -->
+
+<div class="colIzq">
+    
+    <select id="slct_historyTickets" class="form-control">
+        {% if is_granted('ROLE_ADMIN') %}
+                <option value="all" selected    >{% trans %} ticket.opt.all          {% endtrans %}</option>
+                <option value="all_open"        >{% trans %} ticket.opt.all_open     {% endtrans %}</option>
+                <option value="all_closed"      >{% trans %} ticket.opt.all_closed   {% endtrans %}</option>
+        {% else %}
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <option value="ignore" selected >{% trans %} ticket.opt.not_assigned {% endtrans %}</option>
+                <option value="assign"          >{% trans %} ticket.opt.assigned     {% endtrans %}</option>
+            {% else %}
+                <option value="owner" selected  >{% trans %} ticket.opt.owner        {% endtrans %}</option>
+                <option value="workshop"        >{% trans %} ticket.opt.workshop     {% endtrans %}</option>
+            {% endif %}
+        {% endif %}
+    </select>
+        
+    <div class="widget stacked widget-table action-table">
+    				
+        <div class="widget-header">
+                <i class="icon-th-list"></i>
+                <h3>{% trans %} ticket.history.title {% endtrans %}</h3>
+        </div> <!-- /widget-header -->
+
+        <div class="widget-content" >
+
+            <table class="table table-striped table-bordered">
+                
+                    <thead id="ticketHead">
+                        <tr>
+                            <th>{% trans %} date     {% endtrans %}</th>
+                            <th>{% trans %} workshop {% endtrans %}</th>
+                            <th>{% trans %} ticket   {% endtrans %}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketBody">
+                        
+                    </tbody>
+            </table>
+        </div> <!-- /widget-content -->
+    </div> <!-- /widget -->
+</div>
+
+<!-- CONTENIDO PAGINA TICKETS -->
+
+<div class="colDer">
+    {% block content %}{% endblock  %}
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket.js') }}"></script>
+
+    {# ruta para Ajax #}
+    <input id='route' type='hidden' value="{{ path("showTicket", { 'id_ticket': "PLACEHOLDER" }) }}">
+    <script>
+        $(document).ready(function() {
+            
+            //carga la tabla de tickets
+            var url_ajax = "{{ path("fill_tickets") }}";
+            fill_tickets(url_ajax);
+            
+            $('#slct_historyTickets').click(function() {
+                var url_ajax = "{{ path("fill_tickets") }}";
+                fill_tickets(url_ajax);
+            });
+        });
+    </script>
+    
+{% endblock %}

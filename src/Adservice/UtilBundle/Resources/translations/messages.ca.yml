@@ -1,9 +1,31 @@
-# Pantalla principal
-New ticket: Nou ticket
+
+#PRINCIPAL
+login: Iniciar sessió
+login.title: Accés usuaris AD Service
+login.check: Recorda'm
+logout: Tancar la sessió
+
+#HEADER
+index: Índex usuari
+newTicket : Nou ticket
+ticket: Tickets
+incidence: Incidències
+
+#TICKET
+ticket.history.title: Historial Tickets
+ticket.history.date: Data
+ticket.history.workshop: Taller
+ticket.history.ticket: Ticket
+ticket.history.any: No tiens cap ticket obert
+
+###############
+#     OLD     #
+###############
+
+ticket.new: Nou ticket
 My tickets: Els meus tickets
 Technical information: Informació tècnica
 Select language: Sel·leccionar idioma
-Logout: Tancar la sessió
 Not logged in: Sessió no iniciada
 Welcome: Benvingut
 

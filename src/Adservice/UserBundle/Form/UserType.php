@@ -9,30 +9,14 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
-        $builder
-            ->add('username')
-            ->add('password')
-            ->add('name')
-            ->add('surname')
-            ->add('dni')
-            ->add('city')
-            ->add('province')
-            ->add('phone_number_1')
-            ->add('phone_number_2')
-            ->add('movile_number_1')
-            ->add('movile_number_2')
-            ->add('fax')
-            ->add('email_1')
-            ->add('email_2')
-            ->add('active')
-            ->add('language')
-            ->add('region')
-            ->add('province')
-        ;
+        $builder = UserAdminType::getbasicUserType($builder);
+        $builder->add('workshop');
     }
 
     public function getName()
     {
         return 'adservice_userbundle_usertype';
     }
+    
+   
 }

@@ -1,0 +1,36 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('partner_list') }}">List of Partners</a></li>
+      <li class="active">Edit Partner ({{ partner }})</li>
+    </ol>
+
+    <form action="{{ path("partner_edit", { 'id':partner.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_widget(form) }}
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
+
+{#    WORKSHOPS ZONE#}
+    {% include 'WorkshopBundle:Default:_list.html.twig' with {all_workshops : partner.workshops} %}
+
+{% endblock%}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            //si clickamos el combobox de las regiones repoblamos la de las provincias
+            $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').change(function() {
+                var url_ajax = "{{ path("user_provinces") }}";
+                populate_province(url_ajax);
+            });
+        });
+    </script>
+{% endblock %}

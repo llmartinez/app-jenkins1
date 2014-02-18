@@ -1,0 +1,59 @@
+{% extends "TicketBundle:Default:ticket.html.twig" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
+    </ol>
+    
+    <div class="tblContainer">
+        <div class="row">
+
+            <div class="col-sm-8 contact-form">
+                <form action="{{ path('editTicket', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
+                    <div class="row">
+                             
+                        <input type="hidden" id="asesor" name="asesor" value="{{ app.security.getToken().getUser().getId() }}">
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Workshop <select class="form-control" id="user" name="user"><option value=0>Select Workshop..</option>
+                                
+                            {% for workshop in workshops %} <option 
+                                                        {% if ticket.workshop == workshop %} selected="true" {% endif %}
+                                                        value="{{ workshop.id }}"> {{ workshop }} </option> 
+                            {% endfor %}
+                                
+                            </select>
+                        </div>
+                        
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Title {{ form_widget(form.title, { 'attr': {'class': 'form-control' } }) }}
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Status {{ form_widget(form.status, { 'attr': {'class': 'form-control' } }) }}
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Importance {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                            
+                            <legend>Car</legend>
+                            {% include 'CarBundle:Default:car.html.twig'%}
+                            {% include 'CarBundle:Default:edit_car.html.twig'%}
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 form-group">
+                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                            <a class="btn btn-primary pull-right" href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+{% endblock %}

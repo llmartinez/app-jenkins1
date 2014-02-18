@@ -1,0 +1,26 @@
+{# muestra los botones de edicion y asignacion/desasignacion del asesor #}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+        {% if ticket.assignedTo is not null %}
+
+            {% if ticket.assignedTo == app.security.getToken().getUser() %}
+
+                <a class="btn btn-primary pull-right"
+                   href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
+                    Ignore </a>
+
+                <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"> Edit </a>
+            {% else %}
+
+                <a class="btn btn-primary pull-right" style="background-color:gray">Ticket assigned to other assessor</a>
+
+            {% endif %}
+
+        {% else %}
+
+            <a class="btn btn-primary pull-right" id="assign" 
+               href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" > 
+                Assign </a>
+
+        {% endif %}
+    {% endif %}

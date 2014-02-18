@@ -1,0 +1,76 @@
+{% extends "TicketBundle:Default:incidence.html.twig" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listIncidence') }}">List of Incidences</a></li>
+      <li class="active">New Incidence</li>
+    </ol>
+
+    {% if app.session.hasFlash('error') %}
+        <p class="error">{{ app.session.getFlash('error') }}</p>
+    {% endif %}
+        
+    <div class="tblContainer">
+        <div class="row">
+
+            <div class="col-sm-8 contact-form">
+                <form action="{{ path('newIncidence') }}" id="contact" class="form" role="form" method="post">
+                    <div class="row">
+                            
+                        <legend>Incidence Data</legend>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            <label for="workshop">Workshop</label> 
+                            <select class="form-control" id="workshop" name="workshop"><option value=0>Select Workshop..</option>
+                                
+                            {% for workshop in workshops %} <option value="{{ workshop.id }}"> {{ workshop.name }} </option> {% endfor %}
+                                
+                            </select>
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            <label for="new_incidence_form_status">Status</label> 
+                            {{ form_widget(form.status, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            <label for="new_incidence_form_importance">Importance</label> 
+                            {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        
+                        <legend>Car</legend>
+                        {% include 'CarBundle:Default:car.html.twig'%}
+                        
+                        <legend>Ticketing</legend>
+                        
+                        <div class="btn100">   
+                            <label for="new_ticket_form_title">Title</label>  
+                            {{ form_widget(formT.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
+                        </div>
+                        
+                        <div class="btn100">    
+                            <label for="new_incidence_form_title">Description</label>  
+                            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 
+                                                                                    'rows': '5'} }) }}
+                        </div>
+                        
+                        <div class="btn100"> 
+                            <label for="new_incidence_form_title">Solution</label>  
+                            {{ form_widget(form.solution, { 'attr': { 'class': 'form-control', 
+                                                                               'rows': '5' } }) }}
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 form-group">
+                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+{% endblock %}
+        

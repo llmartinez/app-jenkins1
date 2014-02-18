@@ -1,0 +1,48 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {#
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('ticketWorkshopList') }}">List of Workshops</a></li>
+      <li class="active">Tickets form Workshop</li>
+    </ol>
+#}
+
+    {% if workshop.incidences|length > 0  %}
+        
+            <table class="table table-hover" style="width: 70%; margin-left: 250px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ticket</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Owner</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for incidence in workshop.incidences %}
+                         <tr>
+                            <td>{{ incidence.id }}</td>
+                            <td>{{ incidence.ticket.id }} </td>
+                            <td>{{ incidence.description }} </td>
+                            <td>{{ incidence.solution}}</td>
+                            <td>{{ incidence.owner }}</td>
+                            <td>{{ incidence.status }}</td>
+                            <td>
+                                <a href="{{ path('editIncidence', {'id_incidence':incidence.id}) }}" title="Editar Ticket"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="#" title="Eliminar Incidencia"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ incidence.id }}"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+    {% else %}
+        No hay incidencias!!
+    {% endif %}
+
+{% endblock %}

@@ -3,16 +3,21 @@
 #############################
 
 changeLanguage:
-    pattern: /lang/{lang}
-    defaults: { _controller: UtilBundle:Generic:changeLanguage }
+    pattern: /lang/{lang}/
+    defaults: { _controller: UtilBundle:Language:changeLanguage }
     
 ###########################
-#   APDO. JQUERY - AJAX   #
+#   APDO. AJAX   #
 ###########################
-_select_province:
-    pattern: /_select_province
-    defaults: { _controller: UtilBUndle:Default:_selectProvince }
-
 user_provinces: 
     pattern: /provincesFromRegion
     defaults: { _controller: UtilBundle:Default:provincesFromRegion }
+    
+#############################
+#   APDO. FILE              #
+#############################
+
+upload:
+    pattern: /upload
+    defaults: { _controller: UtilBundle:Document:upload }
+    

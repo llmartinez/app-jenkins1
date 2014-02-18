@@ -1,0 +1,65 @@
+{% extends "TicketBundle:Default:post.html.twig" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listIncidence') }}">List of Incidences</a></li>
+      <li class="active"><a href="{{ path('showIncidence', {'id_incidence': incidence.id}) }}">#{{ incidence.id }}</a> Edit</li>
+    </ol>
+    
+    <div class="tblContainer">
+        <div class="row">
+
+            <div class="col-sm-8 contact-form">
+                <form action="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}" id="contact" class="form" role="form" method="post">
+                    <div class="row">
+                             
+                        <input type="hidden" id="asesor" name="asesor" value="{{ app.security.getToken().getUser().getId() }}">
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Taller <select class="form-control" id="user" name="user"><option value=0>Selecciona Taller..</option>
+                                
+                            {% for user in users %} <option 
+                                                        {% if incidence.ticket.owner == user %} selected="true" {% endif %}
+                                                        value="{{ user.id }}"
+                                                    > {{ user }} </option> 
+                            {% endfor %}
+                                
+                            </select>
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Estado {{ form_widget(form.status, { 'attr': {'class': 'form-control' } }) }}
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Titulo <input type="text" id="title" name="title" class="form-control" value="{{ ticket.title }}">
+                        </div>
+                        
+                        <div class="col-xs-6 col-md-6 form-group">    
+                            Importancia {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        
+                        <div class="btn100">    
+                            Descripcion {{ form_widget(form.description, { 'attr': {'class': 'form-control', 
+                                                                                    'rows': '5'} }) }}
+                        </div>
+                        
+                        <div class="btn100">    
+                            Solucion {{ form_widget(form.solution, { 'attr': { 'class': 'form-control', 
+                                                                               'rows': '5' } }) }}
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 form-group">
+                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                            <a class="btn btn-primary pull-right" href="{{ path('showIncidence', {'id_incidence': incidence.id}) }}">Cancelar</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+{% endblock %}

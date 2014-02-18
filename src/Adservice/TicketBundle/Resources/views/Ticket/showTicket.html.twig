@@ -1,0 +1,40 @@
+{% extends "TicketBundle:Default:ticket.html.twig" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active">#{{ ticket.id }}</li>
+    </ol>
+
+        <div class="tblContainer">
+        <table class="table table-striped table-bordered">
+            <tr>    
+                <td>    
+                {# muestra los botones de edicion y asignacion/desasignacion del asesor #}
+                    {% include 'TicketBundle:Default:includes/_assign_btn.html.twig' %}
+                {# muestra los datos del ticket #}    
+                    {% include 'TicketBundle:Default:includes/_data_ticket.html.twig' %}
+                </td>
+            </tr>
+        </table>
+    </div>    
+    
+    {# mensajes del TICKET #}
+        {% set nPosts = ticket.posts | length%}
+            
+        {% for i in 2..1 %}
+            {% if ticket.posts[nPosts-i] is defined %}
+                {% set post = ticket.posts[nPosts-i] %}
+
+                {# muestra el cuadro del post #}
+                {% include 'TicketBundle:Default:includes/_post.html.twig' %}
+            {% endif %}
+        {% endfor %}   
+
+        <a class='pull-right' href='{{ path('showPost', { 'id_ticket': ticket.id }) }}'>View All ({{ nPosts }})</a>
+        
+        {% include 'TicketBundle:Default:includes/_reply.html.twig' %}
+
+{% endblock %}

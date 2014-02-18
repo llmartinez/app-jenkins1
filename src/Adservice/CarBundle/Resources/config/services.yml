@@ -1,0 +1,7 @@
+parameters:
+#    car.example.class: Adservice\CarBundle\Example
+
+services:
+#    car.example:
+#        class: %car.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,34 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('user_list') }}">List of Users</a></li>
+      <li class="active">Edit User ({{ user }})</li>
+    </ol>
+
+    <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
+
+{% endblock%}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            //si clickamos el combobox de las regiones repoblamos la de las provincias
+            $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').change(function() {
+                var url_ajax = "{{ path("user_provinces") }}";
+                populate_province(url_ajax);
+            });
+        });
+    </script>
+{% endblock %}

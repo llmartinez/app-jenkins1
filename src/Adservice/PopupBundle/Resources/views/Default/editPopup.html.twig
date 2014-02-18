@@ -1,0 +1,18 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('popup_list') }}">List of Popups</a></li>
+      <li class="active">Edit Popup ({{ popup }})</li>
+    </ol>
+
+    <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_widget(form) }}
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
+
+{% endblock%}

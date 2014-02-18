@@ -2,28 +2,52 @@
 #   APDO. RUTAS PARA LOGIN   #
 ##############################
        
-login:
+user_login:
     pattern:  /login
     defaults: { _controller: UserBundle:Login:login }
+    
 
-login_check:
+user_login_check:
     pattern:  /login_check
     defaults: { _controller: UserBundle:Login:login }
     
-logout:
+user_logout:
     pattern:  /logout
     
 ##############################
 #   APDO. RUTAS USER         #
 ##############################
 user_index:
-    pattern: /index
+    pattern: /user/index
     defaults: { _controller: UserBundle:Default:index }
     
 user_profile:
-    pattern: /profile
+    pattern: /user/profile
     defaults: { _controller: UserBundle:Default:profile }
 
+user_list:
+    pattern: /user/list
+    defaults: { _controller: UserBundle:Default:userList }
+    
+user_edit:
+    pattern: /user/edit/{id}
+    defaults: { _controller: UserBundle:Default:editUser }
+
+user_delete:
+    pattern: /user/delete/{id}
+    defaults: { _controller: UserBundle:Default:deleteUser }
+
+user_new:
+    pattern: /user/new/{type}
+    defaults: { _controller: UserBundle:Default:newUser }
+    
+user_select_new:
+    pattern: /user/selectNewUser
+    defaults: { _controller: UserBundle:Default:selectNewUser }
+
+##############################
+#       RUTAS AJAX           #
+##############################
 user_provinces: 
     pattern: /provincesFromRegion
-    defaults: { _controller: UserBundle:Default:provincesFromRegion }
+    defaults: { _controller: UtilBundle:Default:provincesFromRegion }

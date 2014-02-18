@@ -1,3 +1,97 @@
+header.welcome: ADService España
+
+user.index.menu.admin_title:            MENU ADMIN
+user.index.menu.assessor_title:         MENU ASESOR
+user.index.menu.user_title:             MENU USUARIO
+user.index.menu.my_profile:             Mi Perfil
+user.index.menu.list_partners:          Listado de Socios ADService
+user.index.menu.list_users:             Listado de Usuarios ADService
+user.index.menu.list_popups:            Listado de Popups ADService
+user.index.menu.list_workshops:         Listado de Talleres ADService
+user.index.menu.list_incidences:        Listado de Incidencias ADService
+user.index.menu.list_statistics:        Listado de Estadísticas ADService
+user.index.menu.create_incidence_admin: Crear Incidencia como Admin
+user.index.menu.my_tickets:             Mis Tickets
+user.index.menu.my_incidences:          Mis Incidencias
+
+# COMUNES
+home:      Índice
+admin:     Admin
+assessor:  Asesor
+user:      Usuario
+date:      Fecha
+workshop:  Taller
+ticket:    Ticket
+car:       Coche
+post:      Mensajes
+incidence: Incidence
+
+#TICKET
+ticket.history.title:     Historial de Tickets  
+ticket.opt.assigned :     Tickets asignados 
+ticket.opt.not_assigned : Tickets sin asignar          
+ticket.opt.all:           Muestra todos los Tickets            
+ticket.opt.all_open:      Muestra todos los Tickets abiertos         
+ticket.opt.all_closed:    Muestra todos los Tickets cerrados   
+ticket.opt.owner:         Tus tickets             
+ticket.opt.workshop:      Tickets de tu taller
+
+#INCIDENCE
+incidence.history.title:  Historial de Incidencias          
+incidence.opt.all:        Muestra todas las incidencias          
+incidence.opt.owner:      Tus incidencias             
+incidence.opt.workshop:   Incidencias de tu taller    
+incidence.list:           Lista de Incidencias
+
+
+############################
+########### OLD ############
+############################
+#   {% trans %}{% endtrans %}
+
+#PRINCIPAL
+login: Iniciar sesión
+login.title: Acceso usuarios AD Service
+login.check: Recuerdame
+logout: Cerrar sesión
+#HEADER
+index: Home
+newTicket : Nuevo ticket
+ticket: Tickets
+incidence: Incidencias
+
+#TICKET
+  # history
+ticket.history.title: Historial Tickets
+ticket.history.date: Fecha
+ticket.history.workshop: Taller
+ticket.history.ticket: Ticket
+ticket.history.any: No tienes ningun ticket abierto
+
+  #list
+ticket.list.header: Tickets
+ticket.list.new: Nuevo Ticket
+ticket.list.search: Buscar
+ticket.list.open: Abrir
+ticket.list.notaccess: No tienes acceso a este ticket
+ticket.list.notfound: El Ticket que has buscado no existe
+  
+  # new
+ticket.new.header: Nuevo Ticket
+ticket.new.title: Título
+ticket.new.importance: Importancia
+ticket.new.description: Descripción
+ticket.new.submit: Crear Ticket
+  
+#STATUS
+open: Abierto
+closed: Cerrado
+reopened: Reabierto
+
+###############
+#     OLD     #
+###############
+
 # Pantalla principal
 New ticket: Nuevo ticket
 My tickets: Mis tickets
@@ -6,9 +100,6 @@ Select language: Seleccionar idioma
 Logout: Cerrar sesión
 Not logged in: Sessión no iniciada
 Welcome: Bienvenido
-
-# Titulos
-Login: Iniciar sesión
 
 # Login
 Username: Nombre de usuario
