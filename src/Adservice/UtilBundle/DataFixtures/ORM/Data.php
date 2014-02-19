@@ -355,7 +355,8 @@ class Data {
      */
     public static function getPlateNumber($i)
     {
-        return 'T-'.$i.$i.$i.$i.'-TT';
+        ($i < 10) ? $result = 'T-'.$i.$i.$i.$i.'-TT' : $result = 'T-'.$i.$i.'-TT';
+        return $result;
     }
     
     /**

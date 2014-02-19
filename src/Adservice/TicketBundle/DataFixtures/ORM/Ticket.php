@@ -23,7 +23,7 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedBy ($this->getReference($entidad->getOwner()->getUserName()));
             $entidad->setWorkshop   ($this->getReference($entidad->getOwner()->getWorkshop()->getName()));
             $entidad->setAssignedTo ($this->getReference(Data::getAssessor()));
-            $entidad->setImportance ('1');
+            $entidad->setImportance (1);
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
             $entidad->setTitle      ('Test n.'.$i);

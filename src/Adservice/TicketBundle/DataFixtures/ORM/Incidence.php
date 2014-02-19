@@ -25,7 +25,7 @@ class Incidences extends AbstractFixture implements OrderedFixtureInterface {
                 $entidad->setOwner      ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
                 $entidad->setWorkshop   ($this->getReference($entidad->getTicket()->getWorkshop()->getName()));
                 $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
-                $entidad->setImportance ('1');
+                $entidad->setImportance (1);
                 $entidad->setDescription(Data::getDescription($i));
                 $entidad->setSolution   (Data::getSolution($i));
                 $entidad->setCreatedAt  (new \DateTime());
