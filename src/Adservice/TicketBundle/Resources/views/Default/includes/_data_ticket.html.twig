@@ -5,7 +5,7 @@
     <p> <label>Date:         </label> {{ ticket.createdAt | date("d-m-Y") }}  ( {{ ticket.status }} ) </p>
 
     <p> <label>Workshop:     </label> {{ ticket.workshop }}         </p>
-    <p> <label>Required by:  </label> {{ ticket.owner    }}         </p>
+    <p> <label>Required by:  </label> {{ ticket.owner.username | upper }}: {{ ticket.owner    }}            </p>
 
     <p> <label>Car:          </label> {{ ticket.car.version.model.brand }} 
                                       {{ ticket.car.version.model }} 

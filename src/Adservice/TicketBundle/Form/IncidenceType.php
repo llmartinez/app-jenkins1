@@ -10,7 +10,7 @@ class IncidenceType extends AbstractType
     {
         $builder
                 ->add('status')
-                ->add('importance')
+                ->add('importance', 'text')
                 ->add('description', 'textarea')
                 ->add('solution', 'textarea')
                 ;

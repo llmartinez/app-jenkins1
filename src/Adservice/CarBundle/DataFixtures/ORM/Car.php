@@ -14,17 +14,17 @@ class Cars  extends AbstractFixture implements OrderedFixtureInterface {
     
     public function load(ObjectManager $manager) 
     {
-        $num = Data::getNum();
+        $num = Data::getNumTickets();
         
         for($i=1;$i<=$num;$i++)
         {
             $entidad = new Car();
             $entidad->setVersion    ($this->getReference(Data::getVersion()));
-            $entidad->setOwner      ($this->getReference('user'.$i));
-            $entidad->setModifiedBy ($this->getReference('user'.$i));
+            $entidad->setOwner      ($this->getReference(Data::getUser()));
+            $entidad->setModifiedBy ($this->getReference(Data::getUser()));
             $entidad->setYear       (Data::getYear());
             $entidad->setVin        (Data::getVin());
-            $entidad->setPlateNumber('T-'.$i.$i.$i.$i.'-TT');
+            $entidad->setPlateNumber(Data::getPlateNumber($i));
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
             $manager->persist($entidad);
