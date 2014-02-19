@@ -21,8 +21,22 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCar        ($this->getReference(Data::getPlateNumber($i)));
             $entidad->setOwner      ($this->getReference(Data::getUser()));
             $entidad->setModifiedBy ($this->getReference($entidad->getOwner()->getUserName()));
-            $entidad->setWorkshop   ($this->getReference($entidad->getOwner()->getWorkshop()->getName()));
-            $entidad->setAssignedTo ($this->getReference(Data::getAssessor()));
+            $userWorkshop = $entidad->getOwner()->getWorkshop()->getName();
+            $entidad->setWorkshop   ($this->getReference($userWorkshop));
+            
+            $assessor=$this->getReference(Data::getAssessor());
+            $res=0;
+            while ($res != 1) {
+                foreach ($assessor->getPartner()->getWorkshops() as $workshop) {
+                    
+                    if($workshop->getName() == $userWorkshop){
+                        $entidad->setAssignedTo($assessor);
+                        $res=1;
+                    }else{
+                        $assessor=$this->getReference(Data::getAssessor());
+                    }
+                }
+            }
             $entidad->setImportance (1);
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
