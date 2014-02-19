@@ -5,11 +5,11 @@
     <property name="sourcedir" value="${basedir}/src" />
     <property name="builddir"  value="${workspace}/app/build" />
 
-<!--    <target name="build" 
-                depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
+    <!--    <target name="build" 
+    depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
     
-     <target name="build"            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
-     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+    <target name="build"            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -42,6 +42,38 @@
         <mkdir dir="${builddir}/logs"/>
         <mkdir dir="${builddir}/pdepend"/>
         <mkdir dir="${builddir}/docs/"/>
+        
+        <exec executable="app/console">
+            <arg value="doctrine:database:drop" />
+            <arg value="-n" />
+            <arg value="--force" />
+        </exec>
+        
+        <exec executable="app/console">
+            <arg value="doctrine:database:create" />
+            <arg value="-n" />
+        </exec>
+        
+        <exec executable="app/console">
+            <arg value="doctrine:schema:update" />
+            <arg value="-n" />
+            <arg value="--complete" />
+            <arg value="--force" />
+        </exec>
+        <exec executable="app/console">
+            <arg value="assetic:dump" />
+            <arg value="-n" />
+            <arg value="--env=prod" />
+            <arg value="--no-debug" />
+        </exec>
+        <exec executable="app/console">
+            <arg value="assets:install" />
+            <arg value="-n" />
+            <arg value="--env=prod" />
+            <arg value="--no-debug" />
+            <arg value="web" />
+        </exec>
+        
     </target>
 
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
