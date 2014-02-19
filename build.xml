@@ -47,7 +47,7 @@
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
     <target name="parameters" description="Copy parameters">
         <exec executable="cp" failonerror="true">
-            <arg path="app/config/parameters.ini.dist" />
+            <arg path="app/config/parameters_test.ini.dist" />
             <arg path="app/config/parameters.ini" />
         </exec>
     </target>

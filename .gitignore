@@ -12,7 +12,7 @@ web/js/*
 web/uploads/*
 
 # -- Scripts para la carga de schema y fixtures -------
-# data/scripts*
+# -- data/scripts
 
 # -- Composer -----------------------------------------
 composer.phar
