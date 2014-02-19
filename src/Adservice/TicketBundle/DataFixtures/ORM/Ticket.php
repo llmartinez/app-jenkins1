@@ -8,7 +8,7 @@ use Adservice\TicketBundle\Entity\Ticket;
 
 class Tickets extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 17; }
+    public function getOrder(){ return 41; }
     
     public function load(ObjectManager $manager) {
         $tickets = array(
@@ -25,7 +25,7 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
                  ),
             array(  'status'      => 'open'             ,     
                     'workshop'    => 'workshop1'        ,
-                    'car'         => 'T-1111-TT'        ,
+                    'car'         => 'T-2222-TT'        ,
                     'owner'       => 'user1'            ,
                     'modified_by' => 'user1'            ,
                     'assigned_to' => 'assessor1'        ,

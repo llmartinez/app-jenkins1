@@ -8,7 +8,7 @@ use Adservice\WorkshopBundle\Entity\Typology;
 
 class Typologies extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 8; }
+    public function getOrder(){ return 13; }
     
     public function load(ObjectManager $manager) {
         $typologies = array(

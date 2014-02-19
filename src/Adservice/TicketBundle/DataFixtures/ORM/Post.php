@@ -8,7 +8,7 @@ use Adservice\TicketBundle\Entity\Post;
 
 class Posts extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 18; }
+    public function getOrder(){ return 42; }
     
     public function load(ObjectManager $manager) {
         $posts = array(
