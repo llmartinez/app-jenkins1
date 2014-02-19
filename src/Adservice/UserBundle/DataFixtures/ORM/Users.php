@@ -9,7 +9,7 @@ use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Users extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 11; }
+    public function getOrder(){ return 22; }
     
     public function load(ObjectManager $manager) {
         $type = 'user';
@@ -18,7 +18,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
         $partner = null;
         $workshop = 'workshop';
         $role = 'ROLE_USER';
-        $num = 3;
+        $num = Data::getNum();
         
         $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $partner, $workshop, $role, $num);
     }
@@ -31,10 +31,10 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setUsername   ($type.$i);
             $entidad->setPassword   ($pass);
             $entidad->setSalt       ($salt);
-            $entidad->setName       ($type);
-            $entidad->setSurname    ($i);
+            $entidad->setName       (Data::getName());
+            $entidad->setSurname    (Data::getSurname());
             $entidad->setEmail1     ('test'.$i.'@'.$type.'.es');
-            $entidad->setDni        ($i.$i.$i.$i.$i.$i.$i.$i.'T');
+            $entidad->setDni        (Data::getDNI());
             $entidad->setActive     ('1');
             $entidad->setRegion     ($_this->getReference(Data::getRegions()));
             $entidad->setProvince   ($_this->getReference(Data::getProvinces()));

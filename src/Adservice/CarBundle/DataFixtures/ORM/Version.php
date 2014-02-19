@@ -8,7 +8,7 @@ use Adservice\CarBundle\Entity\Version;
 
 class Versions  extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 15; }
+    public function getOrder(){ return 32; }
     
     public function load(ObjectManager $manager) {
         $versions = array(

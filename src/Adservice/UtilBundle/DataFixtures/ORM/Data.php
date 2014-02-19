@@ -4,6 +4,22 @@ namespace Adservice\UtilBundle\DataFixtures\ORM;
 
 class Data {
     /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNum()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return 3;
+    }
+    
+/*********************************************************************
+ * GENERADOR VALORES USUARIO
+ **********************************************************************/
+
+
+    /**
      * Generador aleatorio de lenguajes.
      *
      * @return string Language aleatorio generado para el usuario.
@@ -65,7 +81,7 @@ class Data {
      *
      * @return string Nombre aleatorio generado para el usuario.
      */
-    public static function getNombre()
+    public static function getName()
     {
         // Los nombres más populares en España según el INE
         // Fuente: http://www.ine.es/daco/daco42/nombyapel/nombyapel.htm
@@ -97,7 +113,7 @@ class Data {
      *
      * @return string Apellido aleatorio generado para el usuario.
      */
-    private function getApellidos()
+    public static function getSurname()
     {
         // Los apellidos más populares en España según el INE
         // Fuente: http://www.ine.es/daco/daco42/nombyapel/nombyapel.htm
@@ -118,10 +134,9 @@ class Data {
     /**
      * Generador aleatorio de direcciones postales.
      *
-     * @param  Ciudad $ciudad Objeto de la ciudad para la que se genera una dirección postal.
-     * @return string         Dirección postal aleatoria generada para la tienda.
+     * @return string         Dirección aleatoria generada para el usuario.
      */
-    private function getDireccion()
+    public static function getDirection()
     {
         $prefijos = array('Calle', 'Avenida', 'Plaza');
         $nombres = array(
@@ -130,17 +145,123 @@ class Data {
             'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit'
         );
 
-        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
-               .$this->getCodigoPostal();
+        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100);
     }
 
     /**
      * Generador aleatorio de códigos postales
      *
-     * @return string Código postal aleatorio generado para la tienda.
+     * @return string Código postal aleatorio generado para el usuario.
      */
-    private function getCodigoPostal()
+    public static function getDNI()
     {
-        return sprintf('%02s%03s', rand(1, 52), rand(0, 999));
+        return sprintf('%08s', rand(10000000, 99999999)).'T';
     }
+
+    /**
+     * Generador aleatorio de códigos postales
+     *
+     * @return string Código postal aleatorio generado para el usuario.
+     */
+    public static function getPostalCode()
+    {
+        return sprintf('%02s%03s', rand(10, 52), rand(100, 999));
+    }
+
+    /**
+     * Generador aleatorio de telefonos
+     *
+     * @return string Phone aleatorio generado para el usuario.
+     */
+    public static function getPhone()
+    {
+        return sprintf('%09s', rand(100000000, 999999999));
+    }
+    
+    
+/*********************************************************************
+ * GENERADOR VALORES COCHE
+ **********************************************************************/
+    
+    /**
+     * Generador aleatorio de versiones de coches
+     *
+     * @return string Version aleatorio generado para el coche.
+     */
+    public static function getVersion()
+    {
+        $versions = array(
+            '1.8_TURBO', '1.9D TDI-IB', '1.8 TURBO', 
+            '1.9D TDI - IB', '2.0 - E 200 D', '3.2 - E 320'
+        );
+        return $versions[array_rand($versions)];
+    }
+
+    /**
+     * Generador aleatorio de matriculas
+     *
+     * @return string PlateNumber aleatorio generado para el coche.
+     */
+    public static function getPlateNumber()
+    {
+        return 'T-'.sprintf('%04s', rand(0000), rand(9999)).'-TT';
+    }
+    
+    /**
+     * Generador aleatorio de vin de coches
+     *
+     * @return integer Vin aleatorio generado para el coche.
+     */
+    public static function getVin()
+    {
+        return rand(10000000000000000, 99999999999999999);
+    }
+
+    /**
+     * Generador aleatorio de año de los coches
+     *
+     * @return string Year aleatorio generado para el coche.
+     */
+    public static function getYear()
+    {
+        return sprintf('%4s', rand(1900, 2010));
+    }
+
+        
+/*********************************************************************
+ * GENERADOR VALORES TICKET
+ **********************************************************************/
+    
+    /**
+     * Generador aleatorio de estado del ticket
+     *
+     * @return string Status aleatorio generado para el ticket.
+     */
+    public static function getStatus()
+    {
+        $status = array(
+            'open', 'closed'
+        );
+        return $status[array_rand($status)];
+    }
+    
+/*********************************************************************
+ * GENERADOR VALORES SYSTEM
+ **********************************************************************/
+    /**
+     * Generador aleatorio de sistema de las incidencias
+     *
+     * @return string System aleatorio generado para la incidencia.
+     */
+//    public static function getSystem()
+//    {
+//        $system = array(
+//            'CARROCERÍA','CONFORT','DIRECCION','ELECTRICIDAD','FRENOS',
+//            'MOTOR DIESEL','MOTOR GASOLINA','PROGRAMACION Y CODIFICACION',
+//            'SEGURIDAD','SUSPENSION','TRANSMISION','VARIOS'
+//        );
+//        return $system[array_rand($system)];
+//    }
+    
+    
 }

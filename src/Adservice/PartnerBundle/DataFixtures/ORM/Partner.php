@@ -9,20 +9,22 @@ use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Partners extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 6; }
+    public function getOrder(){ return 12; }
     
     public function load(ObjectManager $manager) {
-        for($i=1;$i<5;$i++)
+        $num = Data::getNum();
+        
+        for($i=1;$i<=$num;$i++)
         {
             $entidad = new Partner(); 
             $entidad->setName('partner'.$i);
-            $entidad->setPhoneNumber1($i.$i.$i.$i.$i.$i.$i.$i.$i);
-            $entidad->setPhoneNumber2($i.$i.$i.$i.$i.$i.$i.$i.$i+1);
-            $entidad->setFax($i.$i.$i.$i.$i.$i.$i.$i.$i+2);
+            $entidad->setPhoneNumber1(Data::getPhone());
+            $entidad->setPhoneNumber2(Data::getPhone());
+            $entidad->setFax(Data::getPhone());
             $entidad->setEmail1('partner'.$i.'@partner.es');
             $entidad->setEmail2('partner'.$i.'@partner.com');
-            $entidad->setAddress(Data::getDireccion());
-            $entidad->setPostalCode(Data::getCodigoPostal());
+            $entidad->setAddress(Data::getDirection());
+            $entidad->setPostalCode(Data::getPostalCode());
             $entidad->setActive('1');
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());

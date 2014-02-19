@@ -8,7 +8,7 @@ use Adservice\SystemBundle\Entity\Subsystem;
 
 class SubSystems extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 20; }
+    public function getOrder(){ return 44; }
     
     public function load(ObjectManager $manager) {
         $subsystems = array(

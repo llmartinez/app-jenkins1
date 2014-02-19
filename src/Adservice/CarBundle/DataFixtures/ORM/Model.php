@@ -8,7 +8,7 @@ use Adservice\CarBundle\Entity\Model;
 
 class Models  extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 14; }
+    public function getOrder(){ return 31; }
     
     public function load(ObjectManager $manager) {
         $models = array(

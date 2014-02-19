@@ -8,7 +8,7 @@ use Adservice\UserBundle\Entity\Role;
 
 class Roles extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 4; }
+    public function getOrder(){ return 10; }
     
     public function load(ObjectManager $manager) {
         $roles = array(
