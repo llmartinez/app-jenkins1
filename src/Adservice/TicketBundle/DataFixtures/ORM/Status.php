@@ -8,7 +8,7 @@ use Adservice\TicketBundle\Entity\Status;
 
 class States extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 12; }
+    public function getOrder(){ return 40; }
     
     public function load(ObjectManager $manager) {
         $states = array(

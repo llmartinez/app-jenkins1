@@ -8,7 +8,7 @@ use Adservice\TicketBundle\Entity\Incidence;
 
 class Incidences extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 21; }
+    public function getOrder(){ return 45; }
     
     public function load(ObjectManager $manager) {
         $incidences = array(

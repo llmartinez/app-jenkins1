@@ -5,11 +5,12 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\UserBundle\Entity\User;
+use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 
 class Admins extends AbstractFixture implements OrderedFixtureInterface {
     
-    public function getOrder(){ return 7; }
+    public function getOrder(){ return 20; }
     
     public function load(ObjectManager $manager) {
         $type = 'admin';
@@ -18,7 +19,7 @@ class Admins extends AbstractFixture implements OrderedFixtureInterface {
         $partner = 'partner';
         $workshop = null;
         $role = 'ROLE_ADMIN';
-        $num = 3;
+        $num = Data::getNum();
         
         $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $partner, $workshop, $role, $num);
     }
