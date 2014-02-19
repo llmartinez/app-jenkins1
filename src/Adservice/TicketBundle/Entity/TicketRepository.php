@@ -12,12 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
-    
+   
     public function findAllOpen($user, $status)
     {
         $workshops = $user->getPartner()->getWorkshops();
         foreach ($workshops as $workshop) {
-            $tickets = $this->findBy(array('status' => $status->getId(),
+            $tickets = $this->findBy(array('status' => $status,
                                            'workshop' => $workshop->getId()));
             if ($tickets != null) return $tickets;
         }

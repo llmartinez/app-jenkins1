@@ -13,7 +13,8 @@ class Brands  extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
         $brands = array(
             array('name' => 'AUDI'          , 'idTecDoc' => '5'  ),
-            array('name' => 'MERCEDES BENZ' , 'idTecDoc' => '74' )
+            array('name' => 'MERCEDES BENZ' , 'idTecDoc' => '74' ),
+            array('name' => 'SEAT'          , 'idTecDoc' => '104'  ),
 
         );
         foreach ($brands as $brand) {

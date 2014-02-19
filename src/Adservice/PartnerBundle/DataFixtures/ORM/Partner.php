@@ -12,7 +12,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
     public function getOrder(){ return 12; }
     
     public function load(ObjectManager $manager) {
-        $num = Data::getNum();
+        $num = Data::getNumPartners();
         
         for($i=1;$i<=$num;$i++)
         {
@@ -36,7 +36,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $this->addReference($entidad->getName(), $entidad);
         }
         $sa = $this->getReference('superadmin');
-        $sa->setPartner($this->getReference('partner1'));
+        $sa->setPartner($this->getReference(Data::getPartner()));
         $manager->persist($sa);
         $manager->flush();
     }

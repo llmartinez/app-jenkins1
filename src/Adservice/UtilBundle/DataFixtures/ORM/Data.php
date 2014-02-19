@@ -3,22 +3,96 @@
 namespace Adservice\UtilBundle\DataFixtures\ORM;
 
 class Data {
+    
+    /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
+    private static $numAdmins    = 3;
+    private static $numAssessors = 5;
+    private static $numUsers     = 5;
+    private static $numPartners  = 3;
+    private static $numWorkshops = 5;
+    private static $numTickets   = 10;
+    private static $numPosts     = 4;
+    
     /**
      * Devuelve el numero de entidades por clase que se crearan.
      *
      * @return integer $num
      */
-    public static function getNum()
+    public static function getNumAdmins()
     {
         // Numero de entidades por clase de la aplicacion
-        return 3;
+        return Data::$numAdmins;
+    }
+    /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumAssessors()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return Data::$numAssessors;
+    }
+    /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumUsers()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return Data::$numUsers;
+    }
+    
+    /**
+     * Devuelve el numero de partners por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumPartners()
+    {
+        // Numero de partners por clase de la aplicacion
+        return Data::$numPartners;
+    }
+    
+    /**
+     * Devuelve el numero de workshops por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumWorkshops()
+    {
+        // Numero de workshops por clase de la aplicacion
+        return Data::$numWorkshops;
+    }
+    
+    /**
+     * Devuelve el numero de tickets por clase que se crearan.
+     * Se utiliza tambien en Coches e Incidencias, ya que deben tener el mismo valor
+     *
+     * @return integer $num
+     */
+    public static function getNumTickets()
+    {
+        // Numero de tickets por clase de la aplicacion
+        return Data::$numTickets;
+    }
+    
+    /**
+     * Devuelve el numero maximo de posts por ticket que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumPosts()
+    {
+        // Numero maximo de posts por ticket de la aplicacion
+        return Data::$numPosts;
     }
     
 /*********************************************************************
- * GENERADOR VALORES USUARIO
+ * GENERADOR VALORES UTIL 
  **********************************************************************/
-
-
+    
     /**
      * Generador aleatorio de lenguajes.
      *
@@ -73,6 +147,82 @@ class Data {
         $provinces = array('Barcelona', 'Tarragona', 'Lleida', 'Girona', 'Madrid ','Sta. Cruz de Tenerife' );
 
         return $provinces[array_rand($provinces)];
+    }
+    
+/*********************************************************************
+ * GENERADOR VALORES PARTNER 
+ **********************************************************************/
+    
+    /**
+     * Generador aleatorio de partners 
+     *
+     * @return string Partner aleatorio.
+     */
+    public static function getPartner()
+    {
+        return 'partner'.rand(1, Data::getNumPartners());
+    }
+    
+/*********************************************************************
+ * GENERADOR VALORES WORKSHOP 
+ **********************************************************************/
+    
+    /**
+     * Generador aleatorio de tipologias.
+     *
+     * @return string Typologies aleatorio generado para el usuario.
+     */
+    public static function getTypologies()
+    {
+        // Las tipologias soportadas por la aplicación
+        
+        $typologies = array('Autoservice AD', 'Garage AD', 'Carrosserie AD');
+
+        return $typologies[array_rand($typologies)];
+    }
+    
+    /**
+     * Generador aleatorio de workshops 
+     *
+     * @return string Workshop aleatorio.
+     */
+    public static function getWorkshop()
+    {
+        return 'workshop'.rand(1, Data::getNumWorkshops());
+    }
+    
+/*********************************************************************
+ * GENERADOR VALORES USUARIO
+ **********************************************************************/
+
+    
+    /**
+     * Generador aleatorio de admins 
+     *
+     * @return string Admin aleatorio.
+     */
+    public static function getAdmin()
+    {
+        return 'admin'.rand(1, Data::getNumAdmins());
+    }
+    
+    /**
+     * Generador aleatorio de assessors 
+     *
+     * @return string Assessor aleatorio.
+     */
+    public static function getAssessor()
+    {
+        return 'assessor'.rand(1, Data::getNumAssessors());
+    }
+    /**
+     * Generador aleatorio de users 
+     *
+     * @return string User aleatorio.
+     */
+    public static function getUser()
+    {
+        return 'user'.rand(1, Data::getNumUsers());
     }
     
     /**
@@ -192,7 +342,8 @@ class Data {
     {
         $versions = array(
             '1.8_TURBO', '1.9D TDI-IB', '1.8 TURBO', 
-            '1.9D TDI - IB', '2.0 - E 200 D', '3.2 - E 320'
+            '1.9D TDI - IB', '2.0 - E 200 D', '3.2 - E 320',
+            '1.2 12V', '1.4 16V', '1.9D SDI'
         );
         return $versions[array_rand($versions)];
     }
@@ -202,9 +353,9 @@ class Data {
      *
      * @return string PlateNumber aleatorio generado para el coche.
      */
-    public static function getPlateNumber()
+    public static function getPlateNumber($i)
     {
-        return 'T-'.sprintf('%04s', rand(0000), rand(9999)).'-TT';
+        return 'T-'.$i.$i.$i.$i.'-TT';
     }
     
     /**
@@ -224,7 +375,7 @@ class Data {
      */
     public static function getYear()
     {
-        return sprintf('%4s', rand(1900, 2010));
+        return sprintf('%4s', rand(1990, 2010));
     }
 
         
@@ -243,6 +394,59 @@ class Data {
             'open', 'closed'
         );
         return $status[array_rand($status)];
+    }
+    
+    /**
+     * Generador aleatorio del titulo del ticket
+     *
+     * @return string Title aleatorio generado para el ticket.
+     */
+    public static function getTicketTitle($i)
+    {
+        return 'Test n.'.$i;
+    }
+    
+    /**
+     * Generador aleatorio del post del ticket
+     *
+     * @return string Post aleatorio generado para el ticket.
+     */
+    public static function getPostMessage($i, $j)
+    {
+        return 'Post n.'.$j.' del ticket n.'.$i;
+    }
+    
+    /**
+     * Generador aleatorio del dueño del post
+     *
+     * @return string Owner aleatorio generado para el post.
+     */
+    public static function getPostOwner($entidad)
+    {
+        if (rand() % 2) {
+            return $entidad->getTicket()->getOwner()->getUserName();
+        } else {
+            return $entidad->getTicket()->getAssignedTo()->getUserName();
+        }
+    }
+    /**
+     * Generador aleatorio de la descripcion de la incidencia
+     *
+     * @return string Description aleatorio generado para la incidencia.
+     */
+    public static function getDescription($i)
+    {
+        return 'Descipcion de la incidencia n.'.$i;
+    }
+    
+    /**
+     * Generador aleatorio de la solucion de la incidencia.
+     *
+     * @return string Solution aleatorio generado para la incidencia.
+     */
+    public static function getSolution($i)
+    {
+        return 'Solucion de la incidencia n.'.$i;
     }
     
 /*********************************************************************

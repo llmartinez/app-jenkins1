@@ -13,8 +13,7 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
     
     public function load(ObjectManager $manager) {
         
-        $typologies = array('Autoservice AD', 'Garage AD', 'Carrosserie AD');
-        $num = Data::getNum();    
+        $num = Data::getNumWorkshops();    
         
         for($i=1;$i<=$num;$i++) 
         {
@@ -31,8 +30,8 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
             $entidad->setModifyBy($this->getReference('superadmin'));
-            $entidad->setPartner($this->getReference('partner'.$i));
-            $entidad->setTypology($this->getReference($typologies[$i-1]));
+            $entidad->setPartner($this->getReference(Data::getPartner()));
+            $entidad->setTypology($this->getReference(Data::getTypologies()));
             $manager->persist($entidad);
             
             $this->addReference($entidad->getName(), $entidad);

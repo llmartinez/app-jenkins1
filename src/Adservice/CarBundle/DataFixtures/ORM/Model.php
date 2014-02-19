@@ -12,10 +12,10 @@ class Models  extends AbstractFixture implements OrderedFixtureInterface {
     
     public function load(ObjectManager $manager) {
         $models = array(
-            array('name' => 'A3'           , 'brand' => 'AUDI'          , 'idTecDoc' => '4955'  ),
-            array('name' => 'A4'           , 'brand' => 'AUDI'          , 'idTecDoc' => '5376'  ),
-            array('name' => '210_CLASE_E'  , 'brand' => 'MERCEDES BENZ' , 'idTecDoc' => '1314'  ),
-
+            array('name' => 'A3'             , 'brand' => 'AUDI'          , 'idTecDoc' => '4955'  ),
+            array('name' => 'A4'             , 'brand' => 'AUDI'          , 'idTecDoc' => '5376'  ),
+            array('name' => '210_CLASE_E'    , 'brand' => 'MERCEDES BENZ' , 'idTecDoc' => '1314'  ),
+            array('name' => 'CORDOBA - 6L2'  , 'brand' => 'SEAT'          , 'idTecDoc' => '4961'  ),
         );
         foreach ($models as $model) {
             $entidad = new Model();
