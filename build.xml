@@ -45,11 +45,11 @@
         <mkdir dir="${builddir}/logs"/>
         <mkdir dir="${builddir}/pdepend"/>
         <mkdir dir="${builddir}/docs/"/>
+
         
-        <exec executable="app/console">
-            <arg value="doctrine:database:drop" />
-            <arg value="-n" />
-            <arg value="--force" />
+                <!-- create db and load fixtures -->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:database:drop --env=test --force"/>
         </exec>
         
     </target>
