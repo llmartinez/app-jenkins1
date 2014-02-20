@@ -48,20 +48,13 @@
 
         
         <exec executable="php" failonerror="true">
-            <arg line="app/console cache:clear --env=test"/>
+            <arg line="app/console cache:clear"/>
         </exec>
         
-        <!-- create db and load fixtures -->
-        <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:database:drop --force"/>
-        </exec>
-        
-        <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:database:create"/>
-        </exec>
-        
-        <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:schema:create"/>
+        <exec executable="app/console">
+            <arg value="doctrine:database:drop" />
+            <!--<arg value="-n" />-->
+            <arg value="--force" />
         </exec>
         
         
