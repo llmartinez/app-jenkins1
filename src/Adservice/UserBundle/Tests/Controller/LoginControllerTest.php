@@ -1,11 +1,11 @@
 <?php
 
-namespace Adservice\UserBundle\Tests\Controller;
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Adservice\UserBundle\Entity\User;
-
-class LoginControllerTest extends WebTestCase {
+//namespace Adservice\UserBundle\Tests\Controller;
+//
+//use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+//use Adservice\UserBundle\Entity\User;
+//
+//class LoginControllerTest extends WebTestCase {
 
 //    protected $client;
 //
@@ -120,4 +120,4 @@ class LoginControllerTest extends WebTestCase {
 //        );
 //        return $client;
 //    }
-}
+//}

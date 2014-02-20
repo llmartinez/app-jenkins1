@@ -1,13 +1,13 @@
 <?php
 
-namespace Adservice\TicketBundle\Tests\Controller;
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Adservice\TicketBundle\Entity\Ticket;
-
-class TicketControllerTest extends WebTestCase
-{    
-    public function testLoadNewTicket() {
+//namespace Adservice\TicketBundle\Tests\Controller;
+//
+//use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+//use Adservice\TicketBundle\Entity\Ticket;
+//
+//class TicketControllerTest extends WebTestCase
+//{    
+//    public function testLoadNewTicket() {
 //        $client = static::createClient();
 //        $crawler = $client->request('GET', '/es/ticket/');
 //        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
@@ -18,8 +18,8 @@ class TicketControllerTest extends WebTestCase
 //            '/.*\/..\/login_check/', $crawler->filter('form')->attr('action'), 
 //            'El usuario anónimo ve el formulario de login'
 //        );
-    }
-    
+//    }
+//    
 //    public function testLogin() {
 //        $client = static::createClient();
 //        $client->followRedirects(true);
@@ -48,4 +48,4 @@ class TicketControllerTest extends WebTestCase
 //                'El usuario se ha registrado correctamente y sus datos se han guardado en la base de datos'
 //        );
 //    }
-}
+//}

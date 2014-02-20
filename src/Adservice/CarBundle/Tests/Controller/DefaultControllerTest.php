@@ -9,10 +9,10 @@ class DefaultControllerTest extends \PHPUnit_Framework_TestCase
 {        
 //    private $validator;
         
-    protected function setUp() {
-        parent::setUp();
+//    protected function setUp() {
+//        parent::setUp();
 //        $this->validator = ValidatorFactory::buildDefault()->getValidator();
-    }
+//    }
     
     public function testIsTrue(){
         $this->assertTrue(true);
