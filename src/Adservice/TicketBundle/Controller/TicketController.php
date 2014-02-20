@@ -380,15 +380,16 @@ class TicketController extends Controller {
         $petition = $this->getRequest();
 
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
-        $option = $petition->request->get('option');
-        $user = $this->get('security.context')->getToken()->getUser();
-        $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
-        $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
+        $option     = $petition->request->get('option');
+        $user       = $this->get('security.context')->getToken()->getUser();
+        $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
+        $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
-        //Admin
+        //SuperAdmin
         if ($option == 'all'       ) $tickets = $repoTicket->findAll();
-        if ($option == 'all_open'  ) $tickets = $repoTicket->findAll($user, $open);
-        if ($option == 'all_closed') $tickets = $repoTicket->findAll($user, $closed);
+        //Admin
+        if ($option == 'all_open'  ) $tickets = $repoTicket->findAllOpen($user, $open);
+        if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed);
         //Assessor
         if ($option == 'assign'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 0);
         if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1);

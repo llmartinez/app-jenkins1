@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
-    
+   
     public function findAllOpen($user, $status)
     {
         $workshops = $user->getPartner()->getWorkshops();

@@ -5,48 +5,42 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\TicketBundle\Entity\Ticket;
+use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Tickets extends AbstractFixture implements OrderedFixtureInterface {
     
     public function getOrder(){ return 41; }
     
     public function load(ObjectManager $manager) {
-        $tickets = array(
-            array(  'status'      => 'closed'           ,     
-                    'workshop'    => 'workshop1'        ,
-                    'car'         => 'T-1111-TT'        ,
-                    'owner'       => 'user1'            ,
-                    'modified_by' => 'user1'            ,
-                    'assigned_to' => 'assessor1'        ,
-                    'importance'  => '1'                ,
-                    'created_at'  => new \DateTime()    ,
-                    'modified_at' => new \DateTime()    ,
-                    'title'       => 'Fallo al frenar'  ,
-                 ),
-            array(  'status'      => 'open'             ,     
-                    'workshop'    => 'workshop1'        ,
-                    'car'         => 'T-2222-TT'        ,
-                    'owner'       => 'user1'            ,
-                    'modified_by' => 'user1'            ,
-                    'assigned_to' => 'assessor1'        ,
-                    'importance'  => '1'                ,
-                    'created_at'  => new \DateTime()    ,
-                    'modified_at' => new \DateTime()    ,
-                    'title'       => 'Fugas de refrigeración'  ,
-                 ),
-        );
-        foreach ($tickets as $ticket) {
+        $num = Data::getNumTickets();
+        
+        for($i=1;$i<=$num;$i++)
+        {
             $entidad = new Ticket();
-            $entidad->setStatus     ($this->getReference($ticket['status']));
-            $entidad->setWorkshop   ($this->getReference($ticket['workshop']));
-            $entidad->setCar        ($this->getReference($ticket['car']));
-            $entidad->setOwner      ($this->getReference($ticket['owner']));
-            $entidad->setModifiedBy ($this->getReference($ticket['modified_by']));
-            $entidad->setAssignedTo ($this->getReference($ticket['assigned_to']));
-            $entidad->setImportance ($ticket['importance']);
-            $entidad->setCreatedAt  ($ticket['created_at']);
-            $entidad->setModifiedAt ($ticket['modified_at']);
-            $entidad->setTitle      ($ticket['title']);
+            $entidad->setStatus     ($this->getReference(Data::getStatus()));
+            $entidad->setCar        ($this->getReference(Data::getPlateNumber($i)));
+            $entidad->setOwner      ($this->getReference(Data::getUser()));
+            $entidad->setModifiedBy ($this->getReference($entidad->getOwner()->getUserName()));
+            $userWorkshop = $entidad->getOwner()->getWorkshop()->getName();
+            $entidad->setWorkshop   ($this->getReference($userWorkshop));
+            
+            $assessor=$this->getReference(Data::getAssessor());
+            $res=0;
+            while ($res != 1) {
+                foreach ($assessor->getPartner()->getWorkshops() as $workshop) {
+                    
+                    if($workshop->getName() == $userWorkshop){
+                        $entidad->setAssignedTo($assessor);
+                        $res=1;
+                    }else{
+                        $assessor=$this->getReference(Data::getAssessor());
+                    }
+                }
+            }
+            $entidad->setImportance (1);
+            $entidad->setCreatedAt  (new \DateTime());
+            $entidad->setModifiedAt (new \DateTime());
+            $entidad->setTitle      ('Test n.'.$i);
             $manager->persist($entidad);
             
             $this->addReference($entidad->getTitle(), $entidad);
