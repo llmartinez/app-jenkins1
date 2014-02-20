@@ -51,8 +51,9 @@
             <arg line="app/console cache:clear"/>
         </exec>
         
-        <exec executable="app/console">
-            <arg value="doctrine:database:drop --force" />
+        <exec executable="php">
+            <arg line="app/console doctrine:database:drop" />
+            <arg value="--force" />
         </exec>
         
         
