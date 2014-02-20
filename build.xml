@@ -44,16 +44,12 @@
         <mkdir dir="${builddir}/docs/"/>
         
         <exec executable="php" failonerror="true">
-            <arg line="app/console cache:clear --env=test"/>
+            <arg line="app/console cache:clear"/>
+            <arg value="--env=test" />
         </exec>
         
-        <exec executable="app/console">
-            <arg value="doctrine:schema:update " />
-            <arg value="-n" />
-            <arg value="--env=test" />
-            <arg value="--complete" />
-            <arg value="--force" />
-        </exec>
+        <!--DROP DATABASE HERE-->
+        <!--SCHEMA UPDATE HERE-->
         
         <exec executable="app/console">
             <arg value="assetic:dump" />
