@@ -52,7 +52,7 @@
         </exec>
         
         <exec executable="app/console">
-            <arg value="doctrine:database:drop" />
+            <arg value="doctrine:database:drop --force" />
         </exec>
         
         
