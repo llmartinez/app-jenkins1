@@ -47,10 +47,23 @@
         <mkdir dir="${builddir}/docs/"/>
 
         
-                <!-- create db and load fixtures -->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console cache:clear --env=test"/>
+        </exec>
+        
+        <!-- create db and load fixtures -->
         <exec executable="php" failonerror="true">
             <arg line="app/console doctrine:database:drop --env=test --force"/>
         </exec>
+        
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:database:create --env=test"/>
+        </exec>
+        
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:schema:create --env=test"/>
+        </exec>
+        
         
     </target>
 
