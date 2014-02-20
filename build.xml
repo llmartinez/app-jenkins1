@@ -8,7 +8,7 @@
     <!--    <target name="build" 
     depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
     
-<!--    <target name="build"            depends="parameters, prepare,vendors,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+    <target name="build"            depends="parameters, prepare,vendors,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
@@ -22,10 +22,7 @@
             <antcall target="phploc"/>
             <antcall target="phpdoc"/>
         </parallel>
-    </target>-->
-    
-    <target name="build" 
-            depends="prepare, parameters"/>
+    </target>
 
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
@@ -45,17 +42,33 @@
         <mkdir dir="${builddir}/logs"/>
         <mkdir dir="${builddir}/pdepend"/>
         <mkdir dir="${builddir}/docs/"/>
-
         
         <exec executable="php" failonerror="true">
-            <arg line="app/console cache:clear"/>
+            <arg line="app/console cache:clear --env=test"/>
         </exec>
         
-        <exec executable="php">
-            <arg line="app/console doctrine:database:drop" />
+        <exec executable="app/console">
+            <arg value="doctrine:schema:update " />
+            <arg value="-n" />
+            <arg value="--env=test" />
+            <arg value="--complete" />
             <arg value="--force" />
         </exec>
         
+        <exec executable="app/console">
+            <arg value="assetic:dump" />
+            <arg value="-n" />
+            <arg value="--env=test" />
+            <arg value="--no-debug" />
+        </exec>
+        
+        <exec executable="app/console">
+            <arg value="assets:install" />
+            <arg value="-n" />
+            <arg value="--env=test" />
+            <arg value="--no-debug" />
+            <arg value="web" />
+        </exec>
         
     </target>
 
