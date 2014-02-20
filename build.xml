@@ -53,15 +53,15 @@
         
         <!-- create db and load fixtures -->
         <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:database:drop --env=test --force"/>
+            <arg line="app/console doctrine:database:drop --force"/>
         </exec>
         
         <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:database:create --env=test"/>
+            <arg line="app/console doctrine:database:create"/>
         </exec>
         
         <exec executable="php" failonerror="true">
-            <arg line="app/console doctrine:schema:create --env=test"/>
+            <arg line="app/console doctrine:schema:create"/>
         </exec>
         
         
