@@ -1,33 +1,33 @@
 <?php
 
-//namespace Adservice\UserBundle\Tests\Controller;
-//
-//use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-//use Adservice\UserBundle\Entity\User;
-//
-//class LoginControllerTest extends WebTestCase {
+namespace Adservice\UserBundle\Tests\Controller;
 
-//    protected $client;
-//
-//    protected function setUp() {
-//        $this->client = static::createClient();
-//        $this->client->followRedirects(true);
-//    }
-//
-//    /**
-//     * La pantalla de login se muestra correctamente
-//     */
-//    public function testShowLogin() {
-//        $crawler = $this->client->request('GET', '/');
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
-//
-//        $crawler = $this->client->request('GET', '/es/login');
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
-//    }
-//
-//    /**
-//     * Hace login en la aplicacion y va a su perfil
-//     */
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Adservice\UserBundle\Entity\User;
+
+class LoginControllerTest extends WebTestCase {
+
+    protected $client;
+
+    protected function setUp() {
+        $this->client = static::createClient();
+        $this->client->followRedirects(true);
+    }
+
+    /**
+     * La pantalla de login se muestra correctamente
+     */
+    public function testShowLogin() {
+        $crawler = $this->client->request('GET', '/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
+
+        $crawler = $this->client->request('GET', '/es/login');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
+    }
+
+    /**
+     * Hace login en la aplicacion y va a su perfil
+     */
 //    public function testLogin() {
 //        $crawler = $this->client->request('GET', '/');
 //        //carga el form con los datos de login
@@ -57,10 +57,10 @@
 //        $_this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de home (status 200)');
 ////        return $this->client;
 //    }
-//
-//    protected function tearDown() {
-//        parent::tearDown();
-//    }
+
+    protected function tearDown() {
+        parent::tearDown();
+    }
 
 //    public function testLoadLogin() { 
 //        $client = static::createClient();
@@ -120,4 +120,4 @@
 //        );
 //        return $client;
 //    }
-//}
+}
