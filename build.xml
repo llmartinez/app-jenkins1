@@ -53,8 +53,6 @@
         
         <exec executable="app/console">
             <arg value="doctrine:database:drop" />
-            <!--<arg value="-n" />-->
-            <arg value="--force" />
         </exec>
         
         
