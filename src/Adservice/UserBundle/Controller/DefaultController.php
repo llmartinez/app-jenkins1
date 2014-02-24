@@ -20,7 +20,6 @@ class DefaultController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-        phpinfo();
         return $this->render('UserBundle:Default:index.html.twig');
     }
 
