@@ -55,8 +55,16 @@ class LoginControllerTest extends WebTestCase {
                 'La aplicación ha enviado una cookie de sesión');
 //        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
         
+        //seleccionamos idioma español (para facilitar tema de url)
+//        $links_spain_flag = $crawler->selectLink('body > div.selectLang');
         
+//        $select_lang_links = $crawler->filter('div.selectLang');
+        $select_spanish_link = $crawler->filter('#selectLang a')->eq(1)->link();
+        $crawler = $client->click($select_spanish_link);
         var_dump($crawler);
+        
+//        var_dump($crawler->selectLink('body > div.selectLang'));
+//        var_dump($links_spain_flag);
 //        $linksPerfil = $crawler->selectLink('Mi Perfil');
 //        $linkPerfil = $linksPerfil->link();
 //        $crawler = $client->click($linkPerfil);
