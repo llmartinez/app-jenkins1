@@ -66,6 +66,10 @@
             <arg value="web" />
         </exec>
         
+        <exec executable="app/console">
+            <arg value="php app/console doctrine:fixtures:load" />
+        </exec>
+
     </target>
 
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
