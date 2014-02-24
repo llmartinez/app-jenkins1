@@ -66,9 +66,14 @@
             <arg value="web" />
         </exec>
         
-        <exec executable="app/console">
-            <arg value="php app/console doctrine:fixtures:load" />
-        </exec>
+        <!-- Update fixtures--> 
+        <target name="fixtures" depends="clean" description="Update fixtures">
+            <exec executable="php" failonerror="true">
+                <arg value='app/console' />
+                <arg value="doctrine:fixtures:load" />
+                <arg value='-n' />
+            </exec>
+        </target>
 
     </target>
 
