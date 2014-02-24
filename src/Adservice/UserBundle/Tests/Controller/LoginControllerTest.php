@@ -27,9 +27,10 @@ class LoginControllerTest extends WebTestCase {
     }
 
     /**
+     * @dataProvider users
      * Hace login en la aplicacion y va a su perfil
      */
-    public function testLogin() {
+    public function testLogin($users) {
         
         $client = static::createClient();
         $client->followRedirects(true);
@@ -42,8 +43,8 @@ class LoginControllerTest extends WebTestCase {
 //        user1-2-3-4         user
         
         //carga el form con los datos de login
-        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'admin1',
-                                                                     '_password' => 'admin',
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $users['adservice_userbundle_usertype[username]'],
+                                                                     '_password' => $users['adservice_userbundle_usertype[password]'],
                                                                     ));
         //ejecuta el submit del form
         $crawler = $client->submit($loginForm);
@@ -56,7 +57,7 @@ class LoginControllerTest extends WebTestCase {
                 'La aplicación ha enviado una cookie de sesión');
 //        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
         
-//        seleccionamos idioma español (para facilitar tema de url)
+        //seleccionamos idioma español (para facilitar tema de url)
         $crawler = UtilFunctions::setLang($crawler, $client, 'es');
         
         $linksPerfil = $crawler->selectLink('Mi Perfil');
@@ -64,14 +65,38 @@ class LoginControllerTest extends WebTestCase {
         $crawler = $client->click($linkPerfil);
         
         //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
-        $this->assertEquals( "admin1", $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
+        $this->assertEquals( $users['adservice_userbundle_usertype[username]'], $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
             'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
         );
+        
+    }
+    
+    
+    public function testWrongLogin(){
         
     }
 
     protected function tearDown() {
         parent::tearDown();
+    }
+    
+    /**
+     * Método que provee de usuarios de prueba a los tests de esta clase
+     */
+    public function users()
+    {
+        return array(
+            array(
+                array('adservice_userbundle_usertype[username]' => 'admin1',
+                      'adservice_userbundle_usertype[password]' => 'admin'),
+                array('adservice_userbundle_usertype[username]' => 'assessor1',
+                      'adservice_userbundle_usertype[password]' => 'assessor'),
+                array('adservice_userbundle_usertype[username]' => 'user1',
+                      'adservice_userbundle_usertype[password]' => 'user'),
+                array('adservice_userbundle_usertype[username]' => 'user2',
+                      'adservice_userbundle_usertype[password]' => 'user')
+            )
+        );
     }
 
     /*******************************/
