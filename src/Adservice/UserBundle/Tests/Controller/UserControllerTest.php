@@ -3,6 +3,7 @@
 namespace Adservice\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -12,7 +13,7 @@ class DefaultControllerTest extends WebTestCase
     protected function setUp() {
         $this->client   = static::createClient();
         $this->client   ->followRedirects(true);
-        $this->client   = TestFunctions::doLogin($this->client);
+        $this->client   = UtilFunctionTest::doLogin($this->client);
         $this->userInfo = $this->generaUsers();
     }
     
@@ -57,9 +58,9 @@ class DefaultControllerTest extends WebTestCase
     public function linkToNewTypeUser($client, $type)
     {
         
-        $crawler = TestFunctions::linkTo($client, $this, 'table tr td a#user_list');
-        $crawler = TestFunctions::linkTo($client, $this, 'table tr td a#user_new');
-        $crawler = TestFunctions::linkTo($client, $this, 'table tr td a#type_'.$type);
+        $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
+        $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_new');
+        $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
         
         return $client;
     }    
@@ -90,7 +91,7 @@ class DefaultControllerTest extends WebTestCase
             );
             
             //volver al inicio 
-            $crawler = TestFunctions::linkTo($client, $this, 'ol li a#home');
+            $crawler = UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
              
             //comprueba que vuelva a la pagina del listado de usuarios
             $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(), 
@@ -105,7 +106,7 @@ class DefaultControllerTest extends WebTestCase
         $userInfo = $this->userInfo;
         
         foreach ($userInfo as $user) {
-        $crawler = TestFunctions::linkTo($client, $this, 'table tr td a#user_list');
+        $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
             
             $location = 'table tr td a#btn_edittest'.$user[1];
             echo $user[1].' -- ';
@@ -133,7 +134,7 @@ class DefaultControllerTest extends WebTestCase
             $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("test'.$user[1].'_edited@test.es")')->count(),
                 'Se ha editado el mail del usuario "test'.$user[1].'"');
             //volver al inicio 
-            $crawler = TestFunctions::linkTo($client, $this, 'ol li a#home');
+            $crawler = UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
         }        
     } 
     
@@ -145,7 +146,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = $this->client;
         $userInfo = $this->userInfo;
-        $crawler = TestFunctions::linkTo($client, $this, 'table tr td a#user_list');
+        $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
         
         foreach ($userInfo as $user) {
             $num_users = $crawler->filter('table tr td a#list_username:contains("test'.$user[1].'")')->count();
@@ -170,7 +171,7 @@ class DefaultControllerTest extends WebTestCase
             'Se ha borrado el usuario "'.$user.'"'
             );
             //volver al inicio 
-            //$crawler = TestFunctions::linkTo($client, $crawler, $this, 'ol li a#home');
+            //$crawler = UtilFunctionTest::linkTo($client, $crawler, $this, 'ol li a#home');
         }
     }
     */

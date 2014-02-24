@@ -56,17 +56,17 @@ class LoginControllerTest extends WebTestCase {
                 'La aplicación ha enviado una cookie de sesión');
 //        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
         
-        //seleccionamos idioma español (para facilitar tema de url)
-//        UtilFunctions::setLang($crawler, $client, 'es');
-//        
-//        $linksPerfil = $crawler->selectLink('Mi Perfil');
-//        $linkPerfil = $linksPerfil->link();
-//        $crawler = $client->click($linkPerfil);
-//        
-//        //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
-//        $this->assertEquals( "admin1", $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
-//            'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
-//        );
+//        seleccionamos idioma español (para facilitar tema de url)
+        $crawler = UtilFunctions::setLang($crawler, $client, 'es');
+        
+        $linksPerfil = $crawler->selectLink('Mi Perfil');
+        $linkPerfil = $linksPerfil->link();
+        $crawler = $client->click($linkPerfil);
+        
+        //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
+        $this->assertEquals( "admin1", $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
+            'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
+        );
         
     }
 
