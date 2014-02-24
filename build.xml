@@ -8,7 +8,7 @@
     <!--    <target name="build" 
     depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
     
-    <target name="build"            depends="parameters, prepare, fixtures, vendors,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
+    <target name="build"            depends="parameters, prepare, vendors,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
@@ -65,18 +65,14 @@
             <arg value="--no-debug" />
             <arg value="web" />
         </exec>
-
-    </target>
-    
-    <!-- Update fixtures--> 
-    <target name="fixtures" depends="clean" description="Update fixtures">
-        <exec executable="php" failonerror="true">
-            <arg value='app/console' />
+        
+        <exec executable="app/console" failonerror="true">
             <arg value="doctrine:fixtures:load" />
             <arg value='-n' />
         </exec>
-    </target>
 
+    </target>
+    
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
     <target name="parameters" description="Copy parameters">
         <exec executable="cp" failonerror="true">
