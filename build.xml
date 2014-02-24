@@ -49,7 +49,16 @@
         </exec>
         
         <!--DROP DATABASE HERE-->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:schema:drop --force"/>
+            <arg value="--env=test" />
+        </exec>
+        
         <!--SCHEMA UPDATE HERE-->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:schema:create"/>
+            <arg value="--env=test" />
+        </exec>
         
         <exec executable="app/console">
             <arg value="assetic:dump" />
