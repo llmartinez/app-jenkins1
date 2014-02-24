@@ -109,10 +109,9 @@ class DefaultControllerTest extends WebTestCase
         $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
             
             $location = 'table tr td a#btn_edittest'.$user[1];
-            echo $user[1].' -- ';
             $link = $crawler->filter($location)->link();
             $crawler = $client->click($link);
-
+ 
             //comprueba que vaya a la pagina de edicion de usuarios
             $this->assertRegExp('/.*\/..\/user\/edit\/.*/', $client->getRequest()->getUri(), 
                 'El usuario ve el listado de usuarios'
@@ -136,6 +135,29 @@ class DefaultControllerTest extends WebTestCase
             //volver al inicio 
             $crawler = UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
         }        
+    } 
+    
+    public function testAccessDenied()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/');
+        //carga el form con los datos de login
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'user1',
+                                                                     '_password' => 'user',
+                                                                    ));
+        //ejecuta el submit del form
+        $crawler = $client->submit($loginForm);
+        
+        $this->assertEquals(0, $crawler->filter('table tr td a#user_list')->count(),
+            'El usuario no ve el enlace a la lista de usuarios' );
+        /*
+        //link al cual un usuario normal no tiene acceso
+        $crawler = $client->request('GET', '/es/user/list');
+        
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(),
+        'Acceso denegado al usuario (solo entrara un admin)'
+        );  
+         */
     } 
     
     /*TODO
