@@ -3,16 +3,16 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('user_list') }}">List of Users</a></li>
-      <li class="active">Edit User ({{ user }})</li>
+      <li><a id="home" href="{{ path('user_index') }}"> Home </a></li>
+      <li><a href="{{ path('user_list') }}"> List of Users </a></li>
+      <li class="active"> Edit User ({{ user }}) </li>
     </ol>
 
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
             {{ form_errors(form) }}
             {{ form_widget(form) }}
         <p>
-            <button type="submit">Save</button>
+            <button id="btn_save" type="submit">Save</button>
         </p>
     </form>
 
