@@ -11,10 +11,12 @@ class UtilFunctionTest
      * @param String $lang (en|es|fr)
      */
     public static function setLang($crawler, $client, $lang){
-        if ($lang = 'es') {
+        if ($lang == 'es') {
             $select_spanish_link = $crawler->filter('#selectLang a')->eq(1)->link();
             $crawler = $client->click($select_spanish_link);
         }
+        
+        return $crawler;
     }
 }
 
