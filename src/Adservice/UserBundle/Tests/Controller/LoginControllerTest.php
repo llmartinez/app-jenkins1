@@ -4,63 +4,75 @@ namespace Adservice\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Adservice\UserBundle\Entity\User;
+use Adservice\UtilBundle\Tests\Controller\UtilFunctionTest as UtilFunctions;
 
 class LoginControllerTest extends WebTestCase {
 
-//    protected $client;
-//
-//    protected function setUp() {
-//        $this->client = static::createClient();
-//        $this->client->followRedirects(true);
-//    }
+    protected function setUp() {
+        
+    }
 
     /**
      * La pantalla de login se muestra correctamente
      */
     public function testShowLogin() {
-//        $crawler = $this->client->request('GET', '/');
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
-//
-//        $crawler = $this->client->request('GET', '/es/login');
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
+        $client = static::createClient();
+        $client->followRedirects(true);
+        
+        $crawler = $client->request('GET', '/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
+
+        $crawler = $client->request('GET', '/es/login');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
     }
 
     /**
      * Hace login en la aplicacion y va a su perfil
      */
-//    public function testLogin() {
-//        $crawler = $this->client->request('GET', '/');
-//        //carga el form con los datos de login
-//        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'admin',
-//                                                                     '_password' => 'admin',
-//                                                                    ));
-//        //ejecuta el submit del form
-//        $crawler = $this->client->submit($loginForm);
-//
-//        //comprueba que devuelva una pagina sin error
-//        $this->assertTrue($this->client->getResponse()->isSuccessful());
+    public function testLogin() {
+        
+        $client = static::createClient();
+        $client->followRedirects(true);
+        
+        $crawler = $client->request('GET', '/');
+        
+//        admin               admin
+//        admin1-2-3-4        admin
+//        assessor1-2-3-4     assessor
+//        user1-2-3-4         user
+        
+        //carga el form con los datos de login
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'admin1',
+                                                                     '_password' => 'admin',
+                                                                    ));
+        //ejecuta el submit del form
+        $crawler = $client->submit($loginForm);
+        
+        //comprueba que devuelva una pagina sin error
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        
+        //comprueba que se haya devuelto una cookie de session
+        $this->assertRegExp('/(\d|[a-z])+/', $client->getCookieJar()->get('PHPSESSID')->getValue(),
+                'La aplicación ha enviado una cookie de sesión');
+//        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
+        
+        //seleccionamos idioma español (para facilitar tema de url)
+//        UtilFunctions::setLang($crawler, $client, 'es');
 //        
-//        //comprueba que se haya devuelto una cookie de session
-//        $this->assertRegExp('/(\d|[a-z])+/', $this->client->getCookieJar()->get('PHPSESSID')->getValue(),
-//                'La aplicación ha enviado una cookie de sesión');
+//        $linksPerfil = $crawler->selectLink('Mi Perfil');
+//        $linkPerfil = $linksPerfil->link();
+//        $crawler = $client->click($linkPerfil);
 //        
-//        //link a la pagina de perfil
-//        $crawler = TestFunctions::linkTo($this->client, $crawler, $this, 'table tr td a#profile');
-//        
-//        //comprueba que coincida el nombre de usuario con el logeado
-//        $this->assertEquals('admin', $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
-//                'El usuario se ha registrado correctamente y sus datos se han guardado en la base de datos');
-//        
-//        //link de vuelta al inicio
-//        $crawler = TestFunctions::linkTo($this->client, $crawler, $this, 'ol li a#home');
-//
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), 'Se muestra la pantalla de home (status 200)');
-////        return $this->client;
-//    }
-//
-//    protected function tearDown() {
-//        parent::tearDown();
-//    }
+//        //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
+//        $this->assertEquals( "admin1", $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
+//            'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
+//        );
+        
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+    }
 
     /*******************************/
     

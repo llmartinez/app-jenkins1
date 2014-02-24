@@ -174,7 +174,8 @@ class DefaultControllerTest extends WebTestCase
         }
     }
     */
-    protected function tearDown() {
-        parent::tearDown();
-    }
+//    protected function tearDown() {
+//        parent::tearDown();
+//    }
+//}
 }
