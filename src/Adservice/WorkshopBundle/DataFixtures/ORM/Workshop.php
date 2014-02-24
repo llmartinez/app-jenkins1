@@ -36,6 +36,12 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
             
             $this->addReference($entidad->getName(), $entidad);
         }
+        /*TODO
+         * Cuando exista el rol superadmin esto sera innecesario, ya que verá todos los usuarios y no solo los de su partner
+         */
+        $w1=$this->getReference('workshop1');
+        $w1->setPartner($this->getReference('partner1'));
+        $manager->persist($w1);
         $manager->flush();
     }
 }

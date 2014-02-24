@@ -36,7 +36,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $this->addReference($entidad->getName(), $entidad);
         }
         $sa = $this->getReference('superadmin');
-        $sa->setPartner($this->getReference(Data::getPartner()));
+        $sa->setPartner($this->getReference('partner1'));
         $manager->persist($sa);
         $manager->flush();
     }
