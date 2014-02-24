@@ -107,7 +107,7 @@ class DefaultControllerTest extends WebTestCase
     echo ' --> test'.$user[1].' = '.$num_users.' /n ';die;
     
             //comprueba que vuelva a la pagina del listado de usuarios
-            $_this->assertRegExp('/.*\/..\/user\/delete\/.*/', $client->getRequest()->getUri(), 
+            $_this->assertRegExp('/.*\/..\/user\/delete\/.* /', $client->getRequest()->getUri(), 
                 'El usuario ve el listado de usuarios'
             );
             $_this->assertEquals(0, $crawler->filter('table tr td a#list_username:contains("'.$user.'")')->count(),
