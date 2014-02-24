@@ -48,16 +48,23 @@
             <arg value="--env=test" />
         </exec>
         
-        <!--DROP DATABASE HERE-->
+        <!--DROP DATABASE -->
         <exec executable="php" failonerror="true">
             <arg line="app/console doctrine:schema:drop --force"/>
             <arg value="--env=test" />
         </exec>
         
-        <!--SCHEMA UPDATE HERE-->
+        <!--SCHEMA CREATE -->
         <exec executable="php" failonerror="true">
             <arg line="app/console doctrine:schema:create"/>
             <arg value="--env=test" />
+        </exec>
+        
+        <!-- LOAD FIXTURES -->
+        <exec executable="app/console" failonerror="true">
+            <arg value="doctrine:fixtures:load" />
+            <arg value="--env=test" />
+            <arg value='-n' />
         </exec>
         
         <exec executable="app/console">
@@ -75,10 +82,7 @@
             <arg value="web" />
         </exec>
         
-        <exec executable="app/console" failonerror="true">
-            <arg value="doctrine:fixtures:load" />
-            <arg value='-n' />
-        </exec>
+
 
     </target>
     
