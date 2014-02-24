@@ -10,6 +10,10 @@ editTicket:
     pattern:  /ticket/edit/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:editTicket } 
     
+deleteTicket:
+    pattern:  /ticket/delete/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:deleteTicket } 
+    
 findTicket:
     pattern:  /ticket/find/
     defaults: { _controller: TicketBundle:Ticket:findTicket } 

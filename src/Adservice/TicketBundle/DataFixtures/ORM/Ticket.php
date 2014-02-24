@@ -25,18 +25,12 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setWorkshop   ($this->getReference($userWorkshop));
             
             $assessor=$this->getReference(Data::getAssessor());
-            $res=0;
-            while ($res != 1) {
                 foreach ($assessor->getPartner()->getWorkshops() as $workshop) {
                     
                     if($workshop->getName() == $userWorkshop){
                         $entidad->setAssignedTo($assessor);
-                        $res=1;
-                    }else{
-                        $assessor=$this->getReference(Data::getAssessor());
                     }
                 }
-            }
             $entidad->setImportance (1);
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());

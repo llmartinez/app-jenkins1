@@ -19,9 +19,9 @@ class Versions  extends AbstractFixture implements OrderedFixtureInterface {
             array('name' => '2.0 - E 200 D' , 'model' => '210_CLASE_E'  , 'idTecDoc' => '8557'  ),
             array('name' => '3.2 - E 320'   , 'model' => '210_CLASE_E'  , 'idTecDoc' => '7834'  ),
             array('name' => '4.2 - E 420'   , 'model' => '210_CLASE_E'  , 'idTecDoc' => '5374'  ),
-            array('name' => '1.2 12V'       , 'model' => 'SEAT'         , 'idTecDoc' => '20054' ),
-            array('name' => '1.4 16V'       , 'model' => 'SEAT'         , 'idTecDoc' => '17155' ),
-            array('name' => '1.9D SDI'      , 'model' => 'SEAT'         , 'idTecDoc' => '17154' ),
+            array('name' => '1.2 12V'       , 'model' => 'CORDOBA - 6L2', 'idTecDoc' => '20054' ),
+            array('name' => '1.4 16V'       , 'model' => 'CORDOBA - 6L2', 'idTecDoc' => '17155' ),
+            array('name' => '1.9D SDI'      , 'model' => 'CORDOBA - 6L2', 'idTecDoc' => '17154' ),
 
         );
         foreach ($versions as $version) {
