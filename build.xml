@@ -65,16 +65,16 @@
             <arg value="--no-debug" />
             <arg value="web" />
         </exec>
-        
-        <!-- Update fixtures--> 
-        <target name="fixtures" depends="clean" description="Update fixtures">
-            <exec executable="php" failonerror="true">
-                <arg value='app/console' />
-                <arg value="doctrine:fixtures:load" />
-                <arg value='-n' />
-            </exec>
-        </target>
 
+    </target>
+    
+    <!-- Update fixtures--> 
+    <target name="fixtures" depends="clean" description="Update fixtures">
+        <exec executable="php" failonerror="true">
+            <arg value='app/console' />
+            <arg value="doctrine:fixtures:load" />
+            <arg value='-n' />
+        </exec>
     </target>
 
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
