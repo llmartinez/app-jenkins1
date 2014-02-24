@@ -51,8 +51,8 @@ class TicketController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             //campos comunes
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            $status = $em->getRepository('TicketBundle:Status')->find('0');
+            $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
+            $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
             $security = $this->get('security.context');
 
             $form->bindRequest($request);
@@ -124,17 +124,15 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-            $asesor = $em->getRepository('UserBundle:User')->find($request->get('asesor'));
+            $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
             //Define CAR
             $formC->bindRequest($request);
 
             if ($car->getVersion() != "") {
-                $car = DefaultC::newEntity($car, $user);
                 DefaultC::saveEntity($em, $car, $user, false);
 
                 $form->bindRequest($request);
-                DefaultC::saveEntity($em, $ticket, $asesor);
+                DefaultC::saveEntity($em, $ticket, $user);
 
                 $sesion = $request->getSession();
 
@@ -162,6 +160,46 @@ class TicketController extends Controller {
                 ));
     }
 
+    
+    /**
+     * Elimina el ticket de la bbdd si no tiene respuesta (posts == 1)
+     * @param Int $id
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
+    public function deleteTicketAction($id_ticket){
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') === false){
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $ticket = $em->getRepository("TicketBundle:Ticket")->find($id_ticket);
+        
+        if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
+        
+        //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
+        $posts = $ticket->getPosts();
+        if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
+        
+        //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
+        if ((!$this->get('security.context')->isGranted('ROLE_ASSESSOR') and ($ticket->getAssignedTo() != null))){
+            throw $this->createNotFoundException('Este ticket solo puede ser borrado por un asesor');
+        }
+        
+        //si el ticket esta cerrado no se puede borrar
+        if($ticket->getStatus()->getName() == 'closed'){ 
+           throw $this->createNotFoundException('Este ticket ya esta cerrado');
+        }
+        //borra todos los post del ticket
+        foreach ($posts as $post) {
+             $em->remove($post);
+        }       
+        //borra el ticket
+        $em->remove($ticket);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('listTicket'));
+    }
     /**
      * Muestra los posts que pertenecen a un ticket 
      * @param integer $id_ticket

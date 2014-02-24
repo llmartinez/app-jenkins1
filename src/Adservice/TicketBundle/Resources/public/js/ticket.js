@@ -31,4 +31,14 @@ function fill_tickets(url_ajax) {
             console.log("Error al cargar tickets...");
         }
     });
-} 
+}    
+
+/**
+ * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar
+ * @param int user_id
+ */
+function confirm_delete_ticket_modal(id_ticket) {
+    var custom_href = $('.modal-footer').find('a').attr('href');
+    custom_href = custom_href.replace('foo', id_ticket);
+    $('.modal-footer').find('a').attr('href', custom_href);
+}

@@ -65,6 +65,8 @@ class LoginControllerTest extends WebTestCase {
         parent::tearDown();
     }
 
+    /*******************************/
+    
 //    public function testLoadLogin() { 
 //        $client = static::createClient();
 //        $crawler = $client->request('GET', '/');

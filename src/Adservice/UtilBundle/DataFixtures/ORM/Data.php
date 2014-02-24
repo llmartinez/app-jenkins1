@@ -424,10 +424,15 @@ class Data {
      */
     public static function getPostOwner($entidad)
     {
-        if (rand() % 2) {
+        if($entidad->getTicket()->getAssignedTo() != null)
+        {
+            if (rand() % 2) {
+                return $entidad->getTicket()->getOwner()->getUserName();
+            } else {
+                return $entidad->getTicket()->getAssignedTo()->getUserName();
+            }
+        }else{
             return $entidad->getTicket()->getOwner()->getUserName();
-        } else {
-            return $entidad->getTicket()->getAssignedTo()->getUserName();
         }
     }
     /**
