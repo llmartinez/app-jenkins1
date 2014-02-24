@@ -80,7 +80,7 @@ class DefaultController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
-            if ($role[0]->getRole() == "ROLE_ADMIN")        $users_role_admin[] = $user;
+            if     ($role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
             elseif ($role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
             elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
         }

@@ -17,22 +17,25 @@ class Incidences extends AbstractFixture implements OrderedFixtureInterface {
         for($i=1;$i<=$num;$i++)
         { 
             $ticket = $this->getReference('Test n.'.$i);
-            if($ticket->getStatus()->getName() == 'closed') {
+            if($ticket->getStatus()->getName() == 'closed'){
                 
                 $entidad = new Incidence();
                 $entidad->setTicket     ($ticket);
-                $entidad->setStatus     ($this->getReference($entidad->getTicket()->getStatus()->getName()));
-                $entidad->setOwner      ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
-                $entidad->setWorkshop   ($this->getReference($entidad->getTicket()->getWorkshop()->getName()));
-                $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
-                $entidad->setImportance (1);
-                $entidad->setDescription(Data::getDescription($i));
-                $entidad->setSolution   (Data::getSolution($i));
-                $entidad->setCreatedAt  (new \DateTime());
-                $entidad->setModifiedAt (new \DateTime());
-                $manager->persist($entidad);
+                if ($entidad->getTicket()->getAssignedTo() != null) {
 
-                $this->addReference($entidad->getSolution(), $entidad);
+                    $entidad->setStatus     ($this->getReference($entidad->getTicket()->getStatus()->getName()));
+                    $entidad->setOwner      ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
+                    $entidad->setWorkshop   ($this->getReference($entidad->getTicket()->getWorkshop()->getName()));
+                    $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
+                    $entidad->setImportance (1);
+                    $entidad->setDescription(Data::getDescription($i));
+                    $entidad->setSolution   (Data::getSolution($i));
+                    $entidad->setCreatedAt  (new \DateTime());
+                    $entidad->setModifiedAt (new \DateTime());
+                    $manager->persist($entidad);
+
+                    $this->addReference($entidad->getSolution(), $entidad);
+                }
             }
         }
         $manager->flush();

@@ -21,8 +21,6 @@
                         
                         <legend>Ticket Data</legend>
                         
-                        <input type="hidden" id="user" name="user" value="{{ app.security.getToken().getUser().getId() }}">
-                        
                         <div class="col-xs-6 col-md-6 form-group">   
                             <label for="new_ticket_form_title">Title</label>  
                             {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
