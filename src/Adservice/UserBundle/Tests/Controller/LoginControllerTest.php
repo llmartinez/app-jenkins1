@@ -4,6 +4,7 @@ namespace Adservice\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Adservice\UserBundle\Entity\User;
+use Adservice\UtilBundle\Tests\Controller\UtilFunctionTest as UtilFunctions;
 
 class LoginControllerTest extends WebTestCase {
 
@@ -56,8 +57,7 @@ class LoginControllerTest extends WebTestCase {
 //        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
         
         //seleccionamos idioma español (para facilitar tema de url)
-        $select_spanish_link = $crawler->filter('#selectLang a')->eq(1)->link();
-        $crawler = $client->click($select_spanish_link);
+        UtilFunctions::setLang($crawler, $client, 'es');
         
         $linksPerfil = $crawler->selectLink('Mi Perfil');
         $linkPerfil = $linksPerfil->link();
