@@ -20,7 +20,7 @@ class UtilFunctionTest
     }
     
     /**
-     * hace un link y comprueba que redireccione correctamente
+     * Hace un link y comprueba que redireccione correctamente
      * @param client $client
      * @param this   $_this
      * @param string $location
@@ -39,7 +39,7 @@ class UtilFunctionTest
     }
     
     /**
-     * Hace login en la aplicacion y va a su perfil
+     * Hace login en la aplicacion 
      * @param client $client
      * @return client
      */
