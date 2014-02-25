@@ -60,7 +60,7 @@ class LoginControllerTest extends WebTestCase {
 //        $this->assertTrue($client->getCookieJar()->get('PHPSESSID'), 'La aplicación ha enviado una cookie de sesión'); <---- no va....deberia ir....
         
         //seleccionamos idioma español (para facilitar tema de url)
-        $crawler = UtilFunctions::setLang($crawler, $client, 'es');
+        UtilFunctions::setLang($crawler, $client, 'es');
         
         $linksPerfil = $crawler->selectLink('Mi Perfil');
         $linkPerfil = $linksPerfil->link();
@@ -89,7 +89,7 @@ class LoginControllerTest extends WebTestCase {
                                                                     ));
         //ejecuta el submit del form
         $crawler = $client->submit($loginForm);
-        $this->assertFalse($client->getResponse()->isRedirect(),'Cuando introducimos credenciales erroneas no nos movemos');
+        $this->assertFalse($client->getResponse()->isRedirect(),'Cuando introducimos credenciales erroneas nos quedamos en la misma web');
         
     }
 
