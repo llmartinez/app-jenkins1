@@ -19,11 +19,18 @@ class LoginControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->followRedirects(true);
         
+        //se muestra la web de login...
         $crawler = $client->request('GET', '/');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
 
+        
         $crawler = $client->request('GET', '/es/login');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
+        
+        //aparece el boton login...
+        $num_login_button = $crawler->filter('form input[id="btn_login"]')->count();
+        $this->assertEquals(1, $num_login_button,'Aparece el boton de "login" en la pantalla de login');
+
     }
 
     /**
@@ -36,11 +43,6 @@ class LoginControllerTest extends WebTestCase {
         $client->followRedirects(true);
         
         $crawler = $client->request('GET', '/');
-        
-//        admin               admin
-//        admin1-2-3-4        admin
-//        assessor1-2-3-4     assessor
-//        user1-2-3-4         user
         
         //carga el form con los datos de login
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $users['adservice_userbundle_usertype[username]'],
@@ -72,7 +74,23 @@ class LoginControllerTest extends WebTestCase {
     }
     
     
+    /**
+     * Provando un login incorrecto...
+     */
     public function testWrongLogin(){
+        
+        $client = static::createClient();
+        $client->followRedirects(true);
+        
+        $crawler = $client->request('GET', '/');
+        
+        //carga el form con los datos de login
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'foo',
+                                                                     '_password' => 'foo',
+                                                                    ));
+        //ejecuta el submit del form
+        $crawler = $client->submit($loginForm);
+        $this->assertFalse($client->getResponse()->isRedirect(),'Cuando introducimos credenciales erroneas no nos movemos');
         
     }
 
@@ -85,6 +103,10 @@ class LoginControllerTest extends WebTestCase {
      */
     public function users()
     {
+//        admin               admin
+//        admin1-2-3-4        admin
+//        assessor1-2-3-4     assessor
+//        user1-2-3-4         user
         return array(
             array(
                 array('adservice_userbundle_usertype[username]' => 'admin1',
