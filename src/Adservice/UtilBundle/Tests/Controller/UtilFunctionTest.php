@@ -15,8 +15,6 @@ class UtilFunctionTest
             $select_spanish_link = $crawler->filter('#selectLang a')->eq(1)->link();
             $crawler = $client->click($select_spanish_link);
         }
-        
-        return $crawler;
     }
     
     /**
@@ -43,15 +41,14 @@ class UtilFunctionTest
      * @param client $client
      * @return client
      */
-    public static function doLogin($client) {
+    public static function doLogin($client, $user, $pass) {
         $crawler = $client->request('GET', '/');
-        //carga el form con los datos de login
-        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'admin',
-                                                                     '_password' => 'admin',
+        self::setLang($crawler, $client, 'es');
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
+                                                                     '_password' => $pass,
                                                                     ));
         //ejecuta el submit del form
         $crawler = $client->submit($loginForm);
-        
         return $client;
     }
 }

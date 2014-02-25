@@ -1,12 +1,87 @@
 <?php
 
-//namespace Adservice\TicketBundle\Tests\Controller;
-//
-//use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-//use Adservice\TicketBundle\Entity\Ticket;
-//
-//class TicketControllerTest extends WebTestCase
-//{    
+namespace Adservice\TicketBundle\Tests\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Adservice\TicketBundle\Entity\Ticket;
+use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
+
+class TicketControllerTest extends WebTestCase {
+
+    protected function setUp() {
+        
+    }
+
+    /**
+     * @dataProvider users
+     */
+    public function testNewTicket($users) {
+        $client = static::createClient();
+        $client->followRedirects(true);
+        $client = UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]'] );
+        $crawler = $client->getCrawler();
+        
+        //miramos que exista el link "mis tickets" y lo clickamos
+        $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
+        $crawler = $client->click($myTicket_link);
+        
+        //hay 1 boton de "New Ticket" y lo clickamos
+        $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
+        $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
+        $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
+        $crawler = $client->click($newTicket_link);
+        
+        //CAMPOS DE TICKET
+        $num_field_ticket_title = $crawler->filter('form input[name="new_ticket_form[title]"]')->count();
+        $this->assertEquals(1, $num_field_ticket_title, 'Existe el campo TITLE en el formulario de "New Ticket"');
+        
+        $num_field_ticket_importance = $crawler->filter('form input[name="new_ticket_form[importance]"]')->count();
+        $this->assertEquals(1, $num_field_ticket_importance, 'Existe el campo IMPORTANCE en el formulario de "New Ticket"');
+        
+        //CAMPOS DE CAR
+        $num_field_car_brand = $crawler->filter('form select[id="idBrand"]')->count();
+        $this->assertEquals(1, $num_field_car_brand, 'Existe el campo BRAND en el formulario de "New Ticket"');
+              
+        
+    }
+    
+
+    
+    public function newTicket(){
+        
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+    }
+
+    
+    
+    /**
+     * Método que provee de usuarios de prueba a los tests de esta clase
+     */
+    public function users() {
+//        admin               admin
+//        admin1-2-3-4        admin
+//        assessor1-2-3-4     assessor
+//        user1-2-3-4         user
+
+        return array(
+            array(
+//                array('adservice_userbundle_usertype[username]' => 'admin1',
+//                    'adservice_userbundle_usertype[password]' => 'admin'),
+//                array('adservice_userbundle_usertype[username]' => 'assessor1',
+//                    'adservice_userbundle_usertype[password]' => 'assessor'),
+                array('adservice_userbundle_usertype[username]' => 'user1',
+                    'adservice_userbundle_usertype[password]' => 'user'),
+                array('adservice_userbundle_usertype[username]' => 'user2',
+                    'adservice_userbundle_usertype[password]' => 'user')
+            )
+        );
+    }
+
+}
+
 //    public function testLoadNewTicket() {
 //        $client = static::createClient();
 //        $crawler = $client->request('GET', '/es/ticket/');
