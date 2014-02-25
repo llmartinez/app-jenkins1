@@ -15,8 +15,31 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/*/Bundle/*Bundle/Tests</directory>
+            <!--<directory>../src/Adservice/UtilBundle/Tests/Entity/Languages.php</directory>-->
+            <!--<directory>../src/Adservice/UtilBundle/Tests/Entity/Countries.php</directory>-->
+            <directory>../src/Adservice/UtilBundle/Tests/Entity/RegionTest.php</directory>
+            <directory>../src/Adservice/UtilBundle/Tests/Entity/ProvincesTest.php</directory>
+            <!--<directory>../src/Adservice/UtilBundle/Tests/Entity/Roles.php</directory>-->
+            
+            <!--SuperAdmin-->
+            <directory>../src/Adservice/PartnerBundle/Tests/Entity</directory>
+            <directory>../src/Adservice/WorkshopBundle/Tests/Entity</directory>
+            <!--Admins-->
+            <!--Assessors-->
+            <directory>../src/Adservice/UserBundle/Tests</directory>
+            <directory>../src/Adservice/UserBundle/Tests/Entity</directory>
+            <!--Brands-->
+            <!--Models-->
+            <!--Versions-->
+            <!--Cars-->
+            <!--States-->
+            <!--Tickets-->
+            <!--Posts-->
+            <!--Systems-->
+            <!--SubSystems-->
+            <!--Incidences-->
+            
+
         </testsuite>
     </testsuites>
 
