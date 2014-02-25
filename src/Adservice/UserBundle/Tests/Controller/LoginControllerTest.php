@@ -19,11 +19,18 @@ class LoginControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->followRedirects(true);
         
+        //se muestra la web de login...
         $crawler = $client->request('GET', '/');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
 
+        
         $crawler = $client->request('GET', '/es/login');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
+        
+        //aparece el boton login...
+        $num_login_button = $crawler->filter('form input[id="btn_login"]')->count();
+        $this->assertEquals(1, $num_login_button,'Aparece el boton de "login" en la pantalla de login');
+
     }
 
     /**
@@ -36,11 +43,6 @@ class LoginControllerTest extends WebTestCase {
         $client->followRedirects(true);
         
         $crawler = $client->request('GET', '/');
-        
-//        admin               admin
-//        admin1-2-3-4        admin
-//        assessor1-2-3-4     assessor
-//        user1-2-3-4         user
         
         //carga el form con los datos de login
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $users['adservice_userbundle_usertype[username]'],
@@ -70,9 +72,24 @@ class LoginControllerTest extends WebTestCase {
         );
         
     }
-    
-    
+        
+    /**
+     * Provando un login incorrecto...
+     */
     public function testWrongLogin(){
+        
+        $client = static::createClient();
+        $client->followRedirects(true);
+        
+        $crawler = $client->request('GET', '/');
+        
+        //carga el form con los datos de login
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => 'foo',
+                                                                     '_password' => 'foo',
+                                                                    ));
+        //ejecuta el submit del form
+        $crawler = $client->submit($loginForm);
+        $this->assertFalse($client->getResponse()->isRedirect(),'Cuando introducimos credenciales erroneas no nos movemos');
         
     }
 
@@ -85,6 +102,11 @@ class LoginControllerTest extends WebTestCase {
      */
     public function users()
     {
+//        admin               admin
+//        admin1-2-3-4        admin
+//        assessor1-2-3-4     assessor
+//        user1-2-3-4         user
+        
         return array(
             array(
                 array('adservice_userbundle_usertype[username]' => 'admin1',
@@ -98,65 +120,4 @@ class LoginControllerTest extends WebTestCase {
             )
         );
     }
-
-    /*******************************/
-    
-//    public function testLoadLogin() { 
-//        $client = static::createClient();
-//        $crawler = $client->request('GET', '/');
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
-//        'Se muestra la pantalla de login (status 200)'
-//        );
-//        
-//        $crawler = $client->request('GET', '/es/login');
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
-//        'Se muestra la pantalla de login (status 200)'
-//        );
-//        
-//        $this->assertRegExp(
-//            '/.*\/..\/login_check/', $crawler->filter('form')->attr('action'), 
-//            'El usuario anónimo ve el formulario de login'
-//        );
-//    }
-//    
-//    public function testLogin() {
-//        $client = static::createClient();
-//        $this->doLogin($client, $this);
-//    }
-//    
-//    public static function doLogin($client, $_this) {
-//        //sigue automaticamente las redirecciones del codigo
-//        $client->followRedirects(true);
-//        
-//        $crawler = $client->request('GET', '/');
-//        //carga el form con los datos de login
-//        $loginForm = $crawler->selectButton('btn_login')->form(array(
-//            '_username' => 'admin',
-//            '_password' => 'admin',
-//        ));
-//        //ejecuta el submit del form
-//        $crawler = $client->submit($loginForm);
-//        
-//        //comprueba que devuelva una pagina sin error
-//        $_this->assertTrue($client->getResponse()->isSuccessful());
-//        //comprueba que se haya devuelto una cookie de session
-//        $_this->assertRegExp(
-//            '/(\d|[a-z])+/',
-//            $client->getCookieJar()->get('PHPSESSID')->getValue(),
-//            'La aplicación ha enviado una cookie de sesión'
-//        );
-//        //link a la pagina de perfil
-//        $crawler = TestFunctions::linkTo($client, $crawler, $_this, 'table tr td a#profile');
-//        //comprueba que coincida el nombre de usuario con el logeado
-//        $_this->assertEquals('admin', $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'), 
-//                'El usuario se ha registrado correctamente y sus datos se han guardado en la base de datos'
-//        );
-//        //link de vuelta al inicio
-//        $crawler = TestFunctions::linkTo($client, $crawler, $_this, 'ol li a#home');
-//        
-//        $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
-//        'Se muestra la pantalla de home (status 200)'
-//        );
-//        return $client;
-//    }
 }
