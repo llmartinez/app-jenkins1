@@ -15,40 +15,8 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <!--T.Funcionales ()
-                T.Unitarios   ()  -->
-            <!--<directory>../src/Adservice/UtilBundle/Tests/Entity/Languages.php</directory>-->
-            <!--T.Funcionales ()
-                T.Unitarios   ()  -->
-            <!--<directory>../src/Adservice/UtilBundle/Tests/Entity/Countries.php</directory>-->
-            <!--T.Funcionales ()
-                T.Unitarios   ()  -->
-            <directory>../src/Adservice/UtilBundle/Tests/Entity/RegionTest.php</directory>
-            <!--T.Funcionales ()
-                T.Unitarios   (Province)  -->
-            <directory>../src/Adservice/UtilBundle/Tests/Entity/ProvincesTest.php</directory>
-            
-            <!--T.Funcionales ()
-                T.Unitarios   (Partner)  -->
-            <directory>../src/Adservice/PartnerBundle/Tests/Entity</directory>
-            <!--T.Funcionales ()
-                T.Unitarios   (Typology, Workshop)  -->
-            <directory>../src/Adservice/WorkshopBundle/Tests/Entity</directory>
-            <!--T.Funcionales (Login, User)
-                T.Unitarios   (Role, User)  -->
-            <directory>../src/Adservice/UserBundle/Tests</directory>
-            <!--Brands-->
-            <!--Models-->
-            <!--Versions-->
-            <!--Cars-->
-            <!--States-->
-            <!--Tickets-->
-            <!--Posts-->
-            <!--Systems-->
-            <!--SubSystems-->
-            <!--Incidences-->
-            
-
+            <directory>../src/*/*Bundle/Tests</directory>
+            <directory>../src/*/Bundle/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
 
