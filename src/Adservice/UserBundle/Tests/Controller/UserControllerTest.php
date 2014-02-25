@@ -23,7 +23,7 @@ class DefaultControllerTest extends WebTestCase
      * @param Client $client
      * @return Client
      */
-/***********************
+
     protected static function setClient($client) {
         
         $client = static::createClient();
@@ -32,12 +32,12 @@ class DefaultControllerTest extends WebTestCase
         
         return $client;
     }
-***********************/
+
     /**
      * DataProvider de usuarios: Contiene un admin, un assessor y un user
      * @return array users
      */
-/***********************
+
     public function users()
     {
         return array(
@@ -92,12 +92,12 @@ class DefaultControllerTest extends WebTestCase
             ),
         );
     }
-**********************/
+
     /**
      * DataProvider de usuarios editados: Contiene dos campos de email a editar para un admin, un assessor y un user
      * @return array userEditFields
      */
-/***********************
+
     public function userEditFields()
     {
         return array(
@@ -121,14 +121,14 @@ class DefaultControllerTest extends WebTestCase
                 ),
         );
     }
-**********************/
+
     /**
      * Lleva al usuario desde la pantalla de indice hasta la de nuevo usuario del $type que se introduzca por parametro
      * @param Client $client 
      * @param String $type (admin, assessor, user)
      * @return Client
      */ 
-/*********************** 
+
     public function linkToNewTypeUser($client, $type)
     {
         
@@ -138,12 +138,12 @@ class DefaultControllerTest extends WebTestCase
         
         return $client;
     }  
-***********************/  
+ 
     /**
      * Test que comprueba que se cree un usuario de cada tipo
      * @dataProvider users
      */
-/***********************
+
     public function testNewUser($type, $user)
     {
         $client = $this->client;
@@ -175,12 +175,12 @@ class DefaultControllerTest extends WebTestCase
             'El usuario ve la pagina principal'
         );
     } 
-****************************/
+
     /**
      * Test que comprueba que se edite un usuario de cada tipo
      * @dataProvider userEditFields
      */
-/**********************
+
     public function testEditUser($type, $userEditFields)
     {
         $client = $this->client;
@@ -192,7 +192,7 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->click($link);
 
         //comprueba que vaya a la pagina de edicion de usuarios
-        $this->assertRegExp('/.*\/..\/user\/edit\/.*********************** /', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/edit\/.*/', $client->getRequest()->getUri(), 
             'El usuario ve el listado de usuarios'
         );
 
@@ -214,11 +214,11 @@ class DefaultControllerTest extends WebTestCase
         //volver al inicio 
         $crawler = UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
     } 
-****************************/
+
     /**
      * Test que comprueba que salten alertas de acceso denegado
      */
-/****************************
+
     public function testAccessDenied()
     {
         $client = static::createClient();
@@ -241,7 +241,7 @@ class DefaultControllerTest extends WebTestCase
             );  
         
     }
-**********************/
+
     /*TODO
      * la funcion javascript que cambia la url de 'foo' a 'id_usuario' no funciona,
      * se envia al controller la funcion deleteUser('foo');
