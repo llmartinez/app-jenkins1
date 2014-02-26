@@ -16,9 +16,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetters()
     {
         $user = new User();
-        $user->setUsername('testadmin'); 
+        $user->setUsername('userTest'); 
         $user->setPassword('test');
+        $user->setActive('0');
+        $this->assertEquals(false, $user->isEnabled(), "Probar que el usuario este deshabilitado (active = 0)");
         $user->setActive('1');
+        $this->assertEquals(true,  $user->isEnabled(), "Probar que el usuario este habilitado (active = 1)");
         $user->setName('Test');
         $user->setSurname('User_admin');
         $user->setCity('Badalona');
@@ -32,27 +35,26 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->setEmail2('test@test.es');
         $user->setDni('12345678T');
         $user->addRole(RoleTest::GetRole());
+        $this->assertEquals('RoleTest', $user->getUserRole()[0]->getName() , "Probar que tenga el rol: RoleTest");
         $user->setRegion(RegionTest::GetRegion());
         $user->setWorkshop(WorkshopTest::GetWorkshop());
         $user->setCountry(CountryTest::GetCountry());
         $user->setCreatedAt(new \DateTime('today'));
+        $this->assertEquals(new \DateTime('today'), $user->getCreatedAt(),   "Probar la fecha de creacion: today");
         $user->setModifiedAt(new \DateTime('today'));
+        $this->assertEquals(new \DateTime('today'), $user->getModifiedAt(),  "Probar la fecha de modificacion: today");
         $user->setModifyBy(UserTest::GetUser());
+        $this->assertEquals('userTest', $user->getModifyBy()->getUserName(), "Probar el usuario de modificacion: userTest");
         $user->setPartner(PartnerTest::GetPartner());
         
         $this->user = $user;
     }
     
-    public function testGettersUser()
-    {
-        $user = $this->user;
-        return $user;
-    }
-    
     public static function GetUser()
     {
         $user = new User();
-        $user->setUsername('testadmin'); 
+        $user->setUsername('userTest'); 
+        $user->addRole(RoleTest::GetRole());
         
         return $user;
     }
