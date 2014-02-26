@@ -37,15 +37,14 @@ class UtilFunctionTest
     }
     
     /**
-     * Prepara $client con followRedirects activado, 
-     *                 inicia la sesion como $user 
-     *                 y cambia el ididoma a 'es' 
+     * Prepara $client haciendo login como $user 
+     *                 y cambiando el ididoma a 'es' 
      * @param client $client
      * @param string $user
      * @param string $pass
      * @return client
      */
-    public static function setClient($client, $user, $pass) {
+    public static function doLogin($client, $user, $pass) {
         //inicia la sesion como $user
         $crawler = $client->request('GET', '/');
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,

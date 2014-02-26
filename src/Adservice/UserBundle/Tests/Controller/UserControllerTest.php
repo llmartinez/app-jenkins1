@@ -19,7 +19,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::setClient($client, 'admin', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
         $this->linkToNewTypeUser($client, $type);
 
         //carga el form con los datos del usuario
@@ -55,7 +55,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::setClient($client, 'admin', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
         
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
             
@@ -136,7 +136,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::setClient($client, 'admin', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
         
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#profile');
         
@@ -170,7 +170,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::setClient($client, 'user1', 'user');
+        UtilFunctionTest::doLogin($client, 'user1', 'user');
         $this->assertEquals(0, $client->getCrawler()->filter('table tr td a#user_list')->count(),
             'El usuario no ve el enlace a la lista de usuarios' );
         /*
