@@ -7,7 +7,7 @@ class UtilFunctionTest
     /**
      * 
      * @param Crawler $crawler
-     * @param Client $client
+     * @param client $client
      * @param String $lang (en|es|fr)
      */
     public static function setLang($crawler, $client, $lang){
@@ -18,7 +18,7 @@ class UtilFunctionTest
     }
     
     /**
-     * hace un link y comprueba que redireccione correctamente
+     * Hace un link y comprueba que redireccione correctamente
      * @param client $client
      * @param this   $_this
      * @param string $location
@@ -37,18 +37,23 @@ class UtilFunctionTest
     }
     
     /**
-     * Hace login en la aplicacion
+     * Prepara $client haciendo login como $user 
+     *                 y cambiando el ididoma a 'es' 
      * @param client $client
+     * @param string $user
+     * @param string $pass
      * @return client
      */
     public static function doLogin($client, $user, $pass) {
+        //inicia la sesion como $user
         $crawler = $client->request('GET', '/');
-        self::setLang($crawler, $client, 'es');
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
                                                                      '_password' => $pass,
                                                                     ));
-        //ejecuta el submit del form
         $crawler = $client->submit($loginForm);
+        //cambia el ididoma a 'es' 
+        UtilFunctionTest::setLang($crawler, $client, 'es');
+        
         return $client;
     }
 }

@@ -1,0 +1,154 @@
+HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 25 Feb 2014 09:16:55 GMT
+X-Debug-Token: 530c5f879d3d7
+Set-Cookie: PHPSESSID=985745d78d64e122d6aa8ae753af64d0; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+        
+        <link rel="shortcut icon" href="/favicon.ico" />
+    
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+                
+    <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            //si clickamos el combobox de las regiones repoblamos la de las provincias
+            $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').change(function (){
+                var url_ajax = "/en/provincesFromRegion";
+                populate_province(url_ajax);
+            });
+        });
+    </script>
+    </head>
+    
+
+    <body id="MainBody">
+        
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService England                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/en/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/en/ticket/new/" >   New ticket</a></li>
+                                    <li><a class="btn pull-left" href="/en/ticket/">   Tickets</a></li>
+                                    <li><a class="btn pull-left" href="/en/incidence/">Incidences</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/en/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/en/lang/en/?path=%2Fen%2Fuser%2Fprofile"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/en/lang/es/?path=%2Fen%2Fuser%2Fprofile"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/en/lang/fr/?path=%2Fen%2Fuser%2Fprofile"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>         
+              
+         
+        <div id="MainContent">
+            
+    <ol class="breadcrumb">
+      <li><a id="home" href="/en/user/index">Home</a></li>
+      <li class="active">My Profile</li>
+    </ol>
+
+    <h1>Perfil de super admin</h1>
+
+    <form action="/en/user/profile" method="post"  name="adservice_userbundle_usertype" >
+        <div id="adservice_userbundle_usertype"><input type="hidden" id="adservice_userbundle_usertype__token" name="adservice_userbundle_usertype[_token]" value="30bbf7617be6774630450d94a8fe30559f932358" /><div><label for="adservice_userbundle_usertype_username" class=" required">Username</label><input type="text" id="adservice_userbundle_usertype_username" name="adservice_userbundle_usertype[username]" required="required" maxlength="255" value="admin" /></div><div><label for="adservice_userbundle_usertype_password_Contraseña">Contraseña</label><input type="password" id="adservice_userbundle_usertype_password_Contraseña" name="adservice_userbundle_usertype[password][Contraseña]" /></div><div><label for="adservice_userbundle_usertype_password_Repite Contraseña">Repite contraseña</label><input type="password" id="adservice_userbundle_usertype_password_Repite Contraseña" name="adservice_userbundle_usertype[password][Repite Contraseña]" /></div><div><label for="adservice_userbundle_usertype_name" class=" required">Name</label><input type="text" id="adservice_userbundle_usertype_name" name="adservice_userbundle_usertype[name]" required="required" maxlength="255" value="super" /></div><div><label for="adservice_userbundle_usertype_surname" class=" required">Surname</label><input type="text" id="adservice_userbundle_usertype_surname" name="adservice_userbundle_usertype[surname]" required="required" maxlength="255" value="admin" /></div><div><label for="adservice_userbundle_usertype_dni" class=" required">Dni</label><input type="text" id="adservice_userbundle_usertype_dni" name="adservice_userbundle_usertype[dni]" required="required" maxlength="9" value="17194146T" /></div><div><label for="adservice_userbundle_usertype_city">City</label><input type="text" id="adservice_userbundle_usertype_city" name="adservice_userbundle_usertype[city]" maxlength="255" /></div><div><label for="adservice_userbundle_usertype_phone_number_1">Phone number 1</label><input type="text" id="adservice_userbundle_usertype_phone_number_1" name="adservice_userbundle_usertype[phone_number_1]" maxlength="9" /></div><div><label for="adservice_userbundle_usertype_phone_number_2">Phone number 2</label><input type="text" id="adservice_userbundle_usertype_phone_number_2" name="adservice_userbundle_usertype[phone_number_2]" maxlength="9" /></div><div><label for="adservice_userbundle_usertype_movile_number_1">Movile number 1</label><input type="text" id="adservice_userbundle_usertype_movile_number_1" name="adservice_userbundle_usertype[movile_number_1]" maxlength="9" /></div><div><label for="adservice_userbundle_usertype_movile_number_2">Movile number 2</label><input type="text" id="adservice_userbundle_usertype_movile_number_2" name="adservice_userbundle_usertype[movile_number_2]" maxlength="9" /></div><div><label for="adservice_userbundle_usertype_fax">Fax</label><input type="text" id="adservice_userbundle_usertype_fax" name="adservice_userbundle_usertype[fax]" maxlength="9" /></div><div><label for="adservice_userbundle_usertype_email_1" class=" required">Email 1</label><input type="email" id="adservice_userbundle_usertype_email_1" name="adservice_userbundle_usertype[email_1]" required="required" value="test_edited@test.es" /></div><div><label for="adservice_userbundle_usertype_email_2" class=" required">Email 2</label><input type="email" id="adservice_userbundle_usertype_email_2" name="adservice_userbundle_usertype[email_2]" required="required" value="test_edited@test.com" /></div><div><label for="adservice_userbundle_usertype_active">Active</label><input type="checkbox" id="adservice_userbundle_usertype_active" name="adservice_userbundle_usertype[active]" value="1" checked="checked" /></div><div><label for="adservice_userbundle_usertype_region" class=" required">Region</label><select id="adservice_userbundle_usertype_region" name="adservice_userbundle_usertype[region]" required="required"><option value="1">Catalunya</option><option value="2">Madrid</option><option value="3" selected="selected">Canarias</option></select></div><div><label for="adservice_userbundle_usertype_province" class=" required">Province</label><select id="adservice_userbundle_usertype_province" name="adservice_userbundle_usertype[province]" required="required"><option value="1" selected="selected">Barcelona</option><option value="2">Tarragona</option><option value="3">Lleida</option><option value="4">Girona</option><option value="5">Madrid </option><option value="6">Las Palmas</option><option value="7">Sta. Cruz de Tenerife</option></select></div><div><label for="adservice_userbundle_usertype_country" class=" required">Country</label><select id="adservice_userbundle_usertype_country" name="adservice_userbundle_usertype[country]" required="required"><option value="1" selected="selected">Spain</option><option value="2">England</option><option value="3">France</option></select></div><div><label for="adservice_userbundle_usertype_language" class=" required">Language</label><select id="adservice_userbundle_usertype_language" name="adservice_userbundle_usertype[language]" required="required"><option value="1" selected="selected">es_ES</option><option value="2">en_EN</option><option value="3">fr_FR</option></select></div><div><label for="adservice_userbundle_usertype_workshop" class=" required">Workshop</label><select id="adservice_userbundle_usertype_workshop" name="adservice_userbundle_usertype[workshop]" required="required"><option value="1" selected="selected">workshop1</option><option value="2">workshop2</option><option value="3">workshop3</option><option value="4">workshop4</option><option value="5">workshop5</option></select></div></div>
+        <p>
+            <button id ="btn_save" type="submit">Save</button>
+        </p>
+    </form>
+    
+        </div>
+        
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>    
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>         
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>            
+                </ul>
+            </div>  
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>    
+                <a href="#">Privacy</a>    
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+        
+    </body>
+</html>
