@@ -17,8 +17,8 @@ class TicketControllerTest extends WebTestCase {
      */
     public function testNewTicket($users) {
         $client = static::createClient();
-        $client->followRedirects(true);
-        $client = UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]'] );
+        $client-> followRedirects(true);
+        UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]']);
         $crawler = $client->getCrawler();
         
         //miramos que exista el link "mis tickets" y lo clickamos
