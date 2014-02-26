@@ -61,7 +61,7 @@ class LoginControllerTest extends WebTestCase {
         
         //seleccionamos idioma español (para facilitar tema de url)
         UtilFunctions::setLang($crawler, $client, 'es');
-        
+        $crawler = $client->getCrawler();
         $linksPerfil = $crawler->selectLink('Mi Perfil');
         $linkPerfil = $linksPerfil->link();
         $crawler = $client->click($linkPerfil);

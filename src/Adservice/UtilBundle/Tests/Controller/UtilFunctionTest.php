@@ -37,31 +37,25 @@ class UtilFunctionTest
     }
     
     /**
-     * Hace login en la aplicacion 
-     * @param client $client
-     * @return client
-     */
-    public static function doLogin($client, $user, $pass) {
-        $crawler = $client->request('GET', '/');
-        $crawler = $client->getCrawler();
-        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
-                                                                     '_password' => $pass,
-                                                                    ));
-        //ejecuta el submit del form
-        $crawler = $client->submit($loginForm);
-        return $client;
-    }
-    
-    /**
      * Prepara $client con followRedirects activado, 
-     *                 inicia la sesion como $user y 
-     *                 cambia el ididoma a 'es' 
+     *                 inicia la sesion como $user 
+     *                 y cambia el ididoma a 'es' 
+     * @param client $client
+     * @param string $user
+     * @param string $pass
+     * @return client
      */
     public static function setClient($client, $user, $pass) {
         $client-> followRedirects(true);
-        UtilFunctionTest::doLogin($client, $user, $pass);
-        $crawler = $client->getCrawler();
+        //inicia la sesion como $user
+        $crawler = $client->request('GET', '/');
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
+                                                                     '_password' => $pass,
+                                                                    ));
+        $crawler = $client->submit($loginForm);
+        //cambia el ididoma a 'es' 
         UtilFunctionTest::setLang($crawler, $client, 'es');
+        
         return $client;
     }
 }
