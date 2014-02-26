@@ -46,7 +46,6 @@ class UtilFunctionTest
      * @return client
      */
     public static function setClient($client, $user, $pass) {
-        $client-> followRedirects(true);
         //inicia la sesion como $user
         $crawler = $client->request('GET', '/');
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,

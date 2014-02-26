@@ -18,6 +18,7 @@ class DefaultControllerTest extends WebTestCase
     public function testNewUser($type, $user)
     {
         $client = static::createClient();
+        $client-> followRedirects(true);
         UtilFunctionTest::setClient($client, 'admin', 'admin');
         $this->linkToNewTypeUser($client, $type);
 
@@ -53,6 +54,7 @@ class DefaultControllerTest extends WebTestCase
     public function testEditUser($type, $userEditFields)
     {
         $client = static::createClient();
+        $client-> followRedirects(true);
         UtilFunctionTest::setClient($client, 'admin', 'admin');
         
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
@@ -133,6 +135,7 @@ class DefaultControllerTest extends WebTestCase
     public function testEditProfile()
     {
         $client = static::createClient();
+        $client-> followRedirects(true);
         UtilFunctionTest::setClient($client, 'admin', 'admin');
         
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#profile');
@@ -166,6 +169,7 @@ class DefaultControllerTest extends WebTestCase
     public function testAccessDenied()
     {
         $client = static::createClient();
+        $client-> followRedirects(true);
         UtilFunctionTest::setClient($client, 'user1', 'user');
         $this->assertEquals(0, $client->getCrawler()->filter('table tr td a#user_list')->count(),
             'El usuario no ve el enlace a la lista de usuarios' );
