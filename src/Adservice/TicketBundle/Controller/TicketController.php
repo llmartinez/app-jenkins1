@@ -434,9 +434,14 @@ class TicketController extends Controller {
         //User
         if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
         if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
- 
-        return new Response(json_encode($tickets), $status = 200);
+        
+        
+        foreach ($tickets as $ticket){
+            $json[] = $ticket->to_json($tickets); 
+        }
+        return new Response(json_encode($json), $status = 200);
     }
+
 
     /**
      * Devuelve todos los usuarios que podran ser asignados a un ticket (admins i asesores has nuevo aviso)

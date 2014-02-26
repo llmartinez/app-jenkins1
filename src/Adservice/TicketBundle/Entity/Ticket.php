@@ -11,8 +11,8 @@ use Adservice\UserBundle\Entity\User;
  * @ORM\Table(name="ticket")
  * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\TicketRepository")
  */
-class Ticket implements \JsonSerializable
-{
+class Ticket {
+
     /**
      * @var integer $id
      *
@@ -35,20 +35,21 @@ class Ticket implements \JsonSerializable
      * @ORM\Column(name="importance", type="integer")
      */
     private $importance;
-    
+
     /**
      * @var integer $workshop
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop", inversedBy="tickets")
      */
     private $workshop;
-    
+
     /**
      * @var integer $car
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car")
      */
     private $car;
+
     /**
      * @var string $owner
      *
@@ -89,29 +90,28 @@ class Ticket implements \JsonSerializable
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;    
-    
+    private $title;
+
     /**
      * @var string $posts
      *
      * @ORM\OneToMany(targetEntity="Adservice\TicketBundle\Entity\Post", mappedBy="ticket")
      */
-    private $posts;  
-    
+    private $posts;
+
     /**
      * @var string $cars
      *
      * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
      */
     private $cars;
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -120,8 +120,7 @@ class Ticket implements \JsonSerializable
      *
      * @param \Adservice\TicketBundle\Entity\Status $status
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
     }
 
@@ -130,8 +129,7 @@ class Ticket implements \JsonSerializable
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -140,8 +138,7 @@ class Ticket implements \JsonSerializable
      *
      * @param integer $importance
      */
-    public function setImportance($importance)
-    {
+    public function setImportance($importance) {
         $this->importance = $importance;
     }
 
@@ -150,8 +147,7 @@ class Ticket implements \JsonSerializable
      *
      * @return integer 
      */
-    public function getImportance()
-    {
+    public function getImportance() {
         return $this->importance;
     }
 
@@ -160,8 +156,7 @@ class Ticket implements \JsonSerializable
      *
      * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
      */
-    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop)
-    {
+    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop) {
         $this->workshop = $workshop;
     }
 
@@ -170,11 +165,9 @@ class Ticket implements \JsonSerializable
      *
      * @return integer 
      */
-    public function getWorkshop()
-    {
+    public function getWorkshop() {
         return $this->workshop;
     }
-
 
     /**
      * Set car
@@ -182,8 +175,7 @@ class Ticket implements \JsonSerializable
      * @param \Adservice\CarBundle\Entity\Car $car
      * 
      */
-    public function setCar(\Adservice\CarBundle\Entity\Car $car)
-    {
+    public function setCar(\Adservice\CarBundle\Entity\Car $car) {
         $this->car = $car;
     }
 
@@ -192,19 +184,16 @@ class Ticket implements \JsonSerializable
      *
      * @return integer 
      */
-    public function getCar()
-    {
+    public function getCar() {
         return $this->car;
     }
-
 
     /**
      * Set owner
      *
      * @param \Adservice\UserBundle\Entity\User $owner
      */
-    public function setOwner(\Adservice\UserBundle\Entity\User $owner)
-    {
+    public function setOwner(\Adservice\UserBundle\Entity\User $owner) {
         $this->owner = $owner;
     }
 
@@ -213,18 +202,16 @@ class Ticket implements \JsonSerializable
      *
      * @return string 
      */
-    public function getOwner()
-    {
+    public function getOwner() {
         return $this->owner;
     }
-    
+
     /**
      * Set created_at
      *
      * @param datetime $createdAt
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->created_at = $createdAt;
     }
 
@@ -233,8 +220,7 @@ class Ticket implements \JsonSerializable
      *
      * @return datetime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
@@ -243,8 +229,7 @@ class Ticket implements \JsonSerializable
      *
      * @param datetime $modifiedAt
      */
-    public function setModifiedAt($modifiedAt)
-    {
+    public function setModifiedAt($modifiedAt) {
         $this->modified_at = $modifiedAt;
     }
 
@@ -253,8 +238,7 @@ class Ticket implements \JsonSerializable
      *
      * @return datetime 
      */
-    public function getModifiedAt()
-    {
+    public function getModifiedAt() {
         return $this->modified_at;
     }
 
@@ -263,8 +247,7 @@ class Ticket implements \JsonSerializable
      *
      * @param \Adservice\UserBundle\Entity\User $modified_by
      */
-    public function setModifiedBy(\Adservice\UserBundle\Entity\User $modified_by)
-    {
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $modified_by) {
         $this->modified_by = $modified_by;
     }
 
@@ -273,29 +256,25 @@ class Ticket implements \JsonSerializable
      *
      * @return user 
      */
-    public function getModifiedBy()
-    {
+    public function getModifiedBy() {
         return $this->modified_by;
     }
-    
+
     /**
      * Set assigned_to
      *
      * @param \Adservice\UserBundle\Entity\User $assigned_to
      */
-    public function setAssignedTo(\Adservice\UserBundle\Entity\User $assigned_to=null)
-    {
+    public function setAssignedTo(\Adservice\UserBundle\Entity\User $assigned_to = null) {
         $this->assigned_to = $assigned_to;
     }
-
 
     /**
      * Get assigned_to
      *
      * @return string 
      */
-    public function getAssignedTo()
-    {
+    public function getAssignedTo() {
         return $this->assigned_to;
     }
 
@@ -304,8 +283,7 @@ class Ticket implements \JsonSerializable
      *
      * @param string $title
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
     }
 
@@ -314,18 +292,16 @@ class Ticket implements \JsonSerializable
      *
      * @return string 
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
-    
+
     /**
      * Add posts
      *
      * @param Post $posts
      */
-    public function addPost($posts)
-    {
+    public function addPost($posts) {
         $this->posts[] = $posts;
     }
 
@@ -334,8 +310,7 @@ class Ticket implements \JsonSerializable
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getPosts()
-    {
+    public function getPosts() {
         return $this->posts;
     }
 
@@ -344,8 +319,7 @@ class Ticket implements \JsonSerializable
      *
      * @param Adservice\CarBundle\Entity\Car $cars
      */
-    public function addCar(\Adservice\CarBundle\Entity\Car $cars)
-    {
+    public function addCar(\Adservice\CarBundle\Entity\Car $cars) {
         $this->cars[] = $cars;
     }
 
@@ -354,26 +328,38 @@ class Ticket implements \JsonSerializable
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getCars()
-    {
+    public function getCars() {
         return $this->cars;
     }
-    
+
     public function __toString() {
         return $this->title;
     }
-    
-    public function __construct()
-    {
+
+    public function __construct() {
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'workshop' => $this->getWorkshop()->getName(),
-            'date' => $this->getCreatedAt()->format('d/m/Y'),
-        ];
+
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'title' => $this->getTitle(),
+//            'workshop' => $this->getWorkshop()->getName(),
+//            'date' => $this->getCreatedAt()->format('d/m/Y'),
+//        ];
+//    }
+       
+    /**
+     * Parsea los camposa a formato json
+     * @return Array
+     */
+    public function to_json() {
+
+        $json = array('id'      => $this->getId(),
+                      'title'   => $this->getTitle(),
+                      'workshop'=> $this->getWorkshop()->getName(),
+                      'date'    => $this->getCreatedAt()->format('d/m/Y'));
+        return $json;
     }
+    
 }
