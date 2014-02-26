@@ -11,14 +11,9 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     {
         $role = new Role();
         $role->setName('RoleTest'); 
-        
+        $this->assertEquals('', $role->getId(), "Probar el rol no tenga id (aun no esta asignado)");
+        $this->assertEquals('RoleTest', $role, "Probar el rol no tenga id (aun no esta asignado)");
         $this->role = $role;
-    }
-    
-    public function testGettersRole()
-    {
-        $role = $this->role;
-        return $role;
     }
     
     public static function GetRole()
