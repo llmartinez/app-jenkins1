@@ -5,7 +5,7 @@ namespace Adservice\UtilBundle\Tests\Controller;
 class UtilFunctionTest
 {
     /**
-     * 
+     * Cambia el locale
      * @param Crawler $crawler
      * @param client $client
      * @param String $lang (en|es|fr)
@@ -16,7 +16,7 @@ class UtilFunctionTest
             $crawler = $client->click($select_spanish_link);
         }
     }
-    
+
     /**
      * Hace un link y comprueba que redireccione correctamente
      * @param client $client
@@ -29,13 +29,13 @@ class UtilFunctionTest
        $crawler = $client->getCrawler();
        $link = $crawler->filter($location)->link();
        $crawler = $client->click($link);
-       
+
        $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
         '- Se muestra la pantalla del link a "'.$location.'" (status 200) '
         );
        return $crawler;
     }
-    
+
     /**
      * Prepara $client haciendo login como $user 
      *                 y cambiando el ididoma a 'es' 
@@ -53,7 +53,7 @@ class UtilFunctionTest
         $crawler = $client->submit($loginForm);
         //cambia el ididoma a 'es' 
         UtilFunctionTest::setLang($crawler, $client, 'es');
-        
+
         return $client;
     }
 }
