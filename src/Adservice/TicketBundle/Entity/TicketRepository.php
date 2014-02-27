@@ -57,15 +57,57 @@ class TicketRepository extends EntityRepository
         $query  = 'SELECT t FROM TicketBundle:Ticket t ';
         $joins  = 'JOIN t.workshop w ';
         $where  = 'WHERE t.id != 0 ';
+
+        //Comprueba que los filtros no esten vacios y setea la variable para la consulta
+        $consulta = $this->GetQuery($em, $security, $request, $query, $joins, $where);
+
+        return $consulta->getResult();
+    }
+
+    public function findTickets($security)
+    {
+        $em = $this->getEntityManager();
+
+        if ($security->isGranted('ROLE_ASSESSOR'))
+        {
+            $consulta = $em->createQuery('
+                SELECT t FROM TicketBundle:Ticket t
+                WHERE t.status = :status
+            ');
+
+        }else{
+
+            $consulta = $em->createQuery('
+                SELECT t FROM TicketBundle:Ticket t
+                WHERE t.status = :status
+                AND t.workshop = :workshop
+            ');
+
+            $consulta->setParameter('workshop', $security->getToken()->getUser()->getWorkshop());
+        }
+
+        $consulta->setParameter('status', 0);
+
+	return $consulta->getResult();
+    }
+
+    public static function GetQuery($em, $security, $request, $query, $joins, $where)
+    {
         $params = array();
 
         //Filtros enviados
+        $id_incidence = $request->get('id_incidence');
         $id_ticket   = $request->get('id_ticket');
         $id_partner  = $request->get('id_partner');
         $id_workshop = $request->get('id_workshop');
         $id_region   = $request->get('id_region');
 
-        //Comprueba que los filtros no esten vacios y setea las variables para la consulta
+        if ($id_incidence != "")
+        {
+            $where .= 'AND i.id = :id_incidence ';
+            $params[] = array('id_incidence', $id_incidence);
+        }
+
         if ($id_ticket != "")
         {
             $where .= 'AND t.id = :id_ticket ';
@@ -106,40 +148,6 @@ class TicketRepository extends EntityRepository
             $consulta->setParameter($param[0], $param[1]);
         }
 
-	   return $consulta->getResult();
+        return $consulta;
     }
-
-    public function findTickets($security)
-    {
-        $em = $this->getEntityManager();
-
-        if ($security->isGranted('ROLE_ASSESSOR'))
-        {
-            $consulta = $em->createQuery('
-                SELECT t FROM TicketBundle:Ticket t
-                WHERE t.status = :status
-            ');
-
-        }else{
-
-            $consulta = $em->createQuery('
-                SELECT t FROM TicketBundle:Ticket t
-                WHERE t.status = :status
-                AND t.workshop = :workshop
-            ');
-
-            $consulta->setParameter('workshop', $security->getToken()->getUser()->getWorkshop());
-        }
-
-        $consulta->setParameter('status', 0);
-
-	return $consulta->getResult();
-    }
-
 }
-/* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());
- *
- * ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
-            throw new AccessDeniedException();
-
- */
