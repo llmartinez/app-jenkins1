@@ -2,7 +2,7 @@
     database_driver="pdo_mysql"
     database_host="localhost"
     database_port=""
-    database_name="ad-service-test-roger"
+    database_name="ad-service-test"
     database_user="root"
     database_password="roger"
     mailer_transport="smtp"

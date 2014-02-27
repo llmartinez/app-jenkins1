@@ -5,11 +5,7 @@
     <property name="sourcedir" value="${basedir}/src" />
     <property name="builddir"  value="${workspace}/app/build" />
 
-    <!--    <target name="build" 
-    depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
-    
     <target name="build"            depends="parameters, prepare, vendors, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
-    <!--<target name="build"            depends="parameters, prepare2, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>-->
     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
@@ -92,8 +88,6 @@
             <arg value="--no-debug" />
             <arg value="web" />
         </exec>
-        
-
 
     </target>
     
