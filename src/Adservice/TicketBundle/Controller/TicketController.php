@@ -329,8 +329,10 @@ class TicketController extends Controller {
     public function workshopListAction() {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $logged_user = $this->get('security.context')->getToken()->getUser();
-        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+//        $logged_user = $this->get('security.context')->getToken()->getUser();
+//        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+        
+        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
 
         return $this->render('TicketBundle:Ticket:workshopsList.html.twig', array('workshops' => $workshops));
     }
@@ -385,7 +387,7 @@ class TicketController extends Controller {
     public function assignTicketSelectUserAction($id_ticket) {
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        $users = $this->getUsersToAssingFromTicket($ticket);
+        $users = $this->getUsersToAssingFromTicket();
 
         return $this->render('TicketBundle:Ticket:assignTicket.html.twig', array('ticket' => $ticket,
                     'users' => $users
@@ -445,13 +447,12 @@ class TicketController extends Controller {
      * Devuelve todos los usuarios que podran ser asignados a un ticket (admins i asesores has nuevo aviso)
      * @param type $id_ticket
      */
-    private function getUsersToAssingFromTicket($ticket) {
+    private function getUsersToAssingFromTicket() {
         $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
-        $partner = $em->getRepository('PartnerBundle:Partner')->find($workshop->getPartner()->getId());
+        $users = $em->getRepository('UserBundle:user')->findAll();
 
         $users_for_assign = array();
-        foreach ($partner->getUsers() as $user) {
+        foreach ($users as $user) {
             $role = $user->getRoles();
             if (($role[0]->getRole() == "ROLE_ADMIN") || ($role[0]->getRole() == "ROLE_ASSESSOR")) {
                 $users_for_assign[] = $user;

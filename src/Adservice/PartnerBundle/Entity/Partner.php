@@ -114,12 +114,12 @@ class Partner{
      */
     private $workshops;
 
-    /**
-    *
-    * @var type
-    * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-    */
-    private $users;
+//    /**
+//    *
+//    * @var type
+//    * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+//    */
+//    private $users;
 
     /**
      * @var datetime $created_at
@@ -455,23 +455,23 @@ class Partner{
         return $this->workshops;
     }
 
-    /**
-     * Add users
-     *
-     * @param Adservice\UserBundle\Entity\User $users
-     */
-    public function addUser(\Adservice\UserBundle\Entity\User $users)
-    {
-     $this->users[] = $users;
-    }
-
-    /**
-     * Get users
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
+//    /**
+//     * Add users
+//     *
+//     * @param Adservice\UserBundle\Entity\User $users
+//     */
+//    public function addUser(\Adservice\UserBundle\Entity\User $users)
+//    {
+//     $this->users[] = $users;
+//    }
+//
+//    /**
+//     * Get users
+//     *
+//     * @return Doctrine\Common\Collections\Collection
+//     */
+//    public function getUsers()
+//    {
+//        return $this->users;
+//    }
 }

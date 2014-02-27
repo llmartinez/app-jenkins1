@@ -15,12 +15,11 @@ class Assessors extends AbstractFixture implements OrderedFixtureInterface {
         $type = 'assessor';
         $pass = '6LQcTkIP+7AYn2UQfafPanykBGZtgXgw0JWS3RdS1x5rPy2B9nYmXbPqpwHHMtxOAHuQ18TmUq72C32bXIZT3Q==';
         $salt = '50b62d727a358f509f12c1cdec7dcd9a';
-        $partner = 'yes';
         $workshop = null;
         $role = 'ROLE_ASSESSOR';
         $num = Data::getNumAssessors();
         
-        $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $partner, $workshop, $role, $num);
+        $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $workshop, $role, $num);
     }
 }
 

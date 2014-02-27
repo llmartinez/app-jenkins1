@@ -219,7 +219,6 @@ class DefaultControllerTest extends WebTestCase
                                 'adservice_userbundle_usertype[region]'                     => '1',
                                 'adservice_userbundle_usertype[province]'                   => '1',
                                 'adservice_userbundle_usertype[country]'                    => '1',
-                                'adservice_userbundle_usertype[partner]'                    => '1',
 
                                 ),
             ),
@@ -236,7 +235,6 @@ class DefaultControllerTest extends WebTestCase
                                 'adservice_userbundle_usertype[region]'                     => '1',
                                 'adservice_userbundle_usertype[province]'                   => '1',
                                 'adservice_userbundle_usertype[country]'                    => '1',
-                                'adservice_userbundle_usertype[partner]'                    => '1',
                                 ),
             ),
             array('type' => 'user',
