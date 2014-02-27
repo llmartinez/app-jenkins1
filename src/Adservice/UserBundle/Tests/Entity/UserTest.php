@@ -6,7 +6,6 @@ use Adservice\UtilBundle\Tests\Entity\CountryTest;
 use Adservice\UtilBundle\Tests\Entity\RegionTest;
 use Adservice\UtilBundle\Tests\Entity\ProvinceTest;
 use Adservice\UserBundle\Tests\Entity\RoleTest;
-use Adservice\PartnerBundle\Tests\Entity\PartnerTest;
 use Adservice\WorkshopBundle\Tests\Entity\WorkshopTest;
 
 class UserTest extends \PHPUnit_Framework_TestCase
@@ -45,8 +44,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \DateTime('today'), $user->getModifiedAt(),  "Probar la fecha de modificacion: today");
         $user->setModifyBy(UserTest::GetUser());
         $this->assertEquals('userTest', $user->getModifyBy()->getUserName(), "Probar el usuario de modificacion: userTest");
-        $user->setPartner(PartnerTest::GetPartner());
-        
+                
         $this->user = $user;
     }
     

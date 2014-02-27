@@ -26,6 +26,7 @@ class WorkshopType extends AbstractType
             ->add('adservice_plus', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('typology')
+            ->add('partner')
             ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')
             ->add('region')

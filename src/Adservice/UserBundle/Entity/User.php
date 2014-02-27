@@ -11,7 +11,7 @@ use Adservice\UtilBundle\Entity\Country;
 use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
-use Adservice\PartnerBundle\Entity\Partner;
+//use Adservice\PartnerBundle\Entity\Partner;
 
 /**
  * Adservice\UserBundle\Entity\User
@@ -182,12 +182,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $language;
 
-    /**
-     *
-     * @var type
-     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
-     */
-    private $partner;
+//    /**
+//     *
+//     * @var type
+//     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
+//     */
+//    private $partner;
 
     /**
      * @var datetime $created_at
@@ -564,11 +564,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->modify_by;
     }
 
-    public function getPartner() {
-        return $this->partner;
-    }
-
-    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
-        $this->partner = $partner;
-    }
+//    public function getPartner() {
+//        return $this->partner;
+//    }
+//
+//    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+//        $this->partner = $partner;
+//    }
 }

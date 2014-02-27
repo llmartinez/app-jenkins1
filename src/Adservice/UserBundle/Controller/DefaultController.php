@@ -69,9 +69,10 @@ class DefaultController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $logged_user = $this->get('security.context')->getToken()->getUser();
-        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
+//        $logged_user = $this->get('security.context')->getToken()->getUser();
+//        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
         
+        $users = $em->getRepository("UserBundle:User")->findAll();
 
         $users_role_admin = array();
         $users_role_assessor = array();

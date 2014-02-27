@@ -17,15 +17,17 @@ class DefaultController extends Controller {
      * @throws AccessDeniedException
      */
     public function listAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         
-        $logged_user = $this->get('security.context')->getToken()->getUser();
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+//        $logged_user = $this->get('security.context')->getToken()->getUser();
+//        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
 
+        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
+                
         return $this->render('WorkshopBundle:Default:list.html.twig', array('workshops' => $workshops));
     }
 
@@ -33,7 +35,7 @@ class DefaultController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
         
-        $logged_user = $this->get('security.context')->getToken()->getUser();
+//        $logged_user = $this->get('security.context')->getToken()->getUser();
         $workshop  = new Workshop();
         $request = $this->getRequest();
         $form = $this->createForm(new WorkshopType(), $workshop);
@@ -41,7 +43,7 @@ class DefaultController extends Controller {
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $workshop->setPartner($logged_user->getPartner());
+//            $workshop->setPartner($logged_user->getPartner());
             $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $this->saveWorkshop($em, $workshop);
             
