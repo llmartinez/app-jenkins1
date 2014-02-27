@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : header
     Created on : 21-ene-2014, 10:11:21
     Author     : dani
@@ -34,7 +34,9 @@ html {
     color: #fff;
     padding: 20px;
 }
-
+.margined {
+    margin-right: 40px;
+}
 /*
     HEADER
 */
@@ -149,13 +151,20 @@ html {
 }
 
  /*
-    LISTADO TICKETS 
+    LISTADO TICKETS
  */
 .colList {
     float: left;
     width: 50%;
 }
-
+.colFilter {
+    float: left;
+    width: 20%;
+}
+.colTickets {
+    float: left;
+    width: 80%;
+}
 /*
     LISTA MENSAJES
 */
@@ -177,9 +186,9 @@ html {
     line-height: 33px;
     font-size: 19px;
     background: linear-gradient(top, #ffffff 1%,#eaeaea 100%);
-    box-shadow: 
-        0px 0px 0px 1px rgba(155,155,155,0.3), 
-        1px 0px 0px 0px rgba(255,255,255,0.9) inset, 
+    box-shadow:
+        0px 0px 0px 1px rgba(155,155,155,0.3),
+        1px 0px 0px 0px rgba(255,255,255,0.9) inset,
         0px 2px 2px rgba(0,0,0,0.1);
 }
 .ac-container label:hover{
@@ -190,8 +199,8 @@ html {
     background: #c6e1ec;
     color: #3d7489;
     text-shadow: 0px 1px 1px rgba(255,255,255, 0.6);
-    box-shadow: 
-        0px 0px 0px 1px rgba(155,155,155,0.3), 
+    box-shadow:
+        0px 0px 0px 1px rgba(155,155,155,0.3),
         0px 2px 2px rgba(0,0,0,0.1);
 }
 .ac-container label:hover:after,
@@ -202,7 +211,7 @@ html {
     height: 24px;
     right: 13px;
     top: 7px;
-    background: transparent url(../images/arrow_down.png) no-repeat center center;  
+    background: transparent url(../images/arrow_down.png) no-repeat center center;
 }
 .ac-container input:checked + label:hover:after{
     background-image: url(../images/arrow_up.png);
@@ -217,13 +226,13 @@ html {
     height: 0px;
     position: relative;
     z-index: 10;
-    transition: 
-        height 0.3s ease-in-out, 
+    transition:
+        height 0.3s ease-in-out,
         box-shadow 0.6s linear;
 }
 .ac-container input:checked ~ article{
-    transition: 
-        height 0.5s ease-in-out, 
+    transition:
+        height 0.5s ease-in-out,
         box-shadow 0.1s linear;
     box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
 }

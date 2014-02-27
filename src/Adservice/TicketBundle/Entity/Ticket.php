@@ -35,14 +35,14 @@ class Ticket implements \JsonSerializable
      * @ORM\Column(name="importance", type="integer")
      */
     private $importance;
-    
+
     /**
      * @var integer $workshop
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\WorkshopBundle\Entity\Workshop", inversedBy="tickets")
      */
     private $workshop;
-    
+
     /**
      * @var integer $car
      *
@@ -89,26 +89,26 @@ class Ticket implements \JsonSerializable
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;    
-    
+    private $title;
+
     /**
      * @var string $posts
      *
      * @ORM\OneToMany(targetEntity="Adservice\TicketBundle\Entity\Post", mappedBy="ticket")
      */
-    private $posts;  
-    
+    private $posts;
+
     /**
      * @var string $cars
      *
      * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
      */
     private $cars;
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -128,7 +128,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -148,7 +148,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get importance
      *
-     * @return integer 
+     * @return integer
      */
     public function getImportance()
     {
@@ -168,7 +168,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get workshop
      *
-     * @return integer 
+     * @return integer
      */
     public function getWorkshop()
     {
@@ -180,7 +180,7 @@ class Ticket implements \JsonSerializable
      * Set car
      *
      * @param \Adservice\CarBundle\Entity\Car $car
-     * 
+     *
      */
     public function setCar(\Adservice\CarBundle\Entity\Car $car)
     {
@@ -190,7 +190,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get car
      *
-     * @return integer 
+     * @return integer
      */
     public function getCar()
     {
@@ -211,13 +211,13 @@ class Ticket implements \JsonSerializable
     /**
      * Get owner
      *
-     * @return string 
+     * @return string
      */
     public function getOwner()
     {
         return $this->owner;
     }
-    
+
     /**
      * Set created_at
      *
@@ -231,7 +231,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -251,7 +251,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -271,13 +271,13 @@ class Ticket implements \JsonSerializable
     /**
      * Get modified_by
      *
-     * @return user 
+     * @return user
      */
     public function getModifiedBy()
     {
         return $this->modified_by;
     }
-    
+
     /**
      * Set assigned_to
      *
@@ -292,7 +292,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get assigned_to
      *
-     * @return string 
+     * @return string
      */
     public function getAssignedTo()
     {
@@ -312,13 +312,13 @@ class Ticket implements \JsonSerializable
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
     }
-    
+
     /**
      * Add posts
      *
@@ -332,7 +332,7 @@ class Ticket implements \JsonSerializable
     /**
      * Get posts
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getPosts()
     {
@@ -352,22 +352,22 @@ class Ticket implements \JsonSerializable
     /**
      * Get cars
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCars()
     {
         return $this->cars;
     }
-    
+
     public function __toString() {
         return $this->title;
     }
-    
+
     public function __construct()
     {
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     public function jsonSerialize() {
         return [
             'id' => $this->getId(),

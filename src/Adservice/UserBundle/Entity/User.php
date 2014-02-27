@@ -160,10 +160,10 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
      */
     private $province;
-    
+
     /**
      * @var string $workshp
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="users")
      */
     private $workshop;
@@ -181,18 +181,18 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Language")
      */
     private $language;
-    
+
 //    /**
 //     *
 //     * @var string $partner
 //     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
 //     */
 //    private $partner;
-    
-    
+
+
     /**
      *
-     * @var type 
+     * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
      */
     private $partner;
@@ -221,7 +221,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -239,7 +239,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername() {
         return $this->username;
@@ -257,7 +257,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword() {
         return $this->password;
@@ -275,7 +275,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get salt
      *
-     * @return string 
+     * @return string
      */
     public function getSalt() {
         return $this->salt;
@@ -293,7 +293,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive() {
         return $this->active;
@@ -311,7 +311,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get language
      *
-     * @return string 
+     * @return string
      */
     public function getLanguage() {
         return $this->language;
@@ -418,7 +418,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function eraseCredentials() {
-        
+
     }
 
     public function getRoles() {
@@ -530,7 +530,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt() {
         return $this->created_at;
@@ -548,7 +548,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt() {
         return $this->modified_at;
@@ -566,12 +566,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get modify_by
      *
-     * @return integer 
+     * @return integer
      */
     public function getModifyBy() {
         return $this->modify_by;
     }
-    
+
     public function getPartner() {
         return $this->partner;
     }
@@ -579,6 +579,4 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
         $this->partner = $partner;
     }
-
-
 }

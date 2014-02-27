@@ -1,18 +1,41 @@
 {# muestra los datos de la incidencia #}
+<table class="table table-hover">
+    <tr>
+        <th>#           </th>
+        <th>Ticket Title</th>
+        <th>status      </th>
+        <th>Workshop    </th>
+        <th>Assigned To </th>
+        <th>Date        </th>
+        <th>Required by </th>
+        <th>Car         </th>
+        <th>PlateNumber </th>
+        <th>VIN         </th>
+        <th>Action      </th>
+    </tr>
+    <tr>
+      {% set ticket = incidence.ticket %}
+      {% set car = incidence.ticket.car %}
+        <td> {{ incidence.id }}</td>
+        <td> {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}</td>
+        <td> {{ incidence.status   }}</td>
+        <td> {{ incidence.workshop }}</td>
+        <td> {{ ticket.assignedTo  }}</td>
+        <td> {{ incidence.createdAt | date("d-m-Y") }}</td>
+        <td> {{ incidence.owner.username | upper }}: {{ ticket.owner    }}</td>
+        <td> {{ car.version.model.brand }}
+             {{ car.version.model       }}
+             {{ car.version             }}
+            ({{ car.year                }})
+        </td>
+        <td> {{ car.plateNumber  }}</td>
+        <td> {{ car.vin          }}</td>
+            <td>
+                {% if is_granted('ROLE_ASSESSOR') %}
 
-    <p> <label>Title:               </label>  {{ incidence.ticket.title | length > 100 ?  incidence.ticket.title | slice(0, 100) ~ '...' : incidence.ticket.title }} </p>
-
-    <p> <label>Workshop:            </label>  {{ incidence.workshop }}          </p>
-    
-    {% set car = incidence.ticket.car %}
-    <p> <label>Car:                 </label>  {{ car.version.model.brand }} 
-                                              {{ car.version.model }} 
-                                              {{ car.version }} 
-                                             ({{ car.year }})                   </p>
-        
-    <p> <label>Created By:          </label>  {{ incidence.owner }}                                                  </p>
-    <p> <label>Created At:          </label>  {{ incidence.createdAt | date("d-m-Y") }}  ( {{ incidence.status }} )  </p>
-    
-    <p> <label>Related to ticket:   </label> #{{ incidence.ticket.id }}  
-                                             <a href="{{ path('showTicket', {'id_ticket': incidence.ticket.id }) }}">View</a></p>
-    
+                    <a href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>

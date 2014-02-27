@@ -1,39 +1,39 @@
 {# muestra los botones de edicion y asignacion/desasignacion del asesor #}
 
-    {# se borran los tickets solo si no tienen respuesta (1 post) #}
-    {% if ticket.posts | length <=1 %}
-        {# puede borrarlo el assessor o el usuario si el ticket no esta assignado aun #}
-        {% if is_granted('ROLE_ASSESSOR') or ticket.assignedTo == null %}
-            <a href="#"><span class="glyphicon glyphicon-trash pull-right" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
-        {% endif %}
-    {% endif %}
-
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if ticket.assignedTo is not null %}
 
             {% if ticket.assignedTo == app.security.getToken().getUser() %}
 
-                <a class="btn btn-primary pull-right"
-                   href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status"> 
-                    Ignore </a>
+                {# desasignar Ticket #}
+                <a href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status">
+                    <span class="glyphicon glyphicon-remove-circle"></span></a>
 
-                <a class="btn btn-primary pull-right" href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"> Edit </a>
+                {# editar Ticket #}
+                <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <span class="glyphicon glyphicon-pencil"></span></a></a>
             {% else %}
 
-                <a class="btn btn-primary pull-right" style="background-color:gray">Ticket assigned to other assessor</a>
+                {# Ticket asignado a otro assessor #}
+                <a><span class="glyphicon glyphicon-ban-circle"></span></a>
 
             {% endif %}
 
         {% else %}
-
-            <a class="btn btn-primary pull-right" id="assign" 
-               href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" > 
-                Assign </a>
+            {# asignar Ticket #}
+            <a href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+                <span class="glyphicon glyphicon-ok-circle"></span></a>
 
         {% endif %}
     {% endif %}
-                
-                
+
+    {# se borran los tickets solo si no tienen respuesta (1 post) #}
+    {% if ticket.posts | length <=1 %}
+        {# puede borrarlo el assessor o el usuario si el ticket no esta assignado aun #}
+        {% if is_granted('ROLE_ASSESSOR') or ticket.assignedTo == null %}
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+        {% endif %}
+    {% endif %}
+
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -43,7 +43,7 @@
                 <h4 class="modal-title" id="myModalLabel">Eliminar Ticket</h4>
             </div>
             <div class="modal-body">
-                Estas seguro que quieres eliminar este ticket?                    
+                Estas seguro que quieres eliminar este ticket?
             </div>
             <div class="modal-footer">
                 <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
@@ -59,7 +59,7 @@
                 var id_ticket = {{ ticket.id }};
                 confirm_delete_ticket_modal(id_ticket);
             })
-            
+
             //util.js
             table_filter();
         });

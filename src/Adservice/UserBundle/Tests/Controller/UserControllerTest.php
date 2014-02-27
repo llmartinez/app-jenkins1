@@ -8,9 +8,8 @@ use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
 class DefaultControllerTest extends WebTestCase
 {
     protected function setUp() {
-        
     }
-    
+
     /**
      * Test que comprueba que se cree un usuario de cada tipo
      * @dataProvider users
@@ -31,21 +30,21 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         //comprueba que vuelva a la pagina del listado de usuarios
-        $this->assertRegExp('/.*\/..\/user\/list/', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/list/', $client->getRequest()->getUri(),
             'El usuario ve el listado de usuarios'
         );
         $this->assertGreaterThan(0, $crawler->filter('table tr td a#list_username:contains("test'.$type.'")')->count(), 
             'El admin creado esta en la lista'
         );
 
-        //volver al inicio 
+        //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
 
         //comprueba que vuelva a la pagina del listado de usuarios
-        $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(),
             'El usuario ve la pagina principal'
         );
-    } 
+    }
 
     /**
      * Test que comprueba que se edite un usuario de cada tipo
@@ -56,47 +55,47 @@ class DefaultControllerTest extends WebTestCase
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        
+
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
-            
+
         $location = 'table tr td a#btn_edittest'.$type;
         $link = $client->getCrawler()->filter($location)->link();
         $crawler = $client->click($link);
 
         //comprueba que vaya a la pagina de edicion de usuarios
-        $this->assertRegExp('/.*\/..\/user\/edit\/.*/', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/edit\/.*/', $client->getRequest()->getUri(),
             'El usuario ve el listado de usuarios'
         );
 
         //carga el form con los datos editados del usuario
         $editUserForm = $crawler->selectButton('btn_save')->form($userEditFields);
         //ejecuta el submit del form
-        $crawler = $client->submit($editUserForm); 
+        $crawler = $client->submit($editUserForm);
 
         //comprueba que devuelva una pagina sin error
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         //comprueba que vuelva a la pagina del listado de usuarios
-        $this->assertRegExp('/.*\/..\/user\/list/', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/list/', $client->getRequest()->getUri(),
             'El usuario ve el listado de usuarios'
         );
 
         $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("test'.$type.'_edited@test.es")')->count(),
             'Se ha editado el mail del usuario "test'.$type.'"');
-        //volver al inicio 
+        //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
-    } 
+    }
 
     /*TODO
      * la funcion javascript que cambia la url de 'foo' a 'id_usuario' no funciona,
      * se envia al controller la funcion deleteUser('foo');
-    
+
     public function testDeleteUser()
     {
         $client = $this->client;
         $userInfo = $this->userInfo;
         $crawler = UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
-        
+
         foreach ($userInfo as $user) {
             $num_users = $crawler->filter('table tr td a#list_username:contains("test'.$user[1].'")')->count();
 
@@ -104,22 +103,22 @@ class DefaultControllerTest extends WebTestCase
             $location = 'table tr td a#btn_deletetest'.$user[1];
             $link = $crawler->filter($location)->link();
             $crawler = $client->click($link);
-            
+
             $location = 'div#myModal div div div.modal-footer a#btn_yes';
             $link = $crawler->filter($location)->link();
  ----->>>>  //$crawler = $client->click($link);
-            
-       echo ' --> test'.$user[1].' = '.$num_users;  
-       
-    
+
+       echo ' --> test'.$user[1].' = '.$num_users;
+
+
             //comprueba que vuelva a la pagina del listado de usuarios
-            $this->assertRegExp('/.*\/..\/user\/delete\/.* /', $client->getRequest()->getUri(), 
+            $this->assertRegExp('/.*\/..\/user\/delete\/.* /', $client->getRequest()->getUri(),
                 'El usuario ve el listado de usuarios'
             );
             $_this->assertEquals(0, $crawler->filter('table tr td a#list_username:contains("'.$user.'")')->count(),
             'Se ha borrado el usuario "'.$user.'"'
             );
-            //volver al inicio 
+            //volver al inicio
             //$crawler = UtilFunctionTest::linkTo($client, $crawler, $this, 'ol li a#home');
         }
     }
@@ -128,7 +127,7 @@ class DefaultControllerTest extends WebTestCase
 //        parent::tearDown();
 //    }
 //}
-    
+
     /**
      * Test que comprueba que se edite el perfil del usuario logeado
      */
@@ -137,32 +136,32 @@ class DefaultControllerTest extends WebTestCase
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        
+
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#profile');
-        
+
         //carga el form con los datos editados del usuario
-        $editUserForm = $client->getCrawler()->selectButton("btn_save")->form( array( 
+        $editUserForm = $client->getCrawler()->selectButton("btn_save")->form( array(
                                                                 'adservice_userbundle_usertype[email_1]'    => 'test_edited@test.es',
                                                                 'adservice_userbundle_usertype[email_2]'    => 'test_edited@test.com',
                                                             ));
         //ejecuta el submit del form
-        $crawler = $client->submit($editUserForm); 
+        $crawler = $client->submit($editUserForm);
 
         //comprueba que devuelva una pagina sin error
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         //comprueba que vuelva a la pagina del listado de usuarios
-        $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(), 
+        $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(),
             'El usuario ve el indice'
         );
-        
+
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#profile');
-        
+
         //comprueba que el usuario haya sido editado
         $this->assertEquals('test_edited@test.es', $client->getCrawler()->filter('input#adservice_userbundle_usertype_email_1')->attr('value'),
                 'El usuario ha sido editado');
     }
-    
+
     /**
      * Test que comprueba que salten alertas de acceso denegado
      */
@@ -173,33 +172,33 @@ class DefaultControllerTest extends WebTestCase
         UtilFunctionTest::doLogin($client, 'user1', 'user');
         $this->assertEquals(0, $client->getCrawler()->filter('table tr td a#user_list')->count(),
             'El usuario no ve el enlace a la lista de usuarios' );
+
         /*
             //link al cual un usuario normal no tiene acceso
             $crawler = $client->request('GET', '/es/user/list');
 
             $this->assertEquals(403, $client->getResponse()->getStatusCode(),
             'Acceso denegado al usuario (solo entrara un admin)'
-            );  
+            );
         */
     }
-    
+
     /**
      * Lleva al usuario desde la pantalla de indice hasta la de nuevo usuario del $type que se introduzca por parametro
-     * @param Client $client 
+     * @param Client $client
      * @param String $type (admin, assessor, user)
      * @return Client
-     */ 
+     */
     public function linkToNewTypeUser($client, $type)
     {
-        
+
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_new');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
-        
+
         return $client;
-    }  
-    
-    
+    }
+
     /**
      * DataProvider de usuarios: Contiene un admin, un assessor y un user
      * @return array users
@@ -209,7 +208,7 @@ class DefaultControllerTest extends WebTestCase
         return array(
             array('type' => 'admin',
                   'user' => array(
-                                'adservice_userbundle_usertype[username]'                   => 'testadmin', 
+                                'adservice_userbundle_usertype[username]'                   => 'testadmin',
                                 'adservice_userbundle_usertype[password][Contraseña]'       => 'test',
                                 'adservice_userbundle_usertype[password][Repite Contraseña]'=> 'test',
                                 'adservice_userbundle_usertype[name]'                       => 'Test',
@@ -221,12 +220,12 @@ class DefaultControllerTest extends WebTestCase
                                 'adservice_userbundle_usertype[province]'                   => '1',
                                 'adservice_userbundle_usertype[country]'                    => '1',
                                 'adservice_userbundle_usertype[partner]'                    => '1',
-                      
+
                                 ),
             ),
             array('type' => 'assessor',
                   'user' => array(
-                                'adservice_userbundle_usertype[username]'                   => 'testassessor', 
+                                'adservice_userbundle_usertype[username]'                   => 'testassessor',
                                 'adservice_userbundle_usertype[password][Contraseña]'       => 'test',
                                 'adservice_userbundle_usertype[password][Repite Contraseña]'=> 'test',
                                 'adservice_userbundle_usertype[name]'                       => 'Test',
@@ -242,7 +241,7 @@ class DefaultControllerTest extends WebTestCase
             ),
             array('type' => 'user',
                   'user' => array(
-                                'adservice_userbundle_usertype[username]'                   => 'testuser', 
+                                'adservice_userbundle_usertype[username]'                   => 'testuser',
                                 'adservice_userbundle_usertype[password][Contraseña]'       => 'test',
                                 'adservice_userbundle_usertype[password][Repite Contraseña]'=> 'test',
                                 'adservice_userbundle_usertype[name]'                       => 'Test',
@@ -267,19 +266,19 @@ class DefaultControllerTest extends WebTestCase
     {
         return array(
             array('type' => 'admin',
-                  'user' => array( 
+                  'user' => array(
                                 'adservice_userbundle_usertype[email_1]'    => 'testadmin_edited@test.es',
                                 'adservice_userbundle_usertype[email_2]'    => 'testadmin_edited@test.com',
                                 ),
                 ),
             array('type' => 'assessor',
-                  'user' => array( 
+                  'user' => array(
                                 'adservice_userbundle_usertype[email_1]'    => 'testassessor_edited@test.es',
                                 'adservice_userbundle_usertype[email_2]'    => 'testassessor_edited@test.com',
                                 ),
                 ),
             array('type' => 'user',
-                  'user' => array( 
+                  'user' => array(
                                 'adservice_userbundle_usertype[email_1]'    => 'testuser_edited@test.es',
                                 'adservice_userbundle_usertype[email_2]'    => 'testuser_edited@test.com',
                                 ),

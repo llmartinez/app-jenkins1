@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
 
-        {% if ticket.car is not null %}    
+        {% if ticket.car is not null %}
             $('select[id=idModel]').empty();
                 var opt_models = "<option value=0>Select Model..</option>";
                 {% for model in models %}
@@ -23,7 +23,7 @@
 
                 {% endfor %}
        {% endif %}
-           
+
         $('form[id=contact]').find('select[id=new_car_form_version]').append(opt_versions);
     });
-</script>           
+</script>
