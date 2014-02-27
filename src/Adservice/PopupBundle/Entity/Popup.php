@@ -4,7 +4,6 @@ namespace Adservice\PopupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\UserBundle\Entity\User;
-//use Adservice\PopupBundle\Entity\Popup;
 use Adservice\PopupBundle\Entity\PopupRepository;
 
 /**
@@ -14,7 +13,7 @@ use Adservice\PopupBundle\Entity\PopupRepository;
  * @ORM\Entity(repositoryClass="Adservice\PopupBundle\Entity\PopupRepository")
  */
 //class Popup implements \Serializable{
-class Popup implements \JsonSerializable {
+class Popup {
     /**
      * @var integer $id
      *
@@ -254,11 +253,18 @@ class Popup implements \JsonSerializable {
     /**
      * Campos que apareceran al hacer un json de esta clase
      */
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription()
-        ];
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'name' => $this->getName(),
+//            'description' => $this->getDescription()
+//        ];
+//    }
+    
+    public function to_json(){
+        $json = array('id'          => $this->getId(),
+                      'name'        => $this->getName(),
+                      'description' => $this->getDescription());
+        return $json;
     }
 }

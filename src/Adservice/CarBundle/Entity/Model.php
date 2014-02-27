@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="model")
  * @ORM\Entity
  */
-class Model implements \JsonSerializable
-{
+class Model {
     /**
      * @var integer $id
      *
@@ -124,12 +123,19 @@ class Model implements \JsonSerializable
         return $this->name;
     }
     
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName()
-        ];
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'name' => $this->getName()
+//        ];
+//    }
+    
+    public function to_json(){
+        $json = array('id'  => $this->getId(),
+                      'name'=> $this->getName());
+        return $json;
     }
+    
     public function __construct()
     {
         $this->version = new \Doctrine\Common\Collections\ArrayCollection();

@@ -244,8 +244,10 @@ class IncidenceController extends Controller{
         if($option == 'owner'   ) $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
         if($option == 'workshop') $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
         
-
-        return new Response(json_encode($incidences), $status = 200);
+        foreach ($incidences as $incidence) {
+            $json[] = $incidence->to_json();
+        }
+        return new Response(json_encode($json), $status = 200);
     }
     
     /**

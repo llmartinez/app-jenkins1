@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="province")
  * @ORM\Entity
  */
-class Province implements \JsonSerializable {
+class Province {
 
     /**
      * @var integer $id
@@ -90,11 +90,17 @@ class Province implements \JsonSerializable {
         return $this->getProvince();
     }
     
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'region' => $this->getRegion(),
-            'province' => $this->getProvince()
-        ];
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'region' => $this->getRegion(),
+//            'province' => $this->getProvince()
+//        ];
+//    }
+    public function to_json(){
+        $json = array('id'      => $this->getId(),
+                      'region'  => $this->getRegion(),
+                      'province'=> $this->getProvince());
+        return $json;
     }
 }

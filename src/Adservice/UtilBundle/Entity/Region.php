@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="region")
  * @ORM\Entity
  */
-class Region
-{
+class Region{
     /**
      * @var integer $id
      *
