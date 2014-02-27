@@ -16,10 +16,10 @@ use Adservice\WorkshopBundle\Entity\Workshop;
  * Adservice\PartnerBundle\Entity\Partner
  *
  * @ORM\Table(name="partner")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\PartnerBundle\Entity\PartnerRepository")
  */
 class Partner{
-    
+
     /**
      * @var integer $id
      *
@@ -91,42 +91,34 @@ class Partner{
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
      */
     private $region;
-    
+
     /**
      * @var string $province
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
      */
     private $province;
-    
+
     /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
-    
+
     /**
      *
-     * @var string $workshops 
-     * 
+     * @var string $workshops
+     *
      * @ORM\OneToMany(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", mappedBy="partner")
      */
     private $workshops;
-    
-//    /**
-//     *
-//     * @var string $users
-//     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-//     */
-//    private $users;
-    
-    
+
     /**
-     *
-     * @var type 
-     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-     */
+    *
+    * @var type
+    * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+    */
     private $users;
 
     /**
@@ -149,16 +141,16 @@ class Partner{
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
     private $modify_by;
-    
+
     public function __construct() {
         $this->workshops = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        // $this->users = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -178,7 +170,7 @@ class Partner{
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -198,7 +190,7 @@ class Partner{
     /**
      * Get phone_number_1
      *
-     * @return integer 
+     * @return integer
      */
     public function getPhoneNumber1()
     {
@@ -218,7 +210,7 @@ class Partner{
     /**
      * Get phone_number_2
      *
-     * @return integer 
+     * @return integer
      */
     public function getPhoneNumber2()
     {
@@ -238,7 +230,7 @@ class Partner{
     /**
      * Get email_1
      *
-     * @return string 
+     * @return string
      */
     public function getEmail1()
     {
@@ -258,7 +250,7 @@ class Partner{
     /**
      * Get email_2
      *
-     * @return string 
+     * @return string
      */
     public function getEmail2()
     {
@@ -278,7 +270,7 @@ class Partner{
     /**
      * Get fax
      *
-     * @return integer 
+     * @return integer
      */
     public function getFax()
     {
@@ -298,7 +290,7 @@ class Partner{
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -318,7 +310,7 @@ class Partner{
     /**
      * Get postal_code
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostalCode()
     {
@@ -337,7 +329,7 @@ class Partner{
     /**
      * Get region
      *
-     * @return string 
+     * @return string
      */
     public function getRegion()
     {
@@ -356,13 +348,13 @@ class Partner{
     /**
      * Get province
      *
-     * @return string 
+     * @return string
      */
     public function getProvince()
     {
         return $this->province;
     }
-    
+
     /**
      * Set active
      *
@@ -375,7 +367,7 @@ class Partner{
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive() {
         return $this->active;
@@ -393,7 +385,7 @@ class Partner{
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -405,14 +397,14 @@ class Partner{
      *
      * @param datetime $modifiedAt
      */
-    public function setModifiedAt($modifiedAt) {            
+    public function setModifiedAt($modifiedAt) {
         $this->modified_at = $modifiedAt;
     }
 
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -432,13 +424,13 @@ class Partner{
     /**
      * Get modify_by
      *
-     * @return integer 
+     * @return integer
      */
     public function getModifyBy()
     {
         return $this->modify_by;
     }
-    
+
     public function __toString() {
         return $this->getName();
     }
@@ -456,7 +448,7 @@ class Partner{
     /**
      * Get workshops
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getWorkshops()
     {
@@ -470,13 +462,13 @@ class Partner{
      */
     public function addUser(\Adservice\UserBundle\Entity\User $users)
     {
-        $this->users[] = $users;
+     $this->users[] = $users;
     }
 
     /**
      * Get users
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {

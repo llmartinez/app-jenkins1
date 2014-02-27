@@ -1,5 +1,4 @@
 <?php
-
 namespace Adservice\TicketBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
@@ -12,7 +11,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
-   
     public function findAllOpen($user, $status)
     {
         $workshops = $user->getPartner()->getWorkshops();
@@ -22,11 +20,11 @@ class TicketRepository extends EntityRepository
             if ($tickets != null) return $tickets;
         }
     }
-    
+
     public function findAllAssigned ($user, $status, $bool)
     {
         ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
-        
+
         $workshops = $user->getPartner()->getWorkshops();
         foreach ($workshops as $workshop) {
 
@@ -36,50 +34,111 @@ class TicketRepository extends EntityRepository
             if ($tickets != null) return $tickets;
         }
     }
-    
+
     public function findAllByOwner ($user, $status)
     {
-        $tickets = $this->findBy(array('owner' => $user->getId(), 
+        $tickets = $this->findBy(array('owner' => $user->getId(),
                                        'status' => $status->getId()));
         return $tickets;
     }
-     
+
     public function findAllByWorkshop ($user, $status)
     {
-        $tickets = $this->findBy(array('workshop' => $user->getWorkshop()->getId(), 
+        $tickets = $this->findBy(array('workshop' => $user->getWorkshop()->getId(),
                                        'status' => $status->getId()));
         return $tickets;
     }
-    
-    public function findTicketFiltered($security)
+
+    public function findTicketsFiltered($security, $request)
     {
         $em = $this->getEntityManager();
-        
+
+        //Inicializa variables
+        $query  = 'SELECT t FROM TicketBundle:Ticket t ';
+        $joins  = 'JOIN t.workshop w ';
+        $where  = 'WHERE t.id != 0 ';
+        $params = array();
+
+        //Filtros enviados
+        $id_ticket   = $request->get('id_ticket');
+        $id_partner  = $request->get('id_partner');
+        $id_workshop = $request->get('id_workshop');
+        $id_region   = $request->get('id_region');
+
+        //Comprueba que los filtros no esten vacios y setea las variables para la consulta
+        if ($id_ticket != "")
+        {
+            $where .= 'AND t.id = :id_ticket ';
+            $params[] = array('id_ticket', $id_ticket);
+        }
+
+        if ($security->isGranted("ROLE_ASSESSOR")) {
+
+            if ($id_partner != "0") {
+
+                $joins .= 'JOIN w.partner p ';
+                $where .= 'AND p.id = :id_partner ';
+                $params[] = array('id_partner', $id_partner);
+            }
+
+            if ($id_workshop != "")
+            {
+                $where .= 'AND w.id = :id_workshop ';
+                $params[] = array('id_workshop', $id_workshop);
+            }
+
+            if ($id_region != "0") {
+
+                $joins .= 'JOIN w.region r ';
+                $where .= 'AND r.id = :id_region ';
+                $params[] = array('id_region', $id_region);
+            }
+        }else{
+            $where .= 'AND w.id = '.$security->getToken()->getUser()->getWorkshop()->getId().' ';
+            $params[] = array('id_ticket', $id_ticket);
+        }
+
+        //Crea la consulta
+        $consulta = $em->createQuery($query.$joins.$where);
+
+        //hace un recorrido de $params para extraer los parametros de la consulta
+        foreach($params as $param){
+            $consulta->setParameter($param[0], $param[1]);
+        }
+
+	   return $consulta->getResult();
+    }
+
+    public function findTickets($security)
+    {
+        $em = $this->getEntityManager();
+
         if ($security->isGranted('ROLE_ASSESSOR'))
         {
             $consulta = $em->createQuery('
                 SELECT t FROM TicketBundle:Ticket t
                 WHERE t.status = :status
             ');
-           
+
         }else{
-            
+
             $consulta = $em->createQuery('
                 SELECT t FROM TicketBundle:Ticket t
                 WHERE t.status = :status
                 AND t.workshop = :workshop
             ');
-            
+
             $consulta->setParameter('workshop', $security->getToken()->getUser()->getWorkshop());
         }
-           
+
         $consulta->setParameter('status', 0);
-        
+
 	return $consulta->getResult();
     }
+
 }
 /* $partner->setModifyBy($this->get('security.context')->getToken()->getUser());
- * 
+ *
  * ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
             throw new AccessDeniedException();
 

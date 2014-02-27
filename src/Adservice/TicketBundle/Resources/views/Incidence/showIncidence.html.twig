@@ -9,29 +9,14 @@
     </ol>
 
     <div class="tblContainer">
-        <table class="table table-striped table-bordered">
-            <tr>    
-                <td>
-                    {% if is_granted('ROLE_ASSESSOR') %}
-                        
-                        <a class="btn btn-primary pull-right" href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}">Editar</a>
-                    {% endif %}
-                        
-                    {# muestra los datos de la incidencia #}    
-                    {% include 'TicketBundle:Default:includes/_data_incidence.html.twig' %}
-                    
-                    <fieldset>
-                        <legend>Ticketing</legend>
-                        
-                        <p><b>Descripcion:</b>  {{ incidence.description }} </p>
-                        <p>
-                            <b>Seguimiento:</b> {{ incidence.ticket.posts | length }} mensajes 
-                            <a href='{{ path('showPost', { 'id_ticket': incidence.ticket.id }) }}'>Ver mas</a>
-                        </p>
-                        <p><b>Solucion:</b>  {{ incidence.solution }}</p>
-                    </fieldset>
-                </td>
-            </tr>
-        </table>
-    </div>    
+        {# muestra los datos de la incidencia #}
+        {% include 'TicketBundle:Default:includes/_data_incidence.html.twig' %}
+
+        <fieldset> <legend>Descripcion</legend> {{ incidence.description }} </fieldset>
+        <fieldset> <legend>Seguimiento</legend> {{ incidence.ticket.posts | length }} mensajes del ticket #
+                                                {{ incidence.ticket.id }}
+                                                <a href='{{ path('showPost', { 'id_ticket': incidence.ticket.id }) }}'>Ver mas</a>
+        </fieldset>
+        <fieldset> <legend>Solucion   </legend> {{ incidence.solution    }} </fieldset>
+    </div>
 {% endblock %}

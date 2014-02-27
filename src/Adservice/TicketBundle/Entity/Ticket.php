@@ -109,7 +109,7 @@ class Ticket {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -127,7 +127,7 @@ class Ticket {
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus() {
         return $this->status;
@@ -145,7 +145,7 @@ class Ticket {
     /**
      * Get importance
      *
-     * @return integer 
+     * @return integer
      */
     public function getImportance() {
         return $this->importance;
@@ -163,7 +163,7 @@ class Ticket {
     /**
      * Get workshop
      *
-     * @return integer 
+     * @return integer
      */
     public function getWorkshop() {
         return $this->workshop;
@@ -173,7 +173,7 @@ class Ticket {
      * Set car
      *
      * @param \Adservice\CarBundle\Entity\Car $car
-     * 
+     *
      */
     public function setCar(\Adservice\CarBundle\Entity\Car $car) {
         $this->car = $car;
@@ -182,7 +182,7 @@ class Ticket {
     /**
      * Get car
      *
-     * @return integer 
+     * @return integer
      */
     public function getCar() {
         return $this->car;
@@ -200,7 +200,7 @@ class Ticket {
     /**
      * Get owner
      *
-     * @return string 
+     * @return string
      */
     public function getOwner() {
         return $this->owner;
@@ -218,7 +218,7 @@ class Ticket {
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt() {
         return $this->created_at;
@@ -236,7 +236,7 @@ class Ticket {
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt() {
         return $this->modified_at;
@@ -254,7 +254,7 @@ class Ticket {
     /**
      * Get modified_by
      *
-     * @return user 
+     * @return user
      */
     public function getModifiedBy() {
         return $this->modified_by;
@@ -272,7 +272,7 @@ class Ticket {
     /**
      * Get assigned_to
      *
-     * @return string 
+     * @return string
      */
     public function getAssignedTo() {
         return $this->assigned_to;
@@ -290,7 +290,7 @@ class Ticket {
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle() {
         return $this->title;
@@ -308,7 +308,7 @@ class Ticket {
     /**
      * Get posts
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getPosts() {
         return $this->posts;
@@ -326,7 +326,7 @@ class Ticket {
     /**
      * Get cars
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCars() {
         return $this->cars;

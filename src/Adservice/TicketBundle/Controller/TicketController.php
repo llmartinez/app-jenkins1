@@ -1,5 +1,4 @@
 <?php
-
 namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,11 +20,6 @@ use Adservice\UtilBundle\Entity\DocumentRepository;
 use Adservice\UtilBundle\Form\DocumentType;
 use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Entity\Workshop;
-
-/*
-  use Symfony\Component\Serializer\Encoder\JsonEncoder;
-  use Symfony\Component\HttpFoundation\Response;
- */
 
 class TicketController extends Controller {
 
@@ -160,7 +154,6 @@ class TicketController extends Controller {
                 ));
     }
 
-    
     /**
      * Elimina el ticket de la bbdd si no tiene respuesta (posts == 1)
      * @param Int $id
@@ -168,40 +161,40 @@ class TicketController extends Controller {
      * @throws CreateNotFoundException
      */
     public function deleteTicketAction($id_ticket){
-        
+
         if ($this->get('security.context')->isGranted('ROLE_USER') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository("TicketBundle:Ticket")->find($id_ticket);
-        
+
         if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
-        
+
         //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
         $posts = $ticket->getPosts();
         if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
-        
+
         //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
         if ((!$this->get('security.context')->isGranted('ROLE_ASSESSOR') and ($ticket->getAssignedTo() != null))){
             throw $this->createNotFoundException('Este ticket solo puede ser borrado por un asesor');
         }
-        
+
         //si el ticket esta cerrado no se puede borrar
-        if($ticket->getStatus()->getName() == 'closed'){ 
+        if($ticket->getStatus()->getName() == 'closed'){
            throw $this->createNotFoundException('Este ticket ya esta cerrado');
         }
         //borra todos los post del ticket
         foreach ($posts as $post) {
              $em->remove($post);
-        }       
+        }
         //borra el ticket
         $em->remove($ticket);
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('listTicket'));
     }
     /**
-     * Muestra los posts que pertenecen a un ticket 
+     * Muestra los posts que pertenecen a un ticket
      * @param integer $id_ticket
      * @return url
      */
@@ -212,7 +205,7 @@ class TicketController extends Controller {
     }
 
     /**
-     * Muestra los posts que pertenecen a un ticket 
+     * Muestra los posts que pertenecen a un ticket
      * @param integer $id_ticket
      * @return url
      */
@@ -226,30 +219,36 @@ class TicketController extends Controller {
      * Devuelve todos los tickets realizados
      * @return url
      */
-    public function listTicketAction() {
+    public function listTicketAction()
+    {
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
-
-        $ticket = new Ticket();
+        $security = $this->get('security.context');
+        $request  = $this->getRequest();
 
         if ($request->getMethod() == 'POST') {
 
-            $id_ticket = $request->get('id_ticket');
-
-            if ($id_ticket) {
-                $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-            }
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findTicketsFiltered($security, $request);
+        }else{
+            $tickets = $this->loadTicket();
         }
 
-        $tickets = $this->loadTicket();
+        if ($security->isGranted("ROLE_ASSESSOR")){
+            $partners  = $em->getRepository('PartnerBundle:Partner')->findAll();
+        }else{
+            $partners  = $em->getRepository('PartnerBundle:Partner')->findByWorkshop($security->getToken()->getUser()->getWorkshop()->getId());
+        }
+        $regions   = $em->getRepository('UtilBundle:Region')->findAll();
 
-        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('ticket' => $ticket,
-                    'tickets' => $tickets,));
+        return $this->render('TicketBundle:Ticket:listTicket.html.twig', array('request'   => $request,
+                                                                               'tickets'   => $tickets,
+                                                                               'partners'  => $partners,
+                                                                               'regions'   => $regions,
+                                                                              ));
     }
 
     /**
-     * Crea un array con todos los tickets abiertos en funcion del usuario que este logeado en ese momento. 
-     * Utiliza findTicketFiltered() de TicketRepository.
+     * Crea un array con todos los tickets abiertos en funcion del usuario que este logeado en ese momento.
+     * Utiliza findTickets() de TicketRepository.
      * @return array
      */
     private function loadTicket() {
@@ -257,13 +256,13 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         //Rellenando la lista de tickets abiertos
-        $ticketsFiltered = $em->getRepository('TicketBundle:Ticket')->findTicketFiltered($this->get('security.context'));
+        $ticketsFiltered = $em->getRepository('TicketBundle:Ticket')->findTickets($this->get('security.context'));
 
         return $ticketsFiltered;
     }
 
     /**
-     * Prepara un array con el ticket al que pertenecen los posts y su id, 
+     * Prepara un array con el ticket al que pertenecen los posts y su id,
      *                     todos los tickets abiertos que puede ver el usuario
      *                     y los formularios de post y documento
      * @param Request $request
@@ -282,7 +281,7 @@ class TicketController extends Controller {
         //Define Form de posts
         $form = $this->createForm(new PostType(), $post);
 
-        //Define Form de documents        
+        //Define Form de documents
         $formD = $this->createForm(new DocumentType(), $document);
 
         if ($request->getMethod() == 'POST') {
@@ -311,7 +310,7 @@ class TicketController extends Controller {
 
                 $sesion = $request->getSession();
             } else {
-                
+
             }
         }
 
@@ -356,13 +355,13 @@ class TicketController extends Controller {
     public function assignUserToTicketAction($id_ticket, $id_user = null) {
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-        
+
         //id_user puede venir por parametro o por post
         if ($id_user == null) {
             $petition = $this->getRequest();
             $id_user = $petition->get('id_user');
         }
-        
+
         //si $id_user != null ---> viene de parametro de la funcion o de POST y queremos asignar
         //si $id_user == null ---> queremos desasignar
         if ($id_user != null) {
@@ -371,10 +370,9 @@ class TicketController extends Controller {
         }else{
             $this->assignTicket($ticket, null);
         }
-        
+
         //<--------------------------------------------------------------------------------------------------TODO hacer refactoring, no mola los 2 if(user=null)...
-        
-        
+
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
         return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
     }
@@ -403,7 +401,7 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $user = $em->getRepository('UserBundle:User')->find($id_user);
-        
+
         $this->assignTicket($ticket, $user);
 
         return $this->showTicketAction($id_ticket);
@@ -464,7 +462,7 @@ class TicketController extends Controller {
 
     /**
      * Asigna un $ticket a un $user
-     * Si $user == NULL, se desasigna 
+     * Si $user == NULL, se desasigna
      * @param Ticket $ticket
      * @param User $user
      */
@@ -472,7 +470,7 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         ($user != null) ? $ticket->setAssignedTo($user) : $ticket->setAssignedTo(null);
-        
+
         $em->persist($ticket);
         $em->flush();
     }
