@@ -19,7 +19,10 @@ class DefaultController extends Controller {
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
         
         $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
-        return new Response(json_encode($models), $status = 200);
+        foreach ($models as $model) {
+            $json[] = $model->to_json(); 
+        }
+        return new Response(json_encode($json), $status = 200);
     }
     
     /**
@@ -33,8 +36,11 @@ class DefaultController extends Controller {
         $id_model = $petition->request->get('id_model');
         $model = $em->getRepository('CarBundle:Model')->find($id_model);
         
-        $version = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
-        return new Response(json_encode($version), $status = 200);
+        $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
+        foreach ($versions as $version) {
+            $json[] = $version->to_json(); 
+        }
+        return new Response(json_encode($json), $status = 200);
     }
 
 }

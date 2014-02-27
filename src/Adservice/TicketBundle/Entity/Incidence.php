@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="incidence")
  * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\IncidenceRepository")
  */
-class Incidence implements \JsonSerializable
-{
+class Incidence {
     /**
      * @var integer $id
      *
@@ -302,12 +301,20 @@ class Incidence implements \JsonSerializable
         return $this->modified_by;
     }
     
-    public function jsonSerialize() {
-        return [
-            'id'        => $this->getId(),
-            'title'     => $this->getTicket()->getTitle(),
-            'date'      => $this->getModifiedAt()->format('d/m/Y'),
-            'status'    => $this->getStatus()->getName()
-        ];
+//    public function jsonSerialize() {
+//        return [
+//            'id'        => $this->getId(),
+//            'title'     => $this->getTicket()->getTitle(),
+//            'date'      => $this->getModifiedAt()->format('d/m/Y'),
+//            'status'    => $this->getStatus()->getName()
+//        ];
+//    }
+    
+    public function to_json(){
+        $json = array('id'        => $this->getId(),
+                      'title'     => $this->getTicket()->getTitle(),
+                      'date'      => $this->getModifiedAt()->format('d/m/Y'),
+                      'status'    => $this->getStatus()->getName());
+        return $json;
     }
 }

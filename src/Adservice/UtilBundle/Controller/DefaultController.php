@@ -17,7 +17,9 @@ class DefaultController extends Controller
         $id_region = $petition->request->get('id_region');
 
         $provinces = $em->getRepository("UtilBundle:Province")->findBy(array('region' => $id_region));
-
-        return new Response(json_encode($provinces), $status=200);
+        foreach ($provinces as $province) {
+            $json[] = $province->to_json();
+        }
+        return new Response(json_encode($json), $status=200);
     }
 }

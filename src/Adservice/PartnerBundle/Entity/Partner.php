@@ -114,18 +114,11 @@ class Partner{
      */
     private $workshops;
 
-//    /**
-//     *
-//     * @var string $users
-//     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-//     */
-//    private $users;
-
     /**
-     *
-     * @var type
-     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-     */
+    *
+    * @var type
+    * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+    */
     private $users;
 
     /**
@@ -151,7 +144,7 @@ class Partner{
 
     public function __construct() {
         $this->workshops = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        // $this->users = new ArrayCollection();
     }
 
     /**
@@ -469,7 +462,7 @@ class Partner{
      */
     public function addUser(\Adservice\UserBundle\Entity\User $users)
     {
-        $this->users[] = $users;
+     $this->users[] = $users;
     }
 
     /**

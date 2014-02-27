@@ -182,14 +182,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $language;
 
-//    /**
-//     *
-//     * @var string $partner
-//     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
-//     */
-//    private $partner;
-
-
     /**
      *
      * @var type
