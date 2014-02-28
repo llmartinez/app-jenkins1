@@ -7,9 +7,9 @@ use Adservice\UtilBundle\Tests\Entity\RegionTest;
 use Adservice\UtilBundle\Tests\Entity\ProvinceTest;
 
 class PartnerTest extends \PHPUnit_Framework_TestCase
-{   
+{
     protected $partner;
-    
+
     public function testSettersPartner()
     {
         $partner = new Partner();
@@ -27,21 +27,21 @@ class PartnerTest extends \PHPUnit_Framework_TestCase
         $partner->setPostalCode('08080');
         $partner->setProvince(ProvinceTest::GetProvince());
         $partner->setRegion(RegionTest::GetRegion());
-        
+
         $this->partner = $partner;
     }
-    
+
     public function testGettersPartner()
     {
         $partner = $this->partner;
         return $partner;
     }
-    
+
     public static function GetPartner()
     {
         $partner = new Partner();
-        $partner->setName('PartnerTest'); 
-        
+        $partner->setName('PartnerTest');
+
         return $partner;
     }
 }

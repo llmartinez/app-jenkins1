@@ -18,8 +18,11 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        $this->linkToNewTypeUser($client, $type);
+        //Lleva al usuario desde la pantalla de login hasta la de nuevo usuario del $type que se introduzca por dataProvider
+            UtilFunctionTest::doLogin($client, 'admin', 'admin');
+            UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
+            UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_new');
+            UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
 
         //carga el form con los datos del usuario
         $newUserForm = $client->getCrawler()->selectButton('btn_create')->form($user);
@@ -38,7 +41,7 @@ class DefaultControllerTest extends WebTestCase
         );
 
         //volver al inicio
-        UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
+        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
 
         //comprueba que vuelva a la pagina del listado de usuarios
         $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(),
@@ -83,7 +86,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("test'.$type.'_edited@test.es")')->count(),
             'Se ha editado el mail del usuario "test'.$type.'"');
         //volver al inicio
-        UtilFunctionTest::linkTo($client, $this, 'ol li a#home');
+        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
 
     /*TODO
@@ -184,22 +187,6 @@ class DefaultControllerTest extends WebTestCase
     }
 
     /**
-     * Lleva al usuario desde la pantalla de indice hasta la de nuevo usuario del $type que se introduzca por parametro
-     * @param Client $client
-     * @param String $type (admin, assessor, user)
-     * @return Client
-     */
-    public function linkToNewTypeUser($client, $type)
-    {
-
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_new');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
-
-        return $client;
-    }
-
-    /**
      * DataProvider de usuarios: Contiene un admin, un assessor y un user
      * @return array users
      */
@@ -219,7 +206,6 @@ class DefaultControllerTest extends WebTestCase
                                 'adservice_userbundle_usertype[region]'                     => '1',
                                 'adservice_userbundle_usertype[province]'                   => '1',
                                 'adservice_userbundle_usertype[country]'                    => '1',
-                                'adservice_userbundle_usertype[partner]'                    => '1',
 
                                 ),
             ),
@@ -236,7 +222,6 @@ class DefaultControllerTest extends WebTestCase
                                 'adservice_userbundle_usertype[region]'                     => '1',
                                 'adservice_userbundle_usertype[province]'                   => '1',
                                 'adservice_userbundle_usertype[country]'                    => '1',
-                                'adservice_userbundle_usertype[partner]'                    => '1',
                                 ),
             ),
             array('type' => 'user',

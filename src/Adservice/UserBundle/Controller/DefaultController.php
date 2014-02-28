@@ -69,14 +69,15 @@ class DefaultController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $logged_user = $this->get('security.context')->getToken()->getUser();
-        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
-        
+//        $logged_user = $this->get('security.context')->getToken()->getUser();
+//        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
+
+        $users = $em->getRepository("UserBundle:User")->findAll();
 
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
-        
+
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
@@ -108,7 +109,7 @@ class DefaultController extends Controller {
 
         $user = $em->getRepository("UserBundle:User")->find($id);
         if (!$user)throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-        
+
         $original_password = $user->getPassword();
 
         $petition = $this->getRequest();
@@ -116,7 +117,7 @@ class DefaultController extends Controller {
         if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminType(), $user);
         elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAssessorType(), $user);
         elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserType(), $user);
-            
+
 //        $form = $this->createForm(new UserType(), $user);
 
         if ($petition->getMethod() == 'POST') {

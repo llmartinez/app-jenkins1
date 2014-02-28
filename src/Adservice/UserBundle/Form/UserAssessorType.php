@@ -10,7 +10,6 @@ class UserAssessorType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder = UserAdminType::getbasicUserType($builder);
-        $builder->add('partner');
     }
 
     public function getName()

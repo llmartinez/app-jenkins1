@@ -15,15 +15,14 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
         $type = 'user';
         $pass = 'QeDeEveLRGfrw94I1iCOzs37BWE+xnmQFjkT5EeUTwDjXWRIjQsSYghkc2kAefhuFMTPvnIaplq7xbPOesN22Q==';
         $salt = '84a2646fadd65616d73199e9f1fae1e1';
-        $partner = null;
         $workshop = 'yes';
         $role = 'ROLE_USER';
         $num = Data::getNumUsers();
         
-        $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $partner, $workshop, $role, $num);
+        $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $workshop, $role, $num);
     }
     
-    public static function loadUsers($manager, $_this, $type, $pass, $salt, $partner=null, $workshop=null, $role, $num)
+    public static function loadUsers($manager, $_this, $type, $pass, $salt, $workshop=null, $role, $num)
     {
         for($i=1;$i<=$num;$i++)
         {
@@ -42,9 +41,6 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt (new \DateTime());
             $entidad->setCountry    ($_this->getReference(Data::getCountries()));
             $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
-            if($partner != null){
-                $entidad->setPartner($_this->getReference(Data::getPartner()));
-            }
             if($workshop != null ) {
                 $entidad->setWorkshop($_this->getReference(Data::getWorkshop()));
             }

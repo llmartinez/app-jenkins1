@@ -1,7 +1,7 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    
+
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">Home</a></li>
       <li><a href="{{ path('partner_list') }}">List of Partners</a></li>
@@ -16,7 +16,7 @@
     </form>
 
 {#    WORKSHOPS ZONE#}
-    {% include 'WorkshopBundle:Default:_list.html.twig' with {all_workshops : partner.workshops} %}
+    {% include 'WorkshopBundle:Default:_list.html.twig' with {'workshops' : partner.workshops} %}
 
 {% endblock%}
 
