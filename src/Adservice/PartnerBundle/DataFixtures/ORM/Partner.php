@@ -8,15 +8,15 @@ use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Partners extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 12; }
-    
+
     public function load(ObjectManager $manager) {
         $num = Data::getNumPartners();
-        
+
         for($i=1;$i<=$num;$i++)
         {
-            $entidad = new Partner(); 
+            $entidad = new Partner();
             $entidad->setName('partner'.$i);
             $entidad->setPhoneNumber1(Data::getPhone());
             $entidad->setPhoneNumber2(Data::getPhone());
@@ -32,7 +32,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
         }
         $manager->flush();
