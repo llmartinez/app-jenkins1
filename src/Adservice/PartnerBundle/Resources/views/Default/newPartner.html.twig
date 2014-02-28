@@ -1,7 +1,7 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    
+
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">Home</a></li>
       <li><a href="{{ path('partner_list') }}">List of Partners</a></li>
@@ -11,7 +11,7 @@
     <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}
         <p>
-            <button type="submit">Create</button>
+            <button id="btn_create" type="submit">Create</button>
         </p>
     </form>
 
@@ -20,8 +20,8 @@
 {% block javascripts %}
     {{ parent() }}
     {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
-    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script> 
-    
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+
     <script>
         $(document).ready(function(){
             //si clickamos el combobox de las regiones repoblamos la de las provincias
