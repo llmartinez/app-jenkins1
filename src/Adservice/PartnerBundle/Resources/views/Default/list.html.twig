@@ -44,8 +44,8 @@
                 <td>{{ partner.email1 }}</td>
                 <td>{{ partner.address }}</td>
                 <td>
-                    <a href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>
+                    <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>
                 </td>
             </tr>
                 {% endfor %}
