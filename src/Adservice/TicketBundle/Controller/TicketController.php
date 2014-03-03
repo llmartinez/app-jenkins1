@@ -429,13 +429,14 @@ class TicketController extends Controller {
             //SuperAdmin
             if ($option == 'all'       ) $tickets = $allTickets;
             //Admin
-            if ($option == 'all_open'  ) $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets);
-            if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets);
+            if ($option == 'all_open'  ) { $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets); }
+            else{ if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets); }
+
         }else {
             if($security->isGranted('ROLE_ASSESSOR')){
                 //Assessor
-                if ($option == 'assign'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 0);
-                if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1);
+                if ($option == 'assign'    ) { $tickets = $repoTicket->findAllAssigned($user, $open, 0); }
+                else{ if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1); }
             }else{
                 //User
                 if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
