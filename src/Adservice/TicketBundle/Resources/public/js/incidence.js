@@ -13,6 +13,7 @@ function fill_incidences(url_ajax) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#incidenceBody').empty();
+
             $.each(data, function(idx, elm) {
 
                 if (elm.error) {

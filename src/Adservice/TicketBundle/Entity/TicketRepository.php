@@ -25,7 +25,7 @@ class TicketRepository extends EntityRepository
     {
         ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
 
-        $tickets[] = $this->findBy(array('status' => $status->getId(),
+        $tickets = $this->findBy(array('status' => $status->getId(),
                                        'assigned_to' => $assigned));
         return $tickets;
     }

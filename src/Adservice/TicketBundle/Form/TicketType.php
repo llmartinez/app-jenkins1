@@ -12,6 +12,7 @@ class TicketType extends AbstractType
                 ->add('title')
                 ->add('status')
                 ->add('importance', 'text')
+                ->add('workshop')
                 ;
     }
     public function getName()

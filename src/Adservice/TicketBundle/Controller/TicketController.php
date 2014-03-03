@@ -61,9 +61,10 @@ class TicketController extends Controller {
 
                 //Define TICKET
                 $ticket = DefaultC::newEntity($ticket, $user);
-                if ($security->isGranted('ROLE_ASSESSOR')) {
-                    //$ticket->setWorkshop($request->get('workshop'));
-                } else {
+                if ($security->isGranted('ROLE_ASSESSOR')) 
+                {
+                    $ticket->setAssignedTo($user);
+                }else{
                     $ticket->setWorkshop($user->getWorkshop());
                 }
                 $ticket->setStatus($status);
@@ -443,7 +444,6 @@ class TicketController extends Controller {
                 if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
             }
         }
-
         if(count($tickets) != 0){
 
             foreach ($tickets as $ticket) {

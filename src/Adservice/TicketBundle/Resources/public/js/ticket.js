@@ -17,7 +17,7 @@ function fill_tickets(url_ajax) {
             $.each(data, function(idx, elm) {
 
                 if (elm.error) {
-                    $('#ticketBody').append("<tr><td>" + elm.error + "</td></tr>");
+                    $('#ticketBody').append("<tr><td></td><td></td><td>" + elm.error + "</td></tr>");
                 }else{
                     var route = $('#route').val();
                     route = route.replace("PLACEHOLDER", elm.id );
