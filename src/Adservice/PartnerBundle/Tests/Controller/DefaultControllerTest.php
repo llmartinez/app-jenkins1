@@ -19,7 +19,7 @@ class DefaultControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
-        UtilFunctionTest::doLogin($client, 'admin', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin1', 'admin');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a:contains("Crear un partner nuevo")');
 
@@ -47,7 +47,7 @@ class DefaultControllerTest extends WebTestCase {
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::doLogin($client, 'admin', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin1', 'admin');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
 
         $location = 'table tr td a#edittestpartner';
