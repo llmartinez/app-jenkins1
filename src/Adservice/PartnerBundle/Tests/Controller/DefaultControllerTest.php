@@ -83,6 +83,50 @@ class DefaultControllerTest extends WebTestCase
     }
 
     /**
+     * Test que comprueba que se borre un partner
+     *//*
+    public function testDeletePartner()
+    {
+        $client = static::createClient();
+        $client-> followRedirects(true);
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
+        UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
+
+        $location = 'table tr td a#deletetestpartner';
+        $link = $client->getCrawler()->filter($location)->link();
+        $crawler = $client->click($link);
+ /*TODO
+     * la funcion javascript que cambia la url de 'foo' a 'id_partner' no funciona,
+     * se envia al controller la funcion deleteUser('foo');
+     * ***PHPUnit no soporta JS..
+     *    - probar test con CasperJS y recoger resultado
+     * *//*
+
+        //comprueba que el link pase de 'delete/foo' a 'delete/{id_partner}'
+        $location = 'div#myModal div div div.modal-footer a';
+        $crawler = $crawler->filter($location)->attr('href');
+        var_dump($crawler);
+        die;
+
+        $location = 'div#myModal div div div.modal-footer a';
+        $link = $client->getCrawler()->filter($location)->link();
+        $crawler = $client->click($link);
+
+/*
+
+        //comprueba que vuelva a la pagina del listado de usuarios
+        $this->assertRegExp('/.*\/..\/partner\/list/', $client->getRequest()->getUri(),
+            'El usuario ve el listado de partners'
+        );
+
+        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner_edited@test.es")')->count(),
+            'Se ha editado el mail del partner');
+*/
+        //volver al inicio
+/*        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
+    }
+
+    /**
      * DataProvider de partners: Contiene un array de partners
      * @return array partners
      */

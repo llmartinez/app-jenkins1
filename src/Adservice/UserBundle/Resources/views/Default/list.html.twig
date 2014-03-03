@@ -24,7 +24,7 @@
         </tr>
     </table>
 
-    <table id="tbl_usuarios" class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;"> 
+    <table id="tbl_usuarios" class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
         <thead>
             <tr>
                 <th>#</th>
@@ -57,7 +57,7 @@
                     Estas seguro que quieres eliminar este usuario?                    
                 </div>
                 <div class="modal-footer">
-                    <a id="btn_yes" href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                    <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                 </div>
             </div><!-- /.modal-content -->

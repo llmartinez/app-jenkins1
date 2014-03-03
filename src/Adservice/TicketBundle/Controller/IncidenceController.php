@@ -68,11 +68,13 @@ class IncidenceController extends Controller{
                 $ticket->setImportance($incidence->getImportance());
                 DefaultC::saveEntity($em, $ticket, $user, false);
 
+                //Define POST (i.description)
                 $post = DefaultC::newEntity(new Post(),$user);
                 $post->setTicket($ticket);
                 $post->setMessage($incidence->getDescription());
                 DefaultC::saveEntity($em, $post, $user, false);
 
+                //Define POST (i.solution)
                 $post2 = DefaultC::newEntity(new Post(),$user);
                 $post2->setTicket($ticket);
                 $post2->setMessage($incidence->getSolution());
@@ -122,16 +124,15 @@ class IncidenceController extends Controller{
 
             $form->bindRequest($request);
 
-            echo $incidence->getStatus();
-            die;
-
             //campos comunes
             $security = $this->get('security.context');
             $user = $security->getToken()->getUser();
 
+            //Define TICKET
             $ticket->setStatus($incidence->getStatus());
             DefaultC::saveEntity($em, $ticket, $user, false);
 
+            //Define INCIDENCE
             $incidence = DefaultC::newEntity($incidence, $user);
             DefaultC::saveEntity($em, $incidence, $user);
 
@@ -250,7 +251,7 @@ class IncidenceController extends Controller{
         if($option == 'all'     ) $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
         if($option == 'owner'   ) $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
         if($option == 'workshop') $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
-        
+
         foreach ($incidences as $incidence) {
             $json[] = $incidence->to_json();
         }

@@ -64,7 +64,7 @@ No hay socios!!
                 <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
             </div>
             <div class="modal-body">
-                Estas seguro que quieres eliminar este socio?                    
+                Estas seguro que quieres eliminar este socio?
             </div>
             <div class="modal-footer">
                 <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
@@ -78,7 +78,7 @@ No hay socios!!
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/car/js/car.js') }}"></script>
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
     <script>
@@ -87,7 +87,7 @@ No hay socios!!
                 var partner_id = $(this).data('id');
                 confirm_delete_partner_modal(partner_id);
             })
-            
+
             //util.js
             table_filter();
         });
