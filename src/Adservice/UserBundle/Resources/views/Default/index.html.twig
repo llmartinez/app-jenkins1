@@ -7,7 +7,7 @@
     </ol>
 
     {% if is_granted('ROLE_ADMIN') %}
-        <table>
+        <table name="tbl_admin"> 
             <tr>
                 <th>{% trans %} user.index.menu.admin_title {% endtrans %}</th>
             </tr>
@@ -47,7 +47,7 @@
     {% endif %}
 
     {% if is_granted('ROLE_USER') %}
-        <table id="tbl_user" name ="tbl_user">
+        <table id="tbl_user" name="tbl_user">
             <tr>
                 <th>{% trans %} user.index.menu.user_title {% endtrans %}</th>
             </tr>    
