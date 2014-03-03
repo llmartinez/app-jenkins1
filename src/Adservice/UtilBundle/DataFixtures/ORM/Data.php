@@ -3,7 +3,7 @@
 namespace Adservice\UtilBundle\DataFixtures\ORM;
 
 class Data {
-    
+
     /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
     private static $numAdmins    = 3;
     private static $numAssessors = 5;
@@ -12,7 +12,7 @@ class Data {
     private static $numWorkshops = 5;
     private static $numTickets   = 10;
     private static $numPosts     = 4;
-    
+
     /**
      * Devuelve el numero de entidades por clase que se crearan.
      *
@@ -43,7 +43,7 @@ class Data {
         // Numero de entidades por clase de la aplicacion
         return Data::$numUsers;
     }
-    
+
     /**
      * Devuelve el numero de partners por clase que se crearan.
      *
@@ -54,7 +54,7 @@ class Data {
         // Numero de partners por clase de la aplicacion
         return Data::$numPartners;
     }
-    
+
     /**
      * Devuelve el numero de workshops por clase que se crearan.
      *
@@ -65,7 +65,7 @@ class Data {
         // Numero de workshops por clase de la aplicacion
         return Data::$numWorkshops;
     }
-    
+
     /**
      * Devuelve el numero de tickets por clase que se crearan.
      * Se utiliza tambien en Coches e Incidencias, ya que deben tener el mismo valor
@@ -77,7 +77,7 @@ class Data {
         // Numero de tickets por clase de la aplicacion
         return Data::$numTickets;
     }
-    
+
     /**
      * Devuelve el numero maximo de posts por ticket que se crearan.
      *
@@ -88,11 +88,11 @@ class Data {
         // Numero maximo de posts por ticket de la aplicacion
         return Data::$numPosts;
     }
-    
+
 /*********************************************************************
- * GENERADOR VALORES UTIL 
+ * GENERADOR VALORES UTIL
  **********************************************************************/
-    
+
     /**
      * Generador aleatorio de lenguajes.
      *
@@ -101,12 +101,12 @@ class Data {
     public static function getLanguages()
     {
         // Los lenguages soportados por la aplicación
-        
+
         $languages = array('es_ES', 'en_EN', 'fr_FR');
 
         return $languages[array_rand($languages)];
     }
-    
+
     /**
      * Generador aleatorio de paises.
      *
@@ -115,12 +115,12 @@ class Data {
     public static function getCountries()
     {
         // Los lenguages soportados por la aplicación
-        
+
         $countries = array('Spain', 'England', 'France');
 
         return $countries[array_rand($countries)];
     }
-    
+
     /**
      * Generador aleatorio de regiones.
      *
@@ -129,12 +129,12 @@ class Data {
     public static function getRegions()
     {
         // Los lenguages soportados por la aplicación
-        
+
         $regions = array('Catalunya', 'Madrid', 'Canarias');
 
         return $regions[array_rand($regions)];
     }
-    
+
     /**
      * Generador aleatorio de provincias.
      *
@@ -143,18 +143,18 @@ class Data {
     public static function getProvinces()
     {
         // Los lenguages soportados por la aplicación
-        
+
         $provinces = array('Barcelona', 'Tarragona', 'Lleida', 'Girona', 'Madrid ','Sta. Cruz de Tenerife' );
 
         return $provinces[array_rand($provinces)];
     }
-    
+
 /*********************************************************************
- * GENERADOR VALORES PARTNER 
+ * GENERADOR VALORES PARTNER
  **********************************************************************/
-    
+
     /**
-     * Generador aleatorio de partners 
+     * Generador aleatorio de partners
      *
      * @return string Partner aleatorio.
      */
@@ -162,11 +162,11 @@ class Data {
     {
         return 'partner'.rand(1, Data::getNumPartners());
     }
-    
+
 /*********************************************************************
- * GENERADOR VALORES WORKSHOP 
+ * GENERADOR VALORES WORKSHOP
  **********************************************************************/
-    
+
     /**
      * Generador aleatorio de tipologias.
      *
@@ -175,14 +175,14 @@ class Data {
     public static function getTypologies()
     {
         // Las tipologias soportadas por la aplicación
-        
+
         $typologies = array('Autoservice AD', 'Garage AD', 'Carrosserie AD');
 
         return $typologies[array_rand($typologies)];
     }
-    
+
     /**
-     * Generador aleatorio de workshops 
+     * Generador aleatorio de workshops
      *
      * @return string Workshop aleatorio.
      */
@@ -190,14 +190,14 @@ class Data {
     {
         return 'workshop'.rand(1, Data::getNumWorkshops());
     }
-    
+
 /*********************************************************************
  * GENERADOR VALORES USUARIO
  **********************************************************************/
 
-    
+
     /**
-     * Generador aleatorio de admins 
+     * Generador aleatorio de admins
      *
      * @return string Admin aleatorio.
      */
@@ -205,9 +205,9 @@ class Data {
     {
         return 'admin'.rand(1, Data::getNumAdmins());
     }
-    
+
     /**
-     * Generador aleatorio de assessors 
+     * Generador aleatorio de assessors
      *
      * @return string Assessor aleatorio.
      */
@@ -216,7 +216,7 @@ class Data {
         return 'assessor'.rand(1, Data::getNumAssessors());
     }
     /**
-     * Generador aleatorio de users 
+     * Generador aleatorio de users
      *
      * @return string User aleatorio.
      */
@@ -224,7 +224,7 @@ class Data {
     {
         return 'user'.rand(1, Data::getNumUsers());
     }
-    
+
     /**
      * Generador aleatorio de nombres de personas.
      * Aproximadamente genera un 50% de hombres y un 50% de mujeres.
@@ -257,7 +257,7 @@ class Data {
             return $mujeres[array_rand($mujeres)];
         }
     }
-    
+
     /**
      * Generador aleatorio de apellidos de personas.
      *
@@ -327,12 +327,12 @@ class Data {
     {
         return sprintf('%09s', rand(100000000, 999999999));
     }
-    
-    
+
+
 /*********************************************************************
  * GENERADOR VALORES COCHE
  **********************************************************************/
-    
+
     /**
      * Generador aleatorio de versiones de coches
      *
@@ -341,7 +341,7 @@ class Data {
     public static function getVersion()
     {
         $versions = array(
-            '1.8_TURBO', '1.9D TDI-IB', '1.8 TURBO', 
+            '1.8_TURBO', '1.9D TDI-IB', '1.8 TURBO',
             '1.9D TDI - IB', '2.0 - E 200 D', '3.2 - E 320',
             '1.2 12V', '1.4 16V', '1.9D SDI'
         );
@@ -358,7 +358,7 @@ class Data {
         ($i < 10) ? $result = 'T-'.$i.$i.$i.$i.'-TT' : $result = 'T-'.$i.$i.'-TT';
         return $result;
     }
-    
+
     /**
      * Generador aleatorio de vin de coches
      *
@@ -379,11 +379,11 @@ class Data {
         return sprintf('%4s', rand(1990, 2010));
     }
 
-        
+
 /*********************************************************************
  * GENERADOR VALORES TICKET
  **********************************************************************/
-    
+
     /**
      * Generador aleatorio de estado del ticket
      *
@@ -396,7 +396,7 @@ class Data {
         );
         return $status[array_rand($status)];
     }
-    
+
     /**
      * Generador aleatorio del titulo del ticket
      *
@@ -406,7 +406,7 @@ class Data {
     {
         return 'Test n.'.$i;
     }
-    
+
     /**
      * Generador aleatorio del post del ticket
      *
@@ -416,7 +416,7 @@ class Data {
     {
         return 'Post n.'.$j.' del ticket n.'.$i;
     }
-    
+
     /**
      * Generador aleatorio del dueño del post
      *
@@ -444,7 +444,7 @@ class Data {
     {
         return 'Descipcion de la incidencia n.'.$i;
     }
-    
+
     /**
      * Generador aleatorio de la solucion de la incidencia.
      *
@@ -454,7 +454,7 @@ class Data {
     {
         return 'Solucion de la incidencia n.'.$i;
     }
-    
+
 /*********************************************************************
  * GENERADOR VALORES SYSTEM
  **********************************************************************/
@@ -472,6 +472,6 @@ class Data {
 //        );
 //        return $system[array_rand($system)];
 //    }
-    
-    
+
+
 }

@@ -11,7 +11,7 @@
     <form action="{{ path("partner_edit", { 'id':partner.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
             {{ form_widget(form) }}
         <p>
-            <button type="submit">Save</button>
+            <button id="btn_save" type="submit">Save</button>
         </p>
     </form>
 

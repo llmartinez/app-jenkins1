@@ -3,9 +3,9 @@
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
 function fill_model(url_ajax) {
-    
-    var id_brand = $('form[id=contact]').find('select[id=idBrand]').val()
-    
+
+    var id_brand = $('form[id=contact]').find('select[id=idBrand]').val();
+
     $.ajax({
         type: "POST",
         url: url_ajax,
@@ -18,7 +18,7 @@ function fill_model(url_ajax) {
             $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Select Model..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=idModel]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });      
+            });
         },
         error: function() {
             console.log("Error al cargar modelos...");
@@ -31,9 +31,9 @@ function fill_model(url_ajax) {
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
 function fill_version(url_ajax) {
-    
+
     var id_model = $('form[id=contact]').find('select[id=idModel]').val()
-    
+
     $.ajax({
         type: "POST",
         url: url_ajax,
@@ -46,7 +46,7 @@ function fill_version(url_ajax) {
             $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });      
+            });
         },
         error: function() {
             console.log("Error al cargar versiones...");

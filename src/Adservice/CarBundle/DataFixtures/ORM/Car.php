@@ -8,14 +8,13 @@ use Adservice\CarBundle\Entity\Car;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Cars  extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 33; }
-    
-    
-    public function load(ObjectManager $manager) 
+
+    public function load(ObjectManager $manager)
     {
         $num = Data::getNumTickets();
-        
+
         for($i=1;$i<=$num;$i++)
         {
             $entidad = new Car();
@@ -28,11 +27,11 @@ class Cars  extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getPlateNumber(), $entidad);
         }
         $manager->flush();
-    } 
+    }
 }
 
 ?>

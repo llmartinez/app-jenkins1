@@ -89,10 +89,13 @@ class DefaultControllerTest extends WebTestCase
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
 
-    /*TODO
+     /*TODO
      * la funcion javascript que cambia la url de 'foo' a 'id_usuario' no funciona,
      * se envia al controller la funcion deleteUser('foo');
-
+     * ***PHPUnit no soporta JS..
+     *    - probar test con CasperJS y recoger resultado
+     * */
+/*
     public function testDeleteUser()
     {
         $client = $this->client;
@@ -107,7 +110,7 @@ class DefaultControllerTest extends WebTestCase
             $link = $crawler->filter($location)->link();
             $crawler = $client->click($link);
 
-            $location = 'div#myModal div div div.modal-footer a#btn_yes';
+            $location = 'div#myModal div div div.modal-footer a';
             $link = $crawler->filter($location)->link();
  ----->>>>  //$crawler = $client->click($link);
 

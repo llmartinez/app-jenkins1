@@ -34,7 +34,7 @@ class Brand
      * @ORM\Column(name="idTecDoc", type="integer")
      */
     private $idTecDoc;
-    
+
     /**
      * @var string $models
      *
@@ -46,7 +46,7 @@ class Brand
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,7 +66,7 @@ class Brand
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -86,13 +86,13 @@ class Brand
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
+
     public function __toString() {
         return $this->name;
     }
@@ -100,7 +100,7 @@ class Brand
     {
         $this->models = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add models
      *
@@ -114,7 +114,7 @@ class Brand
     /**
      * Get models
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getModels()
     {

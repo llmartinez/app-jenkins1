@@ -4,6 +4,10 @@ namespace Adservice\UtilBundle\Tests\Controller;
 
 class UtilFunctionTest
 {
+    //Usuario y password para el superAdmin (se utilizará para la mayoria de los login del test)
+    public static $sa_user = 'admin';
+    public static $sa_pass = 'admin';
+
     /**
      * Cambia el locale
      * @param Crawler $crawler
@@ -37,8 +41,8 @@ class UtilFunctionTest
     }
 
     /**
-     * Prepara $client haciendo login como $user 
-     *                 y cambiando el ididoma a 'es' 
+     * Prepara $client haciendo login como $user
+     *                 y cambiando el ididoma a 'es'
      * @param client $client
      * @param string $user
      * @param string $pass
@@ -51,7 +55,7 @@ class UtilFunctionTest
                                                                      '_password' => $pass,
                                                                     ));
         $crawler = $client->submit($loginForm);
-        //cambia el ididoma a 'es' 
+        //cambia el ididoma a 'es'
         UtilFunctionTest::setLang($crawler, $client, 'es');
 
         return $client;
