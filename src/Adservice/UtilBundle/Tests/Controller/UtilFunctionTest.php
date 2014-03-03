@@ -5,8 +5,8 @@ namespace Adservice\UtilBundle\Tests\Controller;
 class UtilFunctionTest
 {
     //Usuario y password para el superAdmin (se utilizará para la mayoria de los login del test)
-    public static sa_user = 'admin';
-    public static sa_pass = 'admin';
+    public static $sa_user = 'admin';
+    public static $sa_pass = 'admin';
 
     /**
      * Cambia el locale
