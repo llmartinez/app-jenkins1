@@ -4,7 +4,7 @@
  */
 function confirm_delete_partner_modal(partner_id) {
     var custom_href = $('.modal-footer').find('a').attr('href');
-    custom_href = custom_href.replace('foo', partnery_id);
+    custom_href = custom_href.replace('foo', partner_id);
     $('.modal-footer').find('a').attr('href', custom_href);
 }
 
@@ -15,7 +15,7 @@ function confirm_delete_partner_modal(partner_id) {
 function populate_province(url_ajax){
     var id_region = $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').val();
 
-    $.ajax({ 
+    $.ajax({
         type        : "POST",
         url         : url_ajax,
         data        : {id_region : id_region},
@@ -25,10 +25,10 @@ function populate_province(url_ajax){
             $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=province]').empty();
             $.each(data, function(idx, elm) {
                $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=province]').append("<option value="+elm.id+">"+elm.province+"</option>");
-           });     
+           });
        },
        error : function(){
-         console.log("Error al cargar las provincias...");  
+         console.log("Error al cargar las provincias...");
        }
    });
 }

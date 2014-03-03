@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\CarBundle\Entity\Version;
 
 class Versions  extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 32; }
-    
+
     public function load(ObjectManager $manager) {
         $versions = array(
             array('name' => '1.8_TURBO'     , 'model' => 'A3'           , 'idTecDoc' => '23839' ),
@@ -30,7 +30,7 @@ class Versions  extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModel   ($this->getReference($version['model']));
             $entidad->setIdTecDoc($version['idTecDoc']);
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
         }
         $manager->flush();

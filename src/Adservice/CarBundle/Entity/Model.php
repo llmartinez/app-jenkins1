@@ -33,7 +33,7 @@ class Model {
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      */
     private $brand;
-    
+
     /**
      * @var string $version
      *
@@ -52,7 +52,7 @@ class Model {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -72,7 +72,7 @@ class Model {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -92,7 +92,7 @@ class Model {
     /**
      * Get brand
      *
-     * @return integer 
+     * @return integer
      */
     public function getBrand()
     {
@@ -112,35 +112,35 @@ class Model {
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
+
     public function __toString() {
         return $this->name;
     }
-    
+
 //    public function jsonSerialize() {
 //        return [
 //            'id' => $this->getId(),
 //            'name' => $this->getName()
 //        ];
 //    }
-    
+
     public function to_json(){
         $json = array('id'  => $this->getId(),
                       'name'=> $this->getName());
         return $json;
     }
-    
+
     public function __construct()
     {
         $this->version = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add version
      *
@@ -154,7 +154,7 @@ class Model {
     /**
      * Get version
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getVersion()
     {

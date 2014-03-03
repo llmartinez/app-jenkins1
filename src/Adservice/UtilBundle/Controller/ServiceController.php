@@ -11,14 +11,14 @@ class ServiceController {
     public function __construct(Container $container){
         $this->container = $container;
     }
-    
+
     public function setDefaultLanguage(Event $event){
         $request = $event->getRequest();
         //obtenemos el defaultLocale que tenemos en Parameters.ini
         $defaultLocale = $this->container->getParameter('session.default_locale');
-        //seteamos el idioma        
+        //seteamos el idioma
         //$request->setLocale($defaultLocale);
-        
+
         $request = $event->getRequest();
 //        //obtenemos el defaultLocale que tenemos en Parameters.ini
 //        $defaultLocale = $this->container->getParameter('session.default_locale');
@@ -26,14 +26,12 @@ class ServiceController {
 ////        $user_locale = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
 //        $token = $event->
 //        $user_locale = $token->getUser();
-//        
-//        //seteamos el idioma        
+//
+//        //seteamos el idioma
 //        //$request->setLocale($defaultLocale);
 //        var_dump($defaultLocale);
 //        var_dump($session_locale);
 //        var_dump($user_locale);
 //        die;
-        
-        
     }
 }

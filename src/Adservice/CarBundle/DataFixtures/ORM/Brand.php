@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\CarBundle\Entity\Brand;
 
 class Brands  extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 30; }
-    
+
     public function load(ObjectManager $manager) {
         $brands = array(
             array('name' => 'AUDI'          , 'idTecDoc' => '5'  ),
@@ -22,7 +22,7 @@ class Brands  extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setName    ($brand['name']);
             $entidad->setIdTecDoc($brand['idTecDoc']);
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
         }
         $manager->flush();

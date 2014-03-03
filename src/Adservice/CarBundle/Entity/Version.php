@@ -45,7 +45,7 @@ class Version {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -65,7 +65,7 @@ class Version {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -85,7 +85,7 @@ class Version {
     /**
      * Get model
      *
-     * @return integer 
+     * @return integer
      */
     public function getModel()
     {
@@ -105,24 +105,24 @@ class Version {
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
+
     public function __toString() {
         return $this->name;
     }
-    
+
 //    public function jsonSerialize() {
 //        return [
 //            'id' => $this->getId(),
 //            'name' => $this->getName()
 //        ];
 //    }
-    
+
     public function to_json(){
         $json = array('id'  => $this->getId(),
                       'name'=> $this->getName());
