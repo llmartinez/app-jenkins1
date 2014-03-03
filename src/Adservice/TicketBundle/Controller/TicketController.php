@@ -440,8 +440,8 @@ class TicketController extends Controller {
                 else{ if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1); }
             }else{
                 //User
-                if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
-                if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
+                if ($option == 'owner'     ) { $tickets = $repoTicket->findAllByOwner($user, $open); }
+                else{ if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open); }
             }
         }
         if(count($tickets) != 0){
