@@ -61,9 +61,10 @@ class TicketController extends Controller {
 
                 //Define TICKET
                 $ticket = DefaultC::newEntity($ticket, $user);
-                if ($security->isGranted('ROLE_ASSESSOR')) {
-                    //$ticket->setWorkshop($request->get('workshop'));
-                } else {
+                if ($security->isGranted('ROLE_ASSESSOR'))
+                {
+                    $ticket->setAssignedTo($user);
+                }else{
                     $ticket->setWorkshop($user->getWorkshop());
                 }
                 $ticket->setStatus($status);
@@ -331,7 +332,7 @@ class TicketController extends Controller {
 
 //        $logged_user = $this->get('security.context')->getToken()->getUser();
 //        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
-        
+
         $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
 
         return $this->render('TicketBundle:Ticket:workshopsList.html.twig', array('workshops' => $workshops));
@@ -416,28 +417,40 @@ class TicketController extends Controller {
     public function fill_ticketsAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
+        $security = $this->get('security.context');
 
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $option     = $petition->request->get('option');
         $user       = $this->get('security.context')->getToken()->getUser();
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
+        $allTickets = $repoTicket->findAll();
 
-        //SuperAdmin
-        if ($option == 'all'       ) $tickets = $repoTicket->findAll();
-        //Admin
-        if ($option == 'all_open'  ) $tickets = $repoTicket->findAllOpen($user, $open);
-        if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed);
-        //Assessor
-        if ($option == 'assign'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 0);
-        if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1);
-        //User
-        if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
-        if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
-        
-        
-        foreach ($tickets as $ticket){
-            $json[] = $ticket->to_json($tickets); 
+        if($security->isGranted('ROLE_ADMIN')){
+            //SuperAdmin
+            if ($option == 'all'       ) $tickets = $allTickets;
+            //Admin
+            if ($option == 'all_open'  ) { $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets); }
+            else{ if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets); }
+
+        }else {
+            if($security->isGranted('ROLE_ASSESSOR')){
+                //Assessor
+                if ($option == 'assign'    ) { $tickets = $repoTicket->findAllAssigned($user, $open, 0); }
+                else{ if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1); }
+            }else{
+                //User
+                if ($option == 'owner'     ) $tickets = $repoTicket->findAllByOwner($user, $open);
+                if ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $open);
+            }
+        }
+        if(count($tickets) != 0){
+
+            foreach ($tickets as $ticket) {
+                $json[] = $ticket->to_json();
+            }
+        }else{
+            $json[] = array('error' => "You don't have any ticket..");
         }
         return new Response(json_encode($json), $status = 200);
     }

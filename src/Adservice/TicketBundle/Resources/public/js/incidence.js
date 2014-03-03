@@ -3,7 +3,7 @@
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
 function fill_incidences(url_ajax) {
-    
+
     var option = $('select[id=slct_historyIncidences]').val();
     $.ajax({
         type: "POST",
@@ -13,21 +13,24 @@ function fill_incidences(url_ajax) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#incidenceBody').empty();
-            if(data.length==0){
-                $('#incidenceBody').append("<th>You don't have any incidence..</th>");
-            }
+
             $.each(data, function(idx, elm) {
-                var route = $('#route').val(); 
-                route = route.replace("PLACEHOLDER", elm.id );
-                $('#incidenceBody').append("<tr><td><a class='btn btn-primary pull-right' href='" + route + "'>Ver</a>"
+
+                if (elm.error) {
+                    $('#incidenceBody').append("<tr><td>" + elm.error + "</td></tr>");
+                }else{
+                    var route = $('#route').val();
+                    route = route.replace("PLACEHOLDER", elm.id );
+                    $('#incidenceBody').append("<tr><td><a class='btn btn-primary pull-right' href='" + route + "'>Ver</a>"
                                             + "<p><b style='color:black'>#" + elm.id + ": </b>"
                                             + elm.title + "</p>"
                                             + "<b>Last Modification</b>: " + elm.date + " (" + elm.status + ")</tr>");
-            }); 
-           
+            }
+        });
+
         },
-        error: function() {
-            console.log("Error al cargar incidencias...");
+        error: function(data) {
+            console.log("Error al cargar incidencias..." + data);
         }
     });
-} 
+}

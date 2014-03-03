@@ -21,10 +21,17 @@
 
                         <legend>Ticket Data</legend>
 
-                        <div class="col-xs-6 col-md-6 form-group">
+                        <div class="col-xs-12 col-md-12 margined">
                             <label for="new_ticket_form_title">Title</label>
                             {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
                         </div>
+
+                        {% if (is_granted('ROLE_ASSESSOR')) %}
+                            <div class="col-xs-6 col-md-6 form-group">
+                                <label for="new_ticket_form_workshop">Workshop</label>
+                                {{ form_widget(form.workshop, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        {% endif %}
 
                         <div class="col-xs-6 col-md-6 form-group">
                             <label for="new_ticket_form_importance">Importance</label>

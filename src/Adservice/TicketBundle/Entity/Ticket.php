@@ -348,7 +348,7 @@ class Ticket {
 //            'date' => $this->getCreatedAt()->format('d/m/Y'),
 //        ];
 //    }
-       
+
     /**
      * Parsea los camposa a formato json
      * @return Array
@@ -361,5 +361,5 @@ class Ticket {
                       'date'    => $this->getCreatedAt()->format('d/m/Y'));
         return $json;
     }
-    
+
 }

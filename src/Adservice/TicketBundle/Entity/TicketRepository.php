@@ -11,28 +11,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
-    public function findAllOpen($user, $status)
+    public function findAllOpen($user, $status, $allTickets)
     {
-        $workshops = $user->getPartner()->getWorkshops();
-        foreach ($workshops as $workshop) {
-            $tickets = $this->findBy(array('status' => $status->getId(),
-                                           'workshop' => $workshop->getId()));
-            if ($tickets != null) return $tickets;
+        foreach ($allTickets as $ticket) {
+            if($ticket->getStatus() == $status) {
+                $tickets[] = $ticket;
+            }
         }
+        return $tickets;
     }
 
     public function findAllAssigned ($user, $status, $bool)
     {
         ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
 
-        $workshops = $user->getPartner()->getWorkshops();
-        foreach ($workshops as $workshop) {
-
-            $tickets = $this->findBy(array('status' => $status->getId(),
-                                           'assigned_to' => $assigned,
-                                           'workshop' => $workshop->getId()));
-            if ($tickets != null) return $tickets;
-        }
+        $tickets = $this->findBy(array('status' => $status->getId(),
+                                       'assigned_to' => $assigned));
+        return $tickets;
     }
 
     public function findAllByOwner ($user, $status)

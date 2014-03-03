@@ -8,7 +8,7 @@ use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
 class DefaultControllerTest extends WebTestCase {
 
     protected function setUp() {
-        
+
     }
 
     /**

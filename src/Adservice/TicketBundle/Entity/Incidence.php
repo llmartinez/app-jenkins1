@@ -47,7 +47,7 @@ class Incidence {
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
-    
+
     /**
      * @var string $solution
      *
@@ -94,7 +94,7 @@ class Incidence {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -114,7 +114,7 @@ class Incidence {
     /**
      * Get ticket
      *
-     * @return string 
+     * @return string
      */
     public function getTicket()
     {
@@ -134,7 +134,7 @@ class Incidence {
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -154,7 +154,7 @@ class Incidence {
     /**
      * Get importance
      *
-     * @return integer 
+     * @return integer
      */
     public function getImportance()
     {
@@ -174,7 +174,7 @@ class Incidence {
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -194,13 +194,13 @@ class Incidence {
     /**
      * Get solution
      *
-     * @return string 
+     * @return string
      */
     public function getSolution()
     {
         return $this->solution;
     }
-    
+
     /**
      * Set owner
      *
@@ -214,13 +214,13 @@ class Incidence {
     /**
      * Get owner
      *
-     * @return string 
+     * @return string
      */
     public function getOwner()
     {
         return $this->owner;
     }
-    
+
     /**
      * Set workshop
      *
@@ -234,13 +234,13 @@ class Incidence {
     /**
      * Get workshop
      *
-     * @return integer 
+     * @return integer
      */
     public function getWorkshop()
     {
         return $this->workshop;
     }
-    
+
     /**
      * Set created_at
      *
@@ -254,7 +254,7 @@ class Incidence {
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -274,7 +274,7 @@ class Incidence {
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -294,13 +294,13 @@ class Incidence {
     /**
      * Get modified_by
      *
-     * @return string 
+     * @return string
      */
     public function getModifiedBy()
     {
         return $this->modified_by;
     }
-    
+
 //    public function jsonSerialize() {
 //        return [
 //            'id'        => $this->getId(),
@@ -309,7 +309,7 @@ class Incidence {
 //            'status'    => $this->getStatus()->getName()
 //        ];
 //    }
-    
+
     public function to_json(){
         $json = array('id'        => $this->getId(),
                       'title'     => $this->getTicket()->getTitle(),
