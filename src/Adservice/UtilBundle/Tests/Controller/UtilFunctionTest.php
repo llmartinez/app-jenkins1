@@ -41,8 +41,7 @@ class UtilFunctionTest
     }
 
     /**
-     * Prepara $client haciendo login como $user
-     *                 y cambiando el ididoma a 'es'
+     * Prepara $client haciendo login como $user y cambiando el idioma a 'es'
      * @param client $client
      * @param string $user
      * @param string $pass
@@ -52,8 +51,7 @@ class UtilFunctionTest
         //inicia la sesion como $user
         $crawler = $client->request('GET', '/');
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
-                                                                     '_password' => $pass,
-                                                                    ));
+                                                                     '_password' => $pass));
         $crawler = $client->submit($loginForm);
         //cambia el ididoma a 'es'
         UtilFunctionTest::setLang($crawler, $client, 'es');
