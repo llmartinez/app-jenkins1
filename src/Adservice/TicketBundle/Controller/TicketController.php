@@ -61,7 +61,7 @@ class TicketController extends Controller {
 
                 //Define TICKET
                 $ticket = DefaultC::newEntity($ticket, $user);
-                if ($security->isGranted('ROLE_ASSESSOR')) 
+                if ($security->isGranted('ROLE_ASSESSOR'))
                 {
                     $ticket->setAssignedTo($user);
                 }else{
