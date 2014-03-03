@@ -11,66 +11,57 @@ class TicketControllerTest extends WebTestCase {
         $this->assertFalse(false);
     }
 
-}
+   // protected function setUp() {
+
+   // }
 
 
-//    protected function setUp() {
-//        
-//    }
+   // public function testNewTicket($users) {
+   //     $client = static::createClient();
+   //     $client-> followRedirects(true);
+   //     UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]']);
+   //     $crawler = $client->getCrawler();
 
+   //     //miramos que exista el link "mis tickets" y lo clickamos
+   //     $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
+   //     $crawler = $client->click($myTicket_link);
 
-//    public function testNewTicket($users) {
-//        $client = static::createClient();
-//        $client-> followRedirects(true);
-//        UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]']);
-//        $crawler = $client->getCrawler();
-//        
-//        //miramos que exista el link "mis tickets" y lo clickamos
-//        $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
-//        $crawler = $client->click($myTicket_link);
-//        
-//        //hay 1 boton de "New Ticket" y lo clickamos
-//        $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
-//        $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
-//        $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
-//        $crawler = $client->click($newTicket_link);
-//        
-//        $this->checkFieldExist($crawler);
-//        
-//        
-//        
-//        //rellenamos el formulario y guardamos
-//        $newTicketForm = $crawler->selectButton('Submit')->form(array('new_ticket_form[title]'      => $this->setTicketTitle(),
-//                                                                      'new_ticket_form[importance]' => $this->getRandomNumber(1,10),
-//                                                                    ));
-//        $newTicketForm['brand']->select('1');
-//        $newTicketForm['idBrand']->select('AUDI');
-//        $brandField = $newTicketForm['form select[id="idBrand"]'];
-//        var_dump($brandField);
-//        $crawler->filter('form select[id="idBrand"]')->select(2);
-//        $newTicketForm->setField('form select[id="idBrand"]', 1);
-//        $newTicketForm['select[id="idBrand"]'];
-//        $newTicketForm['select[id="idBrand"]']->select(2);
-//        $brandField = $crawler->filter('form select[id="idBrand"]');       
-//        $brandField = $crawler->filter('form select#idBrand')->nextAll();
-//        foreach ($brandField as $aa) {
-//            var_dump($aa);
-//        }
-//               var_dump($brandField);
-//    }
-    
+   //     //hay 1 boton de "New Ticket" y lo clickamos
+   //     $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
+   //     $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
+   //     $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
+   //     $crawler = $client->click($newTicket_link);
 
-    
+   //     $this->checkFieldExist($crawler);
+
+   //     //rellenamos el formulario y guardamos
+   //     $newTicketForm = $crawler->selectButton('Submit')->form(array('new_ticket_form[title]'      => $this->setTicketTitle(),
+   //                                                                   'new_ticket_form[importance]' => $this->getRandomNumber(1,10),
+   //                                                                 ));
+   //     $newTicketForm['brand']->select('1');
+   //     $newTicketForm['idBrand']->select('AUDI');
+   //     $brandField = $newTicketForm['form select[id="idBrand"]'];
+   //     var_dump($brandField);
+   //     $crawler->filter('form select[id="idBrand"]')->select(2);
+   //     $newTicketForm->setField('form select[id="idBrand"]', 1);
+   //     $newTicketForm['select[id="idBrand"]'];
+   //     $newTicketForm['select[id="idBrand"]']->select(2);
+   //     $brandField = $crawler->filter('form select[id="idBrand"]');
+   //     $brandField = $crawler->filter('form select#idBrand')->nextAll();
+   //     foreach ($brandField as $aa) {
+   //         var_dump($aa);
+   //     }
+   //            var_dump($brandField);
+   // }
+
 //    public function newTicket(){
-//        
+//
 //    }
 //
 //    protected function tearDown() {
 //        parent::tearDown();
 //    }
 
-    
-    
 
 //    public function users() {
 ////        admin               admin
@@ -91,41 +82,40 @@ class TicketControllerTest extends WebTestCase {
 //            )
 //        );
 //    }
-    
+
 //    private function checkFieldExist($crawler){
 //         //CAMPOS DE TICKET
 //        $num_field_ticket_title = $crawler->filter('form input[name="new_ticket_form[title]"]')->count();
 //        $this->assertEquals(1, $num_field_ticket_title, 'Existe el campo TITLE en el formulario de "New Ticket"');
-//        
+//
 //        $num_field_ticket_importance = $crawler->filter('form input[name="new_ticket_form[importance]"]')->count();
 //        $this->assertEquals(1, $num_field_ticket_importance, 'Existe el campo IMPORTANCE en el formulario de "New Ticket"');
-//        
+//
 //        //CAMPOS DE CAR
 //        $field_car_brand = $crawler->filter('form select[id="idBrand"]')->count();
 //        $this->assertEquals(1, $field_car_brand, 'Existe el campo BRAND en el formulario de "New Ticket"');
-//        
+//
 //        $field_car_model = $crawler->filter('form select[id="idModel"]')->count();
 //        $this->assertEquals(1, $field_car_model, 'Existe el campo MODEL en el formulario de "New Ticket"');
-//        
+//
 //        $field_car_version = $crawler->filter('form select[name="new_car_form[version]"]')->count();
 //        $this->assertEquals(1, $field_car_version, 'Existe el campo VERSION en el formulario de "New Ticket"');
-//        
+//
 //        $field_car_year = $crawler->filter('form input[name="new_car_form[year]"]')->count();
 //        $this->assertEquals(1, $field_car_year, 'Existe el campo YEAR en el formulario de "New Ticket"');
-//        
+//
 //        $field_car_vin = $crawler->filter('form input[name="new_car_form[vin]"]')->count();
 //        $this->assertEquals(1, $field_car_vin, 'Existe el campo VIN en el formulario de "New Ticket"');
-//        
+//
 //        $field_car_plateNumber = $crawler->filter('form input[name="new_car_form[plateNumber]"]')->count();
 //        $this->assertEquals(1, $field_car_plateNumber, 'Existe el campo PLATE NUMBER en el formulario de "New Ticket"');
 //
 //    }
-    
+
 //    private function setTicketTitle(){
 //        return $this->random_lipsum(rand(0,5), 'words', rand(0,20));
 //    }
-    
-    
+
     /**
      * Se va a la paguina de lorem ipsum y devuelve texto
      * @param type $amount  how much of $what you want.
@@ -136,11 +126,11 @@ class TicketControllerTest extends WebTestCase {
 //    private function random_lipsum($amount, $what, $start) {
 //        return simplexml_load_file("http://www.lipsum.com/feed/xml?amount=$amount&what=$what&start=$start")->lipsum;
 //    }
-//    
+//
 //    private function getRandomNumber($min,$max){
 //        return rand($min, $max);
 //    }
-//}
+}
 
 //    public function testLoadNewTicket() {
 //        $client = static::createClient();
@@ -148,17 +138,17 @@ class TicketControllerTest extends WebTestCase {
 //        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
 //        'Se muestra la pantalla de listado de tickets (status 200)'
 //        );
-        
+
 //        $this->assertRegExp(
-//            '/.*\/..\/login_check/', $crawler->filter('form')->attr('action'), 
+//            '/.*\/..\/login_check/', $crawler->filter('form')->attr('action'),
 //            'El usuario anónimo ve el formulario de login'
 //        );
 //    }
-//    
+//
 //    public function testLogin() {
 //        $client = static::createClient();
 //        $client->followRedirects(true);
-//        
+//
 //        $crawler = $client->request('GET', '/');
 //        //carga el form con los datos de login
 //        $loginForm = $crawler->selectButton('btn_login')->form(array(

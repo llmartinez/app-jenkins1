@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Adservice\PopupBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
