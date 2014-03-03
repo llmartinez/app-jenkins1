@@ -5,23 +5,23 @@ namespace Adservice\PartnerBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
 
-class DefaultControllerTest extends WebTestCase
-{
+class DefaultControllerTest extends WebTestCase {
+
     protected function setUp() {
+        
     }
 
     /**
      * Test que comprueba que se cree un partner
      * @dataProvider partners
      */
-    public function testNewPartner($partner)
-    {
+    public function testNewPartner($partner) {
         $client = static::createClient();
-        $client-> followRedirects(true);
+        $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
-            UtilFunctionTest::doLogin($client, 'admin', 'admin');
-            UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
-            UtilFunctionTest::linkTo($client, $this, 'table tr td a:contains("Crear un partner nuevo")');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
+        UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
+        UtilFunctionTest::linkTo($client, $this, 'table tr td a:contains("Crear un partner nuevo")');
 
         //carga el form con los datos del partner
         $newPartnerForm = $client->getCrawler()->selectButton('btn_create')->form($partner);
@@ -32,12 +32,8 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         //comprueba que vuelva a la pagina del listado de partners
-        $this->assertRegExp('/.*\/..\/partner\/list/', $client->getRequest()->getUri(),
-            'El usuario ve el listado de partners'
-        );
-        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner")')->count(),
-            'El partners creado esta en la lista'
-        );
+        $this->assertRegExp('/.*\/..\/partner\/list/', $client->getRequest()->getUri(), 'El usuario ve el listado de partners');
+        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner")')->count(), 'El partners creado esta en la lista');
 
         //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
@@ -130,8 +126,7 @@ class DefaultControllerTest extends WebTestCase
      * DataProvider de partners: Contiene un array de partners
      * @return array partners
      */
-    public function partners()
-    {
+    public function partners() {
         return array(
             array(
                 'partner' => array(
