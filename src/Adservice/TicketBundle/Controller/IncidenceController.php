@@ -247,13 +247,17 @@ class IncidenceController extends Controller{
 
         $option = $petition->request->get('option');
 
-
         if($option == 'all'     ) $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
         if($option == 'owner'   ) $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('owner'       => $this->get('security.context')->getToken()->getUser()->getId()));
         if($option == 'workshop') $incidences = $em->getRepository('TicketBundle:Incidence')->findBy(array('workshop'    => $this->get('security.context')->getToken()->getUser()->getWorkshop()->getId()));
 
-        foreach ($incidences as $incidence) {
-            $json[] = $incidence->to_json();
+        if(count($incidences) != 0){
+
+            foreach ($incidences as $incidence) {
+                $json[] = $incidence->to_json();
+            }
+        }else{
+            $json[] = array('error' => "You don't have any incidence..");
         }
         return new Response(json_encode($json), $status = 200);
     }

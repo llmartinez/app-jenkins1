@@ -3,7 +3,7 @@
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
 function fill_tickets(url_ajax) {
-    
+
     var option = $('select[id=slct_historyTickets]').val();
     $.ajax({
         type: "POST",
@@ -13,25 +13,25 @@ function fill_tickets(url_ajax) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#ticketBody').empty();
-            /*
-            if(data.length==0){
-                $('#ticketHead').empty();
-                $('#ticketHead').append("<th>You don't have any ticket..</th>");
-            }
-            */
+
             $.each(data, function(idx, elm) {
-                var route = $('#route').val(); 
-                route = route.replace("PLACEHOLDER", elm.id );
-                $('#ticketBody').append("<tr> <td>" + elm.date + "</td><td>" + elm.workshop + "</td>"
+
+                if (elm.error) {
+                    $('#ticketBody').append("<tr><td>" + elm.error + "</td></tr>");
+                }else{
+                    var route = $('#route').val();
+                    route = route.replace("PLACEHOLDER", elm.id );
+                    $('#ticketBody').append("<tr> <td>" + elm.date + "</td><td>" + elm.workshop + "</td>"
                                        +"<td>#"+ elm.id +": <a href='"+route+"'>" + elm.title +  "</a></td></tr>");
-            }); 
-           
+                }
+            });
+
         },
         error: function() {
             console.log("Error al cargar tickets...");
         }
     });
-}    
+}
 
 /**
  * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar
