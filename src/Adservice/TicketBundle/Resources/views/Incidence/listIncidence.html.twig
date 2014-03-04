@@ -49,32 +49,34 @@
                 </thead>
                 <tbody>
                     {% for incidence in incidences %}
-                        <tr>
-                          {% set ticket = incidence.ticket %}
-                          {% set car = incidence.ticket.car %}
-                            <td> {{ incidence.id }}</td>
-                            <td> {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}</td>
-                            <td> {{ incidence.status   }}</td>
-                            <td> {{ incidence.workshop }}</td>
-                            <td> {{ ticket.assignedTo  }}</td>
-                            <td> {{ incidence.createdAt | date("d-m-Y") }}</td>
-                            <td> {{ incidence.owner.username | upper }}: {{ ticket.owner    }}</td>
-                            <td> {{ car.version.model.brand }}
-                                 {{ car.version.model       }}
-                                 {{ car.version             }}
-                                ({{ car.year                }})
-                            </td>{#
-                            <td> {{ car.plateNumber  }}</td>
-                            <td> {{ car.vin          }}</td>#}
-                            <td>
-                                {% if is_granted('ROLE_ASSESSOR') %}
+                        {% if is_granted('ROLE_ASSESSOR') or incidence.workshop == app.security.getToken().getUser().getWorkshop() %}
+                            <tr>
+                              {% set ticket = incidence.ticket %}
+                              {% set car = incidence.ticket.car %}
+                                <td> {{ incidence.id }}</td>
+                                <td> {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}</td>
+                                <td> {{ incidence.status   }}</td>
+                                <td> {{ incidence.workshop }}</td>
+                                <td> {{ ticket.assignedTo  }}</td>
+                                <td> {{ incidence.createdAt | date("d-m-Y") }}</td>
+                                <td> {{ incidence.owner.username | upper }}: {{ ticket.owner    }}</td>
+                                <td> {{ car.version.model.brand }}
+                                     {{ car.version.model       }}
+                                     {{ car.version             }}
+                                    ({{ car.year                }})
+                                </td>{#
+                                <td> {{ car.plateNumber  }}</td>
+                                <td> {{ car.vin          }}</td>#}
+                                <td>
+                                    {% if is_granted('ROLE_ASSESSOR') %}
 
-                                    <a href="{{ path('showIncidence', { 'id_incidence' : incidence.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="{{ path('showIncidence', { 'id_incidence' : incidence.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 
-                                    <a href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                {% endif %}
-                            </td>
-                        </tr>
+                                        <a href="{{ path('editIncidence', { 'id_incidence': incidence.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
                 {% else %}
