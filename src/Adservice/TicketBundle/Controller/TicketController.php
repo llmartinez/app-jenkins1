@@ -54,7 +54,7 @@ class TicketController extends Controller {
             $formP->bindRequest($request);
             $formD->bindRequest($request);
 
-            if ($car->getVersion() != "") {
+            if ((($car->getVersion() != "") && ($car->getVersion()->getModel() != "")) && ($car->getVersion()->getModel()->getBrand() != "")) {
                 //Define CAR
                 $car = DefaultC::newEntity($car, $user);
                 DefaultC::saveEntity($em, $car, $user, false);
@@ -168,11 +168,12 @@ class TicketController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository("TicketBundle:Ticket")->find($id_ticket);
+        var_dump($ticket);
 
         if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
 
         //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
-        $posts = $ticket->getPosts();
+        $posts = $ticket->getPosts(); echo count($posts);
         if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
 
         //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
