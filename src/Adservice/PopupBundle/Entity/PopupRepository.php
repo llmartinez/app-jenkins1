@@ -24,7 +24,7 @@ class PopupRepository extends EntityRepository{
                                   );
         $query->setParameter('start_date', $date);
         $query->setParameter('end_date', $date);
-        if ($only_one==true) $query->setMaxResults(1);
+//        if ($only_one==true) $query->setMaxResults(1);
         
         return $query->getResult();
     }
