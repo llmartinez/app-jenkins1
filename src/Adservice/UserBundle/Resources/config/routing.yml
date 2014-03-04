@@ -2,6 +2,10 @@
 #   APDO. RUTAS PARA LOGIN   #
 ##############################
        
+_user_login:
+    pattern:  /
+    defaults: { _controller: UserBundle:Login:goToLogin }
+
 user_login:
     pattern:  /login
     defaults: { _controller: UserBundle:Login:login }

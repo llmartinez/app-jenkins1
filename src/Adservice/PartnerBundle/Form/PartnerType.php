@@ -11,10 +11,10 @@ class PartnerType extends AbstractType {
         $builder
                 ->add('name')
                 ->add('phone_number_1', 'text')
-                ->add('phone_number_2', 'text')
+                ->add('phone_number_2', 'text', array('required' => false))
                 ->add('email_1', 'email')
-                ->add('email_2', 'email')
-                ->add('fax', 'text')
+                ->add('email_2', 'email', array('required' => false))
+                ->add('fax', 'text', array('required' => false))
                 ->add('address')
                 ->add('postal_code', 'text')
                 ->add('active', 'checkbox', array('required' => false))

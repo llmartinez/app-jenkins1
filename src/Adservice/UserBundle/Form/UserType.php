@@ -17,6 +17,4 @@ class UserType extends AbstractType
     {
         return 'adservice_userbundle_usertype';
     }
-    
-   
 }

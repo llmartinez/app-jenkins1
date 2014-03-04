@@ -16,7 +16,7 @@ class UserAdminType extends AbstractType
     {
         return 'adservice_userbundle_usertype';
     }
-    
+
      public static function getbasicUserType($builder)
     {
         $builder
@@ -25,7 +25,6 @@ class UserAdminType extends AbstractType
                                                 'invalid_message'   => 'Las dos contraseñas deben coincidir',
                                                 'first_name'        => 'Contraseña',
                                                 'second_name'       => 'Repite Contraseña',
-                                                'required'          => false
             ))
             ->add('name')
             ->add('surname')

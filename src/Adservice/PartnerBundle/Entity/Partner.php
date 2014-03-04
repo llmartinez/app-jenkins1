@@ -46,7 +46,7 @@ class Partner{
     /**
      * @var integer $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer")
+     * @ORM\Column(name="phone_number_2", type="integer", nullable="true")
      */
     private $phone_number_2;
 
@@ -60,14 +60,14 @@ class Partner{
     /**
      * @var string $email_2
      *
-     * @ORM\Column(name="email_2", type="string", length=255)
+     * @ORM\Column(name="email_2", type="string", length=255, nullable="true")
      */
     private $email_2;
 
     /**
      * @var integer $fax
      *
-     * @ORM\Column(name="fax", type="integer")
+     * @ORM\Column(name="fax", type="integer", nullable="true")
      */
     private $fax;
 
