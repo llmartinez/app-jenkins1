@@ -91,12 +91,11 @@
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
     <script>
         $(document).ready(function(){
+            
+            //al cargar la pagina....
             $(window).load(function(){
-                //recuperamos "visited" de la session, 
-                //si no existe es que es la primera vez que entramos i mostraremos el popup
-                //si existe valdrá "true" i ya no se mostrará el popup
-                var first_time = localStorage['visited'];
-                if (first_time == 'false') {
+                //si localStorage['visited'] vale "true" es que ya hemos visito el posible popup
+                if(localStorage['visited'] == 'false' ){
                     localStorage['visited'] = true;
                     var url_ajax = "{{ path("popup_get") }}";
                     find_popup(url_ajax);

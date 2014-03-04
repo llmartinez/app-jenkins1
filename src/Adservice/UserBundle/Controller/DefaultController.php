@@ -127,9 +127,9 @@ class DefaultController extends Controller {
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:Default:editUser.html.twig', array('user' => $user,
-                    'form_name' => $form->getName(),
-                    'form' => $form->createView()));
+        return $this->render('UserBundle:Default:editUser.html.twig', array('user'      => $user,
+                                                                            'form_name' => $form->getName(),
+                                                                            'form'      => $form->createView()));
     }
 
     /**

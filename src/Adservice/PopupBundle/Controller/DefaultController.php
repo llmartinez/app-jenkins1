@@ -17,8 +17,11 @@ class DefaultController extends Controller {
     public function getPopupAction() {
         $date_today = new \DateTime(\date("Y-m-d"));
         $em = $this->getDoctrine()->getEntityManager();
-        $popup = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, true);
-        $json = $popup->to_json($popup);
+        $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, true);
+//        $json = $popup->to_json($popup[0]);
+        foreach ($popups as $popup) {
+            $json[] = $popup->to_json();
+        }
         return new Response(json_encode($json), $status = 200);
     }
 
