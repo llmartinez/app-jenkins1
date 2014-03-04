@@ -8,6 +8,7 @@ user.index.menu.list_partners:          Listado de Socios ADService
 user.index.menu.list_users:             Listado de Usuarios ADService
 user.index.menu.list_popups:            Listado de Popups ADService
 user.index.menu.list_workshops:         Listado de Talleres ADService
+user.index.menu.list_tickets:        	Listado de Tickets AdService
 user.index.menu.list_incidences:        Listado de Incidencias ADService
 user.index.menu.list_statistics:        Listado de Estadísticas ADService
 user.index.menu.create_incidence_admin: Crear Incidencia como Admin
