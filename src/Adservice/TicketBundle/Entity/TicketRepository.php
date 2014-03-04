@@ -93,9 +93,6 @@ class TicketRepository extends EntityRepository
         //Filtros enviados
         $id_incidence = $request->get('id_incidence');
         $id_ticket   = $request->get('id_ticket');
-        $id_partner  = $request->get('id_partner');
-        $id_workshop = $request->get('id_workshop');
-        $id_region   = $request->get('id_region');
 
         if ($id_incidence != "")
         {
@@ -110,6 +107,10 @@ class TicketRepository extends EntityRepository
         }
 
         if ($security->isGranted("ROLE_ASSESSOR")) {
+
+            $id_partner  = $request->get('id_partner');
+            $id_workshop = $request->get('id_workshop');
+            $id_region   = $request->get('id_region');
 
             if ($id_partner != "0") {
 
@@ -131,8 +132,9 @@ class TicketRepository extends EntityRepository
                 $params[] = array('id_region', $id_region);
             }
         }else{
-            $where .= 'AND w.id = '.$security->getToken()->getUser()->getWorkshop()->getId().' ';
-            $params[] = array('id_ticket', $id_ticket);
+            $id_workshop = $security->getToken()->getUser()->getWorkshop()->getId();
+            $where .= 'AND w.id = :id_workshop ';
+            $params[] = array('id_workshop', $id_workshop);
         }
 
         //Crea la consulta
