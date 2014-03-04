@@ -156,8 +156,6 @@ class IncidenceController extends Controller{
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
-        $incidences = $em->getRepository('TicketBundle:Incidence')->findAll();
-
         $incidence = $em->getRepository('TicketBundle:Incidence')->find($id_incidence);
 
         $form = $this->createForm(new IncidenceType(), $incidence);
@@ -176,18 +174,11 @@ class IncidenceController extends Controller{
                                                                                         'incidence' => $incidence));
         }
 
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($incidence->getTicket()->getId());
+        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
 
-        $posts = $em->getRepository('TicketBundle:Post')->findBy(array('ticket' => $ticket->getId()));
-
-        $users = $em->getRepository('UserBundle:User')->findAll();
-
-        return $this->render('TicketBundle:Incidence:editIncidence.html.twig', array('incidences' => $incidences,
-                                                                                       'incidence' => $incidence,
-                                                                                       'ticket' => $ticket,
-                                                                                       'posts' => $posts,
-                                                                                       'users' => $users,
-                                                                                       'form' => $form->createView(),
+        return $this->render('TicketBundle:Incidence:editIncidence.html.twig', array( 'incidence' => $incidence,
+                                                                                      'workshops' => $workshops,
+                                                                                      'form' => $form->createView(),
                                                                               ));
     }
 

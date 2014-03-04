@@ -20,7 +20,7 @@
 
                     <h5><b>Search by:</b></h5>
 
-                    ID_Incidencia: <input type='text' class="form-control" id='id_incidence' name='id_incidence' placeholder='Insert incidence' {% if request.get('id_incidence') != "" %} value="{{ request.get('id_incidence') }}" {% endif %}>
+                    ID_Incidence: <input type='text' class="form-control" id='id_incidence' name='id_incidence' placeholder='Insert incidence' {% if request.get('id_incidence') != "" %} value="{{ request.get('id_incidence') }}" {% endif %}>
                     {% include 'TicketBundle:Default:includes/_filters_ticket.html.twig' %}
 
                     <button id="btn_search" class="btn btn-primary pull-right" type="submit"> Search </button>

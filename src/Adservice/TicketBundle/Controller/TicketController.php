@@ -53,7 +53,6 @@ class TicketController extends Controller {
             $formC->bindRequest($request);
             $formP->bindRequest($request);
             $formD->bindRequest($request);
-            
 
             if ($car->getVersion() != "") {
                 //Define CAR

@@ -8,6 +8,7 @@ user.index.menu.list_partners:          List of partners AdService
 user.index.menu.list_users:             List of users AdService
 user.index.menu.list_popups:            List of popups AdService
 user.index.menu.list_workshops:         List of workshops AdService
+user.index.menu.list_tickets:        	List of tickets AdService
 user.index.menu.list_incidences:        List of incidences AdService
 user.index.menu.list_statistics:        List of statistics AdService
 user.index.menu.create_incidence_admin: Create incidence as Admin
@@ -15,7 +16,7 @@ user.index.menu.my_tickets:             My Tickets
 user.index.menu.my_incidences:          My Incidences
 
 # COMUNES
-home:      Home 
+home:      Home
 admin:     Admin
 assessor:  Assessor
 user:      User
