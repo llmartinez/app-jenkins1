@@ -15,7 +15,7 @@
 
             <div class="colIzq">
                 {% if post.document is not null %}
-                    <img class='imgPost' src='{{ post.document.imgpath }}'>
+                    <img src="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}">
                 {% endif %}
             </div>
     </fieldset>
