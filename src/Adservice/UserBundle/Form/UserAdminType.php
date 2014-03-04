@@ -37,7 +37,7 @@ class UserAdminType extends AbstractType
             ->add('movile_number_2')
             ->add('fax')
             ->add('email_1', 'email')
-            ->add('email_2', 'email')
+            ->add('email_2', 'email', array('required' => false))
             ->add('active', 'checkbox', array('required' => false))
             ->add('region')
             ->add('province')

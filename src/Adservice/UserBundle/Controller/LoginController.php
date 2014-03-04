@@ -24,6 +24,10 @@ class LoginController extends Controller {
                                                                        'error'          => $error));
 
     }
+
+    public function goToLoginAction() {
+        return $this->redirect($this->generateUrl('user_login'));
+    }
 }
 
 ?>

@@ -9,7 +9,7 @@ SystemBundle:
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-    
+
 PopupBundle:
     resource: "@PopupBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/popup
@@ -29,18 +29,18 @@ TicketBundle:
 UserBundle:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-            
+
 UtilBundle:
     resource: "@UtilBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-    
+
 _login:
     pattern:  /
-    defaults: { _controller: UserBundle:Login:login }
+    defaults: { _controller: UserBundle:Login:goToLogin }
 
 #redirect:
 #    pattern: /{_locale}/{_location}/
-#    defaults: 
-#         _controller: FrameworkBundle:Redirect:urlRedirect 
+#    defaults:
+#         _controller: FrameworkBundle:Redirect:urlRedirect
 #         path: /{_locale}/{_location}/
-#         permanent: true 
+#         permanent: true

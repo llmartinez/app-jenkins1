@@ -7,38 +7,37 @@
       <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
       <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
     </ol>
-    
+
     <div class="tblContainer">
         <div class="row">
 
             <div class="col-sm-8 contact-form">
                 <form action="{{ path('editTicket', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
                     <div class="row">
-                         
-                        <div class="col-xs-6 col-md-6 form-group">    
+
+                        <div class="col-xs-6 col-md-6 form-group">
                             Workshop <select class="form-control" id="workshop" name="workshop"><option value=0>Select Workshop..</option>
-                                
-                            {% for workshop in workshops %} <option 
+
+                            {% for workshop in workshops %} <option
                                                         {% if ticket.workshop == workshop %} selected="true" {% endif %}
                                                         value="{{ workshop.id }}"> {{ workshop }} </option> 
                             {% endfor %}
-                                
+
                             </select>
                         </div>
-                        
-                        
-                        <div class="col-xs-6 col-md-6 form-group">    
+
+                        <div class="col-xs-6 col-md-6 form-group">
                             Title {{ form_widget(form.title, { 'attr': {'class': 'form-control' } }) }}
                         </div>
-                        
-                        <div class="col-xs-6 col-md-6 form-group">    
+
+                        <div class="col-xs-6 col-md-6 form-group">
                             Status {{ form_widget(form.status, { 'attr': {'class': 'form-control' } }) }}
                         </div>
-                        
-                        <div class="col-xs-6 col-md-6 form-group">    
+
+                        <div class="col-xs-6 col-md-6 form-group">
                             Importance {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
-                            
+
                             <legend>Car</legend>
                             {% include 'CarBundle:Default:car.html.twig'%}
                             {% include 'CarBundle:Default:edit_car.html.twig'%}
