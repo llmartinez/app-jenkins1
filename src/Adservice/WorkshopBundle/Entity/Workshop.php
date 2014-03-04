@@ -53,7 +53,7 @@ class Workshop
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
      */
     private $region;
-    
+
     /**
      * @var string $province
      *
@@ -78,7 +78,7 @@ class Workshop
     /**
      * @var integer $movile_phone_1
      *
-     * @ORM\Column(name="movile_phone_1", type="integer")
+     * @ORM\Column(name="movile_phone_1", type="integer", nullable=true)
      */
     private $movile_phone_1;
 
@@ -126,15 +126,15 @@ class Workshop
 
     /**
      * @var string $partner
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="workshops")
      */
     private $partner;
-    
+
     /**
      *
-     * @var string $users 
-     * 
+     * @var string $users
+     *
      * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="workshop")
      */
     private $users;
@@ -170,14 +170,14 @@ class Workshop
     /**
      * @var datetime $update_at
      *
-     * @ORM\Column(name="update_at", type="datetime")
+     * @ORM\Column(name="update_at", type="datetime", nullable=true)
      */
     private $update_at;
 
     /**
      * @var datetime $lowdate_at
      *
-     * @ORM\Column(name="lowdate_at", type="datetime")
+     * @ORM\Column(name="lowdate_at", type="datetime", nullable=true)
      */
     private $lowdate_at;
 
@@ -201,14 +201,14 @@ class Workshop
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
      */
     private $tickets;
-    
+
     /**
      * @var integer $incidences
      *
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Incidence", mappedBy="workshop")
      */
     private $incidences;
-    
+
     /**
      * @var datetime $created_at
      *
@@ -234,7 +234,7 @@ class Workshop
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -254,7 +254,7 @@ class Workshop
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -274,7 +274,7 @@ class Workshop
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -294,14 +294,14 @@ class Workshop
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
         return $this->city;
     }
 
-    public function getRegion() 
+    public function getRegion()
     {
         return $this->region;
     }
@@ -322,7 +322,7 @@ class Workshop
     /**
      * Get province
      *
-     * @return string 
+     * @return string
      */
     public function getProvince()
     {
@@ -342,7 +342,7 @@ class Workshop
     /**
      * Get phone_number_1
      *
-     * @return integer 
+     * @return integer
      */
     public function getPhoneNumber1()
     {
@@ -362,7 +362,7 @@ class Workshop
     /**
      * Get phone_number_2
      *
-     * @return integer 
+     * @return integer
      */
     public function getPhoneNumber2()
     {
@@ -382,7 +382,7 @@ class Workshop
     /**
      * Get movile_phone_1
      *
-     * @return integer 
+     * @return integer
      */
     public function getMovilePhone1()
     {
@@ -402,7 +402,7 @@ class Workshop
     /**
      * Get movile_phone_2
      *
-     * @return integer 
+     * @return integer
      */
     public function getMovilePhone2()
     {
@@ -422,7 +422,7 @@ class Workshop
     /**
      * Get fax
      *
-     * @return integer 
+     * @return integer
      */
     public function getFax()
     {
@@ -442,7 +442,7 @@ class Workshop
     /**
      * Get email_1
      *
-     * @return string 
+     * @return string
      */
     public function getEmail1()
     {
@@ -462,7 +462,7 @@ class Workshop
     /**
      * Get email_2
      *
-     * @return string 
+     * @return string
      */
     public function getEmail2()
     {
@@ -482,7 +482,7 @@ class Workshop
     /**
      * Get contact
      *
-     * @return string 
+     * @return string
      */
     public function getContact()
     {
@@ -502,7 +502,7 @@ class Workshop
     /**
      * Get observations
      *
-     * @return string 
+     * @return string
      */
     public function getObservations()
     {
@@ -522,7 +522,7 @@ class Workshop
     /**
      * Get partner
      *
-     * @return string 
+     * @return string
      */
     public function getPartner()
     {
@@ -542,7 +542,7 @@ class Workshop
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -562,7 +562,7 @@ class Workshop
     /**
      * Get adservice_plus
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAdservicePlus()
     {
@@ -582,7 +582,7 @@ class Workshop
     /**
      * Get test
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getTest()
     {
@@ -602,7 +602,7 @@ class Workshop
     /**
      * Get typology
      *
-     * @return string 
+     * @return string
      */
     public function getTypology()
     {
@@ -622,7 +622,7 @@ class Workshop
     /**
      * Get update_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getUpdateAt()
     {
@@ -642,7 +642,7 @@ class Workshop
     /**
      * Get lowdate_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getLowdateAt()
     {
@@ -662,7 +662,7 @@ class Workshop
     /**
      * Get endtest_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getEndtestAt()
     {
@@ -682,7 +682,7 @@ class Workshop
     /**
      * Get conflictive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getConflictive()
     {
@@ -702,7 +702,7 @@ class Workshop
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -722,7 +722,7 @@ class Workshop
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -742,22 +742,22 @@ class Workshop
     /**
      * Get modify_by
      *
-     * @return string 
+     * @return string
      */
     public function getModifyBy()
     {
         return $this->modify_by;
     }
-    
+
     public function __toString() {
         return $this->getName();
     }
-    
+
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add users
      *
@@ -771,7 +771,7 @@ class Workshop
     /**
      * Get users
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
@@ -791,13 +791,13 @@ class Workshop
     /**
      * Get tickets
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getTickets()
     {
         return $this->tickets;
     }
-    
+
     /**
      * Add incidences
      *
@@ -811,7 +811,7 @@ class Workshop
     /**
      * Get incidences
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getIncidences()
     {

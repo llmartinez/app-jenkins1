@@ -108,6 +108,7 @@ class TicketRepository extends EntityRepository
 
         if ($security->isGranted("ROLE_ASSESSOR")) {
 
+            //Filtros enviados de assessor
             $id_partner  = $request->get('id_partner');
             $id_workshop = $request->get('id_workshop');
             $id_region   = $request->get('id_region');
@@ -132,7 +133,9 @@ class TicketRepository extends EntityRepository
                 $params[] = array('id_region', $id_region);
             }
         }else{
+            //Filtros enviados de user
             $id_workshop = $security->getToken()->getUser()->getWorkshop()->getId();
+
             $where .= 'AND w.id = :id_workshop ';
             $params[] = array('id_workshop', $id_workshop);
         }
