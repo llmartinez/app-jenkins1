@@ -16,7 +16,7 @@ VALUES
 (12,'Galicia'),
 (13,'Madrid'),
 (14,'Murcia'),
-(15,'Navarr'),
+(15,'Navarra'),
 (16,'País Vasco'),
 (17,'La Rioja'),
 (18,'Ceuta'),
