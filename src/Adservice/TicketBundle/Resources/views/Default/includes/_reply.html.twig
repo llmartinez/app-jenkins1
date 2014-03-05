@@ -7,8 +7,11 @@
     {% else %}
 
     {# comprueba que el asesor tenga asignado el ticket #}
-        {% if is_granted('ROLE_ASSESSOR') and ticket.assignedTo is not null and ticket.assignedTo == app.security.getToken().getUser() 
-           or app.security.getToken().getUser().getWorkshop() == ticket.workshop%}
+        {% if ( is_granted('ROLE_ASSESSOR')
+                and ticket.assignedTo is not null
+                and ticket.assignedTo.id == app.security.getToken().getUser().getId())
+           or ( not is_granted('ROLE_ASSESSOR')
+                and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
 
         {# formulario de respuesta de POST #}
             <form action="{{ path('showTicket', {'id_ticket' : id_ticket}) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">

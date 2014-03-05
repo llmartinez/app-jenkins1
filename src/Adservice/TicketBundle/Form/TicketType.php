@@ -11,7 +11,7 @@ class TicketType extends AbstractType
         $builder
                 ->add('title')
                 ->add('status')
-                ->add('importance', 'text')
+                //->add('importance', 'text')
                 ->add('workshop')
                 ;
     }
