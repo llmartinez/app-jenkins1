@@ -113,8 +113,8 @@ class IncidenceController extends Controller{
         $incidence = new Incidence();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
+        //Si la incidencia ya estubiera creada, en vez de crear otra te lleva a la edicion de la incidencia ya creada
         $inc_setted = $em->getRepository('TicketBundle:Incidence')->findOneBy( array('ticket' => $ticket->getId()));
-
         if(isset($inc_setted)) return $this->redirect($this->generateUrl('editIncidence', array('id_incidence' => $inc_setted->getId())));
 
         $incidence->setTicket($ticket);
@@ -133,10 +133,9 @@ class IncidenceController extends Controller{
             DefaultC::saveEntity($em, $ticket, $user, false);
 
             //Define INCIDENCE
+            $incidence->setWorkshop($ticket->getWorkshop());
             $incidence = DefaultC::newEntity($incidence, $user);
             DefaultC::saveEntity($em, $incidence, $user);
-
-            $sesion = $request->getSession();
 
             return $this->redirect($this->generateUrl('listIncidence', array('incidence' => $incidence)));
         }
@@ -167,8 +166,6 @@ class IncidenceController extends Controller{
             $asesor =  $em->getRepository('UserBundle:User')->find($request->get('asesor'));
 
             DefaultC::saveEntity($em, $incidence, $asesor);
-
-            $sesion = $request->getSession();
 
             return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, 
                                                                                         'incidence' => $incidence));
