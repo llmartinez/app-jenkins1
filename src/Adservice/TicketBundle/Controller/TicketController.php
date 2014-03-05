@@ -168,7 +168,6 @@ class TicketController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository("TicketBundle:Ticket")->find($id_ticket);
-        var_dump($ticket);
 
         if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
 
