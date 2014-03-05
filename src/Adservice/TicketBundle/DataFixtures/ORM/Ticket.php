@@ -26,7 +26,7 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
             if (rand() % 2) {
                $entidad->setAssignedTo($this->getReference(Data::getAssessor()));
             }
-            $entidad->setImportance (1);
+//            $entidad->setImportance (1);
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
             $entidad->setTitle      ('Test n.'.$i);
