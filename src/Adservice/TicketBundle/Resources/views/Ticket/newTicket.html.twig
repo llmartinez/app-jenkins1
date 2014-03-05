@@ -33,11 +33,11 @@
                             </div>
                         {% endif %}
 
-                        <div class="col-xs-6 col-md-6 form-group">
+                       {#  <div class="col-xs-6 col-md-6 form-group">
                             <label for="new_ticket_form_importance">Importance</label>
                             {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
                         </div>
-
+ #}
                         <legend>Car</legend>
 
                         {% include 'CarBundle:Default:car.html.twig'%}
