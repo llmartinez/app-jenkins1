@@ -10,7 +10,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder = UserAdminType::getbasicUserType($builder);
-        $builder->add('workshop');
+        $builder->add('workshop', 'entity', array('class'       => 'WorkshopBundle:Workshop',
+                                                  'property'    => 'name',
+                                                  'read_only'   => true));
+            
     }
 
     public function getName()

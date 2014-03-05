@@ -5,9 +5,9 @@
     <fieldset>
     {# Marca con un color diferente los mensajes del usuario #}
         {% if post.owner == app.security.getToken().getUser() %}
-            <legend style="background: azure;"> {{ post.owner.username }}
+            <legend style="background: azure;"> {{ post.owner.name }}
         {% else %}
-            <legend> {{ post.owner.username }}
+            <legend> {{ post.owner }}
         {% endif %}
             </legend>
 

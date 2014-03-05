@@ -89,14 +89,14 @@
     
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/jquery.cookie.js') }}"></script>
     <script>
         $(document).ready(function(){
-            
             //al cargar la pagina....
             $(window).load(function(){
-                //si localStorage['visited'] vale "true" es que ya hemos visito el posible popup
-                if(localStorage['visited'] == 'false' ){
-                    localStorage['visited'] = true;
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
                     var url_ajax = "{{ path("popup_get") }}";
                     find_popup(url_ajax);
                 }
