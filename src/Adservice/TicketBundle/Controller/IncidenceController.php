@@ -65,7 +65,7 @@ class IncidenceController extends Controller{
                 $ticket->setCar($car);
                 $ticket->setWorkshop($incidence->getWorkshop());
                 $ticket->setStatus($incidence->getStatus());
-                $ticket->setImportance($incidence->getImportance());
+                //$ticket->setImportance($incidence->getImportance());
                 DefaultC::saveEntity($em, $ticket, $user, false);
 
                 //Define POST (i.description)

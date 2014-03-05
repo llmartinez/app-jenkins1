@@ -310,10 +310,8 @@ class TicketController extends Controller {
             if ($document->getFile() != "") {
                 $em->persist($document);
             }
-
             $em->flush();
-
-            $sesion = $request->getSession();
+            $form = $this->createForm(new PostType(), new Post());
         }
 
         $array = array('form' => $form->createView(),
