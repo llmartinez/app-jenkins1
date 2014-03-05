@@ -34,7 +34,7 @@ class Ticket {
      *
      * @ORM\Column(name="importance", type="integer")
      */
-    private $importance;
+    // private $importance;
 
     /**
      * @var integer $workshop
@@ -138,18 +138,18 @@ class Ticket {
      *
      * @param integer $importance
      */
-    public function setImportance($importance) {
-        $this->importance = $importance;
-    }
+    // public function setImportance($importance) {
+    //     $this->importance = $importance;
+    // }
 
     /**
      * Get importance
      *
      * @return integer
      */
-    public function getImportance() {
-        return $this->importance;
-    }
+    // public function getImportance() {
+    //     return $this->importance;
+    // }
 
     /**
      * Set workshop
