@@ -286,33 +286,34 @@ class TicketController extends Controller {
         $formD = $this->createForm(new DocumentType(), $document);
 
         if ($request->getMethod() == 'POST') {
-            //$ticket->getAssignedTo()
-            if (true) {
 
-                $form->bindRequest($request);
-
-                //Define User
-                $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
-
-                //Define Post
-                $post = DefaultC::newEntity($post, $user);
-                $post->setTicket($ticket);
-                DefaultC::saveEntity($em, $post, $user, false);
-
-                //Define Document
-                $formD->bindRequest($request);
-                $document->setPost($post);
-
-                if ($document->getFile() != "") {
-                    $em->persist($document);
-                }
-
-                $em->flush();
-
-                $sesion = $request->getSession();
-            } else {
-
+            //Se desasigna el ticket una vez respondido
+            if ($ticket->getAssignedTo() != null) {
+                $ticket->setAssignedTo(null);
+                $em->persist($ticket);
             }
+
+            $form->bindRequest($request);
+
+            //Define User
+            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
+
+            //Define Post
+            $post = DefaultC::newEntity($post, $user);
+            $post->setTicket($ticket);
+            DefaultC::saveEntity($em, $post, $user, false);
+
+            //Define Document
+            $formD->bindRequest($request);
+            $document->setPost($post);
+
+            if ($document->getFile() != "") {
+                $em->persist($document);
+            }
+
+            $em->flush();
+
+            $sesion = $request->getSession();
         }
 
         $array = array('form' => $form->createView(),
