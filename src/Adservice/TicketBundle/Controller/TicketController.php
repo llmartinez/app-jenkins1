@@ -172,8 +172,8 @@ class TicketController extends Controller {
         if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
 
         //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
-        $posts = $ticket->getPosts(); echo count($posts);
-        if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
+        $posts = $ticket->getPosts(); //echo count($posts);
+        // if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
 
         //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
         if ((!$this->get('security.context')->isGranted('ROLE_ASSESSOR') and ($ticket->getAssignedTo() != null))){
