@@ -13,7 +13,7 @@ user.index.menu.list_incidences:        List of incidences AdService
 user.index.menu.list_statistics:        List of statistics AdService
 user.index.menu.create_incidence_admin: Create incidence as Admin
 user.index.menu.asign_user_to_ticket:	Asign Tickets to Users
-user.index.menu.new_ticket:		Create a new ticket
+user.index.menu.new_ticket:             Create a new ticket
 user.index.menu.my_tickets:             My Tickets
 user.index.menu.my_incidences:          My Incidences
 
