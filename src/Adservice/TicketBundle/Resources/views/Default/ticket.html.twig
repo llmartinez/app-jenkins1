@@ -8,12 +8,15 @@
     <select id="slct_historyTickets" class="form-control">
         {% if is_granted('ROLE_ADMIN') %}
                 <option value="all" selected    >{% trans %} ticket.opt.all          {% endtrans %}</option>
-                <option value="all_open"        >{% trans %} ticket.opt.all_open     {% endtrans %}</option>
+                <option value="all_opened"      >{% trans %} ticket.opt.all_open     {% endtrans %}</option>
                 <option value="all_closed"      >{% trans %} ticket.opt.all_closed   {% endtrans %}</option>
         {% else %}
             {% if is_granted('ROLE_ASSESSOR') %}
-                <option value="ignore" selected >{% trans %} ticket.opt.not_assigned {% endtrans %}</option>
-                <option value="assign"          >{% trans %} ticket.opt.assigned     {% endtrans %}</option>
+                <option value="pending" selected >{% trans %} ticket.opt.pending     {% endtrans %}</option>
+                <option value="assigned"         >{% trans %} ticket.opt.assigned    {% endtrans %}</option>
+                <option value="answered"         >{% trans %} ticket.opt.answered    {% endtrans %}</option>
+                <option value="opened"           >{% trans %} ticket.opt.opened      {% endtrans %}</option>
+                <option value="closed"           >{% trans %} ticket.opt.closed      {% endtrans %}</option>
             {% else %}
                 <option value="owner" selected  >{% trans %} ticket.opt.owner        {% endtrans %}</option>
                 <option value="workshop"        >{% trans %} ticket.opt.workshop     {% endtrans %}</option>

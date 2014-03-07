@@ -420,23 +420,29 @@ class TicketController extends Controller {
 
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $option     = $petition->request->get('option');
-        $user       = $this->get('security.context')->getToken()->getUser();
+        $user       = $security->getToken()->getUser();
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
-        $allTickets = $repoTicket->findAll();
 
         if($security->isGranted('ROLE_ADMIN')){
+            $allTickets = $repoTicket->findAll();
             //SuperAdmin
             if ($option == 'all'       ) $tickets = $allTickets;
             //Admin
-            if ($option == 'all_open'  ) { $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets); }
+            if ($option == 'all_opened'  ) { $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets); }
             else{ if ($option == 'all_closed') $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets); }
 
         }else {
             if($security->isGranted('ROLE_ASSESSOR')){
                 //Assessor
-                if ($option == 'assign'    ) { $tickets = $repoTicket->findAllAssigned($user, $open, 0); }
-                else{ if ($option == 'ignore'    ) $tickets = $repoTicket->findAllAssigned($user, $open, 1); }
+                if ($option == 'pending' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'accesible'); }
+                else{ if ($option == 'answered' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'answered'); }
+                    else{ if ($option == 'assigned' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'assigned'); }
+                        else{ if ($option == 'opened' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'all'); }
+                            else{ if ($option == 'closed' ) { $tickets = $repoTicket->findAllTickets($user, $closed, 'accesible'); } }
+                        }
+                    }
+                }
             }else{
                 //User
                 if ($option == 'owner'     ) { $tickets = $repoTicket->findAllByOwner($user, $open); }

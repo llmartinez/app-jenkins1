@@ -21,13 +21,67 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    public function findAllAssigned ($user, $status, $bool)
-    {
-        ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
+    // public function findAllAssigned ($user, $status, $bool)
+    // {
+    //     ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
 
-        $tickets = $this->findBy(array('status' => $status->getId(),
-                                       'assigned_to' => $assigned));
-        return $tickets;
+    //     $tickets = $this->findBy(array('status' => $status->getId(),
+    //                                    'assigned_to' => $assigned));
+    //     return $tickets;
+    // }
+
+/**
+ * Encuentra los tickets segun el estado ($status) y los filtros que quieran devolver ($return)
+ * @param  Entity $user     El usuario logeado actualmente
+ * @param  Entity $status   El estado en que esta el ticket que se quiere devolver ('open', 'closed')
+ * @param  Entity $return   El filtro de tickets que se quieran devolver ( 'all', 'accesible', 'answered', 'assigned')
+ * @return array            array de tickets filtrados segun $status y $return
+ */
+    public function findAllTickets ($user, $status, $return)
+    {
+        $tickets = $this->findByStatus($status->getId());
+        // $tickets = $this->findBy(array('status' => $status->getId()));
+
+        foreach ($tickets as $ticket) {
+
+            // Se recoge el role del owner del ultimo post del ticket
+            $posts = $ticket->getPosts();
+            $last_post = $posts[count($ticket->getPosts())-1];
+            $last_post_owner_roles = $last_post->getOwner()->getRoles();
+            $last_post_owner_role_name = $last_post_owner_roles[0]->getName();
+
+            // Si el ultimo post es de un user
+            if ($last_post_owner_role_name == "ROLE_USER")
+            {
+                // Si el ticket no esta asignado a ningun otro assessor
+                if ( $ticket->getAssignedTo() == null
+                  or $ticket->getAssignedTo() == $user )
+                {
+                       $accesible_tickets[]  = $ticket;
+
+                // Si el ticket esta asignado a otro assessor
+                }else{ $assigned_tickets[] = $ticket; }
+
+            // Si el ultimo post es de un assessor
+            }else {    $answered_tickets[] = $ticket; }
+        }
+
+        //array con todos los tickets fitrados y ordenados (accesible, assigned, answered)
+        if ($return == 'all') {
+            foreach ($accesible_tickets as $accesible) { $all_tickets[] = $accesible; }
+            foreach ($assigned_tickets as $assigned)   { $all_tickets[] = $assigned;  }
+            foreach ($answered_tickets as $answered)   { $all_tickets[] = $answered;  }
+            return $all_tickets;
+        }
+        else {
+            if ($return == 'accesible') {  return $accesible_tickets; } //array con los tickets pendientes de respuesta
+            else {
+                if ($return == 'answered') { return $answered_tickets; } //array con los tickets respondidos
+                else {
+                    if($return == 'assigned') { return $assigned_tickets; } //array con los tickets asignados a un assessor
+                }
+            }
+        }
     }
 
     public function findAllByOwner ($user, $status)

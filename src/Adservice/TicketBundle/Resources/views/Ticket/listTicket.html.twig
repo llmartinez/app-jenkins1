@@ -74,7 +74,8 @@
                Y  : el ultimo en responder != usuario logueado
             #}
             {% if ( ticket.owner == user   or   ticket.assignedTo == user )
-               and  ticket.posts[lastPost].owner.id != user.getId() %}
+               and  ticket.posts[lastPost].owner.id != user.getId()
+               and  ticket.status.name != 'closed' %}
 
                <p> <label>Ticket #{{ ticket.id }}                          </label>    Pending reply..
                    <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">    Show            </a></p>
