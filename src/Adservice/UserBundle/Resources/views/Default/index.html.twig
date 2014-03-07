@@ -23,8 +23,6 @@
                     <a id="listStatistics"     href="{{ path("listStatistics"    ) }}">{% trans %} user.index.menu.list_statistics       {% endtrans %}</a><br>
                     <a id="newIncidence"       href="{{ path("newIncidence"      ) }}">{% trans %} user.index.menu.create_incidence_admin{% endtrans %}</a><br>
                     <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList") }}">{% trans %} user.index.menu.asign_user_to_ticket  {% endtrans %}</a><br>
-                    {#<a href="{{ path("ticket_list") }}">{% trans %}Listado de Tickets{% endtrans %}</a><br>
-                    <a href="{{ path("incidence_list") }}">{% trans %}Listado de Incidencias{% endtrans %}</a><br>#}
                 </td>
             </tr>
         </table>
@@ -61,7 +59,7 @@
             </tr>
         </table>
     {% endif %}
-    
+
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -72,7 +70,7 @@
                     <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
                 </div>
                 <div class="modal-body">
-                    <div id="popup_modal_description"></div>          
+                    <div id="popup_modal_description"></div>
                 </div>
                {# <div class="modal-footer">
                     <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
@@ -86,7 +84,7 @@
 
 
 {% block javascripts %}
-    
+
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
     <script src="{{ asset('bundles/util/js/jquery.cookie.js') }}"></script>
