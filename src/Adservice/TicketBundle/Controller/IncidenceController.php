@@ -64,6 +64,7 @@ class IncidenceController extends Controller{
                 $ticket = DefaultC::newEntity($ticket, $user);
                 $ticket->setCar($car);
                 $ticket->setWorkshop($incidence->getWorkshop());
+                $ticket->setAssignedTo($user);
                 $ticket->setStatus($incidence->getStatus());
                 //$ticket->setImportance($incidence->getImportance());
                 DefaultC::saveEntity($em, $ticket, $user, false);
@@ -167,7 +168,7 @@ class IncidenceController extends Controller{
 
             DefaultC::saveEntity($em, $incidence, $asesor);
 
-            return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences, 
+            return $this->render('TicketBundle:Incidence:listIncidence.html.twig', array('incidences' => $incidences,
                                                                                         'incidence' => $incidence));
         }
 
