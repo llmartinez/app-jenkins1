@@ -128,8 +128,8 @@ class Statistic {
         $query = $em->createQuery("SELECT COUNT(t.id) FROM TicketBundle:Ticket t
                                    WHERE t.status = :status
                                   ");
-        if ($status == 'open') $query->setParameter('status', 0);
-        if ($status == 'close') $query->setParameter('status', 1);
+        if ($status == 'open') $query->setParameter('status', 1);
+        if ($status == 'close') $query->setParameter('status', 2);
         return $query->getSingleScalarResult();
     }
     
@@ -143,8 +143,8 @@ class Statistic {
         $query = $em->createQuery("SELECT COUNT(i.id) FROM TicketBundle:Incidence i
                                    WHERE i.status = :status
                                   ");
-        if ($status == 'open') $query->setParameter('status', 0);
-        if ($status == 'close') $query->setParameter('status', 1);
+        if ($status == 'open') $query->setParameter('status', 1);
+        if ($status == 'close') $query->setParameter('status', 2);
         return $query->getSingleScalarResult();
     }
     
