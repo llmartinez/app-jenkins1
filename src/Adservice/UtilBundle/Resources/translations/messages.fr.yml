@@ -11,13 +11,10 @@ user.index.menu.list_users: 	 		Liste des utilisateurs AdService
 user.index.menu.list_popups: 	 		Liste des Popups ADService
 user.index.menu.list_workshops:  		Liste des ateliers AdService
 user.index.menu.list_tickets:    		Liste des billets AdService
-user.index.menu.list_incidences: 		Liste des questions AdService
 user.index.menu.list_statistics: 		Liste des statistiques AdService
-user.index.menu.create_incidence_admin: Créer un impact en tant qu'administrateur
 user.index.menu.asign_user_to_ticket:	Attribuer billets pour les utilisateurs
 user.index.menu.new_ticket:				Créer un nouveau billet
 user.index.menu.my_tickets:             Mon Tickets
-user.index.menu.my_incidences:          Mon questions
 
 # COMUNES
 home:      Index
@@ -29,29 +26,19 @@ workshop:  Atelier
 ticket:    Billet
 car:       Voiture
 post:      Message
-incidence: Incidence
 
 
 #TICKET
-ticket.history.title:     Histoire Billets
-ticket.opt.all:           Voir tous les billets
-ticket.opt.all_open:      Voir tous les billets ouverts
-ticket.opt.all_closed:    Voir tous les billets fermés
-ticket.opt.pending :      Billets en attente
-ticket.opt.assigned :     Billets attribués
-ticket.opt.answered :     Billets répondu
-ticket.opt.opened : 	  Billets ouverts
-ticket.opt.closed :  	  Billets fermés
-ticket.opt.owner:         Votre ticket
-ticket.opt.workshop:      Billets pour votre atelier
-
-#INCIDENCE
-incidence.history.title:  Histoire Incidence
-incidence.opt.all:        Voir tous les incidences
-incidence.opt.owner:      Votre incidences
-incidence.opt.workshop:   Incidences pour votre atelier
-incidence.list:           Liste des incidences
-
+ticket.history.title:      Histoire Billets
+ticket.opt.all:            Voir tous les billets
+ticket.opt.all_open:       Voir tous les billets ouverts
+ticket.opt.all_closed:     Voir tous les billets fermés
+ticket.opt.free :          Billets libre
+ticket.opt.assigned :      Billets attribués
+ticket.opt.answered :      Billets répondu
+ticket.opt.other_assessor: Billets d'un autre évaluateur
+ticket.opt.owner:          Votre ticket
+ticket.opt.workshop:       Billets pour votre atelier
 
 
 ############################

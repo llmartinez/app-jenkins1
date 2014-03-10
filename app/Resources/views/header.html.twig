@@ -24,7 +24,6 @@
                                     <li><a class="btn pull-left" href="{{ path('user_index') }}">   {% trans %}Home         {% endtrans %}</a></li>
                                     <li><a class="btn pull-left" href="{{ path('newTicket') }}" >   {% trans %}New ticket   {% endtrans %}</a></li>
                                     <li><a class="btn pull-left" href="{{ path('listTicket') }}">   {% trans %}Tickets      {% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('listIncidence') }}">{% trans %}Incidences   {% endtrans %}</a></li>
                                     <li><a href="#"></a></li>
                                     <li class="divider"></li>
                                     <li><a class="btn pull-left" href="{{ path('user_logout') }}">  {% trans %}Logout       {% endtrans %}</a></li>
@@ -35,7 +34,7 @@
                             {% endif %}
                             {#
                                app.request.getPathInfo()
-                               app.request.attributes.get('_route')            -- listIncidence 
+                               app.request.attributes.get('_route')
                             #}
                             <div id="selectLang" class="selectLang">
                                 <a href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>

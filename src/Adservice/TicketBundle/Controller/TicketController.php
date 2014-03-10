@@ -54,52 +54,58 @@ class TicketController extends Controller {
             $formP->bindRequest($request);
             $formD->bindRequest($request);
 
-            if ((($car->getVersion() != "") && ($car->getVersion()->getModel() != "")) && ($car->getVersion()->getModel()->getBrand() != "")) {
-                //Define CAR
-                $car = DefaultC::newEntity($car, $user);
-                DefaultC::saveEntity($em, $car, $user, false);
+            if ((($form->isValid()) && ($formC->isValid()) && ($formP->isValid())) && ($formD->isValid())) {
 
-                //Define TICKET
-                $ticket = DefaultC::newEntity($ticket, $user);
-                if ($security->isGranted('ROLE_ASSESSOR'))
-                {
-                    $ticket->setAssignedTo($user);
-                }else{
-                    $ticket->setWorkshop($user->getWorkshop());
+                if (((($car->getVersion() != "") && ($car->getVersion()->getModel() != "")) && ($car->getVersion()->getModel()->getBrand() != "")) &&
+                    ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0)) {
+
+                    //Define CAR
+                    $car = DefaultC::newEntity($car, $user);
+                    DefaultC::saveEntity($em, $car, $user, false);
+
+                    //Define TICKET
+                    $ticket = DefaultC::newEntity($ticket, $user);
+                    if ($security->isGranted('ROLE_ASSESSOR'))
+                    {
+                        $ticket->setAssignedTo($user);
+                    }else{
+                        $ticket->setWorkshop($user->getWorkshop());
+                    }
+                    $ticket->setStatus($status);
+                    $ticket->setCar($car);
+                    DefaultC::saveEntity($em, $ticket, $user, false);
+
+                    //Define POST
+                    $post = DefaultC::newEntity($post, $user);
+                    $post->setTicket($ticket);
+                    DefaultC::saveEntity($em, $post, $user, false);
+
+                    //Define Document
+                    $document->setPost($post);
+
+                    if ($document->getFile() != "") {
+                        $em->persist($document);
+                    }
+
+                    $em->flush();
+
+                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                } else {
+                    $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente');
                 }
-                $ticket->setStatus($status);
-                $ticket->setCar($car);
-                DefaultC::saveEntity($em, $ticket, $user, false);
-
-                //Define POST
-                $post = DefaultC::newEntity($post, $user);
-                $post->setTicket($ticket);
-                DefaultC::saveEntity($em, $post, $user, false);
-
-                //Define Document
-                $document->setPost($post);
-
-                if ($document->getFile() != "") {
-                    $em->persist($document);
-                }
-
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
-            } else {
-                $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
-            }
+            }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
         }
 
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
-
+        $brands  = $em->getRepository('CarBundle:Brand'    )->findAll();
+        $systems = $em->getRepository('TicketBundle:System')->findAll();
 
         return $this->render('TicketBundle:Ticket:newTicket.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
                     'formP' => $formP->createView(),
                     'formD' => $formD->createView(),
-                    'brands' => $brands,));
+                    'brands' => $brands,
+                    'systems' => $systems,));
     }
 
     /**
@@ -120,38 +126,44 @@ class TicketController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
-            //Define CAR
+
+            $form->bindRequest($request);
             $formC->bindRequest($request);
 
-            if ($car->getVersion() != "") {
-                DefaultC::saveEntity($em, $car, $user, false);
+            //Define CAR
+            if (($form->isValid()) && ($formC->isValid())) {
+                if ($car->getVersion() != "") {
+                    DefaultC::saveEntity($em, $car, $user, false);
 
-                $form->bindRequest($request);
-                DefaultC::saveEntity($em, $ticket, $user);
+                    DefaultC::saveEntity($em, $ticket, $user);
 
-                $sesion = $request->getSession();
+                    $sesion = $request->getSession();
 
-                return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
-            } else {
-
-                $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
-            }
+                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                } else {
+                    $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente');
+                }
+            }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
         }
 
-        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
-        $models = $em->getRepository('CarBundle:Model')->findByBrand($car->getVersion()->getModel()->getBrand()->getId());
-        $versions = $em->getRepository('CarBundle:Version')->findByModel($car->getVersion()->getModel()->getId());
+        $workshops   = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        $importances = $em->getRepository('TicketBundle:Importance')->findAll();
+        $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
+        $brands      = $em->getRepository('CarBundle:Brand'        )->findAll();
+        $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getVersion()->getModel()->getBrand()->getId());
+        $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getVersion()->getModel()->getId());
 
         return $this->render('TicketBundle:Ticket:editTicket.html.twig', array(
-                    'form' => $form->createView(),
-                    'formC' => $formC->createView(),
-                    'tickets' => $this->loadTicket(),
-                    'ticket' => $ticket,
-                    'workshops' => $workshops,
-                    'brands' => $brands,
-                    'models' => $models,
-                    'versions' => $versions
+                    'form'        => $form->createView(),
+                    'formC'       => $formC->createView(),
+                    'tickets'     => $this->loadTicket(),
+                    'ticket'      => $ticket,
+                    'workshops'   => $workshops,
+                    'importances' => $importances,
+                    'systems'     => $systems,
+                    'brands'      => $brands,
+                    'models'      => $models,
+                    'versions'    => $versions
                 ));
     }
 
@@ -227,7 +239,6 @@ class TicketController extends Controller {
         $request  = $this->getRequest();
 
         if ($request->getMethod() == 'POST') {
-
             $tickets = $em->getRepository('TicketBundle:Ticket')->findTicketsFiltered($security, $request);
         }else{
             $tickets = $this->loadTicket();
@@ -272,6 +283,7 @@ class TicketController extends Controller {
      */
     private function createPost($request, $id_ticket) {
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
 
         $post = new Post();
         $document = new Document();
@@ -287,18 +299,11 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            //Se desasigna el ticket una vez respondido
-            if ($ticket->getAssignedTo() != null) {
-                $ticket->setAssignedTo(null);
-                $em->persist($ticket);
-            }
-
-            $form->bindRequest($request);
-
             //Define User
-            $user = $em->getRepository('UserBundle:User')->find($request->get('user'));
+            $user = $security->getToken()->getUser();
 
             //Define Post
+            $form->bindRequest($request);
             $post = DefaultC::newEntity($post, $user);
             $post->setTicket($ticket);
             DefaultC::saveEntity($em, $post, $user, false);
@@ -310,6 +315,23 @@ class TicketController extends Controller {
             if ($document->getFile() != "") {
                 $em->persist($document);
             }
+
+            //Se desbloquea el ticket una vez respondido
+            if ($ticket->getBlockedBy() != null) {
+                $ticket->setBlockedBy(null);
+
+                /*si es el primer assessor que responde se le asigna*/
+                $posts = $ticket->getPosts();
+                $primer_assessor = 0;
+                foreach ($posts as $post) {
+                    if ($post->getOwner()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
+                        $primer_assessor = 1;
+                    }
+                }
+                if($primer_assessor == 0) $ticket->setAssignedTo($user);
+                $em->persist($ticket);
+            }
+
             $em->flush();
             $form = $this->createForm(new PostType(), new Post());
         }
@@ -395,16 +417,19 @@ class TicketController extends Controller {
     }
 
     /**
-     * Asigna un ticket al asesor
+     * Bloquea un ticket al asesor para que conteste
      * @param Int $id_ticket puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function autoAssignTicketAction($id_ticket, $id_user = null) {
+    public function blockTicketAction($id_ticket, $id_user = null) {
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
-        $this->assignTicket($ticket, $user);
+        ($user != null) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
+
+        $em->persist($ticket);
+        $em->flush();
 
         return $this->showTicketAction($id_ticket);
     }
@@ -435,11 +460,10 @@ class TicketController extends Controller {
         }else {
             if($security->isGranted('ROLE_ASSESSOR')){
                 //Assessor
-                if ($option == 'pending' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'accesible'); }
-                else{ if ($option == 'answered' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'answered'); }
-                    else{ if ($option == 'assigned' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'assigned'); }
-                        else{ if ($option == 'opened' ) { $tickets = $repoTicket->findAllTickets($user, $open, 'all'); }
-                            else{ if ($option == 'closed' ) { $tickets = $repoTicket->findAllTickets($user, $closed, 'accesible'); } }
+                if ($option == 'free' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'free'); }
+                else{ if ($option == 'assigned' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'assigned'); }
+                    else{ if ($option == 'answered' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'answered', 'DESC'); }
+                        else{ if ($option == 'other_assessor' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'other_assessor'); }
                         }
                     }
                 }

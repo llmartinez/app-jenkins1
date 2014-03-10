@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Ticket Title</th>
+                <th>Ticket description</th>
                 {# <th>Importance</th> #}
                 <th>Owner</th>
                 <th>Assigned</th>
@@ -25,7 +25,7 @@
             <form action="{{ path("assignUserToTicket", { 'id_ticket':ticket.id }) }}" method="post" >
                 <tr>
                     <td>{{ ticket.id }}</td>
-                    <td>{{ ticket.title }} </td>
+                    <td>{{ ticket.description }} </td>
                     {#<td>{{ ticket.importance}}</td>#}
                     <td>{{ ticket.owner }}</td>
                     <td>{{ ticket.assignedTo }}</td>
@@ -45,7 +45,7 @@
                         <input type="hidden" name="id_ticket" value={{ ticket.id }}>
                         <button type="submit" class="btn btn-primary" id="submitAssingTickets">Asignar</button>
                     </td>
-                </tr> 
+                </tr>
             </form>
         </tbody>
     </table>

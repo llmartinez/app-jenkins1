@@ -1,11 +1,11 @@
 <?php
 
-namespace Adservice\SystemBundle\Entity;
+namespace Adservice\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\SystemBundle\Entity\System
+ * Adservice\TicketBundle\Entity\System
  *
  * @ORM\Table(name="system")
  * @ORM\Entity
@@ -32,7 +32,7 @@ class System
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -52,13 +52,13 @@ class System
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-    
+
     public function __toString() {
         return $this->getName();
     }

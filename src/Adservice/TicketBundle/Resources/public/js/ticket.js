@@ -22,7 +22,7 @@ function fill_tickets(url_ajax) {
                     var route = $('#route').val();
                     route = route.replace("PLACEHOLDER", elm.id );
                     $('#ticketBody').append("<tr> <td>" + elm.date + "</td><td>" + elm.workshop + "</td>"
-                                       +"<td>#"+ elm.id +": <a href='"+route+"'>" + elm.title +  "</a></td></tr>");
+                                       +"<td>#"+ elm.id +": <a href='"+route+"'>" + elm.description +  "</a></td></tr>");
                 }
             });
 

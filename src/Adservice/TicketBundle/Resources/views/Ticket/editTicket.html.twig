@@ -7,6 +7,9 @@
       <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
       <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
     </ol>
+    {% if app.session.hasFlash('error') %}
+        <p class="error">{{ app.session.getFlash('error') }}</p>
+    {% endif %}
 
     <div class="tblContainer">
         <div class="row">
@@ -15,32 +18,37 @@
                 <form action="{{ path('editTicket', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
                     <div class="row">
 
+                        <div class="col-xs-12 col-md-12 form-group">
+                            Description {{ form_widget(form.description, { 'attr': {'class': 'form-control' } }) }}
+                        </div>
+
                         <div class="col-xs-6 col-md-6 form-group">
-                            Workshop <select class="form-control" id="workshop" name="workshop"><option value=0>Select Workshop..</option>
+                            Workshop {{ form_widget(form.workshop, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
 
-                            {% for workshop in workshops %} <option
-                                                        {% if ticket.workshop == workshop %} selected="true" {% endif %}
-                                                        value="{{ workshop.id }}"> {{ workshop }} </option> 
-                            {% endfor %}
+                        <div class="col-xs-6 col-md-6 form-group">
+                            Importance {{ form_widget(form.importance, { 'attr': {'class': 'form-control' } }) }}
+                        </div>
 
+                        <div class="col-xs-6 col-md-6 form-group">
+                            <label for="id_system">System</label>
+                            <select class="form-control" id="id_system"><option value="0">Select system..</option>
+                                {% for system in systems %}
+                                    <option value="{{ system.id }}"> {{ system.name }} </option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="col-xs-6 col-md-6 form-group">
-                            Title {{ form_widget(form.title, { 'attr': {'class': 'form-control' } }) }}
+                            <label for="new_ticket_form_subsystem">Subsystem</label>
+                            {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control'} }) }}
                         </div>
 
-                        <div class="col-xs-6 col-md-6 form-group">
-                            Status {{ form_widget(form.status, { 'attr': {'class': 'form-control' } }) }}
-                        </div>
+                        {{ form_rest(form) }}
 
-                        {# <div class="col-xs-6 col-md-6 form-group">
-                            Importance {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
-                        </div> #}
-
-                            <legend>Car</legend>
-                            {% include 'CarBundle:Default:car.html.twig'%}
-                            {% include 'CarBundle:Default:edit_car.html.twig'%}
+                        <legend>Car</legend>
+                        {% include 'CarBundle:Default:car.html.twig'%}
+                        {% include 'CarBundle:Default:edit_car.html.twig'%}
                     </div>
                     <br />
                     <div class="row">
@@ -52,5 +60,8 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
+
+    {% include 'TicketBundle:Default:includes/system.js.twig' %}
+
 {% endblock %}

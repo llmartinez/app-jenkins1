@@ -37,51 +37,74 @@ class TicketRepository extends EntityRepository
  * @param  Entity $return   El filtro de tickets que se quieran devolver ( 'all', 'accesible', 'answered', 'assigned')
  * @return array            array de tickets filtrados segun $status y $return
  */
-    public function findAllTickets ($user, $status, $return)
+    public function findAllTickets ($em, $user, $status, $return, $ordered=null)
     {
-        $tickets = $this->findByStatus($status->getId());
-        // $tickets = $this->findBy(array('status' => $status->getId()));
+        $query = 'SELECT t FROM TicketBundle:Ticket t
+                  WHERE t.status = '.$status->getId().'
+                  ORDER BY t.modified_at '.$ordered;
+
+        $consulta = $em->createQuery($query);
+
+        $tickets = $consulta->getResult();
+
+        $free_tickets           = array();  //array con los tickets pendientes de respuesta
+        $assigned_tickets       = array();  //array con los tickets asignados al assessor
+        $other_assessor_tickets = array();  //array con los tickets respondidos
+        $answered_tickets       = array();  //array con los tickets asignados a otro assessor
 
         foreach ($tickets as $ticket) {
 
             // Se recoge el role del owner del ultimo post del ticket
             $posts = $ticket->getPosts();
-            $last_post = $posts[count($ticket->getPosts())-1];
-            $last_post_owner_roles = $last_post->getOwner()->getRoles();
-            $last_post_owner_role_name = $last_post_owner_roles[0]->getName();
+            $last_post_owner_role_name = $posts[count($ticket->getPosts())-1]->getOwner()->getRoles()[0]->getName();
 
             // Si el ultimo post es de un user
             if ($last_post_owner_role_name == "ROLE_USER")
             {
-                // Si el ticket no esta asignado a ningun otro assessor
-                if ( $ticket->getAssignedTo() == null
-                  or $ticket->getAssignedTo() == $user )
+                // Tickets no asignados a ningun assessor
+                if ( $ticket->getAssignedTo() == null )
                 {
-                       $accesible_tickets[]  = $ticket;
-
-                // Si el ticket esta asignado a otro assessor
-                }else{ $assigned_tickets[] = $ticket; }
+                       $free_tickets[]  = $ticket;
+                }
+                else {
+                    // Tickets asignados a el assessor
+                    if($ticket->getAssignedTo() == $user) {
+                        $assigned_tickets[] = $ticket;
+                    }
+                    // Tickets asignados a otro assessor
+                    else {
+                        $other_assessor_tickets[] = $ticket;
+                    }
+                }
 
             // Si el ultimo post es de un assessor
-            }else {    $answered_tickets[] = $ticket; }
-        }
-
-        //array con todos los tickets fitrados y ordenados (accesible, assigned, answered)
-        if ($return == 'all') {
-            foreach ($accesible_tickets as $accesible) { $all_tickets[] = $accesible; }
-            foreach ($assigned_tickets as $assigned)   { $all_tickets[] = $assigned;  }
-            foreach ($answered_tickets as $answered)   { $all_tickets[] = $answered;  }
-            return $all_tickets;
-        }
-        else {
-            if ($return == 'accesible') {  return $accesible_tickets; } //array con los tickets pendientes de respuesta
-            else {
-                if ($return == 'answered') { return $answered_tickets; } //array con los tickets respondidos
-                else {
-                    if($return == 'assigned') { return $assigned_tickets; } //array con los tickets asignados a un assessor
+            }else {
+                // Tickets asignados a el assessor
+                if($ticket->getAssignedTo() == $user) {
+                    $answered_tickets[] = $ticket;
                 }
             }
         }
+
+        //array con todos los tickets fitrados y ordenados (accesible, assigned, answered)
+        // if ($return == 'all') {
+        //     foreach ($accesible_tickets as $accesible) { $all_tickets[] = $accesible; }
+        //     foreach ($assigned_tickets as $assigned)   { $all_tickets[] = $assigned;  }
+        //     foreach ($answered_tickets as $answered)   { $all_tickets[] = $answered;  }
+        //     return $all_tickets;
+        // }
+        // else {
+            if ($return == 'free') {  return $free_tickets; } //array con los tickets pendientes de respuesta
+            else {
+                if ($return == 'assigned') { return $assigned_tickets; } //array con los tickets asignados al assessor
+                else {
+                    if($return == 'answered') { return $answered_tickets; } //array con los tickets respondidos
+                    else {
+                        if($return == 'other_assessor') { return $other_assessor_tickets; } //array con los tickets asignados a otro assessor
+                    }
+                }
+            }
+        // }
     }
 
     public function findAllByOwner ($user, $status)
@@ -100,12 +123,12 @@ class TicketRepository extends EntityRepository
 
     public function findTicketsFiltered($security, $request)
     {
-        $em = $this->getEntityManager();
+        $em     = $this->getEntityManager();
 
         //Inicializa variables
         $query  = 'SELECT t FROM TicketBundle:Ticket t ';
         $joins  = 'JOIN t.workshop w ';
-        $where  = 'WHERE t.id != 0 ';
+        $where  = 'WHERE t.status = :status ';
 
         //Comprueba que los filtros no esten vacios y setea la variable para la consulta
         $consulta = $this->GetQuery($em, $security, $request, $query, $joins, $where);
@@ -137,22 +160,19 @@ class TicketRepository extends EntityRepository
 
         $consulta->setParameter('status', 0);
 
-	return $consulta->getResult();
+	    return $consulta->getResult();
     }
 
     public static function GetQuery($em, $security, $request, $query, $joins, $where)
     {
         $params = array();
 
-        //Filtros enviados
-        $id_incidence = $request->get('id_incidence');
-        $id_ticket   = $request->get('id_ticket');
+        //Filtro para tickets abiertos
+        $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
+        $params[] = array('status', $open);
 
-        if ($id_incidence != "")
-        {
-            $where .= 'AND i.id = :id_incidence ';
-            $params[] = array('id_incidence', $id_incidence);
-        }
+        //Filtros enviados
+        $id_ticket   = $request->get('id_ticket');
 
         if ($id_ticket != "")
         {
@@ -195,7 +215,7 @@ class TicketRepository extends EntityRepository
         }
 
         //Crea la consulta
-        $consulta = $em->createQuery($query.$joins.$where);
+        $consulta = $em->createQuery($query.$joins.$where.'ORDER BY t.id ');
 
         //hace un recorrido de $params para extraer los parametros de la consulta
         foreach($params as $param){

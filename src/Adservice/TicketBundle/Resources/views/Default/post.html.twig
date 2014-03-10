@@ -1,9 +1,7 @@
 {% extends "::layout.html.twig" %}
 
 {% block body %}
-{% if incidence is defined %}  {% set posts = incidence.ticket.posts %}
-{% else %}                     {% set posts = ticket.posts %}
-{% endif %}
+{% set posts = ticket.posts %}
 <!-- TABLA POSTS -->
 <div class="colIzq">
     <div class="widget stacked widget-table action-table">

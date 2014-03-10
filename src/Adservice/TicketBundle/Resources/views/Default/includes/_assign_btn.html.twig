@@ -1,12 +1,12 @@
-{# muestra los botones de edicion y asignacion/desasignacion del asesor #}
+{# muestra los botones de editar y bloquear/desbloquear del asesor #}
 
     {% if is_granted('ROLE_ASSESSOR') %}
-        {% if ticket.assignedTo is not null %}
+        {% if ticket.blockedBy is not null %}
 
-            {% if ticket.assignedTo == app.security.getToken().getUser() %}
+            {% if ticket.blockedBy == app.security.getToken().getUser() %}
 
-                {# desasignar Ticket #}
-                <a href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id }) }}" title="Remove the assigned status">
+                {# desbloquear Ticket #}
+                <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}" title="Remove the bloqued status">
                     <span class="glyphicon glyphicon-remove-circle"></span></a>
 
                 {# editar Ticket #}
@@ -19,8 +19,8 @@
             {% endif %}
 
         {% else %}
-            {# asignar Ticket #}
-            <a href="{{ path('autoAssignTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+            {# bloquear Ticket #}
+            <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
                 <span class="glyphicon glyphicon-ok-circle"></span></a>
 
         {% endif %}
@@ -28,8 +28,8 @@
 
     {# se borran los tickets solo si no tienen respuesta (1 post) #}
     {% if ticket.posts | length <=1 %}
-        {# puede borrarlo el assessor o el usuario si el ticket no esta assignado aun #}
-        {% if is_granted('ROLE_ASSESSOR') or ticket.assignedTo == null %}
+        {# puede borrarlo el usuario si el ticket no esta assignado aun #}
+        {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
             <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
         {% endif %}
     {% endif %}

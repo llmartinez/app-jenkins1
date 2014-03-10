@@ -1,0 +1,14 @@
+<script>
+//Funciones para el autorellenado de los combos de campos de coches de los formularios
+
+    $(document).ready(function() {
+        // Limpiamos el combo de subsystem del formulario
+        $('select[id=new_ticket_form_subsystem]').empty();
+    });
+
+    //cambiar model en funcion de brand
+    $('#id_system').change(function() {
+        var url_ajax = "{{ path("ticket_system") }}";
+        fill_subsystem(url_ajax);
+    });
+</script>

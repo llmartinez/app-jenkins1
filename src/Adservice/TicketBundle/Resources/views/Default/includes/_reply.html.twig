@@ -8,8 +8,8 @@
 
     {# comprueba que el asesor tenga asignado el ticket #}
         {% if ( is_granted('ROLE_ASSESSOR')
-                and ticket.assignedTo is not null
-                and ticket.assignedTo.id == app.security.getToken().getUser().getId())
+                and ticket.blockedBy is not null
+                and ticket.blockedBy.id == app.security.getToken().getUser().getId())
            or ( not is_granted('ROLE_ASSESSOR')
                 and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
 
@@ -28,11 +28,14 @@
                 {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
                 <button class="btn btn-primary pull-right btn100" type="submit">Submit</button>
+
+                {{ form_rest(form) }}
+                {{ form_rest(formD) }}
             </form>
 
             {% if is_granted('ROLE_ASSESSOR') %}
 
-                <a class="btn btn-primary pull-right btn100" href="{{ path('createIncidence', { 'id_ticket': ticket.id }) }}">CLOSE TICKET<a>
+                <a class="btn btn-primary pull-right btn100" href="#">CLOSE TICKET<a>
 
             {% endif %}
         {% endif %}

@@ -26,8 +26,7 @@
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
                         <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Tickets</a> |
-                            <a href="{{ path("incidencesFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Incidencias</a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Tickets</a>
                         </td>
                     </tr>
                 {% endfor %}

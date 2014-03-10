@@ -9,13 +9,10 @@ user.index.menu.list_users:             List of users AdService
 user.index.menu.list_popups:            List of popups AdService
 user.index.menu.list_workshops:         List of workshops AdService
 user.index.menu.list_tickets:        	List of tickets AdService
-user.index.menu.list_incidences:        List of incidences AdService
 user.index.menu.list_statistics:        List of statistics AdService
-user.index.menu.create_incidence_admin: Create incidence as Admin
 user.index.menu.asign_user_to_ticket:	Asign Tickets to Users
 user.index.menu.new_ticket:             Create a new ticket
 user.index.menu.my_tickets:             My Tickets
-user.index.menu.my_incidences:          My Incidences
 
 # COMUNES
 home:      Home
@@ -27,27 +24,18 @@ workshop:  Workshop
 ticket:    Ticket
 car:       Car
 post:      Post
-incidence: Incidence
 
 #TICKET
-ticket.history.title:     Tickets History
-ticket.opt.all:           Show all tickets
-ticket.opt.all_open:      Show all tickets opened
-ticket.opt.all_closed:    Show all tickets closed
-ticket.opt.pending :      Show pending tickets
-ticket.opt.assigned :     Show assigned tickets
-ticket.opt.answered :     Show answered tickets
-ticket.opt.opened : 	  Show opened tickets
-ticket.opt.closed :  	  Show your closed tickets
-ticket.opt.owner:         Show your tickets
-ticket.opt.workshop:      Show tickets in your workshop
-
-#INCIDENCE
-incidence.history.title:  Incidence History
-incidence.opt.all:        Show all incidences
-incidence.opt.owner:      Show your incidences
-incidence.opt.workshop:   Show incidences in your workshop
-incidence.list:           List of Incidences
+ticket.history.title:      Tickets History
+ticket.opt.all:            Show all tickets
+ticket.opt.all_open:       Show all tickets opened
+ticket.opt.all_closed:     Show all tickets closed
+ticket.opt.free :          Show free tickets
+ticket.opt.assigned :      Show assigned tickets
+ticket.opt.answered :      Show answered tickets
+ticket.opt.other_assessor: Show other assessor's tickets
+ticket.opt.owner:          Show your tickets
+ticket.opt.workshop:       Show tickets in your workshop
 
 
 ############################

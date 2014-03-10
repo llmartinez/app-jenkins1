@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Ticket Title</th>
+                        <th>Ticket description</th>
                         {#<th>Importance</th>#}
                         <th>Owner</th>
                         <th>Assigned</th>
@@ -26,7 +26,7 @@
                     {% for ticket in workshop.tickets %}
                          <tr>
                             <td>{{ ticket.id }}</td>
-                            <td>{{ ticket.title }} </td>
+                            <td>{{ ticket.description }} </td>
                             {#<td>{{ ticket.importance}}</td>#}
                             <td>{{ ticket.owner }}</td>
                             <td>{{ ticket.assignedTo }}</td>

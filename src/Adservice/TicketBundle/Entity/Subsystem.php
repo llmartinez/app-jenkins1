@@ -1,11 +1,11 @@
 <?php
 
-namespace Adservice\SystemBundle\Entity;
+namespace Adservice\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\SystemBundle\Entity\Subsystem
+ * Adservice\TicketBundle\Entity\Subsystem
  *
  * @ORM\Table(name="subsystem")
  * @ORM\Entity
@@ -31,7 +31,7 @@ class Subsystem
     /**
      * @var string $system
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\SystemBundle\Entity\System")
+     * @ORM\ManyToOne(targetEntity="Adservice\TicketBundle\Entity\System")
      */
     private $system;
 
@@ -39,7 +39,7 @@ class Subsystem
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,7 +59,7 @@ class Subsystem
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -71,7 +71,7 @@ class Subsystem
      *
      * @param string $system
      */
-    public function setSystem(\Adservice\SystemBundle\Entity\System $system)
+    public function setSystem(\Adservice\TicketBundle\Entity\System $system)
     {
         $this->system = $system;
     }
@@ -79,10 +79,25 @@ class Subsystem
     /**
      * Get system
      *
-     * @return string 
+     * @return string
      */
     public function getSystem()
     {
         return $this->system;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
+
+    /**
+     * Parsea los camposa a formato json
+     * @return Array
+     */
+    public function to_json() {
+
+        $json = array('id'   => $this->getId(),
+                      'name' => $this->getName());
+        return $json;
     }
 }

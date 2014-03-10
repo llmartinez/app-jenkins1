@@ -42,9 +42,9 @@ assignUserToTicket:
     pattern:  /ticket/assign/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
 
-autoAssignTicket:
+blockTicket:
     pattern: /ticket/assingAssesor/{id_ticket}/{id_user}
-    defaults: { _controller: TicketBundle:Ticket:autoAssignTicket, id_user: null }
+    defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
     
 # Ajax    
 fill_tickets:
@@ -58,38 +58,10 @@ fill_tickets:
 showPost:
     pattern:  /ticket/posts/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
-      
-################################
-#    GESTIÓN DE INCIDENCIAS    #
-################################        
-        
-newIncidence:
-    pattern:  /incidence/new/
-    defaults: { _controller: TicketBundle:Incidence:newIncidence }
-    
-createIncidence:
-    pattern:  /incidence/create/{id_ticket}
-    defaults: { _controller: TicketBundle:Incidence:createIncidence }
 
-editIncidence:
-    pattern:  /incidence/edit/{id_incidence}
-    defaults: { _controller: TicketBundle:Incidence:editIncidence } 
-    
-showIncidence:
-    pattern:  /incidence/show/{id_incidence}
-    defaults: { _controller: TicketBundle:Incidence:showIncidence }    
-    
-listIncidence:
-    pattern:  /incidence/
-    defaults: { _controller: TicketBundle:Incidence:listIncidence }
-    
-incidencesFromWorkshop:
-    pattern:  /incidence/getIncidencesFromWorkshop/{id_workshop}
-    defaults: { _controller: TicketBundle:Incidence:getIncidencesFromWorkshop }
-
-# Ajax    
-fill_incidences:
-    pattern:  /incidence/ajax
-    defaults: { _controller: TicketBundle:Incidence:fill_incidences }
-    
-    
+###########################
+#   APDO. AJAX            #
+###########################
+ticket_system:
+    pattern: /ticketSystem
+    defaults: { _controller: TicketBundle:Default:ticketSystem }

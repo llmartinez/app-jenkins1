@@ -3,7 +3,7 @@
 <table class="table table-striped table-bordered">
     <tr>
         <th>#</th>
-        <th>Ticket Title</th>
+        <th>Ticket description</th>
         <th>Status</th>
         <th>Workshop</th>
         <th>Assigned To</th>
@@ -16,7 +16,7 @@
     </tr>
     <tr>
         <td> {{ ticket.id }}</td>
-        <td> {{ ticket.title | length > 10 ?  ticket.title | slice(0, 10) ~ '...' : ticket.title }}</td>
+        <td> {{ ticket.description | length > 10 ?  ticket.description | slice(0, 10) ~ '...' : ticket.description }}</td>
         <td> {{ ticket.status }}</td>
         <td> {{ ticket.workshop }}</td>
         <td> {{ ticket.assignedTo }}</td>

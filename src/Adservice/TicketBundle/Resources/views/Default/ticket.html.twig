@@ -12,14 +12,13 @@
                 <option value="all_closed"      >{% trans %} ticket.opt.all_closed   {% endtrans %}</option>
         {% else %}
             {% if is_granted('ROLE_ASSESSOR') %}
-                <option value="pending" selected >{% trans %} ticket.opt.pending     {% endtrans %}</option>
-                <option value="assigned"         >{% trans %} ticket.opt.assigned    {% endtrans %}</option>
-                <option value="answered"         >{% trans %} ticket.opt.answered    {% endtrans %}</option>
-                <option value="opened"           >{% trans %} ticket.opt.opened      {% endtrans %}</option>
-                <option value="closed"           >{% trans %} ticket.opt.closed      {% endtrans %}</option>
+                <option value="free" selected  >{% trans %} ticket.opt.free           {% endtrans %}</option>
+                <option value="assigned"       >{% trans %} ticket.opt.assigned       {% endtrans %}</option>
+                <option value="answered"       >{% trans %} ticket.opt.answered       {% endtrans %}</option>
+                <option value="other_assessor" >{% trans %} ticket.opt.other_assessor {% endtrans %}</option>
             {% else %}
-                <option value="owner" selected  >{% trans %} ticket.opt.owner        {% endtrans %}</option>
-                <option value="workshop"        >{% trans %} ticket.opt.workshop     {% endtrans %}</option>
+                <option value="owner" selected  >{% trans %} ticket.opt.owner         {% endtrans %}</option>
+                <option value="workshop"        >{% trans %} ticket.opt.workshop      {% endtrans %}</option>
             {% endif %}
         {% endif %}
     </select>
@@ -62,6 +61,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/ticket/js/ticket.js') }}"></script>
+    <script src="{{ asset('bundles/ticket/js/system.js') }}"></script>
 
     {# ruta para Ajax #}
     <input id='route' type='hidden' value="{{ path("showTicket", { 'id_ticket': "PLACEHOLDER" }) }}">

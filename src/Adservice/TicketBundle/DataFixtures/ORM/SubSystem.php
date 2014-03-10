@@ -1,15 +1,15 @@
 <?php
-namespace Adservice\SystemBundle\DataFixtures\ORM;
+namespace Adservice\TicketBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Adservice\SystemBundle\Entity\Subsystem;
+use Adservice\TicketBundle\Entity\Subsystem;
 
 class SubSystems extends AbstractFixture implements OrderedFixtureInterface {
-    
-    public function getOrder(){ return 44; }
-    
+
+    public function getOrder(){ return 35; }
+
     public function load(ObjectManager $manager) {
         $subsystems = array(
             array('name' => 'VARIOS CARROCERIA'         , 'system' => 'CARROCERÍA'                  ),
@@ -41,9 +41,9 @@ class SubSystems extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setName($subsystem['name']);
             $entidad->setSystem($this->getReference($subsystem['system']));
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
-            
+
         }
         $manager->flush();
     }

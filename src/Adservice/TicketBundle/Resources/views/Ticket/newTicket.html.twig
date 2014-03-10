@@ -22,22 +22,44 @@
                         <legend>Ticket Data</legend>
 
                         <div class="col-xs-12 col-md-12 margined">
-                            <label for="new_ticket_form_title">Title</label>
-                            {{ form_widget(form.title, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
+                            <label for="new_ticket_form_description">Description</label>
+                            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': "Introduce Titulo"} }) }}
                         </div>
 
                         {% if (is_granted('ROLE_ASSESSOR')) %}
                             <div class="col-xs-6 col-md-6 form-group">
                                 <label for="new_ticket_form_workshop">Workshop</label>
-                                {{ form_widget(form.workshop, { 'attr': {'class': 'form-control'} }) }}
+                                {{ form_widget(form.workshop, { 'attr': {'class': 'form-control','style':'display:inline'} }) }}
                             </div>
+
+                            <div class="col-xs-6 col-md-6 form-group">
+                                <label for="new_ticket_form_importance">Importance</label>
+                                {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+
+                            <div class="col-xs-6 col-md-6 form-group">
+                                <label for="id_system">System</label>
+                                <select class="form-control" id="id_system"><option value="0">Select system..</option>
+                                    {% for system in systems %}
+                                        <option value="{{ system.id }}"> {{ system.name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-xs-6 col-md-6 form-group">
+                                <label for="new_ticket_form_subsystem">Subsystem</label>
+                                {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        {% else %}
+                        {# <input type="hidden">
+                            {{ form_widget(form.workshop, { 'attr': {'style':'display:none'} }) }}
+                            {{ form_widget(form.importance, { 'attr': {'style':'display:none'} }) }}
+                            {{ form_widget(form.subsystem, { 'attr': {'style':'display:none'} }) }}
+                        </input> #}
                         {% endif %}
 
-                       {#  <div class="col-xs-6 col-md-6 form-group">
-                            <label for="new_ticket_form_importance">Importance</label>
-                            {{ form_widget(form.importance, { 'attr': {'class': 'form-control'} }) }}
-                        </div>
- #}
+                        {{ form_widget(form._token) }}
+
                         <legend>Car</legend>
 
                         {% include 'CarBundle:Default:car.html.twig'%}
@@ -45,9 +67,11 @@
                         <div class="form-group">
                             <label for="new_post_form_message">Message</label>
                              {{ form_widget(formP.message, { 'attr': {'class': 'form-control', 'rows': '5'} }) }}
+                             {{ form_rest(formP) }}
                        </div>
 
                             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+                            {{ form_rest(formD) }}
                     </div>
                     <br />
                     <div class="row">
@@ -59,4 +83,7 @@
             </div>
         </div>
     </div>
+
+    {% include 'TicketBundle:Default:includes/system.js.twig' %}
+
 {% endblock %}
