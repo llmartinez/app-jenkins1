@@ -1,28 +1,33 @@
 {# muestra los botones de editar y bloquear/desbloquear del asesor #}
 
     {% if is_granted('ROLE_ASSESSOR') %}
-        {% if ticket.blockedBy is not null %}
+        {% if ticket.status == 'open' %}
+            {% if ticket.blockedBy is not null %}
 
-            {% if ticket.blockedBy == app.security.getToken().getUser() %}
+                {% if ticket.blockedBy == app.security.getToken().getUser() %}
 
-                {# desbloquear Ticket #}
-                <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}" title="Remove the bloqued status">
-                    <span class="glyphicon glyphicon-remove-circle"></span></a>
+                    {# desbloquear Ticket #}
+                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}" title="Remove the bloqued status">
+                        <span class="glyphicon glyphicon-remove-circle"></span></a>
 
-                {# editar Ticket #}
-                <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <span class="glyphicon glyphicon-pencil"></span></a></a>
+                    {# editar Ticket #}
+                    <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <span class="glyphicon glyphicon-pencil"></span></a></a>
+                {% else %}
+
+                    {# Ticket asignado a otro assessor #}
+                    <a><span class="glyphicon glyphicon-ban-circle"></span></a>
+
+                {% endif %}
+
             {% else %}
-
-                {# Ticket asignado a otro assessor #}
-                <a><span class="glyphicon glyphicon-ban-circle"></span></a>
+                {# bloquear Ticket #}
+                <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+                    <span class="glyphicon glyphicon-ok-circle"></span></a>
 
             {% endif %}
-
         {% else %}
-            {# bloquear Ticket #}
-            <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                <span class="glyphicon glyphicon-ok-circle"></span></a>
-
+            {# reabrir Ticket #}
+            btn_reopen
         {% endif %}
     {% endif %}
 

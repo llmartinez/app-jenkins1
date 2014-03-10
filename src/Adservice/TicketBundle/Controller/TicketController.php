@@ -10,6 +10,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Entity\TicketRepository;
 use Adservice\TicketBundle\Form\TicketType;
+use Adservice\TicketBundle\Form\CloseTicketType;
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
 use Adservice\CarBundle\Form\CarType;
@@ -256,6 +257,48 @@ class TicketController extends Controller {
                                                                                'partners'  => $partners,
                                                                                'regions'   => $regions,
                                                                               ));
+    }
+
+    /**
+     * Cierra el ticket
+     * @param  Entity $id_ticket
+     * @return url
+     */
+    public function closeTicketAction($id_ticket)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+        $request  = $this->getRequest();
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+
+        $form = $this->createForm(new CloseTicketType(), $ticket);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+
+                if($ticket->getSolution() != ""){
+                    $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                    $user   = $security->getToken()->getUser();
+                    $ticket->setStatus($closed);
+                    $ticket->setBlockedBy(null);
+
+                    DefaultC::saveEntity($em, $ticket, $user);
+                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
+                }
+                else{
+                    $this->get('session')->setFlash('error', '¡Error! Debes introducir una solucion');
+                }
+            }else{
+                $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente');
+            }
+        }
+
+        $systems = $em->getRepository('TicketBundle:System')->findAll();
+
+        return $this->render('TicketBundle:Ticket:closeTicket.html.twig', array('ticket'   => $ticket,
+                                                                                'systems'  => $systems,
+                                                                                'form'     => $form->createView(), ));
     }
 
     /**

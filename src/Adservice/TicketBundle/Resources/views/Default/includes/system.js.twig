@@ -4,6 +4,11 @@
     $(document).ready(function() {
         // Limpiamos el combo de subsystem del formulario
         $('select[id=new_ticket_form_subsystem]').empty();
+
+        // Limpiamos el combo de subsystem del formulario para cerrarlo
+        {% if ticket.subsystem.system is not defined %}
+        $('select[id=close_ticket_form_subsystem]').empty();
+        {% endif %}
     });
 
     //cambiar model en funcion de brand

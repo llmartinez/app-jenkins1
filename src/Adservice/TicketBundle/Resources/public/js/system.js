@@ -14,10 +14,13 @@ function fill_subsystem(url_ajax) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_ticket_form_subsystem').empty();
+            $('#close_ticket_form_subsystem').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=new_ticket_form_subsystem]').append("<option value=0>Select Version..</option>");
+            $('form[id=contact]').find('select[id=new_ticket_form_subsystem]').append("<option value=0>Select System..</option>");
+            $('form[id=contact]').find('select[id=close_ticket_form_subsystem]').append("<option value=0>Select System..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_ticket_form_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=close_ticket_form_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {

@@ -5,30 +5,30 @@
 newTicket:
     pattern:  /ticket/new/
     defaults: { _controller: TicketBundle:Ticket:newTicket }
- 
+
 editTicket:
     pattern:  /ticket/edit/{id_ticket}
-    defaults: { _controller: TicketBundle:Ticket:editTicket } 
-    
+    defaults: { _controller: TicketBundle:Ticket:editTicket }
+
 deleteTicket:
     pattern:  /ticket/delete/{id_ticket}
-    defaults: { _controller: TicketBundle:Ticket:deleteTicket } 
-    
+    defaults: { _controller: TicketBundle:Ticket:deleteTicket }
+
 findTicket:
     pattern:  /ticket/find/
-    defaults: { _controller: TicketBundle:Ticket:findTicket } 
-    
+    defaults: { _controller: TicketBundle:Ticket:findTicket }
+
 showTicket:
     pattern:  /ticket/show/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
-    
+
 listTicket:
     pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
 
 ticketWorkshopList:
     pattern:  /ticket/workshopList/
-    defaults: { _controller: TicketBundle:Ticket:workshopList }    
+    defaults: { _controller: TicketBundle:Ticket:workshopList }
 
 ticketsFromWorkshop:
     pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}
@@ -37,7 +37,7 @@ ticketsFromWorkshop:
 assignTicket:
     pattern: /ticket/assingTicket/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
-    
+
 assignUserToTicket:
     pattern:  /ticket/assign/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
@@ -45,15 +45,15 @@ assignUserToTicket:
 blockTicket:
     pattern: /ticket/assingAssesor/{id_ticket}/{id_user}
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
-    
-# Ajax    
-fill_tickets:
-    pattern:  /ticket/ajax
-    defaults: { _controller: TicketBundle:Ticket:fill_tickets }
-    
+
+closeTicket:
+    pattern:  /ticket/close/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:closeTicket }
+
+
 ################################
 #    GESTIÓN DE POSTS          #
-################################  
+################################
 
 showPost:
     pattern:  /ticket/posts/{id_ticket}
@@ -62,6 +62,11 @@ showPost:
 ###########################
 #   APDO. AJAX            #
 ###########################
+
+fill_tickets:
+    pattern:  /ticket/ajax
+    defaults: { _controller: TicketBundle:Ticket:fill_tickets }
+
 ticket_system:
     pattern: /ticketSystem
     defaults: { _controller: TicketBundle:Default:ticketSystem }

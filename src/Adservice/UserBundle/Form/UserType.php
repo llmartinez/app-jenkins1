@@ -13,7 +13,6 @@ class UserType extends AbstractType
         $builder->add('workshop', 'entity', array('class'       => 'WorkshopBundle:Workshop',
                                                   'property'    => 'name',
                                                   'read_only'   => true));
-            
     }
 
     public function getName()

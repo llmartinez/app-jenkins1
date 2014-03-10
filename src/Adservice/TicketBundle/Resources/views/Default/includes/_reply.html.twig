@@ -35,7 +35,7 @@
 
             {% if is_granted('ROLE_ASSESSOR') %}
 
-                <a class="btn btn-primary pull-right btn100" href="#">CLOSE TICKET<a>
+                <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id_ticket': id_ticket }) }}">CLOSE TICKET<a>
 
             {% endif %}
         {% endif %}
