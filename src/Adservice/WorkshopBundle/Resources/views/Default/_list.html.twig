@@ -8,9 +8,7 @@
                 <th>Address</th>
                 <th>Email1</th>
                 <th>Phone number 1</th>
-                <th>Observations</th>
                 <th>Active</th>
-                <th>Ad Service +</th>
                 <th>Up Date</th>
                 <th>Actions</th>
             </tr>
@@ -24,9 +22,7 @@
                 <td>{{ workshop.address }}</td>
                 <td>{{ workshop.email1 }}</td>
                 <td>{{ workshop.phoneNumber1 }}</td>
-                <td>{{ workshop.observations }}</td>
                 <td>{{ workshop.active }}</td>
-                <td>{{ workshop.adservicePlus }}</td>
                 <td>{{ workshop.updateAt | date('d-m-Y')}}</td>
                 <td>
                     <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>

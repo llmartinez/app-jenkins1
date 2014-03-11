@@ -34,20 +34,25 @@ class DefaultController extends Controller {
     public function newWorkshopAction() {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        
-//        $logged_user = $this->get('security.context')->getToken()->getUser();
+        $petition = $this->getRequest();
         $workshop  = new Workshop();
         $request = $this->getRequest();
         $form = $this->createForm(new WorkshopType(), $workshop);
         $form->bindRequest($request);
         
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-//            $workshop->setPartner($logged_user->getPartner());
-            $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $this->saveWorkshop($em, $workshop);
-            
-            return $this->redirect($this->generateUrl('workshop_list'));
+        if ($petition->getMethod() == 'POST') {
+            var_dump("11111");
+//            var_dump($form);
+            if ($form->isValid()) {
+                
+//                var_dump("222222222222");die;
+                $em = $this->getDoctrine()->getEntityManager();
+    //            $workshop->setPartner($logged_user->getPartner());
+                $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $this->saveWorkshop($em, $workshop);
+
+                return $this->redirect($this->generateUrl('workshop_list'));
+            }
         }
         
         return $this->render('WorkshopBundle:Default:newWorkshop.html.twig', array('workshop'   => $workshop,

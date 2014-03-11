@@ -3,9 +3,9 @@
 namespace Adservice\WorkshopBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
+use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 
@@ -15,8 +15,8 @@ use Adservice\UtilBundle\Entity\Province;
  * @ORM\Table(name="workshop")
  * @ORM\Entity
  */
-class Workshop
-{
+class Workshop {
+
     /**
      * @var integer $id
      *
@@ -34,6 +34,12 @@ class Workshop
     private $name;
 
     /**
+     * @var string $cif
+     * @ORM\Column(name="cif", type="string", length=255)
+     */
+    private $cif;
+
+    /**
      * @var string $address
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
@@ -47,7 +53,7 @@ class Workshop
      */
     private $city;
 
-     /**
+    /**
      * @var string $region
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
@@ -116,13 +122,27 @@ class Workshop
      * @ORM\Column(name="contact", type="string", length=255, nullable=true)
      */
     private $contact;
-
+    
     /**
-     * @var string $observations
      *
-     * @ORM\Column(name="observations", type="string", length=255, nullable=true)
+     * @var string $observation_workshop
+     * @ORM\Column(name="observation_workshop", type="string", length=255, nullable=true)
      */
-    private $observations;
+    private $observation_workshop;
+    
+    /**
+     *
+     * @var string $observation_assessor 
+     * @ORM\Column(name="observation_assessor", type="string", length=255, nullable=true)
+     */
+    private $observation_assessor;
+    
+    /**
+     *
+     * @var string $observation_admin
+     * @ORM\Column(name="observation_admin", type="string", length=255, nullable=true)
+     */
+    private $observation_admin;
 
     /**
      * @var string $partner
@@ -145,13 +165,6 @@ class Workshop
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
-
-    /**
-     * @var boolean $adservice_plus
-     *
-     * @ORM\Column(name="adservice_plus", type="boolean", nullable=true)
-     */
-    private $adservice_plus;
 
     /**
      * @var boolean $test
@@ -196,6 +209,22 @@ class Workshop
     private $conflictive;
 
     /**
+     * @var int $num_ad_client
+     *
+     * @ORM\Column(name="num_ad_client", type="integer", nullable=false)
+     */
+    private $num_ad_client;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
+     * @ORM\JoinTable(name="workshop_diagnosismachine",
+     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
+     * )
+     */
+    private $diagnosis_machines;
+
+    /**
      * @var integer $tickets
      *
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
@@ -230,14 +259,12 @@ class Workshop
      */
     private $modify_by;
 
-
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -246,8 +273,7 @@ class Workshop
      *
      * @param string $name
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -256,9 +282,16 @@ class Workshop
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
+    }
+
+    public function getCif() {
+        return $this->cif;
+    }
+
+    public function setCif($cif) {
+        $this->cif = $cif;
     }
 
     /**
@@ -266,8 +299,7 @@ class Workshop
      *
      * @param string $address
      */
-    public function setAddress($address)
-    {
+    public function setAddress($address) {
         $this->address = $address;
     }
 
@@ -276,8 +308,7 @@ class Workshop
      *
      * @return string
      */
-    public function getAddress()
-    {
+    public function getAddress() {
         return $this->address;
     }
 
@@ -286,8 +317,7 @@ class Workshop
      *
      * @param string $city
      */
-    public function setCity($city)
-    {
+    public function setCity($city) {
         $this->city = $city;
     }
 
@@ -296,13 +326,11 @@ class Workshop
      *
      * @return string
      */
-    public function getCity()
-    {
+    public function getCity() {
         return $this->city;
     }
 
-    public function getRegion()
-    {
+    public function getRegion() {
         return $this->region;
     }
 
@@ -324,8 +352,7 @@ class Workshop
      *
      * @return string
      */
-    public function getProvince()
-    {
+    public function getProvince() {
         return $this->province;
     }
 
@@ -334,8 +361,7 @@ class Workshop
      *
      * @param integer $phoneNumber1
      */
-    public function setPhoneNumber1($phoneNumber1)
-    {
+    public function setPhoneNumber1($phoneNumber1) {
         $this->phone_number_1 = $phoneNumber1;
     }
 
@@ -344,8 +370,7 @@ class Workshop
      *
      * @return integer
      */
-    public function getPhoneNumber1()
-    {
+    public function getPhoneNumber1() {
         return $this->phone_number_1;
     }
 
@@ -354,8 +379,7 @@ class Workshop
      *
      * @param integer $phoneNumber2
      */
-    public function setPhoneNumber2($phoneNumber2)
-    {
+    public function setPhoneNumber2($phoneNumber2) {
         $this->phone_number_2 = $phoneNumber2;
     }
 
@@ -364,8 +388,7 @@ class Workshop
      *
      * @return integer
      */
-    public function getPhoneNumber2()
-    {
+    public function getPhoneNumber2() {
         return $this->phone_number_2;
     }
 
@@ -374,8 +397,7 @@ class Workshop
      *
      * @param integer $movilePhone1
      */
-    public function setMovilePhone1($movilePhone1)
-    {
+    public function setMovilePhone1($movilePhone1) {
         $this->movile_phone_1 = $movilePhone1;
     }
 
@@ -384,8 +406,7 @@ class Workshop
      *
      * @return integer
      */
-    public function getMovilePhone1()
-    {
+    public function getMovilePhone1() {
         return $this->movile_phone_1;
     }
 
@@ -394,8 +415,7 @@ class Workshop
      *
      * @param integer $movilePhone2
      */
-    public function setMovilePhone2($movilePhone2)
-    {
+    public function setMovilePhone2($movilePhone2) {
         $this->movile_phone_2 = $movilePhone2;
     }
 
@@ -404,8 +424,7 @@ class Workshop
      *
      * @return integer
      */
-    public function getMovilePhone2()
-    {
+    public function getMovilePhone2() {
         return $this->movile_phone_2;
     }
 
@@ -414,8 +433,7 @@ class Workshop
      *
      * @param integer $fax
      */
-    public function setFax($fax)
-    {
+    public function setFax($fax) {
         $this->fax = $fax;
     }
 
@@ -424,8 +442,7 @@ class Workshop
      *
      * @return integer
      */
-    public function getFax()
-    {
+    public function getFax() {
         return $this->fax;
     }
 
@@ -434,8 +451,7 @@ class Workshop
      *
      * @param string $email1
      */
-    public function setEmail1($email1)
-    {
+    public function setEmail1($email1) {
         $this->email_1 = $email1;
     }
 
@@ -444,8 +460,7 @@ class Workshop
      *
      * @return string
      */
-    public function getEmail1()
-    {
+    public function getEmail1() {
         return $this->email_1;
     }
 
@@ -454,8 +469,7 @@ class Workshop
      *
      * @param string $email2
      */
-    public function setEmail2($email2)
-    {
+    public function setEmail2($email2) {
         $this->email_2 = $email2;
     }
 
@@ -464,8 +478,7 @@ class Workshop
      *
      * @return string
      */
-    public function getEmail2()
-    {
+    public function getEmail2() {
         return $this->email_2;
     }
 
@@ -474,8 +487,7 @@ class Workshop
      *
      * @param string $contact
      */
-    public function setContact($contact)
-    {
+    public function setContact($contact) {
         $this->contact = $contact;
     }
 
@@ -484,29 +496,8 @@ class Workshop
      *
      * @return string
      */
-    public function getContact()
-    {
+    public function getContact() {
         return $this->contact;
-    }
-
-    /**
-     * Set observations
-     *
-     * @param string $observations
-     */
-    public function setObservations($observations)
-    {
-        $this->observations = $observations;
-    }
-
-    /**
-     * Get observations
-     *
-     * @return string
-     */
-    public function getObservations()
-    {
-        return $this->observations;
     }
 
     /**
@@ -514,8 +505,7 @@ class Workshop
      *
      * @param string $partner
      */
-    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner)
-    {
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
         $this->partner = $partner;
     }
 
@@ -524,8 +514,7 @@ class Workshop
      *
      * @return string
      */
-    public function getPartner()
-    {
+    public function getPartner() {
         return $this->partner;
     }
 
@@ -534,8 +523,7 @@ class Workshop
      *
      * @param boolean $active
      */
-    public function setActive($active)
-    {
+    public function setActive($active) {
         $this->active = $active;
     }
 
@@ -544,29 +532,8 @@ class Workshop
      *
      * @return boolean
      */
-    public function getActive()
-    {
+    public function getActive() {
         return $this->active;
-    }
-
-    /**
-     * Set adservice_plus
-     *
-     * @param boolean $adservicePlus
-     */
-    public function setAdservicePlus($adservicePlus)
-    {
-        $this->adservice_plus = $adservicePlus;
-    }
-
-    /**
-     * Get adservice_plus
-     *
-     * @return boolean
-     */
-    public function getAdservicePlus()
-    {
-        return $this->adservice_plus;
     }
 
     /**
@@ -574,8 +541,7 @@ class Workshop
      *
      * @param boolean $test
      */
-    public function setTest($test)
-    {
+    public function setTest($test) {
         $this->test = $test;
     }
 
@@ -584,8 +550,7 @@ class Workshop
      *
      * @return boolean
      */
-    public function getTest()
-    {
+    public function getTest() {
         return $this->test;
     }
 
@@ -594,8 +559,7 @@ class Workshop
      *
      * @param string $typology
      */
-    public function setTypology(\Adservice\WorkshopBundle\Entity\Typology $typology)
-    {
+    public function setTypology(\Adservice\WorkshopBundle\Entity\Typology $typology) {
         $this->typology = $typology;
     }
 
@@ -604,8 +568,7 @@ class Workshop
      *
      * @return string
      */
-    public function getTypology()
-    {
+    public function getTypology() {
         return $this->typology;
     }
 
@@ -614,8 +577,7 @@ class Workshop
      *
      * @param datetime $updateAt
      */
-    public function setUpdateAt($updateAt)
-    {
+    public function setUpdateAt($updateAt) {
         $this->update_at = $updateAt;
     }
 
@@ -624,8 +586,7 @@ class Workshop
      *
      * @return datetime
      */
-    public function getUpdateAt()
-    {
+    public function getUpdateAt() {
         return $this->update_at;
     }
 
@@ -634,8 +595,7 @@ class Workshop
      *
      * @param datetime $lowdateAt
      */
-    public function setLowdateAt($lowdateAt)
-    {
+    public function setLowdateAt($lowdateAt) {
         $this->lowdate_at = $lowdateAt;
     }
 
@@ -644,8 +604,7 @@ class Workshop
      *
      * @return datetime
      */
-    public function getLowdateAt()
-    {
+    public function getLowdateAt() {
         return $this->lowdate_at;
     }
 
@@ -654,8 +613,7 @@ class Workshop
      *
      * @param datetime $endtestAt
      */
-    public function setEndtestAt($endtestAt)
-    {
+    public function setEndtestAt($endtestAt) {
         $this->endtest_at = $endtestAt;
     }
 
@@ -664,8 +622,7 @@ class Workshop
      *
      * @return datetime
      */
-    public function getEndtestAt()
-    {
+    public function getEndtestAt() {
         return $this->endtest_at;
     }
 
@@ -674,8 +631,7 @@ class Workshop
      *
      * @param boolean $conflictive
      */
-    public function setConflictive($conflictive)
-    {
+    public function setConflictive($conflictive) {
         $this->conflictive = $conflictive;
     }
 
@@ -684,9 +640,24 @@ class Workshop
      *
      * @return boolean
      */
-    public function getConflictive()
-    {
+    public function getConflictive() {
         return $this->conflictive;
+    }
+
+    /**
+     * Get num_ad_client
+     * @return int
+     */
+    public function getNumAdClient() {
+        return $this->num_ad_client;
+    }
+
+    /**
+     * Set num_ad_client
+     * @param int $num_ad_client
+     */
+    public function setNumAdClient($num_ad_client) {
+        $this->num_ad_client = $num_ad_client;
     }
 
     /**
@@ -694,8 +665,7 @@ class Workshop
      *
      * @param datetime $createdAt
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->created_at = $createdAt;
     }
 
@@ -704,8 +674,7 @@ class Workshop
      *
      * @return datetime
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
@@ -714,8 +683,7 @@ class Workshop
      *
      * @param datetime $modifiedAt
      */
-    public function setModifiedAt($modifiedAt)
-    {
+    public function setModifiedAt($modifiedAt) {
         $this->modified_at = $modifiedAt;
     }
 
@@ -724,8 +692,7 @@ class Workshop
      *
      * @return datetime
      */
-    public function getModifiedAt()
-    {
+    public function getModifiedAt() {
         return $this->modified_at;
     }
 
@@ -734,8 +701,7 @@ class Workshop
      *
      * @param user $modify_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
-    {
+    public function setModifyBy(\Adservice\UserBundle\Entity\User $user) {
         $this->modify_by = $user;
     }
 
@@ -744,8 +710,7 @@ class Workshop
      *
      * @return string
      */
-    public function getModifyBy()
-    {
+    public function getModifyBy() {
         return $this->modify_by;
     }
 
@@ -753,9 +718,9 @@ class Workshop
         return $this->getName();
     }
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->diagnosis_machines = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -763,8 +728,7 @@ class Workshop
      *
      * @param Adservice\UserBundle\Entity\User $users
      */
-    public function addUser(\Adservice\UserBundle\Entity\User $users)
-    {
+    public function addUser(\Adservice\UserBundle\Entity\User $users) {
         $this->users[] = $users;
     }
 
@@ -773,8 +737,7 @@ class Workshop
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
-    {
+    public function getUsers() {
         return $this->users;
     }
 
@@ -783,8 +746,7 @@ class Workshop
      *
      * @param Adservice\TicketBundle\Entity\Ticket $tickets
      */
-    public function addTicket(\Adservice\TicketBundle\Entity\Ticket $tickets)
-    {
+    public function addTicket(\Adservice\TicketBundle\Entity\Ticket $tickets) {
         $this->tickets[] = $tickets;
     }
 
@@ -793,8 +755,7 @@ class Workshop
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getTickets()
-    {
+    public function getTickets() {
         return $this->tickets;
     }
 
@@ -803,8 +764,7 @@ class Workshop
      *
      * @param Adservice\TicketBundle\Entity\Incidence $incidences
      */
-    public function addIncidence(\Adservice\TicketBundle\Entity\Incidence $incidence)
-    {
+    public function addIncidence(\Adservice\TicketBundle\Entity\Incidence $incidence) {
         $this->incidences[] = $incidence;
     }
 
@@ -813,8 +773,50 @@ class Workshop
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getIncidences()
-    {
+    public function getIncidences() {
         return $this->incidences;
     }
+
+    /**
+     * Add user_roles
+     *
+     * @param Role $userRoles
+     */
+    public function addDiagnosisMachine(DiagnosisMachine $diagnosis_machine) {
+        $this->diagnosis_machines[] = $diagnosis_machine;
+    }
+
+    public function setDiagnosisMachine($diagnosis_machines) {
+        $this->diagnosis_machines = $diagnosis_machines;
+    }
+
+    public function getDiagnosisMachines() {
+        return $this->diagnosis_machines;
+    }
+
+    public function getObservationWorkshop() {
+        return $this->observation_workshop;
+    }
+
+    public function getObservationAssessor() {
+        return $this->observation_assessor;
+    }
+
+    public function getObservationAdmin() {
+        return $this->observation_admin;
+    }
+
+    public function setObservationWorkshop($observation_workshop) {
+        $this->observation_workshop = $observation_workshop;
+    }
+
+    public function setObservationAssessor($observation_assessor) {
+        $this->observation_assessor = $observation_assessor;
+    }
+
+    public function setObservationAdmin($observation_admin) {
+        $this->observation_admin = $observation_admin;
+    }
+
+
 }

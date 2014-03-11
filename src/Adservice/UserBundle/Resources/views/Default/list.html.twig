@@ -40,6 +40,8 @@
             {% if  users_role_admin    is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_admin   , role:'admin'   } %} {% endif %}
             {% if  users_role_assessor is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_assessor, role:'assessor'} %} {% endif %}
             {% if  users_role_user     is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_user    , role:'user'    } %} {% endif %}
+            
+            {# Cuando se inserta el listado en otro html, los usuarios son "users"            #}
             {% if  users               is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users              , role:'user'    } %} {% endif %}
 
         </tbody>

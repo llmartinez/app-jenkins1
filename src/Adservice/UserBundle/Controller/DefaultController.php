@@ -35,11 +35,14 @@ class DefaultController extends Controller {
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
         $original_password = $user->getPassword();
+        
         $form = $this->createForm(new UserType(), $user);
+        
+//        $form = $this->createForm($this->get('form.type.user'), $user);
 
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
+      
         $original_password = $form->getData()->getPassword();
 
         if ($petition->getMethod() == 'POST') {
@@ -69,8 +72,6 @@ class DefaultController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-//        $logged_user = $this->get('security.context')->getToken()->getUser();
-//        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
 
         $users = $em->getRepository("UserBundle:User")->findAll();
 
@@ -87,9 +88,9 @@ class DefaultController extends Controller {
         }
 
 
-        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin' => $users_role_admin,
-                                                                        'users_role_user' => $users_role_user,
-                                                                        'users_role_assessor' => $users_role_assessor
+        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin'      => $users_role_admin,
+                                                                        'users_role_user'       => $users_role_user,
+                                                                        'users_role_assessor'   => $users_role_assessor
                                                                        ));
     }
 
@@ -113,12 +114,7 @@ class DefaultController extends Controller {
         $original_password = $user->getPassword();
 
         $petition = $this->getRequest();
-        $role = $user->getRoles();
-        if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserType(), $user);
-
-//        $form = $this->createForm(new UserType(), $user);
+        $form = $this->createForm(new UserType(), $user);
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
@@ -172,21 +168,19 @@ class DefaultController extends Controller {
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminType(), $user);
             $user_type = 'admin';
         } elseif ($type == 'assessor') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAssessorType(), $user);
             $user_type = 'assessor';
         } elseif ($type == 'user') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserType(), $user);
             $user_type = 'user';
         }
-
+        
         $request = $this->getRequest();
+        $form = $this->createForm(new UserType(), $user);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
