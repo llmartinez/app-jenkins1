@@ -3,6 +3,7 @@ header.welcome: ADService England
 user.index.menu.admin_title:            ADMIN MENU
 user.index.menu.assessor_title:         ASSESSOR MENU
 user.index.menu.user_title:             USER MENU
+user.index.menu.ad_title:               AD MENU
 user.index.menu.my_profile:             My Profile
 user.index.menu.list_partners:          List of partners AdService
 user.index.menu.list_users:             List of users AdService
@@ -16,6 +17,9 @@ user.index.menu.asign_user_to_ticket:	Asign Tickets to Users
 user.index.menu.new_ticket:             Create a new ticket
 user.index.menu.my_tickets:             My Tickets
 user.index.menu.my_incidences:          My Incidences
+user.index.menu.new_workshop_order:     Apply for a new workshop
+user.index.menu.actvie_workshop_order:  Apply for activate/deactivate a workshop
+user.index.menu.order_list_workshop:    View the status of my application
 
 # COMUNES
 home:      Home

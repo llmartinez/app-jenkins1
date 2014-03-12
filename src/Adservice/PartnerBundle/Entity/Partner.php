@@ -11,14 +11,13 @@ use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 use Adservice\WorkshopBundle\Entity\Workshop;
 
-
 /**
  * Adservice\PartnerBundle\Entity\Partner
  *
  * @ORM\Table(name="partner")
  * @ORM\Entity(repositoryClass="Adservice\PartnerBundle\Entity\PartnerRepository")
  */
-class Partner{
+class Partner {
 
     /**
      * @var integer $id
@@ -114,12 +113,12 @@ class Partner{
      */
     private $workshops;
 
-//    /**
-//    *
-//    * @var type
-//    * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
-//    */
-//    private $users;
+    /**
+     *
+     * @var type
+     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="partner")
+     */
+    private $users;
 
     /**
      * @var datetime $created_at
@@ -152,8 +151,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -162,8 +160,7 @@ class Partner{
      *
      * @param string $name
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -172,8 +169,7 @@ class Partner{
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -182,8 +178,7 @@ class Partner{
      *
      * @param integer $phoneNumber1
      */
-    public function setPhoneNumber1($phoneNumber1)
-    {
+    public function setPhoneNumber1($phoneNumber1) {
         $this->phone_number_1 = $phoneNumber1;
     }
 
@@ -192,8 +187,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getPhoneNumber1()
-    {
+    public function getPhoneNumber1() {
         return $this->phone_number_1;
     }
 
@@ -202,8 +196,7 @@ class Partner{
      *
      * @param integer $phoneNumber2
      */
-    public function setPhoneNumber2($phoneNumber2)
-    {
+    public function setPhoneNumber2($phoneNumber2) {
         $this->phone_number_2 = $phoneNumber2;
     }
 
@@ -212,8 +205,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getPhoneNumber2()
-    {
+    public function getPhoneNumber2() {
         return $this->phone_number_2;
     }
 
@@ -222,8 +214,7 @@ class Partner{
      *
      * @param string $email1
      */
-    public function setEmail1($email1)
-    {
+    public function setEmail1($email1) {
         $this->email_1 = $email1;
     }
 
@@ -232,8 +223,7 @@ class Partner{
      *
      * @return string
      */
-    public function getEmail1()
-    {
+    public function getEmail1() {
         return $this->email_1;
     }
 
@@ -242,8 +232,7 @@ class Partner{
      *
      * @param string $email2
      */
-    public function setEmail2($email2)
-    {
+    public function setEmail2($email2) {
         $this->email_2 = $email2;
     }
 
@@ -252,8 +241,7 @@ class Partner{
      *
      * @return string
      */
-    public function getEmail2()
-    {
+    public function getEmail2() {
         return $this->email_2;
     }
 
@@ -262,8 +250,7 @@ class Partner{
      *
      * @param integer $fax
      */
-    public function setFax($fax)
-    {
+    public function setFax($fax) {
         $this->fax = $fax;
     }
 
@@ -272,8 +259,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getFax()
-    {
+    public function getFax() {
         return $this->fax;
     }
 
@@ -282,8 +268,7 @@ class Partner{
      *
      * @param string $address
      */
-    public function setAddress($address)
-    {
+    public function setAddress($address) {
         $this->address = $address;
     }
 
@@ -292,8 +277,7 @@ class Partner{
      *
      * @return string
      */
-    public function getAddress()
-    {
+    public function getAddress() {
         return $this->address;
     }
 
@@ -302,8 +286,7 @@ class Partner{
      *
      * @param integer $postalCode
      */
-    public function setPostalCode($postalCode)
-    {
+    public function setPostalCode($postalCode) {
         $this->postal_code = $postalCode;
     }
 
@@ -312,8 +295,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getPostalCode()
-    {
+    public function getPostalCode() {
         return $this->postal_code;
     }
 
@@ -331,8 +313,7 @@ class Partner{
      *
      * @return string
      */
-    public function getRegion()
-    {
+    public function getRegion() {
         return $this->region;
     }
 
@@ -350,8 +331,7 @@ class Partner{
      *
      * @return string
      */
-    public function getProvince()
-    {
+    public function getProvince() {
         return $this->province;
     }
 
@@ -372,13 +352,13 @@ class Partner{
     public function getActive() {
         return $this->active;
     }
+
     /**
      * Set created_at
      *
      * @param datetime $createdAt
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->created_at = $createdAt;
     }
 
@@ -387,8 +367,7 @@ class Partner{
      *
      * @return datetime
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
@@ -406,8 +385,7 @@ class Partner{
      *
      * @return datetime
      */
-    public function getModifiedAt()
-    {
+    public function getModifiedAt() {
         return $this->modified_at;
     }
 
@@ -416,8 +394,7 @@ class Partner{
      *
      * @param user $modify_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
-    {
+    public function setModifyBy(\Adservice\UserBundle\Entity\User $user) {
         $this->modify_by = $user;
     }
 
@@ -426,8 +403,7 @@ class Partner{
      *
      * @return integer
      */
-    public function getModifyBy()
-    {
+    public function getModifyBy() {
         return $this->modify_by;
     }
 
@@ -440,8 +416,7 @@ class Partner{
      *
      * @param Adservice\WorkshopBundle\Entity\Workshop $workshops
      */
-    public function addWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshops)
-    {
+    public function addWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshops) {
         $this->workshops[] = $workshops;
     }
 
@@ -450,28 +425,26 @@ class Partner{
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getWorkshops()
-    {
+    public function getWorkshops() {
         return $this->workshops;
     }
 
-//    /**
-//     * Add users
-//     *
-//     * @param Adservice\UserBundle\Entity\User $users
-//     */
-//    public function addUser(\Adservice\UserBundle\Entity\User $users)
-//    {
-//     $this->users[] = $users;
-//    }
-//
-//    /**
-//     * Get users
-//     *
-//     * @return Doctrine\Common\Collections\Collection
-//     */
-//    public function getUsers()
-//    {
-//        return $this->users;
-//    }
+    /**
+     * Add users
+     *
+     * @param Adservice\UserBundle\Entity\User $users
+     */
+    public function addUser(\Adservice\UserBundle\Entity\User $users) {
+        $this->users[] = $users;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getUsers() {
+        return $this->users;
+    }
+
 }

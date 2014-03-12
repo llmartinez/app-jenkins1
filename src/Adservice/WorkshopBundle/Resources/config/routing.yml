@@ -17,6 +17,23 @@ workshop_new:
     pattern: /new
     defaults: { _controller: WorkshopBundle:Default:newWorkshop }
 
+new_workshop_order:
+    pattern: /newWorkshopOrder
+    defaults: { _controller: WorkshopBundle:Default:newWorkshopOrder }
+
+active_workshop_order:
+    pattern: /activeWorkshopOrder
+    defaults: { _controller: WorkshopBundle:Default:activeWorkshopOrder }
+    
+order_list_workshop:
+    pattern: /listWorkshopOrder
+    defaults: { _controller: WorkshopBundle:Default:listWorkshopOrder }
+    
+register_workshop:
+    pattern: /registerWorkshopOrder/{id}/{action}
+    defaults: { _controller: WorkshopBundle:Default:registerWorkshopOrder }
+    
+
 ##############################
 #       RUTAS AJAX           #
 ##############################

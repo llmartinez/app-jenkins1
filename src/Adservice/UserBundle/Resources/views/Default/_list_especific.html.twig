@@ -4,6 +4,7 @@
         <td><a id="list_username">{{ user.username }}</a> 
             {% if role == 'admin'      %} <span class="label label-primary">{% trans %} Admin    {% endtrans %}</span> {% endif %}
             {% if role == 'assessor'   %} <span class="label label-success">{% trans %} Assessor {% endtrans %}</span> {% endif %}
+            {% if role == 'ad'         %} <span class="label label-warning">{% trans %} AD       {% endtrans %}</span> {% endif %}
             {% if user.active == false %} <span class="label label-danger"> {% trans %} Inactive {% endtrans %}</span> {% endif %}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.surname}}</td>

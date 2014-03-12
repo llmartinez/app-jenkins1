@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Security\Core\SecurityContext;
 
-class UserType extends AbstractType {
+class UserWorkshopType extends AbstractType {
 
 
     public function buildForm(FormBuilder $builder, array $options) {
@@ -17,7 +17,7 @@ class UserType extends AbstractType {
                                                     'invalid_message' => 'Las dos contraseñas deben coincidir',
                                                     'first_name' => 'Contraseña',
                                                     'second_name' => 'Repite Contraseña',
-                                                    'required' => true
+                                                    'required' => false
                 ))
                 ->add('name')
                 ->add('surname')
@@ -31,6 +31,8 @@ class UserType extends AbstractType {
                 ->add('email_1', 'email', array('required' => true))
                 ->add('email_2', 'email', array('required' => false))
                 ->add('active', 'checkbox', array('required' => false))
+                ->add('workshop', 'entity', array('class'       => 'WorkshopBundle:Workshop',
+                                                  'property'    => 'name'))
                 ->add('region')
                 ->add('province')
                 ->add('country')
@@ -41,7 +43,7 @@ class UserType extends AbstractType {
     }
 
     public function getName() {
-        return 'adservice_userbundle_usertype';
+//        return 'adservice_userbundle_usertype';
+        return 'workshop_type';
     }
-
 }

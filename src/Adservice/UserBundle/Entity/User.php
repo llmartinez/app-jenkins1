@@ -14,7 +14,6 @@ use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 
 //use Adservice\PartnerBundle\Entity\Partner;
-
 //@Assert\Callback(methods={"esDniValido"})
 
 /**
@@ -186,12 +185,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $language;
 
-//    /**
-//     *
-//     * @var type
-//     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
-//     */
-//    private $partner;
+    /**
+     *
+     * @var type
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
+     */
+    private $partner;
 
     /**
      * @var datetime $created_at
@@ -568,13 +567,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->modify_by;
     }
 
-//    public function getPartner() {
-//        return $this->partner;
-//    }
-//
-//    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
-//        $this->partner = $partner;
-//    }
+    public function getPartner() {
+        return $this->partner;
+    }
+
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+        $this->partner = $partner;
+    }
 
 //    public function esDniValido(ExecutionContext $context) {
 //        $nombre_propiedad = $context->getPropertyPath() . '.dni';
@@ -596,5 +595,4 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 //            $context->addViolation('La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra', array(), null);
 //        }
 //    }
-
 }

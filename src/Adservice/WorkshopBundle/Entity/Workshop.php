@@ -35,7 +35,7 @@ class Workshop {
 
     /**
      * @var string $cif
-     * @ORM\Column(name="cif", type="string", length=255)
+     * @ORM\Column(name="cif", type="string", length=255, nullable=true)
      */
     private $cif;
 
@@ -105,7 +105,7 @@ class Workshop {
     /**
      * @var string $email_1
      *
-     * @ORM\Column(name="email_1", type="string", length=255)
+     * @ORM\Column(name="email_1", type="string", length=255, nullable=true)
      */
     private $email_1;
 
@@ -122,21 +122,21 @@ class Workshop {
      * @ORM\Column(name="contact", type="string", length=255, nullable=true)
      */
     private $contact;
-    
+
     /**
      *
      * @var string $observation_workshop
      * @ORM\Column(name="observation_workshop", type="string", length=255, nullable=true)
      */
     private $observation_workshop;
-    
+
     /**
      *
      * @var string $observation_assessor 
      * @ORM\Column(name="observation_assessor", type="string", length=255, nullable=true)
      */
     private $observation_assessor;
-    
+
     /**
      *
      * @var string $observation_admin
@@ -211,7 +211,7 @@ class Workshop {
     /**
      * @var int $num_ad_client
      *
-     * @ORM\Column(name="num_ad_client", type="integer", nullable=false)
+     * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
      */
     private $num_ad_client;
 
@@ -223,6 +223,27 @@ class Workshop {
      * )
      */
     private $diagnosis_machines;
+
+    /**
+     *
+     * @var boolean $register_pending
+     * @ORM\Column(name="register_pending", type="boolean", nullable=true)
+     */
+    private $register_pending;
+    
+    /**
+     *
+     * @var boolean $activate_pending
+     * @ORM\Column(name="activate_pending", type="boolean", nullable=true)
+     */
+    private $activate_pending;
+    
+    /**
+     *
+     * @var boolean $deactivate_pending
+     * @ORM\Column(name="$deactivate_pending", type="boolean", nullable=true)
+     */
+    private $deactivate_pending;
 
     /**
      * @var integer $tickets
@@ -244,6 +265,13 @@ class Workshop {
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $created_at;
+    
+    /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
 
     /**
      * @var datetime $modified_at
@@ -713,6 +741,29 @@ class Workshop {
     public function getModifyBy() {
         return $this->modify_by;
     }
+    
+        /**
+     * Set modify_by
+     *
+     * @param user $modify_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get modify_by
+     *
+     * @return string
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
+    }
+    
+    
+    
+    
+    
 
     public function __toString() {
         return $this->getName();
@@ -817,6 +868,31 @@ class Workshop {
     public function setObservationAdmin($observation_admin) {
         $this->observation_admin = $observation_admin;
     }
+
+    public function getRegisterPending() {
+        return $this->register_pending;
+    }
+
+    public function getActivatePending() {
+        return $this->activate_pending;
+    }
+
+    public function getDeactivatePending() {
+        return $this->deactivate_pending;
+    }
+
+    public function setRegisterPending($register_pending) {
+        $this->register_pending = $register_pending;
+    }
+
+    public function setActivatePending($activate_pending) {
+        $this->activate_pending = $activate_pending;
+    }
+
+    public function setDeactivatePending($deactivate_pending) {
+        $this->deactivate_pending = $deactivate_pending;
+    }
+
 
 
 }
