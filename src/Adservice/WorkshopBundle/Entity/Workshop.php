@@ -241,7 +241,7 @@ class Workshop {
     /**
      *
      * @var boolean $deactivate_pending
-     * @ORM\Column(name="$deactivate_pending", type="boolean", nullable=true)
+     * @ORM\Column(name="deactivate_pending", type="boolean", nullable=true)
      */
     private $deactivate_pending;
 

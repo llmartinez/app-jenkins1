@@ -142,11 +142,6 @@ class DefaultController extends Controller {
         
         
     }
-
-    public function activeWorkshopOrderAction(){
-        echo "activeWorkshopOrderAction";
-        die;
-    }
     
     public function listWorkshopOrderAction(){
         $user = $this->get('security.context')->getToken()->getUser();
@@ -159,7 +154,7 @@ class DefaultController extends Controller {
             $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => 1));
             
         }elseif ($role[0]->getRole() == "ROLE_AD"){
-            //vera solo sus solicitudes
+            //solo sus solicitudes
             $user_role = 'ad';
             $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending'  => 1,
                                                                                                     'partner'           => $user->getPartner()->getId()));
@@ -169,6 +164,71 @@ class DefaultController extends Controller {
                                                                                          'workshops_pending_orders' => $workshops_pending_orders));
     }
     
+    public function activeWorkshopOrderAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $user->getRoles();
+        
+        if ($role[0]->getRole() == "ROLE_ADMIN"){
+            $user_role = 'admin';
+            $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('deactivate_pending' => 1));
+            $workshops = array_merge($workshops, $em->getRepository("WorkshopBundle:Workshop")->findBy(array('activate_pending' => 1)));
+
+        }elseif ($role[0]->getRole() == "ROLE_AD"){
+            $user_role = 'ad';
+            $workshops = $user->getPartner()->getWorkshops();
+        }
+        
+        return $this->render('WorkshopBundle:Default:activationWorkshopOrder.html.twig', array('workshops' => $workshops,
+                                                                                               'user_role' => $user_role));
+        
+    }
+    
+    /**
+     * Si es llamada con un usuario con rol "ad" hara una peticion de activacion o desactivacion de un taller
+     * Si es llamada con un usuario con rol "admin" activara o desactivara un taller
+     * @param int $id id del taller
+     * @param string $action (activate | deactivate) define la acción a realizar
+     */
+    public function changeStatusWorkshopOrderAction($id, $action){
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $user->getRoles();
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
+        if ($role[0]->getRole() == "ROLE_ADMIN"){
+            $user_role = 'admin';
+            if ($action == 'activate'){
+                $workshop->setActive(true);
+                $workshop->setActivatePending(false);
+            }elseif ($action == 'deactivate'){
+                $workshop->setActive(false);
+                $workshop->setDeactivatePending(false);
+            }
+            $this->saveWorkshop($em, $workshop);
+            
+            //todos los workshops con estados pendientes
+            $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('deactivate_pending' => 1));
+            $workshops = array_merge($workshops, $em->getRepository("WorkshopBundle:Workshop")->findBy(array('activate_pending' => 1)));
+            
+        }elseif ($role[0]->getRole() == "ROLE_AD"){
+            $user_role = 'ad';
+            if ($action == 'activate'){
+                $workshop->setActivatePending(true);
+                $workshop->setDeactivatePending(false);
+            }elseif ($action == 'deactivate'){
+                $workshop->setDeactivatePending(true);
+                $workshop->setActivatePending(false);
+            }
+            $this->saveWorkshop($em, $workshop);
+            
+            //workshops del usuario logeado
+            $workshops = $user->getPartner()->getWorkshops();
+        }
+        
+        
+        return $this->render('WorkshopBundle:Default:activationWorkshopOrder.html.twig', array('workshops' => $workshops,
+                                                                                               'user_role' => $user_role));
+    }
     /**
      * 
      * @param int $id id del taller
@@ -196,7 +256,7 @@ class DefaultController extends Controller {
         if ($role[0]->getRole() == "ROLE_ADMIN")    $user_role = 'admin';
         elseif ($role[0]->getRole() == "ROLE_AD")   $user_role = 'ad';
         
-        $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => 1));
+        $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending'  => 1));
         return $this->render('WorkshopBundle:Default:listWorkshopOrder.html.twig', array('user_role'                => $user_role,
                                                                                          'workshops_pending_orders' => $workshops_pending_orders));
         
