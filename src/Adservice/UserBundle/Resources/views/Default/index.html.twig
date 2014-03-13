@@ -13,16 +13,18 @@
             </tr>
             <tr>
                 <td>
-                    <a id="profile"            href="{{ path("user_profile"      ) }}">{% trans %} user.index.menu.my_profile            {% endtrans %}</a><br>
-                    <a id="partner_list"       href="{{ path("partner_list"      ) }}">{% trans %} user.index.menu.list_partners         {% endtrans %}</a><br>
-                    <a id="user_list"          href="{{ path("user_list"         ) }}">{% trans %} user.index.menu.list_users            {% endtrans %}</a><br>
-                    <a id="popup_list"         href="{{ path("popup_list"        ) }}">{% trans %} user.index.menu.list_popups           {% endtrans %}</a><br>
-                    <a id="workshop_list"      href="{{ path("workshop_list"     ) }}">{% trans %} user.index.menu.list_workshops        {% endtrans %}</a><br>
-                    <a id="ticket_list"        href="{{ path("listTicket"        ) }}">{% trans %} user.index.menu.list_tickets          {% endtrans %}</a><br>
-                    <a id="listIncidence"      href="{{ path("listIncidence"     ) }}">{% trans %} user.index.menu.list_incidences       {% endtrans %}</a><br>
-                    <a id="listStatistics"     href="{{ path("listStatistics"    ) }}">{% trans %} user.index.menu.list_statistics       {% endtrans %}</a><br>
-                    <a id="newIncidence"       href="{{ path("newIncidence"      ) }}">{% trans %} user.index.menu.create_incidence_admin{% endtrans %}</a><br>
-                    <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList") }}">{% trans %} user.index.menu.asign_user_to_ticket  {% endtrans %}</a><br>
+                    <a id="profile"            href="{{ path("user_profile"          ) }}">{% trans %} user.index.menu.my_profile                   {% endtrans %}</a><br>
+                    <a id="partner_list"       href="{{ path("partner_list"          ) }}">{% trans %} user.index.menu.list_partners                {% endtrans %}</a><br>
+                    <a id="user_list"          href="{{ path("user_list"             ) }}">{% trans %} user.index.menu.list_users                   {% endtrans %}</a><br>
+                    <a id="popup_list"         href="{{ path("popup_list"            ) }}">{% trans %} user.index.menu.list_popups                  {% endtrans %}</a><br>
+                    <a id="workshop_list"      href="{{ path("workshop_list"         ) }}">{% trans %} user.index.menu.list_workshops               {% endtrans %}</a><br>
+                    <a id="ticket_list"        href="{{ path("listTicket"            ) }}">{% trans %} user.index.menu.list_tickets                 {% endtrans %}</a><br>
+                    <a id="listIncidence"      href="{{ path("listIncidence"         ) }}">{% trans %} user.index.menu.list_incidences              {% endtrans %}</a><br>
+                    <a id="listStatistics"     href="{{ path("listStatistics"        ) }}">{% trans %} user.index.menu.list_statistics              {% endtrans %}</a><br>
+                    <a id="newIncidence"       href="{{ path("newIncidence"          ) }}">{% trans %} user.index.menu.create_incidence_admin       {% endtrans %}</a><br>
+                    <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList"    ) }}">{% trans %} user.index.menu.asign_user_to_ticket         {% endtrans %}</a><br>
+                    <a id="workshopOrdersList" href="{{ path("order_list_workshop"   ) }}">{% trans %} user.index.menu.view_register_workshop_order {% endtrans %}</a><br>
+                    <a id="activate_workshop"  href="{{ path("active_workshop_order" ) }}">{% trans %} user.index.menu.view_actvie_workshop_order   {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -60,6 +62,21 @@
         </table>
     {% endif %}
 
+    {% if is_granted('ROLE_AD') %}
+        <table id="tbl_user" name="tbl_user">
+            <tr>
+                <th>{% trans %} user.index.menu.ad_title {% endtrans %}</th>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ path("new_workshop_order"    ) }}">{% trans %}user.index.menu.new_workshop_order   {% endtrans %}</a><br>
+                    <a href="{{ path("order_list_workshop"   ) }}">{% trans %}user.index.menu.order_list_workshop  {% endtrans %}</a><br>
+                    <a href="{{ path("active_workshop_order" ) }}">{% trans %}user.index.menu.actvie_workshop_order{% endtrans %}</a><br>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -72,10 +89,6 @@
                 <div class="modal-body">
                     <div id="popup_modal_description"></div>
                 </div>
-               {# <div class="modal-footer">
-                    <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                </div>#}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

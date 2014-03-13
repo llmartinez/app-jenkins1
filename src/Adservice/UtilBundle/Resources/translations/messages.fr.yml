@@ -2,23 +2,28 @@ header.welcome: ADService France
 
 
 
-user.index.menu.admin_title: 	 		MENU ADMIN
-user.index.menu.assessor_title:  		MENU CONSEILLER
-user.index.menu.user_title: 	 		MENU UTILISATEUR
-user.index.menu.my_profile: 	 		Mon profil
-user.index.menu.list_partners: 	 		Liste des partenaires AdService
-user.index.menu.list_users: 	 		Liste des utilisateurs AdService
-user.index.menu.list_popups: 	 		Liste des Popups ADService
-user.index.menu.list_workshops:  		Liste des ateliers AdService
-user.index.menu.list_tickets:    		Liste des billets AdService
-user.index.menu.list_incidences: 		Liste des questions AdService
-user.index.menu.list_statistics: 		Liste des statistiques AdService
+user.index.menu.admin_title: 	 	MENU ADMIN
+user.index.menu.assessor_title:  	MENU CONSEILLER
+user.index.menu.user_title: 	 	MENU UTILISATEUR
+user.index.menu.ad_title:               MENU AD
+user.index.menu.my_profile: 	 	Mon profil
+user.index.menu.list_partners: 	 	Liste des Partenaires AdService
+user.index.menu.list_users: 	 	Liste des Utilisateurs AdService
+user.index.menu.list_popups: 	 	Liste des Popups ADService
+user.index.menu.list_workshops:  	Liste des Ateliers AdService
+user.index.menu.list_tickets:    	Liste des Billets AdService
+user.index.menu.list_incidences: 	Liste des Questions AdService
+user.index.menu.list_statistics: 	Liste des Statistiques AdService
 user.index.menu.create_incidence_admin: Créer un impact en tant qu'administrateur
-user.index.menu.asign_user_to_ticket:	Attribuer billets pour les utilisateurs
-user.index.menu.new_ticket:				Créer un nouveau billet
+user.index.menu.asign_user_to_ticket:   Attribuer billets pour les utilisateurs
+user.index.menu.new_ticket:		Créer un nouveau billet
 user.index.menu.my_tickets:             Mon Tickets
 user.index.menu.my_incidences:          Mon questions
-
+user.index.menu.new_workshop_order:     Postuler pour un nouvel atelier
+user.index.menu.actvie_workshop_order:  Appliquer pour activer/désactiver un atelier
+user.index.menu.order_list_workshop:    Afficher le statut actuel de ma demande
+user.index.menu.view_register_workshop_order:   Voir atelier s'applique
+user.index.menu.view_actvie_workshop_order:     Voir s'applique de l'activation / désactivation des ateliers
 # COMUNES
 home:      Index
 admin:     Admin

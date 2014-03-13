@@ -2,17 +2,143 @@
 
 {% block body %}
 
-        <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('workshop_list') }}">list of Workshops</a></li>
-      <li class="active">New Workshop</li>
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">Home</a></li>
+        <li><a href="{{ path('workshop_list') }}">list of Workshops</a></li>
+        <li class="active">New Workshop</li>
     </ol>
 
-    <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        {{ form_rest(form) }}
-        <p>
+    {% if app.session.hasFlash('error') %}
+        <p class="error">{{ app.session.getFlash('error') }}</p>
+    {% endif %}
+        
+       
+        
+    <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" > 
+
+        <div class="container">
+                <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <label for="new_car_form_vin">Name</label>
+                            {{ form_widget(form.name, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'Name'} }) }}
+
+                            <label for="new_car_form_vin">Cif</label>
+                            {{ form_widget(form.cif, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'Cif'} }) }}
+
+                            <label for="new_car_form_vin">Num AD Client</label>
+                            {{ form_widget(form.num_ad_client, { 'attr': { 'class': 'form-control',
+                                                                           'placeholder': 'number AD Client'} }) }}
+                            
+                             <label for="new_car_form_vin">Partner</label>
+                            {{ form_widget(form.partner, { 'attr': { 'class': 'form-control',
+                                                                     'placeholder': 'Address'} }) }}
+
+                            <label for="new_car_form_vin">Address</label>
+                            {{ form_widget(form.address, { 'attr': { 'class': 'form-control',
+                                                                     'placeholder': 'Address'} }) }}
+
+                            <label for="new_car_form_vin">City</label>
+                            {{ form_widget(form.city, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'City'} }) }}
+
+                            <label for="new_car_form_vin">Emails</label>
+                            {{ form_widget(form.email_1, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'email 1'} }) }}
+
+                            {{ form_widget(form.email_2, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'email 2'} }) }}   
+
+                            <label for="new_car_form_vin">Contact</label>
+                            {{ form_widget(form.contact, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'contact'} }) }}
+
+                            {% if is_granted('ROLE_USER') %}
+                                <label for="new_car_form_vin">Workshop observation</label>
+                                {{ form_widget(form.observation_workshop, { 'attr': { 'class': 'form-control',
+                                                                            'placeholder': 'contact'} }) }}
+                            {% endif %}
+                            {% if is_granted('ROLE_ASSESSOR')%}
+                                <label for="new_car_form_vin">Assessor observation</label>
+                                {{ form_widget(form.observation_assessor, { 'attr': { 'class': 'form-control',
+                                                                            'placeholder': 'contact'} }) }}
+                            {% endif %}    
+                            {% if is_granted('ROLE_ADMIN')%}    
+                                <label for="new_car_form_vin">Admin observation</label>
+                                {{ form_widget(form.observation_admin, { 'attr': { 'class': 'form-control',
+                                                                            'placeholder': 'contact'} }) }}
+                            {% endif %}
+
+                            <label for="new_car_form_vin">Diagnosis Machines</label>
+                            {{ form_widget(form.diagnosis_machines, { 'attr': { 'class': 'form-control',
+                                                                            'placeholder': 'contact'} }) }}
+
+                        </div>
+                        <div class="col-md-6 column">
+                            <label for="new_car_form_vin">Region</label>
+                            {{ form_widget(form.region, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'City'} }) }}
+
+                            <label for="new_car_form_vin">Province</label>
+                            {{ form_widget(form.province, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'province'} }) }}
+
+                            <label for="new_car_form_vin">Phone Numbers</label>
+                            {{ form_widget(form.phone_number_1, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'phone number 1'} }) }}
+
+                            {{ form_widget(form.phone_number_2, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'phone number 2'} }) }}
+
+                            <label for="new_car_form_vin">Movile Numbers</label>
+                            {{ form_widget(form.movile_phone_1, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'movile number 1'} }) }}
+
+                            {{ form_widget(form.movile_phone_2, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'movile number 2'} }) }}   
+
+                            <label for="new_car_form_vin">Fax</label>
+                            {{ form_widget(form.fax, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'fax'} }) }}
+
+                            <label for="new_car_form_vin">Active</label>
+                            {{ form_widget(form.active) }}<br/>
+
+                            <label for="new_car_form_vin">Test</label>
+                            {{ form_widget(form.test) }}<br/>
+
+                            <label for="new_car_form_vin">Typology</label>
+                            {{ form_widget(form.typology, { 'attr': { 'class': 'form-control',
+                                                            'placeholder': 'test'} }) }}
+
+                            <label for="new_car_form_vin">Update At</label>
+                            {{ form_widget(form.update_at) }}
+
+                            <label for="new_car_form_vin">Lowdate At</label>
+                            {{ form_widget(form.lowdate_at) }}
+
+                            <label for="new_car_form_vin">End Test At</label>
+                            {{ form_widget(form.endtest_at) }}
+
+                            <label for="new_car_form_vin">Conflictive</label>
+                            {{ form_widget(form.conflictive) }}<br/>
+
+                        </div>
+                    {{ form_rest(form) }}
+                </div>
+    {#        <button class="btn btn-primary pull-right" type="submit">Submit</button>#}
             <button type="submit">Create</button>
-        </p>
+        </div>
+
+    {#    <p>
+
+        </p>#}
+    {#                    <div class="row">
+                           <div class="col-md-6 column">
+                                <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                            </div>
+                        </div>#}
     </form>
 
 {% endblock %}
@@ -20,15 +146,15 @@
 {% block javascripts %}
     {{ parent() }}
     {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
-    <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script> 
-    
-    <script>
-        $(document).ready(function(){
-            //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_workshopbundle_workshoptype]').find('select[name*=region]').change(function (){
-                var url_ajax = "{{ path("user_provinces") }}";
-                populate_province(url_ajax);
-            });
+<script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script> 
+
+<script>
+    $(document).ready(function() {
+        //si clickamos el combobox de las regiones repoblamos la de las provincias
+        $('form[name=adservice_workshopbundle_workshoptype]').find('select[name*=region]').change(function() {
+            var url_ajax = "{{ path("user_provinces") }}";
+            populate_province(url_ajax);
         });
-    </script>
+    });
+</script>
 {% endblock %}

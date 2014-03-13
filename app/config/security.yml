@@ -25,7 +25,7 @@ security:
             entity: { class: Adservice\UserBundle\Entity\User, property: username }
     
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER]
+        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_AD]
         ROLE_ASSESSOR: ROLE_USER
 #        ROLE_ADMIN: ROLE_USER
 #        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
@@ -36,7 +36,7 @@ security:
       - { path: ^/incidence/new, roles: [ROLE_ASSESSOR] }
       - { path: ^/incidence/create, roles: [ROLE_ASSESSOR] }
       - { path: ^/incidence/edit, roles: [ROLE_ASSESSOR] }
-      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ASSESSOR, ROLE_ADMIN] }
+      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ASSESSOR, ROLE_ADMIN, ROLE_AD] }
 
     encoders: 
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
