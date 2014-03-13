@@ -102,12 +102,17 @@ class DefaultController extends Controller {
         return $this->redirect($this->generateUrl('workshop_list'));
     }
     
+    
+    /**
+     * Crea una nueva solicitud de alta de taller
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function newWorkshopOrderAction(){
         
         //solo pasan ROLE_AD y ROLE_ADMIN
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
-        
         
         $petition = $this->getRequest();
         $workshop  = new Workshop();
@@ -119,9 +124,9 @@ class DefaultController extends Controller {
             $form->bindRequest($petition);
             
             if ($form->isValid())
+                //creamos un taller pendiente de alta
                 $em = $this->getDoctrine()->getEntityManager();
                 $user = $this->get('security.context')->getToken()->getUser();
-//                var_dump($user);die;
                 $workshop->setActive(false);
                 $workshop->setRegisterPending(true);
                 $workshop->setPartner($user->getPartner());
@@ -133,7 +138,11 @@ class DefaultController extends Controller {
                 $em->persist($workshop);
                 $em->flush();
                 
-                return $this->redirect($this->generateUrl('order_list_workshop'));
+                $user_role = 'ad';
+                $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending'  => 1,
+                                                                                                        'partner'           => $user->getPartner()->getId()));
+                return $this->render('WorkshopBundle:Default:listWorkshopOrder.html.twig', array('user_role'                => $user_role,
+                                                                                                 'workshops_pending_orders' => $workshops_pending_orders));
         }
         
         return $this->render('WorkshopBundle:Default:newWorkshopOrder.html.twig', array('workshop'   => $workshop,
@@ -143,6 +152,10 @@ class DefaultController extends Controller {
         
     }
     
+    /**
+     * Funcion que lista las solicitudes de alta pendientes
+     * @return type
+     */
     public function listWorkshopOrderAction(){
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $user->getRoles();
@@ -164,6 +177,10 @@ class DefaultController extends Controller {
                                                                                          'workshops_pending_orders' => $workshops_pending_orders));
     }
     
+    /**
+     * Funcion que lista las solicitudes de activación/desactivación
+     * @return type
+     */
     public function activeWorkshopOrderAction(){
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -171,12 +188,19 @@ class DefaultController extends Controller {
         
         if ($role[0]->getRole() == "ROLE_ADMIN"){
             $user_role = 'admin';
+            //queremos todos los talleres que estan pendientes de activacion/desactivacion...
             $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('deactivate_pending' => 1));
             $workshops = array_merge($workshops, $em->getRepository("WorkshopBundle:Workshop")->findBy(array('activate_pending' => 1)));
 
         }elseif ($role[0]->getRole() == "ROLE_AD"){
             $user_role = 'ad';
-            $workshops = $user->getPartner()->getWorkshops();
+            //solo queremos los talleres que me pertenezcan...
+//            $workshops = $user->getPartner()->getWorkshops();
+            
+            $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => null,
+                                                                                     'partner'          => $user->getPartner()->getId()));
+            $workshops = array_merge($workshops, $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => 0,
+                                                                                                             'partner'          => $user->getPartner()->getId())));
         }
         
         return $this->render('WorkshopBundle:Default:activationWorkshopOrder.html.twig', array('workshops' => $workshops,
@@ -199,10 +223,13 @@ class DefaultController extends Controller {
             $user_role = 'admin';
             if ($action == 'activate'){
                 $workshop->setActive(true);
+                $workshop->setDeactivatePending(false);
                 $workshop->setActivatePending(false);
             }elseif ($action == 'deactivate'){
                 $workshop->setActive(false);
                 $workshop->setDeactivatePending(false);
+                $workshop->setActivatePending(false);
+                
             }
             $this->saveWorkshop($em, $workshop);
             
@@ -230,7 +257,7 @@ class DefaultController extends Controller {
                                                                                                'user_role' => $user_role));
     }
     /**
-     * 
+     * Hace el alta o baja de un taller
      * @param int $id id del taller
      * @param string $action OK -> aceptar la alta, 
      *                       KO -> denegarla
