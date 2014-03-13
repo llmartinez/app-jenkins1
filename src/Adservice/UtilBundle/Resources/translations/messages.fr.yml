@@ -22,7 +22,8 @@ user.index.menu.my_incidences:          Mon questions
 user.index.menu.new_workshop_order:     Postuler pour un nouvel atelier
 user.index.menu.actvie_workshop_order:  Appliquer pour activer/désactiver un atelier
 user.index.menu.order_list_workshop:    Afficher le statut actuel de ma demande
-
+user.index.menu.view_register_workshop_order:   Voir atelier s'applique
+user.index.menu.view_actvie_workshop_order:     Voir s'applique de l'activation / désactivation des ateliers
 # COMUNES
 home:      Index
 admin:     Admin

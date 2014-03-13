@@ -20,6 +20,9 @@ user.index.menu.my_incidences:          My Incidences
 user.index.menu.new_workshop_order:     Apply for a new workshop
 user.index.menu.actvie_workshop_order:  Apply for activate/deactivate a workshop
 user.index.menu.order_list_workshop:    View the status of my application
+user.index.menu.view_register_workshop_order:   View workshop apply
+user.index.menu.view_actvie_workshop_order:     View apply de activation/deactivation of workshops
+
 
 # COMUNES
 home:      Home
