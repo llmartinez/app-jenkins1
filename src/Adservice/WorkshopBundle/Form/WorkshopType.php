@@ -23,7 +23,7 @@ class WorkshopType extends AbstractType
             ->add('contact')
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
-            ->add('diagnosis_machines')
+//            ->add('diagnosis_machines', 'text', array('required' => false))
             ->add('observation_workshop', 'textarea', array('required' => false))
             ->add('observation_assessor', 'textarea', array('required' => false))
             ->add('observation_admin', 'textarea', array('required' => false))

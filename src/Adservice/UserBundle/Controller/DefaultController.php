@@ -37,9 +37,7 @@ class DefaultController extends Controller {
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
         
-        return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user,
-
-        ));
+        return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user));
     }
 
     public function selectNewUserAction() {

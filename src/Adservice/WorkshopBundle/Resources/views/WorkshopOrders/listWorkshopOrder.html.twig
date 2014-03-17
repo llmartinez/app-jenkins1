@@ -7,9 +7,9 @@
         <li class="active">Apply for new workshop</li>
     </ol>
 
-    <h1>Lista de solicitudes de alta de talleres pendientes</h1>
+    <h1>Listado de solicitudes de {{ user.partner}} </h1>
     
-    <table class="table" style="width: 50%; margin-left: 450px;">
+   {# <table class="table" style="width: 50%; margin-left: 450px;">
         <tr>
             <td align="right">
                <div class="input-group">
@@ -20,11 +20,10 @@
                 </div>
             </td>
         </tr>
-    </table>
+    </table>#}
     
-    {% if workshops_pending_orders is defined %}
-        {# Pendientes de dar de alta    #}
-        {% if workshops_pending_orders|length > 0  %}
+    {% if workshopsOrders is defined %}
+        {% if workshopsOrders|length > 0  %}
             <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
                 <thead>
                     <tr>
@@ -36,13 +35,11 @@
                         <th>Region</th>
                         <th>Province</th>
                         <th>City</th>
-                        {% if user_role == 'admin' %}
-                            <th>Actions</th>
-                        {% endif %}
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for workshop in workshops_pending_orders %}
+                    {% for workshop in workshopsOrders %}
                         <tr>
                             <td>{{ workshop.id }}</td>
                             <td>{{ workshop.name }}</td>
@@ -56,6 +53,10 @@
                                 <td>
                                     <a id="regiter_ok_{{ workshop.id }}"  title="Aceptar el alta del taller"    href="{{ path("register_workshop", { 'id': workshop.id, 'action': 'OK'})  }}"><span class="glyphicon glyphicon-ok"></span></a>
                                     <a id="regiter_ko_{{ workshop.id }}"  title="Rechazar y eliminar el taller" href="{{ path("register_workshop", { 'id': workshop.id, 'action': 'KO' }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 're_modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>
                                 </td>
                             {% endif %}
                         </tr>
