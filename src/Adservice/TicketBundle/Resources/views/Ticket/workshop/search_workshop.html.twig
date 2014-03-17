@@ -2,11 +2,20 @@
 <form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label style="width: 100%;">Code</label>
-        <input type="text" id="w_idpartner" name="w_idpartner" class="btnfilters form-control" style="width: 50%;" placeholder="partner">
-        <input type="text" id="w_id"        name="w_id"        class="btnfilters form-control" style="width: 50%;" placeholder="workshop">
+        <input type="text" id="w_idpartner" name="w_idpartner" class="form-control" style="width: 50%;" placeholder="partner">
+        <input type="text" id="w_id"        name="w_id"        class="form-control" style="width: 50%;" placeholder="workshop">
         <label style="width: 100%;">Email / Tel</label>
-        <input type="text" id="w_email"     name="w_email"     class="btnfilters form-control" style="width: 50%;" placeholder="e-mail">
-        <input type="text" id="w_tel"       name="w_tel"       class="btnfilters form-control" style="width: 50%;" placeholder="tel">
+        <input type="text" id="w_email"     name="w_email"     class="form-control" style="width: 50%;" placeholder="e-mail">
+        <input type="text" id="w_tel"       name="w_tel"       class="form-control" style="width: 50%;" placeholder="tel">
         <input type="submit" class="btn btn-primary" value="check">
     </div>
 </form>
+
+<script>
+$( "#w_idpartner" ).on( "keydown", function( event ) {
+
+  if (event.which == 13) {
+  	alert('bien');
+  }
+});
+</script>
