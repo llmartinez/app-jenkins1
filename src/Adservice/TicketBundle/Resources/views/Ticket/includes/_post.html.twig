@@ -1,0 +1,21 @@
+
+	{# DATOS POST #}
+	<legend
+		{% if post.owner == app.security.getToken().getUser() %}
+				 style="background: azure;"> Tu
+        {% else %}
+	             class="legend">
+	                {% if post.owner.roles[0] == 'ROLE_ASSESSOR' %} Assessor
+	                {% else %} 										User 	{% endif %}
+																	{{ post.owner.name }}
+        {% endif %}
+	</legend>
+
+	{# CONTENT POST #}
+	<div class="colDer"> <p> {{ post.message }} </p> </div>
+
+    <div class="colIzq">
+        {% if post.document is not null %}
+            <img class="imgPost" src="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}">
+        {% endif %}
+    </div>

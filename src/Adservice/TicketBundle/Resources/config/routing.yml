@@ -3,8 +3,8 @@
 ################################
 
 newTicket:
-    pattern:  /ticket/new/
-    defaults: { _controller: TicketBundle:Ticket:newTicket }
+    pattern:  /ticket/new/{id_workshop}
+    defaults: { _controller: TicketBundle:Ticket:newTicket, id_workshop: null }
 
 editTicket:
     pattern:  /ticket/edit/{id_ticket}
@@ -25,6 +25,10 @@ showTicket:
 listTicket:
     pattern:  /ticket/
     defaults: { _controller: TicketBundle:Ticket:listTicket }
+
+listTicketFiltered:
+    pattern:  /ticket/filtered
+    defaults: { _controller: TicketBundle:Ticket:listTicketFiltered }
 
 ticketWorkshopList:
     pattern:  /ticket/workshopList/

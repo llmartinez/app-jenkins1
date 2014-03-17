@@ -1,0 +1,25 @@
+<div class="tblContainer">
+
+    <legend>Car</legend>
+
+    <div class="col-xs-4 col-md-4 form-group">
+        <label for="new_car_form_brand">Brand *</label>
+        <select id="new_car_form_brand" name="new_car_form_brand" class="form-control" multiple="multiple", required >
+            {% for brand in brands %}
+                <option value={{ brand.id }}>{{ brand.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-xs-4 col-md-4 form-group">
+        <label for="new_car_form_model">Model *</label>
+        <select id="new_car_form_model" name="new_car_form_model" class="form-control" multiple="multiple", required ></select>
+    </div>
+
+    <div class="col-xs-4 col-md-4 form-group">
+        <label for="new_car_form_version">Version</label>
+        <select id="new_car_form_version" name="new_car_form_version" class="form-control" multiple="multiple" >
+        </select>
+    </div>
+    {% include 'TicketBundle:Ticket:includes/_rest_car.html.twig' %}
+</div>

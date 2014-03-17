@@ -60,21 +60,21 @@ class Ticket {
     /**
      * @var integer $importance
      *
-     * @ORM\OneToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
      */
     private $importance;
 
     /**
      * @var string $subsystem
      *
-     * @ORM\OneToOne(targetEntity="\Adservice\TicketBundle\Entity\Subsystem")
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Subsystem")
      */
     private $subsystem;
 
     /**
      * @var integer $car
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car")
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="ticket")
      */
     private $car;
 

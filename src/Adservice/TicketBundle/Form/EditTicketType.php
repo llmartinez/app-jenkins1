@@ -4,18 +4,17 @@ namespace Adservice\TicketBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class CloseTicketType extends AbstractType
+class EditTicketType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-                ->add('solution', 'textarea')
                 ->add('importance')
                 ->add('subsystem')
                 ;
     }
     public function getName()
     {
-        return 'close_ticket_form';
+        return 'edit_ticket_form';
     }
 }

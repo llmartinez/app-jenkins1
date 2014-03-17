@@ -43,6 +43,7 @@ class DefaultController extends Controller
         $petition = $this->getRequest();
 
         $id_system = $petition->request->get('id_system');
+
         $system = $em->getRepository('TicketBundle:System')->find($id_system);
 
         $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));

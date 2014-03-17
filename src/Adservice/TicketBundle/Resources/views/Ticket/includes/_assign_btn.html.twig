@@ -8,26 +8,23 @@
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}" title="Remove the bloqued status">
-                        <span class="glyphicon glyphicon-remove-circle"></span></a>
-
-                    {# editar Ticket #}
-                    <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <span class="glyphicon glyphicon-pencil"></span></a></a>
+                        <span class="glyphicon glyphicon-remove-circle" style="color:red"></span></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
                     <a><span class="glyphicon glyphicon-ban-circle"></span></a>
 
                 {% endif %}
-
             {% else %}
+
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
                     <span class="glyphicon glyphicon-ok-circle"></span></a>
-
             {% endif %}
         {% else %}
             {# reabrir Ticket #}
-            btn_reopen
+            <a class="glyphicon glyphicon-ok" style="color:gray"></a>
+            <a> btn_reopen </a>
         {% endif %}
     {% endif %}
 

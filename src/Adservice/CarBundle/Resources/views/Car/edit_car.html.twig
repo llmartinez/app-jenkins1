@@ -1,0 +1,30 @@
+{% extends "TicketBundle:Default:ticket.html.twig" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
+    </ol>
+    {% if app.session.hasFlash('error') %}
+        <p class="error">{{ app.session.getFlash('error') }}</p>
+    {% endif %}
+
+    <div class="tblContainer">
+
+        <legend> Edit Car </legend>
+        <form action="{{ path('editCar', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
+            {% include 'CarBundle:Car:_edit_MMG.html.twig'%}
+            {% include 'CarBundle:Car:_rest_car.html.twig'%}
+
+            <div class="col-xs-12 col-md-12 form-group">
+                <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                <a class="btn btn-primary pull-right" href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">Cancel</a>
+                </form>
+            </div>
+        </form>
+    </div>
+    {% include 'TicketBundle:Default:includes/ticket.js.twig' %}
+
+{% endblock %}

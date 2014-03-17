@@ -22,7 +22,6 @@
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a class="btn pull-left" href="{{ path('user_index') }}">   {% trans %}Home         {% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('newTicket') }}" >   {% trans %}New ticket   {% endtrans %}</a></li>
                                     <li><a class="btn pull-left" href="{{ path('listTicket') }}">   {% trans %}Tickets      {% endtrans %}</a></li>
                                     <li><a href="#"></a></li>
                                     <li class="divider"></li>
@@ -41,7 +40,7 @@
                                 <a href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
                                 <a href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
                             </div>
-                            {# 
+                            {#
                               {% set location = 'ticket' %}
                               <a href="{{ path('redirect', {'_locale': 'en', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
                               <a href="{{ path('redirect', {'_locale': 'es', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>

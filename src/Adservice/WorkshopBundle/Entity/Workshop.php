@@ -13,7 +13,7 @@ use Adservice\UtilBundle\Entity\Province;
  * Adservice\WorkshopBundle\Entity\Workshop
  *
  * @ORM\Table(name="workshop")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\WorkshopBundle\Entity\WorkshopRepository")
  */
 class Workshop
 {

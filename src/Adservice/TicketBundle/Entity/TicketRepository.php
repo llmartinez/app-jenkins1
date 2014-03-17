@@ -55,33 +55,35 @@ class TicketRepository extends EntityRepository
         foreach ($tickets as $ticket) {
 
             // Se recoge el role del owner del ultimo post del ticket
-            $posts = $ticket->getPosts();
-            $last_post_owner_role_name = $posts[count($ticket->getPosts())-1]->getOwner()->getRoles()[0]->getName();
+            if (count($ticket->getPosts()) > 0) {
+                $posts = $ticket->getPosts();
+                $last_post_owner_role_name = $posts[count($ticket->getPosts())-1]->getOwner()->getRoles()[0]->getName();
 
-            // Si el ultimo post es de un user
-            if ($last_post_owner_role_name == "ROLE_USER")
-            {
-                // Tickets no asignados a ningun assessor
-                if ( $ticket->getAssignedTo() == null )
+                // Si el ultimo post es de un user
+                if ($last_post_owner_role_name == "ROLE_USER")
                 {
-                       $free_tickets[]  = $ticket;
-                }
-                else {
+                    // Tickets no asignados a ningun assessor
+                    if ( $ticket->getAssignedTo() == null )
+                    {
+                           $free_tickets[]  = $ticket;
+                    }
+                    else {
+                        // Tickets asignados a el assessor
+                        if($ticket->getAssignedTo() == $user) {
+                            $assigned_tickets[] = $ticket;
+                        }
+                        // Tickets asignados a otro assessor
+                        else {
+                            $other_assessor_tickets[] = $ticket;
+                        }
+                    }
+
+                // Si el ultimo post es de un assessor
+                }else {
                     // Tickets asignados a el assessor
                     if($ticket->getAssignedTo() == $user) {
-                        $assigned_tickets[] = $ticket;
+                        $answered_tickets[] = $ticket;
                     }
-                    // Tickets asignados a otro assessor
-                    else {
-                        $other_assessor_tickets[] = $ticket;
-                    }
-                }
-
-            // Si el ultimo post es de un assessor
-            }else {
-                // Tickets asignados a el assessor
-                if($ticket->getAssignedTo() == $user) {
-                    $answered_tickets[] = $ticket;
                 }
             }
         }
@@ -121,97 +123,26 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    public function findTicketsFiltered($security, $request)
+    public function findTicketsFiltered($security, $id_workshop, $id_ticket=null, $status=null)
     {
         $em     = $this->getEntityManager();
 
-        //Inicializa variables
         $query  = 'SELECT t FROM TicketBundle:Ticket t ';
         $joins  = 'JOIN t.workshop w ';
-        $where  = 'WHERE t.status = :status ';
+        $where  = 'WHERE w.id = :w_id ';
 
-        //Comprueba que los filtros no esten vacios y setea la variable para la consulta
-        $consulta = $this->GetQuery($em, $security, $request, $query, $joins, $where);
+        $params[] = array('w_id', $id_workshop);
 
-        return $consulta->getResult();
-    }
-
-    public function findTickets($security)
-    {
-        $em = $this->getEntityManager();
-
-        if ($security->isGranted('ROLE_ASSESSOR'))
-        {
-            $consulta = $em->createQuery('
-                SELECT t FROM TicketBundle:Ticket t
-                WHERE t.status = :status
-            ');
-
-        }else{
-
-            $consulta = $em->createQuery('
-                SELECT t FROM TicketBundle:Ticket t
-                WHERE t.status = :status
-                AND t.workshop = :workshop
-            ');
-
-            $consulta->setParameter('workshop', $security->getToken()->getUser()->getWorkshop());
-        }
-
-        $consulta->setParameter('status', 0);
-
-	    return $consulta->getResult();
-    }
-
-    public static function GetQuery($em, $security, $request, $query, $joins, $where)
-    {
-        $params = array();
-
-        //Filtro para tickets abiertos
-        $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
-        $params[] = array('status', $open);
-
-        //Filtros enviados
-        $id_ticket   = $request->get('id_ticket');
-
-        if ($id_ticket != "")
+        if ($id_ticket != null)
         {
             $where .= 'AND t.id = :id_ticket ';
             $params[] = array('id_ticket', $id_ticket);
         }
 
-        if ($security->isGranted("ROLE_ASSESSOR")) {
-
-            //Filtros enviados de assessor
-            $id_partner  = $request->get('id_partner');
-            $id_workshop = $request->get('id_workshop');
-            $id_region   = $request->get('id_region');
-
-            if ($id_partner != "0") {
-
-                $joins .= 'JOIN w.partner p ';
-                $where .= 'AND p.id = :id_partner ';
-                $params[] = array('id_partner', $id_partner);
-            }
-
-            if ($id_workshop != "")
-            {
-                $where .= 'AND w.id = :id_workshop ';
-                $params[] = array('id_workshop', $id_workshop);
-            }
-
-            if ($id_region != "0") {
-
-                $joins .= 'JOIN w.region r ';
-                $where .= 'AND r.id = :id_region ';
-                $params[] = array('id_region', $id_region);
-            }
-        }else{
-            //Filtros enviados de user
-            $id_workshop = $security->getToken()->getUser()->getWorkshop()->getId();
-
-            $where .= 'AND w.id = :id_workshop ';
-            $params[] = array('id_workshop', $id_workshop);
+        if ($status != null and $status->getId() != null)
+        {
+            $where .= 'AND t.status = :status ';
+            $params[] = array('status', $status->getId());
         }
 
         //Crea la consulta
@@ -222,6 +153,6 @@ class TicketRepository extends EntityRepository
             $consulta->setParameter($param[0], $param[1]);
         }
 
-        return $consulta;
+        return $consulta->getResult();
     }
 }
