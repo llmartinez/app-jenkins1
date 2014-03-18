@@ -36,9 +36,9 @@
                         <td>{{ workshop.active }}</td>
                         <td>{{ workshop.updateAt | date('d-m-Y')}}</td>
                         <td>
-{#                            <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>#}
-{#                            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>#}
-                            <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.id, 'action' : 'modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="Modificar datos de la solicitud"  href="{{ path('workshopOrder_new', {'id' : workshop.id, 'action' : 'modify'            })}}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="Solicitud de activación"          href="{{ path('workshopOrder_new', {'id' : workshop.id, 'action' : 'activate'  })}}"><span class="glyphicon glyphicon-ok"></span></a>
+                            <a title="Solicitud de desactivación"       href="{{ path('workshopOrder_new', {'id' : workshop.id, 'action' : 'deactivate'})}}"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 {% endfor %}

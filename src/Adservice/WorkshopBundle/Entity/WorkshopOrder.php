@@ -225,6 +225,12 @@ class WorkshopOrder {
     private $conflictive;
 
     /**
+     * @var string $rejection_reason 
+     * @ORM\Column(name="rejection_reason", type="string", length=255, nullable=true)
+     */
+    private $rejection_reason;
+    
+    /**
      * @var int $num_ad_client
      *
      * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
@@ -902,5 +908,13 @@ class WorkshopOrder {
         $this->action = $action;
     }
     
-        
+    public function getRejectionReason() {
+        return $this->rejection_reason;
+    }
+
+    public function setRejectionReason($rejection_reason) {
+        $this->rejection_reason = $rejection_reason;
+    }
+
+
 }
