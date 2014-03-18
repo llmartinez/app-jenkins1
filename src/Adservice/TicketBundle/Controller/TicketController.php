@@ -155,7 +155,7 @@ class TicketController extends Controller {
 
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
-        return $this->render('TicketBundle:Ticket:edit_ticket.html.twig', array(
+        return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array(
                     'form'        => $form->createView(),
                     'ticket'      => $ticket,
                     'systems'     => $systems,
@@ -407,7 +407,7 @@ class TicketController extends Controller {
 
         $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
 
-        return $this->render('TicketBundle:Ticket:workshopsList.html.twig', array('workshops' => $workshops));
+        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array('workshops' => $workshops));
     }
 
     /**
@@ -419,7 +419,7 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
-        return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array('workshop' => $workshop));
+        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('workshop' => $workshop));
     }
 
     /**
@@ -462,9 +462,9 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $users = $this->getUsersToAssingFromTicket();
 
-        return $this->render('TicketBundle:Ticket:assignTicket.html.twig', array('ticket' => $ticket,
-                    'users' => $users
-                ));
+        return $this->render('TicketBundle:Ticket:ticket/assign_ticket.html.twig', array('ticket' => $ticket,
+                                                                                         'users' => $users
+                                                                                       ));
     }
 
     /**
