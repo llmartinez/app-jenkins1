@@ -88,9 +88,19 @@ class TicketRepository extends EntityRepository
                     if($return == 'other_assessor') { return $other_assessor_tickets; } //array con los tickets asignados a otro assessor
                 }
             }
-        }
-    }
-
+         }
+         
+//        if     ($return == 'free')           return $free_tickets;  //array con los tickets pendientes de respuesta
+//        elseif ($return == 'assigned')       return $assigned_tickets;  //array con los tickets asignados al assessor
+//        elseif ($return == 'answered')       return $answered_tickets;  //array con los tickets respondidos
+//        elseif ($return == 'other_assessor') return $other_assessor_tickets;  //array con los tickets asignados a otro assessor
+                
+            
+         }
+         
+         
+         
+    
     public function findAllByOwner ($user, $status)
     {
         $tickets = $this->findBy(array('owner' => $user->getId(),
