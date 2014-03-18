@@ -274,7 +274,6 @@ class TicketController extends Controller {
                                                                             'systems'   => $systems, )));
     }
 
-        $systems  = $em->getRepository('TicketBundle:System')->findAll();
         return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array( 'form'      => $form ->createView(),
                                                                                         'formP'     => $formP->createView(),
                                                                                         'formD'     => $formD->createView(),
@@ -467,6 +466,20 @@ class TicketController extends Controller {
         return $this->showTicketAction($id_ticket);
     }
 
+    /**
+     * Muestra los posts que pertenecen a un ticket
+     * @param integer $id_ticket
+     * @return url
+     */
+    public function showTicketReadonlyAction($id_ticket) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $systems  = $em->getRepository('TicketBundle:System')->findAll();
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+
+        return $this->render('TicketBundle:Ticket:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
+                                                                                                 'systems'   => $systems, ));
+    }
     /**
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
      * @return \Symfony\Component\HttpFoundation\Response

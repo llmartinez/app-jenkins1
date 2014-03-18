@@ -18,7 +18,9 @@
                 <tbody>
                 {% for ticket in tickets %}
                     <tr>
-                        <td>{{ ticket.id           }}</td>
+                        <td>{% if ticket.owner.roles[0] == 'ROLE_USER' %} <span class="glyphicon glyphicon-user"     title="Created by workshop" ></span>
+                            {% else %}                                    <span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span> {% endif %}
+                            {{ ticket.id           }} </td>
                         <td>{{ ticket.createdAt   | date ("d/m/Y")}}</td>
                         <td>{{ ticket.car.brand }} {{ ticket.car.model }} {{ ticket.car.version }}</td>
                         <td>{{ ticket.assignedTo   }}</td>
@@ -26,7 +28,7 @@
                         <td>
                             {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ASSESSOR') %}
                                 <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">
-                                <span class="glyphicon glyphicon-eye-open"></span></a>
+                                <span class="glyphicon glyphicon-eye-open" title="Show ticket"></span></a>
                             {% endif %}
                           {% include 'TicketBundle:Ticket:includes/_assign_btn.html.twig' %}
                         </td>
