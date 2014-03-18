@@ -2,13 +2,14 @@
  * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function fill_tickets(url_ajax) {
+function fill_tickets(url_ajax, url_show) {
 
     var option = $('select[id=slct_historyTickets]').val();
+
     $.ajax({
         type: "POST",
         url: url_ajax,
-        data: {option: option},
+        data: { option: option, url_show: url_show },
         dataType: "json",
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
@@ -18,17 +19,17 @@ function fill_tickets(url_ajax) {
 
                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
                 else{
-                    var route = $('#route').val();
-                    route = route.replace("PLACEHOLDER", elm.id );
+                    url = url_show.replace("PLACEHOLDER", elm.id);
 
                     if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
                     else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
 
-                    $('#ticketBody').append("<tr> <td>" + created + elm.id   + "</td>"
-                                               + "<td>" + elm.date           + "</td>"
-                                               + "<td>" + elm.car            + "</td>"
-                                               + "<td>" + elm.workshop       + "</td>"
-                                               + "<td>" + elm.description    + "</td>"
+                    $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
+                                               + "<td>" + created +" "+ elm.id + "</td>"
+                                               + "<td>" + elm.date             + "</td>"
+                                               + "<td>" + elm.car              + "</td>"
+                                               + "<td>" + elm.workshop         + "</td>"
+                                               + "<td>" + elm.description      + "</td>"
                                             );
                 }
             });

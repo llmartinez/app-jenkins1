@@ -376,6 +376,25 @@ class TicketController extends Controller {
                                                                                         'systems'  => $systems,
                                                                                         'form'     => $form->createView(), ));
     }
+    /**
+     * Reabre el ticket
+     * @param  Entity $id_ticket
+     * @return url
+     */
+    public function reopenTicketAction($id_ticket)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $user = $security->getToken()->getUser();
+        $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
+
+        $ticket->setStatus($status);
+        DefaultC::saveEntity($em, $ticket, $user);
+
+        return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
+    }
 
     /**
      * Obtiene todos los talleres del usuario logeado

@@ -15,6 +15,7 @@
 	{% if is_granted('ROLE_ASSESSOR') %}
 
         {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:workshop/show_workshop.html.twig'   %}
+                                    {% include 'TicketBundle:Ticket:includes/_tbl_similar.html.twig'    %}
         {% else %}                  {% include 'TicketBundle:Ticket:workshop/search_workshop.html.twig' %}  {% endif %}
 
   {% else %}

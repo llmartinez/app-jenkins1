@@ -58,6 +58,10 @@ showTicketReadonly:
     pattern:  /ticket/show_read/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showTicketReadonly }
 
+reopenTicket:
+    pattern: /ticket/reopen/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:reopenTicket }
+
 ################################
 #    GESTIÓN DE POSTS          #
 ################################

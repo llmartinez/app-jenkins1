@@ -33,19 +33,17 @@
 {% block additionalJavascripts %}
     {% if workshop.id == "" %}
 
-        {# ruta para Ajax #}
-        <input id='route' type='hidden' value="{{ path("showTicket", { 'id_ticket': "PLACEHOLDER" }) }}">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function() { tickets_ajax();
 
-                //carga la tabla de tickets
-                var url_ajax = "{{ path("fill_tickets") }}";
-                fill_tickets(url_ajax);
+                $('#slct_historyTickets').click(function() { tickets_ajax(); });
 
-                $('#slct_historyTickets').click(function() {
+                function tickets_ajax() {
+                    var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
                     var url_ajax = "{{ path("fill_tickets") }}";
-                    fill_tickets(url_ajax);
-                });
+
+                    fill_tickets(url_ajax, url_show);
+                }
             });
         </script>
     {% endif %}
