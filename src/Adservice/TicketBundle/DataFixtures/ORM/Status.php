@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\TicketBundle\Entity\Status;
 
 class States extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 40; }
-    
+
     public function load(ObjectManager $manager) {
         $states = array(
             array('name' => 'open'   ),
@@ -19,9 +19,9 @@ class States extends AbstractFixture implements OrderedFixtureInterface {
             $entidad = new Status();
             $entidad->setName($state['name']);
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
-            
+
         }
         $manager->flush();
     }

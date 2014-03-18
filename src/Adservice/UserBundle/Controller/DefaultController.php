@@ -59,6 +59,7 @@ class DefaultController extends Controller {
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
+        $users_role_ad = array();
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {

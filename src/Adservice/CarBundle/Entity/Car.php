@@ -22,8 +22,21 @@ class Car
     private $id;
 
     /**
-     * @var integer $version
+     * @var integer $brand
      *
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     */
+    private $brand;
+
+    /**
+     * @var integer $model
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     */
+    private $model;
+
+    /**
+     * @var integer $version
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
      */
     private $version;
@@ -31,21 +44,42 @@ class Car
     /**
      * @var integer $year
      *
-     * @ORM\Column(name="year", type="integer", length=4)
+     * @ORM\Column(name="year", type="integer", length=4, nullable="true")
      */
     private $year;
 
     /**
+     * @var integer $motor
+     *
+     * @ORM\Column(name="motor", type="string", length=255, nullable="true")
+     */
+    private $motor;
+
+    /**
+     * @var integer $kW
+     *
+     * @ORM\Column(name="kW", type="decimal", nullable="true")
+     */
+    private $kW;
+
+    /**
+     * @var integer $displacement
+     *
+     * @ORM\Column(name="displacement", type="decimal", nullable="true")
+     */
+    private $displacement;
+
+    /**
      * @var string $vin
      *
-     * @ORM\Column(name="vin", type="string", length=255)
+     * @ORM\Column(name="vin", type="string", length=255, nullable="true")
      */
     private $vin;
 
     /**
      * @var string $plateNumber
      *
-     * @ORM\Column(name="plateNumber", type="string", length=255)
+     * @ORM\Column(name="plateNumber", type="string", length=255, nullable="true")
      */
     private $plateNumber;
 
@@ -78,6 +112,13 @@ class Car
     private $modified_by;
 
     /**
+     * @var integer $ticket
+     *
+     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="car")
+     */
+    private $ticket;
+
+    /**
      * Get id
      *
      * @return integer
@@ -85,6 +126,46 @@ class Car
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set brand
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    /**
+     * Get brand
+     *
+     * @return integer
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * Set model
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * Get model
+     *
+     * @return integer
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
@@ -125,6 +206,66 @@ class Car
     public function getYear()
     {
         return $this->year;
+    }
+
+    /**
+     * Set motor
+     *
+     * @param integer $motor
+     */
+    public function setMotor($motor)
+    {
+        $this->motor = $motor;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return integer
+     */
+    public function getMotor()
+    {
+        return $this->motor;
+    }
+
+    /**
+     * Set kW
+     *
+     * @param integer $kW
+     */
+    public function setKW($kW)
+    {
+        $this->kW = $kW;
+    }
+
+    /**
+     * Get kW
+     *
+     * @return integer
+     */
+    public function getKW()
+    {
+        return $this->kW;
+    }
+
+    /**
+     * Set displacement
+     *
+     * @param integer $displacement
+     */
+    public function setDisplacement($displacement)
+    {
+        $this->displacement = $displacement;
+    }
+
+    /**
+     * Get displacement
+     *
+     * @return integer
+     */
+    public function getDisplacement()
+    {
+        return $this->displacement;
     }
 
     /**
@@ -245,6 +386,24 @@ class Car
     public function getModifiedBy()
     {
         return $this->modified_by;
+    }
+
+    /**
+     * Set ticket
+     *
+     * @param \Adservice\TicketBundle\Entity\Ticket $ticket
+     */
+    public function setTicket(\Adservice\TicketBundle\Entity\Ticket $ticket) {
+        $this->ticket = $ticket;
+    }
+
+    /**
+     * Get ticket
+     *
+     * @return integer
+     */
+    public function getTicket() {
+        return $this->ticket;
     }
 
     public function __toString() {

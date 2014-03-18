@@ -37,6 +37,9 @@ html {
 .margined {
     margin-right: 40px;
 }
+.floating {
+    float:left;
+}
 /*
     HEADER
 */
@@ -51,6 +54,17 @@ html {
 /*
     Plantillas
 */
+.info {
+    width: 20%;
+    padding: 10px;
+    float: left;
+}
+
+.content {
+    width: 80%;
+    padding: 10px;
+    float: left;
+}
 .colIzq {
     width: 30%;
     padding: 10px;
@@ -68,6 +82,10 @@ html {
     padding-left: 20px;
 }
 
+.padded {
+    padding: 5px;
+}
+
 .txtContainer {
     border: 1px solid rgba(155,155,155,0.3);
 }
@@ -79,6 +97,15 @@ html {
     padding-left: 20px;
     padding-bottom: 10px;
 }
+
+/*
+    BOTONERA
+ */
+#btnfilters {
+    width: 30%;
+    float: left;
+}
+
 /*
     TABLA INCIDENCIAS
 */
@@ -139,15 +166,8 @@ html {
 }
 
 .error {
-  color: white;
-  background: none repeat scroll 0 0 #F00;
-  clear: both;
-  font-size: 140%;
+  color: red;
   font-weight: bold;
-  width: 630px;
-  margin: 0 0 1em 6px;
-  padding: 5px;
-  padding-left: 0.4em;
 }
 
  /*
@@ -168,6 +188,16 @@ html {
 /*
     LISTA MENSAJES
 */
+.legend {
+    background-color: gainsboro;
+    padding-left: 20px;
+}
+
+.message {
+    background-color: ghostwhite;
+    min-height: 100px;
+}
+
 .ac-container{
     width: 40%;
     margin-left: 30px;
@@ -262,6 +292,9 @@ html {
 .btn100 {
     width: 100%;
     margin-top: 15px;
+}
+.btn50 {
+    width: 50%;
 }
 
 /*

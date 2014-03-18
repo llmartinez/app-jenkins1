@@ -1,0 +1,33 @@
+
+{% if workshop.id         != "" %}
+	<legend>Workshop
+			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-remove"></span></a></a>
+	</legend>
+{% endif %}
+<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
+
+{# WORKSHOP #}
+<div class="form-group">
+	#{{ workshop.partner.id}},{{ workshop.id }}: <b>{{ workshop.name }}</b>
+	{% if workshop.contact      != "" %}<b>Contact:  </b>{{ workshop.contact      }}  {% endif %}
+</div>
+
+{# TEL/MAIL #}
+<div class="form-group">
+	{% if workshop.phoneNumber1 != "" %}{{ workshop.phoneNumber1 }} / {% else %}
+	{% if workshop.movilePhone1 != "" %}{{ workshop.movilePhone1 }} / {% endif %}{% endif %}
+	{% if workshop.email1       != "" %}{{ workshop.email1       }}   {% endif %}
+</div>
+
+{# LOCATION #}
+<div class="form-group">
+	{% if workshop.region       != "" %}{{ workshop.region       }} , {% endif %}
+	{% if workshop.province     != "" %}{{ workshop.province     }}   {% endif %}
+</div>
+
+{# PARTNER #}
+<div class="form-group">
+	{% if workshop.partner      != "" %} Partner: {{ workshop.partner      }} {% endif %}
+</div>
+
+<div id="tbl_systems"></div>

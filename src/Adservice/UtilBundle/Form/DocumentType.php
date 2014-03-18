@@ -10,7 +10,6 @@ class DocumentType extends AbstractType
     {
 //        $builder->add('file', 'file', array('required' => false));
         $builder
-                ->add('name')
                 ->add('file')
         ;
 

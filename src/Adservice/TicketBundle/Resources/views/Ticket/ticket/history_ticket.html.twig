@@ -1,0 +1,43 @@
+
+    <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
+
+    <select id="slct_historyTickets" class="form-control">
+
+        {% if is_granted('ROLE_ADMIN') %}
+                <option value="all" selected    >{% trans %} ticket.opt.all          {% endtrans %}</option>
+                <option value="all_opened"      >{% trans %} ticket.opt.all_open     {% endtrans %}</option>
+                <option value="all_closed"      >{% trans %} ticket.opt.all_closed   {% endtrans %}</option>
+        {% else %}
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <option value="free" selected  >{% trans %} ticket.opt.free           {% endtrans %}</option>
+                <option value="assigned"       >{% trans %} ticket.opt.assigned       {% endtrans %}</option>
+                <option value="answered"       >{% trans %} ticket.opt.answered       {% endtrans %}</option>
+                <option value="other_assessor" >{% trans %} ticket.opt.other_assessor {% endtrans %}</option>
+                {# CLOSED #}
+            {% else %}
+                <option value="owner" selected  >{% trans %} ticket.opt.owner         {% endtrans %}</option>
+                <option value="workshop"        >{% trans %} ticket.opt.workshop      {% endtrans %}</option>
+                {# CLOSED #}
+            {% endif %}
+        {% endif %}
+    </select>
+
+    <div class="table table-hover table-list-search">
+
+        <div class="widget-content" >
+
+            <table class="table table-striped table-bordered table-hover table-list-search">
+
+                    <thead id="ticketHead">
+                        <tr>
+                            <th>{% trans %} date     {% endtrans %}</th>
+                            <th>{% trans %} workshop {% endtrans %}</th>
+                            <th>{% trans %} ticket   {% endtrans %}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketBody">
+
+                    </tbody>
+            </table>
+        </div> <!-- /widget-content -->
+    </div> <!-- /widget -->

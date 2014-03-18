@@ -18,11 +18,8 @@ class DefaultController extends Controller {
         
         $statistic->setNumUsers($statistic->getNumUsersInAdservice($em));
         $statistic->setNumTickets($statistic->getTicketsInAdservice($em));
-        $statistic->setNumIncidences($statistic->getIncidencesInAdservice($em));
         $statistic->setNumOpenTickets($statistic->getNumTicketsByStatus($em, 'open'));
         $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close'));
-        $statistic->setNumOpenIncidences($statistic->getNumIncidencesByStatus($em, 'open'));
-        $statistic->setNumClosedIncidences($statistic->getNumIncidencesByStatus($em, 'close'));
         $statistic->setUserWithMaxPost($statistic->getUserWithMaxNumPost($em));
         
         return $this->render('StatisticBundle:Default:list.html.twig', array('statistic' => $statistic));

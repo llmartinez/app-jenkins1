@@ -4,7 +4,7 @@
  */
 function fill_model(url_ajax) {
 
-    var id_brand = $('form[id=contact]').find('select[id=idBrand]').val();
+    var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
     $.ajax({
         type: "POST",
@@ -13,11 +13,11 @@ function fill_model(url_ajax) {
         dataType: "json",
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
-            $('#idModel').empty();
+            $('#new_car_form_model').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=idModel]').append("<option value=0>Select Model..</option>");
+            // $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0>Select Model..</option>");
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=idModel]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {
@@ -32,7 +32,7 @@ function fill_model(url_ajax) {
  */
 function fill_version(url_ajax) {
 
-    var id_model = $('form[id=contact]').find('select[id=idModel]').val()
+    var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val()
 
     $.ajax({
         type: "POST",
@@ -43,7 +43,7 @@ function fill_version(url_ajax) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             //Primer campo vacío
-            $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
+            // $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });

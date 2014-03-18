@@ -268,12 +268,6 @@ class WorkshopOrder {
      */
     private $tickets;
 
-    /**
-     * @var integer $incidences
-     *
-     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Incidence", mappedBy="workshop")
-     */
-    private $incidences;
 
     /**
      * @var datetime $created_at
@@ -824,24 +818,6 @@ class WorkshopOrder {
      */
     public function getTickets() {
         return $this->tickets;
-    }
-
-    /**
-     * Add incidences
-     *
-     * @param Adservice\TicketBundle\Entity\Incidence $incidences
-     */
-    public function addIncidence(\Adservice\TicketBundle\Entity\Incidence $incidence) {
-        $this->incidences[] = $incidence;
-    }
-
-    /**
-     * Get incidences
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getIncidences() {
-        return $this->incidences;
     }
 
     /**

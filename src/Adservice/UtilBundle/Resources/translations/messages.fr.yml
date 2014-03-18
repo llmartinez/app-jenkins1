@@ -34,29 +34,19 @@ workshop:  Atelier
 ticket:    Billet
 car:       Voiture
 post:      Message
-incidence: Incidence
 
 
 #TICKET
-ticket.history.title:     Histoire Billets
-ticket.opt.all:           Voir tous les billets
-ticket.opt.all_open:      Voir tous les billets ouverts
-ticket.opt.all_closed:    Voir tous les billets fermés
-ticket.opt.pending :      Billets en attente
-ticket.opt.assigned :     Billets attribués
-ticket.opt.answered :     Billets répondu
-ticket.opt.opened : 	  Billets ouverts
-ticket.opt.closed :  	  Billets fermés
-ticket.opt.owner:         Votre ticket
-ticket.opt.workshop:      Billets pour votre atelier
-
-#INCIDENCE
-incidence.history.title:  Histoire Incidence
-incidence.opt.all:        Voir tous les incidences
-incidence.opt.owner:      Votre incidences
-incidence.opt.workshop:   Incidences pour votre atelier
-incidence.list:           Liste des incidences
-
+ticket.history.title:      Histoire Billets
+ticket.opt.all:            Voir tous les billets
+ticket.opt.all_open:       Voir tous les billets ouverts
+ticket.opt.all_closed:     Voir tous les billets fermés
+ticket.opt.free :          Billets libre
+ticket.opt.assigned :      Billets attribués
+ticket.opt.answered :      Billets répondu
+ticket.opt.other_assessor: Billets d'un autre évaluateur
+ticket.opt.owner:          Votre ticket
+ticket.opt.workshop:       Billets pour votre atelier
 
 
 ############################

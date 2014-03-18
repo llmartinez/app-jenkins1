@@ -1,0 +1,21 @@
+<script>
+//Funciones para el autorellenado de los combos de campos de coches de los formularios
+
+    $(document).ready(function() {
+    });
+
+    //cambiar model en funcion de brand
+    $('#new_car_form_brand').change(function() {
+        var url= "{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}";
+        var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
+        var url_ajax = url.replace("PLACEHOLDER", id_brand);
+        fill_model(url_ajax);
+    });
+
+    //cambiar version en funcion de model
+    $('#new_car_form_model').change(function() {
+        var url_ajax = "{{ path("car_version") }}";
+        fill_version(url_ajax);
+    });
+// });
+</script>
