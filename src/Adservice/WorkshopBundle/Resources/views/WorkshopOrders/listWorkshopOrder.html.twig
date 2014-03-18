@@ -7,9 +7,13 @@
         <li class="active">Apply for new workshop</li>
     </ol>
 
-    <h1>Listado de solicitudes de {{ user.partner}} </h1>
+    {% if user_role == 'admin' %}
+        <h1>Solicitudes pendientes</h1>
+    {% elseif user_role == 'ad'%}
+        <h1>Listado de solicitudes de {{ user.partner}} </h1>
+    {% endif %}
     
-   {# <table class="table" style="width: 50%; margin-left: 450px;">
+    <table class="table" style="width: 50%; margin-left: 450px;">
         <tr>
             <td align="right">
                <div class="input-group">
@@ -20,7 +24,7 @@
                 </div>
             </td>
         </tr>
-    </table>#}
+    </table>
     
     {% if workshopsOrders is defined %}
         {% if workshopsOrders|length > 0  %}
@@ -35,6 +39,7 @@
                         <th>Region</th>
                         <th>Province</th>
                         <th>City</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -49,10 +54,19 @@
                             <td>{{ workshop.region }}</td>
                             <td>{{ workshop.province }}</td>
                             <td>{{ workshop.city }}</td>
+                            <td>
+                                {% if ((workshop.action == 'modify') or (workshop.action == 're_modify')) %}
+                                    (Modificación pendiente)
+                                {% elseif workshop.action == 'activate' %}
+                                    (Activación pendiente)
+                                {% elseif workshop.action == 'deactivate' %}
+                                    (Desactivación pendiente)
+                                {% endif %}
+                            </td>
                             {% if user_role == 'admin' %}
                                 <td>
-                                    <a id="regiter_ok_{{ workshop.id }}"  title="Aceptar el alta del taller"    href="{{ path("register_workshop", { 'id': workshop.id, 'action': 'OK'})  }}"><span class="glyphicon glyphicon-ok"></span></a>
-                                    <a id="regiter_ko_{{ workshop.id }}"  title="Rechazar y eliminar el taller" href="{{ path("register_workshop", { 'id': workshop.id, 'action': 'KO' }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="Aceptar la activación del taller"  href="{{ path("workshopOrder_change_status", { 'id': workshop.idWorkshop, 'status': 'activate'   })  }}"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="Rechazar la activación del taller" href="{{ path("workshopOrder_change_status", { 'id': workshop.idWorkshop, 'status': 'deactivate' }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
                             {% else %}
                                 <td>

@@ -99,8 +99,8 @@ class WorkshopOrderController extends Controller {
         
         if ($role[0]->getRole() == "ROLE_ADMIN"){
 //            //vera todas las solicitudes de todos los socios
-//            $user_role = 'admin';
-//            $workshops_pending_orders = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => 1));
+            $user_role = 'admin';
+            $workshopsOrders = $em->getRepository("WorkshopBundle:WorkshopOrder")->findAll();
             
         }elseif ($role[0]->getRole() == "ROLE_AD"){
             //solo sus solicitudes
@@ -112,6 +112,37 @@ class WorkshopOrderController extends Controller {
                                                                                                 'workshopsOrders'   => $workshopsOrders,
                                                                                                 'user'              => $user));
     }
+    
+    public function changeWorkshopStatusOrderAction($id, $status){
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
+        if (!$workshop)
+            throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $user->getRoles();
+        
+        if ($role[0]->getRole() == "ROLE_ADMIN"){
+            if ($status == 'activate'){
+                $workshop->setActive(true);
+            }elseif ($status == 'deactivate'){
+                $workshop->setActive(falses);
+            }
+            $this->saveWorkshopOrder($em, $workshop);   //seria saveWorkshop, pero para el caso nos da igual
+            return $this->redirect($this->generateUrl('workshopOrder_workshoplist'));
+            
+        }elseif ($role[0]->getRole() == "ROLE_AD"){
+            $workshopOrder = $this->workshop_to_workshopOrder($workshop);
+            $workshopOrder->setAction($status);
+            $this->saveWorkshopOrder($em, $workshopOrder);
+            return $this->redirect($this->generateUrl('user_index'));
+        }
+        
+        
+    }
+    
+    
     private function workshop_to_workshopOrder($workshop) {
         
         $workshopOrder = new WorkshopOrder();

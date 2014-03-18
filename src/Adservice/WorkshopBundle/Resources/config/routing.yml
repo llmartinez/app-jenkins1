@@ -47,7 +47,7 @@ workshopOrder_new:
 workshopOrder_edit:
     pattern: /editWorkshopOrder/{id}/{action}
     defaults: { _controller: WorkshopBundle:WorkshopOrder:editWorkshopOrder }
-#workshopOrder_delete:
+
 workshopOrder_list:
     pattern: /listWorkshopOrder
     defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
@@ -55,7 +55,11 @@ workshopOrder_list:
 workshopOrder_workshoplist:
     pattern: /workshoplistWorkshopOrder
     defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}    
-#workshopOrder_change_status:
+
+workshopOrder_change_status:
+    pattern: /changeWorkshopStatusOrder/{id}/{status}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeWorkshopStatusOrder}
+    
 
 
 
