@@ -19,12 +19,14 @@
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                    <span class="glyphicon glyphicon-ok-circle" title="Block to answer"></span></a>
+                    <span class="glyphicon glyphicon-link" title="Block to answer"></span></a>
             {% endif %}
         {% else %}
+            {# Ticket cerrado#}
+            <span class="glyphicon glyphicon-ok"     style="color:gray"  title="Ticket closed"></span>
             {# reabrir Ticket #}
-            <a class="glyphicon glyphicon-ok" style="color:gray"  title="Ticket closed"></a>
-            <a> btn_reopen </a>
+            <a href="{{ path('reopenTicket', { 'id_ticket': ticket.id }) }}" >
+                <span class="glyphicon glyphicon-repeat" title="Reopen Ticket"></span></a>
         {% endif %}
     {% endif %}
 
