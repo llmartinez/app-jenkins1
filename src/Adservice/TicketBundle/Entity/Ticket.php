@@ -249,7 +249,7 @@ class Ticket {
      *
      * @param \Adservice\TicketBundle\Entity\Subsystem $subsystem
      */
-    public function setSubsystem(\Adservice\TicketBundle\Entity\SubSystem $subsystem) {
+    public function setSubsystem(\Adservice\TicketBundle\Entity\Subsystem $subsystem) {
         $this->subsystem = $subsystem;
     }
 
