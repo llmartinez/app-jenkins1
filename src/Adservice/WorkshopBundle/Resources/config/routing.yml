@@ -17,6 +17,48 @@ workshop_new:
     pattern: /new
     defaults: { _controller: WorkshopBundle:Default:newWorkshop }
 
+###################################
+#   APDO. RUTAS WORKSHOPORDER     #
+###################################
+#new_workshop_order:
+#    pattern: /newWorkshopOrder
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:newWorkshopOrder }
+#
+#active_workshop_order:
+#    pattern: /activeWorkshopOrder
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:activeWorkshopOrder }
+#    
+#order_list_workshop:
+#    pattern: /listWorkshopOrder
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
+#    
+#register_workshop:
+#    pattern: /registerWorkshopOrder/{id}/{action}
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:registerWorkshopOrder }
+#
+#change_status_workshop:
+#    pattern: /changeStatusWorkshopOrder/{id}/{action}
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeStatusWorkshopOrder }
+
+workshopOrder_new:
+    pattern: /newWorkshopOrder/{id}/{action}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:newWorkshopOrder }
+
+workshopOrder_edit:
+    pattern: /editWorkshopOrder/{id}/{action}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:editWorkshopOrder }
+#workshopOrder_delete:
+workshopOrder_list:
+    pattern: /listWorkshopOrder
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
+
+workshopOrder_workshoplist:
+    pattern: /workshoplistWorkshopOrder
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}    
+#workshopOrder_change_status:
+
+
+
 ##############################
 #       RUTAS AJAX           #
 ##############################

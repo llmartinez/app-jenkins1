@@ -1,21 +1,45 @@
 
 <form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label style="width: 100%;">Code</label>
-        <input type="text" id="w_idpartner" name="w_idpartner" class="form-control" style="width: 50%;" placeholder="partner">
-        <input type="text" id="w_id"        name="w_id"        class="form-control" style="width: 50%;" placeholder="workshop">
+        <label style="width: 100%;">Code <a id="lbl_code" style="color:red"></a></label>
+        <input type="text" id="w_idpartner" name="w_idpartner" class="btn50 floating form-control" style="width: 50%;" placeholder="partner">
+        <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="workshop">
         <label style="width: 100%;">Email / Tel</label>
-        <input type="text" id="w_email"     name="w_email"     class="form-control" style="width: 50%;" placeholder="e-mail">
-        <input type="text" id="w_tel"       name="w_tel"       class="form-control" style="width: 50%;" placeholder="tel">
-        <input type="submit" class="btn btn-primary" value="check">
+        <input type="text" id="w_email"     name="w_email"     class="form-control" placeholder="e-mail">
+        <input type="text" id="w_tel"       name="w_tel"       class="form-control" placeholder="tel">
+        <input type="submit" class="btn btn-primary" id="btn_check" value="check">
     </div>
 </form>
 
 <script>
-$( "#w_idpartner" ).on( "keydown", function( event ) {
 
-  if (event.which == 13) {
-  	alert('bien');
-  }
-});
+	$(document).ready(function() {
+		$( "#w_idpartner" ).focus();
+	});
+
+	$( "#w_idpartner" ).on( "keydown", function( event ) {
+
+		if (event.which == 13) {
+		  	event.preventDefault();
+		  	$( "#w_id" ).focus();
+		}
+	});
+
+	$( "#w_id" ).on( "keydown", function( event ) {
+
+	  	if (event.which == 13 && $( "#w_idpartner" ).val() == "") {
+	  		event.preventDefault();
+			$( "#w_idpartner" ).focus();
+			$( "#lbl_code" ).html("Insert partner code");
+	  	}
+	});
+
+	$( "#btn_check" ).click(function() {
+
+	  	if ($( "#w_id" ).val() != "" && $( "#w_idpartner" ).val() == "") {
+	  		event.preventDefault();
+			$( "#w_idpartner" ).focus();
+			$( "#lbl_code" ).html("Insert partner code");
+	  	}
+	});
 </script>

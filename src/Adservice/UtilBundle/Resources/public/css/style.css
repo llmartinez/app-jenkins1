@@ -54,6 +54,17 @@ html {
 /*
     Plantillas
 */
+.info {
+    width: 20%;
+    padding: 10px;
+    float: left;
+}
+
+.content {
+    width: 80%;
+    padding: 10px;
+    float: left;
+}
 .colIzq {
     width: 30%;
     padding: 10px;
@@ -69,6 +80,10 @@ html {
 .tblContainer {
     width: 100%;
     padding-left: 20px;
+}
+
+.padded {
+    padding: 5px;
 }
 
 .txtContainer {
@@ -277,6 +292,9 @@ html {
 .btn100 {
     width: 100%;
     margin-top: 15px;
+}
+.btn50 {
+    width: 50%;
 }
 
 /*

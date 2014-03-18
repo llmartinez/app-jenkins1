@@ -7,11 +7,13 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
-use Adservice\UserBundle\Form\UserAdminType;
-use Adservice\UserBundle\Form\UserAssessorType;
-use Adservice\UserBundle\Form\UserType;
+
+use Adservice\UserBundle\Form\UserAdminAssessorType;
+use Adservice\UserBundle\Form\UserPartnerType;
+use Adservice\UserBundle\Form\UserWorkshopType;
+
 use Adservice\UserBundle\Entity\User;
-//use Adservice\StatisticBundle\Entity\Statistic;
+use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
 
 class DefaultController extends Controller {
@@ -24,36 +26,18 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Obtener los datos del usuario logueado para verlos/modificarlos
-     * Si la petición es GET  --> mostrar el formulario
-     * Si la petición es POST --> save del formulario
+     * Obtener los datos del usuario logueado para verlos
      */
     public function profileAction() {
-
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
-        $original_password = $user->getPassword();
-        $form = $this->createForm(new UserType(), $user);
-
+        
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
-        $original_password = $form->getData()->getPassword();
-
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
-            if ($form->isValid())
-                $this->saveUser($em, $user, $original_password);
-            return $this->redirect($this->generateUrl('user_index'));
-        }
-
-
-        return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user,
-                    'form_name' => $form->getName(),
-                    'form' => $form->createView()
-        ));
+        
+        return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user));
     }
 
     public function selectNewUserAction() {
@@ -69,14 +53,13 @@ class DefaultController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-//        $logged_user = $this->get('security.context')->getToken()->getUser();
-//        $users = $em->getRepository("UserBundle:User")->findByPartner($logged_user->getPartner());
 
         $users = $em->getRepository("UserBundle:User")->findAll();
 
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
+        $users_role_ad = array();
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
@@ -84,12 +67,14 @@ class DefaultController extends Controller {
             if     ($role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
             elseif ($role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
             elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
         }
 
 
-        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin' => $users_role_admin,
-                                                                        'users_role_user' => $users_role_user,
-                                                                        'users_role_assessor' => $users_role_assessor
+        return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin'      => $users_role_admin,
+                                                                        'users_role_user'       => $users_role_user,
+                                                                        'users_role_assessor'   => $users_role_assessor,
+                                                                        'users_role_ad'         => $users_role_ad
                                                                        ));
     }
 
@@ -110,15 +95,19 @@ class DefaultController extends Controller {
         $user = $em->getRepository("UserBundle:User")->find($id);
         if (!$user)throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
+        //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
 
         $petition = $this->getRequest();
+        
+        //que tipo de usuario estamos editando (los formtype varian...)
         $role = $user->getRoles();
-        if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserType(), $user);
-
-//        $form = $this->createForm(new UserType(), $user);
+        if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminAssessorType(), $user);
+        elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserWorkshopType(), $user);
+        elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAdminAssessorType(), $user);
+        elseif ($role[0]->getRole() == "ROLE_AD")       $form = $this->createForm(new UserPartnerType(), $user);
+        
+        
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
@@ -172,21 +161,23 @@ class DefaultController extends Controller {
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminType(), $user);
-            $user_type = 'admin';
+            $form = $this->createForm(new UserAdminAssessorType(), $user);
         } elseif ($type == 'assessor') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAssessorType(), $user);
-            $user_type = 'assessor';
+            $form = $this->createForm(new UserAdminAssessorType(), $user);
         } elseif ($type == 'user') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserType(), $user);
-            $user_type = 'user';
+            $form = $this->createForm(new UserWorkshopType(), $user);
+        }elseif ($type == 'ad') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserPartnerType(), $user);
         }
-
+        
         $request = $this->getRequest();
+        
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -197,12 +188,13 @@ class DefaultController extends Controller {
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:Default:newUser.html.twig', array('user' => $user,
-                                                                           'user_type' => $user_type,
-                                                                           'form_name' => $form->getName(),
-                                                                           'form' => $form->createView()));
+        return $this->render('UserBundle:Default:newUser.html.twig', array('user'       => $user,
+                                                                           'user_type'  => $type,
+                                                                           'form_name'  => $form->getName(),
+                                                                           'form'       => $form->createView()));
     }
-
+    
+    
     /**
      * Hace el save de un usuario
      * Si $original_password == NULL indica que no se quiere modificar y se mantienen el que habia (viene del formulario y esta en blanco)

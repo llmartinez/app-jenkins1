@@ -1,18 +1,29 @@
 header.welcome: ADService España
 
-user.index.menu.admin_title:            MENU ADMIN
-user.index.menu.assessor_title:         MENU ASESOR
-user.index.menu.user_title:             MENU USUARIO
-user.index.menu.my_profile:             Mi Perfil
-user.index.menu.list_partners:          Listado de Socios ADService
-user.index.menu.list_users:             Listado de Usuarios ADService
-user.index.menu.list_popups:            Listado de Popups ADService
-user.index.menu.list_workshops:         Listado de Talleres ADService
-user.index.menu.list_tickets:        	Listado de Tickets AdService
-user.index.menu.list_statistics:        Listado de Estadísticas ADService
-user.index.menu.asign_user_to_ticket:	Asignar Tickets a Usuarios
-user.index.menu.new_ticket:				Crea un nuevo ticket
-user.index.menu.my_tickets:             Mis Tickets
+user.index.menu.admin_title:                    MENU ADMIN
+user.index.menu.assessor_title:                 MENU ASESOR
+user.index.menu.user_title:                     MENU USUARIO
+user.index.menu.ad_title:                       MENU AD
+user.index.menu.my_profile:                     Mi Perfil
+user.index.menu.list_partners:                  Listado de Socios ADService
+user.index.menu.list_users:                     Listado de Usuarios ADService
+user.index.menu.list_popups:                    Listado de Popups ADService
+user.index.menu.list_workshops:                 Listado de Talleres ADService
+user.index.menu.list_tickets:                   Listado de Tickets AdService
+user.index.menu.list_incidences:                Listado de Incidencias ADService
+user.index.menu.list_statistics:                Listado de Estadísticas ADService
+user.index.menu.create_incidence_admin:         Crear Incidencia como Admin
+user.index.menu.asign_user_to_ticket:           Asignar Tickets a Usuarios
+user.index.menu.new_ticket:                     Crea un nuevo ticket
+user.index.menu.my_tickets:                     Mis Tickets
+user.index.menu.my_incidences:                  Mis Incidencias
+user.index.menu.new_workshop_order:             Solicitar alta de taller
+user.index.menu.actvie_workshop_order:          Solicitar activación/desactivación de taller
+user.index.menu.order_list_workshop:            Ver el estado de mis solicitudes
+user.index.menu.view_register_workshop_order:   Ver las solicitudes de altas de talleres
+user.index.menu.view_actvie_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
+
+
 
 # COMUNES
 home:      Índice

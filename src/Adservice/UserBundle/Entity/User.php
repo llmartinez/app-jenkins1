@@ -7,11 +7,14 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+use Symfony\Component\Validator\ExecutionContext;
 use Adservice\UtilBundle\Entity\Country;
 use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
+
 //use Adservice\PartnerBundle\Entity\Partner;
+//@Assert\Callback(methods={"esDniValido"})
 
 /**
  * Adservice\UserBundle\Entity\User
@@ -182,12 +185,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $language;
 
-//    /**
-//     *
-//     * @var type
-//     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
-//     */
-//    private $partner;
+    /**
+     *
+     * @var type
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
+     */
+    private $partner;
 
     /**
      * @var datetime $created_at
@@ -410,7 +413,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function eraseCredentials() {
-
+        
     }
 
     public function getRoles() {
@@ -564,11 +567,32 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->modify_by;
     }
 
-//    public function getPartner() {
-//        return $this->partner;
-//    }
-//
-//    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
-//        $this->partner = $partner;
+    public function getPartner() {
+        return $this->partner;
+    }
+
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+        $this->partner = $partner;
+    }
+
+//    public function esDniValido(ExecutionContext $context) {
+//        $nombre_propiedad = $context->getPropertyPath() . '.dni';
+//        var_dump($nombre_propiedad);die;
+//        $dni = $this->getDni();
+//        // Comprobar que el formato sea correcto
+//        if (0 === preg_match("/\d{1,8}[a-z]/i", $dni)) {
+//            $context->setPropertyPath($nombre_propiedad);
+//            $context->addViolation('El DNI introducido no tiene el formato correcto (entre 1 y 8 números seguidos de una letra, sin guiones y sin dejar ningún espacio en blanco)',
+//                                   array(), 
+//                                   null);
+//            return;
+//        }
+//        // Comprobar que la letra cumple con el algoritmo
+//        $numero = substr($dni, 0, -1);
+//        $letra = strtoupper(substr($dni, -1));
+//        if ($letra != substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($numero, "XYZ", "012") % 23, 1)) {
+//            $context->setPropertyPath($nombre_propiedad);
+//            $context->addViolation('La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra', array(), null);
+//        }
 //    }
 }

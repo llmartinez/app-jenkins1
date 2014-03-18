@@ -2,34 +2,82 @@
 
 {% block body %}
 
-    <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">My Profile</li>
-    </ol>
+<ol class="breadcrumb">
+    <li><a href="{{ path('user_index') }}">Home</a></li>
+    <li class="active">My Profile</li>
+</ol>
 
-    <h1>Perfil de {{ app.user }}</h1>
+<h1>Perfil de {{ app.user }}</h1>
 
-    <form action="{{ path("user_profile") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {#<form action="{{ path("user_profile") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_widget(form) }}
         <p>
             <button id ="btn_save" type="submit">Save</button>
         </p>
-    </form>
+    </form>#}
+<table>
+    <tbody>
+        <tr>
+            <td>Username</td><td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td>Name</td><td>{{ user.name }}</td>
+        </tr>
+        <tr>
+            <td>Surname</td><td>{{ user.surname }}</td>
+        </tr>
+        <tr>
+            <td>DNI</td><td>{{ user.dni }}</td>
+        </tr>
+        <tr>
+            <td>Phone Numbers</td><td>{{ user.phoneNumber1 }} / {{ user.phoneNumber2 }}</td>
+        </tr>
+        <tr>
+            <td>Movile Numbers</td><td>{{ user.movileNumber1 }} / {{ user.movileNumber2 }}</td>
+        </tr>
+        <tr>
+            <td>Fax</td><td>{{ user.fax }}</td>
+        </tr>
+        <tr>
+            <td>Email 1</td><td>{{ user.email1 }}</td>
+        </tr>
+        <tr>
+            <td>Email 2</td><td>{{ user.email2 }}</td>
+        </tr>
+        <tr>
+            <td>Active</td><td>{{ user.active }}</td>
+        </tr>
+        <tr>
+            <td>Region</td><td>{{ user.region }}</td>
+        </tr>
+        <tr>
+            <td>Province</td><td>{{ user.province }}</td>
+        </tr>
+        <tr>
+            <td>Country</td><td>{{ user.country }}</td>
+        </tr>
+        <tr>
+            <td>Workshop</td><td>{{ user.workshop }}</td>
+        </tr>
+        
+    </tbody>
+</table>
+
 
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+<script src="{{ asset('bundles/user/js/user.js') }}"></script>
 
-    <script>
-        $(document).ready(function(){
-            //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').change(function (){
-                var url_ajax = "{{ path("user_provinces") }}";
-                populate_province(url_ajax);
-            });
+<script>
+    $(document).ready(function() {
+        //si clickamos el combobox de las regiones repoblamos la de las provincias
+        $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').change(function() {
+            var url_ajax = "{{ path("user_provinces") }}";
+            populate_province(url_ajax);
         });
-    </script>
+    });
+</script>
 {% endblock %}

@@ -434,7 +434,21 @@ class Ticket {
         $json = array('id'          => $this->getId(),
                       'description' => $this->getDescription(),
                       'workshop'    => $this->getWorkshop()->getName(),
-                      'date'        => $this->getCreatedAt()->format('d/m/Y'));
+                      'date'        => $this->getCreatedAt()->format('d/m/Y'),
+                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      );
+        return $json;
+    }
+    /**
+     * Parsea los camposa a formato json para el listado de subsystem
+     * @return Array
+     */
+    public function to_json_subsystem() {
+
+        $json = array('id'          => $this->getId(),
+                      'description' => $this->getDescription(),
+                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      );
         return $json;
     }
 

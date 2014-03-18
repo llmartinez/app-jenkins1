@@ -12,10 +12,10 @@ use Adservice\UtilBundle\Entity\Province;
 /**
  * Adservice\WorkshopBundle\Entity\Workshop
  *
- * @ORM\Table(name="workshop")
- * @ORM\Entity(repositoryClass="Adservice\WorkshopBundle\Entity\WorkshopRepository")
+ * @ORM\Table(name="workshopOrder")
+ * @ORM\Entity
  */
-class Workshop {
+class WorkshopOrder {
 
     /**
      * @var integer $id
@@ -25,6 +25,22 @@ class Workshop {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var string $id_workshop
+     *
+     * @ORM\Column(name="id_workshop", type="integer", length=255)
+     */
+    private $id_workshop;
+    
+    
+    /**
+     * @var string $action
+     *
+     * @ORM\Column(name="action", type="string", length=255)
+     */
+    private $action;
+    
 
     /**
      * @var string $name
@@ -215,14 +231,14 @@ class Workshop {
      */
     private $num_ad_client;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
-     * @ORM\JoinTable(name="workshop_diagnosismachine",
-     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
-     * )
-     */
-    private $diagnosis_machines;
+//    /**
+//     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
+//     * @ORM\JoinTable(name="workshop_diagnosismachine",
+//     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
+//     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
+//     * )
+//     */
+//    private $diagnosis_machines;
 
 //    /**
 //     *
@@ -251,6 +267,7 @@ class Workshop {
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
      */
     private $tickets;
+
 
     /**
      * @var datetime $created_at
@@ -526,7 +543,7 @@ class Workshop {
      *
      * @param string $partner
      */
-    public function setPartner(Partner $partner) {
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
         $this->partner = $partner;
     }
 
@@ -812,7 +829,7 @@ class Workshop {
         $this->diagnosis_machines[] = $diagnosis_machine;
     }
 
-    public function setDiagnosisMachines($diagnosis_machines) {
+    public function setDiagnosisMachine($diagnosis_machines) {
         $this->diagnosis_machines = $diagnosis_machines;
     }
 
@@ -868,6 +885,22 @@ class Workshop {
 //        $this->deactivate_pending = $deactivate_pending;
 //    }
 
+    public function getIdWorkshop() {
+        return $this->id_workshop;
+    }
 
+    public function setIdWorkshop($id_workshop) {
+        $this->id_workshop = $id_workshop;
+    }
 
+        
+    public function getAction() {
+        return $this->action;
+    }
+
+    public function setAction($action) {
+        $this->action = $action;
+    }
+    
+        
 }

@@ -15,4 +15,11 @@
         var url_ajax = "{{ path("ticket_system") }}";
         fill_subsystem(url_ajax);
     });
+
+    $("#new_ticket_form_subsystem").change(function() {
+        var url = "{{ path("tbl_system", {"subsystem": "PLACEHOLDER" }) }}";
+        var id_subsystem = $('#new_ticket_form_subsystem').val();
+        var url_ajax = url.replace("PLACEHOLDER", id_subsystem);
+        fill_tbl_subsystem(url_ajax);
+    });
 </script>

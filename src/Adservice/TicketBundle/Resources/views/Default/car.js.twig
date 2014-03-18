@@ -2,31 +2,7 @@
 //Funciones para el autorellenado de los combos de campos de coches de los formularios
 
     $(document).ready(function() {
-
-        // // Limpiamos el combo de version del formulario
-        // $('select[id=new_car_form_version]').empty();
-        // var opt_versions = "<option value=0>Select Version..</option>";
-        // $('form[id=contact]').find('select[id=new_car_form_version]').append(opt_versions);
-
-        // // Limpiamos el combo de brand del formulario
-        // $('select[id=idBrand]').empty();
-        //     var opt_brands = "<option value=0>Select Brand..</option>";
-        //     //Añadimos todos los options de brand
-        // {#    {% for brand in brands %}
-
-        //         opt_brands = opt_brands + '<option value="{{ brand.id }}" ';
-        //         {% if  ticket is defined
-        //            and ticket.car is not null
-        //            and ticket.car.version.model.brand == brand %}  opt_brands = opt_brands + 'selected="true"'; {% endif %}
-        //         opt_brands = opt_brands + '> {{ brand.name }} </option>';
-
-        //     {% endfor %}#}
-        // $('form[id=contact]').find('select[id=idBrand]').append(opt_brands);
     });
-
-    // {% for brand in brands %}
-    //     $('#new_car_form_brand').append("<option value={{ brand.id }}>{{ brand.name }}</option>");
-    // {% endfor %}
 
     //cambiar model en funcion de brand
     $('#new_car_form_brand').change(function() {

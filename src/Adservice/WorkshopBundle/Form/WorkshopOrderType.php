@@ -5,7 +5,7 @@ namespace Adservice\WorkshopBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class WorkshopType extends AbstractType
+class WorkshopOrderType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -23,25 +23,22 @@ class WorkshopType extends AbstractType
             ->add('contact')
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
-//            ->add('diagnosis_machines', 'text', array('required' => false))
-            ->add('observation_workshop', 'textarea', array('required' => false))
-            ->add('observation_assessor', 'textarea', array('required' => false))
-            ->add('observation_admin', 'textarea', array('required' => false))
+//            ->add('diagnosis_machines')
             ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('typology')
-            ->add('update_at')
-            ->add('lowdate_at')
-            ->add('endtest_at')
+//            ->add('update_at')
+//            ->add('lowdate_at')
+//            ->add('endtest_at')
             ->add('partner')
-            ->add('conflictive', 'checkbox', array('required' => false))
+//            ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')
             ->add('region')
+//            ->add('order')
         ;
     }
 
-    public function getName()
-    {
-        return 'adservice_workshopbundle_workshoptype';
+    public function getName(){
+        return 'WorkshopOrderType';
     }
 }

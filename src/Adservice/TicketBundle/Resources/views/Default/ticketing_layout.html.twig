@@ -4,13 +4,13 @@
 
     {% block breadcrumb %}{% endblock  %}
 
-<div class="colIzq">
+<div class="info">
 	{% block info %}{% endblock  %}
 </div>
 
 <!-- CONTENIDO PAGINA TICKETS -->
 
-<div class="colDer">
+<div class="content">
     {% block content %}{% endblock  %}
 </div>
 
@@ -22,4 +22,5 @@
     <script src="{{ asset('bundles/ticket/js/ticket.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
     {% block additionalJavascripts %}{% endblock %}
+
 {% endblock %}

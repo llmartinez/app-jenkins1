@@ -5,7 +5,7 @@ namespace Adservice\WorkshopBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\UserBundle\Entity\Typology
+ * Adservice\WorkshopBundle\Entity\Typology
  *
  * @ORM\Table(name="typology")
  * @ORM\Entity
