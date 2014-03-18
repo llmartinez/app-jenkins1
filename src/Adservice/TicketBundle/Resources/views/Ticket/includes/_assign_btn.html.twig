@@ -7,23 +7,23 @@
                 {% if ticket.blockedBy == app.security.getToken().getUser() %}
 
                     {# desbloquear Ticket #}
-                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}" title="Remove the bloqued status">
-                        <span class="glyphicon glyphicon-remove-circle" style="color:red"></span></a>
+                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}">
+                        <span class="glyphicon glyphicon-remove-circle"  title="Remove the bloqued status" style="color:red"></span></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
-                    <a><span class="glyphicon glyphicon-ban-circle"></span></a>
+                    <a><span class="glyphicon glyphicon-ban-circle" title="Ticket blocked"></span></a>
 
                 {% endif %}
             {% else %}
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                    <span class="glyphicon glyphicon-ok-circle"></span></a>
+                    <span class="glyphicon glyphicon-ok-circle" title="Block to answer"></span></a>
             {% endif %}
         {% else %}
             {# reabrir Ticket #}
-            <a class="glyphicon glyphicon-ok" style="color:gray"></a>
+            <a class="glyphicon glyphicon-ok" style="color:gray"  title="Ticket closed"></a>
             <a> btn_reopen </a>
         {% endif %}
     {% endif %}
@@ -32,7 +32,7 @@
     {% if ticket.posts | length <=1 %}
         {# puede borrarlo el usuario si el ticket no esta assignado aun #}
         {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
-            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="Delete ticket"></span></a>
         {% endif %}
     {% endif %}
 

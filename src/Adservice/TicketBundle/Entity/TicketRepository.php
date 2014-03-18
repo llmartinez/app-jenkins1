@@ -21,15 +21,6 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    // public function findAllAssigned ($user, $status, $bool)
-    // {
-    //     ($bool == 0) ? $assigned = $user->getId() : $assigned = null;
-
-    //     $tickets = $this->findBy(array('status' => $status->getId(),
-    //                                    'assigned_to' => $assigned));
-    //     return $tickets;
-    // }
-
 /**
  * Encuentra los tickets segun el estado ($status) y los filtros que quieran devolver ($return)
  * @param  Entity $user     El usuario logeado actualmente
@@ -88,27 +79,28 @@ class TicketRepository extends EntityRepository
             }
         }
 
-        //array con todos los tickets fitrados y ordenados (accesible, assigned, answered)
-        // if ($return == 'all') {
-        //     foreach ($accesible_tickets as $accesible) { $all_tickets[] = $accesible; }
-        //     foreach ($assigned_tickets as $assigned)   { $all_tickets[] = $assigned;  }
-        //     foreach ($answered_tickets as $answered)   { $all_tickets[] = $answered;  }
-        //     return $all_tickets;
-        // }
-        // else {
-            if ($return == 'free') {  return $free_tickets; } //array con los tickets pendientes de respuesta
+        if ($return == 'free') {  return $free_tickets; } //array con los tickets pendientes de respuesta
+        else {
+            if ($return == 'assigned') { return $assigned_tickets; } //array con los tickets asignados al assessor
             else {
-                if ($return == 'assigned') { return $assigned_tickets; } //array con los tickets asignados al assessor
+                if($return == 'answered') { return $answered_tickets; } //array con los tickets respondidos
                 else {
-                    if($return == 'answered') { return $answered_tickets; } //array con los tickets respondidos
-                    else {
-                        if($return == 'other_assessor') { return $other_assessor_tickets; } //array con los tickets asignados a otro assessor
-                    }
+                    if($return == 'other_assessor') { return $other_assessor_tickets; } //array con los tickets asignados a otro assessor
                 }
             }
-        // }
-    }
-
+         }
+         
+//        if     ($return == 'free')           return $free_tickets;  //array con los tickets pendientes de respuesta
+//        elseif ($return == 'assigned')       return $assigned_tickets;  //array con los tickets asignados al assessor
+//        elseif ($return == 'answered')       return $answered_tickets;  //array con los tickets respondidos
+//        elseif ($return == 'other_assessor') return $other_assessor_tickets;  //array con los tickets asignados a otro assessor
+                
+            
+         }
+         
+         
+         
+    
     public function findAllByOwner ($user, $status)
     {
         $tickets = $this->findBy(array('owner' => $user->getId(),
@@ -143,6 +135,39 @@ class TicketRepository extends EntityRepository
         {
             $where .= 'AND t.status = :status ';
             $params[] = array('status', $status->getId());
+        }
+
+        //Crea la consulta
+        $consulta = $em->createQuery($query.$joins.$where.'ORDER BY t.id ');
+
+        //hace un recorrido de $params para extraer los parametros de la consulta
+        foreach($params as $param){
+            $consulta->setParameter($param[0], $param[1]);
+        }
+
+        return $consulta->getResult();
+    }
+
+    public function findSimilar($status, $model=null, $subsystem=null)
+    {
+        $em = $this->getEntityManager();
+
+        $query    = 'SELECT t FROM TicketBundle:Ticket t ';
+        $joins    = ' ';
+        $where    = 'WHERE t.status = :status ';
+        $params[] = array('status', $status);
+
+        if ($model != null)
+        {
+            $joins  = 'JOIN t.car c ';
+            $where .= 'AND c.model = :model ';
+            $params[] = array('model', $model->getId());
+        }
+
+        if ($subsystem != null)
+        {
+            $where .= 'AND t.subsystem = :subsystem ';
+            $params[] = array('subsystem', $subsystem->getId());
         }
 
         //Crea la consulta
