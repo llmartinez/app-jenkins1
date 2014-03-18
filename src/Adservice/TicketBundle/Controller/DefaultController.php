@@ -3,6 +3,8 @@ namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Adservice\TicketBundle\Entity\Subsystem;
+use Adservice\CarBundle\Entity\Model;
 
 class DefaultController extends Controller
 {
@@ -57,15 +59,18 @@ class DefaultController extends Controller
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function tblSystemAction() {
+    public function tblSimilarAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
+        $id_model     = $petition->request->get('id_model');
         $id_subsystem = $petition->request->get('id_subsystem');
+        $status       = $em->getRepository('TicketBundle:Status')->findByName('closed');
 
-        $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+        if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
+        if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findBysubsystem($subsystem->getId());
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
 
         if(count($tickets) > 0) {
             foreach ($tickets as $ticket) {

@@ -413,11 +413,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function eraseCredentials() {
-        
+
     }
 
     public function getRoles() {
-        return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array 
+        return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array
     }
 
     public function __toString() {

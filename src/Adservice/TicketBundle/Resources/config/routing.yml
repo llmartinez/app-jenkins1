@@ -54,6 +54,9 @@ closeTicket:
     pattern:  /ticket/close/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:closeTicket }
 
+showTicketReadonly:
+    pattern:  /ticket/show_read/{id_ticket}
+    defaults: { _controller: TicketBundle:Ticket:showTicketReadonly }
 
 ################################
 #    GESTIÓN DE POSTS          #
@@ -75,6 +78,6 @@ ticket_system:
     pattern: /ticketSystem
     defaults: { _controller: TicketBundle:Default:ticketSystem }
 
-tbl_system:
-    pattern: /tblSystem
-    defaults: { _controller: TicketBundle:Default:tblSystem }
+tbl_similar:
+    pattern: /tblSimilar
+    defaults: { _controller: TicketBundle:Default:tblSimilar }

@@ -1,10 +1,5 @@
 
-{% if workshop.id         != "" %}
-	<legend>Workshop
-			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="Back"></span></a></a>
-	</legend>
-{% endif %}
-<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
+<legend>Workshop</legend>
 
 {# WORKSHOP #}
 <div class="form-group">
@@ -28,10 +23,4 @@
 {# PARTNER #}
 <div class="form-group">
 	{% if workshop.partner      != "" %} Partner: {{ workshop.partner      }} {% endif %}
-</div>
-
-<legend>Similar Tickets (subsystem)</legend>
-
-<div id="tbl_similar">
-	<p>Select Model or Subsystem for matching similar tickets..</p>
 </div>

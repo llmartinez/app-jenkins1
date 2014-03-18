@@ -430,12 +430,16 @@ class Ticket {
      * @return Array
      */
     public function to_json() {
+        $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();
 
-        $json = array('id'          => $this->getId(),
-                      'description' => $this->getDescription(),
-                      'workshop'    => $this->getWorkshop()->getName(),
+        if ($this->getOwner()->getRoles()[0] == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
+
+        $json = array('created'     => $created,
+                      'id'          => $this->getId(),
                       'date'        => $this->getCreatedAt()->format('d/m/Y'),
-                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      'car'         => $car,
+                      'workshop'    => $this->getWorkshop()->getName(),
+                      'description' => $this->getDescription(),
                       );
         return $json;
     }
@@ -444,10 +448,16 @@ class Ticket {
      * @return Array
      */
     public function to_json_subsystem() {
+/**/
+        if (strlen($this->getDescription()) > 20) { $desc = substr($this->getDescription(), 0, 20)."..."; }
+        else                                      { $desc = $this->getDescription(); }
+
+        $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();
+        if(strlen($car) > 15) { $car = substr($car, 0, 15)."..."; }
 
         $json = array('id'          => $this->getId(),
-                      'description' => $this->getDescription(),
-                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      'description' => $desc,
+                      'car'         => $car,
                       );
         return $json;
     }
