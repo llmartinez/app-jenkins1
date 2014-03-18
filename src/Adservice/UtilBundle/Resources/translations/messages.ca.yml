@@ -9,7 +9,6 @@ logout: Tancar la sessió
 index: Índex usuari
 newTicket : Nou ticket
 ticket: Tickets
-incidence: Incidències
 
 #TICKET
 ticket.history.title: Historial Tickets

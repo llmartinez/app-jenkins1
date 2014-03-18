@@ -225,6 +225,12 @@ class WorkshopOrder {
     private $conflictive;
 
     /**
+     * @var string $rejection_reason 
+     * @ORM\Column(name="rejection_reason", type="string", length=255, nullable=true)
+     */
+    private $rejection_reason;
+    
+    /**
      * @var int $num_ad_client
      *
      * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
@@ -268,12 +274,6 @@ class WorkshopOrder {
      */
     private $tickets;
 
-    /**
-     * @var integer $incidences
-     *
-     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Incidence", mappedBy="workshop")
-     */
-    private $incidences;
 
     /**
      * @var datetime $created_at
@@ -827,24 +827,6 @@ class WorkshopOrder {
     }
 
     /**
-     * Add incidences
-     *
-     * @param Adservice\TicketBundle\Entity\Incidence $incidences
-     */
-    public function addIncidence(\Adservice\TicketBundle\Entity\Incidence $incidence) {
-        $this->incidences[] = $incidence;
-    }
-
-    /**
-     * Get incidences
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getIncidences() {
-        return $this->incidences;
-    }
-
-    /**
      * Add user_roles
      *
      * @param Role $userRoles
@@ -926,5 +908,13 @@ class WorkshopOrder {
         $this->action = $action;
     }
     
-        
+    public function getRejectionReason() {
+        return $this->rejection_reason;
+    }
+
+    public function setRejectionReason($rejection_reason) {
+        $this->rejection_reason = $rejection_reason;
+    }
+
+
 }

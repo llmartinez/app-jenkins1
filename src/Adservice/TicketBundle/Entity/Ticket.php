@@ -23,18 +23,25 @@ class Ticket {
     private $id;
 
     /**
-     * @var integer $status
+     * @var string $owner
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Status")
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $status;
+    private $owner;
 
     /**
-     * @var integer $importance
+     * @var string $assigned_to
      *
-     * @ORM\Column(name="importance", type="integer")
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    // private $importance;
+    private $assigned_to;
+
+    /**
+     * @var string $blocked_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $blocked_by;
 
     /**
      * @var integer $workshop
@@ -44,18 +51,46 @@ class Ticket {
     private $workshop;
 
     /**
+     * @var integer $status
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Status")
+     */
+    private $status;
+
+    /**
+     * @var integer $importance
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
+     */
+    private $importance;
+
+    /**
+     * @var string $subsystem
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Subsystem")
+     */
+    private $subsystem;
+
+    /**
      * @var integer $car
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car")
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="ticket")
      */
     private $car;
 
     /**
-     * @var string $owner
+     * @var string $description
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     * @ORM\Column(name="description", type="string", length=255)
      */
-    private $owner;
+    private $description;
+
+    /**
+     * @var string $solution
+     *
+     * @ORM\Column(name="solution", type="string", length=255, nullable="true")
+     */
+    private $solution;
 
     /**
      * @var date $created_at
@@ -77,20 +112,6 @@ class Ticket {
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
     private $modified_by;
-
-    /**
-     * @var string $owner
-     *
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
-     */
-    private $assigned_to;
-
-    /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
 
     /**
      * @var string $posts
@@ -116,6 +137,78 @@ class Ticket {
     }
 
     /**
+     * Set owner
+     *
+     * @param \Adservice\UserBundle\Entity\User $owner
+     */
+    public function setOwner(\Adservice\UserBundle\Entity\User $owner) {
+        $this->owner = $owner;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return string
+     */
+    public function getOwner() {
+        return $this->owner;
+    }
+
+    /**
+     * Set assigned_to
+     *
+     * @param \Adservice\UserBundle\Entity\User $assigned_to
+     */
+    public function setAssignedTo(\Adservice\UserBundle\Entity\User $assigned_to = null) {
+        $this->assigned_to = $assigned_to;
+    }
+
+    /**
+     * Get assigned_to
+     *
+     * @return string
+     */
+    public function getAssignedTo() {
+        return $this->assigned_to;
+    }
+
+    /**
+     * Set blocked_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $blocked_by
+     */
+    public function setBlockedBy(\Adservice\UserBundle\Entity\User $blocked_by = null) {
+        $this->blocked_by = $blocked_by;
+    }
+
+    /**
+     * Get blocked_by
+     *
+     * @return string
+     */
+    public function getBlockedBy() {
+        return $this->blocked_by;
+    }
+
+    /**
+     * Set workshop
+     *
+     * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
+     */
+    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop) {
+        $this->workshop = $workshop;
+    }
+
+    /**
+     * Get workshop
+     *
+     * @return integer
+     */
+    public function getWorkshop() {
+        return $this->workshop;
+    }
+
+    /**
      * Set status
      *
      * @param \Adservice\TicketBundle\Entity\Status $status
@@ -136,37 +229,37 @@ class Ticket {
     /**
      * Set importance
      *
-     * @param integer $importance
+     * @param \Adservice\TicketBundle\Entity\Imoprtance $importance
      */
-    // public function setImportance($importance) {
-    //     $this->importance = $importance;
-    // }
+     public function setImportance($importance) {
+         $this->importance = $importance;
+     }
 
     /**
      * Get importance
      *
      * @return integer
      */
-    // public function getImportance() {
-    //     return $this->importance;
-    // }
+     public function getImportance() {
+         return $this->importance;
+     }
 
     /**
-     * Set workshop
+     * Set subsystem
      *
-     * @param \Adservice\WorkshopBundle\Entity\Workshop $workshop
+     * @param \Adservice\TicketBundle\Entity\Subsystem $subsystem
      */
-    public function setWorkshop(\Adservice\WorkshopBundle\Entity\Workshop $workshop) {
-        $this->workshop = $workshop;
+    public function setSubsystem(\Adservice\TicketBundle\Entity\SubSystem $subsystem) {
+        $this->subsystem = $subsystem;
     }
 
     /**
-     * Get workshop
+     * Get subsystem
      *
      * @return integer
      */
-    public function getWorkshop() {
-        return $this->workshop;
+    public function getSubsystem() {
+        return $this->subsystem;
     }
 
     /**
@@ -189,22 +282,41 @@ class Ticket {
     }
 
     /**
-     * Set owner
+     * Set description
      *
-     * @param \Adservice\UserBundle\Entity\User $owner
+     * @param string $description
      */
-    public function setOwner(\Adservice\UserBundle\Entity\User $owner) {
-        $this->owner = $owner;
+    public function setDescription($description) {
+        $this->description = $description;
     }
 
     /**
-     * Get owner
+     * Get description
      *
      * @return string
      */
-    public function getOwner() {
-        return $this->owner;
+    public function getDescription() {
+        return $this->description;
     }
+
+    /**
+     * Set solution
+     *
+     * @param string $solution
+     */
+    public function setSolution($solution) {
+        $this->solution = $solution;
+    }
+
+    /**
+     * Get solution
+     *
+     * @return string
+     */
+    public function getSolution() {
+        return $this->solution;
+    }
+
 
     /**
      * Set created_at
@@ -261,42 +373,6 @@ class Ticket {
     }
 
     /**
-     * Set assigned_to
-     *
-     * @param \Adservice\UserBundle\Entity\User $assigned_to
-     */
-    public function setAssignedTo(\Adservice\UserBundle\Entity\User $assigned_to = null) {
-        $this->assigned_to = $assigned_to;
-    }
-
-    /**
-     * Get assigned_to
-     *
-     * @return string
-     */
-    public function getAssignedTo() {
-        return $this->assigned_to;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     */
-    public function setTitle($title) {
-        $this->title = $title;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle() {
-        return $this->title;
-    }
-
-    /**
      * Add posts
      *
      * @param Post $posts
@@ -333,7 +409,7 @@ class Ticket {
     }
 
     public function __toString() {
-        return $this->title;
+        return $this->description;
     }
 
     public function __construct() {
@@ -343,7 +419,7 @@ class Ticket {
 //    public function jsonSerialize() {
 //        return [
 //            'id' => $this->getId(),
-//            'title' => $this->getTitle(),
+//            'description' => $this->getDescription(),
 //            'workshop' => $this->getWorkshop()->getName(),
 //            'date' => $this->getCreatedAt()->format('d/m/Y'),
 //        ];
@@ -355,10 +431,24 @@ class Ticket {
      */
     public function to_json() {
 
-        $json = array('id'      => $this->getId(),
-                      'title'   => $this->getTitle(),
-                      'workshop'=> $this->getWorkshop()->getName(),
-                      'date'    => $this->getCreatedAt()->format('d/m/Y'));
+        $json = array('id'          => $this->getId(),
+                      'description' => $this->getDescription(),
+                      'workshop'    => $this->getWorkshop()->getName(),
+                      'date'        => $this->getCreatedAt()->format('d/m/Y'),
+                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      );
+        return $json;
+    }
+    /**
+     * Parsea los camposa a formato json para el listado de subsystem
+     * @return Array
+     */
+    public function to_json_subsystem() {
+
+        $json = array('id'          => $this->getId(),
+                      'description' => $this->getDescription(),
+                      'car'         => $this->getCar()->getBrand()." ".$this->getCar()->getModel(),
+                      );
         return $json;
     }
 

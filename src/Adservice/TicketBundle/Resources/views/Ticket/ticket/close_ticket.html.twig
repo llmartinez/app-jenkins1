@@ -1,0 +1,19 @@
+
+    <legend> Ticket Information </legend>
+
+    <legend>Description</legend>
+        <p> {{ ticket.description }} </p>
+
+        {% if ticket.assignedTo != "" %}    <p><b>Assigned To:</b>{{ ticket.assignedTo }} </p>{% endif %}
+
+        {% include 'TicketBundle:Ticket:ticket/edit_ticket_info.html.twig' %}
+
+        <div class="col-xs-12 col-md-12 margined">
+            <legend>Solution</legend>
+            {{ form_widget(form.solution, { 'attr': {'class': 'form-control', 'placeholder': "Insert Solution"} }) }}
+            {{ form_rest(form) }}
+        </div>
+
+        <button class="btn btn-primary pull-right btn100" type="submit"> Submit </button>
+
+        {{ form_rest(form) }}

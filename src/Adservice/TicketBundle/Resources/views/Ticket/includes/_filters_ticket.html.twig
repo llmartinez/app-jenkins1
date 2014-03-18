@@ -1,0 +1,17 @@
+
+<legend>Actions</legend>
+	{# New Ticket #}
+        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"> New Ticket </a>
+
+    <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data">
+        <p>
+            <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
+
+            Search ticket by ID: <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='Insert ticket ID'>
+
+            <p> <input type='checkbox' id='flt_open'   name='flt_open'  > Open
+                <input type='checkbox' id='flt_closed' name='flt_closed'> Closed </p>
+
+            <input type="submit" class="btn btn-primary" id="btn_search" name="btn_search" value="search">
+        </p>
+    </form>

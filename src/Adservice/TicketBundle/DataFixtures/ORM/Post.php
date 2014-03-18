@@ -8,19 +8,19 @@ use Adservice\TicketBundle\Entity\Post;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Posts extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 42; }
-    
+
     public function load(ObjectManager $manager) {
         $numT = Data::getNumTickets();
-        
+
         for($i=1;$i<=$numT;$i++)
         {
             $numP = rand(1, Data::getNumPosts());
             for($j=1;$j<=$numP;$j++)
-            {   
+            {
                 $entidad = new Post();
-                $entidad->setTicket     ($this->getReference(Data::getTicketTitle($i)));
+                $entidad->setTicket     ($this->getReference(Data::getTicketDescription($i)));
                 $entidad->setOwner      ($this->getReference(Data::getPostOwner($entidad)));
                 if($entidad->getTicket()->getAssignedTo() != null) {
                     $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
@@ -37,7 +37,7 @@ class Posts extends AbstractFixture implements OrderedFixtureInterface {
         }
         $manager->flush();
     }
-    
+
 }
 
 ?>

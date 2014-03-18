@@ -11,9 +11,6 @@ class Statistic {
     private $num_tickets;
     private $num_open_tickets;
     private $num_closed_tickets;
-    private $num_incidences;
-    private $num_open_incidences;
-    private $num_closed_incidences;
     private $user_with_max_post;
     
         
@@ -34,18 +31,6 @@ class Statistic {
         return $this->num_closed_tickets;
     }
 
-    public function getNumIncidences() {
-        return $this->num_incidences;
-    }
-
-    public function getNumOpenIncidences() {
-        return $this->num_open_incidences;
-    }
-
-    public function getNumClosedIncidences() {
-        return $this->num_closed_incidences;
-    }
-
     public function setNumUsers($num_users) {
         $this->num_users = $num_users;
     }
@@ -60,18 +45,6 @@ class Statistic {
 
     public function setNumClosedTickets($num_closed_tickets) {
         $this->num_closed_tickets = $num_closed_tickets;
-    }
-
-    public function setNumIncidences($num_incidences) {
-        $this->num_incidences = $num_incidences;
-    }
-
-    public function setNumOpenIncidences($num_open_incidences) {
-        $this->num_open_incidences = $num_open_incidences;
-    }
-
-    public function setNumClosedIncidences($num_closed_incidences) {
-        $this->num_closed_incidences = $num_closed_incidences;
     }
     public function getUserWithMaxPost() {
         return $this->user_with_max_post;
@@ -109,16 +82,6 @@ class Statistic {
     }
     
     /**
-     * Devuelve el número de incidencias dentro de ADService
-     * @param EntityManager $em
-     * @return type
-     */
-    public function getIncidencesInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(i) FROM TicketBundle:Incidence i");
-        return $query->getSingleScalarResult();
-    }
-    
-    /**
      * Devuelve el número de tickets segun su $status
      * @param EntityManager $em
      * @param String $status 'closed' o 'open'
@@ -127,21 +90,6 @@ class Statistic {
     public function getNumTicketsByStatus($em, $status){
         $query = $em->createQuery("SELECT COUNT(t.id) FROM TicketBundle:Ticket t
                                    WHERE t.status = :status
-                                  ");
-        if ($status == 'open') $query->setParameter('status', 1);
-        if ($status == 'close') $query->setParameter('status', 2);
-        return $query->getSingleScalarResult();
-    }
-    
-    /**
-     * Devuelve el número de incidencias segun su $status 
-     * @param EntityManager $em
-     * @param String $status 'closed' o 'open'
-     * @return Integer
-     */
-    public function getNumIncidencesByStatus($em, $status){
-        $query = $em->createQuery("SELECT COUNT(i.id) FROM TicketBundle:Incidence i
-                                   WHERE i.status = :status
                                   ");
         if ($status == 'open') $query->setParameter('status', 1);
         if ($status == 'close') $query->setParameter('status', 2);

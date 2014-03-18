@@ -32,7 +32,7 @@ class Country
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -52,13 +52,13 @@ class Country
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry()
     {
         return $this->country;
     }
-    
+
     public function __toString() {
         return $this->getCountry();
     }

@@ -398,11 +398,11 @@ class Data {
     }
 
     /**
-     * Generador aleatorio del titulo del ticket
+     * Generador aleatorio de la descripcion del ticket
      *
-     * @return string Title aleatorio generado para el ticket.
+     * @return string Description aleatorio generado para el ticket.
      */
-    public static function getTicketTitle($i)
+    public static function getTicketDescription($i)
     {
         return 'Test n.'.$i;
     }

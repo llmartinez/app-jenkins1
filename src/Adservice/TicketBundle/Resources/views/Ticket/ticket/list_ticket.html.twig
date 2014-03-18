@@ -1,0 +1,39 @@
+
+        <legend> Tickets from Workshop </legend>
+
+        {% if tickets | length > 0 %}
+
+            {# Si encuentra un ticket #}
+            <table class="table table-hover table-list-search">
+                <thead>
+                    <tr>
+                        <th> #           </th>
+                        <th> Date 		 </th>
+                        <th> Car 		 </th>
+                        <th> Assigned To </th>
+                        <th> Description </th>
+                        <th> Action      </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.id           }}</td>
+                        <td>{{ ticket.createdAt   | date ("d/m/Y")}}</td>
+                        <td>{{ ticket.car.brand }} {{ ticket.car.model }} {{ ticket.car.version }}</td>
+                        <td>{{ ticket.assignedTo   }}</td>
+                        <td>{{ ticket.description | length > 10 ?  ticket.description | slice(0, 10) ~ '...' : ticket.description }}</td>
+                        <td>
+                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ASSESSOR') %}
+                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">
+                                <span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% endif %}
+                          {% include 'TicketBundle:Ticket:includes/_assign_btn.html.twig' %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            {% if workshop.id != "" %}<legend> This workshop don't have any ticket </legend>{% endif %}
+        {% endif %}

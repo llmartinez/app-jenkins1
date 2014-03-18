@@ -19,9 +19,7 @@
                     <a id="popup_list"         href="{{ path("popup_list"            ) }}">{% trans %} user.index.menu.list_popups                  {% endtrans %}</a><br>
                     <a id="workshop_list"      href="{{ path("workshop_list"         ) }}">{% trans %} user.index.menu.list_workshops               {% endtrans %}</a><br>
                     <a id="ticket_list"        href="{{ path("listTicket"            ) }}">{% trans %} user.index.menu.list_tickets                 {% endtrans %}</a><br>
-                    <a id="listIncidence"      href="{{ path("listIncidence"         ) }}">{% trans %} user.index.menu.list_incidences              {% endtrans %}</a><br>
                     <a id="listStatistics"     href="{{ path("listStatistics"        ) }}">{% trans %} user.index.menu.list_statistics              {% endtrans %}</a><br>
-                    <a id="newIncidence"       href="{{ path("newIncidence"          ) }}">{% trans %} user.index.menu.create_incidence_admin       {% endtrans %}</a><br>
                     <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList"    ) }}">{% trans %} user.index.menu.asign_user_to_ticket         {% endtrans %}</a><br>
                     <a id="workshopOrdersList" href="{{ path("workshopOrder_list"    ) }}">{% trans %} Lista de ordenes pendientes                  {% endtrans %}</a><br>
 {#                    <a id="activate_workshop"  href="{{ path("active_workshop_order" ) }}">{% trans %} user.index.menu.view_actvie_workshop_order   {% endtrans %}</a><br>#}
@@ -38,9 +36,7 @@
             <tr>
                 <td>
                     <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile      {% endtrans %}</a><br>
-                    <a href="{{ path("newTicket"    ) }}">{% trans %} user.index.menu.new_ticket      {% endtrans %}</a><br>
                     <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.list_tickets    {% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %} user.index.menu.list_incidences {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -54,9 +50,7 @@
             <tr>
                 <td>    
                     <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
-                    <a href="{{ path("newTicket"    ) }}">{% trans %} user.index.menu.new_ticket    {% endtrans %}</a><br>
                     <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.my_tickets    {% endtrans %}</a><br>
-                    <a href="{{ path("listIncidence") }}">{% trans %} user.index.menu.my_incidences {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -69,9 +63,10 @@
             </tr>
             <tr>
                 <td>
-                    <a href="{{ path("user_profile"                         ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_workshoplist"           ) }}">{% trans %}Mis talleres                   {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_list"                   ) }}">{% trans %}Lista de solicitudes pendientes{% endtrans %}</a><br>
+                    <a href="{{ path("user_profile"                         ) }}">{% trans %}user.index.menu.my_profile         {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_new", {'id':'create', 'action': 'new'} ) }}">{% trans %}user.index.menu.new_workshop_order {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_workshoplist"           ) }}">{% trans %}Mis talleres                       {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_list"                   ) }}">{% trans %}Lista de solicitudes pendientes    {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -83,7 +78,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-{#                    <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>#}
                     <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
                 </div>
                 <div class="modal-body">

@@ -1,0 +1,53 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li class="active">List of Tickets</li>
+    </ol>
+
+{% endblock  %}
+
+{% block info %}
+
+	{% if is_granted('ROLE_ASSESSOR') %}
+
+        {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:workshop/show_workshop.html.twig'   %}
+        {% else %}                  {% include 'TicketBundle:Ticket:workshop/search_workshop.html.twig' %}  {% endif %}
+    {% else %}
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+    {% endif %}
+
+    {% if workshop.id != "" %}{% include 'TicketBundle:Ticket:includes/_filters_ticket.html.twig' %}{% endif %}
+
+{% endblock  %}
+
+{% block content %}
+
+    {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig'  %}
+    {% else %}                  {% include 'TicketBundle:Ticket:ticket/history_ticket.html.twig' %}  {% endif %}
+
+{% endblock  %}
+
+{% block additionalJavascripts %}
+    {% if workshop.id == "" %}
+
+        {# ruta para Ajax #}
+        <input id='route' type='hidden' value="{{ path("showTicket", { 'id_ticket': "PLACEHOLDER" }) }}">
+        <script>
+            $(document).ready(function() {
+
+                //carga la tabla de tickets
+                var url_ajax = "{{ path("fill_tickets") }}";
+                fill_tickets(url_ajax);
+
+                $('#slct_historyTickets').click(function() {
+                    var url_ajax = "{{ path("fill_tickets") }}";
+                    fill_tickets(url_ajax);
+                });
+            });
+        </script>
+    {% endif %}
+
+{% endblock %}

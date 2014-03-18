@@ -1,3 +1,0 @@
-SystemBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: SystemBundle:Default:index }

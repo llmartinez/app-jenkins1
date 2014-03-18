@@ -2,10 +2,6 @@ StatisticBundle:
     resource: "@StatisticBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/statistic
 
-SystemBundle:
-    resource: "@SystemBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/

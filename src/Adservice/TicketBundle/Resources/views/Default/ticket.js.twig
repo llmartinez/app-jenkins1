@@ -1,0 +1,25 @@
+<script>
+//Funciones para el autorellenado de los combos de campos de coches de los formularios
+
+    $(document).ready(function() {
+        // Limpiamos el combo de subsystem del formulario para cerrarlo
+        {% if ticket.subsystem.system is not defined %}
+        $('select[id=new_ticket_form_subsystem]').empty();
+        $('select[id=edit_ticket_form_subsystem]').empty();
+        $('select[id=close_ticket_form_subsystem]').empty();
+        {% endif %}
+    });
+
+    //cambiar model en funcion de brand
+    $('#id_system').change(function() {
+        var url_ajax = "{{ path("ticket_system") }}";
+        fill_subsystem(url_ajax);
+    });
+
+    $("#new_ticket_form_subsystem").change(function() {
+        var url = "{{ path("tbl_system", {"subsystem": "PLACEHOLDER" }) }}";
+        var id_subsystem = $('#new_ticket_form_subsystem').val();
+        var url_ajax = url.replace("PLACEHOLDER", id_subsystem);
+        fill_tbl_subsystem(url_ajax);
+    });
+</script>

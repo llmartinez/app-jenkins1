@@ -1,9 +1,8 @@
 <?php
-
 namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -34,4 +33,48 @@ class DefaultController extends Controller
         if($auto_flush) $em->flush();
         return true;
     }
+
+    /**
+     * Funcion Ajax que devuelve un listado de subsistemas filtrados a partir del sistema ($system)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function ticketSystemAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $id_system = $petition->request->get('id_system');
+
+        $system = $em->getRepository('TicketBundle:System')->find($id_system);
+
+        $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
+        foreach ($subsystems as $subsystem) {
+            $json[] = $subsystem->to_json();
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+
+    /**
+     * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function tblSystemAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $id_subsystem = $petition->request->get('id_subsystem');
+
+        $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBysubsystem($subsystem->getId());
+
+        if(count($tickets) > 0) {
+            foreach ($tickets as $ticket) {
+                $json[] = $ticket->to_json_subsystem();
+            }
+        }else{
+            $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+
 }

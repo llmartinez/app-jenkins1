@@ -18,7 +18,9 @@ class Cars  extends AbstractFixture implements OrderedFixtureInterface {
         for($i=1;$i<=$num;$i++)
         {
             $entidad = new Car();
-            $entidad->setVersion    ($this->getReference(Data::getVersion()));
+            $entidad->setBrand      ($this->getReference('AUDI'));
+            $entidad->setModel      ($this->getReference('A3'));
+            $entidad->setVersion    ($this->getReference('1.8_TURBO'));
             $entidad->setOwner      ($this->getReference(Data::getUser()));
             $entidad->setModifiedBy ($this->getReference(Data::getUser()));
             $entidad->setYear       (Data::getYear());

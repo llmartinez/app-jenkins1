@@ -8,12 +8,12 @@ use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Tickets extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 41; }
-    
+
     public function load(ObjectManager $manager) {
         $num = Data::getNumTickets();
-        
+
         for($i=1;$i<=$num;$i++)
         {
             $entidad = new Ticket();
@@ -29,11 +29,11 @@ class Tickets extends AbstractFixture implements OrderedFixtureInterface {
 //            $entidad->setImportance (1);
             $entidad->setCreatedAt  (new \DateTime());
             $entidad->setModifiedAt (new \DateTime());
-            $entidad->setTitle      ('Test n.'.$i);
+            $entidad->setDescription('Test n.'.$i);
             $manager->persist($entidad);
-            
-            $this->addReference($entidad->getTitle(), $entidad);
-            
+
+            $this->addReference($entidad->getDescription(), $entidad);
+
         }
         $manager->flush();
     }
