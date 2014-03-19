@@ -27,8 +27,8 @@ function fill_tickets(url_ajax, url_show) {
                     $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
                                                + "<td>" + created +" "+ elm.id + "</td>"
                                                + "<td>" + elm.date             + "</td>"
-                                               + "<td>" + elm.car              + "</td>"
                                                + "<td>" + elm.workshop         + "</td>"
+                                               + "<td>" + elm.car              + "</td>"
                                                + "<td>" + elm.description      + "</td>"
                                             );
                 }
