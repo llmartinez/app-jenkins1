@@ -12,8 +12,7 @@ class Statistic {
     private $num_open_tickets;
     private $num_closed_tickets;
     private $user_with_max_post;
-    
-        
+
 
     public function getNumUsers() {
         return $this->num_users;
@@ -53,14 +52,13 @@ class Statistic {
     public function setUserWithMaxPost($user_with_max_post) {
         $this->user_with_max_post = $user_with_max_post;
     }
-    
-    
+
     /********************************************************************************************************
      ********************************************************************************************************
      ****************************************  ZONA SQL *****************************************************
      ********************************************************************************************************
      ********************************************************************************************************/
-    
+
     /**
      * Devuelve el número de usuarios dentro de ADService (admins + users)
      * @param EntityManager $em
@@ -70,7 +68,7 @@ class Statistic {
         $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u");
         return $query->getSingleScalarResult();
     }
-    
+
     /**
      * Devuelve el número de tickets dentro de ADService
      * @param EntityManager $em
@@ -80,7 +78,7 @@ class Statistic {
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t");
         return $query->getSingleScalarResult();
     }
-    
+
     /**
      * Devuelve el número de tickets segun su $status
      * @param EntityManager $em
@@ -95,7 +93,7 @@ class Statistic {
         if ($status == 'close') $query->setParameter('status', 2);
         return $query->getSingleScalarResult();
     }
-    
+
     /**
      * Devuelve el usuario con mas post, y el numero de post que ha hecho
      * @param EntityManager $em

@@ -10,12 +10,43 @@
         {% endif %}
     });
 
+    function tickets_ajax() {
+        var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
+        var url_ajax = "{{ path("fill_tickets") }}";
+
+        fill_tickets(url_ajax, url_show);
+    }
+
+
+    $('#btn_anterior').click(function() {
+
+        if( $('#page').val() > 1) {
+            var ant_page = parseFloat($('#page').val()) - parseFloat(1);
+
+            $('#page').val(ant_page);
+
+            tickets_ajax();
+        }
+    });
+
+    //cambiar model en funcion de brand
+    $('#btn_siguiente').click(function() {
+
+        if( $('#page').val() < $('#totalpage').val() ) {
+            var next_page = parseFloat($('#page').val()) + parseFloat(1);
+
+            $('#page').val(next_page);
+
+            var url_ajax = "{{ path("ticket_system") }}";
+            tickets_ajax();
+        }
+    });
+
     //cambiar model en funcion de brand
     $('#id_system').change(function() {
         var url_ajax = "{{ path("ticket_system") }}";
         fill_subsystem(url_ajax);
     });
-
 
     //vacia tbl_similar
     $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });

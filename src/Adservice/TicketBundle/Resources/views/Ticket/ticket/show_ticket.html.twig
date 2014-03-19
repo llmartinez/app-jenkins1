@@ -18,6 +18,7 @@
 			{% elseif ticket.blockedBy == app.security.getToken().getUser() %}
 
 				{% include 'TicketBundle:Ticket:ticket/edit_ticket_info.html.twig'  %}
+				{{ form_rest(form) }}
 				{% include 'TicketBundle:Ticket:post/show_last_post.html.twig'   	%}
 			 	{% include 'TicketBundle:Ticket:post/reply.html.twig'  				%}
 
