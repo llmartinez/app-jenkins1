@@ -443,7 +443,7 @@ class Ticket {
         else                                              { $workshop = $this->getWorkshop()->getName(); }
 
         //DESCRIPTION
-        if (strlen($this->getDescription()) > 40) { $desc = substr($this->getDescription(), 0, 40)."..."; }
+        if (strlen($this->getDescription()) > 35) { $desc = substr($this->getDescription(), 0, 35)."..."; }
         else                                      { $desc = $this->getDescription(); }
 
         $json = array('created'     => $created,

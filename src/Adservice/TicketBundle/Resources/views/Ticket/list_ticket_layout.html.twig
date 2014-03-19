@@ -27,7 +27,7 @@
 
     {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig'  %}
     {% else %}                  {% include 'TicketBundle:Ticket:ticket/history_ticket.html.twig' %}  {% endif %}
-
+    {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig'  %}
 {% endblock  %}
 
 {% block additionalJavascripts %}
