@@ -220,7 +220,7 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         //Define Forms
-        $form = $this->createForm(new EditTicketType(), $ticket);
+        if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
         $formP = $this->createForm(new PostType(), $post);
         $formD = $this->createForm(new DocumentType(), $document);
 
@@ -229,7 +229,7 @@ class TicketController extends Controller {
             //Define User
             $user = $security->getToken()->getUser();
             //Define Ticket
-            $form->bindRequest($request);
+            if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
 
             if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid())) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
@@ -272,11 +272,15 @@ class TicketController extends Controller {
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems, )));
         }
-        return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array( 'form'      => $form ->createView(),
-                                                                                        'formP'     => $formP->createView(),
-                                                                                        'formD'     => $formD->createView(),
-                                                                                        'ticket'    => $ticket,
-                                                                                        'systems'   => $systems, ));
+
+        $array = array( 'formP'     => $formP->createView(),
+                        'formD'     => $formD->createView(),
+                        'ticket'    => $ticket,
+                        'systems'   => $systems, );
+
+        if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
+
+        return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -374,6 +378,7 @@ class TicketController extends Controller {
                                                                                         'systems'  => $systems,
                                                                                         'form'     => $form->createView(), ));
     }
+
     /**
      * Reabre el ticket
      * @param  Entity $id_ticket
