@@ -13,6 +13,11 @@ use Adservice\WorkshopBundle\Form\WorkshopRejectedReasonType;
 
 class WorkshopOrderController extends Controller {
     
+    /**
+     * Crea una solicitud (workshopOrder) del tipo "create", por defecto el taller que se creara estara inactivo...
+     * @return type
+     * @throws AccessDeniedException.
+     */
     public function newCreateWorkshopOrderAction(){
         
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
@@ -50,6 +55,11 @@ class WorkshopOrderController extends Controller {
         
     }
     
+    /**
+     * Lista todos los talleres, si somos un usuario con rol "ad" solo se mostraran los talleres que tenga relacionado...
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function listWorkshopsAction(){
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -63,6 +73,13 @@ class WorkshopOrderController extends Controller {
         
     }
     
+    /**
+     * Crea una solicitud (workshopOrder) del tipo "modify"
+     * @param integer $id del workshop que queremos modificar
+     * @return type
+     * @throws AccessDeniedException
+     * @throws type
+     */
     public function newModifyWorkshopOrderAction($id){
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -78,6 +95,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('id_workshop'  => $workshop->getId(),
                                                                                              'action'       => 'rejected'));
         
+        //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
         if (!$workshopOrder) $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         
         $form = $this->createForm(new WorkshopOrderModifyType(), $workshopOrder);
@@ -88,13 +106,12 @@ class WorkshopOrderController extends Controller {
                 
                 $user = $this->get('security.context')->getToken()->getUser();
                 
-//                $workshopOrder = $this->workshop_to_workshopOrder($workshop);
                 $workshopOrder->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
                 $workshopOrder->setCreatedBy($user);
                 $workshopOrder->setAction('modify');
                 $workshopOrder->setWantedAction('modify');
                 $this->saveWorkshopOrder($em, $workshopOrder);
-//
+
                 return $this->redirect($this->generateUrl('user_index'));
                 
             }
@@ -105,6 +122,15 @@ class WorkshopOrderController extends Controller {
         
     }
     
+    
+    /**
+     * Crea una solicitud (workshopOrder) del tipo "activate" o "deactivate" segun el $status
+     * @param integer $id del workshop que queremos modificar
+     * @param string $status (active | inactive)
+     * @return type
+     * @throws AccessDeniedException
+     * @throws type
+     */
     public function newChangeStatusWorkshopOrderAction($id, $status){
         
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
@@ -145,6 +171,11 @@ class WorkshopOrderController extends Controller {
         
     }
 
+    /**
+     * Lista todas las workshopsOrders
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function listWorkshopOrdersAction(){
         
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
@@ -154,6 +185,7 @@ class WorkshopOrderController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $user->getRoles();
 
+        //segun el rol puede ver sus talleres o todos los que haya
         if ($role[0]->getRole() == "ROLE_AD"){
             $workshopsOrders = $em->getRepository("WorkshopBundle:WorkshopOrder")->findBy(array('partner' => $user->getPartner()->getId()));
             $workshopsRejectedOrders = $em->getRepository("WorkshopBundle:WorkshopOrder")->findBy(array('partner'   => $user->getPartner()->getId(),
@@ -178,6 +210,13 @@ class WorkshopOrderController extends Controller {
                                                                                                 'user'                      => $user));
     }
         
+    /**
+     * Elimina una workshopOrder segun el $id
+     * @param integer $id del workshopOrder que queremos eliminar
+     * @return type
+     * @throws AccessDeniedException
+     * @throws type
+     */
     public function removeWorkshopOrderAction($id){
         
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
@@ -200,6 +239,13 @@ class WorkshopOrderController extends Controller {
         
     }
     
+    /**
+     * 
+     * @param integer $id del workshopOrder
+     * @param string $status (accepted)
+     * @return type
+     * @throws AccessDeniedException
+     */
     public function doActionWorkshopAction($id, $status){
         
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
@@ -239,6 +285,13 @@ class WorkshopOrderController extends Controller {
         
     }
     
+    /**
+     * Actualiza el campo "rejection_reason" de la workshopOrder i pone su estada en "rejected"
+     * @param type $id
+     * @return type
+     * @throws AccessDeniedException
+     * @throws type
+     */
     public function setReasonRejectionOrderAction($id){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
@@ -284,9 +337,6 @@ class WorkshopOrderController extends Controller {
         return $this->render('WorkshopBundle:WorkshopOrders:rejectedWorkshopOrder.html.twig', array('workshopOrder' => $workshopOrder,
                                                                                                     'form_name'     => $form->getName(),
                                                                                                     'form'          => $form->createView()));
-        
-        
-        
     }
             
     /**
@@ -323,6 +373,12 @@ class WorkshopOrderController extends Controller {
         return $workshopOrder;
     }
     
+    /**
+     * Hace el mapeo entre workshopOrder y workshop
+     * @param Workshop $workshop
+     * @param type $workshopOrder
+     * @return \Adservice\WorkshopBundle\Entity\WorkshopOrder
+     */
     private function workshopOrder_to_workshop($workshop, $workshopOrder){
         
 //        $workshop->setIdWorkshop($workshopOrder->getId());
