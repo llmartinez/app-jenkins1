@@ -1,0 +1,47 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('ticketWorkshopList') }}">List of Workshops</a></li>
+      <li class="active">Tickets form Workshop</li>
+    </ol>
+
+
+    {% if workshop.tickets|length > 0  %}
+
+            <table class="table table-hover" style="width: 80%; margin-left: 10%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ticket description</th>
+                        {#<th>Importance</th>#}
+                        <th>Owner</th>
+                        <th>Assigned</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in workshop.tickets %}
+                         <tr>
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.description }} </td>
+                            {#<td>{{ ticket.importance}}</td>#}
+                            <td>{{ ticket.owner }}</td>
+                            <td>{{ ticket.assignedTo }}</td>
+                            <td>
+                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"><span class="glyphicon glyphicon-search" title="Show ticket"></span></a>
+                                <a href="{{ path('assignTicket', {'id_ticket':ticket.id})}}"   ><span class="glyphicon glyphicon-user" title="Asignar Ticket"></span></a>
+                                <a href="#" title="Eliminar Ticket"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+    {% else %}
+        No hay tickets!!
+    {% endif %}
+
+{% endblock %}

@@ -249,7 +249,7 @@ class Ticket {
      *
      * @param \Adservice\TicketBundle\Entity\Subsystem $subsystem
      */
-    public function setSubsystem(\Adservice\TicketBundle\Entity\SubSystem $subsystem) {
+    public function setSubsystem(\Adservice\TicketBundle\Entity\Subsystem $subsystem) {
         $this->subsystem = $subsystem;
     }
 
@@ -430,16 +430,28 @@ class Ticket {
      * @return Array
      */
     public function to_json() {
-        $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();
 
+        // CREATED
         if ($this->getOwner()->getRoles()[0] == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
+
+        //CAR
+        $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();
+        if(strlen($car) > 15) { $car = substr($car, 0, 15)."..."; }
+
+        //WORKSHOP
+        if (strlen($this->getWorkshop()->getName()) > 15) { $workshop = substr($this->getWorkshop()->getName(), 0, 15)."..."; }
+        else                                              { $workshop = $this->getWorkshop()->getName(); }
+
+        //DESCRIPTION
+        if (strlen($this->getDescription()) > 35) { $desc = substr($this->getDescription(), 0, 35)."..."; }
+        else                                      { $desc = $this->getDescription(); }
 
         $json = array('created'     => $created,
                       'id'          => $this->getId(),
-                      'date'        => $this->getCreatedAt()->format('d/m/Y'),
+                      'date'        => $this->getCreatedAt()->format('d/m/y'),
                       'car'         => $car,
-                      'workshop'    => $this->getWorkshop()->getName(),
-                      'description' => $this->getDescription(),
+                      'workshop'    => $workshop,
+                      'description' => $desc,
                       );
         return $json;
     }
@@ -448,7 +460,7 @@ class Ticket {
      * @return Array
      */
     public function to_json_subsystem() {
-/**/
+
         if (strlen($this->getDescription()) > 20) { $desc = substr($this->getDescription(), 0, 20)."..."; }
         else                                      { $desc = $this->getDescription(); }
 

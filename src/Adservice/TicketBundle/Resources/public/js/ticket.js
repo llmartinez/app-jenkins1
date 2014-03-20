@@ -4,7 +4,8 @@
  */
 function fill_tickets(url_ajax, url_show) {
 
-    var option = $('select[id=slct_historyTickets]').val();
+    var option   = $('select[id=slct_historyTickets]').val();
+    var new_page = $('#page').val();
 
     $.ajax({
         type: "POST",
@@ -15,22 +16,41 @@ function fill_tickets(url_ajax, url_show) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#ticketBody').empty();
 
+            //PAGINACION
+            var total = data.length;
+            var cont  = 1;
+            var limit = 10;
+            var num_pag = Math.ceil(total/limit);
+            if(new_page != ""){ page = new_page } else{ page = 1 };
+
             $.each(data, function(idx, elm) {
 
                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
                 else{
-                    url = url_show.replace("PLACEHOLDER", elm.id);
 
-                    if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
-                    else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
+                    var lim_actual = limit*page;
+                    var num_actual = lim_actual-limit;
 
-                    $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
-                                               + "<td>" + created +" "+ elm.id + "</td>"
-                                               + "<td>" + elm.date             + "</td>"
-                                               + "<td>" + elm.car              + "</td>"
-                                               + "<td>" + elm.workshop         + "</td>"
-                                               + "<td>" + elm.description      + "</td>"
-                                            );
+                    if (cont > num_actual && cont <= lim_actual ) {
+
+                        url = url_show.replace("PLACEHOLDER", elm.id);
+
+                        if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
+                        else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
+
+                        $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
+                                                   + "<td>" + created +" "+ elm.id + "</td>"
+                                                   + "<td>" + elm.date             + "</td>"
+                                                   + "<td>" + elm.workshop         + "</td>"
+                                                   + "<td>" + elm.car              + "</td>"
+                                                   + "<td>" + elm.description      + "</td>"
+                                                );
+                    }
+                    cont++;
+                }
+
+                if (!elm.error){
+                    $('#totalpage').val(num_pag);
                 }
             });
 
@@ -40,6 +60,7 @@ function fill_tickets(url_ajax, url_show) {
         }
     });
 }
+
 
 /**
  * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar

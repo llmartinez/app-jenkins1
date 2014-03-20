@@ -15,13 +15,13 @@ class DefaultController extends Controller {
 
 
         $statistic = new Statistic();
-        
+
         $statistic->setNumUsers($statistic->getNumUsersInAdservice($em));
         $statistic->setNumTickets($statistic->getTicketsInAdservice($em));
         $statistic->setNumOpenTickets($statistic->getNumTicketsByStatus($em, 'open'));
         $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close'));
         $statistic->setUserWithMaxPost($statistic->getUserWithMaxNumPost($em));
-        
+
         return $this->render('StatisticBundle:Default:list.html.twig', array('statistic' => $statistic));
     }
 }
