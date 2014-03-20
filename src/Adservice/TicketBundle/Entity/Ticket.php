@@ -442,6 +442,9 @@ class Ticket {
         if (strlen($this->getWorkshop()->getName()) > 15) { $workshop = substr($this->getWorkshop()->getName(), 0, 15)."..."; }
         else                                              { $workshop = $this->getWorkshop()->getName(); }
 
+        //ASSIGNED TO
+        if ($this->getAssignedTo() != null) { $assginedTo = $this->getAssignedTo()->__toString(); } else { $assginedTo = ""; }
+
         //DESCRIPTION
         if (strlen($this->getDescription()) > 35) { $desc = substr($this->getDescription(), 0, 35)."..."; }
         else                                      { $desc = $this->getDescription(); }
@@ -451,6 +454,7 @@ class Ticket {
                       'date'        => $this->getCreatedAt()->format('d/m/y'),
                       'car'         => $car,
                       'workshop'    => $workshop,
+                      'assignedTo'  => $assginedTo,
                       'description' => $desc,
                       );
         return $json;

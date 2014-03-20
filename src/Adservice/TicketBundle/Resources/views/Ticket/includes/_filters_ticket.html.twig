@@ -3,7 +3,7 @@
 	{# New Ticket #}
         <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"> New Ticket </a>
 
-    <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data">
+    {# <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data"> #}
         <p>
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
@@ -12,8 +12,8 @@
             <p> <input type='checkbox' id='flt_open'   name='flt_open'  > Open
                 <input type='checkbox' id='flt_closed' name='flt_closed'> Closed </p>
 
-            <input type="submit" class="btn btn-primary" id="btn_search" name="btn_search" value="search">
+            <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">search</button>
         </p>
-    </form>
+    {# </form> #}
 
     <script type="text/javascript"> $('#newTicket').focus(); </script>

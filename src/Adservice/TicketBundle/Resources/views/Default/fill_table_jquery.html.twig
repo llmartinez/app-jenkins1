@@ -1,0 +1,42 @@
+<script>
+//Funciones para el autorellenado de los combos de campos de coches de los formularios
+
+    $(document).ready(function() {
+
+        {% if workshop is defined and workshop.id == "" %} tickets_ajax(); {% else %} tickets_from_workshop_ajax(); {% endif %}
+    });
+
+    {% if workshop is defined and workshop.id == "" %}
+
+            $('#slct_historyTickets').click(function() {
+                $('#page').val(1);
+                tickets_ajax();
+            });
+
+            $('#btn_search').click(function() {
+                $('#page').val(1);
+                tickets_ajax();
+            });
+
+            function tickets_ajax() {
+                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
+                var url_ajax = "{{ path("fill_tickets") }}";
+
+                fill_tickets(url_ajax, url_show);
+            }
+    {% else %}
+
+            $('#btn_search').click(function() {
+                $('#page').val(1);
+                tickets_from_workshop_ajax();
+            });
+
+            function tickets_from_workshop_ajax() {
+                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
+                var url_ajax = "{{ path("tickets_from_workshop") }}";
+
+                fill_tickets_from_workshop(url_ajax, url_show);
+            }
+    {% endif %}
+
+</script>

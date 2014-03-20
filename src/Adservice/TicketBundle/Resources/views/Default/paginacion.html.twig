@@ -1,0 +1,56 @@
+
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content">
+    	<button type="button" id="btn_anterior"  ><span class="glyphicon glyphicon-chevron-left"  title="Previous page"></span></button>
+
+	    <input  type="text"   id="page"          class="page_number" value="1"  disabled >/
+	    <input  type="text"   id="totalpage"     class="page_number" value="1"  disabled >
+
+    	<button type="button" id="btn_siguiente" ><span class="glyphicon glyphicon-chevron-right"  title="Next page"></span></button>
+    </div>
+    <script type="text/javascript">
+
+	    $('#btn_anterior').click(function() {
+
+	            if( $('#page').val() > 1) {
+	                var ant_page = parseFloat($('#page').val()) - parseFloat(1);
+
+	                $('#page').val(ant_page);
+
+					{% if workshop.id != "" %}
+			            tickets_from_workshop_ajax();
+			        {% else %}
+	                	tickets_ajax();
+	        		{% endif %}
+	            }
+	    });
+
+	    $('#btn_siguiente').click(function() {
+
+	            if( $('#page').val() < $('#totalpage').val() ) {
+	                var next_page = parseFloat($('#page').val()) + parseFloat(1);
+
+	                $('#page').val(next_page);
+
+					{% if workshop.id != "" %}
+			            tickets_from_workshop_ajax();
+			        {% else %}
+	                	tickets_ajax();
+	        		{% endif %}
+	            }
+	    });
+
+	    function tickets_ajax() {
+	        var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
+	        var url_ajax = "{{ path("fill_tickets") }}";
+
+	        fill_tickets(url_ajax, url_show);
+	    }
+
+	    function tickets_from_workshop_ajax() {
+                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
+                var url_ajax = "{{ path("tickets_from_workshop") }}";
+
+                fill_tickets_from_workshop(url_ajax, url_show);
+        }
+	</script>
