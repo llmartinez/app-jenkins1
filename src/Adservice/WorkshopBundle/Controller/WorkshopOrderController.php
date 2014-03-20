@@ -11,13 +11,6 @@ use Adservice\WorkshopBundle\Form\WorkshopOrderCreateType;
 use Adservice\WorkshopBundle\Form\WorkshopOrderModifyType;
 use Adservice\WorkshopBundle\Form\WorkshopRejectedReasonType;
 
-
-//use Adservice\WorkshopBundle\Entity\Typology;
-//use Adservice\WorkshopBundle\Form\WorkshopType;
-//use Adservice\WorkshopBundle\Form\WorkshopNewOrderType;
-//use Adservice\WorkshopBundle\Form\WorkshopOrderType;
-//use Adservice\WorkshopBundle\Form\WorkshopRejectedReasonType;
-
 class WorkshopOrderController extends Controller {
     
     public function newCreateWorkshopOrderAction(){
