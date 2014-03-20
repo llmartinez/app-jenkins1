@@ -449,6 +449,9 @@ class Ticket {
         if (strlen($this->getDescription()) > 35) { $desc = substr($this->getDescription(), 0, 35)."..."; }
         else                                      { $desc = $this->getDescription(); }
 
+        if ($this->getBlockedBy() == null) { $status =  $this->getStatus()->getName(); }
+        else                               { $status =  '<a id="locked_ticket" style="color:red" title="you have this ticket blocked for an answer" >Pending</a>'; }
+
         $json = array('created'     => $created,
                       'id'          => $this->getId(),
                       'date'        => $this->getCreatedAt()->format('d/m/y'),
@@ -456,6 +459,7 @@ class Ticket {
                       'workshop'    => $workshop,
                       'assignedTo'  => $assginedTo,
                       'description' => $desc,
+                      'status'      => $status,
                       );
         return $json;
     }

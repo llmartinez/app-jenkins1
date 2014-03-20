@@ -1,3 +1,10 @@
+
+/*Numero maximo de tickets que se mostraran en la tabla */
+var max_rows_page = 10;
+
+/*Numero maximo de paginas que se mostraran a los lados de la pagina actual de la paginacion */
+var max_pages_pagination = 2;
+
 /**
  * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
@@ -22,7 +29,7 @@ function fill_tickets(url_ajax, url_show) {
             //PAGINACION
             var total = data.length;
             var cont  = 1;
-            var limit = 10;
+            var limit = max_rows_page;
             var num_pag = Math.ceil(total/limit);
             if(new_page != ""){ page = new_page } else{ page = 1 };
 
@@ -52,9 +59,7 @@ function fill_tickets(url_ajax, url_show) {
                     cont++;
                 }
 
-                if (!elm.error){
-                    $('#totalpage').val(num_pag);
-                }
+                if (!elm.error){ paginator(num_pag); }
             });
 
         },
@@ -88,7 +93,7 @@ function fill_tickets_from_workshop(url_ajax, url_show) {
             //PAGINACION
             var total = data.length;
             var cont  = 1;
-            var limit = 10;
+            var limit = max_rows_page;
             var num_pag = Math.ceil(total/limit);
             if(new_page != ""){ page = new_page } else{ page = 1 };
 
@@ -113,14 +118,13 @@ function fill_tickets_from_workshop(url_ajax, url_show) {
                                                    + "<td>" + elm.car              + "</td>"
                                                    + "<td>" + elm.assignedTo       + "</td>"
                                                    + "<td>" + elm.description      + "</td>"
+                                                   + "<td>" + elm.status           + "</td>"
                                                 );
                     }
                     cont++;
                 }
 
-                if (!elm.error){
-                    $('#totalpage').val(num_pag);
-                }
+                if (!elm.error){ paginator(num_pag); }
             });
 
         },
@@ -156,6 +160,33 @@ function setCheckId(){
     else{ var filter_id = 'all'; }
 
     return filter_id;
+}
+
+/**
+ * paginacion de la lista de tickets
+ */
+function paginator(num_pag){
+        page = $('#page').val();
+
+        $('#prev_pages').empty();
+        $('#next_pages').empty();
+
+        for ( var i=1; i<=max_pages_pagination; i++) {
+
+            var prev = parseFloat($('#page').val()) - parseFloat(i);
+            if( prev > 0 ) { $('#prev_pages').prepend('<button class="page_number change_page" >'+ prev +'</button>'); }
+
+            var next = parseFloat($('#page').val()) + parseFloat(i);
+            if( next <= num_pag){ $('#next_pages').append('<button class="page_number change_page" >'+ next +'</button>'); }
+
+        }
+        // if (prev > 1)        { $('#prev_pages').prepend('<input  type="text" id="change_page" class="page_number" value="1"  disabled >...'); }
+        // if (next < num_pag) { $('#next_pages').append('<input  type="text" id="change_page" class="page_number" value="'+ num_pag +'"  disabled >'); }
+        $('.change_page').click(function() {
+           $('#page').val($(this).text());
+           tickets_ajax();
+        });
+        $('#totalpage').val(num_pag);
 }
 
 /**
