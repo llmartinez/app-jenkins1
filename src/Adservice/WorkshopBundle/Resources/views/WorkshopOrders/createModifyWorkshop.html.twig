@@ -1,0 +1,159 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">Home</a></li>
+        <li class="active">Apply for new workshop</li>
+    </ol>
+
+    <h1>Petición de modificación del taller: <b>{{ workshop.name }}</b></h1>
+    
+    <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>OldValue</th>
+                    <th>New Value</th>
+                </tr>
+            </thead>
+
+                <tr>
+                    <td>Name</td>
+                    <td>{{ workshop.name }}</td>
+                    <td>{{ form_widget(form.name) }}</td>
+                </tr>
+                <tr>
+                    <td>Cif</td>
+                    <td>{{ workshop.cif }}</td>
+                    <td>{{ form_widget(form.cif) }}</td>
+                </tr>
+                <tr>
+                    <td>Num AD Client</td>
+                    <td>{{ workshop.numAdClient }}</td>
+                    <td>{{ form_widget(form.num_ad_client) }}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>{{ workshop.address }}</td>
+                    <td>{{ form_widget(form.address) }}</td>
+                </tr>
+                <tr>
+                    <td>City</td>
+                    <td>{{ workshop.city }}</td>
+                    <td>{{ form_widget(form.city) }}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number1</td>
+                    <td>{{ workshop.phoneNumber1 }}</td>
+                    <td>{{ form_widget(form.phone_number_1) }}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number2</td>
+                    <td>{{ workshop.phoneNumber2 }}</td>
+                    <td>{{ form_widget(form.phone_number_2) }}</td>
+                </tr>
+                <tr>
+                    <td>Movile Number1</td>
+                    <td>{{ workshop.movilePhone1 }}</td>
+                    <td>{{ form_widget(form.movile_phone_1) }}</td>
+                </tr>
+                <tr>
+                    <td>Movile Number2</td>
+                    <td>{{ workshop.movilePhone2 }}</td>
+                    <td>{{ form_widget(form.movile_phone_2) }}</td>
+                </tr>
+                <tr>
+                    <td>Fax</td>
+                    <td>{{ workshop.fax }}</td>
+                    <td>{{ form_widget(form.fax) }}</td>
+                </tr>
+                <tr>
+                    <td>Contact</td>
+                    <td>{{ workshop.contact }}</td>
+                    <td>{{ form_widget(form.contact ) }}</td>
+                </tr>
+                <tr>
+                    <td>Email 1</td>
+                    <td>{{ workshop.email1}}</td>
+                    <td>{{ form_widget(form.email_1) }}</td>
+                </tr>
+                <tr>
+                    <td>Email 2</td>
+                    <td>{{ workshop.email2}}</td>
+                    <td>{{ form_widget(form.email_2) }}</td>
+                </tr>
+                <tr>
+                    <td>Typology</td>
+                    <td>{{ workshop.typology }}</td>
+                    <td>{{ form_widget(form.typology) }}</td>
+                </tr>
+                <tr>
+                    <td>Province</td>
+                    <td>{{ workshop.province }}</td>
+                    <td>{{ form_widget(form.province) }}</td>
+                </tr>
+                <tr>
+                    <td>Region</td>
+                    <td>{{ workshop.region }}</td>
+                    <td>{{ form_widget(form.region) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button class="btn btn-primary pull-right" type="submit">Submit</button></td>
+                </tr>
+            </tbody>
+            
+        </table>
+        
+        {{ form_rest(form) }}
+    </form>
+    
+{#    <form action="{{ path('workshopOrder_createNew') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >#}
+        
+        {#<div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6 column">
+                    <label>Workshop Name</label>
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control',
+                                                         'placeholder': 'Name'} }) }}
+                    
+                    <label>Contact</label>
+                    {{ form_widget(form.contact, { 'attr': {'class': 'form-control',
+                                                            'placeholder': 'Contact'} }) }}
+                    
+                    <label>Email</label>
+                    {{ form_widget(form.email_1, { 'attr': {'class': 'form-control',
+                                                           'placeholder': 'Email'} }) }}
+                    <label>Phone Number</label>
+                    {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control',
+                                                                   'placeholder': 'Phone Number'} }) }}
+                    <label>Movile Phone</label>
+                    {{ form_widget(form.movile_phone_1, { 'attr': {'class': 'form-control',
+                                                                   'placeholder': 'Movile Phone'} }) }}
+                </div>
+
+                <div class="col-md-6 column">
+                    
+                    <label>Region</label>
+                    {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }}
+                    
+                    <label>Province</label>
+                    {{ form_widget(form.province, { 'attr': {'class': 'form-control'} }) }}
+                    
+                    <label>City</label>
+                    {{ form_widget(form.city, { 'attr': {'class': 'form-control',
+                                                         'placeholder': 'City'} }) }}                    
+                    <label>Adress</label>
+                    {{ form_widget(form.address, { 'attr': {'class': 'form-control',
+                                                            'placeholder': 'Address'} }) }}
+                </div>
+
+                {{ form_rest(form) }}
+            </div>
+            <br/>
+            <p><button type="submit">Create</button></p>#}
+            
+{#        </div>#}
+{#    </form>#}
+{% endblock %}
