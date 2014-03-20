@@ -90,15 +90,23 @@ class TicketRepository extends EntityRepository
 
     public function findAllByOwner ($user, $status)
     {
-        $tickets = $this->findBy(array('owner' => $user->getId(),
-                                       'status' => $status->getId()));
+        if ( $status != 'all' ) { $array = array('owner'  => $user->getId(),
+                                                 'status' => $status->getId()); }
+
+        else                    { $array = array('owner'  => $user->getId()); }
+
+        $tickets = $this->findBy($array);
         return $tickets;
     }
 
     public function findAllByWorkshop ($user, $status)
     {
-        $tickets = $this->findBy(array('workshop' => $user->getWorkshop()->getId(),
-                                       'status' => $status->getId()));
+        if ( $status != 'all' ) { $array = array('workshop'  => $user->getWorkshop()->getId(),
+                                                 'status'    => $status->getId()); }
+
+        else                    { $array = array('workshop'  => $user->getWorkshop()->getId()); }
+
+        $tickets = $this->findBy($array);
         return $tickets;
     }
 

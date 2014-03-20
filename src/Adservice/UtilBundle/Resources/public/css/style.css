@@ -25,8 +25,7 @@ html {
 #MainContent {
     background-color:  white;
     padding: 20px;
-    color: #000;
-    overflow: auto;
+    min-height: 850px;
 }
 
 #MainFooter {
@@ -104,6 +103,28 @@ html {
 #btnfilters {
     width: 30%;
     float: left;
+}
+
+/*
+    PAGINACION
+ */
+.pagination_content {
+    text-align: center;
+    margin: auto;
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+    background-color: #fff;
+}
+.page_number {
+    width: 30px;
+    text-align: center;
+    border: 1px solid #cccccc;
+    border-top: none;
+    border-bottom: none;
+    background-color: #fff;
+}
+.page_selected {
+    background-color: #aaa;
 }
 
 /*

@@ -62,6 +62,7 @@ reopenTicket:
     pattern: /ticket/reopen/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
+
 ################################
 #    GESTIÓN DE POSTS          #
 ################################
@@ -77,6 +78,10 @@ showPost:
 fill_tickets:
     pattern:  /ticket/ajax
     defaults: { _controller: TicketBundle:Ticket:fill_tickets }
+
+tickets_from_workshop:
+    pattern: /ticket/tickets_from_workshop
+    defaults: { _controller: TicketBundle:Default:fill_ticketsFromWorkshop }
 
 ticket_system:
     pattern: /ticketSystem

@@ -4,7 +4,7 @@
         {% if tickets | length > 0 %}
 
             {# Si encuentra un ticket #}
-            <table class="table table-hover table-list-search">
+            <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
                 <thead>
                     <tr>
                         <th> #           </th>
@@ -12,11 +12,11 @@
                         <th> Car 		 </th>
                         <th> Assigned To </th>
                         <th> Description </th>
-                        <th> Action      </th>
+                        <th> Status      </th>
                     </tr>
                 </thead>
-                <tbody>
-                {% for ticket in tickets %}
+                <tbody id="ticketBody">
+                {# {% for ticket in tickets %}
                     <tr onclick="window.open('{{ path('showTicket', { 'id_ticket' : ticket.id }) }}', '_self')">
                         <td>{% if ticket.owner.roles[0] == 'ROLE_USER' %} <span class="glyphicon glyphicon-user"     title="Created by workshop" ></span>
                             {% else %}                                    <span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span> {% endif %}
@@ -33,9 +33,12 @@
                           {% include 'TicketBundle:Ticket:includes/_assign_btn.html.twig' %}
                         </td>
                     </tr>
-                {% endfor %}
+                {% endfor %} #}
                 </tbody>
             </table>
+
+        {% include 'TicketBundle:Default:paginacion.html.twig' %}
+
         {% else %}
             {% if workshop.id != "" %}<legend> This workshop don't have any ticket </legend>{% endif %}
         {% endif %}

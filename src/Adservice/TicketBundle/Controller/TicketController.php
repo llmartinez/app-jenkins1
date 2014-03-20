@@ -538,9 +538,24 @@ class TicketController extends Controller {
                     }
                 }
             }else{
-                //User
-                if ($option == 'owner'          ) { $tickets = $repoTicket->findAllByOwner($user, $open);    }
-                else{ if ($option == 'workshop' )   $tickets = $repoTicket->findAllByWorkshop($user, $open); }
+
+                $check_id = $petition->request->get('filter_id');
+
+                if($check_id == 'all'){
+
+                    $check_status = $petition->request->get('status');
+
+                    if     ($check_status == 'all'   ) { $status = 'all';   }
+                    elseif ($check_status == 'open'  ) { $status = $open;   }
+                    elseif ($check_status == 'closed') { $status = $closed; }
+
+                    //User
+                    if ($option == 'owner'          ) { $tickets = $repoTicket->findAllByOwner($user, $status);    }
+                    else{ if ($option == 'workshop' )   $tickets = $repoTicket->findAllByWorkshop($user, $status); }
+                }else{
+                    $array  = array('id' => $check_id);
+                    $tickets = $repoTicket->findBy($array);
+                }
             }
         }
         if(count($tickets) != 0){

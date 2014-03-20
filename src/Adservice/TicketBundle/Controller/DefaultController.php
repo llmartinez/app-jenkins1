@@ -82,4 +82,56 @@ class DefaultController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
+    /**
+     * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function fill_ticketsFromWorkshopAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $security = $this->get('security.context');
+
+        $id_workshop = $petition->request->get('id_workshop');
+        $repoTicket  = $em->getRepository('TicketBundle:Ticket');
+
+        if($security->isGranted('ROLE_ASSESSOR')){
+
+            $check_id = $petition->request->get('filter_id');
+
+            if($check_id == 'all'){
+
+                $check_status = $petition->request->get('status');
+
+                if     ($check_status == 'all'   ) {
+                                                    $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
+                                                    $array  = array('workshop' => $id_workshop);
+                                                   }
+                elseif ($check_status == 'open'  ) {
+                                                    $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
+                                                    $array  = array('workshop' => $id_workshop,
+                                                                    'status'   => $open->getId());
+                                                   }
+                elseif ($check_status == 'closed') {
+                                                    $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'  ));
+                                                    $array  = array('workshop' => $id_workshop,
+                                                                    'status'   => $closed->getId());
+                                                   }
+            }
+            else{
+                $array  = array('id' => $check_id);
+            }
+
+            $tickets = $repoTicket->findBy($array);
+        }
+
+        if(count($tickets) != 0){
+
+            foreach ($tickets as $ticket) {
+                $json[] = $ticket->to_json();
+            }
+        }else{
+            $json[] = array('error' => "You don't have any ticket..");
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
 }

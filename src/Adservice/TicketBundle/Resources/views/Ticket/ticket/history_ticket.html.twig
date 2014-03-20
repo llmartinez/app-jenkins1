@@ -42,11 +42,7 @@
                 </tbody>
             </table>
 
-            {# PAGINACION #}
-            <button type="button" id="btn_anterior"  >menos</button>
-            <input  type="text"   id="page"          value="1"  disabled >/
-            <input  type="text"   id="totalpage"     value="1"  disabled >
-            <button type="button" id="btn_siguiente" >mas</button>
+            {% include 'TicketBundle:Default:paginacion.html.twig' %}
 
         </div> <!-- /widget-content -->
     </div> <!-- /widget -->
