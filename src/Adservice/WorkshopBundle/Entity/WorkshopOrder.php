@@ -29,10 +29,15 @@ class WorkshopOrder {
     /**
      * @var string $id_workshop
      *
-     * @ORM\Column(name="id_workshop", type="integer", length=255)
+     * @ORM\Column(name="id_workshop", type="integer", length=255, nullable=true )
      */
     private $id_workshop;
     
+    /**
+     * @var string $$wanted_action
+     * @ORM\Column(name="wanted_action", type="string", length=255)
+     */
+    private $wanted_action;
     
     /**
      * @var string $action
@@ -915,6 +920,15 @@ class WorkshopOrder {
     public function setRejectionReason($rejection_reason) {
         $this->rejection_reason = $rejection_reason;
     }
+
+    public function getWantedAction() {
+        return $this->wanted_action;
+    }
+
+    public function setWantedAction($wanted_action) {
+        $this->wanted_action = $wanted_action;
+    }
+
 
 
 }

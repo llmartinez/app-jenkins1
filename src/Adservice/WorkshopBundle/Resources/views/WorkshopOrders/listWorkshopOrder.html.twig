@@ -7,28 +7,12 @@
         <li class="active">Apply for new workshop</li>
     </ol>
 
-    {% if user_role == 'admin' %}
-        <h1>Solicitudes pendientes</h1>
-    {% elseif user_role == 'ad'%}
-        <h1>Listado de solicitudes de {{ user.partner}} </h1>
-    {% endif %}
-    
-    <table class="table" style="width: 50%; margin-left: 450px;">
-        <tr>
-            <td align="right">
-               <div class="input-group">
-                    <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div>
-            </td>
-        </tr>
-    </table>
+           
     
     {% if workshopsOrders is defined %}
         {% if workshopsOrders|length > 0  %}
-            <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
+            <h1>Listado de solicitudes pendientes</h1> 
+            <table class="table table-hover" style="width: 60%; margin-left: 375px;">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -44,25 +28,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for workshop in workshopsOrders %}
+                    {% for workshopOrder in workshopsOrders %}
                         <tr>
-                            <td>{{ workshop.id }}</td>
-                            <td>{{ workshop.name }}</td>
-                            <td>{{ workshop.partner }}</td>
-                            <td>{{ workshop.address}}</td>
-                            <td>{{ workshop.phoneNumber1 }}</td>
-                            <td>{{ workshop.region }}</td>
-                            <td>{{ workshop.province }}</td>
-                            <td>{{ workshop.city }}</td>
+                            <td>{{ workshopOrder.id }}</td>
+                            <td>{{ workshopOrder.name }}</td>
+                            <td>{{ workshopOrder.partner }}</td>
+                            <td>{{ workshopOrder.address}}</td>
+                            <td>{{ workshopOrder.phoneNumber1 }}</td>
+                            <td>{{ workshopOrder.region }}</td>
+                            <td>{{ workshopOrder.province }}</td>
+                            <td>{{ workshopOrder.city }}</td>
                             <td>
-                                {% if ((workshop.action == 'modify') or (workshop.action == 're_modify')) %}
+                                {% if ((workshopOrder.action == 'modify') or (workshopOrder.action == 're_modify')) %}
                                     <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
-                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal" ></span></a>
-                                    <a title="{{ workshop.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{workshopOrder.id}}" ></span></a>
+                                    {% if workshopOrder.rejectionReason is not null %}
+                                        <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                    {% endif %}
                                     
                                 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="myModal_edit_{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -70,17 +56,17 @@
                                                     <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <b>Name:</b> {{ workshop.name }}<br/>
-                                                    <b>Num AD Client:</b> {{ workshop.numAdClient }}<br/>
-                                                    <b>Cif:</b> {{ workshop.cif }}<br/>
-                                                    <b>Address:</b> {{ workshop.address }}<br/>
-                                                    <b>City:</b> {{ workshop.city }}<br/>
-                                                    <b>Phone Number</b> {{ workshop.phoneNumber1 }} / {{ workshop.phoneNumber2 }}<br/>
-                                                    <b>Movile Number</b> {{ workshop.movilePhone1}} / {{ workshop.movilePhone1 }}<br/>
-                                                    <b>Fax</b> {{ workshop.fax }}<br/>
-                                                    <b>Email:</b> {{ workshop.email1 }} / {{ workshop.email2 }}<br/>
-                                                    <b>Region:</b> {{ workshop.region }}<br/>
-                                                    <b>Province:</b> {{ workshop.province }}<br/>
+                                                    <b>Name:</b> {{ workshopOrder.name }}<br/>
+                                                    <b>Num AD Client:</b> {{ workshopOrder.numAdClient }}<br/>
+                                                    <b>Cif:</b> {{ workshopOrder.cif }}<br/>
+                                                    <b>Address:</b> {{ workshopOrder.address }}<br/>
+                                                    <b>City:</b> {{ workshopOrder.city }}<br/>
+                                                    <b>Phone Number</b> {{ workshopOrder.phoneNumber1 }} / {{ workshopOrder.phoneNumber2 }}<br/>
+                                                    <b>Movile Number</b> {{ workshopOrder.movilePhone1}} / {{ workshopOrder.movilePhone1 }}<br/>
+                                                    <b>Fax</b> {{ workshopOrder.fax }}<br/>
+                                                    <b>Email:</b> {{ workshopOrder.email1 }} / {{ workshopOrder.email2 }}<br/>
+                                                    <b>Region:</b> {{ workshopOrder.region }}<br/>
+                                                    <b>Province:</b> {{ workshopOrder.province }}<br/>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -90,40 +76,181 @@
                                     </div><!-- /.modal -->
 
 
-                                {% elseif workshop.action == 'activate' %}
+                                {% elseif workshopOrder.action == 'activate' %}
                                     <span class="label label-danger"> {% trans %} Inactive {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
                                     <span class="label label-success"> {% trans %} Active {% endtrans %}</span>
-                                {% elseif workshop.action == 'deactivate' %}
+                                {% elseif workshopOrder.action == 'deactivate' %}
                                     <span class="label label-success"> {% trans %} Active {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
                                     <span class="label label-danger"> {% trans %} Inactive {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'create' %}
+                                    <span class="label label-info"> {% trans %} Create {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'rejected' %}
+                                    <span class="label label-danger"> {% trans %} Rejected {% endtrans %}</span>
                                 {% endif %}
                             </td>
-                            {% if user_role == 'admin' %}
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <td>
-                                    <a title="Aceptar"  href="{{ path("workshopOrder_change_status", { 'id': workshop.id, 'status': 'accepted'   })  }}"><span class="glyphicon glyphicon-ok"></span></a>
-                                    <a title="Rechazar" href="{{ path("workshopOrder_change_status", { 'id': workshop.id, 'status': 'rejected' }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="Aceptar"  href="{{ path("workshopOrder_changeStatusOrder", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="Rechazar" href="{{ path("workshopOrder_setReasonRejectionOrder", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
-                            {% else %}
+                            {% elseif is_granted('ROLE_AD') %}
                                 <td>
-                                    {% if workshop.action == 'activate' or workshop.action == 'deactivate' %}
-                                        <a title="Cancelar la activación / desactivación" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 'canceled'})}}"><span class="glyphicon glyphicon-remove"></span></a>
-                                    {% else %}
-                                        <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 're_modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                    {% endif %}
+{#                                    {% if workshop.action == 'activate' or workshop.action == 'deactivate' %}#}
+{#                                        <a title="Cancelar la activación / desactivación" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshop.idWorkshop}) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
+{#                                    {% else %}#}
+{#                                        <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 're_modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>#}
+{#                                    {% endif %}#}
+                                    <a title="Cancelar la solicitud" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
                             {% endif %}
                         </tr>
-                        
-                        
-                        
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            No hay talleres!!
+            No hay solicitudes pendientes!!
         {% endif %}
+            
+        <br />
+        
+        {% if workshopsRejectedOrders is defined %}
+            {% if workshopsRejectedOrders|length > 0  %}
+                
+                <h1>Listado de solicitudes rechazadas</h1>   
+                
+                <table class="table table-hover table-list-search" style="width: 60%; margin-left: 375px;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Workshop</th>
+                            <th>Partner</th>
+                            <th>Address</th>
+                            <th>Phone Number</th>
+                            <th>Region</th>
+                            <th>Province</th>
+                            <th>City</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for workshopOrder in workshopsRejectedOrders %}
+                            <tr>
+                                <td>{{ workshopOrder.id }}</td>
+                                <td>{{ workshopOrder.name }}</td>
+                                <td>{{ workshopOrder.partner }}</td>
+                                <td>{{ workshopOrder.address}}</td>
+                                <td>{{ workshopOrder.phoneNumber1 }}</td>
+                                <td>{{ workshopOrder.region }}</td>
+                                <td>{{ workshopOrder.province }}</td>
+                                <td>{{ workshopOrder.city }}</td>
+                                <td>
+                                    {% if ((workshopOrder.action == 'modify') or (workshopOrder.action == 're_modify')) %}
+                                        <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
+                                        <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_rejected_edit{{workshopOrder.id}}" ></span></a>
+                                        {#{% if workshopOrder.rejectionReason is not null %}
+                                            <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                        {% endif %}#}
+
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal_rejected_edit{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <b>Name:</b> {{ workshopOrder.name }}<br/>
+                                                        <b>Num AD Client:</b> {{ workshopOrder.numAdClient }}<br/>
+                                                        <b>Cif:</b> {{ workshopOrder.cif }}<br/>
+                                                        <b>Address:</b> {{ workshopOrder.address }}<br/>
+                                                        <b>City:</b> {{ workshopOrder.city }}<br/>
+                                                        <b>Phone Number</b> {{ workshopOrder.phoneNumber1 }} / {{ workshopOrder.phoneNumber2 }}<br/>
+                                                        <b>Movile Number</b> {{ workshopOrder.movilePhone1}} / {{ workshopOrder.movilePhone1 }}<br/>
+                                                        <b>Fax</b> {{ workshopOrder.fax }}<br/>
+                                                        <b>Email:</b> {{ workshopOrder.email1 }} / {{ workshopOrder.email2 }}<br/>
+                                                        <b>Region:</b> {{ workshopOrder.region }}<br/>
+                                                        <b>Province:</b> {{ workshopOrder.province }}<br/>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+
+
+                                    {% elseif workshopOrder.action == 'activate' %}
+                                        <span class="label label-danger"> {% trans %} Inactive {% endtrans %}</span>
+                                        <span class="glyphicon glyphicon-arrow-right"></span>
+                                        <span class="label label-success"> {% trans %} Active {% endtrans %}</span>
+                                    {% elseif workshopOrder.action == 'deactivate' %}
+                                        <span class="label label-success"> {% trans %} Active {% endtrans %}</span>
+                                        <span class="glyphicon glyphicon-arrow-right"></span>
+                                        <span class="label label-danger"> {% trans %} Inactive {% endtrans %}</span>
+                                    {% elseif workshopOrder.action == 'create' %}
+                                        <span class="label label-info"> {% trans %} Create {% endtrans %}</span>
+                                    {% elseif workshopOrder.action == 'rejected' %}
+                                        <span class="label label-danger"> {% trans %} Rejected {% endtrans %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{workshopOrder.id}}" >Ver motivo del rechazo</span></a>
+                                    <!-- Modal -->
+                                        <div class="modal fade" id="myModal_rejected_reason{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">Rejection Reason</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ workshopOrder.rejectionReason }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                </td>
+                                
+                                
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <td>
+                                        <a title="Cancelar la solicitud" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
+{#                                        <a title="Aceptar"  href="{{ path("workshopOrder_changeStatusOrder", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>#}
+{#                                        <a title="Rechazar" href="{{ path("workshopOrder_setReasonRejectionOrder", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
+{#                                        <a title="Cancelar la solicitud" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
+                                    </td>
+                                {% elseif is_granted('ROLE_AD') %}
+                                    <td>
+    {#                                    {% if workshop.action == 'activate' or workshop.action == 'deactivate' %}#}
+    {#                                        <a title="Cancelar la activación / desactivación" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshop.idWorkshop}) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
+    {#                                    {% else %}#}
+    {#                                        <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 're_modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>#}
+    {#                                    {% endif %}#}
+{#                                        <a title="Editar y enviar una nueva solicitud"          href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>#}
+                                        <a title="Modificar datos del taller"                   href="{{ path('workshopOrder_createModifyOrder',       {'id':workshopOrder.idworkshop                       }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a title="Cancelar la solicitud"                        href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                        <a title="Solicitar de nuevo la activación del taller"  href="{{ path('workshopOrder_createChangeStatusOrder', {'id':workshopOrder.idWorkshop, 'status':'active'    }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+            No hay solicitudes rechazadas pendientes!!
+        
+            {% endif %}
+        {% endif %}
+            
     {% endif %}
             
    
