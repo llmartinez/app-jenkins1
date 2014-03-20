@@ -40,25 +40,59 @@ workshop_new:
 #    pattern: /changeStatusWorkshopOrder/{id}/{action}
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeStatusWorkshopOrder }
 
-workshopOrder_new:
-    pattern: /newWorkshopOrder/{id}/{action}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:newWorkshopOrder }
 
-workshopOrder_edit:
-    pattern: /editWorkshopOrder/{id}/{action}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:editWorkshopOrder }
-
-workshopOrder_list:
-    pattern: /listWorkshopOrder
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
 
 workshopOrder_workshoplist:
-    pattern: /workshoplistWorkshopOrder
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}    
+    pattern: /listWorkshopsWorkshopOrder
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}
+    
+workshopOrder_createNewOrder:
+    pattern: /newCreateWorkshopOrder
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:newCreateWorkshopOrder }
 
-workshopOrder_change_status:
-    pattern: /changeWorkshopStatusOrder/{id}/{status}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeWorkshopStatusOrder}
+workshopOrder_createModifyOrder:
+    pattern: /newModifyWorkshopOrder/{id}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:newModifyWorkshopOrder }
+
+workshopOrder_createChangeStatusOrder:
+    pattern: /changeStatusWorkshopOrder/{id}/{status}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:newChangeStatusWorkshopOrder }
+
+workshopOrder_removeWorkshopOrder:
+    pattern: /removeWorkshopOrder/{id}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:removeWorkshopOrder }  
+
+workshopOrder_listWorkshopOrders:
+    pattern: /listWorkshopOrders
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrders } 
+
+workshopOrder_changeStatusOrder:
+    pattern: /listWorkshopOrders/{id}/{status}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:doActionWorkshop } 
+
+workshopOrder_setReasonRejectionOrder:
+    pattern: /setReasonRejectionOrder/{id}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:setReasonRejectionOrder } 
+    
+#workshopOrder_new:
+#    pattern: /newWorkshopOrder/{id}/{action}
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:newWorkshopOrder }
+#
+#workshopOrder_edit:
+#    pattern: /editWorkshopOrder/{id}/{action}
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:editWorkshopOrder }
+#
+#workshopOrder_list:
+#    pattern: /listWorkshopOrder
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
+#
+#workshopOrder_workshoplist:
+#    pattern: /workshoplistWorkshopOrder
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}    
+#
+#workshopOrder_change_status:
+#    pattern: /changeWorkshopStatusOrder/{id}/{status}
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeWorkshopStatusOrder}
     
 
 
