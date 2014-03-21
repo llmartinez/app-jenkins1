@@ -132,7 +132,7 @@ class Workshop {
 
     /**
      *
-     * @var string $observation_assessor 
+     * @var string $observation_assessor
      * @ORM\Column(name="observation_assessor", type="string", length=255, nullable=true)
      */
     private $observation_assessor;
@@ -209,7 +209,7 @@ class Workshop {
     private $conflictive;
 
     /**
-     * @var int $num_ad_client
+     * @var integer $num_ad_client
      *
      * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
      */
