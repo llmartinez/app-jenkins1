@@ -122,6 +122,7 @@ class DefaultController extends Controller
             }
 
             $tickets = $repoTicket->findBy($array);
+            // $tickets = $repoTicket->findBy($array, array('modified_at' => 'DESC'));
         }
 
         if(count($tickets) != 0){

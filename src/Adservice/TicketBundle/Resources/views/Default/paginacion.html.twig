@@ -17,10 +17,10 @@
     </div>
     <script type="text/javascript">
 
-		$('.change_page').click(function() {
-		   $('#page').val($(this).text());
-		   tickets_ajax();
-		});
+		// $('.change_page').click(function() {
+		//    $('#page').val($(this).text());
+		//    tickets_ajax();
+		// });
 
 	    $('#firstpage').click(function() {
 
@@ -98,7 +98,8 @@
 	    function tickets_from_workshop_ajax() {
                 var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
                 var url_ajax = "{{ path("tickets_from_workshop") }}";
+                var user = "{{ app.security.getToken().getUser().getId() }}";
 
-                fill_tickets_from_workshop(url_ajax, url_show);
+                fill_tickets_from_workshop(url_ajax, url_show, user);
         }
 	</script>

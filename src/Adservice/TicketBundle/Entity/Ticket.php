@@ -450,7 +450,8 @@ class Ticket {
         else                                      { $desc = $this->getDescription(); }
 
         if ($this->getBlockedBy() == null) { $status =  $this->getStatus()->getName(); }
-        else                               { $status =  '<a id="locked_ticket" style="color:red" title="you have this ticket blocked for an answer" >Pending</a>'; }
+        else                               { $status =  array('blocked_id' => $this->getBlockedBy()->getId(),
+                                                              'blocked_by' => $this->getBlockedBy()->getName()); }
 
         $json = array('created'     => $created,
                       'id'          => $this->getId(),

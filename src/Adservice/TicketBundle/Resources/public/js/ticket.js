@@ -73,7 +73,7 @@ function fill_tickets(url_ajax, url_show) {
  * Rellena (fill) el combo de los tickets segun el workshop seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function fill_tickets_from_workshop(url_ajax, url_show) {
+function fill_tickets_from_workshop(url_ajax, url_show, user) {
 
     var id_workshop = $('#id_workshop').val();
     var new_page = $('#page').val();
@@ -84,7 +84,7 @@ function fill_tickets_from_workshop(url_ajax, url_show) {
     $.ajax({
         type: "POST",
         url: url_ajax,
-        data: { id_workshop: id_workshop, filter_id: filter_id, status: status, url_show: url_show },
+        data: { id_workshop: id_workshop, filter_id: filter_id, status: status, url_show: url_show, user: user },
         dataType: "json",
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
@@ -112,13 +112,22 @@ function fill_tickets_from_workshop(url_ajax, url_show) {
                         if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
                         else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
 
+                        if (elm.status instanceof Object) {
+                            if (elm.status['blocked_id'] == user) {
+                                    status = '<a id="locked_ticket" style="color:red"  title="you have this ticket blocked for an answer" >Pending</a>'; }
+                            else {
+                                    status = '<a id="locked_ticket" style="color:gray" title="this ticket is blocked by '+ elm.status['blocked_by'] +'" >Blocked</a>'; }
+                        }
+                        else{ status = elm.status; }
+
+
                         $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
                                                    + "<td>" + created +" "+ elm.id + "</td>"
                                                    + "<td>" + elm.date             + "</td>"
                                                    + "<td>" + elm.car              + "</td>"
                                                    + "<td>" + elm.assignedTo       + "</td>"
                                                    + "<td>" + elm.description      + "</td>"
-                                                   + "<td>" + elm.status           + "</td>"
+                                                   + "<td>" + status               + "</td>"
                                                 );
                     }
                     cont++;
