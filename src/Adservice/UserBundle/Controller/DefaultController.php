@@ -22,6 +22,12 @@ class DefaultController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
+        
+//        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
+//        
+//        $session = $this->getRequest()->getSession();
+//        $session->set('id_logged_user', $id_logged_user);
+
         return $this->render('UserBundle:Default:index.html.twig');
     }
 

@@ -4,20 +4,28 @@ namespace Adservice\PartnerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\EventSubscriber;
+//use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 use Adservice\WorkshopBundle\Entity\Workshop;
+//use Symfony\Component\Security\Core\SecurityContextInterface;
+
+//use Symfony\Component\DependencyInjection\ContainerInterface;
+//use Symfony\Component\Security\Core\SecurityContextInterface;
+
+//use Adservice\UtilBundle\Listener\EntityUtilListener;
 
 /**
  * Adservice\PartnerBundle\Entity\Partner
- *
+ *git add
  * @ORM\Table(name="partner")
  * @ORM\Entity(repositoryClass="Adservice\PartnerBundle\Entity\PartnerRepository")
  */
-class Partner {
+class Partner {//implements EventSubscriber{
 
     /**
      * @var integer $id
@@ -26,6 +34,7 @@ class Partner {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+
     private $id;
 
     /**
@@ -141,10 +150,34 @@ class Partner {
      */
     private $modify_by;
 
+
     public function __construct() {
         $this->workshops = new ArrayCollection();
-        // $this->users = new ArrayCollection();
     }
+
+//    protected $securityContext;
+//    public function __construct(SecurityContextInterface $securityContext) {
+//        $this->securityContext = $securityContext;
+//        $this->container = $container;
+//        $this->workshops = new ArrayCollection();
+//    }
+    
+//    private $entityManager;
+//    private $user;
+
+//    public function setEntityManager(EntityManager $entityManager)
+//    {
+//        $this->entityManager = $entityManager;
+//    }
+//
+//    public function setUserFromSecurityContext(SecurityContext $securityContext)
+//    {
+//        # notice, there are a cases when `getToken()` returns null, so improve this
+//        $this->user = $securityContext->getToken()->getUser();
+//    }
+    
+    
+    
 
     /**
      * Get id
@@ -447,4 +480,21 @@ class Partner {
         return $this->users;
     }
 
+//    /**
+//     * @ORM\PrePersist
+//     */
+//    public function create_timestamps() {
+//        $this->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+////        $this->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+//    }
+//
+//    /**
+//     * @ORM\PreUpdate
+//     */
+//    public function update_timestamps() {
+////        $session = $this->getRequest()->getSession();
+//        $this->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+//        echo "update_timestamps";
+//        die;
+//    }
 }
