@@ -36,13 +36,12 @@ class DefaultController extends Controller {
     public function newWorkshopAction() {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        $petition = $this->getRequest();
-        $workshop  = new Workshop();
         $request = $this->getRequest();
+        $workshop  = new Workshop();
         $form = $this->createForm(new WorkshopType(), $workshop);
         $form->bindRequest($request);
         
-        if ($petition->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getEntityManager();
                 $workshop->setCreatedBy($this->get('security.context')->getToken()->getUser());
