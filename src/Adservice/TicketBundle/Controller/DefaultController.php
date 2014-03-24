@@ -15,7 +15,7 @@ class DefaultController extends Controller
      * @return Class
      */
     public static function newEntity($entity, $user){
-        $entity->setOwner($user);
+        $entity->setCreatedBy($user);
         $entity->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
         return $entity;
     }

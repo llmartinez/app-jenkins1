@@ -47,6 +47,7 @@ class DefaultController extends Controller {
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $popup->setCreatedBy($this->get('security.context')->getToken()->getUser());
             $this->savePopup($em, $popup);
 
             return $this->redirect($this->generateUrl('popup_list'));

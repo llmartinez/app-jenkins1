@@ -258,7 +258,7 @@ class TicketController extends Controller {
                         $posts = $ticket->getPosts();
                         $primer_assessor = 0;
                         foreach ($posts as $post) {
-                            if ($post->getOwner()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
+                            if ($post->getCreatedBy()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
                                 $primer_assessor = 1;
                             }
                         }
@@ -550,8 +550,8 @@ class TicketController extends Controller {
                     elseif ($check_status == 'closed') { $status = $closed; }
 
                     //User
-                    if ($option == 'owner'          ) { $tickets = $repoTicket->findAllByOwner($user, $status);    }
-                    else{ if ($option == 'workshop' )   $tickets = $repoTicket->findAllByWorkshop($user, $status); }
+                    if ($option == 'created_by'      ) { $tickets = $repoTicket->findAllByOwner($user, $status);    }
+                    else{ if ($option == 'workshop'  )   $tickets = $repoTicket->findAllByWorkshop($user, $status); }
                 }else{
                     $array  = array('id' => $check_id);
                     $tickets = $repoTicket->findBy($array);

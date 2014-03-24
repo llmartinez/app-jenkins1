@@ -188,6 +188,7 @@ class DefaultController extends Controller {
 
         if ($form->isValid()) {
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $user->setCreatedBy($this->get('security.context')->getToken()->getUser());
 //            $partner = $form->getData('partner');
             $this->saveUser($em, $user);
 

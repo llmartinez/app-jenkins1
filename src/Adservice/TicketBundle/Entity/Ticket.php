@@ -23,11 +23,11 @@ class Ticket {
     private $id;
 
     /**
-     * @var string $owner
+     * @var string $created_by
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $owner;
+    private $created_by;
 
     /**
      * @var string $assigned_to
@@ -137,21 +137,21 @@ class Ticket {
     }
 
     /**
-     * Set owner
+     * Set created_by
      *
-     * @param \Adservice\UserBundle\Entity\User $owner
+     * @param \Adservice\UserBundle\Entity\User $created_by
      */
-    public function setOwner(\Adservice\UserBundle\Entity\User $owner) {
-        $this->owner = $owner;
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by) {
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get owner
+     * Get created_by
      *
      * @return string
      */
-    public function getOwner() {
-        return $this->owner;
+    public function getCreatedBy() {
+        return $this->created_by;
     }
 
     /**
@@ -432,7 +432,7 @@ class Ticket {
     public function to_json() {
 
         // CREATED
-        if ($this->getOwner()->getRoles()[0] == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
+        if ($this->getCreatedBy()->getRoles()[0] == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
 
         //CAR
         $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();

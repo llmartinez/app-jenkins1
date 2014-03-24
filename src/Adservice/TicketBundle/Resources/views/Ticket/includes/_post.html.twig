@@ -1,14 +1,14 @@
 
 	{# DATOS POST #}
 	<legend
-		{% if post.owner == app.security.getToken().getUser() %}
+		{% if post.created_by == app.security.getToken().getUser() %}
 				 style="background: azure;"> <a style="color:black; text-decoration:none; padding-left:20px;">Tu</a>
         {% else %}
 	             class="legend">
-	             	{% if post.owner.roles[0] == 'ROLE_ADMIN' 		 %} Admin
-	                {% elseif post.owner.roles[0] == 'ROLE_ASSESSOR' %} Assessor
+	             	{% if post.created_by.roles[0] == 'ROLE_ADMIN' 		 %} Admin
+	                {% elseif post.created_by.roles[0] == 'ROLE_ASSESSOR' %} Assessor
 	                {% else %} 										    User 	{% endif %}
-																		{{ post.owner.name }}
+																		{{ post.created_by.name }}
         {% endif %}
         <a style="color:gray; float:right; text-decoration:none;"> {{ post.created_at | date("H:i (d/m/y) ") }} </a>
 	</legend>

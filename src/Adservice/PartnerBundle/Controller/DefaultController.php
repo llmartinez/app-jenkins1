@@ -45,6 +45,7 @@ class DefaultController extends Controller {
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $partner->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $partner->setCreatedBy($this->get('security.context')->getToken()->getUser());
             $this->savePartner($em, $partner);
 
             return $this->redirect($this->generateUrl('partner_list'));

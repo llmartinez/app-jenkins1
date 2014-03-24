@@ -49,7 +49,7 @@ class TicketRepository extends EntityRepository
 
             if (count($ticket->getPosts()) > 0) {
 
-                $last_post_owner_role_name = $posts[count($ticket->getPosts())-1]->getOwner()->getRoles()[0]->getName();
+                $last_post_owner_role_name = $posts[count($ticket->getPosts())-1]->getCreatedBy()->getRoles()[0]->getName();
 
             //si no tiene ningun post, significa que esta recien creado
             } else { $last_post_owner_role_name = "ROLE_USER"; }
@@ -90,10 +90,10 @@ class TicketRepository extends EntityRepository
 
     public function findAllByOwner ($user, $status)
     {
-        if ( $status != 'all' ) { $array = array('owner'  => $user->getId(),
+        if ( $status != 'all' ) { $array = array('created_by'  => $user->getId(),
                                                  'status' => $status->getId()); }
 
-        else                    { $array = array('owner'  => $user->getId()); }
+        else                    { $array = array('created_by'  => $user->getId()); }
 
         $tickets = $this->findBy($array);
         return $tickets;

@@ -137,6 +137,13 @@ class Partner {//implements EventSubscriber{
     private $created_at;
 
     /**
+     * @var integer $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
      * @var datetime $modified_at
      *
      * @ORM\Column(name="modified_at", type="datetime")
@@ -386,6 +393,10 @@ class Partner {//implements EventSubscriber{
         return $this->active;
     }
 
+    public function __toString() {
+        return $this->getName();
+    }
+
     /**
      * Set created_at
      *
@@ -402,6 +413,24 @@ class Partner {//implements EventSubscriber{
      */
     public function getCreatedAt() {
         return $this->created_at;
+    }
+
+    /**
+     * Set created_by
+     *
+     * @param user $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return integer
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
     }
 
     /**
@@ -438,10 +467,6 @@ class Partner {//implements EventSubscriber{
      */
     public function getModifyBy() {
         return $this->modify_by;
-    }
-
-    public function __toString() {
-        return $this->getName();
     }
 
     /**

@@ -15,7 +15,7 @@
                 <th>#</th>
                 <th>Ticket description</th>
                 {# <th>Importance</th> #}
-                <th>Owner</th>
+                <th>Created By</th>
                 <th>Assigned</th>
                 <th>Assign To</th>
                 <th>Action</th>
@@ -27,7 +27,7 @@
                     <td>{{ ticket.id }}</td>
                     <td>{{ ticket.description }} </td>
                     {#<td>{{ ticket.importance}}</td>#}
-                    <td>{{ ticket.owner }}</td>
+                    <td>{{ ticket.created_by }}</td>
                     <td>{{ ticket.assignedTo }}</td>
                     <td>
                         <select class="combobox" id="id_user" name="id_user">
