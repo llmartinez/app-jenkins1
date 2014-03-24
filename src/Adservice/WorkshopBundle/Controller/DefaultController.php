@@ -19,17 +19,17 @@ class DefaultController extends Controller {
      */
     public function listAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        
+
 //        $logged_user = $this->get('security.context')->getToken()->getUser();
 //        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
 
         $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
 //        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => null));
-                
+
         return $this->render('WorkshopBundle:Default:list.html.twig', array('workshops' => $workshops));
     }
 
@@ -40,7 +40,7 @@ class DefaultController extends Controller {
         $workshop  = new Workshop();
         $form = $this->createForm(new WorkshopType(), $workshop);
         $form->bindRequest($request);
-        
+
         if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getEntityManager();
@@ -51,7 +51,7 @@ class DefaultController extends Controller {
                 return $this->redirect($this->generateUrl('workshop_list'));
             }
         }
-        
+
         return $this->render('WorkshopBundle:Default:newWorkshop.html.twig', array('workshop'   => $workshop,
                                                                                    'form_name'  => $form->getName(),
                                                                                    'form'       => $form->createView()));
