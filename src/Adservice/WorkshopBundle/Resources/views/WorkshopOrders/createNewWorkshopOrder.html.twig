@@ -8,20 +8,20 @@
     </ol>
 
     <h1>Petición de alta de taller</h1>
-    
+
     <form action="{{ path('workshopOrder_createNewOrder') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        
+
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6 column">
                     <label>Workshop Name</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control',
                                                          'placeholder': 'Name'} }) }}
-                    
+
                     <label>Contact</label>
                     {{ form_widget(form.contact, { 'attr': {'class': 'form-control',
                                                             'placeholder': 'Contact'} }) }}
-                    
+
                     <label>Email</label>
                     {{ form_widget(form.email_1, { 'attr': {'class': 'form-control',
                                                            'placeholder': 'Email'} }) }}
@@ -34,16 +34,19 @@
                 </div>
 
                 <div class="col-md-6 column">
-                    
+
+                    <label>Typology</label>
+                    {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
+
                     <label>Region</label>
                     {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }}
-                    
+
                     <label>Province</label>
                     {{ form_widget(form.province, { 'attr': {'class': 'form-control'} }) }}
-                    
+
                     <label>City</label>
                     {{ form_widget(form.city, { 'attr': {'class': 'form-control',
-                                                         'placeholder': 'City'} }) }}                    
+                                                         'placeholder': 'City'} }) }}
                     <label>Adress</label>
                     {{ form_widget(form.address, { 'attr': {'class': 'form-control',
                                                             'placeholder': 'Address'} }) }}
@@ -53,7 +56,7 @@
             </div>
             <br/>
             <p><button type="submit">Create</button></p>
-            
+
         </div>
     </form>
 {% endblock %}

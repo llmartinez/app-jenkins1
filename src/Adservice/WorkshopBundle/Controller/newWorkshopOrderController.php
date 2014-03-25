@@ -1,5 +1,4 @@
 <?php
-
 namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -37,7 +36,7 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException.
      */
-    public function newCreateWorkshopOrderAction(){
+    public function newWorkshopOrderAction(){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -74,6 +73,56 @@ class WorkshopOrderController extends Controller {
 
     }
 
+
+    /**
+     * Crea una solicitud (workshopOrder) del tipo "activate" o "deactivate" segun el $status
+     * @param integer $id del workshop que queremos modificar
+     * @param string $status (active | inactive)
+     * @return type
+     * @throws AccessDeniedException
+     * @throws type
+     */
+    public function newChangeStatusOrderAction($id_workshop, $status){
+
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+            throw new AccessDeniedException();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id_workshop);
+        if (!$workshop)
+            throw $this->createNotFoundException('Taller no encontrado en la BBDD');
+
+
+        /* REPASAR ESTO */
+
+                //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
+                //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
+                $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('workshop' => $workshop->getId()));
+                if ($workshopOrder && $workshopOrder->getAction() == 'rejected'){
+                    $em->remove($workshopOrder);
+                    $em->flush();
+                }
+        /**/
+        $user = $this->get('security.context')->getToken()->getUser();
+        $workshopOrder = $this->workshop_to_workshopOrder($workshop);
+        $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
+
+        //actualizamos el campo "action" de la orden segun queramos activar o desactivar
+        if ($status == 'active'){
+            $workshopOrder->setAction('activate');
+            $workshopOrder->setWantedAction('activate');
+
+        }elseif ($status == 'inactive'){
+            $workshopOrder->setAction('deactivate');
+            $workshopOrder->setWantedAction('deactivate');
+        }
+
+        DefaultC::saveEntity($em, $workshopOrder, $user);
+
+        return $this->redirect($this->generateUrl('user_index'));
+
+    }
+
     /**
      * Crea una solicitud (workshopOrder) del tipo "modify"
      * @param integer $id del workshop que queremos modificar
@@ -81,19 +130,19 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function newModifyWorkshopOrderAction($id) {
+    public function newModifyOrderAction($id_workshop){
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
-        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id_workshop);
         if (!$workshop)
             throw $this->createNotFoundException('Taller no encontrado en la BBDD');
 /**************/
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a envair)
-        $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('id_workshop'  => $id,
+        $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('workshop'  => $workshop->getId(),
                                                                                              'action'       => 'rejected'));
 /*****************/
         //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
@@ -121,56 +170,7 @@ class WorkshopOrderController extends Controller {
                                                                                                    'form'       => $form->createView()));
 
     }
-    
-    
-    /**
-     * Crea una solicitud (workshopOrder) del tipo "activate" o "deactivate" segun el $status
-     * @param integer $id del workshop que queremos modificar
-     * @param string $status (active | inactive)
-     * @return type
-     * @throws AccessDeniedException
-     * @throws type
-     */
-    public function newChangeStatusWorkshopOrderAction($id, $status){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
-            throw new AccessDeniedException();
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
-        if (!$workshop)
-            throw $this->createNotFoundException('Taller no encontrado en la BBDD');
-
-
-        /* REPASAR ESTO */
-
-                //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
-                //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
-                $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id));
-                if ($workshopOrder && $workshopOrder->getAction() == 'rejected'){
-                    $em->remove($workshopOrder);
-                    $em->flush();
-                }
-        /**/
-        $user = $this->get('security.context')->getToken()->getUser();
-        $workshopOrder = $this->workshop_to_workshopOrder($workshop);
-        $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
-
-        //actualizamos el campo "action" de la orden segun queramos activar o desactivar
-        if ($status == 'active'){
-            $workshopOrder->setAction('activate');
-            $workshopOrder->setWantedAction('activate');
-
-        }elseif ($status == 'inactive'){
-            $workshopOrder->setAction('deactivate');
-            $workshopOrder->setWantedAction('deactivate');
-        }
-
-        DefaultC::saveEntity($em, $workshopOrder, $user);
-
-        return $this->redirect($this->generateUrl('user_index'));
-
-    }
 
     /**
      * Lista todas las workshopsOrders
@@ -178,10 +178,10 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      */
     public function listWorkshopOrdersAction(){
-        
+
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $user->getRoles();
@@ -198,19 +198,25 @@ class WorkshopOrderController extends Controller {
 
         //eliminamos de la lista de "todos" los que ya tenemos en la lista de rechazados
         foreach ($workshopsOrders as $key => $workshopOrder) {
+
+            if ($workshopOrder->getWorkshop() != null){
+                echo 'entra';
+                $workshopOrder->setWorkshop($em->getRepository("WorkshopBundle:Workshop")->find($workshopOrder->getWorkshop()));
+            }
+
             if (in_array($workshopOrder, $workshopsRejectedOrders)){
                 unset($workshopsOrders[$key]);
             }
         }
-        
+
         //casos que todas esten en rechazadas... (el "unset" de todos los elementos elimina el array....)
         if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
-        
+
         return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders'           => $workshopsOrders,
                                                                                                 'workshopsRejectedOrders'   => $workshopsRejectedOrders,
                                                                                                 'user'                      => $user));
     }
-        
+
     /**
      * Elimina una workshopOrder segun el $id
      * @param integer $id del workshopOrder que queremos eliminar
@@ -239,9 +245,9 @@ class WorkshopOrderController extends Controller {
                                                                                                 'user'              => $user));
 
     }
-    
+
     /**
-     * 
+     *
      * @param integer $id del workshopOrder
      * @param string $status (accepted)
      * @return type
@@ -265,20 +271,20 @@ class WorkshopOrderController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
 
         if (( $workshopOrder->getAction() == 'activate') && $status == 'accepted'){
-            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($workshopOrder->getWorkshop()->getId());
             $workshop->setActive(true);
             $em->remove($workshopOrder);
             DefaultC::newEntity($workshop, $user);
             DefaultC::saveEntity($em, $workshop, $user);
 
         }elseif (( $workshopOrder->getAction() == 'deactivate') && $status == 'accepted'){
-            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($workshopOrder->getWorkshop()->getId());
             $workshop->setActive(false);
             $em->remove($workshopOrder);
             DefaultC::saveEntity($em, $workshop, $user);
 
         }elseif (($workshopOrder->getAction() == 'modify')  && $status == 'accepted'){
-            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($workshopOrder->getWorkshop()->getId());
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $em->remove($workshopOrder);
             DefaultC::saveEntity($em, $workshop, $user);
@@ -296,7 +302,7 @@ class WorkshopOrderController extends Controller {
                                                                                                 'user'              => $user));
 
     }
-    
+
     /**
      * Actualiza el campo "rejection_reason" de la workshopOrder i pone su estada en "rejected"
      * @param type $id
@@ -350,7 +356,7 @@ class WorkshopOrderController extends Controller {
                                                                                                     'form_name'     => $form->getName(),
                                                                                                     'form'          => $form->createView()));
     }
-            
+
     /**
      * Hace el mapeo entre workshop y workshopOrder
      * @param Workshop $workshop
@@ -360,7 +366,7 @@ class WorkshopOrderController extends Controller {
 
         $workshopOrder = new WorkshopOrder();
 
-        $workshopOrder->setIdWorkshop   ($workshop->getId());
+        $workshopOrder->setWorkshop     ($workshop);
         $workshopOrder->setName         ($workshop->getName());
         $workshopOrder->setCif          ($workshop->getCif());
         $workshopOrder->setNumAdClient  ($workshop->getNumAdClient());
@@ -384,7 +390,7 @@ class WorkshopOrderController extends Controller {
 
         return $workshopOrder;
     }
-    
+
     /**
      * Hace el mapeo entre workshopOrder y workshop
      * @param Workshop $workshop

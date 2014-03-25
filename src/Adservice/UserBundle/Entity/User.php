@@ -214,11 +214,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $modified_at;
 
     /**
-     * @var integer $modify_by
+     * @var integer $modified_by
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
-    private $modify_by;
+    private $modified_by;
 
     /**
      * Get id
@@ -575,21 +575,21 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     /**
-     * Set modify_by
+     * Set modified_by
      *
-     * @param user $modify_by
+     * @param user $modified_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user) {
-        $this->modify_by = $user;
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->modified_by = $user;
     }
 
     /**
-     * Get modify_by
+     * Get modified_by
      *
      * @return integer
      */
-    public function getModifyBy() {
-        return $this->modify_by;
+    public function getModifiedBy() {
+        return $this->modified_by;
     }
 
     public function getPartner() {

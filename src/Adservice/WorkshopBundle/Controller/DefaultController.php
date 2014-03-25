@@ -132,7 +132,7 @@ class DefaultController extends Controller {
 //                $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
 //                $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
 //                $workshop->setCreatedBy($user);
-//                $workshop->setModifyBy($user);
+//                $workshop->setModifiedBy($user);
 //                
 //                $em->persist($workshop);
 //                $em->flush();
@@ -297,7 +297,7 @@ class DefaultController extends Controller {
      */
     private function saveWorkshop($em, $workshop){
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $workshop->setModifyBy($this->get('security.context')->getToken()->getUser());
+        $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         $em->persist($workshop);
         $em->flush();
     }

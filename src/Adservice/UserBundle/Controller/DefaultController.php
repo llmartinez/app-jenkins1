@@ -224,7 +224,7 @@ class DefaultController extends Controller {
             $user->setPassword($original_password);
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $user->setModifyBy($this->get('security.context')->getToken()->getUser());
+        $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
         $em->persist($user);
         $em->flush();

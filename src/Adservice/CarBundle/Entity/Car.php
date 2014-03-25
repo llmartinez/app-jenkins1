@@ -98,6 +98,13 @@ class Car
     private $created_at;
 
     /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
      * @var date $modified_at
      *
      * @ORM\Column(name="modified_at", type="datetime")
@@ -346,6 +353,26 @@ class Car
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+
+    /**
+     * Set created_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return string
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
     }
 
     /**

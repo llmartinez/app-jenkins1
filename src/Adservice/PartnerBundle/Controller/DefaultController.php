@@ -113,7 +113,7 @@ class DefaultController extends Controller {
      */
     private function savePartner($em, $partner){
         $partner->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $partner->setModifyBy($this->get('security.context')->getToken()->getUser());
+        $partner->setModifiedBy($this->get('security.context')->getToken()->getUser());
         $em->persist($partner);
         $em->flush();
     }

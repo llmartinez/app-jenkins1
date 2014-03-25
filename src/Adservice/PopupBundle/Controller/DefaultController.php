@@ -113,7 +113,7 @@ class DefaultController extends Controller {
      */
     private function savePopup($em, $popup){
         $popup->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $popup->setModifyBy($this->get('security.context')->getToken()->getUser());
+        $popup->setModifiedBy($this->get('security.context')->getToken()->getUser());
         $em->persist($popup);
         $em->flush();
     }

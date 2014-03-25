@@ -45,7 +45,7 @@ workshop_new:
 workshopOrder_workshoplist:
     pattern: /listWorkshopsWorkshopOrder
     defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}
-    
+
 workshopOrder_createNewOrder:
     pattern: /newCreateWorkshopOrder
     defaults: { _controller: WorkshopBundle:WorkshopOrder:newCreateWorkshopOrder }

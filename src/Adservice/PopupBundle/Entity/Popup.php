@@ -80,11 +80,11 @@ class Popup {
     private $modified_at;
 
     /**
-     * @var string $modify_by
+     * @var string $modified_by
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
-    private $modify_by;
+    private $modified_by;
 
 
     /**
@@ -252,23 +252,23 @@ class Popup {
     }
 
     /**
-     * Set modify_by
+     * Set modified_by
      *
-     * @param user $modify_by
+     * @param user $modified_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user)
     {
-        $this->modify_by = $user;
+        $this->modified_by = $user;
     }
 
     /**
-     * Get modify_by
+     * Get modified_by
      *
      * @return string 
      */
-    public function getModifyBy()
+    public function getModifiedBy()
     {
-        return $this->modify_by;
+        return $this->modified_by;
     }
     
     public function __toString() {

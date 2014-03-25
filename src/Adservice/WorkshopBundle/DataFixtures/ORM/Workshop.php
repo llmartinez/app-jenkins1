@@ -29,7 +29,7 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt(new \DateTime());
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
-            $entidad->setModifyBy($this->getReference('superadmin'));
+            $entidad->setModifiedBy($this->getReference('superadmin'));
             $entidad->setPartner($this->getReference(Data::getPartner()));
             $entidad->setTypology($this->getReference(Data::getTypologies()));
             $manager->persist($entidad);
