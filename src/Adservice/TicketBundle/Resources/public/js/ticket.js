@@ -14,8 +14,8 @@ function fill_tickets(url_ajax, url_show) {
     var option   = $('select[id=slct_historyTickets]').val();
     var new_page = $('#page').val();
 
-    var filter_id = setCheckId();
-    var status    = setCheckStatus();
+    var filter_id   = setCheckId();
+    var status      = setCheckStatus();
 
     $.ajax({
         type: "POST",
@@ -78,6 +78,8 @@ function fill_tickets_from_workshop(url_ajax, url_show, user) {
     var id_workshop = $('#id_workshop').val();
     var new_page = $('#page').val();
 
+    if(new_page == "" || new_page == null){ new_page = 1 };
+
     var filter_id = setCheckId();
     var status    = setCheckStatus();
 
@@ -95,7 +97,7 @@ function fill_tickets_from_workshop(url_ajax, url_show, user) {
             var cont  = 1;
             var limit = max_rows_page;
             var num_pag = Math.ceil(total/limit);
-            if(new_page != ""){ page = new_page } else{ page = 1 };
+            var page = new_page;
 
             $.each(data, function(idx, elm) {
 
@@ -142,6 +144,7 @@ function fill_tickets_from_workshop(url_ajax, url_show, user) {
         }
     });
 }
+
 /**
  * Comprueba el checkbox open/closed
  */
@@ -154,6 +157,7 @@ function setCheckStatus(){
     }
     return status;
 }
+
 /**
  * Comprueba el checkbox de id ticket
  */
@@ -191,10 +195,15 @@ function paginator(num_pag){
         }
         // if (prev > 1)        { $('#prev_pages').prepend('<input  type="text" id="change_page" class="page_number" value="1"  disabled >...'); }
         // if (next < num_pag) { $('#next_pages').append('<input  type="text" id="change_page" class="page_number" value="'+ num_pag +'"  disabled >'); }
+
         $('.change_page').click(function() {
+
            $('#page').val($(this).text());
-           tickets_ajax();
+
+            if ($('#id_workshop').val() != null){ tickets_from_workshop_ajax(); }
+            else{ tickets_ajax(); }
         });
+
         $('#totalpage').val(num_pag);
 }
 

@@ -518,6 +518,7 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
 
         $option     = $petition->request->get('option');
+        $check_id   = $petition->request->get('filter_id');
         $user       = $security->getToken()->getUser();
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
@@ -532,19 +533,23 @@ class TicketController extends Controller {
             else{
                 if ($option == 'all_closed' ) $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets); }
 
+            if($check_id != 'all') { $tickets = $this->filterTickets($tickets,$check_id); }
+
         }else {
+
             if($security->isGranted('ROLE_ASSESSOR')){
                 //Assessor
-                if  ($option == 'free' )                        { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'free'            ); }
-                else{ if ($option == 'assigned' )               { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'assigned'        ); }
-                    else{ if ($option == 'answered' )           { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'answered', 'DESC'); }
-                        else{ if ($option == 'other_assessor' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'other_assessor'  ); }
-                        }
-                    }
-                }
-            }else{
+                if     ($option == 'free'              ) { $tickets = $repoTicket->findAllTickets($em, $user, $open  , 'free'                      ); }
+                elseif ($option == 'assessor_assigned' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open  , 'assessor_assigned'         ); }
+                elseif ($option == 'assessor_answered' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open  , 'assessor_answered', 'DESC' ); }
+                elseif ($option == 'assessor_closed'   ) { $tickets = $repoTicket->findAllTickets($em, $user, $closed, 'assessor_closed'           ); }
+                elseif ($option == 'other_assigned'    ) { $tickets = $repoTicket->findAllTickets($em, $user, $open  , 'other_assigned'            ); }
+                elseif ($option == 'other_answered'    ) { $tickets = $repoTicket->findAllTickets($em, $user, $open  , 'other_answered', 'DESC'    ); }
+                elseif ($option == 'other_closed'      ) { $tickets = $repoTicket->findAllTickets($em, $user, $closed, 'other_closed'              ); }
 
-                $check_id = $petition->request->get('filter_id');
+                if($check_id != 'all') { $tickets = $this->filterTickets($tickets,$check_id); }
+
+            }else{
 
                 if($check_id == 'all'){
 
@@ -606,6 +611,23 @@ class TicketController extends Controller {
 
         $em->persist($ticket);
         $em->flush();
+    }
+
+    /**
+     * Filtra un array de tickets en funcion del id
+     * @param  Array   $tickets
+     * @param  Integer $check_id
+     * @return Array
+     */
+    private function filterTickets($tickets,$check_id){
+        $tickets_filtered = array();
+
+        foreach ($tickets as $ticket) {
+
+            if($ticket->getId() == $check_id)
+                $tickets_filtered[] = $ticket;
+        }
+        return $tickets_filtered;
     }
 
 }

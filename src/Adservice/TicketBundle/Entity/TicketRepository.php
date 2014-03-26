@@ -38,10 +38,13 @@ class TicketRepository extends EntityRepository
 
         $tickets = $consulta->getResult();
 
-        $free_tickets           = array();  //array con los tickets pendientes de respuesta
-        $assigned_tickets       = array();  //array con los tickets asignados al assessor
-        $other_assessor_tickets = array();  //array con los tickets respondidos
-        $answered_tickets       = array();  //array con los tickets asignados a otro assessor
+        $free_tickets      = array();  //array con los tickets pendientes  de respuesta
+        $assessor_assigned = array();  //array con los tickets pendientes  del assessor
+        $assessor_answered = array();  //array con los tickets respondidos del assessor
+        $assessor_closed   = array();  //array con los tickets cerrados    del assessor
+        $other_assigned    = array();  //array con los tickets pendientes  de otro assessor
+        $other_answered    = array();  //array con los tickets respondidos de otro assessor
+        $other_closed      = array();  //array con los tickets cerrados    de otro assessor
 
         foreach ($tickets as $ticket) {
             // Se recoge el role del owner del ultimo post del ticket
@@ -57,35 +60,41 @@ class TicketRepository extends EntityRepository
             // Si el ultimo post es de un user
             if ($last_post_owner_role_name == "ROLE_USER")
             {
-                // Tickets no asignados a ningun assessor
+                // tickets pendientes de respuesta
                 if ( $ticket->getAssignedTo() == null )
                 {
                        $free_tickets[]  = $ticket;
                 }
                 else {
-                    // Tickets asignados a el assessor
+                    // pendientes del assessor
                     if($ticket->getAssignedTo() == $user) {
-                        $assigned_tickets[] = $ticket;
+                        $assessor_assigned[] = $ticket;
                     }
-                    // Tickets asignados a otro assessor
+                    // pendientes de otro assessor
                     else {
-                        $other_assessor_tickets[] = $ticket;
+                        $other_assigned[] = $ticket;
                     }
                 }
 
             // Si el ultimo post es de un assessor
             }else {
-                // Tickets asignados a el assessor
+                // respondidos del assessor
                 if($ticket->getAssignedTo() == $user) {
-                    $answered_tickets[] = $ticket;
+                    $assessor_answered[] = $ticket;
+                }
+                // respondidos de otro assessor
+                else {
+                    $other_answered[] = $ticket;
                 }
             }
         }
-
-       if     ($return == 'free'          ) return $free_tickets;           //array con los tickets pendientes de respuesta
-       elseif ($return == 'assigned'      ) return $assigned_tickets;       //array con los tickets asignados al assessor
-       elseif ($return == 'answered'      ) return $answered_tickets;       //array con los tickets respondidos
-       elseif ($return == 'other_assessor') return $other_assessor_tickets; //array con los tickets asignados a otro assessor
+        if     ($return == 'free'              ) return $free_tickets;
+        elseif ($return == 'assessor_assigned' ) return $assessor_assigned;
+        elseif ($return == 'assessor_answered' ) return $assessor_answered;
+        elseif ($return == 'assessor_closed'   ) return $assessor_assigned;
+        elseif ($return == 'other_assigned'    ) return $other_assigned;
+        elseif ($return == 'other_answered'    ) return $other_answered;
+        elseif ($return == 'other_closed'      ) return $other_assigned;
     }
 
     public function findAllByOwner ($user, $status)

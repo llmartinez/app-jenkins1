@@ -43,18 +43,21 @@ btn.search:                	Search
 placeholder.ticket.id:	   	Insert ticket ID
 
 #TICKET
-ticket.history.title:       Tickets History
-ticket.opt.all:             Show all tickets
-ticket.opt.all_open:        Show all tickets opened
-ticket.opt.all_closed:      Show all tickets closed
-ticket.opt.free :           Show free tickets
-ticket.opt.assigned :       Show assigned tickets
-ticket.opt.answered :       Show answered tickets
-ticket.opt.other_assessor:  Show other assessor's tickets
-ticket.opt.owner:           Show your tickets
-ticket.opt.workshop:        Show tickets in your workshop
+ticket.history.title:        Tickets History
+ticket.opt.all:               Show all tickets
+ticket.opt.all_open:          Show all tickets opened
+ticket.opt.all_closed:        Show all tickets closed
+ticket.opt.free :             Show free tickets
+ticket.opt.assessor.assigned: Show your assigned tickets
+ticket.opt.assessor.answered: Show your answered tickets
+ticket.opt.assessor.closed:   Show your closed tickets
+ticket.opt.other.assigned:    Show other assigned tickets
+ticket.opt.other.answered:    Show other answered tickets
+ticket.opt.other.closed:      Show other closed tickets
+ticket.opt.owner:             Show your tickets
+ticket.opt.workshop:          Show tickets in your workshop
 
-ticket.flt.searchBy.id:		Search ticket by ID
+ticket.flt.searchBy.id:		  Search ticket by ID
 
 ############################
 ########### OLD ############

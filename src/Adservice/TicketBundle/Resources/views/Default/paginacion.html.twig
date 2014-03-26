@@ -17,11 +17,6 @@
     </div>
     <script type="text/javascript">
 
-		// $('.change_page').click(function() {
-		//    $('#page').val($(this).text());
-		//    tickets_ajax();
-		// });
-
 	    $('#firstpage').click(function() {
 
 	                $('#page').val(1);
@@ -75,18 +70,6 @@
 	                	tickets_ajax();
 	        		{% endif %}
 	    });
-
-
-	    // $('.change_page').click(function() {
-
-	    //             $('#page').val($(this).text());
-
-					// {% if workshop.id != "" %}
-			  //           tickets_from_workshop_ajax();
-			  //       {% else %}
-	    //             	tickets_ajax();
-	    //     		{% endif %}
-	    // });
 
 	    function tickets_ajax() {
 	        var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";

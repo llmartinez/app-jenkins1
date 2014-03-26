@@ -41,6 +41,6 @@
           {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">Save & close</button>{% endif %}
         </form>
 
-    {% else %}{% include 'TicketBundle:Ticket:ticket/history_ticket.html.twig' %}  {% endif %}
+    {% else %}<p>Insert a workshop to create a ticket</p>  {% endif %}
 
 {% endblock  %}
