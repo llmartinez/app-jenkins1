@@ -1,49 +1,60 @@
 header.welcome: ADService England
 
-user.index.menu.admin_title:            ADMIN MENU
-user.index.menu.assessor_title:         ASSESSOR MENU
-user.index.menu.user_title:             USER MENU
-user.index.menu.ad_title:               AD MENU
-user.index.menu.my_profile:             My Profile
-user.index.menu.list_partners:          List of partners AdService
-user.index.menu.list_users:             List of users AdService
-user.index.menu.list_popups:            List of popups AdService
-user.index.menu.list_workshops:         List of workshops AdService
-user.index.menu.list_tickets:        	List of tickets AdService
-user.index.menu.list_statistics:        List of statistics AdService
-user.index.menu.asign_user_to_ticket:	Asign Tickets to Users
-user.index.menu.new_ticket:             Create a new ticket
-user.index.menu.my_tickets:             My Tickets
-user.index.menu.new_workshop_order:     Apply for a new workshop
-user.index.menu.actvie_workshop_order:  Apply for activate/deactivate a workshop
-user.index.menu.order_list_workshop:    View the status of my application
+user.index.menu.admin_title:            		ADMIN MENU
+user.index.menu.assessor_title:         		ASSESSOR MENU
+user.index.menu.user_title:             		USER MENU
+user.index.menu.ad_title:              			AD MENU
+user.index.menu.my_profile:             		My Profile
+user.index.menu.list_partners:          		List of partners AdService
+user.index.menu.list_users:             		List of users AdService
+user.index.menu.list_popups:            		List of popups AdService
+user.index.menu.list_workshops:         		List of workshops AdService
+user.index.menu.list_tickets:        			List of tickets AdService
+user.index.menu.asign_user_to_ticket:			Asign Tickets to Users
+user.index.menu.new_ticket:             		Create a new ticket
+user.index.menu.my_tickets:             		My Tickets
+user.index.menu.new_workshop_order:     		Apply for a new workshop
+user.index.menu.active_workshop_order:  		Apply for activate/deactivate a workshop
+user.index.menu.order_list_workshop:    		View the status of my application
 user.index.menu.view_register_workshop_order:   View workshop apply
-user.index.menu.view_actvie_workshop_order:     View apply de activation/deactivation of workshops
-
+user.index.menu.view_active_workshop_order:     View apply de activation/deactivation of workshops
 
 # COMUNES
-home:      Home
-admin:     Admin
-assessor:  Assessor
-user:      User
-date:      Date
-workshop:  Workshop
-ticket:    Ticket
-car:       Car
-post:      Post
+home: 		  	Home
+admin: 			Admin
+assessor: 		Assessor
+user: 			User
+date: 			Date
+workshop: 		Workshop
+ticket: 		Ticket
+car: 			Car
+post: 			Post
+description: 	Description
+actions: 		Actions
+open: 			Open
+closed: 		Closed
+
+
+# BOTONES
+btn.ticket.new:            	New Ticket
+btn.search:                	Search
+
+#PLACEHOLDERS
+placeholder.ticket.id:	   	Insert ticket ID
 
 #TICKET
-ticket.history.title:      Tickets History
-ticket.opt.all:            Show all tickets
-ticket.opt.all_open:       Show all tickets opened
-ticket.opt.all_closed:     Show all tickets closed
-ticket.opt.free :          Show free tickets
-ticket.opt.assigned :      Show assigned tickets
-ticket.opt.answered :      Show answered tickets
-ticket.opt.other_assessor: Show other assessor's tickets
-ticket.opt.owner:          Show your tickets
-ticket.opt.workshop:       Show tickets in your workshop
+ticket.history.title:       Tickets History
+ticket.opt.all:             Show all tickets
+ticket.opt.all_open:        Show all tickets opened
+ticket.opt.all_closed:      Show all tickets closed
+ticket.opt.free :           Show free tickets
+ticket.opt.assigned :       Show assigned tickets
+ticket.opt.answered :       Show answered tickets
+ticket.opt.other_assessor:  Show other assessor's tickets
+ticket.opt.owner:           Show your tickets
+ticket.opt.workshop:        Show tickets in your workshop
 
+ticket.flt.searchBy.id:		Search ticket by ID
 
 ############################
 ########### OLD ############

@@ -88,16 +88,19 @@ class WorkshopOrderController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
-        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
-        if (!$workshop)
-            throw $this->createNotFoundException('Taller no encontrado en la BBDD');
-/**************/
-        //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a envair)
-        $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('id_workshop'  => $id,
-                                                                                             'action'       => 'rejected'));
-/*****************/
-        //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
-        if (!$workshopOrder) $workshopOrder = $this->workshop_to_workshopOrder($workshop);
+
+        //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
+        $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->findOneBy(array('id'     => $id,
+                                                                                             'action' => 'rejected'));
+        if ($workshopOrder) $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($workshopOrder->getIdWorkshop());
+        else {
+            $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
+            if (!$workshop)
+                throw $this->createNotFoundException('Taller no encontrado en la BBDD');
+
+            //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
+             $workshopOrder = $this->workshop_to_workshopOrder($workshop);
+        }
 
         $form = $this->createForm(new WorkshopOrderModifyType(), $workshopOrder);
 
@@ -108,17 +111,26 @@ class WorkshopOrderController extends Controller {
                 $user = $this->get('security.context')->getToken()->getUser();
 
                 $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
-                $workshopOrder->setAction('modify');
-                $workshopOrder->setWantedAction('modify');
+
+                if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
+                    $workshopOrder->setAction('re_modify');
+                }
+                elseif ($workshopOrder->getAction() == 'rejected') {
+                    $workshopOrder->setAction('re_modify');
+                }else{
+                    $workshopOrder->setAction('modify');
+                    $workshopOrder->setWantedAction('modify');
+                }
                 DefaultC::saveEntity($em, $workshopOrder, $user);
 
-                return $this->redirect($this->generateUrl('user_index'));
+                return $this->redirect($this->generateUrl('workshopOrder_listWorkshopOrders'));
 
             }
         }
-        return $this->render('WorkshopBundle:WorkshopOrders:createModifyWorkshop.html.twig', array('workshop'   => $workshop,                //old values
-                                                                                                   'form_name'  => $form->getName(),         //new values
-                                                                                                   'form'       => $form->createView()));
+        return $this->render('WorkshopBundle:WorkshopOrders:createModifyWorkshop.html.twig', array('workshopOrder' => $workshopOrder,
+                                                                                                   'workshop'      => $workshop,                //old values
+                                                                                                   'form_name'     => $form->getName(),         //new values
+                                                                                                   'form'          => $form->createView()));
 
     }
     
@@ -131,7 +143,7 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function newChangeStatusWorkshopOrderAction($id, $status){
+    public function newChangeStatusOrderAction($id, $status){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -172,16 +184,35 @@ class WorkshopOrderController extends Controller {
 
     }
 
+
+    public function resendOrderAction($id, $status){
+
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+            throw new AccessDeniedException();
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
+        //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
+        $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->find($id);
+        if ($workshopOrder && $workshopOrder->getAction() == 'rejected'){
+            $workshopOrder->setAction($workshopOrder->getWantedAction());
+            $em->persist($workshopOrder);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('user_index'));
+    }
+
     /**
      * Lista todas las workshopsOrders
      * @return type
      * @throws AccessDeniedException
      */
     public function listWorkshopOrdersAction(){
-        
+
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $user->getRoles();
@@ -197,20 +228,26 @@ class WorkshopOrderController extends Controller {
         }
 
         //eliminamos de la lista de "todos" los que ya tenemos en la lista de rechazados
+
         foreach ($workshopsOrders as $key => $workshopOrder) {
+
             if (in_array($workshopOrder, $workshopsRejectedOrders)){
                 unset($workshopsOrders[$key]);
             }
         }
-        
+
         //casos que todas esten en rechazadas... (el "unset" de todos los elementos elimina el array....)
         if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
-        
+
+        //creamos arrays de los valores anteriores a la modificacion/rechazo de la solicitud
+        $ordersBefore = $this->getOrdersBefore($workshopsOrders);
+
         return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders'           => $workshopsOrders,
                                                                                                 'workshopsRejectedOrders'   => $workshopsRejectedOrders,
+                                                                                                'ordersBefore'              => $ordersBefore,
                                                                                                 'user'                      => $user));
     }
-        
+
     /**
      * Elimina una workshopOrder segun el $id
      * @param integer $id del workshopOrder que queremos eliminar
@@ -235,8 +272,12 @@ class WorkshopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $workshopsOrders = $em->getRepository("WorkshopBundle:WorkshopOrder")->findBy(array('partner' => $user->getPartner()->getId()));
-        return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders'   => $workshopsOrders,
-                                                                                                'user'              => $user));
+
+        $ordersBefore = $this->getOrdersBefore($workshopsOrders);
+
+        return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders' => $workshopsOrders,
+                                                                                                'ordersBefore'    => $ordersBefore,
+                                                                                                'user'            => $user));
 
     }
     
@@ -264,27 +305,33 @@ class WorkshopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if (( $workshopOrder->getAction() == 'activate') && $status == 'accepted'){
+        if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+            $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $workshop->setActive(true);
             $em->remove($workshopOrder);
             DefaultC::newEntity($workshop, $user);
             DefaultC::saveEntity($em, $workshop, $user);
 
-        }elseif (( $workshopOrder->getAction() == 'deactivate') && $status == 'accepted'){
+        }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+            $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $workshop->setActive(false);
             $em->remove($workshopOrder);
             DefaultC::saveEntity($em, $workshop, $user);
 
-        }elseif (($workshopOrder->getAction() == 'modify')  && $status == 'accepted'){
+        }elseif (($workshopOrder->getWantedAction() == 'modify')  && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $em->remove($workshopOrder);
             DefaultC::saveEntity($em, $workshop, $user);
 
-        }elseif (($workshopOrder->getAction() == 'create')  && $status == 'accepted'){
+        }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
             $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
+
+            if ($workshopOrder->getTest() != null) {
+                $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
+            }
             $em->remove($workshopOrder);
             DefaultC::newEntity($workshop, $user);
             DefaultC::saveEntity($em, $workshop, $user);
@@ -292,7 +339,10 @@ class WorkshopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $workshopsOrders = $em->getRepository("WorkshopBundle:WorkshopOrder")->findAll();
+        $ordersBefore = $this->getOrdersBefore($workshopsOrders);
+
         return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders'   => $workshopsOrders,
+                                                                                                'ordersBefore'      => $ordersBefore,
                                                                                                 'user'              => $user));
 
     }
@@ -339,8 +389,11 @@ class WorkshopOrderController extends Controller {
                 //casos que todas esten en rechazadas... (el "unset" de todos los elementos elimina el array....)
                 if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
 
+                $ordersBefore = $this->getOrdersBefore($workshopsOrders);
+
                 return $this->render('WorkshopBundle:WorkshopOrders:listWorkshopOrder.html.twig', array('workshopsOrders'           => $workshopsOrders,
                                                                                                         'workshopsRejectedOrders'   => $workshopsRejectedOrders,
+                                                                                                        'ordersBefore'              => $ordersBefore,
                                                                                                         'user'                      => $user));
             }
 
@@ -378,6 +431,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setContact      ($workshop->getContact());
         $workshopOrder->setPartner      ($workshop->getPartner());
         $workshopOrder->setTypology     ($workshop->getTypology());
+        $workshopOrder->setTest         ($workshopOrder->getTest());
 
         $workshopOrder->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshopOrder->setActive(false);
@@ -410,20 +464,38 @@ class WorkshopOrderController extends Controller {
         $workshop->setContact      ($workshopOrder->getContact());
         $workshop->setPartner      ($workshopOrder->getPartner());
         $workshop->setTypology     ($workshopOrder->getTypology());
+        $workshop->setTest         ($workshopOrder->getTest());
         $workshop->setActive       (true);
 
         return $workshop;
     }
 
-    // /**
-    //  * Hace el save de un workshopOrder
-    //  * @param EntityManager $em
-    //  * @param WorkshopOrder $workshopOrder
-    //  */
-    // private function saveWorkshopOrder($em, $workshopOrder){
-    //     $workshopOrder->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-    //     $workshopOrder->setModifiedBy($this->get('security.context')->getToken()->getUser());
-    //     $em->persist($workshopOrder);
-    //     $em->flush();
-    // }
+        //
+    /**
+     * crea un array con los valores anteriores a la modificacion/rechazo de la solicitud
+     * @param  Array $workshopsOrders
+     * @return Array
+     */
+    private function getOrdersBefore($workshopsOrders) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $ordersBefore = array();
+
+        foreach ($workshopsOrders as $key => $workshopOrder) {
+
+            if ($workshopOrder->getAction() == 'modify' or $workshopOrder->getAction() == 're_modify') {
+
+                $workshopBefore = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
+                $ordersBefore[$workshopOrder->getId()] = $workshopBefore;
+            }
+
+            if ($workshopOrder->getAction() == 'rejected' or $workshopOrder->getAction() == 'resend') {
+
+                $workshopBefore = $em->getRepository("WorkshopBundle:WorkshopOrder")->find($workshopOrder->getId());
+                var_dump($workshopBefore);
+                $ordersBefore[$workshopOrder->getId()] = $workshopBefore;
+            }
+        }
+        return $ordersBefore;
+    }
 }

@@ -55,25 +55,29 @@ workshopOrder_createModifyOrder:
     defaults: { _controller: WorkshopBundle:WorkshopOrder:newModifyWorkshopOrder }
 
 workshopOrder_createChangeStatusOrder:
-    pattern: /changeStatusWorkshopOrder/{id}/{status}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:newChangeStatusWorkshopOrder }
+    pattern: /changeStatusOrder/{id}/{status}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:newChangeStatusOrder }
 
 workshopOrder_removeWorkshopOrder:
     pattern: /removeWorkshopOrder/{id}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:removeWorkshopOrder }  
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:removeWorkshopOrder }
 
 workshopOrder_listWorkshopOrders:
     pattern: /listWorkshopOrders
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrders } 
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrders }
 
 workshopOrder_changeStatusOrder:
     pattern: /listWorkshopOrders/{id}/{status}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:doActionWorkshop } 
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:doActionWorkshop }
+
+workshopOrder_resendOrder:
+    pattern: /resendOrder/{id}/{status}
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:resendOrder }
 
 workshopOrder_setReasonRejectionOrder:
     pattern: /setReasonRejectionOrder/{id}
-    defaults: { _controller: WorkshopBundle:WorkshopOrder:setReasonRejectionOrder } 
-    
+    defaults: { _controller: WorkshopBundle:WorkshopOrder:setReasonRejectionOrder }
+
 #workshopOrder_new:
 #    pattern: /newWorkshopOrder/{id}/{action}
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:newWorkshopOrder }
@@ -88,7 +92,7 @@ workshopOrder_setReasonRejectionOrder:
 #
 #workshopOrder_workshoplist:
 #    pattern: /workshoplistWorkshopOrder
-#    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}    
+#    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshops}
 #
 #workshopOrder_change_status:
 #    pattern: /changeWorkshopStatusOrder/{id}/{status}

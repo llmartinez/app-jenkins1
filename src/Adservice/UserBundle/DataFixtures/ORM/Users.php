@@ -8,9 +8,9 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Users extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 22; }
-    
+
     public function load(ObjectManager $manager) {
         $type = 'user';
         $pass = 'QeDeEveLRGfrw94I1iCOzs37BWE+xnmQFjkT5EeUTwDjXWRIjQsSYghkc2kAefhuFMTPvnIaplq7xbPOesN22Q==';
@@ -18,10 +18,10 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
         $workshop = 'yes';
         $role = 'ROLE_USER';
         $num = Data::getNumUsers();
-        
+
         $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $workshop, $role, $num);
     }
-    
+
     public static function loadUsers($manager, $_this, $type, $pass, $salt, $workshop=null, $role, $num)
     {
         for($i=1;$i<=$num;$i++)
@@ -45,7 +45,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
                 $entidad->setWorkshop($_this->getReference(Data::getWorkshop()));
             }
             $entidad->addRole       ($_this->getReference($role));
-            
+
             $manager->persist($entidad);
             $_this->addReference($entidad->getUsername(), $entidad);
         }

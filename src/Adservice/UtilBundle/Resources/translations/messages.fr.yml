@@ -1,29 +1,24 @@
 header.welcome: ADService France
 
-
-
-user.index.menu.admin_title: 	 	MENU ADMIN
-user.index.menu.assessor_title:  	MENU CONSEILLER
-user.index.menu.user_title: 	 	MENU UTILISATEUR
-user.index.menu.ad_title:               MENU AD
-user.index.menu.my_profile: 	 	Mon profil
-user.index.menu.list_partners: 	 	Liste des Partenaires AdService
-user.index.menu.list_users: 	 	Liste des Utilisateurs AdService
-user.index.menu.list_popups: 	 	Liste des Popups ADService
-user.index.menu.list_workshops:  	Liste des Ateliers AdService
-user.index.menu.list_tickets:    	Liste des Billets AdService
-user.index.menu.list_incidences: 	Liste des Questions AdService
-user.index.menu.list_statistics: 	Liste des Statistiques AdService
-user.index.menu.create_incidence_admin: Créer un impact en tant qu'administrateur
-user.index.menu.asign_user_to_ticket:   Attribuer billets pour les utilisateurs
-user.index.menu.new_ticket:		Créer un nouveau billet
-user.index.menu.my_tickets:             Mon Tickets
-user.index.menu.my_incidences:          Mon questions
-user.index.menu.new_workshop_order:     Postuler pour un nouvel atelier
-user.index.menu.actvie_workshop_order:  Appliquer pour activer/désactiver un atelier
-user.index.menu.order_list_workshop:    Afficher le statut actuel de ma demande
+user.index.menu.admin_title: 	 				MENU ADMIN
+user.index.menu.assessor_title:  				MENU CONSEILLER
+user.index.menu.user_title: 	 				MENU UTILISATEUR
+user.index.menu.ad_title:           			MENU AD
+user.index.menu.my_profile: 	 				Mon profil
+user.index.menu.list_partners: 	 				Liste des Partenaires AdService
+user.index.menu.list_users: 	 				Liste des Utilisateurs AdService
+user.index.menu.list_popups: 	 				Liste des Popups ADService
+user.index.menu.list_workshops:  				Liste des Ateliers AdService
+user.index.menu.list_tickets:    				Liste des Billets AdService
+user.index.menu.asign_user_to_ticket:   		Attribuer billets pour les utilisateurs
+user.index.menu.new_ticket:						Créer un nouveau billet
+user.index.menu.my_tickets:             		Mon Tickets
+user.index.menu.new_workshop_order:     		Postuler pour un nouvel atelier
+user.index.menu.active_workshop_order:  		Appliquer pour activer/désactiver un atelier
+user.index.menu.order_list_workshop:    		Afficher le statut actuel de ma demande
 user.index.menu.view_register_workshop_order:   Voir atelier s'applique
-user.index.menu.view_actvie_workshop_order:     Voir s'applique de l'activation / désactivation des ateliers
+user.index.menu.view_active_workshop_order:     Voir s'applique de l'activation / désactivation des ateliers
+
 # COMUNES
 home:      Index
 admin:     Admin
@@ -35,19 +30,24 @@ ticket:    Billet
 car:       Voiture
 post:      Message
 
-
 #TICKET
-ticket.history.title:      Histoire Billets
-ticket.opt.all:            Voir tous les billets
-ticket.opt.all_open:       Voir tous les billets ouverts
-ticket.opt.all_closed:     Voir tous les billets fermés
-ticket.opt.free :          Billets libre
-ticket.opt.assigned :      Billets attribués
-ticket.opt.answered :      Billets répondu
-ticket.opt.other_assessor: Billets d'un autre évaluateur
-ticket.opt.owner:          Votre ticket
-ticket.opt.workshop:       Billets pour votre atelier
+ticket.history.title:       Histoire Billets
+ticket.opt.all:             Voir tous les billets
+ticket.opt.all_open:        Voir tous les billets ouverts
+ticket.opt.all_closed:      Voir tous les billets fermés
+ticket.opt.free :           Billets libre
+ticket.opt.assigned :       Billets attribués
+ticket.opt.answered :       Billets répondu
+ticket.opt.other_assessor:  Billets d'un autre évaluateur
+ticket.opt.owner:           Votre ticket
+ticket.opt.workshop:        Billets pour votre atelier
 
+ticket.btn.newTicket:       Nuevo Ticket
+ticket.btn.search:          Buscar
+
+ticket.flt.placeholder.id:	Inserta ID de ticket
+ticket.flt.open:		 	Abierto
+ticket.flt.closed:		 	Cerrado
 
 ############################
 ########### OLD ############
@@ -64,7 +64,7 @@ Not logged in: Session non demarré
 Welcome: Bienvenue
 
 # Titulos
-Login: S'enregistrer  
+Login: S'enregistrer
 
 # Login
 Username: Nom d'utilisateur

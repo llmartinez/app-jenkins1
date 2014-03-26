@@ -121,7 +121,8 @@ class TicketController extends Controller {
                     'formC' => $formC->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
-                    'workshop' => $workshop,));
+                    'workshop' => $workshop,
+                    'form_name' => $form->getName(),));
     }
 
     /**
@@ -156,10 +157,11 @@ class TicketController extends Controller {
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
         return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array(
-                    'form'        => $form->createView(),
-                    'ticket'      => $ticket,
-                    'systems'     => $systems,
-                ));
+                                                                                        'form'        => $form->createView(),
+                                                                                        'form_name'   => $form->getName(),
+                                                                                        'ticket'      => $ticket,
+                                                                                        'systems'     => $systems,
+                                                                                    ));
     }
 
     /**
@@ -269,11 +271,13 @@ class TicketController extends Controller {
                 }
             }
             return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
+                                                                            'form_name' => $form->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems, )));
         }
 
         $array = array( 'formP'     => $formP->createView(),
+                        'form_name' => $form->getName(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems, );
@@ -374,9 +378,10 @@ class TicketController extends Controller {
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
 
-        return $this->render('TicketBundle:Ticket:close_ticket_layout.html.twig', array('ticket'   => $ticket,
-                                                                                        'systems'  => $systems,
-                                                                                        'form'     => $form->createView(), ));
+        return $this->render('TicketBundle:Ticket:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+                                                                                        'systems'   => $systems,
+                                                                                        'form'      => $form->createView(),
+                                                                                        'form_name' => $form->getName(), ));
     }
 
     /**

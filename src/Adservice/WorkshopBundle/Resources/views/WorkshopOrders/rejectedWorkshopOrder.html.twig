@@ -2,10 +2,10 @@
 
 {% block body %}
     <h1>Motivo del rechazo</h1>
-    
-     <form action="{{ path('workshopOrder_setReasonRejectionOrder', { 'id': workshopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" > 
-        
-        <label for="rejection_reason">Rejection Reaseon</label>
+
+     <form action="{{ path('workshopOrder_setReasonRejectionOrder', { 'id': workshopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <label for="rejection_reason">Rejection Reason</label>
         {{ form_widget(form.rejection_reason) }}<br/>
 
         {{ form_rest(form) }}
