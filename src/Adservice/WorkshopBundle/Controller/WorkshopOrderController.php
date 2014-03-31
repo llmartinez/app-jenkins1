@@ -492,7 +492,6 @@ class WorkshopOrderController extends Controller {
             if ($workshopOrder->getAction() == 'rejected' or $workshopOrder->getAction() == 'resend') {
 
                 $workshopBefore = $em->getRepository("WorkshopBundle:WorkshopOrder")->find($workshopOrder->getId());
-                var_dump($workshopBefore);
                 $ordersBefore[$workshopOrder->getId()] = $workshopBefore;
             }
         }

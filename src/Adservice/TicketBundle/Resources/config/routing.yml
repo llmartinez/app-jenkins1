@@ -31,8 +31,8 @@ listTicketFiltered:
     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered }
 
 ticketWorkshopList:
-    pattern:  /ticket/workshopList/
-    defaults: { _controller: TicketBundle:Ticket:workshopList }
+    pattern:  /ticket/workshopList/{page}/
+    defaults: { _controller: TicketBundle:Ticket:workshopList, page: 1 }
 
 ticketsFromWorkshop:
     pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}
@@ -51,8 +51,8 @@ blockTicket:
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
 
 closeTicket:
-    pattern:  /ticket/close/{id_ticket}
-    defaults: { _controller: TicketBundle:Ticket:closeTicket }
+    pattern:  /ticket/close/{id_ticket}/
+    defaults: { _controller: TicketBundle:Ticket:closeTicket, id_ticket: null }
 
 showTicketReadonly:
     pattern:  /ticket/show_read/{id_ticket}

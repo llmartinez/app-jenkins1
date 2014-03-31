@@ -406,7 +406,7 @@ class TicketController extends Controller {
      * @param  Entity $id_ticket
      * @return url
      */
-    public function closeTicketAction($id_ticket)
+    public function closeTicketAction($id_ticket=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -467,15 +467,21 @@ class TicketController extends Controller {
     /**
      * Obtiene todos los talleres del usuario logeado
      */
-    public function workshopListAction() {
+    public function workshopListAction($page=1 , $option=null) {
         $em = $this->getDoctrine()->getEntityManager();
 
-       // $logged_user = $this->get('security.context')->getToken()->getUser();
-       // $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+        $params[] = array();
 
-        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
+        $pagination = new Pagination($page);
 
-        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array('workshops' => $workshops));
+        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array( 'workshops'  => $workshops,
+                                                                                            'pagination' => $pagination));
     }
 
     /**
@@ -483,11 +489,20 @@ class TicketController extends Controller {
      * @param Int $id_workshop
      * @return type
      */
-    public function getTicketsFromWorkshopAction($id_workshop) {
+    public function getTicketsFromWorkshopAction($id_workshop, $page=1) {
         $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
-        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('workshop' => $workshop));
+        $params[] = array('workshop' => ' = '.$id_workshop);
+
+        $pagination = new Pagination($page);
+
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $tickets));
     }
 
     /**
@@ -541,11 +556,12 @@ class TicketController extends Controller {
      * @param Int $id_user
      */
     public function blockTicketAction($id_ticket, $id_user = null) {
+
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
-        ($user != null) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
+        ($user != null and $id_user != 0) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
 
         $em->persist($ticket);
         $em->flush();

@@ -15,7 +15,7 @@ class Pagination
     private $last_row;       //Numero del ultimo registro a mostrar
     private $total_pag;      //Numero total de paginas
 
-    public function __construct($page) {
+    public function __construct($page=1) {
         $this->setMaxRows(10);
         $this->setNumSidePages(5);
         $this->setPage($page);

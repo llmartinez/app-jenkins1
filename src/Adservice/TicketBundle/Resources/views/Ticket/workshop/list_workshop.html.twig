@@ -32,6 +32,9 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {% include 'UtilBundle:Pagination:pagination_workshoplist.html.twig' %}
+
     {% else %}
         No hay talleres!!
     {% endif %}
