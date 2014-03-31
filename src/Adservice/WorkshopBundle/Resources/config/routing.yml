@@ -2,9 +2,9 @@
 #   APDO. RUTAS WORKSHOP     #
 ##############################
 workshop_list:
-    pattern:  /list
-    defaults: { _controller: WorkshopBundle:Default:list }
-    
+    pattern:  /list/{page}/{option}
+    defaults: { _controller: WorkshopBundle:Default:list, page: 1 , option: null  }
+
 workshop_edit:
     pattern: /edit/{id}
     defaults: { _controller: WorkshopBundle:Default:editWorkshop }
@@ -27,11 +27,11 @@ workshop_new:
 #active_workshop_order:
 #    pattern: /activeWorkshopOrder
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:activeWorkshopOrder }
-#    
+#
 #order_list_workshop:
 #    pattern: /listWorkshopOrder
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:listWorkshopOrder }
-#    
+#
 #register_workshop:
 #    pattern: /registerWorkshopOrder/{id}/{action}
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:registerWorkshopOrder }
@@ -97,13 +97,13 @@ workshopOrder_setReasonRejectionOrder:
 #workshopOrder_change_status:
 #    pattern: /changeWorkshopStatusOrder/{id}/{status}
 #    defaults: { _controller: WorkshopBundle:WorkshopOrder:changeWorkshopStatusOrder}
-    
+
 
 
 
 ##############################
 #       RUTAS AJAX           #
 ##############################
-user_provinces: 
+user_provinces:
     pattern: /provincesFromRegion
     defaults: { _controller: UtilBundle:Default:provincesFromRegion }

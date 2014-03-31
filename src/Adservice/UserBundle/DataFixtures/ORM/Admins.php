@@ -15,10 +15,11 @@ class Admins extends AbstractFixture implements OrderedFixtureInterface {
         $pass = 'mcobJtS8ExG2JAUrEg3VzeLlgyxyyviEr5/uO+vel5stbf3TeHTJxZoHUZqfVHOqON1QNKcm5PXemcz9rW4BZg==';
         $salt = '79bc6981377363689c90b9c7d6962da9';
         $workshop = null;
+        $partner  = null;
         $role = 'ROLE_ADMIN';
         $num = Data::getNumAdmins();
         
-        $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $workshop, $role, $num);
+        $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $workshop ,$partner, $role, $num);
     }
 }
 

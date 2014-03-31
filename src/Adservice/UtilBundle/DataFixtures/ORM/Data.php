@@ -5,12 +5,13 @@ namespace Adservice\UtilBundle\DataFixtures\ORM;
 class Data {
 
     /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
-    private static $numAdmins    = 3;
-    private static $numAssessors = 5;
-    private static $numUsers     = 5;
-    private static $numPartners  = 3;
-    private static $numWorkshops = 5;
-    private static $numTickets   = 10;
+    private static $numAdmins    = 5;
+    private static $numAssessors = 35;
+    private static $numUsers     = 400;
+    private static $numAds       = 15;
+    private static $numPartners  = 15;
+    private static $numWorkshops = 400;
+    private static $numTickets   = 1000;
     private static $numPosts     = 4;
 
     /**
@@ -43,7 +44,16 @@ class Data {
         // Numero de entidades por clase de la aplicacion
         return Data::$numUsers;
     }
-
+    /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumAds()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return Data::$numAds;
+    }
     /**
      * Devuelve el numero de partners por clase que se crearan.
      *
@@ -355,7 +365,7 @@ class Data {
      */
     public static function getPlateNumber($i)
     {
-        ($i < 10) ? $result = 'T-'.$i.$i.$i.$i.'-TT' : $result = 'T-'.$i.$i.'-TT';
+        $result = 'T-'.$i.'-TT';
         return $result;
     }
 
@@ -427,12 +437,12 @@ class Data {
         if($entidad->getTicket()->getAssignedTo() != null)
         {
             if (rand() % 2) {
-                return $entidad->getTicket()->getOwner()->getUserName();
+                return $entidad->getTicket()->getCreatedBy()->getUserName();
             } else {
                 return $entidad->getTicket()->getAssignedTo()->getUserName();
             }
         }else{
-            return $entidad->getTicket()->getOwner()->getUserName();
+            return $entidad->getTicket()->getCreatedBy()->getUserName();
         }
     }
     /**

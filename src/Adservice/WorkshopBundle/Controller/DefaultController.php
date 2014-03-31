@@ -9,6 +9,7 @@ use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Form\WorkshopOrderType;
+use Adservice\UtilBundle\Entity\Pagination;
 
 class DefaultController extends Controller {
 
@@ -17,20 +18,25 @@ class DefaultController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction() {
+    public function listAction($page=1 , $option=null) {
         $em = $this->getDoctrine()->getEntityManager();
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
 
-//        $logged_user = $this->get('security.context')->getToken()->getUser();
-//        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+        $params[] = array();
 
-        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
-//        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('register_pending' => null));
+        $pagination = new Pagination($page);
 
-        return $this->render('WorkshopBundle:Default:list.html.twig', array('workshops' => $workshops));
+        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('WorkshopBundle:Default:list.html.twig', array('workshops' => $workshops,
+                                                                            'pagination' => $pagination,));
     }
 
     public function newWorkshopAction() {

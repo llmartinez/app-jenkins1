@@ -95,14 +95,12 @@ class DefaultController extends Controller
         $check_id = $petition->request->get('filter_id');
         $repoTicket  = $em->getRepository('TicketBundle:Ticket');
 
-        if($security->isGranted('ROLE_ASSESSOR')){
 
             if($check_id == 'all'){
 
                 $check_status = $petition->request->get('status');
 
                 if     ($check_status == 'all'   ) {
-                                                    $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
                                                     $array  = array('workshop' => $id_workshop);
                                                    }
                 elseif ($check_status == 'open'  ) {
@@ -122,15 +120,6 @@ class DefaultController extends Controller
                                     'workshop' => $id_workshop,);
                 }
             }
-
-        }else{
-            if($check_id == 'all'){
-                $array  = array('workshop' => $id_workshop);
-            }else{
-                $array  = array('workshop' => $id_workshop,
-                                'id'       => $check_id);
-            }
-        }
 
         $tickets = $repoTicket->findBy($array);
 

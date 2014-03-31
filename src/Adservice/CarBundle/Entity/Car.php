@@ -435,14 +435,10 @@ class Car
 
     public function __toString() {
 
-        return $this->plateNumber;
-       /* $version = $this->version;
-        $model = $version->getModel();
-        $brand = $model->getBrand();
-        $year = $this->year;
-        $car = $brand.' '.$model.' '.$version;
-
-        return $car;*/
+        $model   = $this->getModel();
+        $brand   = $this->getBrand();
+        $version = $this->getVersion();
+        return $brand.' '.$model.' '.$version;
     }
 
 }

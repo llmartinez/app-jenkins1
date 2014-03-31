@@ -11,6 +11,7 @@ use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
+use Adservice\UtilBundle\Entity\Pagination;
 
 class DefaultController extends Controller {
 
@@ -18,16 +19,25 @@ class DefaultController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction() {
+    public function listAction($page=1 , $option=null) {
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $all_partners = $em->getRepository("PartnerBundle:Partner")->findAll();
 
+        $params[] = array();
 
-        return $this->render('PartnerBundle:Default:list.html.twig', array('all_partners' => $all_partners));
+        $pagination = new Pagination($page);
+
+        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('PartnerBundle:Default:list.html.twig', array( 'all_partners' => $partners,
+                                                                            'pagination'   => $pagination,));
     }
     /**
      * Crea un socio en la bbdd

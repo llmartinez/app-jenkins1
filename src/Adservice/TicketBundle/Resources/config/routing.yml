@@ -23,8 +23,8 @@ showTicket:
     defaults: { _controller: TicketBundle:Ticket:showTicket }
 
 listTicket:
-    pattern:  /ticket/
-    defaults: { _controller: TicketBundle:Ticket:listTicket }
+    pattern:  /ticket/{page}/{option}
+    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , option: null  }
 
 listTicketFiltered:
     pattern:  /ticket/filtered

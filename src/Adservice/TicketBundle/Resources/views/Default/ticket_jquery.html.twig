@@ -18,6 +18,20 @@
     $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
 
     /**
+     * Vacia el combo de subsystem del formulario y cargamos subsistemas
+     * @return AjaxFunction
+     */
+    function list_tbl_subsystem() {
+
+        {% if form_name is defined %}
+            var form_subsystem = "{{ form_name }}_subsystem";
+            var url_ajax       = "{{ path("ticket_system") }}";
+
+            fill_subsystem(url_ajax, form_subsystem);
+        {% endif %}
+    }
+
+    /**
      * busca tickets que coincidan en modelo o subsistema con el ticket actual
      * @return AjaxFunction
      */
@@ -41,19 +55,5 @@
         else { if (parent == 'system') { var son = 'Subsystem'; }}
 
         $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
-    }
-
-    /**
-     * Vacia el combo de subsystem del formulario y cargamos subsistemas
-     * @return AjaxFunction
-     */
-    function list_tbl_subsystem() {
-
-        {% if form_name is defined %}
-            var form_subsystem = "{{ form_name }}_subsystem";
-            var url_ajax       = "{{ path("ticket_system") }}";
-
-            fill_subsystem(url_ajax, form_subsystem);
-        {% endif %}
     }
 </script>

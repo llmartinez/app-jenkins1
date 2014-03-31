@@ -16,13 +16,14 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
         $pass = 'QeDeEveLRGfrw94I1iCOzs37BWE+xnmQFjkT5EeUTwDjXWRIjQsSYghkc2kAefhuFMTPvnIaplq7xbPOesN22Q==';
         $salt = '84a2646fadd65616d73199e9f1fae1e1';
         $workshop = 'yes';
+        $partner  = null;
         $role = 'ROLE_USER';
         $num = Data::getNumUsers();
 
-        $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $workshop, $role, $num);
+        $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $workshop, $partner, $role, $num);
     }
 
-    public static function loadUsers($manager, $_this, $type, $pass, $salt, $workshop=null, $role, $num)
+    public static function loadUsers($manager, $_this, $type, $pass, $salt, $workshop=null ,$partner=null, $role, $num)
     {
         for($i=1;$i<=$num;$i++)
         {
@@ -43,6 +44,9 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
             if($workshop != null ) {
                 $entidad->setWorkshop($_this->getReference(Data::getWorkshop()));
+            }
+            if($partner != null ) {
+                $entidad->setPartner($_this->getReference(Data::getPartner()));
             }
             $entidad->addRole       ($_this->getReference($role));
 

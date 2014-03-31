@@ -43,15 +43,17 @@ btn.search:                	Search
 placeholder.ticket.id:	   	Insert ticket ID
 
 #TICKET
-ticket.history.title:        Tickets History
+ticket.history.title:         Tickets History
 ticket.opt.all:               Show all tickets
-ticket.opt.all_open:          Show all tickets opened
-ticket.opt.all_closed:        Show all tickets closed
+ticket.opt.open:              Show opened tickets
+ticket.opt.closed:            Show closed tickets
 ticket.opt.free :             Show free tickets
-ticket.opt.assessor.assigned: Show your assigned tickets
+ticket.opt.pending:  		  Show pending tickets
+ticket.opt.answered: 		  Show answered tickets
+ticket.opt.assessor.pending:  Show your pending tickets
 ticket.opt.assessor.answered: Show your answered tickets
 ticket.opt.assessor.closed:   Show your closed tickets
-ticket.opt.other.assigned:    Show other assigned tickets
+ticket.opt.other.pending:     Show other pending tickets
 ticket.opt.other.answered:    Show other answered tickets
 ticket.opt.other.closed:      Show other closed tickets
 ticket.opt.owner:             Show your tickets

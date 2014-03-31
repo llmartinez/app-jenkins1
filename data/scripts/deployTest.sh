@@ -1,6 +1,6 @@
 clear
 echo '
-  Reloading schema "ad-service-test" and fixtures: 
+  Reloading schema and fixtures: 
 ';
 
 php app/console doctrine:schema:drop --force

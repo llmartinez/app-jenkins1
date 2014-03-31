@@ -2,9 +2,9 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /list
-    defaults: { _controller: PartnerBundle:Default:list }
-    
+    pattern:  /list/{page}/{option}
+    defaults: { _controller: PartnerBundle:Default:list, page: 1 , option: null }
+
 partner_edit:
     pattern: /edit/{id}
     defaults: { _controller: PartnerBundle:Default:editPartner }
@@ -16,10 +16,10 @@ partner_delete:
 partner_new:
     pattern: /new
     defaults: { _controller: PartnerBundle:Default:newPartner }
-    
+
 ##############################
 #       RUTAS AJAX           #
 ##############################
-user_provinces: 
+user_provinces:
     pattern: /provincesFromRegion
-    defaults: { _controller: UtilBundle:Default:provincesFromRegion }    
+    defaults: { _controller: UtilBundle:Default:provincesFromRegion }

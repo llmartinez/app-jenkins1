@@ -1,149 +1,136 @@
 
-/*Numero maximo de tickets que se mostraran en la tabla */
-var max_rows_page = 10;
+// /**
+//  * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario
+//  * @param {url de tipo {{ path('mi_path') }}} url_ajax
+//  */
+// function fill_tickets(url_ajax, url_show) {
 
-/*Numero maximo de paginas que se mostraran a los lados de la pagina actual de la paginacion */
-var max_pages_pagination = 2;
+//     var option   = $('select[id=slct_historyTickets]').val();
+//     var new_page = $('#page').val();
 
-/**
- * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function fill_tickets(url_ajax, url_show) {
+//     var filter_id   = setCheckId();
+//     var status      = setCheckStatus();
 
-    var option   = $('select[id=slct_historyTickets]').val();
-    var new_page = $('#page').val();
+//     $.ajax({
+//         type: "POST",
+//         url: url_ajax,
+//         data: { option: option, filter_id: filter_id, status: status, url_show: url_show },
+//         dataType: "json",
+//         success: function(data) {
+//             // Limpiamos y llenamos el combo con las opciones del json
+//             $('#ticketBody').empty();
 
-    var filter_id   = setCheckId();
-    var status      = setCheckStatus();
+//             $.each(data, function(idx, elm) {
 
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: { option: option, filter_id: filter_id, status: status, url_show: url_show },
-        dataType: "json",
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#ticketBody').empty();
+//                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
+//                 else{
 
-            //PAGINACION
-            var total = data.length;
-            var cont  = 1;
-            var limit = max_rows_page;
-            var num_pag = Math.ceil(total/limit);
-            if(new_page != ""){ page = new_page } else{ page = 1 };
+//                     var lim_actual = limit*page;
+//                     var num_actual = lim_actual-limit;
 
-            $.each(data, function(idx, elm) {
+//                     if (cont > num_actual && cont <= lim_actual ) {
 
-                if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
-                else{
+//                         url = url_show.replace("PLACEHOLDER", elm.id);
 
-                    var lim_actual = limit*page;
-                    var num_actual = lim_actual-limit;
+//                         if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
+//                         else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
 
-                    if (cont > num_actual && cont <= lim_actual ) {
+//                         $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
+//                                                    + "<td>" + created +" "+ elm.id + "</td>"
+//                                                    + "<td>" + elm.date             + "</td>"
+//                                                    + "<td>" + elm.workshop         + "</td>"
+//                                                    + "<td>" + elm.car              + "</td>"
+//                                                    + "<td>" + elm.description      + "</td>"
+//                                                 );
+//                     }
+//                     cont++;
+//                 }
 
-                        url = url_show.replace("PLACEHOLDER", elm.id);
+//                 if (!elm.error){ paginator(num_pag); }
+//             });
 
-                        if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
-                        else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
+//         },
+//         error: function() {
+//             console.log("Error al cargar tickets...");
+//         }
+//     });
+// }
 
-                        $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
-                                                   + "<td>" + created +" "+ elm.id + "</td>"
-                                                   + "<td>" + elm.date             + "</td>"
-                                                   + "<td>" + elm.workshop         + "</td>"
-                                                   + "<td>" + elm.car              + "</td>"
-                                                   + "<td>" + elm.description      + "</td>"
-                                                );
-                    }
-                    cont++;
-                }
+// /**
+//  * Rellena (fill) el combo de los tickets segun el workshop seleccionado por el usuario
+//  * @param {url de tipo {{ path('mi_path') }}} url_ajax
+//  */
+// function fill_tickets_from_workshop(url_ajax, url_show, user) {
 
-                if (!elm.error){ paginator(num_pag); }
-            });
+//     var id_workshop = $('#id_workshop').val();
+//     var new_page = $('#page').val();
 
-        },
-        error: function() {
-            console.log("Error al cargar tickets...");
-        }
-    });
-}
+//     if(new_page == "" || new_page == null){ new_page = 1 };
 
-/**
- * Rellena (fill) el combo de los tickets segun el workshop seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function fill_tickets_from_workshop(url_ajax, url_show, user) {
+//     var filter_id = setCheckId();
+//     var status    = setCheckStatus();
 
-    var id_workshop = $('#id_workshop').val();
-    var new_page = $('#page').val();
+//     $.ajax({
+//         type: "POST",
+//         url: url_ajax,
+//         data: { id_workshop: id_workshop, filter_id: filter_id, status: status, url_show: url_show, user: user },
+//         dataType: "json",
+//         success: function(data) {
+//             // Limpiamos y llenamos el combo con las opciones del json
+//             $('#ticketBody').empty();
 
-    if(new_page == "" || new_page == null){ new_page = 1 };
+//             //PAGINACION
+//             var total = data.length;
+//             var cont  = 1;
+//             var limit = max_rows_page;
+//             var num_pag = Math.ceil(total/limit);
+//             var page = new_page;
 
-    var filter_id = setCheckId();
-    var status    = setCheckStatus();
+//             $.each(data, function(idx, elm) {
 
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: { id_workshop: id_workshop, filter_id: filter_id, status: status, url_show: url_show, user: user },
-        dataType: "json",
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#ticketBody').empty();
+//                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
+//                 else{
 
-            //PAGINACION
-            var total = data.length;
-            var cont  = 1;
-            var limit = max_rows_page;
-            var num_pag = Math.ceil(total/limit);
-            var page = new_page;
+//                     var lim_actual = limit*page;
+//                     var num_actual = lim_actual-limit;
 
-            $.each(data, function(idx, elm) {
+//                     if (cont > num_actual && cont <= lim_actual ) {
 
-                if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
-                else{
+//                         url = url_show.replace("PLACEHOLDER", elm.id);
 
-                    var lim_actual = limit*page;
-                    var num_actual = lim_actual-limit;
+//                         if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
+//                         else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
 
-                    if (cont > num_actual && cont <= lim_actual ) {
-
-                        url = url_show.replace("PLACEHOLDER", elm.id);
-
-                        if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
-                        else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
-
-                        if (elm.status instanceof Object) {
-                            if (elm.status['blocked_id'] == user) {
-                                    status = '<a id="locked_ticket" style="color:red"  title="you have this ticket blocked for an answer" >Pending</a>'; }
-                            else {
-                                    status = '<a id="locked_ticket" style="color:gray" title="this ticket is blocked by '+ elm.status['blocked_by'] +'" >Blocked</a>'; }
-                        }
-                        else{ status = elm.status; }
+//                         if (elm.status instanceof Object) {
+//                             if (elm.status['blocked_id'] == user) {
+//                                     status = '<a id="locked_ticket" style="color:red"  title="you have this ticket blocked for an answer" >Pending</a>'; }
+//                             else {
+//                                     status = '<a id="locked_ticket" style="color:gray" title="this ticket is blocked by '+ elm.status['blocked_by'] +'" >Blocked</a>'; }
+//                         }
+//                         else{ status = elm.status; }
 
 
-                        $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
-                                                   + "<td>" + created +" "+ elm.id + "</td>"
-                                                   + "<td>" + elm.date             + "</td>"
-                                                   + "<td>" + elm.car              + "</td>"
-                                                   + "<td>" + elm.assignedTo       + "</td>"
-                                                   + "<td>" + elm.description      + "</td>"
-                                                   + "<td>" + status               + "</td>"
-                                                );
-                    }
-                    cont++;
-                }
+//                         $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
+//                                                    + "<td>" + created +" "+ elm.id + "</td>"
+//                                                    + "<td>" + elm.date             + "</td>"
+//                                                    + "<td>" + elm.car              + "</td>"
+//                                                    + "<td>" + elm.assignedTo       + "</td>"
+//                                                    + "<td>" + elm.description      + "</td>"
+//                                                    + "<td>" + status               + "</td>"
+//                                                 );
+//                     }
+//                     cont++;
+//                 }
 
-                if (!elm.error){ paginator(num_pag); }
-            });
+//                 if (!elm.error){ paginator(num_pag); }
+//             });
 
-        },
-        error: function() {
-            console.log("Error al cargar tickets...");
-        }
-    });
-}
+//         },
+//         error: function() {
+//             console.log("Error al cargar tickets...");
+//         }
+//     });
+// }
 
 /**
  * Comprueba el checkbox open/closed
@@ -228,31 +215,29 @@ function fill_subsystem(url_ajax, form_subsystem) {
     //Valor del subsistema del ticket al cerrar
     var id_subsystem = ($('#'+form_subsystem).val());
     if (id_subsystem == null) $('#'+form_subsystem).empty();
-    else {
 
-        $.ajax({
-            type: "POST",
-            url: url_ajax,
-            data: {id_system: id_system},
-            dataType: "json",
-            success: function(data) {
+    $.ajax({
+        type: "POST",
+        url: url_ajax,
+        data: {id_system: id_system},
+        dataType: "json",
+        success: function(data) {
 
-                // Limpiamos y llenamos el combo con las opciones del json
-                $('#'+form_subsystem).empty();
+            // Limpiamos y llenamos el combo con las opciones del json
+            $('#'+form_subsystem).empty();
 
-                //Primer campo vacío
-                $.each(data, function(idx, elm) {
-                    if (elm.id == id_subsystem)
-                        $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                    else
-                        $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                });
-            },
-            error: function() {
-                console.log("Error al cargar subsistemas...");
-            }
-        });
-    }
+            //Primer campo vacío
+            $.each(data, function(idx, elm) {
+                if (elm.id == id_subsystem)
+                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                else
+                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+            });
+        },
+        error: function() {
+            console.log("Error al cargar subsistemas...");
+        }
+    });
 }
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
