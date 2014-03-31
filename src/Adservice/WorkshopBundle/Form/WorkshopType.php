@@ -31,6 +31,8 @@ class WorkshopType extends AbstractType
             ->add('test', 'checkbox', array('required' => false))
             ->add('typology')
             ->add('endtest_at')
+            ->add('update_at')
+            ->add('lowdate_at')
             ->add('partner')
             ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')
