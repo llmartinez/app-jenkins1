@@ -44,8 +44,8 @@ class LoginControllerTest extends WebTestCase {
         $crawler = $client->request('GET', '/');
 
         //carga el form con los datos de login
-        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $users['adservice_userbundle_usertype[username]'],
-                                                                     '_password' => $users['adservice_userbundle_usertype[password]'],
+        $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $users[0]['value'],
+                                                                     '_password' => $users[1]['value'],
                                                                     ));
         //ejecuta el submit del form
         $crawler = $client->submit($loginForm);
@@ -66,7 +66,8 @@ class LoginControllerTest extends WebTestCase {
         $crawler = $client->click($linkPerfil);
 
         //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
-        $this->assertEquals( $users['adservice_userbundle_usertype[username]'], $crawler->filter('form input[name="adservice_userbundle_usertype[username]"]')->attr('value'),
+        $form = 'form input[name="'.$users[0]['field'].'"]';die;
+        $this->assertEquals( $users[0]['value'], $crawler->filter($form)->attr('value'),
             'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
         );
 
@@ -108,14 +109,14 @@ class LoginControllerTest extends WebTestCase {
 
         return array(
             array(
-                array('adservice_userbundle_usertype[username]' => 'admin1',
-                      'adservice_userbundle_usertype[password]' => 'admin'),
-                array('adservice_userbundle_usertype[username]' => 'assessor1',
-                      'adservice_userbundle_usertype[password]' => 'assessor'),
-                array('adservice_userbundle_usertype[username]' => 'user1',
-                      'adservice_userbundle_usertype[password]' => 'user'),
-                array('adservice_userbundle_usertype[username]' => 'user2',
-                      'adservice_userbundle_usertype[password]' => 'user')
+                array(array('field' => 'admin_assessor_type[username]', 'value' => 'admin1'),
+                      array('field' => 'admin_assessor_type[password]', 'value' => 'admin')),
+                array(array('field' => 'admin_assessor_type[username]', 'value' => 'assessor1'),
+                      array('field' => 'admin_assessor_type[password]', 'value' => 'assessor')),
+                array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user1'),
+                      array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user')),
+                array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user2'),
+                      array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user'))
             )
         );
     }
