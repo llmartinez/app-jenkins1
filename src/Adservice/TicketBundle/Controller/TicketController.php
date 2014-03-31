@@ -42,6 +42,7 @@ class TicketController extends Controller {
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request    = $this->getRequest();
+        $security   = $this->get('security.context');
 
         $params     = array();
         $id_user    = $this->get('security.context')->getToken()->getUser()->getId();
@@ -62,8 +63,18 @@ class TicketController extends Controller {
                 }
                 else{ $params[] = array(); }
             }
+            elseif (!$security->isGranted('ROLE_ASSESSOR')) {
+                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $security->getToken()->getUser()->getWorkshop()->getId()));
+
+                if($workshops[0]->getId() != "") {
+                    $params[] = array('workshop', '= '.$workshops[0]->getId());
+                    $option = $workshops[0]->getId();
+                }
+                else{ $params[] = array(); }
+            }
             else{ $params[] = array(); }
         }
+
         elseif ($option == 'all'      ) { $params[] = array();  }
         elseif ($option == 'opened'   ) { $params[] = array('status'        , ' = '.$open  ->getId()); }
         elseif ($option == 'closed'   ) { $params[] = array('status'        , ' = '.$closed->getId()); }

@@ -29,4 +29,16 @@
 	<div class="form-group">
 		{% if workshop.partner      != "" %} Partner: {{ workshop.partner      }} {% endif %}
 	</div>
+	{# OBERVATIONS #}
+	<div class="form-group">
+		{% if is_granted('ROLE_ADMIN') %}
+			{% if workshop.observationAdmin      != "" %} Observations: {{ workshop.observationAdmin      }} {% endif %}
+
+		{% elseif is_granted('ROLE_ASSESSOR') %}
+			{% if workshop.observationAssessor   != "" %} Observations: {{ workshop.observationAssessor   }} {% endif %}
+
+		{% elseif is_granted('ROLE_USER') %}
+			{% if workshop.observationWorkshop   != "" %} Observations: {{ workshop.observationWorkshop   }} {% endif %}
+		{% endif %}
+	</div>
 {% endif %}

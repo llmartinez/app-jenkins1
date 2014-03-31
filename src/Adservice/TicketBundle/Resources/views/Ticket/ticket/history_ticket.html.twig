@@ -52,6 +52,8 @@
                 </tbody>
             </table>
 
+            {% include 'TicketBundle:Default:tickets_history_pagination.html.twig' %}
+
             <script type="text/javascript">
 
                 $(document).ready(function() {
@@ -78,7 +80,6 @@
 
                 });
             </script>
-            {% include 'TicketBundle:Default:tickets_history_pagination.html.twig' %}
 
         </div>
     </div>
