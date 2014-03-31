@@ -492,7 +492,8 @@ class TicketController extends Controller {
     public function getTicketsFromWorkshopAction($id_workshop, $page=1) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $params[] = array('workshop' => ' = '.$id_workshop);
+        $params = array();
+        $params[] = array('workshop',' = '.$id_workshop);
 
         $pagination = new Pagination($page);
 
@@ -529,10 +530,8 @@ class TicketController extends Controller {
             $this->assignTicket($ticket, null);
         }
 
-        //<--------------------------------------------------------------------------------------------------TODO hacer refactoring, no mola los 2 if(user=null)...
-
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
-        return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
+        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $workshop->getTickets()));
     }
 
     /**

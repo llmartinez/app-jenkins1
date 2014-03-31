@@ -28,7 +28,7 @@
                             <td>{{ ticket.id }}</td>
                             <td>{{ ticket.description }} </td>
                             {#<td>{{ ticket.importance}}</td>#}
-                            <td>{{ ticket.created_by }}</td>
+                            <td>{{ ticket.createdBy }}</td>
                             <td>{{ ticket.assignedTo }}</td>
                             <td>
                                 <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"><span class="glyphicon glyphicon-search" title="Show ticket"></span></a>

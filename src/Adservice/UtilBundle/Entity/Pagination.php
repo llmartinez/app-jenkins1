@@ -203,7 +203,7 @@ class Pagination
 
         $where = 'WHERE e.id > 0 ';
 
-        if($params[0] != null) {
+        if($params != null and $params[0] != null) {
             foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
         }
 

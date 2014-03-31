@@ -35,11 +35,11 @@ ticketWorkshopList:
     defaults: { _controller: TicketBundle:Ticket:workshopList, page: 1 }
 
 ticketsFromWorkshop:
-    pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}
-    defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop }
+    pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}/{page}/
+    defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop, page: 1 }
 
 assignTicket:
-    pattern: /ticket/assingTicket/{id_ticket}
+    pattern: /ticket/assingTicket/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
 
 assignUserToTicket:

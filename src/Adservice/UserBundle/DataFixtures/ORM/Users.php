@@ -38,7 +38,9 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setActive     ('1');
             $entidad->setRegion     ($_this->getReference(Data::getRegions()));
             $entidad->setProvince   ($_this->getReference(Data::getProvinces()));
+            $entidad->setCreatedBy  ($_this->getReference('superadmin'));
             $entidad->setCreatedAt  (new \DateTime());
+            $entidad->setModifiedBy ($_this->getReference('superadmin'));
             $entidad->setModifiedAt (new \DateTime());
             $entidad->setCountry    ($_this->getReference(Data::getCountries()));
             $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
