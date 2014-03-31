@@ -19,6 +19,8 @@ class WorkshopOrderCreateType extends AbstractType
             ->add('email_1','email')
             ->add('province')
             ->add('region')
+            ->add('typology')
+            ->add('test')
         ;
     }
 

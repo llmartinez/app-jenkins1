@@ -17,20 +17,11 @@
     </div>
     <script type="text/javascript">
 
-		$('.change_page').click(function() {
-		   $('#page').val($(this).text());
-		   tickets_ajax();
-		});
-
 	    $('#firstpage').click(function() {
 
-	                $('#page').val(1);
+            $('#page').val(1);
 
-					{% if workshop.id != "" %}
-			            tickets_from_workshop_ajax();
-			        {% else %}
-	                	tickets_ajax();
-	        		{% endif %}
+					
 	    });
 
 	    $('#btn_anterior').click(function() {
@@ -40,11 +31,7 @@
 
 	                $('#page').val(ant_page);
 
-					{% if workshop.id != "" %}
-			            tickets_from_workshop_ajax();
-			        {% else %}
-	                	tickets_ajax();
-	        		{% endif %}
+					
 	        	}
 	    });
 
@@ -55,11 +42,7 @@
 
 	                $('#page').val(next_page);
 
-					{% if workshop.id != "" %}
-			            tickets_from_workshop_ajax();
-			        {% else %}
-	                	tickets_ajax();
-	        		{% endif %}
+					
 	            }
 	    });
 
@@ -69,24 +52,8 @@
 
 	                $('#page').val(last_page);
 
-					{% if workshop.id != "" %}
-			            tickets_from_workshop_ajax();
-			        {% else %}
-	                	tickets_ajax();
-	        		{% endif %}
+					
 	    });
-
-
-	    // $('.change_page').click(function() {
-
-	    //             $('#page').val($(this).text());
-
-					// {% if workshop.id != "" %}
-			  //           tickets_from_workshop_ajax();
-			  //       {% else %}
-	    //             	tickets_ajax();
-	    //     		{% endif %}
-	    // });
 
 	    function tickets_ajax() {
 	        var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
@@ -94,11 +61,4 @@
 
 	        fill_tickets(url_ajax, url_show);
 	    }
-
-	    function tickets_from_workshop_ajax() {
-                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
-                var url_ajax = "{{ path("tickets_from_workshop") }}";
-
-                fill_tickets_from_workshop(url_ajax, url_show);
-        }
 	</script>

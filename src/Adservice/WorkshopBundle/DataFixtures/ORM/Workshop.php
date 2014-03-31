@@ -8,14 +8,14 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Workshops extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 14; }
-    
+
     public function load(ObjectManager $manager) {
-        
-        $num = Data::getNumWorkshops();    
-        
-        for($i=1;$i<=$num;$i++) 
+
+        $num = Data::getNumWorkshops();
+
+        for($i=1;$i<=$num;$i++)
         {
             $entidad = new Workshop();
             $entidad->setName('workshop'.$i);
@@ -29,11 +29,11 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setModifiedAt(new \DateTime());
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
-            $entidad->setModifyBy($this->getReference('superadmin'));
+            $entidad->setModifiedBy($this->getReference('superadmin'));
             $entidad->setPartner($this->getReference(Data::getPartner()));
             $entidad->setTypology($this->getReference(Data::getTypologies()));
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getName(), $entidad);
         }
         /*TODO

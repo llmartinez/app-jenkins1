@@ -7,7 +7,7 @@
                 {% if ticket.blockedBy == app.security.getToken().getUser() %}
 
                     {# desbloquear Ticket #}
-                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id }) }}">
+                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': 0 }) }}">
                         <span class="glyphicon glyphicon-remove-circle"  title="Remove the bloqued status" style="color:red"></span></a>
                 {% else %}
 

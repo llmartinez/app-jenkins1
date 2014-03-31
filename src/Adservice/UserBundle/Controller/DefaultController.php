@@ -13,6 +13,7 @@ use Adservice\UserBundle\Form\UserPartnerType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 
 use Adservice\UserBundle\Entity\User;
+use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
 
@@ -22,9 +23,9 @@ class DefaultController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-        
+
 //        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-//        
+//
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
@@ -39,10 +40,10 @@ class DefaultController extends Controller {
         $petition = $this->getRequest();
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
-        
+
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-        
+
         return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user));
     }
 
@@ -53,7 +54,7 @@ class DefaultController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction() {
+    public function userListAction($page=1, $option=null) {
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
@@ -67,6 +68,11 @@ class DefaultController extends Controller {
         $users_role_user = array();
         $users_role_ad = array();
 
+
+        $pagination = new Pagination($page);
+        $params[] = array();
+        $users = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
+
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
@@ -76,11 +82,15 @@ class DefaultController extends Controller {
             elseif ($role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
         }
 
+        $length = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+
+        $pagination->setTotalPagByLength($length);
 
         return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin'      => $users_role_admin,
                                                                         'users_role_user'       => $users_role_user,
                                                                         'users_role_assessor'   => $users_role_assessor,
-                                                                        'users_role_ad'         => $users_role_ad
+                                                                        'users_role_ad'         => $users_role_ad,
+                                                                        'pagination'            => $pagination,
                                                                        ));
     }
 
@@ -188,6 +198,7 @@ class DefaultController extends Controller {
 
         if ($form->isValid()) {
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $user->setCreatedBy($this->get('security.context')->getToken()->getUser());
 //            $partner = $form->getData('partner');
             $this->saveUser($em, $user);
 
@@ -223,7 +234,7 @@ class DefaultController extends Controller {
             $user->setPassword($original_password);
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $user->setModifyBy($this->get('security.context')->getToken()->getUser());
+        $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
         $em->persist($user);
         $em->flush();

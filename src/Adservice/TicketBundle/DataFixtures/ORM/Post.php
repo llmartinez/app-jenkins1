@@ -21,11 +21,11 @@ class Posts extends AbstractFixture implements OrderedFixtureInterface {
             {
                 $entidad = new Post();
                 $entidad->setTicket     ($this->getReference(Data::getTicketDescription($i)));
-                $entidad->setOwner      ($this->getReference(Data::getPostOwner($entidad)));
+                $entidad->setCreatedBy  ($this->getReference(Data::getPostOwner($entidad)));
                 if($entidad->getTicket()->getAssignedTo() != null) {
                     $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getAssignedTo()->getUserName()));
                 }else{
-                    $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getOwner()->getUserName()));
+                    $entidad->setModifiedBy ($this->getReference($entidad->getTicket()->getCreatedBy()->getUserName()));
                 }
                 $entidad->setCreatedAt  (new \DateTime());
                 $entidad->setModifiedAt (new \DateTime());

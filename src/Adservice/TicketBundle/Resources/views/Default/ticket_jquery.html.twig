@@ -2,19 +2,12 @@
 //Funciones para el autorellenado de los combos de campos de coches de los formularios
 
     $(document).ready(function() {
-        // Limpiamos el combo de subsystem del formulario para cerrarlo
-        {% if ticket.subsystem.system is not defined %}
-        $('select[id=new_ticket_form_subsystem]').empty();
-        $('select[id=edit_ticket_form_subsystem]').empty();
-        $('select[id=close_ticket_form_subsystem]').empty();
-        {% endif %}
+        // Limpiamos el combo de subsystem del formulario y cargamos subsistemas
+        list_tbl_subsystem();
     });
 
     //cambiar model en funcion de brand
-    $('#id_system').change(function() {
-        var url_ajax = "{{ path("ticket_system") }}";
-        fill_subsystem(url_ajax);
-    });
+    $('#id_system').change(function() { list_tbl_subsystem(); });
 
     //vacia tbl_similar
     $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });
@@ -23,6 +16,20 @@
     //llena tbl_similar
     $('#new_car_form_model'       ).change(function() { list_tbl_similar() });
     $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
+
+    /**
+     * Vacia el combo de subsystem del formulario y cargamos subsistemas
+     * @return AjaxFunction
+     */
+    function list_tbl_subsystem() {
+
+        {% if form_name is defined %}
+            var form_subsystem = "{{ form_name }}_subsystem";
+            var url_ajax       = "{{ path("ticket_system") }}";
+
+            fill_subsystem(url_ajax, form_subsystem);
+        {% endif %}
+    }
 
     /**
      * busca tickets que coincidan en modelo o subsistema con el ticket actual
@@ -35,6 +42,7 @@
 
         fill_tbl_similar(url_ajax, url_show);
     }
+
     /**
      * vacia tbl_similar
      * @return AjaxFunction

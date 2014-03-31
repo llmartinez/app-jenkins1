@@ -98,6 +98,13 @@ class Car
     private $created_at;
 
     /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
      * @var date $modified_at
      *
      * @ORM\Column(name="modified_at", type="datetime")
@@ -349,6 +356,26 @@ class Car
     }
 
     /**
+     * Set created_by
+     *
+     * @param \Adservice\UserBundle\Entity\User $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return string
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
      * Set modified_at
      *
      * @param datetime $modifiedAt
@@ -408,14 +435,10 @@ class Car
 
     public function __toString() {
 
-        return $this->plateNumber;
-       /* $version = $this->version;
-        $model = $version->getModel();
-        $brand = $model->getBrand();
-        $year = $this->year;
-        $car = $brand.' '.$model.' '.$version;
-
-        return $car;*/
+        $model   = $this->getModel();
+        $brand   = $this->getBrand();
+        $version = $this->getVersion();
+        return $brand.' '.$model.' '.$version;
     }
 
 }

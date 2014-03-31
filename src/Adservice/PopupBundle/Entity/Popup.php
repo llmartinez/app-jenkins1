@@ -50,7 +50,7 @@ class Popup {
      * @ORM\Column(name="enddate_at", type="datetime")
      */
     private $enddate_at;
-    
+
     /**
      * @var boolean $active
      *
@@ -66,6 +66,13 @@ class Popup {
     private $created_at;
 
     /**
+     * @var integer $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
      * @var datetime $modified_at
      *
      * @ORM\Column(name="modified_at", type="datetime")
@@ -73,11 +80,11 @@ class Popup {
     private $modified_at;
 
     /**
-     * @var string $modify_by
+     * @var string $modified_by
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
-    private $modify_by;
+    private $modified_by;
 
 
     /**
@@ -207,6 +214,24 @@ class Popup {
     }
 
     /**
+     * Set created_by
+     *
+     * @param user $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return integer
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
+    }
+
+    /**
      * Set modified_at
      *
      * @param datetime $modifiedAt
@@ -227,23 +252,23 @@ class Popup {
     }
 
     /**
-     * Set modify_by
+     * Set modified_by
      *
-     * @param user $modify_by
+     * @param user $modified_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user)
     {
-        $this->modify_by = $user;
+        $this->modified_by = $user;
     }
 
     /**
-     * Get modify_by
+     * Get modified_by
      *
      * @return string 
      */
-    public function getModifyBy()
+    public function getModifiedBy()
     {
-        return $this->modify_by;
+        return $this->modified_by;
     }
     
     public function __toString() {

@@ -21,7 +21,7 @@ class PartnerTest extends \PHPUnit_Framework_TestCase
        $partner->setEmail2('test@test.es');
        $partner->setFax('931112233');
        $partner->setModifiedAt(new \DateTime('today'));
-       $partner->setModifyBy(UserTest::GetUser());
+       $partner->setmodifiedBy(UserTest::GetUser());
        $partner->setPhoneNumber1('931112233');
        $partner->setPhoneNumber2('931112233');
        $partner->setPostalCode('08080');

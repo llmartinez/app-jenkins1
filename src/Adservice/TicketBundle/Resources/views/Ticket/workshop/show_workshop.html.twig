@@ -1,7 +1,7 @@
 
 {% if workshop.id         != "" %}
-	<legend>Workshop
-			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="Back"></span></a></a>
+	<legend>{% trans %} workshop {% endtrans %}
+			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a></a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
@@ -9,7 +9,7 @@
 	{# WORKSHOP #}
 	<div class="form-group">
 		#{{ workshop.partner.id}},{{ workshop.id }}: <b>{{ workshop.name }}</b>
-		{% if workshop.contact      != "" %}<b>Contact:  </b>{{ workshop.contact      }}  {% endif %}
+		{% if workshop.contact      != "" %}<b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
 	</div>
 
 	{# TEL/MAIL #}
@@ -28,5 +28,17 @@
 	{# PARTNER #}
 	<div class="form-group">
 		{% if workshop.partner      != "" %} Partner: {{ workshop.partner      }} {% endif %}
+	</div>
+	{# OBERVATIONS #}
+	<div class="form-group">
+		{% if is_granted('ROLE_ADMIN') %}
+			{% if workshop.observationAdmin      != "" %} Observations: {{ workshop.observationAdmin      }} {% endif %}
+
+		{% elseif is_granted('ROLE_ASSESSOR') %}
+			{% if workshop.observationAssessor   != "" %} Observations: {{ workshop.observationAssessor   }} {% endif %}
+
+		{% elseif is_granted('ROLE_USER') %}
+			{% if workshop.observationWorkshop   != "" %} Observations: {{ workshop.observationWorkshop   }} {% endif %}
+		{% endif %}
 	</div>
 {% endif %}

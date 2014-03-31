@@ -41,13 +41,14 @@
             {% if  users_role_ad       is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_ad      , role:'ad'      } %} {% endif %}
             {% if  users_role_assessor is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_assessor, role:'assessor'} %} {% endif %}
             {% if  users_role_user     is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users_role_user    , role:'user'    } %} {% endif %}
-            
-            
+
             {# Cuando se inserta el listado en otro html, los usuarios son "users"            #}
             {% if  users               is defined %} {% include 'UserBundle:Default:_list_especific.html.twig' with {users : users              , role:'user'    } %} {% endif %}
 
         </tbody>
     </table>
+
+    {% include 'UtilBundle:Pagination:pagination_user.html.twig' %}
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -58,7 +59,7 @@
                     <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
                 </div>
                 <div class="modal-body">
-                    Estas seguro que quieres eliminar este usuario?                    
+                    Estas seguro que quieres eliminar este usuario?
                 </div>
                 <div class="modal-footer">
                     <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>

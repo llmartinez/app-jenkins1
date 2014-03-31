@@ -10,44 +10,69 @@ user.index.menu.list_users:                     Listado de Usuarios ADService
 user.index.menu.list_popups:                    Listado de Popups ADService
 user.index.menu.list_workshops:                 Listado de Talleres ADService
 user.index.menu.list_tickets:                   Listado de Tickets AdService
-user.index.menu.list_incidences:                Listado de Incidencias ADService
-user.index.menu.list_statistics:                Listado de Estadísticas ADService
-user.index.menu.create_incidence_admin:         Crear Incidencia como Admin
 user.index.menu.asign_user_to_ticket:           Asignar Tickets a Usuarios
 user.index.menu.new_ticket:                     Crea un nuevo ticket
 user.index.menu.my_tickets:                     Mis Tickets
-user.index.menu.my_incidences:                  Mis Incidencias
 user.index.menu.new_workshop_order:             Solicitar alta de taller
-user.index.menu.actvie_workshop_order:          Solicitar activación/desactivación de taller
+user.index.menu.active_workshop_order:          Solicitar activación/desactivación de taller
 user.index.menu.order_list_workshop:            Ver el estado de mis solicitudes
 user.index.menu.view_register_workshop_order:   Ver las solicitudes de altas de talleres
-user.index.menu.view_actvie_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
-
-
+user.index.menu.view_active_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
 
 # COMUNES
-home:      Índice
-admin:     Admin
-assessor:  Asesor
-user:      Usuario
-date:      Fecha
-workshop:  Taller
-ticket:    Ticket
-car:       Coche
-post:      Mensajes
+home: 			Índice
+admin: 			Admin
+assessor: 		Asesor
+user: 			Usuario
+date: 			Fecha
+mail:			Correo
+tel:			Telefono
+
+partner:		Socio
+workshop: 		Taller
+code:			Código
+contact:		Contacto
+
+ticket: 		Ticket
+car: 			Coche
+post: 			Mensajes
+description: 	Descripcion
+status:			Estado
+
+actions: 		Acciones
+open: 			Abierto
+closed: 		Cerrado
+back:			Atras
+
+# BOTONES
+btn.ticket.new:            	Nuevo Ticket
+btn.search:                	Buscar
+
+#PLACEHOLDERS
+placeholder.ticket.id:	   	Inserta ID de ticket
 
 #TICKET
-ticket.opt.all:            Muestra todos los Tickets
-ticket.opt.all_open:       Muestra todos los Tickets abiertos
-ticket.opt.all_closed:     Muestra todos los Tickets cerrados
-ticket.opt.free :          Tickets libres
-ticket.opt.assigned :      Tickets asignados
-ticket.opt.answered :      Tickets respondidos
-ticket.opt.other_assessor: Tickets de otro asesor
-ticket.opt.owner:          Tus tickets
-ticket.opt.workshop:       Tickets de tu taller
+ticket.history.title:         Historial de Tickets
+ticket.opt.all:               Todos los Tickets
+ticket.opt.open:              Tickets abiertos
+ticket.opt.closed:            Tickets cerrados
+ticket.opt.free :             Tickets libres
+ticket.opt.pending:  		  Tickets pendientes
+ticket.opt.answered: 		  Tickets respondidos
+ticket.opt.assessor.pending:  Tus tickets pendientes
+ticket.opt.assessor.answered: Tus tickets respondidos
+ticket.opt.assessor.closed:   Tus tickets cerrados
+ticket.opt.other.pending:     Otros tickets pendientes
+ticket.opt.other.answered:    Otros tickets respondidos
+ticket.opt.other.closed:      Otros tickets cerrados
+ticket.opt.owner:             Tus tickets
+ticket.opt.workshop:          Tickets de tu taller
 
+ticket.title.from_workshop: Tickets del taller
 
+ticket.assigned_to:			Asignado a
+
+ticket.flt.searchBy.id:		Buscar ticket por ID
 
 ############################
 ########### OLD ############

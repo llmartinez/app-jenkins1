@@ -30,8 +30,8 @@ user_profile:
     defaults: { _controller: UserBundle:Default:profile }
 
 user_list:
-    pattern: /user/list
-    defaults: { _controller: UserBundle:Default:userList }
+    pattern: /user/list/{page}/{option}
+    defaults: { _controller: UserBundle:Default:userList, page:1 , option: null }
     
 user_edit:
     pattern: /user/edit/{id}

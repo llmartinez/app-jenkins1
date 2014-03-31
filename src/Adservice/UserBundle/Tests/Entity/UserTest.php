@@ -42,8 +42,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
        $this->assertEquals(new \DateTime('today'), $user->getCreatedAt(),   "Probar la fecha de creacion: today");
        $user->setModifiedAt(new \DateTime('today'));
        $this->assertEquals(new \DateTime('today'), $user->getModifiedAt(),  "Probar la fecha de modificacion: today");
-       $user->setModifyBy(UserTest::GetUser());
-       $this->assertEquals('userTest', $user->getModifyBy()->getUserName(), "Probar el usuario de modificacion: userTest");
+       $user->setModifiedBy(UserTest::GetUser());
+       $this->assertEquals('userTest', $user->getModifiedBy()->getUserName(), "Probar el usuario de modificacion: userTest");
                
        $this->user = $user;
    }

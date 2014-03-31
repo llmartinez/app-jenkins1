@@ -15,7 +15,7 @@ class DefaultController extends Controller
      * @return Class
      */
     public static function newEntity($entity, $user){
-        $entity->setOwner($user);
+        $entity->setCreatedBy($user);
         $entity->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
         return $entity;
     }
@@ -92,18 +92,15 @@ class DefaultController extends Controller
         $security = $this->get('security.context');
 
         $id_workshop = $petition->request->get('id_workshop');
+        $check_id = $petition->request->get('filter_id');
         $repoTicket  = $em->getRepository('TicketBundle:Ticket');
 
-        if($security->isGranted('ROLE_ASSESSOR')){
-
-            $check_id = $petition->request->get('filter_id');
 
             if($check_id == 'all'){
 
                 $check_status = $petition->request->get('status');
 
                 if     ($check_status == 'all'   ) {
-                                                    $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
                                                     $array  = array('workshop' => $id_workshop);
                                                    }
                 elseif ($check_status == 'open'  ) {
@@ -116,13 +113,15 @@ class DefaultController extends Controller
                                                     $array  = array('workshop' => $id_workshop,
                                                                     'status'   => $closed->getId());
                                                    }
-            }
-            else{
-                $array  = array('id' => $check_id);
+            }else{
+                if($id_workshop == 'all'){ $array  = array('id' => $check_id);
+                }else{
+                    $array  = array('id'       => $check_id,
+                                    'workshop' => $id_workshop,);
+                }
             }
 
-            $tickets = $repoTicket->findBy($array);
-        }
+        $tickets = $repoTicket->findBy($array);
 
         if(count($tickets) != 0){
 

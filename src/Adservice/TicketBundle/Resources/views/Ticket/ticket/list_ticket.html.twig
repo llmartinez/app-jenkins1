@@ -1,44 +1,44 @@
 
-        <legend> Tickets from Workshop </legend>
+    <legend> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
 
-        {% if tickets | length > 0 %}
+        <input type="hidden" id='slct_historyTickets' value={{ option }}>
 
-            {# Si encuentra un ticket #}
-            <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
-                <thead>
-                    <tr>
-                        <th> #           </th>
-                        <th> Date 		 </th>
-                        <th> Car 		 </th>
-                        <th> Assigned To </th>
-                        <th> Description </th>
-                        <th> Status      </th>
+        {# Si encuentra un ticket #}
+        <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
+            <thead>
+                <tr>
+                    <th> #           </th>
+                    <th>{% trans %} date               {% endtrans %}</th>
+                    <th>{% trans %} car                {% endtrans %}</th>
+                    <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
+                    <th>{% trans %} description        {% endtrans %}</th>
+                    <th>{% trans %} status             {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                {% for ticket in tickets %}
+                    <tr id="ticketRow">
+                        <td id="id_ticket">{{ ticket.id         }}</td>
+                        <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
+                        <td>{{ ticket.car                       }}</td>
+                        <td>{{ ticket.assignedTo                }}</td>
+                        <td>{{ ticket.description               }}</td>
+                        <td>{{ ticket.status                    }}</td>
                     </tr>
-                </thead>
-                <tbody id="ticketBody">
-                {# {% for ticket in tickets %}
-                    <tr onclick="window.open('{{ path('showTicket', { 'id_ticket' : ticket.id }) }}', '_self')">
-                        <td>{% if ticket.owner.roles[0] == 'ROLE_USER' %} <span class="glyphicon glyphicon-user"     title="Created by workshop" ></span>
-                            {% else %}                                    <span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span> {% endif %}
-                            {{ ticket.id           }} </td>
-                        <td>{{ ticket.createdAt   | date ("d/m/Y")}}</td>
-                        <td>{{ ticket.car.brand }} {{ ticket.car.model }} {{ ticket.car.version }}</td>
-                        <td>{{ ticket.assignedTo   }}</td>
-                        <td>{{ ticket.description | length > 10 ?  ticket.description | slice(0, 10) ~ '...' : ticket.description }}</td>
-                        <td>
-                            {% if (ticket.owner.id == app.security.getToken().getUser().getId()) or is_granted('ROLE_ASSESSOR') %}
-                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}">
-                                <span class="glyphicon glyphicon-search" title="Show ticket"></span></a>
-                            {% endif %}
-                          {% include 'TicketBundle:Ticket:includes/_assign_btn.html.twig' %}
-                        </td>
-                    </tr>
-                {% endfor %} #}
-                </tbody>
-            </table>
+                {% endfor %}
+            </tbody>
+        </table>
 
-        {% include 'TicketBundle:Default:paginacion.html.twig' %}
+        {% include 'TicketBundle:Default:tickets_history_pagination.html.twig' %}
 
-        {% else %}
-            {% if workshop.id != "" %}<legend> This workshop don't have any ticket </legend>{% endif %}
-        {% endif %}
+<script type="text/javascript">
+
+    $("tr#ticketRow").click(function() {
+
+        var url = "{{ path('showTicket', {'id_ticket': 'PLACEHOLDER'}) }}";
+        url_show = url.replace("PLACEHOLDER", $(this).children('#id_ticket').text());
+
+        window.open(url_show, "_self");
+
+    });
+</script>

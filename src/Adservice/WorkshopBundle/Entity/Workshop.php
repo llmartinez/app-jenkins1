@@ -132,7 +132,7 @@ class Workshop {
 
     /**
      *
-     * @var string $observation_assessor 
+     * @var string $observation_assessor
      * @ORM\Column(name="observation_assessor", type="string", length=255, nullable=true)
      */
     private $observation_assessor;
@@ -209,7 +209,7 @@ class Workshop {
     private $conflictive;
 
     /**
-     * @var int $num_ad_client
+     * @var integer $num_ad_client
      *
      * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
      */
@@ -274,11 +274,11 @@ class Workshop {
     private $modified_at;
 
     /**
-     * @var string $modify_by
+     * @var string $modified_by
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
-    private $modify_by;
+    private $modified_by;
 
     /**
      * Get id
@@ -700,6 +700,24 @@ class Workshop {
     }
 
     /**
+     * Set created_by
+     *
+     * @param user $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return string
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
+    }
+
+    /**
      * Set modified_at
      *
      * @param datetime $modifiedAt
@@ -718,45 +736,23 @@ class Workshop {
     }
 
     /**
-     * Set modify_by
+     * Set modified_by
      *
-     * @param user $modify_by
+     * @param user $modified_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user) {
-        $this->modify_by = $user;
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->modified_by = $user;
     }
 
     /**
-     * Get modify_by
+     * Get modified_by
      *
      * @return string
      */
-    public function getModifyBy() {
-        return $this->modify_by;
-    }
-    
-        /**
-     * Set modify_by
-     *
-     * @param user $modify_by
-     */
-    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
-        $this->created_by = $user;
+    public function getModifiedBy() {
+        return $this->modified_by;
     }
 
-    /**
-     * Get modify_by
-     *
-     * @return string
-     */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
-    
-    
-    
-    
-    
 
     public function __toString() {
         return $this->getName();

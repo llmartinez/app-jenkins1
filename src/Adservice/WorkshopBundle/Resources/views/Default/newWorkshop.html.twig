@@ -11,10 +11,8 @@
     {% if app.session.hasFlash('error') %}
         <p class="error">{{ app.session.getFlash('error') }}</p>
     {% endif %}
-        
-       
-        
-    <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" > 
+
+    <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="container">
                 <div class="row clearfix">
@@ -27,10 +25,10 @@
                             {{ form_widget(form.cif, { 'attr': { 'class': 'form-control',
                                                                   'placeholder': 'Cif'} }) }}
 
-                            <label for="new_car_form_vin">Num AD Client</label>
+                           {#  <label for="new_car_form_vin">Num AD Client</label>
                             {{ form_widget(form.num_ad_client, { 'attr': { 'class': 'form-control',
                                                                            'placeholder': 'number AD Client'} }) }}
-                            
+ #}
                              <label for="new_car_form_vin">Partner</label>
                             {{ form_widget(form.partner, { 'attr': { 'class': 'form-control',
                                                                      'placeholder': 'Address'} }) }}
@@ -48,7 +46,7 @@
                                                                 'placeholder': 'email 1'} }) }}
 
                             {{ form_widget(form.email_2, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'email 2'} }) }}   
+                                                                  'placeholder': 'email 2'} }) }}
 
                             <label for="new_car_form_vin">Contact</label>
                             {{ form_widget(form.contact, { 'attr': { 'class': 'form-control',
@@ -63,8 +61,8 @@
                                 <label for="new_car_form_vin">Assessor observation</label>
                                 {{ form_widget(form.observation_assessor, { 'attr': { 'class': 'form-control',
                                                                             'placeholder': 'contact'} }) }}
-                            {% endif %}    
-                            {% if is_granted('ROLE_ADMIN')%}    
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN')%}
                                 <label for="new_car_form_vin">Admin observation</label>
                                 {{ form_widget(form.observation_admin, { 'attr': { 'class': 'form-control',
                                                                             'placeholder': 'contact'} }) }}
@@ -96,7 +94,7 @@
                                                                 'placeholder': 'movile number 1'} }) }}
 
                             {{ form_widget(form.movile_phone_2, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'movile number 2'} }) }}   
+                                                                  'placeholder': 'movile number 2'} }) }}
 
                             <label for="new_car_form_vin">Fax</label>
                             {{ form_widget(form.fax, { 'attr': { 'class': 'form-control',

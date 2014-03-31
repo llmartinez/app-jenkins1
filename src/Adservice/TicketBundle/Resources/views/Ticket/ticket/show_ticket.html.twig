@@ -9,7 +9,7 @@
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}
 
-    		{% if ticket.blockedBy  == null %}
+    		{% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %}
 
 				{% if ticket.importance  != "" %}{% include 'TicketBundle:Ticket:ticket/show_ticket_info.html.twig' %}{% endif %}
 

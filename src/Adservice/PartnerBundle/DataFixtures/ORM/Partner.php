@@ -28,7 +28,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setActive('1');
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());
-            $entidad->setModifyBy($this->getReference('superadmin'));
+            $entidad->setModifiedBy($this->getReference('superadmin'));
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
             $manager->persist($entidad);

@@ -20,16 +20,21 @@
         {% set workshop = app.security.getToken().getUser().getWorkshop() %}
     {% endif %}
 
-    {% if workshop.id != "" %}{% include 'TicketBundle:Ticket:includes/_filters_ticket.html.twig' %}{% endif %}
+    {% include 'TicketBundle:Ticket:includes/_filters_ticket.html.twig' %}
 
 {% endblock  %}
 
 {% block content %}
 
-    {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig'  %}
-    {% else %}                  {% include 'TicketBundle:Ticket:ticket/history_ticket.html.twig' %}  {% endif %}
+    {% if is_granted('ROLE_ASSESSOR') %}
+        {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig'  %}
+        {% else %}                  {% include 'TicketBundle:Ticket:ticket/history_ticket.html.twig' %}  {% endif %}
+    {% else %}
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% include 'TicketBundle:Ticket:ticket/list_ticket.html.twig' %}
+    {% endif %}
 
-    {% include 'TicketBundle:Default:fill_table_jquery.html.twig' %}
+    {# {% include 'TicketBundle:Default:fill_table_jquery.html.twig' %} #}
 
 {% endblock  %}
 

@@ -30,7 +30,92 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Entity\WorkshopRepository;
 use Adservice\WorkshopBundle\Form\WorkshopType;
 
+use Adservice\UtilBundle\Entity\Pagination;
+
 class TicketController extends Controller {
+
+    /**
+     * Devuelve el listado de tickets segunla pagina y la opcion escogida
+     * @return url
+     */
+    public function listTicketAction($page=1 , $option=null)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request    = $this->getRequest();
+        $security   = $this->get('security.context');
+
+        $params     = array();
+        $id_user    = $this->get('security.context')->getToken()->getUser()->getId();
+        $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
+        $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
+        $workshops  = array('0' => new Workshop());
+
+        /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
+        if($option == null){
+            // Si se envia el codigo del taller se buscan los tickets en funcion de estos
+            if ($request->getMethod() == 'POST') {
+
+                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
+
+                if($workshops[0]->getId() != "") {
+                    $params[] = array('workshop', '= '.$workshops[0]->getId());
+                    $option = $workshops[0]->getId();
+                }
+                else{ $params[] = array(); }
+            }
+            elseif (!$security->isGranted('ROLE_ASSESSOR')) {
+                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $security->getToken()->getUser()->getWorkshop()->getId()));
+
+                if($workshops[0]->getId() != "") {
+                    $params[] = array('workshop', '= '.$workshops[0]->getId());
+                    $option = $workshops[0]->getId();
+                }
+                else{ $params[] = array(); }
+            }
+            else{ $params[] = array(); }
+        }
+
+        elseif ($option == 'all'      ) { $params[] = array();  }
+        elseif ($option == 'opened'   ) { $params[] = array('status'        , ' = '.$open  ->getId()); }
+        elseif ($option == 'closed'   ) { $params[] = array('status'        , ' = '.$closed->getId()); }
+        elseif ($option == 'free'     ) { $params[] = array('status'        , ' = '.$open  ->getId(), 'assigned_to '  , 'IS NULL'); }
+
+        elseif ($option == 'pending'          or  $option == 'answered')
+        {
+            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , 'IS NOT NULL');
+        }
+        elseif ($option == 'assessor_pending' or  $option == 'assessor_answered')
+        {
+            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '= '.$id_user);
+        }
+        elseif ($option == 'other_pending'    or  $option == 'other_answered')
+        {
+            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '!= '.$id_user);
+        }
+        elseif ($option == 'assessor_closed') { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '= ' .$id_user); }
+        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
+
+        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
+
+        else{
+            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
+            $params[] = array('workshop', ' = '.$option);
+        }
+
+        $pagination = new Pagination($page);
+
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Ticket:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
+                                                                                       'pagination' => $pagination,
+                                                                                       'tickets'    => $tickets,
+                                                                                       'option'     => $option,
+                                                                              ));
+    }
 
     /**
      * Crea un ticket abierto con sus respectivos post y car
@@ -121,7 +206,8 @@ class TicketController extends Controller {
                     'formC' => $formC->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
-                    'workshop' => $workshop,));
+                    'workshop' => $workshop,
+                    'form_name' => $form->getName(),));
     }
 
     /**
@@ -156,10 +242,11 @@ class TicketController extends Controller {
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
         return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array(
-                    'form'        => $form->createView(),
-                    'ticket'      => $ticket,
-                    'systems'     => $systems,
-                ));
+                                                                                        'form'        => $form->createView(),
+                                                                                        'form_name'   => $form->getName(),
+                                                                                        'ticket'      => $ticket,
+                                                                                        'systems'     => $systems,
+                                                                                    ));
     }
 
     /**
@@ -209,7 +296,7 @@ class TicketController extends Controller {
      */
     public function showTicketAction($id_ticket) {
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $request  = $this->getRequest();
         $security = $this->get('security.context');
 
         $post = new Post();
@@ -258,7 +345,7 @@ class TicketController extends Controller {
                         $posts = $ticket->getPosts();
                         $primer_assessor = 0;
                         foreach ($posts as $post) {
-                            if ($post->getOwner()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
+                            if ($post->getCreatedBy()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
                                 $primer_assessor = 1;
                             }
                         }
@@ -269,11 +356,13 @@ class TicketController extends Controller {
                 }
             }
             return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
+                                                                            'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems, )));
         }
 
         $array = array( 'formP'     => $formP->createView(),
+                        'form_name' => $formP->getName(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems, );
@@ -281,31 +370,6 @@ class TicketController extends Controller {
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
         return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', $array);
-    }
-
-    /**
-     * Devuelve todos los tickets realizados
-     * @return url
-     */
-    public function listTicketAction()
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $request  = $this->getRequest();
-        $workshops = array('0' => new Workshop());
-        $tickets = array();
-
-        if ($request->getMethod() == 'POST') {
-
-            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
-
-            if($workshops[0]->getId() != "") {
-                $tickets = $em->getRepository('TicketBundle:Ticket')->findByWorkshop($workshops[0]->getId());
-            }
-        }
-
-        return $this->render('TicketBundle:Ticket:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
-                                                                                       'tickets'   => $tickets,
-                                                                              ));
     }
 
     /**
@@ -342,7 +406,7 @@ class TicketController extends Controller {
      * @param  Entity $id_ticket
      * @return url
      */
-    public function closeTicketAction($id_ticket)
+    public function closeTicketAction($id_ticket=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -374,9 +438,10 @@ class TicketController extends Controller {
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
 
-        return $this->render('TicketBundle:Ticket:close_ticket_layout.html.twig', array('ticket'   => $ticket,
-                                                                                        'systems'  => $systems,
-                                                                                        'form'     => $form->createView(), ));
+        return $this->render('TicketBundle:Ticket:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+                                                                                        'systems'   => $systems,
+                                                                                        'form'      => $form->createView(),
+                                                                                        'form_name' => $form->getName(), ));
     }
 
     /**
@@ -402,15 +467,21 @@ class TicketController extends Controller {
     /**
      * Obtiene todos los talleres del usuario logeado
      */
-    public function workshopListAction() {
+    public function workshopListAction($page=1 , $option=null) {
         $em = $this->getDoctrine()->getEntityManager();
 
-       // $logged_user = $this->get('security.context')->getToken()->getUser();
-       // $workshops = $em->getRepository("WorkshopBundle:Workshop")->findByPartner($logged_user->getPartner()->getId());
+        $params[] = array();
 
-        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findAll();
+        $pagination = new Pagination($page);
 
-        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array('workshops' => $workshops));
+        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array( 'workshops'  => $workshops,
+                                                                                            'pagination' => $pagination));
     }
 
     /**
@@ -418,11 +489,21 @@ class TicketController extends Controller {
      * @param Int $id_workshop
      * @return type
      */
-    public function getTicketsFromWorkshopAction($id_workshop) {
+    public function getTicketsFromWorkshopAction($id_workshop, $page=1) {
         $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
-        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('workshop' => $workshop));
+        $params = array();
+        $params[] = array('workshop',' = '.$id_workshop);
+
+        $pagination = new Pagination($page);
+
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $tickets));
     }
 
     /**
@@ -449,10 +530,8 @@ class TicketController extends Controller {
             $this->assignTicket($ticket, null);
         }
 
-        //<--------------------------------------------------------------------------------------------------TODO hacer refactoring, no mola los 2 if(user=null)...
-
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
-        return $this->render('TicketBundle:Ticket:ticketsFromWorkshop.html.twig', array("workshop" => $workshop));
+        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $workshop->getTickets()));
     }
 
     /**
@@ -476,11 +555,12 @@ class TicketController extends Controller {
      * @param Int $id_user
      */
     public function blockTicketAction($id_ticket, $id_user = null) {
+
         $em = $this->getDoctrine()->getEntityManager();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
-        ($user != null) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
+        ($user != null and $id_user != 0) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
 
         $em->persist($ticket);
         $em->flush();
@@ -504,69 +584,64 @@ class TicketController extends Controller {
     }
 
     /**
-     * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Funcion que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
+     * @return array
      */
-    public function fill_ticketsAction() {
+    public function getTicketsByOption($option) {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $security = $this->get('security.context');
 
-        $option     = $petition->request->get('option');
+        $tickets    = array();
+        $check_id   = $petition->request->get('filter_id');
         $user       = $security->getToken()->getUser();
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
         if($security->isGranted('ROLE_ADMIN')){
-            $allTickets = $repoTicket->findAll();
-            //SuperAdmin
-            if ($option == 'all'        )     $tickets = $allTickets;
             //Admin
-            if ($option == 'all_opened' ){    $tickets = $repoTicket->findAllOpen($user, $open  , $allTickets); }
-            else{
-                if ($option == 'all_closed' ) $tickets = $repoTicket->findAllOpen($user, $closed, $allTickets); }
+            if     ($option == 'all'     ) { $tickets = $repoTicket->findAll();                      }
+            elseif ($option == 'opened'  ) { $tickets = $repoTicket->findAllStatus   ($em, $open);   }
+            elseif ($option == 'closed'  ) { $tickets = $repoTicket->findAllStatus   ($em, $closed); }
+            elseif ($option == 'free'    ) { $tickets = $repoTicket->findAllFree     ($em, $open);   }
+            elseif ($option == 'pending' ) { $tickets = $repoTicket->findAllPending  ($em, $open);   }
+            elseif ($option == 'answered') { $tickets = $repoTicket->findAllAnswered ($em, $open);   }
 
-        }else {
-            if($security->isGranted('ROLE_ASSESSOR')){
+            if($check_id != 'all') { $tickets = $this->filterTickets($tickets,$check_id); }
+
+        }elseif($security->isGranted('ROLE_ASSESSOR')){
                 //Assessor
-                if  ($option == 'free' )                        { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'free'            ); }
-                else{ if ($option == 'assigned' )               { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'assigned'        ); }
-                    else{ if ($option == 'answered' )           { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'answered', 'DESC'); }
-                        else{ if ($option == 'other_assessor' ) { $tickets = $repoTicket->findAllTickets($em, $user, $open, 'other_assessor'  ); }
-                        }
-                    }
-                }
-            }else{
+                if     ($option == 'free'              ) { $tickets = $repoTicket->findAllFree     ($em, $open);   }
+                elseif ($option == 'assessor_pending'  ) { $tickets = $repoTicket->findAllFromUser ($em, $open, true, true, $user, true);         }
+                elseif ($option == 'assessor_answered' ) { $tickets = $repoTicket->findOption($em, $user, $open  , 'assessor_answered', 'DESC' ); }
+                elseif ($option == 'assessor_closed'   ) { $tickets = $repoTicket->findOption($em, $user, $closed, 'assessor_closed'           ); }
+                elseif ($option == 'other_pending'     ) { $tickets = $repoTicket->findOption($em, $user, $open  , 'other_pending'             ); }
+                elseif ($option == 'other_answered'    ) { $tickets = $repoTicket->findOption($em, $user, $open  , 'other_answered', 'DESC'    ); }
+                elseif ($option == 'other_closed'      ) { $tickets = $repoTicket->findOption($em, $user, $closed, 'other_closed'              ); }
+                elseif ($option == 'all'               ) { $tickets = $repoTicket->findAll();                                                         }
 
-                $check_id = $petition->request->get('filter_id');
+                if($check_id != 'all') { $tickets = $this->filterTickets($tickets,$check_id); }
 
-                if($check_id == 'all'){
-
-                    $check_status = $petition->request->get('status');
-
-                    if     ($check_status == 'all'   ) { $status = 'all';   }
-                    elseif ($check_status == 'open'  ) { $status = $open;   }
-                    elseif ($check_status == 'closed') { $status = $closed; }
-
-                    //User
-                    if ($option == 'owner'          ) { $tickets = $repoTicket->findAllByOwner($user, $status);    }
-                    else{ if ($option == 'workshop' )   $tickets = $repoTicket->findAllByWorkshop($user, $status); }
-                }else{
-                    $array  = array('id' => $check_id);
-                    $tickets = $repoTicket->findBy($array);
-                }
-            }
-        }
-        if(count($tickets) != 0){
-
-            foreach ($tickets as $ticket) {
-                $json[] = $ticket->to_json();
-            }
         }else{
-            $json[] = array('error' => "You don't have any ticket..");
+
+            if($check_id == 'all'){
+
+                $check_status = $petition->request->get('status');
+
+                if     ($check_status == 'all'   ) { $status = 'all';   }
+                elseif ($check_status == 'open'  ) { $status = $open;   }
+                elseif ($check_status == 'closed') { $status = $closed; }
+
+                //User
+                if ($option == 'created_by'    ) $tickets = $repoTicket->findAllByOwner($user, $status);
+                elseif ($option == 'workshop'  ) $tickets = $repoTicket->findAllByWorkshop($user, $status);
+            }else{
+                $array  = array('id' => $check_id);
+                $tickets = $repoTicket->findBy($array);
+            }
         }
-        return new Response(json_encode($json), $status = 200);
+        return $tickets;
     }
 
 
@@ -601,6 +676,23 @@ class TicketController extends Controller {
 
         $em->persist($ticket);
         $em->flush();
+    }
+
+    /**
+     * Filtra un array de tickets en funcion del id
+     * @param  Array   $tickets
+     * @param  Integer $check_id
+     * @return Array
+     */
+    private function filterTickets($tickets,$check_id){
+        $tickets_filtered = array();
+
+        foreach ($tickets as $ticket) {
+
+            if($ticket->getId() == $check_id)
+                $tickets_filtered[] = $ticket;
+        }
+        return $tickets_filtered;
     }
 
 }
