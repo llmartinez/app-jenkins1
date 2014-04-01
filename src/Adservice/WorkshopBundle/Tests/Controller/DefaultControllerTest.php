@@ -16,19 +16,19 @@ class DefaultControllerTest extends WebTestCase
      * Test de cracion de workshops
      * @dataProvider workshops
      */
-   public function testNewWorkshop($workshops){
-       // $client = static::createClient();
-       // $client->followRedirects(true);
+   public function testNewWorkshop($workshop){
+    //    $client = static::createClient();
+    //    $client->followRedirects(true);
 
-       // UtilFunctionTest::doLogin($client, 'admin1', 'admin');
-       // UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
-       // UtilFunctionTest::linkTo($client, $this, 'table tr td a#newWorkshop');
-       // $crawler = $client->getCrawler();
+    //    UtilFunctionTest::doLogin($client, 'admin1', 'admin');
+    //    UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
+    //    UtilFunctionTest::linkTo($client, $this, 'table tr td a#newWorkshop');
+    //    $crawler = $client->getCrawler();
 
-       // //carga el form con los datos del workshop
-       // $newWorkshopForm = $crawler->selectButton('btn_create')->form($workshops);
-       // //ejecuta el submit del form
-       // $crawler = $client->submit($newWorkshopForm);
+    //    //carga el form con los datos del workshop
+    //    $newWorkshopForm = $crawler->selectButton('input[type=submit]')->form($workshop);
+    //    //ejecuta el submit del form
+    //    $crawler = $client->submit($newWorkshopForm);
     }
 
     /**
@@ -37,7 +37,8 @@ class DefaultControllerTest extends WebTestCase
      */
     public function workshops() {
 
-       $workshop1 = array('adservice_workshopbundle_workshoptype[name]'                   => 'Name Workshop1',
+      return  array(
+            array('workshop' => array('adservice_workshopbundle_workshoptype[name]'       => 'Name Workshop1',
                           'adservice_workshopbundle_workshoptype[cif]'                    => 'cif',
                           'adservice_workshopbundle_workshoptype[partner]'                => 1,
                           'adservice_workshopbundle_workshoptype[address]'                => 'adress',
@@ -61,8 +62,8 @@ class DefaultControllerTest extends WebTestCase
                           'adservice_workshopbundle_workshoptype[typology]'               => 1,
                           'adservice_workshopbundle_workshoptype[conflictive]'            => 0,
 
-            );
+            )));
 
-        return array($workshop1);
+        return array('workshop' => $workshop1);
     }
 }
