@@ -61,8 +61,6 @@ class DefaultController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        $users = $em->getRepository("UserBundle:User")->findAll();
-
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
@@ -70,27 +68,31 @@ class DefaultController extends Controller {
 
 
         $pagination = new Pagination($page);
-        $params[] = array();
-        $users = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
+
+        $users = $em->getRepository("UserBundle:User")->findByOption($em, $option, $pagination);
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
-            if     ($role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
-            elseif ($role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
-            elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
-            elseif ($role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
+            if     (($option == null or $option == "ROLE_ADMIN")    and $role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
+            elseif (($option == null or $option == "ROLE_USER")     and $role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
+            elseif (($option == null or $option == "ROLE_ASSESSOR") and $role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
+            elseif (($option == null or $option == "ROLE_AD")       and $role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
         }
 
-        $length = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+        $length = $pagination->setTotalPagByLength(count($users));
 
         $pagination->setTotalPagByLength($length);
+
+        $roles = $em->getRepository("UserBundle:Role")->findAll();
 
         return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin'      => $users_role_admin,
                                                                         'users_role_user'       => $users_role_user,
                                                                         'users_role_assessor'   => $users_role_assessor,
                                                                         'users_role_ad'         => $users_role_ad,
                                                                         'pagination'            => $pagination,
+                                                                        'roles'                 => $roles,
+                                                                        'option'                => $option,
                                                                        ));
     }
 

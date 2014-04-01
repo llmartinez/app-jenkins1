@@ -199,8 +199,8 @@ class Pagination
      */
     public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null)
     {
-        $query = 'SELECT e FROM '.$bundle.':'.$entity.' e ';
-
+        $query = 'SELECT e ';
+        $from  = 'FROM '.$bundle.':'.$entity.' e ';
         $where = 'WHERE e.id > 0 ';
 
         if($params != null and $params[0] != null) {
@@ -211,11 +211,11 @@ class Pagination
 
         if($pagination != null){
 
-            $consulta = $em ->createQuery($query.$where.$order)
+            $consulta = $em ->createQuery($query.$from.$where.$order)
                             ->setMaxResults($pagination->getMaxRows())
                             ->setFirstResult($pagination->getFirstRow());
         }else{
-            $consulta = $em->createQuery($query.$where.$order);
+            $consulta = $em->createQuery($query.$from.$where.$order);
         }
 
         return $consulta->getResult();

@@ -36,4 +36,21 @@ class UserRepository extends EntityRepository
 
         return $users;
     }
+
+     /**
+     * Get 10 rows of a role
+     *
+     * @return string
+     */
+    public function findByOption($em, $option, $pagination)
+    {
+        $query = 'SELECT u, r FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option)
+                        ->setMaxResults($pagination->getMaxRows())
+                        ->setFirstResult($pagination->getFirstRow());
+
+        return $consulta->getResult();
+    }
 }
