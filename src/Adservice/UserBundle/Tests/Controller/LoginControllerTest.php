@@ -60,15 +60,11 @@ class LoginControllerTest extends WebTestCase {
 
         //seleccionamos idioma español (para facilitar tema de url)
         UtilFunctions::setLang($crawler, $client, 'es');
-        $crawler = $client->getCrawler();
-        $linksPerfil = $crawler->selectLink('Mi Perfil');
-        $linkPerfil = $linksPerfil->link();
-        $crawler = $client->click($linkPerfil);
+        UtilFunctions::linkTo($client, $this, 'table tr td a#profile');
 
         //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
-        $form = 'form input[name="'.$users[0]['field'].'"]';die;
-        $this->assertEquals( $users[0]['value'], $crawler->filter($form)->attr('value'),
-            'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
+        $this->assertTrue( $crawler->filter('table:contains('.$users[0]['value'].')')->count() > 0,
+            'En el Perfil se muestra el mismo nombre que el usado en el login'
         );
 
     }
