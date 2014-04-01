@@ -69,20 +69,25 @@ class DefaultController extends Controller {
 
         $pagination = new Pagination($page);
 
-        $users = $em->getRepository("UserBundle:User")->findByOption($em, $option, $pagination);
+        if($option == null){
+                $params[] = array();
+                $users    = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
+                $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+        }else{
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $option, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $option, $pagination);
+        }
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             $role = $user->getRoles();
-            if     (($option == null or $option == "ROLE_ADMIN")    and $role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
-            elseif (($option == null or $option == "ROLE_USER")     and $role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
-            elseif (($option == null or $option == "ROLE_ASSESSOR") and $role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
-            elseif (($option == null or $option == "ROLE_AD")       and $role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
+            if     ($role[0]->getRole() == "ROLE_ADMIN")    $users_role_admin[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_USER")     $users_role_user[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $users_role_assessor[] = $user;
+            elseif ($role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
         }
 
-        $length = $pagination->setTotalPagByLength(count($users));
-
-        $pagination->setTotalPagByLength($length);
+        $length = $pagination->setTotalPagByLength($length);
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
 

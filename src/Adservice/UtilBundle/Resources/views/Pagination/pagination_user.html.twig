@@ -40,7 +40,10 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	window.open("{{ path('user_list', { 'page': '1' }) }}", "_self");
+	    	var option = $('#slct_role').val();
+	    	var url = "{{ path('user_list', { 'page': '1', 'option': 'PLACEHOLDER_OPTION' }) }}";
+            url = url.replace('PLACEHOLDER_OPTION', option);
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
@@ -50,20 +53,24 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('user_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
+				var option = $('#slct_role').val();
+		    	var url = "{{ path('user_list', { 'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION' }) }}";
+		    	url = url.replace("PLACEHOLDER", prev_page);
+	            url = url.replace('PLACEHOLDER_OPTION', option);
 
-		    	window.open(url_page, "_self");
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('user_list', {'page': 'PLACEHOLDER'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
+	    	var option = $('#slct_role').val();
+	    	var url = "{{ path('user_list', { 'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION' }) }}";
+	    	url = url.replace("PLACEHOLDER", $(this).text());
+            url = url.replace('PLACEHOLDER_OPTION', option);
 
-	    	window.open(url_page, "_self");
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
@@ -73,17 +80,23 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('user_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
+		    	var option = $('#slct_role').val();
+		    	var url = "{{ path('user_list', { 'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION' }) }}";
+		    	url = url.replace("PLACEHOLDER", next_page);
+	            url = url.replace('PLACEHOLDER_OPTION', option);
 
-		    	window.open(url_page, "_self");
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	window.open("{{ path('user_list', { 'page': totalpag }) }}", "_self");
+			var option = $('#slct_role').val();
+	    	var url = "{{ path('user_list', { 'page': totalpag }) }}, 'option': 'PLACEHOLDER_OPTION' }) }}";
+            url = url.replace('PLACEHOLDER_OPTION', option);
+	    	window.open(url, "_self");
 	    });
 
 	</script>
