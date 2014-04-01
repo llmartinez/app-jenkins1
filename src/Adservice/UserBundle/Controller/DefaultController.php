@@ -61,8 +61,6 @@ class DefaultController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        $users = $em->getRepository("UserBundle:User")->findAll();
-
         $users_role_admin = array();
         $users_role_assessor = array();
         $users_role_user = array();
@@ -70,8 +68,15 @@ class DefaultController extends Controller {
 
 
         $pagination = new Pagination($page);
-        $params[] = array();
-        $users = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
+
+        if($option == null){
+                $params[] = array();
+                $users    = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
+                $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+        }else{
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $option, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $option, $pagination);
+        }
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
@@ -82,15 +87,17 @@ class DefaultController extends Controller {
             elseif ($role[0]->getRole() == "ROLE_AD")       $users_role_ad[] = $user;
         }
 
-        $length = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+        $length = $pagination->setTotalPagByLength($length);
 
-        $pagination->setTotalPagByLength($length);
+        $roles = $em->getRepository("UserBundle:Role")->findAll();
 
         return $this->render('UserBundle:Default:list.html.twig', array('users_role_admin'      => $users_role_admin,
                                                                         'users_role_user'       => $users_role_user,
                                                                         'users_role_assessor'   => $users_role_assessor,
                                                                         'users_role_ad'         => $users_role_ad,
                                                                         'pagination'            => $pagination,
+                                                                        'roles'                 => $roles,
+                                                                        'option'                => $option,
                                                                        ));
     }
 
