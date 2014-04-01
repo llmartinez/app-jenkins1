@@ -66,7 +66,7 @@ class LoginControllerTest extends WebTestCase {
         $crawler = $client->click($linkPerfil);
 
         //comprobación de que el formulario de mi perfil corresponde a la persona que ha hecho login
-        $form = 'form input[name="'.$users[0]['field'].'"]';die;
+        $form = 'form input[name="'.$users[0]['field'].'"]';
         $this->assertEquals( $users[0]['value'], $crawler->filter($form)->attr('value'),
             'En el formulario de Mi Perfil sale el mismo nombre que el usado en el login'
         );
