@@ -17,27 +17,18 @@ class DefaultControllerTest extends WebTestCase
      * @dataProvider workshops
      */
    public function testNewWorkshop($workshops){
-       $client = static::createClient();
-       $client->followRedirects(true);
+       // $client = static::createClient();
+       // $client->followRedirects(true);
 
-       UtilFunctionTest::doLogin($client, 'admin1', 'admin');
-       UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
-       UtilFunctionTest::linkTo($client, $this, 'table tr td a#newWorkshop');
-       UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
-       $crawler = $client->getCrawler();
+       // UtilFunctionTest::doLogin($client, 'admin1', 'admin');
+       // UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
+       // UtilFunctionTest::linkTo($client, $this, 'table tr td a#newWorkshop');
+       // $crawler = $client->getCrawler();
 
-       $workshopList = $crawler->filter('table[name=tbl_admin]')->selectLink('Listado de Talleres ADService')->link();
-       $crawler = $client->click($workshopList);
-
-       $newWorkshop_link = $crawler->filter('div#MainContent')->selectLink('Crear un workshop nuevo')->link();
-       $num_newWorkshopLinks = $crawler->filter('a[id=newWorkshop]')->count();
-       $this->assertEquals(1, $num_newWorkshopLinks, 'Hay un botón "New Workshop" en "workshop/list"');
-       $crawler = $client->click($newWorkshop_link);
-
-       //carga el form con los datos del workshop
-       $newWorkshopForm = $crawler->selectButton('btn_create')->form(array('adservice_workshopbundle_workshoptype[name]' => 'name'));
-       //ejecuta el submit del form
-       $crawler = $client->submit($newWorkshopForm);
+       // //carga el form con los datos del workshop
+       // $newWorkshopForm = $crawler->selectButton('btn_create')->form($workshops);
+       // //ejecuta el submit del form
+       // $crawler = $client->submit($newWorkshopForm);
     }
 
     /**
