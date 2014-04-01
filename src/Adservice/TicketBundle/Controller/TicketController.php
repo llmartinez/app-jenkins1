@@ -187,6 +187,13 @@ class TicketController extends Controller {
                         $ticket->setCar($car);
                         DefaultC::saveEntity($em, $ticket, $user);
 
+                        $subject = 'New Ticket Created';
+                        $from    = 'dmaya@grupeina.com';
+                        $to      = $user->getEmail1();
+                        $subject = 'New Ticket Created by '.$user->getRoles[0].'';
+
+                        send($subject, $from, $to, $body);
+
                         if (isset($_POST['save&close'])){
                             return $this->redirect($this->generateUrl('closeTicket', array( 'id_ticket' => $ticket->getId() )));
                         }else{

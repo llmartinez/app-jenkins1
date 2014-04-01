@@ -13,16 +13,16 @@ class UserRepository extends EntityRepository
      */
     public function findByPartner($partner)
     {
-        
+
         //users que dependen directamente del partner
         $em = $this->getEntityManager();
-        $query = $em->createQuery("SELECT u 
+        $query = $em->createQuery("SELECT u
                                    FROM UserBundle:User u
                                    WHERE u.partner = :partner
                                   ");
         $query->setParameter('partner', $partner);
         $users = $query->getResult();
-        
+
         //users que dependen del taller
         $workshops = $partner->getWorkshops();
         if (count($workshops)>0){
@@ -35,5 +35,36 @@ class UserRepository extends EntityRepository
         }
 
         return $users;
+    }
+
+     /**
+     * Get 10 rows of a role
+     *
+     * @return string
+     */
+    public function findByOption($em, $option, $pagination)
+    {
+        $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option)
+                        ->setMaxResults($pagination->getMaxRows())
+                        ->setFirstResult($pagination->getFirstRow());
+
+        return $consulta->getResult();
+    }
+    /**
+     * Get 10 rows of a role
+     *
+     * @return string
+     */
+    public function findLengthOption($em, $option, $pagination)
+    {
+        $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option);
+
+        return $consulta->getResult()[0][1];
     }
 }
