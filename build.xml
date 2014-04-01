@@ -10,7 +10,7 @@
     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 -->
     
-    <target name="build"            depends="parameters, prepare, vendors, lint, phploc"/>
+    <target name="build"            depends="parameters, prepare"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
