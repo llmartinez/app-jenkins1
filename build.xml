@@ -94,14 +94,13 @@
     </target>
     
     <!--INSTALAMOS LOS VENDORS DE SYMFONY2-->    
-<!--    <target name="vendors"
+    <target name="vendors"
             description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
             <arg value="update" />
         </exec>
-    </target>-->
-    
-    
+    </target>
+
     <target name="lint" description="Perform syntax check of sourcecode files">
         <apply executable="php" failonerror="true">
             <arg value="-l" />
