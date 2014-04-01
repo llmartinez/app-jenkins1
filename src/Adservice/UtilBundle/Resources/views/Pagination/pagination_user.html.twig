@@ -94,7 +94,7 @@
 	    $('#totalpage').click(function() {
 
 			var option = $('#slct_role').val();
-	    	var url = "{{ path('user_list', { 'page': totalpag, 'option': 'PLACEHOLDER_OPTION' }) }}";
+                var url = "{{ path('user_list', { 'page': totalpag, 'option': 'PLACEHOLDER_OPTION' }) }}";
             url = url.replace('PLACEHOLDER_OPTION', option);
 	    	window.open(url, "_self");
 	    });

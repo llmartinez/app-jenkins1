@@ -1,12 +1,13 @@
 # -- Symfony2 -----------------------------------------
 # -- app/bootstrap.php.cache
 # -- app/bootstrap_cache.php.cache
+app/build/*
 app/config/parameters.ini
-app/config/parameters_test.ini.dist
+# -- app/config/parameters_test.ini.dist
 app/config/parameters.yml
 app/cache/*
 app/logs/*
-vendor/*
+/vendor/
 web/bundles/*
 web/css/*
 web/js/*
@@ -60,7 +61,7 @@ tmtags
 
 # netbeans
 nbproject/
-build/
+# -- build/
 nbbuild/
 dist/
 nbdist/

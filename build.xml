@@ -5,8 +5,12 @@
     <property name="sourcedir" value="${basedir}/src" />
     <property name="builddir"  value="${workspace}/app/build" />
 
-    <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
-    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+<!--    
+-->    <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
+    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/><!--
+-->
+    
+    <!--<target name="build"            depends="parameters, prepare, lint, phploc"/>-->
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -21,16 +25,6 @@
         </parallel>
     </target>
     
-    <target name="prepare2" depends="clean" description="Prepare for build">
-        <mkdir dir="${builddir}/api"/>
-        <mkdir dir="${builddir}/code-browser"/>
-        <mkdir dir="${builddir}/coverage"/>
-        <mkdir dir="${builddir}/logs"/>
-        <mkdir dir="${builddir}/pdepend"/>
-        <mkdir dir="${builddir}/docs/"/>
-    </target>
-    
-
     <!--BORRAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${builddir}/api"/>
@@ -38,7 +32,7 @@
         <delete dir="${builddir}/coverage"/>
         <delete dir="${builddir}/logs"/>
         <delete dir="${builddir}/pdepend"/>
-        <delete dir="${builddir}/docs/*"/>
+        <delete dir="${builddir}/docs"/>
     </target>
     
     <!--CREAMOS LAS CARPETAS QUE NECESITA JENKINS-->
@@ -100,14 +94,15 @@
     </target>
     
     <!--INSTALAMOS LOS VENDORS DE SYMFONY2-->    
-<!--    <target name="vendors"
+<!--
+    <target name="vendors"
             description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
             <arg value="update" />
         </exec>
-    </target>-->
-    
-    
+    </target>
+-->
+
     <target name="lint" description="Perform syntax check of sourcecode files">
         <apply executable="php" failonerror="true">
             <arg value="-l" />
