@@ -12,3 +12,8 @@
     mailer_password=""
     locale="en"
     secret="db5af6fd668f327cafd579d177d8fad7"
+
+    mailer_transport  = smtp
+    mailer_host       = mail.ad-service.es
+    mailer_user       = ticketing@ad-service.es
+    mailer_password   = jrmeioH7P-2y

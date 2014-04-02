@@ -59,59 +59,20 @@ ticket.opt.other.closed:      Show other closed tickets
 ticket.opt.owner:             Show your tickets
 ticket.opt.workshop:          Show tickets in your workshop
 
+ticket.title.from_workshop:   Tickets from workshop
+ticket.assigned_to:			  Assigned to
 ticket.flt.searchBy.id:		  Search ticket by ID
 
-############################
-########### OLD ############
-############################
+#MAIL
+mail.newTicket.subject:				'ADService | New Ticket created with id #'
+mail.newTicket.title:				A new Ticket has been created
+mail.newTicket.createdby:			'This ticket has been created by phone with:'
+mail.newTicket.createdby.workshop:	This ticket has been created by the AD-Service platform
+mail.newTicket.info:				'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.newTicket.info.id:				'The reference of the ticket is:'
+mail.newTicket.info.more:			'More info:'
 
+mail.textDisclaimer:				AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. soporte@ad-service.com
 
-
-# Pantalla principal
-New ticket: New ticket
-My tickets: My tickets
-Technical information: Technical information
-Select language: Select language
-Logout: Logout
-Not logged in: Not logged in
-Welcome: Welcome
-
-# Titulos
-Login: Login
-
-# Login
-Username: Username
-Password: Password
-
-# Index
-Start menu: Start page
-New ticket: New ticket
-Ticket list: Ticket list
-User configuration: User configuration
-
-# Formulario de ticket
-Brand: Brand
-Model: Model
-Version: Version
-System: System
-Subsystem: Subsystem
-Description: Description
-Photo attachment: Photo attachment
-I want a technical expert to call me back: I want a technical expert to call me back
-Upload: Upload
-Send ticket: Send ticket
-Fill the following fields before sending the ticket: Fill the following fields before sending the ticket
-
-Select brand first: Select brand first
-Select model first: Select model first
-Select system first: Select system first
-
-Brand not specified: Brand not specified
-Model not specified: Model not specified
-Version not specified: Version not specified
-System not specified: System not specified
-Subsystem not specified: Subsystem not specified
-
-Loading models from: Loading models from
-Loading versions from: Loading versions from
-Loading subsystems from: Loading subsystems from
+termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
+footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos

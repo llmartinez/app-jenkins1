@@ -26,7 +26,7 @@ assessor: 		Asesor
 user: 			Usuario
 date: 			Fecha
 mail:			Correo
-tel:			Telefono
+tel:			Teléfono
 
 partner:		Socio
 workshop: 		Taller
@@ -36,13 +36,13 @@ contact:		Contacto
 ticket: 		Ticket
 car: 			Coche
 post: 			Mensajes
-description: 	Descripcion
+description: 	Descripción
 status:			Estado
 
 actions: 		Acciones
 open: 			Abierto
 closed: 		Cerrado
-back:			Atras
+back:			Atrás
 
 # BOTONES
 btn.ticket.new:            	Nuevo Ticket
@@ -68,101 +68,28 @@ ticket.opt.other.closed:      Otros tickets cerrados
 ticket.opt.owner:             Tus tickets
 ticket.opt.workshop:          Tickets de tu taller
 
-ticket.title.from_workshop: Tickets del taller
+ticket.title.from_workshop:   Tickets del taller
+ticket.assigned_to:			  Asignado a
+ticket.flt.searchBy.id:		  Buscar ticket por ID
 
-ticket.assigned_to:			Asignado a
+#MAIL
+mail.newTicket.subject:				'ADService | Nuevo Ticket creado con id #'
+mail.newTicket.title:				Se ha creado un ticket
+mail.newTicket.createdby:			'Este ticket se ha creado vía teléfono con:'
+mail.newTicket.createdby.workshop:	Este ticket ha sido creado a través de la plataforma AD-Service.
+mail.newTicket.info:				'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.newTicket.info.id:				'El código del ticket es:'
+mail.newTicket.info.more:			'Más información:'
 
-ticket.flt.searchBy.id:		Buscar ticket por ID
+mail.newTicket.subject:				'ADService | Ticket editado con id #'
+mail.newTicket.title:				Se ha editado un ticket
+mail.newTicket.createdby:			'Este ticket ha sido editado por:'
+mail.newTicket.createdby.workshop:	Has editado el ticket a través de la plataforma AD-Service.
+mail.newTicket.info:				'Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.newTicket.info.id:				'El código del ticket es:'
+mail.newTicket.info.more:			'Más información:'
 
-############################
-########### OLD ############
-############################
-#   {% trans %}{% endtrans %}
+mail.textDisclaimer:				AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>
 
-#PRINCIPAL
-login: Iniciar sesión
-login.title: Acceso usuarios AD Service
-login.check: Recuerdame
-logout: Cerrar sesión
-#HEADER
-index: Home
-newTicket : Nuevo ticket
-ticket: Tickets
-
-#TICKET
-  # history
-ticket.history.title: Historial Tickets
-ticket.history.date: Fecha
-ticket.history.workshop: Taller
-ticket.history.ticket: Ticket
-ticket.history.any: No tienes ningun ticket abierto
-
-  #list
-ticket.list.header: Tickets
-ticket.list.new: Nuevo Ticket
-ticket.list.search: Buscar
-ticket.list.open: Abrir
-ticket.list.notaccess: No tienes acceso a este ticket
-ticket.list.notfound: El Ticket que has buscado no existe
-  
-  # new
-ticket.new.header: Nuevo Ticket
-ticket.new.title: Título
-ticket.new.importance: Importancia
-ticket.new.description: Descripción
-ticket.new.submit: Crear Ticket
-  
-#STATUS
-open: Abierto
-closed: Cerrado
-reopened: Reabierto
-
-###############
-#     OLD     #
-###############
-
-# Pantalla principal
-New ticket: Nuevo ticket
-My tickets: Mis tickets
-Technical information: Información técnica
-Select language: Seleccionar idioma
-Logout: Cerrar sesión
-Not logged in: Sessión no iniciada
-Welcome: Bienvenido
-
-# Login
-Username: Nombre de usuario
-Password: Contraseña
-
-# Index
-Start menu: Página inicial
-New ticket: Nuevo ticket
-Ticket list: Listado de tickets
-User configuration: Configuración del usuario
-
-# Formulario de ticket
-Brand: Marca
-Model: Modelo
-Version: Versión
-System: Sistema
-Subsystem: Subsistema
-Description: Descripción
-Photo attachment: Foto adjunta
-I want a technical expert to call me back: Quiero que un técnico experto me llame
-Upload: Subir
-Send ticket: Enviar ticket
-Fill the following fields before sending the ticket: Rellene los siguientes campos antes de enviar el ticket
-
-Select brand first: Seleccionar marca primero
-Select model first: Seleccionar modelo primero
-Select system first: Seleccionar sistema primero
-
-Brand not specified: Marca no especificada
-Model not specified: Modelo no especificado
-Version not specified: Versión no especificada
-System not specified: Sistema no especificado
-Subsystem not specified: Subsistema no especificado
-
-Loading models from: Cargando modelos de
-Loading versions from: Cargando versiones de
-Loading subsystems from: Cargando subsistemas de
+termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
+footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos
