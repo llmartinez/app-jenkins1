@@ -30,6 +30,7 @@ ticket: 		Ticket
 car: 			Car
 post: 			Post
 description: 	Description
+solution:		Solution
 actions: 		Actions
 open: 			Open
 closed: 		Closed

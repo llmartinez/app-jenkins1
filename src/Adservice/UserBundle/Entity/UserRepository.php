@@ -58,7 +58,7 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findLengthOption($em, $option, $pagination)
+    public function findLengthOption($em, $option)
     {
         $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 

@@ -89,7 +89,6 @@ class DefaultController extends Controller
     public function fill_ticketsFromWorkshopAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-        $security = $this->get('security.context');
 
         $id_workshop = $petition->request->get('id_workshop');
         $check_id = $petition->request->get('filter_id');

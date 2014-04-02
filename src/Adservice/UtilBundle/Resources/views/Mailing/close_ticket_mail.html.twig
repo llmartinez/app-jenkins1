@@ -5,7 +5,7 @@
 <body style="color: #000000; margin: 0; font-family: Verdana, Geneva, sans-serif; background-color: #FFF;">
 <table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #285e8e; text-align: center;">
     <tr><td width="100%" height="50" valign="middle">
-        {% trans %} mail.newTicket.title {% endtrans %}
+        {% trans %} mail.closeTicket.title {% endtrans %}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
@@ -15,25 +15,25 @@
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
-        {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.newTicket.createdby {% endtrans %}
+        {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.closeTicket.createdby {% endtrans %}
                                                                    <h3>
                                                                         {% trans %} admin {% endtrans %}
                                                                         {{ ticket.modifiedBy.name }}
                                                                     </h3>
-        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} mail.newTicket.createdby {% endtrans %}
+        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} mail.closeTicket.createdby {% endtrans %}
                                                                    <h3>
                                                                         {% trans %} assessor {% endtrans %}
                                                                         {{ ticket.modifiedBy.name }}
                                                                     </h3>
-        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.newTicket.createdby.workshop  {% endtrans %}
+        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.closeTicket.createdby.workshop  {% endtrans %}
         {% endif %}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newTicket.info {% endtrans %}"<b>{% trans %} user.index.menu.list_tickets {% endtrans %}</b>".
+        {% trans %} mail.closeTicket.info {% endtrans %}"<b>{% trans %} user.index.menu.list_tickets {% endtrans %}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newTicket.info.id {% endtrans %}
+        {% trans %} mail.closeTicket.info.id {% endtrans %}
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ ticket.id }}</h2>
@@ -44,8 +44,11 @@
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <b>{% trans %} description {% endtrans %}:</b> {{ ticket.description|nl2br }}
     </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        <b>{% trans %} solution {% endtrans %}:</b> {{ ticket.solution|nl2br }}
+    </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.newTicket.info.more {% endtrans %} <a href="http://www.ad-service.es">www.ad-service.es</a>
+        {% trans %} mail.closeTicket.info.more {% endtrans %} <a href="http://www.ad-service.es">www.ad-service.es</a>
     </td></tr>
 </table>
 

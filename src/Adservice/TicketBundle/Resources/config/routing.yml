@@ -59,7 +59,7 @@ showTicketReadonly:
     defaults: { _controller: TicketBundle:Ticket:showTicketReadonly }
 
 reopenTicket:
-    pattern: /ticket/reopen/{id_ticket}
+    pattern: /ticket/reopen/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 

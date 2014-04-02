@@ -36,7 +36,9 @@ contact:		Contacto
 ticket: 		Ticket
 car: 			Coche
 post: 			Mensajes
+answer: 		Respuesta
 description: 	Descripción
+solution:		Solución
 status:			Estado
 
 actions: 		Acciones
@@ -73,21 +75,53 @@ ticket.assigned_to:			  Asignado a
 ticket.flt.searchBy.id:		  Buscar ticket por ID
 
 #MAIL
-mail.newTicket.subject:				'ADService | Nuevo Ticket creado con id #'
-mail.newTicket.title:				Se ha creado un ticket
-mail.newTicket.createdby:			'Este ticket se ha creado vía teléfono con:'
-mail.newTicket.createdby.workshop:	Este ticket ha sido creado a través de la plataforma AD-Service.
-mail.newTicket.info:				'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.newTicket.info.id:				'El código del ticket es:'
-mail.newTicket.info.more:			'Más información:'
+mail.newTicket.subject:					'ADService | Nuevo Ticket creado con id #'
+mail.newTicket.title:					'Se ha creado un ticket'
+mail.newTicket.createdby:				'Este ticket se ha creado vía teléfono con:'
+mail.newTicket.createdby.workshop:		'Este ticket ha sido creado a través de la plataforma AD-Service.'
+mail.newTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.newTicket.info.id:					'El código del ticket es:'
+mail.newTicket.info.more:				'Más información:'
 
-mail.newTicket.subject:				'ADService | Ticket editado con id #'
-mail.newTicket.title:				Se ha editado un ticket
-mail.newTicket.createdby:			'Este ticket ha sido editado por:'
-mail.newTicket.createdby.workshop:	Has editado el ticket a través de la plataforma AD-Service.
-mail.newTicket.info:				'Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.newTicket.info.id:				'El código del ticket es:'
-mail.newTicket.info.more:			'Más información:'
+mail.editTicket.subject:				'ADService | Ticket editado con id #'
+mail.editTicket.title:					'Se ha editado un ticket'
+mail.editTicket.createdby:				'Este ticket ha sido editado por:'
+mail.editTicket.createdby.workshop:		'Has editado el ticket a través de la plataforma AD-Service.'
+mail.editTicket.info:					'Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.editTicket.info.id:				'El código del ticket es:'
+mail.editTicket.info.more:				'Más información:'
+
+mail.deleteTicket.subject:				'ADService | Ticket borrado con id #'
+mail.deleteTicket.title:				'Se ha borrado un ticket'
+mail.deleteTicket.createdby:			'Este ticket ha sido borrado por:'
+mail.deleteTicket.createdby.workshop:	'Has borrado el ticket a través de la plataforma AD-Service.'
+mail.deleteTicket.info:					'Para consultar tus tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.deleteTicket.info.id:				'El código del ticket borrado es:'
+mail.deleteTicket.info.more:			'Más información:'
+
+mail.closeTicket.subject:				'ADService | Ticket cerrado con id #'
+mail.closeTicket.title:					'Se ha cerrado un ticket'
+mail.closeTicket.createdby:				'Este ticket ha sido cerrado por:'
+mail.closeTicket.createdby.workshop:	'Has cerrado el ticket a través de la plataforma AD-Service.'
+mail.closeTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.closeTicket.info.id:				'El código del ticket cerrado es:'
+mail.closeTicket.info.more:				'Más información:'
+
+mail.reopenTicket.subject:				'ADService | Ticket reabierto con id #'
+mail.reopenTicket.title:				'Se ha reabierto un ticket'
+mail.reopenTicket.createdby:			'Este ticket ha sido reabierto por:'
+mail.reopenTicket.createdby.workshop:	'Has reabierto el ticket a través de la plataforma AD-Service.'
+mail.reopenTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.reopenTicket.info.id:				'El código del ticket reabierto es:'
+mail.reopenTicket.info.more:			'Más información:'
+
+mail.answerTicket.subject:				'ADService | Ticket respondido con id #'
+mail.answerTicket.title:				'Se ha respondido un ticket'
+mail.answerTicket.createdby:			'Este ticket ha sido respondido por:'
+mail.answerTicket.createdby.workshop:	'Has respondido el ticket a través de la plataforma AD-Service.'
+mail.answerTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.answerTicket.info.id:				'El código del ticket respondido es:'
+mail.answerTicket.info.more:			'Más información:'
 
 mail.textDisclaimer:				AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>
 

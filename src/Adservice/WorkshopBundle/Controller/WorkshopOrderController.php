@@ -185,7 +185,7 @@ class WorkshopOrderController extends Controller {
     }
 
 
-    public function resendOrderAction($id, $status){
+    public function resendOrderAction($id){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -261,7 +261,6 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
 
         $workshopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->find($id);
         if (!$workshopOrder)
@@ -294,7 +293,6 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
 
         $workshopOrder = $em->getRepository('WorkshopBundle:WorkshopOrder')->find($id);
 
@@ -481,7 +479,7 @@ class WorkshopOrderController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $ordersBefore = array();
 
-        foreach ($workshopsOrders as $key => $workshopOrder) {
+        foreach ($workshopsOrders as $workshopOrder) {
 
             if ($workshopOrder->getAction() == 'modify' or $workshopOrder->getAction() == 're_modify') {
 

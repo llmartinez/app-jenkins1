@@ -307,8 +307,17 @@ class TicketController extends Controller {
         }
         //borra el ticket
         $em->remove($ticket);
-        $em->flush();
 
+        /* MAILING */
+        $mailer = $this->get('cms.mailer');
+        $mailer->setTo($this->get('security.context')->getToken()->getUser()->getEmail1());
+        $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$ticket->getId());
+        $mailer->setFrom('noreply@grupeina.com');
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:delete_ticket_mail.html.twig', array('ticket' => $ticket)));
+        $mailer->sendMailToSpool();
+        //echo $this->renderView('UtilBundle:Mailing:delete_ticket_mail.html.twig', array('ticket' => $ticket));die;
+
+        $em->flush();
         return $this->redirect($this->generateUrl('listTicket'));
     }
 
@@ -376,6 +385,15 @@ class TicketController extends Controller {
                     }
 
                     DefaultC::saveEntity($em, $ticket, $user);
+
+                    /* MAILING */
+                    $mailer = $this->get('cms.mailer');
+                    $mailer->setTo($user->getEmail1());
+                    $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                    $mailer->setFrom('noreply@grupeina.com');
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:answer_ticket_mail.html.twig', array('ticket' => $ticket)));
+                    $mailer->sendMailToSpool();
+                    //echo $this->renderView('UtilBundle:Mailing:answer_ticket_mail.html.twig', array('ticket' => $ticket));die;
                 }
             }
             return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
@@ -402,7 +420,6 @@ class TicketController extends Controller {
     public function listTicketFilteredAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
         $request  = $this->getRequest();
         $tickets  = array();
         $status   = new Status();
@@ -416,7 +433,7 @@ class TicketController extends Controller {
         else {
             if($st_closed != "") { $status = $em->getRepository('TicketBundle:Status')->findOneByName('closed'); }
         }
-        $tickets  = $em->getRepository('TicketBundle:Ticket'    )->findTicketsFiltered($security, $id_workshop, $id_ticket, $status);
+        $tickets  = $em->getRepository('TicketBundle:Ticket'    )->findTicketsFiltered($id_workshop, $id_ticket, $status);
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
         return $this->render('TicketBundle:Ticket:list_ticket_layout.html.twig', array('workshop' => $workshop,
@@ -449,6 +466,16 @@ class TicketController extends Controller {
                     $ticket->setBlockedBy(null);
 
                     DefaultC::saveEntity($em, $ticket, $user);
+
+                    /* MAILING */
+                        $mailer = $this->get('cms.mailer');
+                        $mailer->setTo($user->getEmail1());
+                        $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
+                        $mailer->setFrom('noreply@grupeina.com');
+                        $mailer->setBody($this->renderView('UtilBundle:Mailing:close_ticket_mail.html.twig', array('ticket' => $ticket)));
+                        $mailer->sendMailToSpool();
+                        //echo $this->renderView('UtilBundle:Mailing:close_ticket_mail.html.twig', array('ticket' => $ticket));die;
+
                     return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
                 }
                 else{
@@ -483,6 +510,14 @@ class TicketController extends Controller {
 
         $ticket->setStatus($status);
         DefaultC::saveEntity($em, $ticket, $user);
+         /* MAILING */
+            $mailer = $this->get('cms.mailer');
+            $mailer->setTo($user->getEmail1());
+            $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$ticket->getId());
+            $mailer->setFrom('noreply@grupeina.com');
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:reopen_ticket_mail.html.twig', array('ticket' => $ticket)));
+            $mailer->sendMailToSpool();
+            //echo $this->renderView('UtilBundle:Mailing:reopen_ticket_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
 
         return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
     }

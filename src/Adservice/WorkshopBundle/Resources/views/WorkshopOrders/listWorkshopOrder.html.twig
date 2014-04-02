@@ -242,7 +242,7 @@
                                         <a title="Modificar datos del taller"                   href="{{ path('workshopOrder_createModifyOrder',   {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                                         <a title="Cancelar la solicitud"                        href="{{ path('workshopOrder_removeWorkshopOrder', {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
 
-                                        <a title="Solicitar de nuevo la activación del taller"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id, 'status':'active'    }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                        <a title="Solicitar de nuevo la activación del taller"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
                                     </td>
                                 {% endif %}
                             </tr>

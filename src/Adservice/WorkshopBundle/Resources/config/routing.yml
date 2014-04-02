@@ -71,7 +71,7 @@ workshopOrder_changeStatusOrder:
     defaults: { _controller: WorkshopBundle:WorkshopOrder:doActionWorkshop }
 
 workshopOrder_resendOrder:
-    pattern: /resendOrder/{id}/{status}
+    pattern: /resendOrder/{id}/
     defaults: { _controller: WorkshopBundle:WorkshopOrder:resendOrder }
 
 workshopOrder_setReasonRejectionOrder:
