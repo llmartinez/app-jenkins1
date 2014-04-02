@@ -20,8 +20,7 @@ class DefaultController extends Controller {
         }
         return new Response(json_encode($json), $status = 200);
     }
-    
-    
+
     // Función auxiliar usada para CIFs y NIFs especiales
     private function getCifSum($cif) {
         $sum = $cif[2] + $cif[4] + $cif[6];

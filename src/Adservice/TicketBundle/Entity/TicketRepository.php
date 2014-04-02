@@ -85,7 +85,7 @@ class TicketRepository extends EntityRepository
 
     private function getLastPostRole($ticket) {
         $posts = $ticket->getPosts();
-        $last_post = end($posts);
+        //$last_post = end($posts);
         $num_posts = count($ticket->getPosts());
 
         if    ($num_posts > 0)                   { $last_post_role = $posts[$num_posts-1]->getCreatedBy()->getRoles()[0]->getName(); }
@@ -221,7 +221,7 @@ class TicketRepository extends EntityRepository
     //     return $tickets;
     // }
 
-    public function findTicketsFiltered($security, $id_workshop, $id_ticket=null, $status=null)
+    public function findTicketsFiltered($id_workshop, $id_ticket=null, $status=null)
     {
         $em     = $this->getEntityManager();
 

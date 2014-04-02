@@ -72,7 +72,6 @@ class CarController extends Controller {
      */
     public function carModelAction($id_brand) {
         $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
 
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
 

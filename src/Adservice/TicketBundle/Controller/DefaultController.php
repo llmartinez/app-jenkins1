@@ -89,7 +89,6 @@ class DefaultController extends Controller
     public function fill_ticketsFromWorkshopAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-        $security = $this->get('security.context');
 
         $id_workshop = $petition->request->get('id_workshop');
         $check_id = $petition->request->get('filter_id');
@@ -134,24 +133,4 @@ class DefaultController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    /**
-     * Envia un mail de notificacion
-     * @return [type] [description]
-     */
-    public function send($subject, $from, $to, $body)
-    {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom   ($from)
-            ->setTo     ($to)
-            ->setBody   ($body)
-            // ->setBody(
-            //     $this->renderView(
-            //         'HelloBundle:Hello:email.txt.twig',
-            //         array('name' => $name)
-            //     )
-            // )
-        ;
-        $this->get('mailer')->send($message);
-    }
 }

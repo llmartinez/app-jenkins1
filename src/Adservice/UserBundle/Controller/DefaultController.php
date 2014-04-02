@@ -37,7 +37,6 @@ class DefaultController extends Controller {
      */
     public function profileAction() {
         $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
 
@@ -75,7 +74,7 @@ class DefaultController extends Controller {
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
         }else{
                 $users    = $em->getRepository("UserBundle:User")->findByOption($em, $option, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $option, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $option);
         }
 
         //separamos los tipos de usuario...

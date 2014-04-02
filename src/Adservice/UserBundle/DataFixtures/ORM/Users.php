@@ -33,7 +33,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setSalt       ($salt);
             $entidad->setName       (Data::getName());
             $entidad->setSurname    (Data::getSurname());
-            $entidad->setEmail1     ('test'.$i.'@'.$type.'.es');
+            $entidad->setEmail1     ('dmaya@grupeina.com');
             $entidad->setDni        (Data::getDNI());
             $entidad->setActive     ('1');
             $entidad->setRegion     ($_this->getReference(Data::getRegions()));
