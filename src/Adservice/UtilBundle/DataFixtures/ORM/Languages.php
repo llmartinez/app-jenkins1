@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\UtilBundle\Entity\Language;
 
 class Languages extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 1; }
-    
+
     public function load(ObjectManager $manager) {
         $languages = array(
             array('language' => 'spanish' , 'short_name' => 'es_ES'  ),
@@ -21,7 +21,7 @@ class Languages extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setLanguage($language['language']);
             $entidad->setShortName($language['short_name']);
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getShortName(), $entidad);
         }
         $manager->flush();

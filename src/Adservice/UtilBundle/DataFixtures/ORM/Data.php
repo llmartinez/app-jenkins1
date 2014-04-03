@@ -7,10 +7,9 @@ class Data {
     /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
     private static $numAdmins    = 5;
     private static $numAssessors = 35;
-    private static $numUsers     = 400;
+    private static $numWorkshops = 400;
     private static $numAds       = 15;
     private static $numPartners  = 15;
-    private static $numWorkshops = 400;
     private static $numTickets   = 1000;
     private static $numPosts     = 4;
 
@@ -39,10 +38,10 @@ class Data {
      *
      * @return integer $num
      */
-    public static function getNumUsers()
+    public static function getnumWorkshops()
     {
         // Numero de entidades por clase de la aplicacion
-        return Data::$numUsers;
+        return Data::$numWorkshops;
     }
     /**
      * Devuelve el numero de entidades por clase que se crearan.
@@ -63,17 +62,6 @@ class Data {
     {
         // Numero de partners por clase de la aplicacion
         return Data::$numPartners;
-    }
-
-    /**
-     * Devuelve el numero de workshops por clase que se crearan.
-     *
-     * @return integer $num
-     */
-    public static function getNumWorkshops()
-    {
-        // Numero de workshops por clase de la aplicacion
-        return Data::$numWorkshops;
     }
 
     /**
@@ -232,7 +220,7 @@ class Data {
      */
     public static function getUser()
     {
-        return 'user'.rand(1, Data::getNumUsers());
+        return 'user'.rand(1, Data::getnumWorkshops());
     }
 
     /**
@@ -306,16 +294,6 @@ class Data {
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100);
-    }
-
-    /**
-     * Generador aleatorio de códigos postales
-     *
-     * @return string Código postal aleatorio generado para el usuario.
-     */
-    public static function getDNI()
-    {
-        return sprintf('%08s', rand(10000000, 99999999)).'T';
     }
 
     /**

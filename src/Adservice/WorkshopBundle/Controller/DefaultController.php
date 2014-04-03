@@ -50,6 +50,7 @@ class DefaultController extends Controller {
         if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getEntityManager();
+                /*TODO newEntity????*/
                 $workshop->setCreatedBy($this->get('security.context')->getToken()->getUser());
                 $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
                 $this->saveWorkshop($em, $workshop);

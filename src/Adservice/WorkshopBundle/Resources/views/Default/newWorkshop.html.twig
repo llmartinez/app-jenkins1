@@ -49,28 +49,32 @@
                                                                   'placeholder': 'email 2'} }) }}
 
                             <label for="new_car_form_vin">Contact</label>
-                            {{ form_widget(form.contact, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'contact'} }) }}
+                            {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'name'} }) }}
+
+                            <label for="new_car_form_vin">Contact Surname</label>
+                            {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'surname'} }) }}
 
                             {% if is_granted('ROLE_USER') %}
                                 <label for="new_car_form_vin">Workshop observation</label>
                                 {{ form_widget(form.observation_workshop, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'contact'} }) }}
+                                                                            'placeholder': 'observation'} }) }}
                             {% endif %}
                             {% if is_granted('ROLE_ASSESSOR')%}
                                 <label for="new_car_form_vin">Assessor observation</label>
                                 {{ form_widget(form.observation_assessor, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'contact'} }) }}
+                                                                            'placeholder': 'observation'} }) }}
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN')%}
                                 <label for="new_car_form_vin">Admin observation</label>
                                 {{ form_widget(form.observation_admin, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'contact'} }) }}
+                                                                            'placeholder': 'observation'} }) }}
                             {% endif %}
 
                             <label for="new_car_form_vin">Diagnosis Machines</label>
                             {{ form_widget(form.diagnosis_machines, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'contact'} }) }}
+                                                                            'placeholder': 'observation'} }) }}
 
                         </div>
                         <div class="col-md-6 column">
@@ -90,10 +94,10 @@
                                                                   'placeholder': 'phone number 2'} }) }}
 
                             <label for="new_car_form_vin">Movile Numbers</label>
-                            {{ form_widget(form.movile_phone_1, { 'attr': { 'class': 'form-control',
+                            {{ form_widget(form.movile_number_1, { 'attr': { 'class': 'form-control',
                                                                 'placeholder': 'movile number 1'} }) }}
 
-                            {{ form_widget(form.movile_phone_2, { 'attr': { 'class': 'form-control',
+                            {{ form_widget(form.movile_number_2, { 'attr': { 'class': 'form-control',
                                                                   'placeholder': 'movile number 2'} }) }}
 
                             <label for="new_car_form_vin">Fax</label>

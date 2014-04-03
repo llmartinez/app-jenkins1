@@ -33,10 +33,11 @@ class DefaultControllerTest extends WebTestCase
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[province]']                 = 2                      ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[phone_number_1]']           = '111111111'            ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[phone_number_2]']           = '222222222'            ;
-                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_phone_1]']           = '333333333'            ;
-                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_phone_2]']           = '444444444'            ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_number_1]']          = '333333333'            ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_number_2]']          = '444444444'            ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[fax]']                      = '555555555'            ;
-                  $newWorkshopForm['adservice_workshopbundle_workshoptype[contact]']                  = 'contact'              ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[contact_name]']             = 'contact_name'         ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[contact_surname]']          = 'contact_surname'      ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[observation_workshop]']     = 'observation_workshop' ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[observation_assessor]']     = 'observation_assessor' ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[observation_admin]']        = 'observation_admin'    ;

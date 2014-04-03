@@ -25,7 +25,6 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setName       ('super');
             $entidad->setSurname    ($type);
             $entidad->setEmail1     ('test0@'.$type.'.es');
-            $entidad->setDni        (Data::getDNI());
             $entidad->setActive     ('1');
             $entidad->setRegion     ($this->getReference(Data::getRegions()));
             $entidad->setProvince   ($this->getReference(Data::getProvinces()));

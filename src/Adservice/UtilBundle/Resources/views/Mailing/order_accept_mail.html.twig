@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body style="color: #000000; margin: 0; font-family: Verdana, Geneva, sans-serif; background-color: #FFF;">
+<table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #285e8e; text-align: center;">
+    <tr><td width="100%" height="50" valign="middle">
+        {% trans %} mail.acceptOrder.title {% endtrans %}
+        {% if action == 'create'     %}{% trans %} action.create   {% endtrans %}{% endif %}
+        {% if action == 'activate'   %}{% trans %} action.active   {% endtrans %}{% endif %}
+        {% if action == 'deactivate' %}{% trans %} action.inactive {% endtrans %}{% endif %}
+        {% if action == 'modify'     %}{% trans %} action.modify   {% endtrans %}{% endif %}
+        {% trans %} workshop {% endtrans %}
+    </td></tr>
+</table>
+<table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
+    <tr><td height="150" valign="middle" align="center">
+        <img src="http://grupeina.com/images/especif/003_01_a.jpg" alt="AD-Service" title="AD-Service" width="322" height="109" />
+    </td></tr>
+
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+
+        {% if     workshop.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.acceptOrder.createdby {% endtrans %}
+                                                                   <h3>
+                                                                        {% trans %} admin {% endtrans %}
+                                                                        {{ workshop.modifiedBy.name }}
+                                                                    </h3>
+        {% elseif workshop.modifiedBy.roles[0] == 'ROLE_AD'     %} {% trans %} mail.acceptOrder.createdby.workshop  {% endtrans %}
+        {% endif %}
+    </td></tr>
+
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        {% trans %} mail.acceptOrder.info {% endtrans %}"<b>{% trans %} user.index.menu.workshops {% endtrans %}</b>".
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        {% trans %} mail.acceptOrder.info.id {% endtrans %}
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        <h2>{{ workshop.id }}</h2>
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        {% trans %} action {% endtrans %} {% trans %} action.accepted {% endtrans %} :
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        <h2>
+        {% if action == 'create'     %}{% trans %} action.create   {% endtrans %}{% endif %}
+        {% if action == 'activate'   %}{% trans %} action.active   {% endtrans %}{% endif %}
+        {% if action == 'deactivate' %}{% trans %} action.inactive {% endtrans %}{% endif %}
+        {% if action == 'modify'     %}{% trans %} action.modify   {% endtrans %}{% endif %}
+        {% trans %} workshop {% endtrans %}
+        </h2>
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        <table>
+            <h3>{% trans %} dataWorkshop {% endtrans %}:</h3>
+
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} workshop {% endtrans %}:</b></td><td> {{ workshop.name }}
+            </td></tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} code {% endtrans %}:</b></td><td> {{ workshop.partner.id }}, {{ workshop.id }}
+            </td></tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} contact {% endtrans %}:</b></td><td> {{ workshop.contact }}
+            </td></tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} tel {% endtrans %}:</b></td><td> {{ workshop.phoneNumber1 }}
+            </td></tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} mail {% endtrans %}:</b></td><td> {{ workshop.Email1 }}
+            </td></tr>
+        </table>
+            <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                {% if workshop.test == 1 %}
+                    <b>{% trans %} testing {% endtrans %}</b>
+                {% endif %}
+            </td></tr>
+    </td></tr>
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
+        {% trans %} mail.info.more {% endtrans %} <a href="http://www.ad-service.es">www.ad-service.es</a>
+    </td></tr>
+</table>
+
+<hr>
+
+</table>
+<table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} footerText {% endtrans %}
+    </td></tr>
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} termsConditions {% endtrans %}
+    </td></tr>
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} mail.textDisclaimer {% endtrans %}
+    </td></tr>
+</table>
+</body>
+</html>

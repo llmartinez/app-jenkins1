@@ -121,15 +121,13 @@ class DefaultController extends Controller {
         $original_password = $user->getPassword();
 
         $petition = $this->getRequest();
-        
+
         //que tipo de usuario estamos editando (los formtype varian...)
         $role = $user->getRoles();
         if ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new UserAdminAssessorType(), $user);
         elseif ($role[0]->getRole() == "ROLE_USER")     $form = $this->createForm(new UserWorkshopType(), $user);
         elseif ($role[0]->getRole() == "ROLE_ASSESSOR") $form = $this->createForm(new UserAdminAssessorType(), $user);
         elseif ($role[0]->getRole() == "ROLE_AD")       $form = $this->createForm(new UserPartnerType(), $user);
-        
-        
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
@@ -197,9 +195,9 @@ class DefaultController extends Controller {
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserPartnerType(), $user);
         }
-        
+
         $request = $this->getRequest();
-        
+
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -216,8 +214,7 @@ class DefaultController extends Controller {
                                                                            'form_name'  => $form->getName(),
                                                                            'form'       => $form->createView()));
     }
-    
-    
+
     /**
      * Hace el save de un usuario
      * Si $original_password == NULL indica que no se quiere modificar y se mantienen el que habia (viene del formulario y esta en blanco)

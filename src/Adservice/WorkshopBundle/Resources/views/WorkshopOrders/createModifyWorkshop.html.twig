@@ -56,13 +56,13 @@
                 </tr>
                 <tr>
                     <td>Movile Number1</td>
-                    <td>{{ workshop.movilePhone1 }}</td>
-                    <td>{{ form_widget(form.movile_phone_1) }}</td>
+                    <td>{{ workshop.movileNumber1 }}</td>
+                    <td>{{ form_widget(form.movile_number_1) }}</td>
                 </tr>
                 <tr>
                     <td>Movile Number2</td>
-                    <td>{{ workshop.movilePhone2 }}</td>
-                    <td>{{ form_widget(form.movile_phone_2) }}</td>
+                    <td>{{ workshop.movileNumber2 }}</td>
+                    <td>{{ form_widget(form.movile_number_2) }}</td>
                 </tr>
                 <tr>
                     <td>Fax</td>
@@ -72,7 +72,7 @@
                 <tr>
                     <td>Contact</td>
                     <td>{{ workshop.contact }}</td>
-                    <td>{{ form_widget(form.contact ) }}</td>
+                    <td>{{ form_widget(form.contact_name ) }}{{ form_widget(form.contact_surname ) }}</td>
                 </tr>
                 <tr>
                     <td>Email 1</td>
@@ -129,7 +129,7 @@
                     {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control',
                                                                    'placeholder': 'Phone Number'} }) }}
                     <label>Movile Phone</label>
-                    {{ form_widget(form.movile_phone_1, { 'attr': {'class': 'form-control',
+                    {{ form_widget(form.movile_number_1, { 'attr': {'class': 'form-control',
                                                                    'placeholder': 'Movile Phone'} }) }}
                 </div>
 

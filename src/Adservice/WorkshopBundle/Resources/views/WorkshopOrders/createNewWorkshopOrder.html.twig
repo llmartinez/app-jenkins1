@@ -18,9 +18,15 @@
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control',
                                                          'placeholder': 'Name'} }) }}
 
-                    <label>Contact</label>
-                    {{ form_widget(form.contact, { 'attr': {'class': 'form-control',
-                                                            'placeholder': 'Contact'} }) }}
+                    
+                    <label for="new_car_form_vin">Contact Name</label>
+                    {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
+                                                        'placeholder': 'name'} }) }}
+
+                    <label for="new_car_form_vin">Contact Surname</label>
+                    {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'surname'} }) }}
+
 
                     <label>Email</label>
                     {{ form_widget(form.email_1, { 'attr': {'class': 'form-control',
@@ -29,7 +35,7 @@
                     {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control',
                                                                    'placeholder': 'Phone Number'} }) }}
                     <label>Movile Phone</label>
-                    {{ form_widget(form.movile_phone_1, { 'attr': {'class': 'form-control',
+                    {{ form_widget(form.movile_number_1, { 'attr': {'class': 'form-control',
                                                                    'placeholder': 'Movile Phone'} }) }}
                 </div>
 

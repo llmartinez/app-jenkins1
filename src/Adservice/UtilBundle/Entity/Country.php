@@ -28,6 +28,13 @@ class Country
      */
     private $country;
 
+    /**
+     * @var string $lang
+     *
+     * @ORM\Column(name="lang", type="string", length=255)
+     */
+    private $lang;
+
 
     /**
      * Get id
@@ -57,6 +64,26 @@ class Country
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set lang
+     *
+     * @param string $lang
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+    }
+
+    /**
+     * Get lang
+     *
+     * @return string
+     */
+    public function getLang()
+    {
+        return $this->lang;
     }
 
     public function __toString() {

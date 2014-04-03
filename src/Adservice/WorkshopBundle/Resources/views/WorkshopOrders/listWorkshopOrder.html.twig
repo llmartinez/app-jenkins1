@@ -9,7 +9,7 @@
 
     {% if workshopsOrders is defined %}
         {% if workshopsOrders|length > 0  %}
-            <h1>Listado de solicitudes pendientes</h1> 
+            <h1>Listado de solicitudes pendientes</h1>
             <table class="table table-hover" style="width: 80%; margin-left: 10%;">
                 <thead>
                     <tr>
@@ -67,7 +67,7 @@
                                                     <tr><td><b>Address       </b></td><td>{{ orderBefore.address }}      </td><td> {{ workshopOrder.address }}      </td></tr>
                                                     <tr><td><b>City          </b></td><td>{{ orderBefore.city }}         </td><td> {{ workshopOrder.city }}         </td></tr>
                                                     <tr><td><b>Phone Number  </b></td><td>{{ orderBefore.phoneNumber1 }} </td><td> {{ workshopOrder.phoneNumber1 }} </td></tr>
-                                                    <tr><td><b>Movile Number </b></td><td>{{ orderBefore.movilePhone1}}  </td><td> {{ workshopOrder.movilePhone1}}  </td></tr>
+                                                    <tr><td><b>Movile Number </b></td><td>{{ orderBefore.movileNumber1}}  </td><td> {{ workshopOrder.movileNumber1}}  </td></tr>
                                                     <tr><td><b>Fax           </b></td><td>{{ orderBefore.fax }}          </td><td> {{ workshopOrder.fax }}          </td></tr>
                                                     <tr><td><b>Email         </b></td><td>{{ orderBefore.email1 }}       </td><td> {{ workshopOrder.email1 }}       </td></tr>
                                                     <tr><td><b>Region        </b></td><td>{{ orderBefore.region }}       </td><td> {{ workshopOrder.region }}       </td></tr>
@@ -118,13 +118,13 @@
         {% endif %}
 
         <br />
-        
+
         {% if workshopsRejectedOrders is defined %}
             {% if workshopsRejectedOrders|length > 0  %}
-                
-                <h1>Listado de solicitudes rechazadas</h1>   
-                
-                <table class="table table-hover table-list-search" style="width: 60%; margin-left: 375px;">
+
+                <h1>Listado de solicitudes rechazadas</h1>
+
+                <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -175,7 +175,7 @@
                                                         <b>Address:</b> {{ workshopOrder.address }}<br/>
                                                         <b>City:</b> {{ workshopOrder.city }}<br/>
                                                         <b>Phone Number</b> {{ workshopOrder.phoneNumber1 }} / {{ workshopOrder.phoneNumber2 }}<br/>
-                                                        <b>Movile Number</b> {{ workshopOrder.movilePhone1}} / {{ workshopOrder.movilePhone1 }}<br/>
+                                                        <b>Movile Number</b> {{ workshopOrder.movileNumber1}} / {{ workshopOrder.movileNumber1 }}<br/>
                                                         <b>Fax</b> {{ workshopOrder.fax }}<br/>
                                                         <b>Email:</b> {{ workshopOrder.email1 }} / {{ workshopOrder.email2 }}<br/>
                                                         <b>Region:</b> {{ workshopOrder.region }}<br/>
@@ -214,7 +214,7 @@
                                                         <h4 class="modal-title" id="myModalLabel">Rejection Reason</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{ workshopOrder.rejectionReason }}
+                                                        {{ workshopOrder.rejectionReason|nl2br }}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -223,44 +223,27 @@
                                             </div><!-- /.modal-dialog -->
                                         </div><!-- /.modal -->
                                 </td>
+                                <td>
+                                {% if is_granted('ROLE_AD') %}
 
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <td>
-                                        <a title="Cancelar la solicitud" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
-{#                                        <a title="Aceptar"  href="{{ path("workshopOrder_changeStatusOrder", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>#}
-{#                                        <a title="Rechazar" href="{{ path("workshopOrder_setReasonRejectionOrder", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
-{#                                        <a title="Cancelar la solicitud" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
-                                    </td>
-                                {% elseif is_granted('ROLE_AD') %}
-                                    <td>
-    {#                                    {% if workshop.action == 'activate' or workshop.action == 'deactivate' %}#}
-    {#                                        <a title="Cancelar la activación / desactivación" href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshop.idWorkshop}) }}"><span class="glyphicon glyphicon-remove"></span></a>#}
-    {#                                    {% else %}#}
-    {#                                        <a title="Modificar datos de la solicitud" href="{{ path('workshopOrder_new', {'id' : workshop.idWorkshop, 'action' : 're_modify'})}}"><span class="glyphicon glyphicon-pencil"></span></a>#}
-    {#                                    {% endif %}#}
-{#                                        <a title="Editar y enviar una nueva solicitud"          href="{{ path('workshopOrder_removeWorkshopOrder', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>#}
                                         <a title="Modificar datos del taller"                   href="{{ path('workshopOrder_createModifyOrder',   {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                                         <a title="Cancelar la solicitud"                        href="{{ path('workshopOrder_removeWorkshopOrder', {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
 
                                         <a title="Solicitar de nuevo la activación del taller"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
-                                    </td>
                                 {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% else %}
             No hay solicitudes rechazadas pendientes!!
-        
             {% endif %}
         {% endif %}
-            
     {% endif %}
-            
-   
-       
+
 {% endblock %}
-            
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>

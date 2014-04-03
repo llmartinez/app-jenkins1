@@ -21,7 +21,6 @@ class UserPartnerType extends AbstractType {
                                                     'required' => false ))
                 ->add('name')
                 ->add('surname')
-                ->add('dni')
                 ->add('city')
                 ->add('phone_number_1')
                 ->add('phone_number_2', 'text', array('required' => false))

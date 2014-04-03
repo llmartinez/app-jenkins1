@@ -21,7 +21,6 @@ class UserWorkshopType extends AbstractType {
                 ))
                 ->add('name')
                 ->add('surname')
-                ->add('dni')
                 ->add('city')
                 ->add('phone_number_1', 'text', array('required' => true))
                 ->add('phone_number_2', 'text', array('required' => false))

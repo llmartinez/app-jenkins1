@@ -53,7 +53,8 @@
 
         <div class="col-xs-2 col-md-2 form-group">
             <label for="adservice_workshopbundle_workshoptype_contact">Contact</label>
-            {{ form_widget(form.contact, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(form.contact_name, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
             <label for="adservice_workshopbundle_workshoptype_phone_number_1">Phone Number 1</label>
@@ -64,27 +65,31 @@
             {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_workshopbundle_workshoptype_movile_phone_1">Movile Phone 1</label>
-            {{ form_widget(form.movile_phone_1, { 'attr': {'class': 'form-control'} }) }}
+            <label for="adservice_workshopbundle_workshoptype_movile_number_1">Movile Phone 1</label>
+            {{ form_widget(form.movile_number_1, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_workshopbundle_workshoptype_movile_phone_2">Movile Phone 2</label>
-            {{ form_widget(form.movile_phone_2, { 'attr': {'class': 'form-control'} }) }}
+            <label for="adservice_workshopbundle_workshoptype_movile_number_2">Movile Phone 2</label>
+            {{ form_widget(form.movile_number_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
             <label for="adservice_workshopbundle_workshoptype_fax">Fax</label>
             {{ form_widget(form.fax, { 'attr': {'class': 'form-control'} }) }}
         </div>
 
-        <div class="col-xs-6 col-md-6 form-group">
+        <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_email_1">Email 1</label>
             {{ form_widget(form.email_1, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-6 col-md-6 form-group">
+        <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_email_2">Email 2</label>
             {{ form_widget(form.email_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
 
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_country">Country</label>
+            {{ form_widget(form.country, { 'attr': {'class': 'form-control'} }) }}
+        </div>
         <div class="col-xs-2 col-md-2 form-group">
             <label for="adservice_workshopbundle_workshoptype_region">Region</label>
             {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }}
@@ -97,7 +102,7 @@
             <label for="adservice_workshopbundle_workshoptype_city">City</label>
             {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-6 col-md-6 form-group">
+        <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_address">Address</label>
             {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}
         </div>
