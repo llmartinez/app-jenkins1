@@ -163,6 +163,31 @@ class DefaultController extends Controller {
         return $this->redirect($this->generateUrl('user_list'));
     }
 
+
+    public function changePasswordAction($id, $password=null) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        if (!$user)
+            throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
+
+        /*CREAR PASSWORD AUTOMATICAMENTE*/
+        if ($password == null) $password = substr( md5(microtime()), 1, 8);
+
+        $user->setPassword($password);
+        $this->saveUser($em, $user);
+        /* MAILING */
+        $mailerUser = $this->get('cms.mailer');
+        $mailerUser->setTo($user->getEmail1());
+        $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
+        $mailerUser->setFrom('noreply@grupeina.com');
+        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
+        $mailerUser->sendMailToSpool();
+        // echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
+       return $this->render('UserBundle:Default:profile.html.twig', array('user' => $user, 'change' => 0));
+    }
+
     /**
      * Crea un nuevo usuario en la bbdd
      * @return type
@@ -186,10 +211,10 @@ class DefaultController extends Controller {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserAdminAssessorType(), $user);
-        } elseif ($type == 'user') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
-            $user->setUserRoles($rol);
-            $form = $this->createForm(new UserWorkshopType(), $user);
+        // } elseif ($type == 'user') {
+        //     $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
+        //     $user->setUserRoles($rol);
+        //     $form = $this->createForm(new UserWorkshopType(), $user);
         }elseif ($type == 'ad') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
             $user->setUserRoles($rol);
@@ -201,6 +226,7 @@ class DefaultController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
+
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($this->get('security.context')->getToken()->getUser());
 //            $partner = $form->getData('partner');

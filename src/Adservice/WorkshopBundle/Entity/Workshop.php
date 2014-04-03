@@ -26,6 +26,13 @@ class Workshop {
      */
     private $id;
 
+    // *
+    //  * @var integer $code_workshop
+    //  *
+    //  * @ORM\Column(name="code_workshop", type="integer")
+
+    // private $code_workshop;
+
     /**
      * @var string $name
      *
@@ -302,6 +309,24 @@ class Workshop {
     public function getId() {
         return $this->id;
     }
+
+    // /**
+    //  * Set code_workshop
+    //  *
+    //  * @param string $code_workshop
+    //  */
+    // public function setCodeWorkshop($code_workshop) {
+    //     $this->code_workshop = $code_workshop;
+    // }
+
+    // /**
+    //  * Get code_workshop
+    //  *
+    //  * @return string
+    //  */
+    // public function getCodeWorkshop() {
+    //     return $this->code_workshop;
+    // }
 
     /**
      * Set name

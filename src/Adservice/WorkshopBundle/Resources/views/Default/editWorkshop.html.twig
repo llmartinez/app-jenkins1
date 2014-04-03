@@ -147,7 +147,7 @@
     <script>
         $(document).ready(function() {
             //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').change(function() {
+            $('form[name=adservice_workshopbundle_workshoptype]').find('select[name*=region]').change(function() {
                 var url_ajax = "{{ path("user_provinces") }}";
                 populate_province(url_ajax);
             });

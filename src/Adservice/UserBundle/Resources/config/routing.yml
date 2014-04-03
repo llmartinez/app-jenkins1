@@ -1,7 +1,7 @@
 ##############################
 #   APDO. RUTAS PARA LOGIN   #
 ##############################
-       
+
 _user_login:
     pattern:  /
     defaults: { _controller: UserBundle:Login:goToLogin }
@@ -9,22 +9,22 @@ _user_login:
 user_login:
     pattern:  /login
     defaults: { _controller: UserBundle:Login:login }
-    
+
 
 user_login_check:
     pattern:  /login_check
     defaults: { _controller: UserBundle:Login:login }
-    
+
 user_logout:
     pattern:  /logout
-    
+
 ##############################
 #   APDO. RUTAS USER         #
 ##############################
 user_index:
     pattern: /user/index
     defaults: { _controller: UserBundle:Default:index }
-    
+
 user_profile:
     pattern: /user/profile
     defaults: { _controller: UserBundle:Default:profile }
@@ -32,26 +32,30 @@ user_profile:
 user_list:
     pattern: /user/list/{page}/{option}
     defaults: { _controller: UserBundle:Default:userList, page:1 , option: null }
-    
+
 user_edit:
     pattern: /user/edit/{id}
     defaults: { _controller: UserBundle:Default:editUser }
 
 user_delete:
     pattern: /user/delete/{id}
-    defaults: { _controller: UserBundle:Default:deleteUser }
+    defaults: { _controller: UserBundle:Default::deleteUser }
 
 user_new:
     pattern: /user/new/{type}
     defaults: { _controller: UserBundle:Default:newUser }
-    
+
 user_select_new:
     pattern: /user/selectNewUser
     defaults: { _controller: UserBundle:Default:selectNewUser }
 
+change_password:
+    pattern: /user/changePassword/{id}/{password}
+    defaults: { _controller: UserBundle:Default:changePassword }
+
 ##############################
 #       RUTAS AJAX           #
 ##############################
-user_provinces: 
+user_provinces:
     pattern: /provincesFromRegion
     defaults: { _controller: UtilBundle:Default:provincesFromRegion }

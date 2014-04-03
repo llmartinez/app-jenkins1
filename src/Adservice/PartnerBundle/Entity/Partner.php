@@ -21,7 +21,6 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 
 /**
  * Adservice\PartnerBundle\Entity\Partner
- *git add
  * @ORM\Table(name="partner")
  * @ORM\Entity(repositoryClass="Adservice\PartnerBundle\Entity\PartnerRepository")
  */
@@ -36,6 +35,8 @@ class Partner {//implements EventSubscriber{
      */
 
     private $id;
+
+    private $codePartner;
 
     /**
      * @var string $name

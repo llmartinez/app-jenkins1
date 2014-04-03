@@ -15,8 +15,9 @@ class WorkshopRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
 
-        $query = 'SELECT w FROM WorkshopBundle:Workshop w
-                  WHERE w.active = 1 ';
+        $query = 'SELECT w';
+        $from  = 'FROM WorkshopBundle:Workshop w
+                 WHERE w.active = 1 ';
         $where = "";
 
         $w_id        = $request->get('w_id'       );
@@ -24,15 +25,18 @@ class WorkshopRepository extends EntityRepository
         $w_email     = $request->get('w_email'    );
         $w_tel       = $request->get('w_tel'      );
 
-        if ($w_id        != "") {  $where .= "AND w.id = ".$w_id." ";                                                            }
-        if ($w_idpartner != "") {  $where .= "AND w.partner = ".$w_idpartner." ";                                                }
-        if ($w_email     != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' ";          }
-        if ($w_tel       != "") {  $where .= "AND w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
-                                              OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%'"; }
+        if ($w_id          != "") {  $where .= "AND w.id = ".$w_id." ";                                                             }
+        if ($w_idpartner   != "") {  $where .= "AND w.partner.code_partner = ".$w_idpartner." ";                                    }
+        // if ($w_codepartner != "") { $query .= ", p";
+        //                             $from  .= "JOIN w.partner p ";
+        //                             $where .= "AND p.code_partner = ".$w_codepartner." ";                                        }
+        if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' ";           }
+        if ($w_tel         != "") {  $where .= "AND w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
+                                              OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%'";  }
 
         //Crea la consulta
         // echo $query.$where.' ORDER BY w.id ';die;
-        $consulta = $em->createQuery($query.$where.' ORDER BY w.id ');
+        $consulta = $em->createQuery($query.$from.$where.' ORDER BY w.id ');
 
         //Si la consulta da resultado y hay algun campo de los filtros introducido se devuelve el resultado, sino se devuelve un array vacio
         if ((count($consulta->getResult()) > 0) && ($w_id != "" || $w_idpartner != "" || $w_email != "" || $w_tel != "" ))
