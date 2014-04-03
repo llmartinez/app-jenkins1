@@ -19,16 +19,20 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
         {
             $entidad = new Workshop();
             $entidad->setName('workshop'.$i);
+            $entidad->setContactName('name'.$i);
+            $entidad->setContactSurname('surname'.$i);
             $entidad->setPhoneNumber1(Data::getPhone());
-            $entidad->setMovilePhone1(Data::getPhone());
+            $entidad->setMovileNumber1(Data::getPhone());
             $entidad->setEmail1('workshop'.$i.'@workshop.es');
             $entidad->setActive('1');
             $entidad->setUpdateAt(new \DateTime());
             $entidad->setLowdateAt(new \DateTime());
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());
+            $entidad->setCountry($this->getReference(Data::getCountries()));
             $entidad->setRegion($this->getReference(Data::getRegions()));
             $entidad->setProvince($this->getReference(Data::getProvinces()));
+            $entidad->setCreatedBy($this->getReference('superadmin'));
             $entidad->setModifiedBy($this->getReference('superadmin'));
             $entidad->setPartner($this->getReference(Data::getPartner()));
             $entidad->setTypology($this->getReference(Data::getTypologies()));

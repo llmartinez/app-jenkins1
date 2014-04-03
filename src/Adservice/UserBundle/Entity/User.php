@@ -13,9 +13,6 @@ use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 
-//use Adservice\PartnerBundle\Entity\Partner;
-//@Assert\Callback(methods={"esDniValido"})
-
 /**
  * Adservice\UserBundle\Entity\User
  *
@@ -125,13 +122,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @Assert\Email()
      */
     private $email_2;
-
-    /**
-     * @var string $dni
-     *
-     * @ORM\Column(name="dni", type="string", length=9)
-     */
-    private $dni;
 
     /**
      * @var boolean $active
@@ -363,10 +353,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->email_2;
     }
 
-    public function getDni() {
-        return $this->dni;
-    }
-
     public function setName($name) {
         $this->name = $name;
     }
@@ -409,10 +395,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
     public function setEmail2($email_2) {
         $this->email_2 = $email_2;
-    }
-
-    public function setDni($dni) {
-        $this->dni = $dni;
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -600,24 +582,4 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->partner = $partner;
     }
 
-//    public function esDniValido(ExecutionContext $context) {
-//        $nombre_propiedad = $context->getPropertyPath() . '.dni';
-//        var_dump($nombre_propiedad);die;
-//        $dni = $this->getDni();
-//        // Comprobar que el formato sea correcto
-//        if (0 === preg_match("/\d{1,8}[a-z]/i", $dni)) {
-//            $context->setPropertyPath($nombre_propiedad);
-//            $context->addViolation('El DNI introducido no tiene el formato correcto (entre 1 y 8 números seguidos de una letra, sin guiones y sin dejar ningún espacio en blanco)',
-//                                   array(), 
-//                                   null);
-//            return;
-//        }
-//        // Comprobar que la letra cumple con el algoritmo
-//        $numero = substr($dni, 0, -1);
-//        $letra = strtoupper(substr($dni, -1));
-//        if ($letra != substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($numero, "XYZ", "012") % 23, 1)) {
-//            $context->setPropertyPath($nombre_propiedad);
-//            $context->addViolation('La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra', array(), null);
-//        }
-//    }
 }

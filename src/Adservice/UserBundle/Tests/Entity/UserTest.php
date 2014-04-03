@@ -32,7 +32,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
        $user->setFax('931112233');
        $user->setEmail1('test@test.es');
        $user->setEmail2('test@test.es');
-       $user->setDni('12345678T');
        $user->addRole(RoleTest::GetRole());
        $this->assertEquals('RoleTest', $user->getUserRole()[0]->getName() , "Probar que tenga el rol: RoleTest");
        $user->setRegion(RegionTest::GetRegion());

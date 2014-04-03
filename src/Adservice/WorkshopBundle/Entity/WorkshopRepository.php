@@ -28,7 +28,7 @@ class WorkshopRepository extends EntityRepository
         if ($w_idpartner != "") {  $where .= "AND w.partner = ".$w_idpartner." ";                                                }
         if ($w_email     != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' ";          }
         if ($w_tel       != "") {  $where .= "AND w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
-                                              OR  w.movile_phone_1 like '%".$w_tel."%' OR w.movile_phone_2 like '%".$w_tel."%'"; }
+                                              OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%'"; }
 
         //Crea la consulta
         // echo $query.$where.' ORDER BY w.id ';die;

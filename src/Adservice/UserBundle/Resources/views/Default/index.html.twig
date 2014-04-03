@@ -21,7 +21,7 @@
                     <a id="ticket_list"        href="{{ path("listTicket"                           ) }}">{% trans %} user.index.menu.list_tickets          {% endtrans %}</a><br>
                     <a id="listStatistics"     href="{{ path("listStatistics"                       ) }}">{% trans %} user.index.menu.list_statistics       {% endtrans %}</a><br>
                     <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList"                   ) }}">{% trans %} user.index.menu.asign_user_to_ticket  {% endtrans %}</a><br>
-                    <a id="workshopOrdersList" href="{{ path("workshopOrder_listWorkshopOrders"     ) }}">{% trans %} Lista de ordenes pendientes           {% endtrans %}</a><br>
+                    <a id="workshopOrdersList" href="{{ path("workshopOrder_listWorkshopOrders"     ) }}">{% trans %} user.index.menu.workshop_orders   {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -47,7 +47,7 @@
                 <th>{% trans %} user.index.menu.user_title {% endtrans %}</th>
             </tr>
             <tr>
-                <td>    
+                <td>
                     <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
                     <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.my_tickets    {% endtrans %}</a><br>
                 </td>
@@ -63,10 +63,10 @@
             <tr>
                 <td>
                     <a href="{{ path("user_profile"                     ) }}">{% trans %}user.index.menu.my_profile         {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_workshoplist"       ) }}">{% trans %}Mis talleres                       {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_createNewOrder"     ) }}">{% trans %}user.index.menu.new_workshop_order {% endtrans %}</a><br>                    
+                    <a href="{{ path("workshopOrder_workshoplist"       ) }}">{% trans %}user.index.menu.workshops          {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_createNewOrder"     ) }}">{% trans %}user.index.menu.new_workshop_order {% endtrans %}</a><br>
                     <a href="{{ path("workshopOrder_listWorkshopOrders" ) }}">{% trans %}Lista de solicitudes pendientes    {% endtrans %}</a><br>
-                    
+
                 </td>
             </tr>
         </table>

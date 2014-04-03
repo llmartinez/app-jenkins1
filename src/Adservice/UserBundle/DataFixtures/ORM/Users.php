@@ -18,7 +18,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
         $workshop = 'yes';
         $partner  = null;
         $role = 'ROLE_USER';
-        $num = Data::getNumUsers();
+        $num = Data::getNumWorkshops();
 
         $users= $this->loadUsers($manager, $this, $type, $pass, $salt, $workshop, $partner, $role, $num);
     }
@@ -34,7 +34,6 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setName       (Data::getName());
             $entidad->setSurname    (Data::getSurname());
             $entidad->setEmail1     ('dmaya@grupeina.com');
-            $entidad->setDni        (Data::getDNI());
             $entidad->setActive     ('1');
             $entidad->setRegion     ($_this->getReference(Data::getRegions()));
             $entidad->setProvince   ($_this->getReference(Data::getProvinces()));
@@ -45,7 +44,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCountry    ($_this->getReference(Data::getCountries()));
             $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
             if($workshop != null ) {
-                $entidad->setWorkshop($_this->getReference(Data::getWorkshop()));
+                $entidad->setWorkshop($_this->getReference('workshop'.$i));
             }
             if($partner != null ) {
                 $entidad->setPartner($_this->getReference(Data::getPartner()));

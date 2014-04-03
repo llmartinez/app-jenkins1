@@ -75,6 +75,13 @@ class WorkshopOrder {
     private $city;
 
     /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
      * @var string $region
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
@@ -103,18 +110,18 @@ class WorkshopOrder {
     private $phone_number_2;
 
     /**
-     * @var integer $movile_phone_1
+     * @var integer $movile_number_1
      *
-     * @ORM\Column(name="movile_phone_1", type="integer", nullable=true)
+     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
      */
-    private $movile_phone_1;
+    private $movile_number_1;
 
     /**
-     * @var integer $movile_phone_2
+     * @var integer $movile_number_2
      *
-     * @ORM\Column(name="movile_phone_2", type="integer", nullable=true)
+     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
      */
-    private $movile_phone_2;
+    private $movile_number_2;
 
     /**
      * @var integer $fax
@@ -138,11 +145,18 @@ class WorkshopOrder {
     private $email_2;
 
     /**
-     * @var string $contact
+     * @var string $contact_name
      *
-     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     * @ORM\Column(name="contact_name", type="string", length=255)
      */
-    private $contact;
+    private $contact_name;
+
+    /**
+     * @var string $contact_surname
+     *
+     * @ORM\Column(name="contact_surname", type="string", length=255, nullable=true)
+     */
+    private $contact_surname;
 
     /**
      *
@@ -379,6 +393,14 @@ class WorkshopOrder {
         return $this->city;
     }
 
+    public function getCountry() {
+        return $this->country;
+    }
+
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
     public function getRegion() {
         return $this->region;
     }
@@ -442,39 +464,39 @@ class WorkshopOrder {
     }
 
     /**
-     * Set movile_phone_1
+     * Set movile_number_1
      *
-     * @param integer $movilePhone1
+     * @param integer $movileNumber1
      */
-    public function setMovilePhone1($movilePhone1) {
-        $this->movile_phone_1 = $movilePhone1;
+    public function setMovileNumber1($movileNumber1) {
+        $this->movile_number_1 = $movileNumber1;
     }
 
     /**
-     * Get movile_phone_1
+     * Get movile_number_1
      *
      * @return integer
      */
-    public function getMovilePhone1() {
-        return $this->movile_phone_1;
+    public function getMovileNumber1() {
+        return $this->movile_number_1;
     }
 
     /**
-     * Set movile_phone_2
+     * Set movile_number_2
      *
-     * @param integer $movilePhone2
+     * @param integer $movileNumber2
      */
-    public function setMovilePhone2($movilePhone2) {
-        $this->movile_phone_2 = $movilePhone2;
+    public function setMovileNumber2($movileNumber2) {
+        $this->movile_number_2 = $movileNumber2;
     }
 
     /**
-     * Get movile_phone_2
+     * Get movile_number_2
      *
      * @return integer
      */
-    public function getMovilePhone2() {
-        return $this->movile_phone_2;
+    public function getMovileNumber2() {
+        return $this->movile_number_2;
     }
 
     /**
@@ -532,13 +554,41 @@ class WorkshopOrder {
     }
 
     /**
-     * Set contact
+     * Set contact_name
      *
-     * @param string $contact
+     * @param string $contact_name
      */
-    public function setContact($contact) {
-        $this->contact = $contact;
+    public function setContactName($contact_name) {
+        $this->contact_name = $contact_name;
     }
+
+    /**
+     * Get contact_name
+     *
+     * @return string
+     */
+    public function getContactName() {
+        return $this->contact_name;
+    }
+
+    /**
+     * Set contact_surname
+     *
+     * @param string $contact_surname
+     */
+    public function setContactSurname($contact_surname) {
+        $this->contact_surname = $contact_surname;
+    }
+
+    /**
+     * Get contact_surname
+     *
+     * @return string
+     */
+    public function getContactSurname() {
+        return $this->contact_surname;
+    }
+
 
     /**
      * Get contact
@@ -546,7 +596,8 @@ class WorkshopOrder {
      * @return string
      */
     public function getContact() {
-        return $this->contact;
+        $contact = $this->contact_name.' '.$this->contact_surname;
+        return $contact;
     }
 
     /**

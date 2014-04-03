@@ -9,6 +9,31 @@ use Adservice\UtilBundle\Entity\Province;
 
 class DefaultController extends Controller {
 
+    static public function getSlug($cadena, $separador = '-')
+    {
+        // Código copiado de http://cubiq.org/the-perfect-php-clean-url-generator
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $cadena);
+        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug);
+        $slug = strtolower(trim($slug, $separador));
+        $slug = preg_replace("/[\/_|+ -]+/", $separador, $slug);
+        return $slug;
+    }
+
+    static public function getUsernameUnused($em, $name)
+    {
+        $slug = DefaultController::getSlug($name);
+        $unused = 1;
+        while($unused != 'unused') {
+            $username = $em->getRepository('UserBundle:User')->findOneByUsername($slug);
+            if( $username == null) { $unused = 'unused'; }
+            else{
+                $slug = DefaultController::getSlug($name).'-'.$unused;
+                $unused++;
+            }
+        }
+        return $slug;
+    }
+
     public function provincesFromRegionAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();

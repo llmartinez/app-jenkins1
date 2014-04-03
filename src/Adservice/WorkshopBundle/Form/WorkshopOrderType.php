@@ -17,10 +17,11 @@ class WorkshopOrderType extends AbstractType
             ->add('city')
             ->add('phone_number_1', 'text')
             ->add('phone_number_2', 'text', array('required' => false))
-            ->add('movile_phone_1', 'text', array('required' => false))
-            ->add('movile_phone_2', 'text', array('required' => false))
+            ->add('movile_number_1', 'text', array('required' => false))
+            ->add('movile_number_2', 'text', array('required' => false))
             ->add('fax', 'text', array('required' => false))
-            ->add('contact')
+            ->add('contact_name', 'text', array('required' => true))
+            ->add('contact_surname', 'text', array('required' => true))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
 //            ->add('diagnosis_machines')
@@ -34,6 +35,7 @@ class WorkshopOrderType extends AbstractType
 //            ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')
             ->add('region')
+            ->add('country')
 //            ->add('order')
         ;
     }

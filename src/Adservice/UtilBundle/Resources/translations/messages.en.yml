@@ -65,13 +65,53 @@ ticket.assigned_to:			  Assigned to
 ticket.flt.searchBy.id:		  Search ticket by ID
 
 #MAIL
-mail.newTicket.subject:				'ADService | New Ticket created with id #'
-mail.newTicket.title:				A new Ticket has been created
-mail.newTicket.createdby:			'This ticket has been created by phone with:'
-mail.newTicket.createdby.workshop:	This ticket has been created by the AD-Service platform
-mail.newTicket.info:				'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
-mail.newTicket.info.id:				'The reference of the ticket is:'
-mail.newTicket.info.more:			'More info:'
+mail.newTicket.subject:				    'ADService | New Ticket created with id #'
+mail.newTicket.title:					'A new Ticket has been created'
+mail.newTicket.createdby:				'This ticket has been created by phone with:'
+mail.newTicket.createdby.workshop:		'This ticket has been created by the AD-Service platform'
+mail.newTicket.info:					'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.newTicket.info.id:					'The reference of the ticket is:'
+mail.newTicket.info.more:				'More info:'
+
+mail.editTicket.subject:				'ADService | Ticket edited with id #'
+mail.editTicket.title:					'A Ticket has been edited'
+mail.editTicket.createdby:				'This ticket has been edited by phone with:'
+mail.editTicket.createdby.workshop:		'This ticket has been edited by the AD-Service platform'
+mail.editTicket.info:					'To acces or modify this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.editTicket.info.id:				'The reference of the ticket is:'
+mail.editTicket.info.more:				'More info:'
+
+mail.deleteTicket.subject:				'ADService | Ticket deleted with id #'
+mail.deleteTicket.title:				'A Ticket has been deleted'
+mail.deleteTicket.createdby:			'This ticket has been deleted by phone with:'
+mail.deleteTicket.createdby.workshop:	'This ticket has been deleted by the AD-Service platform'
+mail.deleteTicket.info:					'To acces to your tickets insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.deleteTicket.info.id:				'The reference of the deleted ticket is:'
+mail.deleteTicket.info.more:			'More info:'
+
+mail.closeTicket.subject:				'ADService | Ticket closed with id #'
+mail.closeTicket.title:					'A Ticket has been created'
+mail.closeTicket.createdby:				'This ticket has been created by phone with:'
+mail.closeTicket.createdby.workshop:	'This ticket has been created by the AD-Service platform'
+mail.closeTicket.info:					'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.closeTicket.info.id:				'The reference of the closed ticket is:'
+mail.closeTicket.info.more:				'More info:'
+
+mail.reopenTicket.subject:				'ADService | Ticket reopened with id #'
+mail.reopenTicket.title:				'A Ticket has been reopened'
+mail.reopenTicket.createdby:			'This ticket has been reopened by phone with:'
+mail.reopenTicket.createdby.workshop:	'This ticket has been reopened by the AD-Service platform'
+mail.reopenTicket.info:					'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.reopenTicket.info.id:				'The reference of the reopened ticket is:'
+mail.reopenTicket.info.more:			'More info:'
+
+mail.answerTicket.subject:				'ADService | Ticket answered with id #'
+mail.answerTicket.title:				'A Ticket has been answered'
+mail.answerTicket.createdby:			'This ticket has been answered by phone with:'
+mail.answerTicket.createdby.workshop:	'This ticket has been answered by the AD-Service platform'
+mail.answerTicket.info:					'To acces to this ticket insert the reference code of the ticket in <a href="http://www.ad-service.es">www.ad-service.es</a> at section '
+mail.answerTicket.info.id:				'The reference of the answered ticket is:'
+mail.answerTicket.info.more:			'More info:'
 
 mail.textDisclaimer:				AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. soporte@ad-service.com
 
