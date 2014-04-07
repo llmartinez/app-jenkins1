@@ -21,17 +21,20 @@
                             {{ form_widget(form.name, { 'attr': { 'class': 'form-control',
                                                                   'placeholder': 'Name'} }) }}
 
+                             <label for="new_car_form_vin">Partner</label>
+                            {{ form_widget(form.partner, { 'attr': { 'class': 'form-control',
+                                                                     'placeholder': 'Address'} }) }}
+
+                            <label for="new_car_form_vin">Code Workshop</label>
+                            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                                                                           'placeholder': 'code Workshop'} }) }}
+                            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+
                             <label for="new_car_form_vin">Cif</label>
                             {{ form_widget(form.cif, { 'attr': { 'class': 'form-control',
                                                                   'placeholder': 'Cif'} }) }}
 
-                           {#  <label for="new_car_form_vin">Num AD Client</label>
-                            {{ form_widget(form.num_ad_client, { 'attr': { 'class': 'form-control',
-                                                                           'placeholder': 'number AD Client'} }) }}
- #}
-                             <label for="new_car_form_vin">Partner</label>
-                            {{ form_widget(form.partner, { 'attr': { 'class': 'form-control',
-                                                                     'placeholder': 'Address'} }) }}
 
                             <label for="new_car_form_vin">Address</label>
                             {{ form_widget(form.address, { 'attr': { 'class': 'form-control',
@@ -47,14 +50,6 @@
 
                             {{ form_widget(form.email_2, { 'attr': { 'class': 'form-control',
                                                                   'placeholder': 'email 2'} }) }}
-
-                            <label for="new_car_form_vin">Contact</label>
-                            {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'name'} }) }}
-
-                            <label for="new_car_form_vin">Contact Surname</label>
-                            {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'surname'} }) }}
 
                             {% if is_granted('ROLE_USER') %}
                                 <label for="new_car_form_vin">Workshop observation</label>
@@ -78,13 +73,23 @@
 
                         </div>
                         <div class="col-md-6 column">
+                            <label for="new_car_form_vin">Contact</label>
+                            {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'name'} }) }}
+
+                            <label for="new_car_form_vin">Contact Surname</label>
+                            {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
+                                                                'placeholder': 'surname'} }) }}
+                            <label for="new_car_form_vin">Country</label>
+                            {{ form_widget(form.country, { 'attr': { 'class': 'form-control',
+                                                                  'placeholder': 'Country'} }) }}
                             <label for="new_car_form_vin">Region</label>
                             {{ form_widget(form.region, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'City'} }) }}
+                                                                  'placeholder': 'Region'} }) }}
 
                             <label for="new_car_form_vin">Province</label>
                             {{ form_widget(form.province, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'province'} }) }}
+                                                                  'placeholder': 'Province'} }) }}
 
                             <label for="new_car_form_vin">Phone Numbers</label>
                             {{ form_widget(form.phone_number_1, { 'attr': { 'class': 'form-control',
@@ -113,12 +118,12 @@
                             <label for="new_car_form_vin">Typology</label>
                             {{ form_widget(form.typology, { 'attr': { 'class': 'form-control',
                                                             'placeholder': 'test'} }) }}
-
+{#
                             <label for="new_car_form_vin">Update At</label>
                             {{ form_widget(form.update_at) }}
 
                             <label for="new_car_form_vin">Lowdate At</label>
-                            {{ form_widget(form.lowdate_at) }}
+                            {{ form_widget(form.lowdate_at) }} #}
 
                             <label for="new_car_form_vin">End Test At</label>
                             {{ form_widget(form.endtest_at) }}

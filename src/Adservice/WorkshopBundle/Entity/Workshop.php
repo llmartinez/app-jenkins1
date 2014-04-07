@@ -26,12 +26,12 @@ class Workshop {
      */
     private $id;
 
-    // *
-    //  * @var integer $code_workshop
-    //  *
-    //  * @ORM\Column(name="code_workshop", type="integer")
-
-    // private $code_workshop;
+    /**
+     * @var integer $code_workshop
+     *
+     * @ORM\Column(name="code_workshop", type="integer")
+     */
+    private $code_workshop;
 
     /**
      * @var string $name
@@ -230,13 +230,6 @@ class Workshop {
     private $conflictive;
 
     /**
-     * @var integer $num_ad_client
-     *
-     * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
-     */
-    private $num_ad_client;
-
-    /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosismachine",
      *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
@@ -310,23 +303,23 @@ class Workshop {
         return $this->id;
     }
 
-    // /**
-    //  * Set code_workshop
-    //  *
-    //  * @param string $code_workshop
-    //  */
-    // public function setCodeWorkshop($code_workshop) {
-    //     $this->code_workshop = $code_workshop;
-    // }
+    /**
+     * Set code_workshop
+     *
+     * @param integer $code_workshop
+     */
+    public function setCodeWorkshop($code_workshop) {
+        $this->code_workshop = $code_workshop;
+    }
 
-    // /**
-    //  * Get code_workshop
-    //  *
-    //  * @return string
-    //  */
-    // public function getCodeWorkshop() {
-    //     return $this->code_workshop;
-    // }
+    /**
+     * Get code_workshop
+     *
+     * @return integer
+     */
+    public function getCodeWorkshop() {
+        return $this->code_workshop;
+    }
 
     /**
      * Set name
@@ -739,22 +732,6 @@ class Workshop {
      */
     public function getConflictive() {
         return $this->conflictive;
-    }
-
-    /**
-     * Get num_ad_client
-     * @return int
-     */
-    public function getNumAdClient() {
-        return $this->num_ad_client;
-    }
-
-    /**
-     * Set num_ad_client
-     * @param int $num_ad_client
-     */
-    public function setNumAdClient($num_ad_client) {
-        $this->num_ad_client = $num_ad_client;
     }
 
     /**

@@ -12,6 +12,8 @@ use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Province;
 use Adservice\UtilBundle\Entity\Pagination;
+use Adservice\UtilBundle\Controller\DefaultController as UtilController;
+use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
 
 class DefaultController extends Controller {
 
@@ -19,7 +21,7 @@ class DefaultController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1 , $option=null) {
+    public function listAction($page=1) {
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
@@ -47,24 +49,45 @@ class DefaultController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
+        $em = $this->getDoctrine()->getEntityManager();
         $partner = new Partner();
         $request = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $partner->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $partner->setCreatedBy($this->get('security.context')->getToken()->getUser());
-            $this->savePartner($em, $partner);
+        if ($request->getMethod() == 'POST') {
+            if ($form->isValid()) {
+                /*CHECK CODE PARTNER NO SE REPITA*/
+                $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
+                if($code != $partner->getCodePartner())
+                {
+                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code;
+                    $this->get('session')->setFlash('error', $flash);
+                }
+                else{
+                    $partner = DefaultC::newEntity($partner, $this->get('security.context')->getToken()->getUser());
+                    $this->savePartner($em, $partner);
 
-            return $this->redirect($this->generateUrl('partner_list'));
+                    return $this->redirect($this->generateUrl('partner_list'));
+                }
+            }
+            else{
+                $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
+                $flash = 'El primer numero disponible es: '.$partner->getCodePartner();
+                $this->get('session')->setFlash('info', $flash);
+            }
         }
+        else{
+            $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
+            $flash = 'El primer numero disponible es: '.$partner->getCodePartner();
+            $this->get('session')->setFlash('info', $flash);
+        }
+
         return $this->render('PartnerBundle:Default:newPartner.html.twig', array('partner'    => $partner,
                                                                                  'form_name'  => $form->getName(),
                                                                                  'form'       => $form->createView()));
     }
-    
+
      /**
      * Obtener los datos del partner a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * Si la petición es GET  --> mostrar el formulario
@@ -74,27 +97,42 @@ class DefaultController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id);
-        
+
         if (!$partner) throw $this->createNotFoundException('Partner no encontrado en la BBDD');
 
         $petition = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
-        
-        
+
+
         if ($petition->getMethod() == 'POST') {
+
+            $last_code = $partner->getCodePartner();
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->savePartner($em, $partner);
-            return $this->redirect($this->generateUrl('partner_list'));
+
+            if ($form->isValid())
+            {
+                /*CHECK CODE PARTNER NO SE REPITA*/
+                $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
+                if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())
+                {
+                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$last_code.').';
+                    $this->get('session')->setFlash('error', $flash);
+                }
+                else{
+                    $this->savePartner($em, $partner);
+                    return $this->redirect($this->generateUrl('partner_list'));
+                }
+            }
         }
 
         return $this->render('PartnerBundle:Default:editPartner.html.twig', array('partner'    => $partner,
                                                                                   'form_name'  => $form->getName(),
                                                                                   'form'       => $form->createView()));
     }
-    
+
     /**
      * Elimina el socio con $id de la bbdd
      * @param Int $id
@@ -102,20 +140,20 @@ class DefaultController extends Controller {
      * @throws CreateNotFoundException
      */
     public function deletePartnerAction($id){
-        
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id);
         if (!$partner) throw $this->createNotFoundException('Partner no encontrado en la BBDD');
-        
+
         $em->remove($partner);
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('partner_list'));
     }
-    
+
      /**
      * Hace el save de un partner
      * @param EntityManager $em

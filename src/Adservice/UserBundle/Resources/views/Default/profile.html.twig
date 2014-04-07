@@ -10,8 +10,7 @@
 <h1>Perfil de {{ app.user }} </h1>
 {# <button class="btn btn-primary pull-left" onclick="window.open('{{ path('changePassword, { 'user_id': user.id }') }}','_self')">Change Password</button> #}
 <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
-{% if change is defined %}  <div class="col-xs-4 col-md-4 form-group"><p class="form-control">{% trans %} password_changed {% endtrans %}</p></div> {% endif %}
-
+{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
     {#<form action="{{ path("user_profile") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_widget(form) }}
         <p>

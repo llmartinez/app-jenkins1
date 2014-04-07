@@ -18,6 +18,7 @@ class Partners extends AbstractFixture implements OrderedFixtureInterface {
         {
             $entidad = new Partner();
             $entidad->setName('partner'.$i);
+            $entidad->setCodePartner($i);
             $entidad->setPhoneNumber1(Data::getPhone());
             $entidad->setPhoneNumber2(Data::getPhone());
             $entidad->setFax(Data::getPhone());

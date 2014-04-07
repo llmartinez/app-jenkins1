@@ -24,14 +24,50 @@ class DefaultController extends Controller {
         $slug = DefaultController::getSlug($name);
         $unused = 1;
         while($unused != 'unused') {
-            $username = $em->getRepository('UserBundle:User')->findOneByUsername($slug);
-            if( $username == null) { $unused = 'unused'; }
+            $find = $em->getRepository('UserBundle:User')->findOneByUsername($slug);
+            if( $find == null) { $unused = 'unused'; }
             else{
                 $slug = DefaultController::getSlug($name).'-'.$unused;
                 $unused++;
             }
         }
         return $slug;
+    }
+
+    static public function getCodePartnerUnused($em, $code=null)
+    {
+        if($code == null) {
+            $code   = 1; //Si no hay codigo por parametro se asigna 1
+            $unused = 1;
+        }
+        else { $unused = 'default'; } //Si hay codigo por parametro se marca para, en caso de estar en uso, empezar desde 1
+
+        while($unused != 'unused') {
+            $find = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' =>$code));
+
+            if( $find == null) { $unused = 'unused'; }//Si no encuentra el codigo significa que esta disponible y se devuelve
+            else{
+                if ($unused == 'default') { $code   = 1; //Si el codigo por parametro esta en uso, empieza desde 1
+                                            $unused = 1; }
+                else                        $code  ++;   //Si el codigo esta en uso, se busca el siguiente
+            }
+        }
+        return $code;
+    }
+
+    static public function getCodeWorkshopUnused($em, $partner)
+    {
+
+        $code   = 1; //Si no hay codigo por parametro se asigna 1
+        $unused = 1;
+
+        while($unused != 'unused') {
+            $find = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+
+            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
+            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+        }
+        return $code;
     }
 
     public function provincesFromRegionAction() {
