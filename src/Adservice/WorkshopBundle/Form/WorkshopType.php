@@ -10,9 +10,9 @@ class WorkshopType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-             ->add('name')
+            ->add('name')
             ->add('cif', 'text', array('required' => true))
-            // ->add('num_ad_client')
+            ->add('code_workshop', 'number')
             ->add('address')
             ->add('city')
             ->add('phone_number_1', 'text')
@@ -31,9 +31,7 @@ class WorkshopType extends AbstractType
             ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('typology')
-            ->add('endtest_at')
-            ->add('update_at')
-            ->add('lowdate_at')
+            ->add('endtest_at', 'datetime')
             ->add('partner')
             ->add('conflictive', 'checkbox', array('required' => false))
             ->add('province')

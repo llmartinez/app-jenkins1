@@ -19,6 +19,7 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
         {
             $entidad = new Workshop();
             $entidad->setName('workshop'.$i);
+            $entidad->setCodeWorkshop($i);
             $entidad->setContactName('name'.$i);
             $entidad->setContactSurname('surname'.$i);
             $entidad->setPhoneNumber1(Data::getPhone());

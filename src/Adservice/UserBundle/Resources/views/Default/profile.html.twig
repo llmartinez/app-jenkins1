@@ -7,8 +7,10 @@
     <li class="active">My Profile</li>
 </ol>
 
-<h1>Perfil de {{ app.user }}</h1>
-
+<h1>Perfil de {{ app.user }} </h1>
+{# <button class="btn btn-primary pull-left" onclick="window.open('{{ path('changePassword, { 'user_id': user.id }') }}','_self')">Change Password</button> #}
+<button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
+{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
     {#<form action="{{ path("user_profile") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_widget(form) }}
         <p>
@@ -60,6 +62,38 @@
     </tbody>
 </table>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+            </div>
+            <div class="modal-body">
+                <label>{% trans %} password {% endtrans %}</label>
+                <input id="new_password1" name="new_password1" type="text" placeholder="new password">
+                <label>{% trans %} repeat_password {% endtrans %}</label>
+                <input id="new_password2" name="new_password2" type="text" placeholder="new password">
+            </div>
+            <div class="modal-footer">
+                <button id="confirm_password" type="button" class="btn btn-default" role="button">SI</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <script>
+                    $('#confirm_password').click(function(){
+                        if($('#new_password1').val() == $('#new_password2').val())
+                        {
+                            var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER' }) }}";
+                            url = url.replace('PLACEHOLDER', $('#new_password1').val());
+                            window.open(url,'_self');
+
+                        } else alert('{% trans %} error.new_password {% endtrans %}');
+                    });
+                </script>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 {% endblock %}
 
@@ -67,5 +101,6 @@
 {% block javascripts %}
     {{ parent() }}
 <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+
 
 {% endblock %}

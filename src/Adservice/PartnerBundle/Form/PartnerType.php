@@ -10,13 +10,14 @@ class PartnerType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
                 ->add('name')
+                ->add('code_partner')
                 ->add('phone_number_1', 'text')
                 ->add('phone_number_2', 'text', array('required' => false))
                 ->add('email_1', 'email')
                 ->add('email_2', 'email', array('required' => false))
                 ->add('fax', 'text', array('required' => false))
                 ->add('address')
-                ->add('postal_code', 'text')
+                ->add('postal_code')
                 ->add('active', 'checkbox', array('required' => false))
                 ->add('province')
                 ->add('region')

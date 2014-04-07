@@ -38,8 +38,8 @@ class UserPartnerType extends AbstractType {
                 ->add('language')
         ;
         return $builder;
-    }   
-    
+    }
+
     public function getName() {
 //        return 'adservice_userbundle_usertype';
         return 'partner_type';

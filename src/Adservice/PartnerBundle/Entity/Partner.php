@@ -21,7 +21,6 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 
 /**
  * Adservice\PartnerBundle\Entity\Partner
- *git add
  * @ORM\Table(name="partner")
  * @ORM\Entity(repositoryClass="Adservice\PartnerBundle\Entity\PartnerRepository")
  */
@@ -36,6 +35,13 @@ class Partner {//implements EventSubscriber{
      */
 
     private $id;
+
+    /**
+     * @var integer $code_partner
+     *
+     * @ORM\Column(name="code_partner", type="integer")
+     */
+    private $code_partner;
 
     /**
      * @var string $name
@@ -168,7 +174,7 @@ class Partner {//implements EventSubscriber{
 //        $this->container = $container;
 //        $this->workshops = new ArrayCollection();
 //    }
-    
+
 //    private $entityManager;
 //    private $user;
 
@@ -182,9 +188,7 @@ class Partner {//implements EventSubscriber{
 //        # notice, there are a cases when `getToken()` returns null, so improve this
 //        $this->user = $securityContext->getToken()->getUser();
 //    }
-    
-    
-    
+
 
     /**
      * Get id
@@ -193,6 +197,24 @@ class Partner {//implements EventSubscriber{
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * Set code_partner
+     *
+     * @param integer $code_partner
+     */
+    public function setCodePartner($code_partner) {
+        $this->code_partner = $code_partner;
+    }
+
+    /**
+     * Get code_partner
+     *
+     * @return integer
+     */
+    public function getCodePartner() {
+        return $this->code_partner;
     }
 
     /**

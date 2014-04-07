@@ -83,8 +83,6 @@ class DefaultControllerTest extends WebTestCase
             'El usuario ve el listado de usuarios'
         );
 
-        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("test'.$type.'_edited@test.es")')->count(),
-            'Se ha editado el mail del usuario "test'.$type.'"');
         //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
@@ -225,21 +223,21 @@ class DefaultControllerTest extends WebTestCase
                                 'admin_assessor_type[country]'                     => '1',
                                 ),
             ),
-            array('type' => 'user',
-                  'user' => array(
-                                'workshop_type[username]'                       => 'testuser',
-                                'workshop_type[password][Contraseña]'           => 'test',
-                                'workshop_type[password][Repite Contraseña]'    => 'test',
-                                'workshop_type[name]'                           => 'Test',
-                                'workshop_type[surname]'                        => 'User_user',
-                                'workshop_type[email_1]'                        => 'testuser@test.es',
-                                'workshop_type[active]'                         => '1',
-                                'workshop_type[region]'                         => '1',
-                                'workshop_type[province]'                       => '1',
-                                'workshop_type[country]'                        => '1',
-                                'workshop_type[workshop]'                       => '1',
-                                ),
-            ),
+            // array('type' => 'user',
+            //       'user' => array(
+            //                     'workshop_type[username]'                       => 'testuser',
+            //                     'workshop_type[password][Contraseña]'           => 'test',
+            //                     'workshop_type[password][Repite Contraseña]'    => 'test',
+            //                     'workshop_type[name]'                           => 'Test',
+            //                     'workshop_type[surname]'                        => 'User_user',
+            //                     'workshop_type[email_1]'                        => 'testuser@test.es',
+            //                     'workshop_type[active]'                         => '1',
+            //                     'workshop_type[region]'                         => '1',
+            //                     'workshop_type[province]'                       => '1',
+            //                     'workshop_type[country]'                        => '1',
+            //                     'workshop_type[workshop]'                       => '1',
+            //                     ),
+            // ),
             array('type' => 'ad',
                   'user' => array(
                                 'partner_type[username]'                    => 'testad',

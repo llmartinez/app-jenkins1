@@ -10,7 +10,7 @@ class UserWorkshopType extends AbstractType {
 
 
     public function buildForm(FormBuilder $builder, array $options) {
-        
+
         $builder
                 ->add('username')
                 ->add('password', 'repeated', array('type' => 'password',

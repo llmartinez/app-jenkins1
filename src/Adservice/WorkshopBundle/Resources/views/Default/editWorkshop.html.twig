@@ -22,14 +22,24 @@
             {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_partner">Partner</label>
-            {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-
-        <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_typology">Typology</label>
             {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
         </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_partner">Partner</label>
+            {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="new_car_form_vin">Code Workshop</label>
+            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                                                           'placeholder': 'code Workshop'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <br><br><br>
+        </div>
+
         <div class="col-xs-4 col-md-4 form-group">
             <div class="col-xs-12 col-md-12 form-group">
                 <label for="adservice_workshopbundle_workshoptype_active">Active</label>
@@ -61,7 +71,7 @@
             {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_workshopbundle_workshoptype_phone_number_2">Phone Number 1</label>
+            <label for="adservice_workshopbundle_workshoptype_phone_number_2">Phone Number 2</label>
             {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
@@ -77,11 +87,11 @@
             {{ form_widget(form.fax, { 'attr': {'class': 'form-control'} }) }}
         </div>
 
-        <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group">
             <label for="adservice_workshopbundle_workshoptype_email_1">Email 1</label>
             {{ form_widget(form.email_1, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group">
             <label for="adservice_workshopbundle_workshoptype_email_2">Email 2</label>
             {{ form_widget(form.email_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
@@ -147,7 +157,7 @@
     <script>
         $(document).ready(function() {
             //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').change(function() {
+            $('form[name=adservice_workshopbundle_workshoptype]').find('select[name*=region]').change(function() {
                 var url_ajax = "{{ path("user_provinces") }}";
                 populate_province(url_ajax);
             });
