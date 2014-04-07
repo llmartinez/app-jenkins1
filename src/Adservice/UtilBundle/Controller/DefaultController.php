@@ -34,23 +34,16 @@ class DefaultController extends Controller {
         return $slug;
     }
 
-    static public function getCodePartnerUnused($em, $code=null)
+    static public function getCodePartnerUnused($em)
     {
-        if($code == null) {
-            $code   = 1; //Si no hay codigo por parametro se asigna 1
-            $unused = 1;
-        }
-        else { $unused = 'default'; } //Si hay codigo por parametro se marca para, en caso de estar en uso, empezar desde 1
+        $code   = 1; //Si no hay codigo por parametro se asigna 1
+        $unused = 1;
 
         while($unused != 'unused') {
             $find = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' =>$code));
 
-            if( $find == null) { $unused = 'unused'; }//Si no encuentra el codigo significa que esta disponible y se devuelve
-            else{
-                if ($unused == 'default') { $code   = 1; //Si el codigo por parametro esta en uso, empieza desde 1
-                                            $unused = 1; }
-                else                        $code  ++;   //Si el codigo esta en uso, se busca el siguiente
-            }
+            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
+            else               { $code  ++;          } //Si el codigo esta en uso, se busca el siguiente
         }
         return $code;
     }

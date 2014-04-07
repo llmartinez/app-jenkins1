@@ -53,28 +53,26 @@ class DefaultController extends Controller {
         $partner = new Partner();
         $request = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
-        $form->bindRequest($request);
 
         if ($request->getMethod() == 'POST') {
+
+            $form->bindRequest($request);
+            $code = UtilController::getCodePartnerUnused($em);
+
             if ($form->isValid()) {
                 /*CHECK CODE PARTNER NO SE REPITA*/
-                $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
-                if($code != $partner->getCodePartner())
+                $find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
+                if($find == null)
                 {
-                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code;
-                    $this->get('session')->setFlash('error', $flash);
-                }
-                else{
                     $partner = DefaultC::newEntity($partner, $this->get('security.context')->getToken()->getUser());
                     $this->savePartner($em, $partner);
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
-            }
-            else{
-                $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
-                $flash = 'El primer numero disponible es: '.$partner->getCodePartner();
-                $this->get('session')->setFlash('info', $flash);
+                else{
+                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code;
+                    $this->get('session')->setFlash('error', $flash);
+                }
             }
         }
         else{

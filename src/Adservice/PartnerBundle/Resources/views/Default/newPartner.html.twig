@@ -18,8 +18,8 @@
             {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-             {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-              {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
         </div>
         <div class="col-xs-6 col-md-6 form-group">
             <label for="new_ticket_form_importance">Email1 *</label>

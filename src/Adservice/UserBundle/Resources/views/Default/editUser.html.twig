@@ -31,8 +31,10 @@
                 {{ form_widget(form.active) }}
             </div>
              <div class="col-xs-4 col-md-4 form-group">
-               <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
-               <br><br>{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+                {% if user.roles[0] != 'ROLE_ADMIN' %}
+                   <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
+                   <br><br>{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+                {% endif %}
             </div>
         <legend>Contact</legend>
 

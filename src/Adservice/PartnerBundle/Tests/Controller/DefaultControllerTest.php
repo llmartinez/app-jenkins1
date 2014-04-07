@@ -130,7 +130,7 @@ class DefaultControllerTest extends WebTestCase {
             array(
                 'partner' => array(
                     'adservice_partnerbundle_partnertype[name]'           => 'testpartner',
-                    'adservice_partnerbundle_partnertype[code_partner]'   => substr( md5(microtime()), 1, 8),
+                    'adservice_partnerbundle_partnertype[code_partner]'   => substr( microtime(), 2, 8),
                     'adservice_partnerbundle_partnertype[phone_number_1]' => '123456789',
                     'adservice_partnerbundle_partnertype[phone_number_2]' => '123456879',
                     'adservice_partnerbundle_partnertype[fax]'            => '123456789',

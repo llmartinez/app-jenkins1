@@ -83,8 +83,6 @@ class DefaultControllerTest extends WebTestCase
             'El usuario ve el listado de usuarios'
         );
 
-        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("test'.$type.'_edited@test.es")')->count(),
-            'Se ha editado el mail del usuario "test'.$type.'"');
         //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
