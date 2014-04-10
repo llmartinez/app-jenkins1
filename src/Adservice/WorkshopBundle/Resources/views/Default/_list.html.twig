@@ -5,7 +5,8 @@
                 <th>Code</th>
                 <th>Workshop Name</th>
                 <th>Partner</th>
-                <th>Address</th>
+                <th>Shop</th>
+                {# <th>Address</th> #}
                 <th>Email1</th>
                 <th>Phone number 1</th>
                 <th>Active</th>
@@ -19,15 +20,59 @@
                 <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
                 <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
                 <td>{{ workshop.partner}}</td>
-                <td>{{ workshop.address }}</td>
+                <td>{{ workshop.shop}}</td>
+                {# <td>{{ workshop.address }}</td> #}
                 <td>{{ workshop.email1 }}</td>
                 <td>{{ workshop.phoneNumber1 }}</td>
                 <td>{{ workshop.active }}</td>
                 {# <td>{{ workshop.updateAt | date('d-m-Y')}}</td> #}
-                <td>
-                    <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
+                    </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Eliminar Taller</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Estas seguro que quieres eliminar este taller?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ path('workshop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                {% elseif is_granted('ROLE_AD') %}
+                    <td>
+                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
+                    </td>
+                    <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Eliminar Taller</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Estas seguro que quieres eliminar este taller?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ path('workshopOrder_remove', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                {% endif %}
             </tr>
                 {% endfor %}
         </tbody>
@@ -37,24 +82,6 @@
     No hay talleres!!
 {% endif %}
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
-            </div>
-            <div class="modal-body">
-                Estas seguro que quieres eliminar este taller?
-            </div>
-            <div class="modal-footer">
-                <a href="{{ path('workshop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 {% block javascripts %}
 

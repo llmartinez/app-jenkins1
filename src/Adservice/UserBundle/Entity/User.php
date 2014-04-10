@@ -66,64 +66,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $surname;
 
     /**
-     * @var string $city
-     *
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
-     */
-    private $city;
-
-    /**
-     * @var string $phone_number_1
-     *
-     * @ORM\Column(name="phone_number_1", type="string", length=9, nullable=true)
-     */
-    private $phone_number_1;
-
-    /**
-     * @var string $phone_number_2
-     *
-     * @ORM\Column(name="phone_number_2", type="string", length=9, nullable=true)
-     */
-    private $phone_number_2;
-
-    /**
-     * @var string $movile_number_1
-     *
-     * @ORM\Column(name="movile_number_1", type="string", length=9, nullable=true)
-     */
-    private $movile_number_1;
-
-    /**
-     * @var string $movile_number_2
-     *
-     * @ORM\Column(name="movile_number_2", type="string", length=9, nullable=true)
-     */
-    private $movile_number_2;
-
-    /**
-     * @var string $fax
-     *
-     * @ORM\Column(name="fax", type="string", length=9, nullable=true)
-     */
-    private $fax;
-
-    /**
-     * @var string $email
-     *
-     * @ORM\Column(name="email_1", type="string", length=255)
-     * @Assert\Email()
-     */
-    private $email_1;
-
-    /**
-     * @var string $email
-     *
-     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
-     * @Assert\Email()
-     */
-    private $email_2;
-
-    /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
@@ -141,34 +83,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $user_role;
 
     /**
-     * @var string $region
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
-     */
-    private $region;
-
-    /**
-     * @var string $province
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
-     */
-    private $province;
-
-    /**
-     * @var string $workshp
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="users")
-     */
-    private $workshop;
-
-    /**
-     * @var string $country
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
-     */
-    private $country;
-
-    /**
      * @var string $language
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Language")
@@ -183,32 +97,26 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $partner;
 
     /**
-     * @var datetime $created_at
      *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @var type
+     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="workshops")
      */
-    private $created_at;
+    private $workshop;
 
-    /**
-     * @var integer $created_by
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
-     */
-    private $created_by;
+//  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
+// / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
+// \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
+//  ___) | |___  | |   | | | |___|  _ < ___) / /| |_| | |___  | |   | | | |___ |  _ < ___) |
+// |____/|_____| |_|   |_| |_____|_| \_\____/_/  \____|_____| |_|   |_| |_____||_| \_\____/
 
-    /**
-     * @var datetime $modified_at
-     *
-     * @ORM\Column(name="modified_at", type="datetime")
-     */
-    private $modified_at;
 
-    /**
-     * @var integer $modified_by
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
-     */
-    private $modified_by;
+    public function __toString() {
+        return $this->getName() . ' ' . $this->getSurname();
+    }
+
+    public function __construct() {
+        $this->user_role = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -321,38 +229,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->city;
     }
 
-    public function getProvince() {
-        return $this->province;
-    }
-
-    public function getPhoneNumber1() {
-        return $this->phone_number_1;
-    }
-
-    public function getPhoneNumber2() {
-        return $this->phone_number_2;
-    }
-
-    public function getMovileNumber1() {
-        return $this->movile_number_1;
-    }
-
-    public function getMovileNumber2() {
-        return $this->movile_number_2;
-    }
-
-    public function getFax() {
-        return $this->fax;
-    }
-
-    public function getEmail1() {
-        return $this->email_1;
-    }
-
-    public function getEmail2() {
-        return $this->email_2;
-    }
-
     public function setName($name) {
         $this->name = $name;
     }
@@ -365,38 +241,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->city = $city;
     }
 
-    public function setProvince(\Adservice\UtilBundle\Entity\Province $province) {
-        $this->province = $province;
-    }
-
-    public function setPhoneNumber1($phone_number_1) {
-        $this->phone_number_1 = $phone_number_1;
-    }
-
-    public function setPhoneNumber2($phone_number_2) {
-        $this->phone_number_2 = $phone_number_2;
-    }
-
-    public function setMovileNumber1($movile_number_1) {
-        $this->movile_number_1 = $movile_number_1;
-    }
-
-    public function setMovileNumber2($movile_number_2) {
-        $this->movile_number_2 = $movile_number_2;
-    }
-
-    public function setFax($fax) {
-        $this->fax = $fax;
-    }
-
-    public function setEmail1($email_1) {
-        $this->email_1 = $email_1;
-    }
-
-    public function setEmail2($email_2) {
-        $this->email_2 = $email_2;
-    }
-
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
         return $this->getUsername() == $user->getUsername();
     }
@@ -407,14 +251,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
     public function getRoles() {
         return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array
-    }
-
-    public function __toString() {
-        return $this->getName() . ' ' . $this->getSurname();
-    }
-
-    public function __construct() {
-        $this->user_role = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -478,14 +314,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
                 $serialized);
     }
 
-    public function getRegion() {
-        return $this->region;
-    }
-
-    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
-        $this->region = $region;
-    }
-
     public function getWorkshop() {
         return $this->workshop;
     }
@@ -494,13 +322,339 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->workshop = $workshop;
     }
 
+    public function getPartner() {
+        return $this->partner;
+    }
+
+    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+        $this->partner = $partner;
+    }
+
+
+
+
+//   ____ ___  _   _ _____  _    ____ _____
+//  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
+// | |  | | | |  \| | | | / _ \| |     | |
+// | |__| |_| | |\  | | |/ ___ \ |___  | |
+//  \____\___/|_| \_| |_/_/   \_\____| |_|
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
+     * @var string $region
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     */
+    private $region;
+
+    /**
+     * @var string $address
+     *
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string $postal_code
+     *
+     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     */
+    private $postal_code;
+
+    /**
+     * @var integer $phone_number_1
+     *
+     * @ORM\Column(name="phone_number_1", type="integer")
+     */
+    private $phone_number_1;
+
+    /**
+     * @var integer $phone_number_2
+     *
+     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     */
+    private $phone_number_2;
+
+    /**
+     * @var integer $movile_number_1
+     *
+     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     */
+    private $movile_number_1;
+
+    /**
+     * @var integer $movile_number_2
+     *
+     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     */
+    private $movile_number_2;
+
+    /**
+     * @var integer $fax
+     *
+     * @ORM\Column(name="fax", type="integer", nullable=true)
+     */
+    private $fax;
+
+    /**
+     * @var string $email_1
+     *
+     * @ORM\Column(name="email_1", type="string", length=255, nullable=true)
+     */
+    private $email_1;
+
+    /**
+     * @var string $email_2
+     *
+     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
+     */
+    private $email_2;
+
+//  ___________________________________________________________________
+// |___________________________________________________________________|
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
     public function getCountry() {
         return $this->country;
     }
 
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
-        $this->country = $country;
+    /**
+     * Set region
+     *
+     * @param string $region
+     */
+    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+        $this->region = $region;
     }
+
+    /**
+     * Get region
+     *
+     * @return string
+     */
+    public function getRegion() {
+        return $this->region;
+    }
+
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     */
+    public function setAddress($address) {
+        $this->address = $address;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress() {
+        return $this->address;
+    }
+
+    /**
+     * Set postal_code
+     *
+     * @param string $postal_code
+     */
+    public function setPostalCode($postal_code) {
+        $this->postal_code = $postal_code;
+    }
+
+    /**
+     * Get postal_code
+     *
+     * @return string
+     */
+    public function getPostalCode() {
+        return $this->postal_code;
+    }
+
+    /**
+     * Set phone_number_1
+     *
+     * @param integer $phoneNumber1
+     */
+    public function setPhoneNumber1($phoneNumber1) {
+        $this->phone_number_1 = $phoneNumber1;
+    }
+
+    /**
+     * Get phone_number_1
+     *
+     * @return integer
+     */
+    public function getPhoneNumber1() {
+        return $this->phone_number_1;
+    }
+
+    /**
+     * Set phone_number_2
+     *
+     * @param integer $phoneNumber2
+     */
+    public function setPhoneNumber2($phoneNumber2) {
+        $this->phone_number_2 = $phoneNumber2;
+    }
+
+    /**
+     * Get phone_number_2
+     *
+     * @return integer
+     */
+    public function getPhoneNumber2() {
+        return $this->phone_number_2;
+    }
+
+    /**
+     * Set movile_number_1
+     *
+     * @param integer $movileNumber1
+     */
+    public function setMovileNumber1($movileNumber1) {
+        $this->movile_number_1 = $movileNumber1;
+    }
+
+    /**
+     * Get movile_number_1
+     *
+     * @return integer
+     */
+    public function getMovileNumber1() {
+        return $this->movile_number_1;
+    }
+
+    /**
+     * Set movile_number_2
+     *
+     * @param integer $movileNumber2
+     */
+    public function setMovileNumber2($movileNumber2) {
+        $this->movile_number_2 = $movileNumber2;
+    }
+
+    /**
+     * Get movile_number_2
+     *
+     * @return integer
+     */
+    public function getMovileNumber2() {
+        return $this->movile_number_2;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param integer $fax
+     */
+    public function setFax($fax) {
+        $this->fax = $fax;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return integer
+     */
+    public function getFax() {
+        return $this->fax;
+    }
+
+    /**
+     * Set email_1
+     *
+     * @param string $email1
+     */
+    public function setEmail1($email1) {
+        $this->email_1 = $email1;
+    }
+
+    /**
+     * Get email_1
+     *
+     * @return string
+     */
+    public function getEmail1() {
+        return $this->email_1;
+    }
+
+    /**
+     * Set email_2
+     *
+     * @param string $email2
+     */
+    public function setEmail2($email2) {
+        $this->email_2 = $email2;
+    }
+
+    /**
+     * Get email_2
+     *
+     * @return string
+     */
+    public function getEmail2() {
+        return $this->email_2;
+    }
+
+//   ____ ____  _____    _  _____ _____    ____  __  ___  ____ ___ _______   __
+//  / ___|  _ \| ____|  / \|_   _| ____|  / /  \/  |/ _ \|  _ \_ _|  ___\ \ / /
+// | |   | |_) |  _|   / _ \ | | |  _|   / /| |\/| | | | | | | | || |_   \ V /
+// | |___|  _ <| |___ / ___ \| | | |___ / / | |  | | |_| | |_| | ||  _|   | |
+//  \____|_| \_\_____/_/   \_\_| |_____/_/  |_|  |_|\___/|____/___|_|     |_|
+
+    /**
+     * @var datetime $created_at
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
+     * @var datetime $modified_at
+     *
+     * @ORM\Column(name="modified_at", type="datetime")
+     */
+    private $modified_at;
+
+    /**
+     * @var string $modified_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $modified_by;
+
+//  ___________________________________________________________________
+// |___________________________________________________________________|
+
 
     /**
      * Set created_at
@@ -532,7 +686,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get created_by
      *
-     * @return integer
+     * @return string
      */
     public function getCreatedBy() {
         return $this->created_by;
@@ -568,18 +722,10 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * Get modified_by
      *
-     * @return integer
+     * @return string
      */
     public function getModifiedBy() {
         return $this->modified_by;
-    }
-
-    public function getPartner() {
-        return $this->partner;
-    }
-
-    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
-        $this->partner = $partner;
     }
 
 }

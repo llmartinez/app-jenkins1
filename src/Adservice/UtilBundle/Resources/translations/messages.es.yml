@@ -1,25 +1,31 @@
 header.welcome: ADService España
 
-user.index.menu.admin_title:                    MENU ADMIN
-user.index.menu.assessor_title:                 MENU ASESOR
-user.index.menu.user_title:                     MENU USUARIO
-user.index.menu.ad_title:                       MENU AD
-user.index.menu.my_profile:                     Mi Perfil
-user.index.menu.list_partners:                  Listado de Socios ADService
-user.index.menu.list_users:                     Listado de Usuarios ADService
-user.index.menu.list_popups:                    Listado de Popups ADService
-user.index.menu.list_workshops:                 Listado de Talleres ADService
-user.index.menu.list_tickets:                   Listado de Tickets AdService
-user.index.menu.asign_user_to_ticket:           Asignar Tickets a Usuarios
-user.index.menu.new_ticket:                     Crea un nuevo ticket
-user.index.menu.my_tickets:                     Mis Tickets
-user.index.menu.new_workshop_order:             Solicitar alta de taller
-user.index.menu.workshops:             			Mis tallleres
-user.index.menu.workshop_orders:				Lista de solicitudes pendientes
-user.index.menu.active_workshop_order:          Solicitar activación/desactivación de taller
-user.index.menu.order_list_workshop:            Ver el estado de mis solicitudes
-user.index.menu.view_register_workshop_order:   Ver las solicitudes de altas de talleres
-user.index.menu.view_active_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
+menu.title_admin:                    MENU ADMIN
+menu.title_assessor:                 MENU ASESOR
+menu.title_user:                     MENU USUARIO
+menu.title_ad:                       MENU AD
+
+menu.profile:                        Mi Perfil
+menu.list_statistics:                Consultar Estadísticas ADService
+menu.list_users:                     Listado de Usuarios ADService
+menu.list_partners:                  Listado de Socios ADService
+menu.list_shops:                     Listado de Tiendas ADService
+menu.list_workshops:                 Listado de Talleres ADService
+menu.list_tickets:                   Listado de Tickets AdService
+menu.list_popups:                    Listado de Popups ADService
+menu.list_orders: 			 	     Listado de Solicitudes pendientes
+
+menu.asign_user_to_ticket:           Asignar Tickets a Usuarios
+menu.asign_shop_to_workshop:		 Asignar Talleres a Tiendas
+menu.new_ticket:                     Crea un nuevo ticket
+menu.new_shop_order: 				 Solicitar alta de tienda
+menu.new_workshop_order:             Solicitar alta de taller
+
+
+# menu.active_workshop_order:          Solicitar activación/desactivación de taller
+# menu.order_list_workshop:            Ver el estado de mis solicitudes
+# menu.view_register_workshop_order:   Ver las solicitudes de altas de talleres
+# menu.view_active_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
 
 # COMUNES
 home: 			Índice
@@ -31,11 +37,13 @@ mail:			Correo
 tel:			Teléfono
 
 partner:		Socio
+shop:	 		Tienda
 workshop: 		Taller
 code:			Código
 contact:		Contacto
-dataWorkshop:	Datos del Taller
-dataUser:    	Datos del Usuario
+datauser:    	Datos del Usuario
+dataworkshop:	Datos del Taller
+datashop:		Datos de la Tienda
 
 ticket: 		Ticket
 car: 			Coche
@@ -104,91 +112,102 @@ mail.testing:		                	'En fase de pruebas hasta '
 mail.newTicket.subject:					'ADService | Nuevo Ticket creado con id #'
 mail.newTicket.title:					'Se ha creado un ticket'
 mail.newTicket.createdby:				'Este ticket se ha creado vía teléfono con:'
-mail.newTicket.createdby.workshop:		'Este ticket ha sido creado a través de la plataforma AD-Service.'
+mail.newTicket.createdby.user:			'Este ticket ha sido creado a través de la plataforma AD-Service.'
 mail.newTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.newTicket.info.id:					'El código del ticket es:'
 
 mail.editTicket.subject:				'ADService | Ticket editado con id #'
 mail.editTicket.title:					'Se ha editado un ticket'
 mail.editTicket.createdby:				'Este ticket ha sido editado por:'
-mail.editTicket.createdby.workshop:		'Has editado el ticket a través de la plataforma AD-Service.'
+mail.editTicket.createdby.user:			'Has editado el ticket a través de la plataforma AD-Service.'
 mail.editTicket.info:					'Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.editTicket.info.id:				'El código del ticket es:'
 
 mail.deleteTicket.subject:				'ADService | Ticket borrado con id #'
 mail.deleteTicket.title:				'Se ha borrado un ticket'
 mail.deleteTicket.createdby:			'Este ticket ha sido borrado por:'
-mail.deleteTicket.createdby.workshop:	'Has borrado el ticket a través de la plataforma AD-Service.'
+mail.deleteTicket.createdby.user:		'Has borrado el ticket a través de la plataforma AD-Service.'
 mail.deleteTicket.info:					'Para consultar tus tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.deleteTicket.info.id:				'El código del ticket borrado es:'
 
 mail.closeTicket.subject:				'ADService | Ticket cerrado con id #'
 mail.closeTicket.title:					'Se ha cerrado un ticket'
 mail.closeTicket.createdby:				'Este ticket ha sido cerrado por:'
-mail.closeTicket.createdby.workshop:	'Has cerrado el ticket a través de la plataforma AD-Service.'
+mail.closeTicket.createdby.user:		'Has cerrado el ticket a través de la plataforma AD-Service.'
 mail.closeTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.closeTicket.info.id:				'El código del ticket cerrado es:'
 
 mail.reopenTicket.subject:				'ADService | Ticket reabierto con id #'
 mail.reopenTicket.title:				'Se ha reabierto un ticket'
 mail.reopenTicket.createdby:			'Este ticket ha sido reabierto por:'
-mail.reopenTicket.createdby.workshop:	'Has reabierto el ticket a través de la plataforma AD-Service.'
+mail.reopenTicket.createdby.user:		'Has reabierto el ticket a través de la plataforma AD-Service.'
 mail.reopenTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.reopenTicket.info.id:				'El código del ticket reabierto es:'
 
 mail.answerTicket.subject:				'ADService | Ticket respondido con id #'
 mail.answerTicket.title:				'Se ha respondido un ticket'
 mail.answerTicket.createdby:			'Este ticket ha sido respondido por:'
-mail.answerTicket.createdby.workshop:	'Has respondido el ticket a través de la plataforma AD-Service.'
+mail.answerTicket.createdby.user:		'Has respondido el ticket a través de la plataforma AD-Service.'
 mail.answerTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.answerTicket.info.id:				'El código del ticket respondido es:'
 
 mail.newOrder.subject:					'ADService | Solicitud de creación con id #'
 mail.newOrder.title:					'Se ha creado una solicitud para un nuevo taller'
+mail.newOrder.shop.title:				'Se ha creado una solicitud para una nueva tienda'
 mail.newOrder.createdby:				'Esta solicitud ha sido creada por:'
-mail.newOrder.createdby.workshop:		'Esta solicitud ha sido creada a través de la plataforma AD-Service.'
+mail.newOrder.createdby.user:			'Esta solicitud ha sido creada a través de la plataforma AD-Service.'
 mail.newOrder.info:						'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.newOrder.info.id:					'El número de referencia de la solicitud es:'
 
 mail.editOrder.subject:					'ADService | Solicitud de edición con id #'
+mail.editOrder.shop.title:				'Se ha creado una solicitud para editar una tienda'
+mail.editOrder.shop.createdby:			'Esta tienda ha sido editada por:'
+mail.editOrder.shop.createdby.user:		'Esta tienda ha sido editada a través de la plataforma AD-Service.'
 mail.editOrder.title:					'Se ha creado una solicitud para editar un taller'
 mail.editOrder.createdby:				'Este taller ha sido editado por:'
-mail.editOrder.createdby.workshop:		'Este taller ha sido editado a través de la plataforma AD-Service.'
+mail.editOrder.createdby.user:			'Este taller ha sido editado a través de la plataforma AD-Service.'
 mail.editOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.editOrder.info.id:					'El número de referencia de la solicitud es:'
 
 mail.changeOrder.subject:				'ADService | Solicitud de activación/desactivación con id #'
+mail.changeOrder.shop.title:			'Se ha creado una solicitud para modificar una tienda'
+mail.changeOrder.shop.createdby:		'Esta tienda ha sido modificada por:'
+mail.changeOrder.shop.createdby.user:	'Esta tienda ha sido modificada a través de la plataforma AD-Service.'
 mail.changeOrder.title:					'Se ha creado una solicitud para modificar un taller'
 mail.changeOrder.createdby:				'Este taller ha sido modificado por:'
-mail.changeOrder.createdby.workshop:	'Este taller ha sido modificado a través de la plataforma AD-Service.'
+mail.changeOrder.createdby.user:		'Este taller ha sido modificado a través de la plataforma AD-Service.'
 mail.changeOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.changeOrder.info.id:				'El número de referencia de la solicitud es:'
 
 mail.rejectOrder.subject:				'ADService | Solicitud rechazada con id #'
 mail.rejectOrder.title:					'Se ha denegado la solicitud de '
 mail.rejectOrder.createdby:				'Esta solicitud ha sido denegada por:'
-mail.rejectOrder.createdby.workshop:	'Esta solicitud ha sido denegada a través de la plataforma AD-Service.'
+mail.rejectOrder.createdby.user:		'Esta solicitud ha sido denegada a través de la plataforma AD-Service.'
 mail.rejectOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.rejectOrder.info.id:				'El número de referencia de la solicitud es:'
 
 mail.acceptOrder.subject:				'ADService | Solicitud aceptada para el taller con id #'
+mail.acceptOrder.shop.subject:			'ADService | Solicitud aceptada para la tienda con id #'
 mail.acceptOrder.title:					'Se ha aceptado la solicitud de '
 mail.acceptOrder.createdby:				'Esta solicitud ha sido aceptada por:'
-mail.acceptOrder.createdby.workshop:	'Esta solicitud ha sido aceptada a través de la plataforma AD-Service.'
+mail.acceptOrder.createdby.user:		'Esta solicitud ha sido aceptada a través de la plataforma AD-Service.'
 mail.acceptOrder.info:					'Para acceder a este taller entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.acceptOrder.shop.info:				'Para acceder a esta tienda entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.acceptOrder.info.id:				'El número de referencia del taller es:'
+mail.acceptOrder.shop.info.id:			'El número de referencia de la tienda es:'
 
 mail.removeOrder.subject:				'ADService | Solicitud cancelada con id #'
 mail.removeOrder.title:					'Se ha cancelado la solicitud de '
 mail.removeOrder.createdby:				'Esta solicitud ha sido cancelada por:'
-mail.removeOrder.createdby.workshop:	'Esta solicitud ha sido cancelada a través de la plataforma AD-Service.'
+mail.removeOrder.createdby.user:		'Esta solicitud ha sido cancelada a través de la plataforma AD-Service.'
 mail.removeOrder.info:					'Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.removeOrder.info.id:				'El número de referencia del taller es:'
+mail.removeOrder.shop.info.id:			'El número de referencia de la tienda es:'
 
 mail.resendOrder.subject:				'ADService | Solicitud reenviada con id #'
 mail.resendOrder.title:					'Se ha reenviado la solicitud de '
 mail.resendOrder.createdby:				'Esta solicitud ha sido reenviada por:'
-mail.resendOrder.createdby.workshop:	'Esta solicitud ha sido reenviada a través de la plataforma AD-Service.'
+mail.resendOrder.createdby.user:		'Esta solicitud ha sido reenviada a través de la plataforma AD-Service.'
 mail.resendOrder.info:					'Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.resendOrder.info.id:				'El número de referencia de la solicitud es:'
 
@@ -205,7 +224,7 @@ mail.newUser.info.password:				'Para modificar tu contraseña entra en <a href="
 mail.changePassword.subject:			'ADService | Nueva contraseña para el usuario '
 mail.changePassword.title:				'Se ha cambiado la contraseña del usuario desde la plataforma AD-Service'
 mail.changePassword.createdby:			'Esta modificación ha sido realizada por:'
-mail.changePassword.createdby.workshop:	'Esta modificación ha sido realizada a través de la plataforma AD-Service.'
+mail.changePassword.createdby.user:		'Esta modificación ha sido realizada a través de la plataforma AD-Service.'
 mail.changePassword.info:				'Para crear o consultar tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 mail.changePassword.info.tel:			'o llama al telefono 93111111.'
 mail.changePassword.info.id:			'Tu código de taller es:'

@@ -6,30 +6,248 @@
         <li class="active">List of Statistics</li>
     </ol>
 
-    <table class="table table-hover" style="width: 80%; margin-left: 10%;">
-        <tbody>
-            <tr>
-                <td>Número de Usuarios en ADService</td>
-                <td>{{ statistic.getNumUsers }}</td>
-            </tr>
-            <tr>
-                <td>Usuario con mas posts en ADService</td>
-                <td>{{ statistic.getUserWithMaxPost[0].createdBy }} ({{ statistic.getUserWithMaxPost.num_post }} posts)</td>
-            </tr>
-            <tr>
-                <td>Número de Tickets en ADService</td>
-                <td>{{ statistic.getNumTickets }}</td>
-            </tr>
-            <tr>
-                <td>Número de Tickets Abiertos en ADService</td>
-                <td>{{ statistic.getNumOpenTickets }}</td>
-            </tr>
-            <tr>
-                <td>Número de Tickets Cerrados en ADService</td>
-                <td>{{ statistic.getNumClosedTickets }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="col_izq">
+
+    <legend>Tickets</legend>
+
+        <div class="col-xs-6 col-md-6 form-group"> <label> from   </label><input id="flt_tck_from" type="date"
+            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} ></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> to     </label><input id="flt_tck_to" type="date"
+            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} ></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> partner</label><select id="flt_tck_partner" class='form-control'>
+                                                                                    <option value="none">All</option>
+                                                                                {% for partner in partners %}
+                                                                                    <option value="{{ partner.id }}">{{ partner }}</option>
+                                                                                {% endfor %}
+                                                                          </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> status</label><select id="flt_tck_status" class='form-control'>
+                                                                                                    <option value="all"     >Todos   </option>
+                                                                                                    <option value="open"    >Open    </option>
+                                                                                                    <option value="closed"  >Closed  </option>
+                                                                                                 </select></div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <button class="btn btn-primary btn100" id="btn_search_ticket">Search Tickets</button>
+        </div>
 
 
+    <legend>Workshops</legend>
+
+        <div class="col-xs-6 col-md-6 form-group"> <label> from   </label><input id="flt_wks_from" type="date"></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> to     </label><input id="flt_wks_to" type="date"></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> partner</label><select id="flt_wks_partner" class='form-control'>
+                                                                                        <option value="none">All</option>
+                                                                                    {% for partner in partners %}
+                                                                                        <option value="{{ partner.id }}">{{ partner }}</option>
+                                                                                {% endfor %}
+                                                                          </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label > status</label><select id="flt_wks_status" class='form-control'>
+                                                                                                    <option value="all"     >All     </option>
+                                                                                                    <option value="active"  >Active  </option>
+                                                                                                    <option value="deactive">Deactive</option>
+                                                                                                    {# <option value="noticket">Without Tickets</option> #}
+                                                                                                 </select></div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <button class="btn btn-primary btn100" id="btn_search_workshop">Search Workshops</button>
+        </div>
+</div>
+
+<div class="col_der pad-left">
+
+    {% if statistic.results is defined %}
+
+        {% if type == 'ticket' %}
+        <legend> Estadísticas Tickets
+            <span id="doExcel_ticket" class="glyphicon glyphicon-download-alt" title="Excel download" >
+        </legend>
+
+            <table class="table table-hover table-list-search">
+                <thead>
+                    <tr>
+                        <th> #           </th>
+                        <th>{% trans %} date               {% endtrans %}</th>
+                        <th>{% trans %} car                {% endtrans %}</th>
+                        <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
+                        <th>{% trans %} description        {% endtrans %}</th>
+                        <th>{% trans %} status             {% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody id="ticketBody">
+                    {% for ticket in statistic.results %}
+                        <tr id="ticketRow">
+                            <td id="id_ticket">{{ ticket.id         }}</td>
+                            <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
+                            <td>{{ ticket.car                       }}</td>
+                            <td>{{ ticket.assignedTo                }}</td>
+                            <td>{{ ticket.description               }}</td>
+                            <td>{{ ticket.status                    }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_ticket.html.twig' %}</div>
+
+        {% elseif type == 'workshop' %}
+        <legend> Estadísticas Talleres
+            <span id="doExcel_workshop" class="glyphicon glyphicon-download-alt" title="Excel download">
+        </legend>
+
+            <table class="table table-hover table-list-search">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Workshop Name</th>
+                        <th>Partner</th>
+                        <th>Email1</th>
+                        <th>Phone number 1</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for workshop in statistic.results %}
+                    <tr>
+                        <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                        <td>{{ workshop.partner}}</td>
+                        <td>{{ workshop.email1 }}</td>
+                        <td>{{ workshop.phoneNumber1 }}</td>
+                        <td>{{ workshop.active }}</td>
+                    </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_workshop.html.twig' %}</div>
+
+        {% else %}
+    <legend> Estadísticas generales </legend>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Usuarios en ADService        </label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumUsers         }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Socios en ADService          </label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumPartners      }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tiendas en ADService         </label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumShops         }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Talleres en ADService        </label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumWorkshops     }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets en ADService         </label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumTickets       }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets Abiertos en ADService</label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumOpenTickets   }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets Cerrados en ADService</label></div>
+            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumClosedTickets }}            </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        {% if     type == 'ticket'   %} $("#flt_tck_status").val('{{ status }}');
+                                        {% if partner != 'none' %} $("#flt_tck_partner").val('{{ partner }}');{% endif %}
+        {% elseif type == 'workshop' %} $("#flt_wks_status").val('{{ status }}');
+                                        {% if partner != 'none' %} $("#flt_wks_partner").val('{{ partner }}');{% endif %}
+        {% endif %}
+    });
+
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_search_ticket').click(function() {
+
+        var from    = $('#flt_tck_from').val();
+        var to      = $('#flt_tck_to').val();
+        var partner = $('#flt_tck_partner').val();
+        var country = $('#flt_tck_country').val();
+        var status  = $('#flt_tck_status').val();
+
+        if(from    == ""  ) from    = 'none';
+        if(to      == ""  ) to      = 'none';
+        if(partner == null) partner = 'none';
+        if(status  == null) status  = 'none';
+
+        var url     = "{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+        url = url.replace("plc_page", 1);
+        url = url.replace("plc_from", from);
+        url = url.replace("plc_to", to);
+        url = url.replace("plc_partner", partner);
+        url = url.replace("plc_status", status);
+
+
+        window.open(url, "_self");
+    });
+
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_search_workshop').click(function() {
+
+        var from    = $('#flt_wks_from').val();
+        var to      = $('#flt_wks_to').val();
+        var partner = $('#flt_wks_partner').val();
+        var country = $('#flt_wks_country').val();
+        var status  = $('#flt_wks_status').val();
+
+        if(from    == ""  ) from    = 'none';
+        if(to      == ""  ) to      = 'none';
+        if(partner == null) partner = 'none';
+        if(status  == null) status  = 'none';
+
+        var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+        url = url.replace("plc_page", 1);
+        url = url.replace("plc_from", from);
+        url = url.replace("plc_to", to);
+        url = url.replace("plc_partner", partner);
+        url = url.replace("plc_status", status);
+
+
+        window.open(url, "_self");
+    });
+
+    $('#doExcel_ticket').click(function() {
+
+        var from    = $('#flt_tck_from').val();
+        var to      = $('#flt_tck_to').val();
+        var partner = $('#flt_tck_partner').val();
+        // var country = $('#flt_tck_country').val();
+        var status  = $('#flt_tck_status').val();
+
+        if(from    == ""  ) from    = 'none';
+        if(to      == ""  ) to      = 'none';
+        if(partner == null) partner = 'none';
+        if(status  == null) status  = 'none';
+
+        var url     = "{{ path('doExcel', { 'type': 'ticket', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+        url = url.replace("plc_page", 1);
+        url = url.replace("plc_from", from);
+        url = url.replace("plc_to", to);
+        url = url.replace("plc_partner", partner);
+        url = url.replace("plc_status", status);
+
+
+        window.open(url, "_self");
+    });
+
+    $('#doExcel_workshop').click(function() {
+
+        var from    = $('#flt_wks_from').val();
+        var to      = $('#flt_wks_to').val();
+        var partner = $('#flt_wks_partner').val();
+        // var country = $('#flt_wks_country').val();
+        var status  = $('#flt_wks_status').val();
+
+        if(from    == ""  ) from    = 'none';
+        if(to      == ""  ) to      = 'none';
+        if(partner == null) partner = 'none';
+        if(status  == null) status  = 'none';
+
+        var url     = "{{ path('doExcel', { 'type': 'workshop', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+        url = url.replace("plc_page", 1);
+        url = url.replace("plc_from", from);
+        url = url.replace("plc_to", to);
+        url = url.replace("plc_partner", partner);
+        url = url.replace("plc_status", status);
+
+
+        window.open(url, "_self");
+    });
+</script>
 {% endblock %}

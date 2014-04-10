@@ -9,15 +9,6 @@
 
     <table class="table" style="width: 80%; margin-left: 10%;">
         <tr>
-            <td align="right">
-               <div class="input-group">
-                    <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
-                    <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div>
-                </br>
                 <div class="col-xs-4 col-md-4 form-group">
                     <select id="slct_role" class="form-control"> <option val="all">...</option>
                         {% for role in roles %} <option val="{{ role.id }}"
@@ -58,9 +49,9 @@
 
     <script>
         $('#slct_role').change(function() {
-            var option = $(this).val();
-            var url_list = "{{ path('user_list', { 'page': '1', 'option': 'PLACEHOLDER' }) }}";
-            url = url_list.replace('PLACEHOLDER', option);
+            var role = $(this).val();
+            var url_list = "{{ path('user_list', { 'page': '1', 'role': 'plc_role' }) }}";
+            url = url_list.replace('plc_role', role);
             window.open(url, "_self");
         });
     </script>

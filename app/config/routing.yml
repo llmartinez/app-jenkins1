@@ -1,3 +1,11 @@
+DataBundle:
+    resource: "@DataBundle/Resources/config/routing.yml"
+    prefix:   /
+
+OrderBundle:
+    resource: "@OrderBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/order
+
 StatisticBundle:
     resource: "@StatisticBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/statistic

@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\WorkshopBundle\Entity\Typology;
 
 class Typologies extends AbstractFixture implements OrderedFixtureInterface {
-    
+
     public function getOrder(){ return 13; }
-    
+
     public function load(ObjectManager $manager) {
         $typologies = array(
             array( 'name' => 'Autoservice AD', ),
@@ -21,7 +21,7 @@ class Typologies extends AbstractFixture implements OrderedFixtureInterface {
             $entidad = new Typology();
             $entidad->setTypology($typology['name']);
             $manager->persist($entidad);
-            
+
             $this->addReference($entidad->getTypology(), $entidad);
         }
         $manager->flush();

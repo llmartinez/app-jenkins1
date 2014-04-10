@@ -15,137 +15,139 @@
     <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="container">
-                <div class="row clearfix">
-                        <div class="col-md-6 column">
-                            <label for="new_car_form_vin">Name</label>
-                            {{ form_widget(form.name, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'Name'} }) }}
+                <legend>Workshop</legend>
 
-                             <label for="new_car_form_vin">Partner</label>
-                            {{ form_widget(form.partner, { 'attr': { 'class': 'form-control',
-                                                                     'placeholder': 'Address'} }) }}
-
-                            <label for="new_car_form_vin">Code Workshop</label>
-                            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
-                                                                           'placeholder': 'code Workshop'} }) }}
-                            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-                            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
-
-                            <label for="new_car_form_vin">Cif</label>
-                            {{ form_widget(form.cif, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'Cif'} }) }}
-
-
-                            <label for="new_car_form_vin">Address</label>
-                            {{ form_widget(form.address, { 'attr': { 'class': 'form-control',
-                                                                     'placeholder': 'Address'} }) }}
-
-                            <label for="new_car_form_vin">City</label>
-                            {{ form_widget(form.city, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'City'} }) }}
-
-                            <label for="new_car_form_vin">Emails</label>
-                            {{ form_widget(form.email_1, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'email 1'} }) }}
-
-                            {{ form_widget(form.email_2, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'email 2'} }) }}
-
-                            {% if is_granted('ROLE_USER') %}
-                                <label for="new_car_form_vin">Workshop observation</label>
-                                {{ form_widget(form.observation_workshop, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'observation'} }) }}
-                            {% endif %}
-                            {% if is_granted('ROLE_ASSESSOR')%}
-                                <label for="new_car_form_vin">Assessor observation</label>
-                                {{ form_widget(form.observation_assessor, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'observation'} }) }}
-                            {% endif %}
-                            {% if is_granted('ROLE_ADMIN')%}
-                                <label for="new_car_form_vin">Admin observation</label>
-                                {{ form_widget(form.observation_admin, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'observation'} }) }}
-                            {% endif %}
-
-                            <label for="new_car_form_vin">Diagnosis Machines</label>
-                            {{ form_widget(form.diagnosis_machines, { 'attr': { 'class': 'form-control',
-                                                                            'placeholder': 'observation'} }) }}
-
-                        </div>
-                        <div class="col-md-6 column">
-                            <label for="new_car_form_vin">Contact</label>
-                            {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'name'} }) }}
-
-                            <label for="new_car_form_vin">Contact Surname</label>
-                            {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'surname'} }) }}
-                            <label for="new_car_form_vin">Country</label>
-                            {{ form_widget(form.country, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'Country'} }) }}
-                            <label for="new_car_form_vin">Region</label>
-                            {{ form_widget(form.region, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'Region'} }) }}
-
-                            <label for="new_car_form_vin">Province</label>
-                            {{ form_widget(form.province, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'Province'} }) }}
-
-                            <label for="new_car_form_vin">Phone Numbers</label>
-                            {{ form_widget(form.phone_number_1, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'phone number 1'} }) }}
-
-                            {{ form_widget(form.phone_number_2, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'phone number 2'} }) }}
-
-                            <label for="new_car_form_vin">Movile Numbers</label>
-                            {{ form_widget(form.movile_number_1, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'movile number 1'} }) }}
-
-                            {{ form_widget(form.movile_number_2, { 'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'movile number 2'} }) }}
-
-                            <label for="new_car_form_vin">Fax</label>
-                            {{ form_widget(form.fax, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'fax'} }) }}
-
-                            <label for="new_car_form_vin">Active</label>
-                            {{ form_widget(form.active) }}<br/>
-
-                            <label for="new_car_form_vin">Test</label>
-                            {{ form_widget(form.test) }}<br/>
-
-                            <label for="new_car_form_vin">Typology</label>
-                            {{ form_widget(form.typology, { 'attr': { 'class': 'form-control',
-                                                            'placeholder': 'test'} }) }}
-{#
-                            <label for="new_car_form_vin">Update At</label>
-                            {{ form_widget(form.update_at) }}
-
-                            <label for="new_car_form_vin">Lowdate At</label>
-                            {{ form_widget(form.lowdate_at) }} #}
-
-                            <label for="new_car_form_vin">End Test At</label>
-                            {{ form_widget(form.endtest_at) }}
-
-                            <label for="new_car_form_vin">Conflictive</label>
-                            {{ form_widget(form.conflictive) }}<br/>
-
-                        </div>
-                    {{ form_rest(form) }}
-                </div>
-    {#        <button class="btn btn-primary pull-right" type="submit">Submit</button>#}
-            <button id="btn_create" type="submit">Create</button>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_name">Name</label>
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_cif">CIF</label>
+            {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_typology">Typology</label>
+            {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_partner">Partner</label>
+            {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_shop">Shop</label>
+            {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="new_car_form_vin">Code Workshop</label>
+            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                                                           'placeholder': 'code Workshop'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <br><br><br>
         </div>
 
-    {#    <p>
+        <div class="col-xs-4 col-md-4 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+                <label for="adservice_workshopbundle_workshoptype_active">Active</label>
+                {{ form_widget(form.active) }}
+            </div>
+            <div class="col-xs-3 col-md-3 form-group">
+                <label for="adservice_workshopbundle_workshoptype_test">Test</label>
+                {{ form_widget(form.test) }}
+            </div>
+            <div class="col-xs-9 col-md-9 form-group">
+                <label for="adservice_workshopbundle_workshoptype_endtest_at">Endtest at</label>
+                {{ form_widget(form.endtest_at) }}
+            </div>
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">Diagnosis machines</label>
+            {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+        </div>
 
-        </p>#}
-    {#                    <div class="row">
-                           <div class="col-md-6 column">
-                                <button class="btn btn-primary pull-right" type="submit">Submit</button>
-                            </div>
-                        </div>#}
+        <legend>Contact</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_contact">Contact</label>
+            {{ form_widget(form.contact_name, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_phone_number_1">Phone Number 1</label>
+            {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_phone_number_2">Phone Number 2</label>
+            {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_movile_number_1">Movile Phone 1</label>
+            {{ form_widget(form.movile_number_1, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_movile_number_2">Movile Phone 2</label>
+            {{ form_widget(form.movile_number_2, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_fax">Fax</label>
+            {{ form_widget(form.fax, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="col-xs-5 col-md-5 form-group">
+            <label for="adservice_workshopbundle_workshoptype_email_1">Email 1</label>
+            {{ form_widget(form.email_1, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label for="adservice_workshopbundle_workshoptype_email_2">Email 2</label>
+            {{ form_widget(form.email_2, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_country">Country</label>
+            {{ form_widget(form.country, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_region">Region</label>
+            {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_province">Province</label>
+            {{ form_widget(form.province, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_workshopbundle_workshoptype_city">City</label>
+            {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_address">Address</label>
+            {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <legend>Observations</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <label for="adservice_workshopbundle_workshoptype_conflictive">Conflictive</label>
+            {{ form_widget(form.conflictive) }}
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_workshop">Observation Workshop</label>
+            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_assessor">Observation Assessor</label>
+            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_admin">Observation Admin</label>
+            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+
+    {{ form_rest(form) }}
+            <button id="btn_create" type="submit">Create</button>
+        </div>
     </form>
 
 {% endblock %}

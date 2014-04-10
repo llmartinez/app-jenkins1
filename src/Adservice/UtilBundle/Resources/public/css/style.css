@@ -39,6 +39,14 @@ html {
 .floating {
     float:left;
 }
+.col_izq {
+    float:left;
+    width: 30%;
+}
+.col_der {
+    float:left;
+    width: 70%;
+}
 /*
     HEADER
 */
@@ -83,6 +91,9 @@ html {
 
 .padded {
     padding: 5px;
+}
+.pad-left {
+    padding-left: 20px;
 }
 
 .txtContainer {

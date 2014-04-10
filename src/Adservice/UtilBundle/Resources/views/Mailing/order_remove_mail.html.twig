@@ -25,12 +25,12 @@
                                                                         {% trans %} admin {% endtrans %}
                                                                         {{ workshopOrder.modifiedBy.name }}
                                                                     </h3>
-        {% elseif workshopOrder.modifiedBy.roles[0] == 'ROLE_AD'     %} {% trans %} mail.removeOrder.createdby.workshop  {% endtrans %}
+        {% elseif workshopOrder.modifiedBy.roles[0] == 'ROLE_AD'     %} {% trans %} mail.removeOrder.createdby.user  {% endtrans %}
         {% endif %}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.removeOrder.info {% endtrans %}"<b>{% trans %} user.index.menu.workshop_orders {% endtrans %}</b>".
+        {% trans %} mail.removeOrder.info {% endtrans %}"<b>{% trans %} menu.list_orders {% endtrans %}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         {% trans %} mail.removeOrder.info.id {% endtrans %}

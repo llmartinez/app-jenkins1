@@ -11,6 +11,7 @@ class PopupType extends AbstractType {
         $builder
                 ->add('name')
                 ->add('description')
+                ->add('role')
                 ->add('startdate_at')
                 ->add('enddate_at')
                 ->add('active', 'checkbox', array('required' => false))

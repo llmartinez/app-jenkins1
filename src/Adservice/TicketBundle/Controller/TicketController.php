@@ -94,6 +94,7 @@ class TicketController extends Controller {
             $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '!= '.$id_user);
         }
         elseif ($option == 'assessor_closed') { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '= ' .$id_user); }
+
         elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
 
         elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }

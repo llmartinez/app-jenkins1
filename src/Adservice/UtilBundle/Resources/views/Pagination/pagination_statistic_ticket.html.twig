@@ -1,0 +1,175 @@
+
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content">
+
+    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+    	{% set page      = pagination.page      %}
+    	{% set prevpages = pagination.prevpages %}
+	    {% set nextpages = pagination.nextpages %}
+	    {% set totalpag  = pagination.totalpag  %}
+
+	    {# FLECHAS PAGINAS ANTERIORES #}
+    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="First page"   ></span></button>
+    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="Previous page"></span></button>
+
+	    {# PAGINAS ANTERIORES #}
+    	{% if prevpages > 0 %}
+	    	{% for prev_page in prevpages..1 %}
+	    		<button class="page_number change_page" >{{ page - prev_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+    	{# PAGINA ACTUAL #}
+	    <input  type="text"   id="page"  class="page_number page_selected" value="{{ page }}"  disabled >
+
+	    {# PAGINAS SIGUIENTES #}
+    	{% if nextpages > 0 %}
+			{% for next_page in 1..nextpages %}
+	    		<button class="page_number change_page" >{{ page + next_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+	    {# FLECHAS PAGINAS SIGUIENTES #}
+    	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="Next page"></span></button>
+    	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="Last page ({{ totalpag }})"></span></button>
+
+    </div>
+
+    <script type="text/javascript">
+
+    	//REDIRIGE A LA PRIMERA PAGINA
+	    $('#firstpage').click(function() {
+
+	    	var from    = $('#flt_tck_from').val();
+	    	var to      = $('#flt_tck_to').val();
+	    	var partner = $('#flt_tck_partner').val();
+	    	var status  = $('#flt_tck_status').val();
+
+	    	if(from    == ""  ) from    = 'none';
+	    	if(to      == ""  ) to      = 'none';
+	    	if(partner == null) partner = 'none';
+	    	if(status  == null) status  = 'none';
+
+	    	var url     = "{{ path('listStatistics', { 'type': 'ticket', 'page': '1', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+	    	url = url.replace("plc_from", from);
+	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_partner", partner);
+	    	url = url.replace("plc_status", status);
+
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA ANTERIOR PAGINA
+	    $('#btn_anterior').click(function() {
+
+	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
+
+	    	if (prev_page > 0 ) {
+
+	    		var from    = $('#flt_tck_from').val();
+	    		var to      = $('#flt_tck_to').val();
+	    		var partner = $('#flt_tck_partner').val();
+
+	    		var status  = $('#flt_tck_status').val();
+
+		    	if(from    == ""  ) from    = 'none';
+		    	if(to      == ""  ) to      = 'none';
+		    	if(partner == null) partner = 'none';
+
+		    	if(status  == null) status  = 'none';
+
+		    	var url     = "{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+		    	url = url.replace("plc_page", prev_page);
+		    	url = url.replace("plc_from", from);
+		    	url = url.replace("plc_to", to);
+		    	url = url.replace("plc_partner", partner);
+		    	url = url.replace("plc_status", status);
+
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+	    $('.change_page').click(function() {
+
+	    	var from    = $('#flt_tck_from').val();
+	    	var to      = $('#flt_tck_to').val();
+	    	var partner = $('#flt_tck_partner').val();
+	    	var status  = $('#flt_tck_status').val();
+
+	    	if(from    == ""  ) from    = 'none';
+	    	if(to      == ""  ) to      = 'none';
+	    	if(partner == null) partner = 'none';
+	    	if(status  == null) status  = 'none';
+
+	    	var url     = "{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+	    	url = url.replace("plc_page", $(this).text());
+	    	url = url.replace("plc_from", from);
+	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_partner", partner);
+	    	url = url.replace("plc_status", status);
+
+
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA SIGUIENTE PAGINA
+	    $('#btn_siguiente').click(function() {
+
+	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
+
+	    	if (next_page <= {{ totalpag }}) {
+
+	    		var from    = $('#flt_tck_from').val();
+	    		var to      = $('#flt_tck_to').val();
+	    		var partner = $('#flt_tck_partner').val();
+
+	    		var status  = $('#flt_tck_status').val();
+
+		    	if(from    == ""  ) from    = 'none';
+		    	if(to      == ""  ) to      = 'none';
+		    	if(partner == null) partner = 'none';
+		    	if(status  == null) status  = 'none';
+
+		    	var url     = "{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+
+		    	url = url.replace("plc_page", next_page);
+		    	url = url.replace("plc_from", from);
+		    	url = url.replace("plc_to", to);
+		    	url = url.replace("plc_partner", partner);
+
+		    	url = url.replace("plc_status", status);
+
+
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA ULTIMA PAGINA
+	    $('#totalpage').click(function() {
+
+	    	var from    = $('#flt_tck_from').val();
+	    	var to      = $('#flt_tck_to').val();
+	    	var partner = $('#flt_tck_partner').val();
+	    	var status  = $('#flt_tck_status').val();
+
+	    	if(from    == ""  ) from    = 'none';
+	    	if(to      == ""  ) to      = 'none';
+	    	if(partner == null) partner = 'none';
+	    	if(status  == null) status  = 'none';
+
+            var     url = "{{ path('listStatistics', { 'type': 'ticket', 'page': totalpag , 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status'}) }}";
+
+	    	url = url.replace("plc_from", from);
+	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_partner", partner);
+	    	url = url.replace("plc_status", status);
+
+
+	    	window.open(url, "_self");
+	    });
+
+	</script>

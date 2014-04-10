@@ -2,20 +2,41 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /list/{page}/{option}
+    pattern:  /partner/list/{page}/{option}
     defaults: { _controller: PartnerBundle:Default:list, page: 1 , option: null }
 
+partner_new:
+    pattern: /new/partner
+    defaults: { _controller: PartnerBundle:Default:newPartner }
+
 partner_edit:
-    pattern: /edit/{id}
+    pattern: /edit/partner/{id}
     defaults: { _controller: PartnerBundle:Default:editPartner }
 
 partner_delete:
-    pattern: /delete/{id}
+    pattern: /delete/partner/{id}
     defaults: { _controller: PartnerBundle:Default:deletePartner }
 
-partner_new:
-    pattern: /new
-    defaults: { _controller: PartnerBundle:Default:newPartner }
+
+##############################
+#   APDO. RUTAS SHOP         #
+##############################
+shop_list:
+    pattern:  /shop/list/{page}/{option}
+    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , option: null }
+
+shop_new:
+    pattern: /new/shop
+    defaults: { _controller: PartnerBundle:Shop:newShop }
+
+shop_edit:
+    pattern: /edit/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:editShop }
+
+shop_delete:
+    pattern: /delete/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:deleteShop }
+
 
 ##############################
 #       RUTAS AJAX           #

@@ -1,0 +1,31 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">Home</a></li>
+        <li class="active">Apply for new order</li>
+    </ol>
+
+    {% include 'OrderBundle:Order:list_shop_rejected_orders.html.twig' %}
+    <br />
+    {% include 'OrderBundle:Order:list_shop_orders.html.twig' %}
+    <br />
+    {% include 'OrderBundle:Order:list_workshop_rejected_orders.html.twig' %}
+    <br />
+    {% include 'OrderBundle:Order:list_workshop_orders.html.twig' %}
+    <br />
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            //util.js
+            table_filter();//util.js
+        });
+    </script>
+{% endblock %}

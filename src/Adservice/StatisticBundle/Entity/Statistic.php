@@ -8,14 +8,28 @@ namespace Adservice\StatisticBundle\Entity;
 class Statistic {
 
     private $num_users;
+    private $num_partners;
+    private $num_shops;
+    private $num_workshops;
     private $num_tickets;
     private $num_open_tickets;
     private $num_closed_tickets;
     private $user_with_max_post;
 
+    private $results;
+
 
     public function getNumUsers() {
         return $this->num_users;
+    }
+    public function getNumPartners() {
+        return $this->num_partners;
+    }
+    public function getNumShops() {
+        return $this->num_shops;
+    }
+    public function getNumWorkshops() {
+        return $this->num_workshops;
     }
 
     public function getNumTickets() {
@@ -30,8 +44,21 @@ class Statistic {
         return $this->num_closed_tickets;
     }
 
+    public function getResults() {
+        return $this->results;
+    }
+
     public function setNumUsers($num_users) {
         $this->num_users = $num_users;
+    }
+    public function setNumPartners($num_partners) {
+        $this->num_partners = $num_partners;
+    }
+    public function setNumShops($num_shops) {
+        $this->num_shops = $num_shops;
+    }
+    public function setNumWorkshops($num_workshops) {
+        $this->num_workshops = $num_workshops;
     }
 
     public function setNumTickets($num_tickets) {
@@ -45,12 +72,9 @@ class Statistic {
     public function setNumClosedTickets($num_closed_tickets) {
         $this->num_closed_tickets = $num_closed_tickets;
     }
-    public function getUserWithMaxPost() {
-        return $this->user_with_max_post;
-    }
 
-    public function setUserWithMaxPost($user_with_max_post) {
-        $this->user_with_max_post = $user_with_max_post;
+    public function setResults($results) {
+        $this->results = $results;
     }
 
     /********************************************************************************************************
@@ -60,12 +84,41 @@ class Statistic {
      ********************************************************************************************************/
 
     /**
-     * Devuelve el número de usuarios dentro de ADService (admins + users)
+     * Devuelve el número de usuarios dentro de ADService
      * @param EntityManager $em
      * @return Integer
      */
     public function getNumUsersInAdservice($em) {
         $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u");
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Devuelve el número de socios dentro de ADService
+     * @param EntityManager $em
+     * @return Integer
+     */
+    public function getNumPartnersInAdservice($em) {
+        $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p");
+        return $query->getSingleScalarResult();
+    }
+    /**
+     * Devuelve el número de tiendas dentro de ADService
+     * @param EntityManager $em
+     * @return Integer
+     */
+    public function getNumShopsInAdservice($em) {
+        $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s");
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Devuelve el número de talleres dentro de ADService
+     * @param EntityManager $em
+     * @return Integer
+     */
+    public function getNumWorkshopsInAdservice($em) {
+        $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w");
         return $query->getSingleScalarResult();
     }
 
@@ -92,20 +145,5 @@ class Statistic {
         if ($status == 'open') $query->setParameter('status', 1);
         if ($status == 'close') $query->setParameter('status', 2);
         return $query->getSingleScalarResult();
-    }
-
-    /**
-     * Devuelve el usuario con mas post, y el numero de post que ha hecho
-     * @param EntityManager $em
-     */
-    public function getUserWithMaxNumPost($em){
-
-        $query = $em->createQuery("SELECT p, u, COUNT(p) num_post
-                                   FROM TicketBundle:Post p JOIN p.owner u
-                                   GROUP BY p.owner
-                                   ORDER BY num_post DESC
-                                  ");
-        $query->setMaxResults(1);
-        return $query->getSingleResult();
     }
 }

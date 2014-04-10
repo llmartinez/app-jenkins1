@@ -24,7 +24,7 @@ class DefaultController extends Controller {
     public function listAction($page=1 , $option=null) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
