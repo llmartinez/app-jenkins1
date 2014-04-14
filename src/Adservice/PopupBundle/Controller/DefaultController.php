@@ -15,12 +15,14 @@ class DefaultController extends Controller {
      * es una llamada AJAX
      */
     public function getPopupAction() {
-        $date_today = new \DateTime(\date("Y-m-d"));
         $em = $this->getDoctrine()->getEntityManager();
-        $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, true);
-//        $json = $popup->to_json($popup[0]);
+        $date_today = new \DateTime(\date("Y-m-d H:i:s"));
+        $role = $this->get('security.context')->getToken()->getUser()->getRoles()[0];
+        $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, $role->getId());
+
+        $json = array();
         foreach ($popups as $popup) {
-            $json[] = $popup->to_json();
+          $json[] = $popup->to_json();
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -34,7 +36,7 @@ class DefaultController extends Controller {
 
         return $this->render('PopupBundle:Default:list.html.twig', array('all_popups' => $all_popups));
     }
-    
+
     public function newPopupAction(){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
@@ -56,7 +58,7 @@ class DefaultController extends Controller {
                                                                              'form_name'  => $form->getName(),
                                                                              'form'       => $form->createView()));
     }
-    
+
     /**
      * Obtener los datos del popup a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * Si la petición es GET  --> mostrar el formulario
@@ -66,15 +68,15 @@ class DefaultController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $popup = $em->getRepository("PopupBundle:Popup")->find($id);
-        
+
         if (!$popup) throw $this->createNotFoundException('Popup no encontrado en la BBDD');
 
         $petition = $this->getRequest();
         $form = $this->createForm(new PopupType(), $popup);
-        
+
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
             if ($form->isValid()) $this->savePopup($em, $popup);
@@ -85,7 +87,7 @@ class DefaultController extends Controller {
                                                                               'form_name'  => $form->getName(),
                                                                               'form'       => $form->createView()));
     }
-    
+
     /**
      * Elimina el popup con $id de la bbdd
      * @param Int $id
@@ -93,17 +95,17 @@ class DefaultController extends Controller {
      * @throws CreateNotFoundException
      */
     public function deletePopupAction($id){
-        
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
         $popup = $em->getRepository("PopupBundle:Popup")->find($id);
         if (!$popup) throw $this->createNotFoundException('Popup no encontrado en la BBDD');
-        
+
         $em->remove($popup);
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('popup_list'));
     }
     /**

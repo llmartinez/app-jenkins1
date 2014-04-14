@@ -1,0 +1,106 @@
+
+    {% if shopOrders is defined %}
+            <legend>Solicitudes de Tiendas pendientes</legend>
+        {% if shopOrders|length > 0  %}
+            <table class="table table-hover" style="width: 80%; margin-left: 10%;">
+                <thead>
+                    <tr>
+                        <th>#            </th>
+                        <th>Name         </th>
+                        <th>Partner      </th>
+                        <th>Phone Number </th>
+                        <th>Region       </th>
+                        <th>Province     </th>
+                        <th>Address      </th>
+                        <th>Status       </th>
+                        <th>Order        </th>
+                        <th>Actions      </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for shopOrder in shopOrders %}
+
+                   {#  {% if ordersBefore[shopOrder.id] is defined %}
+                        {% set orderBefore = ordersBefore[shopOrder.id] %}
+                    {% endif %} #}
+                        <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
+                            <td> {{ shopOrder.id           }} </td>
+                            <td> {{ shopOrder.name         }} </td>
+                            <td> {{ shopOrder.partner      }} </td>
+                            <td> {{ shopOrder.phoneNumber1 }} </td>
+                            <td> {{ shopOrder.region       }} </td>
+                            <td> {{ shopOrder.province     }} </td>
+                            <td> {{ shopOrder.address      }} </td>
+                            <td> {% if shopOrder.active == 1 %}{% trans %} active   {% endtrans %}
+                                 {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
+                            <td>
+                                {% if shopOrder.wantedaction == 'modify' or shopOrder.action == 're_modify' %}
+                                    <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
+                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></span></a>
+                                    {% if shopOrder.rejectionReason is not null %}
+                                        <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                    {% endif %}
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal_edit_{{ shopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table table-hover">
+                                                    <tr><th><b>             </b></th>{# <th>   Before                      </th> #}<th>    After                     </th></tr>
+                                                    <tr><td><b>Name         </b></td>{# <td>{{ orderBefore.name }}         </td> #}<td> {{ shopOrder.name         }} </td></tr>
+                                                    <tr><td><b>Partner      </b></td>{# <td>{{ orderBefore.partner }}      </td> #}<td> {{ shopOrder.partner      }} </td></tr>
+                                                    <tr><td><b>Phone Number </b></td>{# <td>{{ orderBefore.phoneNumber1 }} </td> #}<td> {{ shopOrder.phoneNumber1 }} </td></tr>
+                                                    <tr><td><b>Region       </b></td>{# <td>{{ orderBefore.region }}       </td> #}<td> {{ shopOrder.region       }} </td></tr>
+                                                    <tr><td><b>Province     </b></td>{# <td>{{ orderBefore.province }}     </td> #}<td> {{ shopOrder.province     }} </td></tr>
+                                                    <tr><td><b>Address      </b></td>{# <td>{{ orderBefore.address  }}     </td> #}<td> {{ shopOrder.address      }} </td></tr>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+
+                                {% elseif shopOrder.action == 'activate' %}
+                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'deactivate' %}
+                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'create' %}
+                                    <span class="label label-info">    {% trans %} Create   {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'delete' %}
+                                    <span class="label label-danger">  {% trans %} Delete   {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'rejected' %}
+                                    <span class="label label-danger">  {% trans %} Rejected {% endtrans %}</span>
+
+                                {% elseif shopOrder.action == 'resend' and shopOrder.rejectionReason is not null %}
+                                    <span class="label label-warning"> {% trans %} Resend {% endtrans %} {{ shopOrder.wantedaction }} </span>
+                                        <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                {% endif %}
+                            </td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>
+                                    <a title="Aceptar"  href="{{ path("shopOrder_accept", { 'id': shopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="Rechazar" href="{{ path("shopOrder_reject", { 'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            {% elseif is_granted('ROLE_AD') %}
+                                <td>
+                                    <a title="Cancelar la solicitud" href="{{ path('shopOrder_remove', {'id' : shopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            No hay solicitudes pendientes!!
+        {% endif %}
+{% endif %}

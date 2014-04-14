@@ -7,10 +7,11 @@ class Data {
     /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
     private static $numAdmins    = 5;
     private static $numAssessors = 35;
-    private static $numWorkshops = 400;
-    private static $numAds       = 15;
-    private static $numPartners  = 15;
-    private static $numTickets   = 1000;
+    private static $numAds       = 150;
+    private static $numPartners  = 150;
+    private static $numShops     = 300;
+    private static $numWorkshops = 1000;
+    private static $numTickets   = 10000;
     private static $numPosts     = 4;
 
     /**
@@ -38,16 +39,6 @@ class Data {
      *
      * @return integer $num
      */
-    public static function getnumWorkshops()
-    {
-        // Numero de entidades por clase de la aplicacion
-        return Data::$numWorkshops;
-    }
-    /**
-     * Devuelve el numero de entidades por clase que se crearan.
-     *
-     * @return integer $num
-     */
     public static function getNumAds()
     {
         // Numero de entidades por clase de la aplicacion
@@ -62,6 +53,26 @@ class Data {
     {
         // Numero de partners por clase de la aplicacion
         return Data::$numPartners;
+    }
+    /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumShops()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return Data::$numShops;
+    }
+    /**
+     * Devuelve el numero de entidades por clase que se crearan.
+     *
+     * @return integer $num
+     */
+    public static function getNumWorkshops()
+    {
+        // Numero de entidades por clase de la aplicacion
+        return Data::$numWorkshops;
     }
 
     /**
@@ -114,7 +125,7 @@ class Data {
     {
         // Los lenguages soportados por la aplicación
 
-        $countries = array('Spain', 'England', 'France');
+        $countries = array('Spain', 'France');
 
         return $countries[array_rand($countries)];
     }
@@ -124,27 +135,15 @@ class Data {
      *
      * @return string Region aleatorio generado para el usuario.
      */
-    public static function getRegions()
+    public static function getRegions($country)
     {
         // Los lenguages soportados por la aplicación
 
-        $regions = array('Catalunya', 'Madrid', 'Canarias');
+        $regions = array('Spain'  => array('Catalunya', 'Madrid', 'Canarias'),
+                         'France' => array('Borgoña', 'Córcega', 'Isla de Francia')
+                        );
 
-        return $regions[array_rand($regions)];
-    }
-
-    /**
-     * Generador aleatorio de provincias.
-     *
-     * @return string Province aleatorio generado para el usuario.
-     */
-    public static function getProvinces()
-    {
-        // Los lenguages soportados por la aplicación
-
-        $provinces = array('Barcelona', 'Tarragona', 'Lleida', 'Girona', 'Madrid ','Sta. Cruz de Tenerife' );
-
-        return $provinces[array_rand($provinces)];
+        return $regions[$country][array_rand($regions[$country])];
     }
 
 /*********************************************************************
@@ -159,6 +158,16 @@ class Data {
     public static function getPartner()
     {
         return 'partner'.rand(1, Data::getNumPartners());
+    }
+
+    /**
+     * Generador aleatorio de tiendas
+     *
+     * @return string Shop aleatorio.
+     */
+    public static function getShop()
+    {
+        return 'shop'.rand(1, Data::getNumShops());
     }
 
 /*********************************************************************
@@ -220,7 +229,7 @@ class Data {
      */
     public static function getUser()
     {
-        return 'user'.rand(1, Data::getnumWorkshops());
+        return 'user'.rand(1, Data::getNumWorkshops());
     }
 
     /**

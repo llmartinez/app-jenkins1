@@ -38,6 +38,13 @@ class Popup {
     private $description;
 
     /**
+     * @var string $role
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\Role")
+     */
+    private $role;
+
+    /**
      * @var datetime $startdate_at
      *
      * @ORM\Column(name="startdate_at", type="datetime")
@@ -110,7 +117,7 @@ class Popup {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -130,13 +137,33 @@ class Popup {
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
     }
-    
+
+    /**
+     * Set role
+     *
+     * @param user $role
+     */
+    public function setRole(\Adservice\UserBundle\Entity\Role $role)
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
     /**
      * Get active
      * @return type
@@ -144,7 +171,7 @@ class Popup {
     public function getActive(){
         return $this->active;
     }
-    
+
     /**
      * Set active
      * @param boolean $active
@@ -166,7 +193,7 @@ class Popup {
     /**
      * Get startdate_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getStartdateAt()
     {
@@ -186,7 +213,7 @@ class Popup {
     /**
      * Get enddate_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getEnddateAt()
     {
@@ -206,7 +233,7 @@ class Popup {
     /**
      * Get createt_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -244,7 +271,7 @@ class Popup {
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -264,17 +291,17 @@ class Popup {
     /**
      * Get modified_by
      *
-     * @return string 
+     * @return string
      */
     public function getModifiedBy()
     {
         return $this->modified_by;
     }
-    
+
     public function __toString() {
         return $this->getName();
     }
-        
+
     /**
      * Campos que apareceran al hacer un json de esta clase
      */

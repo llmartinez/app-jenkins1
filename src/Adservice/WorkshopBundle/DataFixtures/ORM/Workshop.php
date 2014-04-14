@@ -22,21 +22,30 @@ class Workshops extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCodeWorkshop($i);
             $entidad->setContactName('name'.$i);
             $entidad->setContactSurname('surname'.$i);
-            $entidad->setPhoneNumber1(Data::getPhone());
-            $entidad->setMovileNumber1(Data::getPhone());
-            $entidad->setEmail1('workshop'.$i.'@workshop.es');
             $entidad->setActive('1');
             $entidad->setUpdateAt(new \DateTime());
             $entidad->setLowdateAt(new \DateTime());
+            $entidad->setPartner($this->getReference(Data::getPartner()));
+            $entidad->setShop($this->getReference(Data::getShop()));
+            $entidad->setTypology($this->getReference(Data::getTypologies()));
+
+            //CONTACT
+            $entidad->setCountry($this->getReference(Data::getCountries()));
+            $entidad->setRegion($this->getReference(Data::getRegions($entidad->getCountry()->getCountry())));
+            $entidad->setAddress('Address '.$i);
+            $entidad->setPostalCode(Data::getPostalCode());
+            $entidad->setPhoneNumber1(Data::getPhone());
+            $entidad->setPhoneNumber2(Data::getPhone());
+            $entidad->setMovileNumber1(Data::getPhone());
+            $entidad->setPhoneNumber2(Data::getPhone());
+            $entidad->setFax(Data::getPhone());
+            $entidad->setEmail1('mail'.$i.'@mail.es');
+            $entidad->setEmail2('mail'.$i.'@mail.com');
+            //CREATE/MODIFY
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());
-            $entidad->setCountry($this->getReference(Data::getCountries()));
-            $entidad->setRegion($this->getReference(Data::getRegions()));
-            $entidad->setProvince($this->getReference(Data::getProvinces()));
             $entidad->setCreatedBy($this->getReference('superadmin'));
             $entidad->setModifiedBy($this->getReference('superadmin'));
-            $entidad->setPartner($this->getReference(Data::getPartner()));
-            $entidad->setTypology($this->getReference(Data::getTypologies()));
             $manager->persist($entidad);
 
             $this->addReference($entidad->getName(), $entidad);

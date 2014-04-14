@@ -1,0 +1,120 @@
+
+    {% if shopRejectedOrders is defined %}
+            <legend>Solicitudes de Tiendas rechazadas</legend>
+        {% if shopRejectedOrders|length > 0  %}
+            <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Shop</th>
+                        <th>Partner</th>
+                        <th>Phone Number</th>
+                        <th>Region</th>
+                        <th>Province</th>
+                        <th>Address</th>
+                        <th>Order</th>
+                        <th>Reason</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for shopOrder in shopRejectedOrders %}
+                        <tr>
+                            <td>{{ shopOrder.id }}</td>
+                            <td>{{ shopOrder.name }}</td>
+                            <td>{{ shopOrder.partner }}</td>
+                            <td>{{ shopOrder.phoneNumber1 }}</td>
+                            <td>{{ shopOrder.region }}</td>
+                            <td>{{ shopOrder.province }}</td>
+                            <td>{{ shopOrder.address}}</td>
+                            <td>
+                                {% if ((shopOrder.action == 'modify') or (shopOrder.action == 're_modify')) %}
+                                    <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
+                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}" ></span></a>
+                                    {#{% if shopOrder.rejectionReason is not null %}
+                                        <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                    {% endif %}#}
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal_rejected_edit{{shopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <b>Name:</b> {{ shopOrder.name }}<br/>
+                                                    <b>Num AD Client:</b> {{ shopOrder.numAdClient }}<br/>
+                                                    <b>Cif:</b> {{ shopOrder.cif }}<br/>
+                                                    <b>Address:</b> {{ shopOrder.address }}<br/>
+                                                    <b>City:</b> {{ shopOrder.city }}<br/>
+                                                    <b>Phone Number</b> {{ shopOrder.phoneNumber1 }} / {{ shopOrder.phoneNumber2 }}<br/>
+                                                    <b>Movile Number</b> {{ shopOrder.movileNumber1}} / {{ shopOrder.movileNumber1 }}<br/>
+                                                    <b>Fax</b> {{ shopOrder.fax }}<br/>
+                                                    <b>Email:</b> {{ shopOrder.email1 }} / {{ shopOrder.email2 }}<br/>
+                                                    <b>Region:</b> {{ shopOrder.region }}<br/>
+                                                    <b>Province:</b> {{ shopOrder.province }}<br/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+
+
+                                {% elseif shopOrder.action == 'activate'   %}
+                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right"></span>
+                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'deactivate' %}
+                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right"></span>
+                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'create'     %}
+                                    <span class="label label-info">    {% trans %} Create   {% endtrans %}</span>
+                                {% elseif shopOrder.action == 'rejected'   %}
+                                    <span class="label label-danger">  {% trans %} Rejected {% endtrans %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a title="{{ shopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ shopOrder.id }}" >Ver motivo del rechazo</span></a>
+                                <!-- Modal -->
+                                    <div class="modal fade" id="myModal_rejected_reason{{shopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel">Rejection Reason</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ shopOrder.rejectionReason|nl2br }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                            </td>
+                            <td>
+                            {% if not is_granted('ROLE_ADMIN') %}
+
+                                    {% if shopOrder.wantedAction != 'create' %}
+                                        <a title="Modificar datos de la tienda"             href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    {% endif %}
+                                    <a title="Cancelar la solicitud"                        href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+
+                                    <a title="Solicitar de nuevo la activación de la tienda"  href="{# {{ path('shopOrder_resendOrder', {'id': shopOrder.id      }) }} #}"><span class="glyphicon glyphicon-refresh"></span></a>
+                            {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        No hay solicitudes rechazadas pendientes!!
+        {% endif %}
+    {% endif %}

@@ -50,11 +50,11 @@
             {{ form_widget(form.province, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Postal Code</label>
+            <label for="new_ticket_form_importance">Postal Code *</label>
             {{ form_widget(form.postal_code, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Address</label>
+            <label for="new_ticket_form_importance">Address *</label>
             {{ form_widget(form.address, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
@@ -64,7 +64,7 @@
         {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_save" type="submit">Create</button>
+            <button id="btn_save" type="submit">Save</button>
         </div>
         </p>
     </form>

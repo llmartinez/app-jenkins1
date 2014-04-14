@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Adservice\PopupBundle\PopupBundle(),
             new Adservice\StatisticBundle\StatisticBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
+            new Adservice\OrderBundle\OrderBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -197,12 +197,16 @@ class Pagination
      *
      * @return string
      */
-    public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null)
+    public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null, $joins=null, $add='')
     {
-        $query = 'SELECT e ';
+        $query = 'SELECT e '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
         $where = 'WHERE e.id > 0 ';
 
+        if($joins != null and $joins[0] != null) {
+            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
+                                        $where = $where.'AND '.$join[1].' '; }
+        }
         if($params != null and $params[0] != null) {
             foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
         }
@@ -218,22 +222,31 @@ class Pagination
             $consulta = $em->createQuery($query.$from.$where.$order);
         }
 
+        /* PRUEBAS */
+           // echo $query.$from.$where.$order.'<br>';
+           // var_dump($consulta->getResult());
+           // die;
         return $consulta->getResult();
     }
 
-    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null)
+    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null)
     {
-        $query = 'SELECT COUNT(e) FROM '.$bundle.':'.$entity.' e ';
+        $query = 'SELECT COUNT(e) ';
+        $from  = 'FROM '.$bundle.':'.$entity.' e ';
 
         $where = 'WHERE e.id > 0 ';
 
-        if($params[0] != null) {
+        if($joins != null and $joins[0] != null) {
+            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
+                                        $where = $where.'AND '.$join[1].' '; }
+        }
+        if($params != null and $params[0] != null) {
             foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
         }
 
         ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
 
-            $consulta = $em ->createQuery($query.$where.$order);
+            $consulta = $em ->createQuery($query.$from.$where.$order);
 
         return $consulta->getResult()[0][1];
     }

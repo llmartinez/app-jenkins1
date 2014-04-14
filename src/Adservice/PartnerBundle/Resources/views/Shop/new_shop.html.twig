@@ -1,0 +1,87 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('shop_list') }}">List of Shops</a></li>
+      <li class="active">New Shop</li>
+    </ol>
+
+    <form action="{{ path('shop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        <div class="col-xs-6 col-md-6 form-group">
+            <label for="adservice_partnerbundle_shoptype">Name *</label>
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_partnerbundle_shoptype">Partner * </label>
+            {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+        </div>
+        <div class="col-xs-6 col-md-6 form-group">
+            <label for="adservice_partnerbundle_shoptype">Email1 *</label>
+            {{ form_widget(form.email_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-6 col-md-6 form-group">
+            <label for="adservice_partnerbundle_shoptype">Email2</label>
+            {{ form_widget(form.email_2, { 'attr': {'class': 'form-control' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_partnerbundle_shoptype">PhoneNumber1 *</label>
+            {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_partnerbundle_shoptype">PhoneNumber2</label>
+            {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_partnerbundle_shoptype">Fax</label>
+            {{ form_widget(form.fax, { 'attr': {'class': 'form-control' } }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label for="adservice_partnerbundle_shoptype">Region *</label>
+            {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label for="adservice_partnerbundle_shoptype">Province *</label>
+            {{ form_widget(form.province, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label for="adservice_partnerbundle_shoptype">Postal Code *</label>
+            {{ form_widget(form.postal_code, { 'attr': {'class': 'form-control' } }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label for="adservice_partnerbundle_shoptype">Address *</label>
+            {{ form_widget(form.address, { 'attr': {'class': 'form-control' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="adservice_partnerbundle_shoptype">Active</label>
+            {{ form_widget(form.active) }}
+        </div>
+        {{ form_rest(form) }}
+
+        <div class="col-xs-10 col-md-10 form-group">
+            <button id="btn_create" type="submit">Save</button>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            //si clickamos el combobox de las regiones repoblamos la de las provincias
+            $('form[name=adservice_partnerbundle_shoptype]').find('select[name*=region]').change(function (){
+                var url_ajax = "{{ path("user_provinces") }}";
+                populate_province(url_ajax);
+            });
+        });
+    </script>
+{% endblock %}

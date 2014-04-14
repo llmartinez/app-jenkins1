@@ -8,7 +8,7 @@
     </ol>
 
     <h1>Lista de talleres</h1>
-    
+
     <table class="table" style="width: 80%; margin-left: 10%;">
         <tr>
             <td align="right">
@@ -21,7 +21,7 @@
             </td>
         </tr>
     </table>
-    
+
     {% if workshops is defined %}
         {# Pendientes de dar de alta    #}
         {% if workshops|length > 0  %}
@@ -63,17 +63,17 @@
                                     {% elseif workshop.deactivatePending == true%}  <span class="label label-warning">Pendiente desactivación</span>
                                     {% elseif workshop.active == true %}            <a title="Pedir la desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">Desactivar</a>
                                     {% elseif workshop.active == false %}           <a title="Pedir la desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">Activar</a>
-                                    {% endif %} 
+                                    {% endif %}
                                 </td>
                             {% elseif user_role == 'admin' %}
                                 {% if workshop.activatePending == true %}
                                     <td><span class="label label-warning">Pendiente activación</span></td>
                                     <td><a title="Activaciar del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">Activar</a></td>
-                                {% elseif workshop.deactivatePending == true %}  
+                                {% elseif workshop.deactivatePending == true %}
                                     <td><span class="label label-warning">Pendiente desactivación</span></td>
-                                    <td><a title="Desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">Desactivar</a></td>       
-                                {% endif %} 
-                            {% endif %} 
+                                    <td><a title="Desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">Desactivar</a></td>
+                                {% endif %}
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -82,9 +82,9 @@
             No hay talleres!!
         {% endif %}
     {% endif %}
-    
+
 {% endblock %}
-            
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>

@@ -30,11 +30,15 @@
             {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_shop">Shop</label>
+            {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
             <label for="new_car_form_vin">Code Workshop</label>
             {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
                                                            'placeholder': 'code Workshop'} }) }}
         </div>
-        <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-2 col-md-2 form-group">
             {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
             {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             <br><br><br>

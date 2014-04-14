@@ -25,12 +25,12 @@
                                                                         {% trans %} assessor {% endtrans %}
                                                                         {{ ticket.modifiedBy.name }}
                                                                     </h3>
-        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.closeTicket.createdby.workshop  {% endtrans %}
+        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.closeTicket.createdby.user  {% endtrans %}
         {% endif %}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.closeTicket.info {% endtrans %}"<b>{% trans %} user.index.menu.list_tickets {% endtrans %}</b>".
+        {% trans %} mail.closeTicket.info {% endtrans %}"<b>{% trans %} menu.list_tickets {% endtrans %}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         {% trans %} mail.closeTicket.info.id {% endtrans %}

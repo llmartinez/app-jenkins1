@@ -9,19 +9,20 @@
     {% if is_granted('ROLE_ADMIN') %}
         <table name="tbl_admin">
             <tr>
-                <th>{% trans %} user.index.menu.admin_title {% endtrans %}</th>
+                <th>{% trans %} menu.title_admin {% endtrans %}</th>
             </tr>
             <tr>
                 <td>
-                    <a id="profile"            href="{{ path("user_profile"                         ) }}">{% trans %} user.index.menu.my_profile            {% endtrans %}</a><br>
-                    <a id="partner_list"       href="{{ path("partner_list"                         ) }}">{% trans %} user.index.menu.list_partners         {% endtrans %}</a><br>
-                    <a id="user_list"          href="{{ path("user_list"                            ) }}">{% trans %} user.index.menu.list_users            {% endtrans %}</a><br>
-                    <a id="popup_list"         href="{{ path("popup_list"                           ) }}">{% trans %} user.index.menu.list_popups           {% endtrans %}</a><br>
-                    <a id="workshop_list"      href="{{ path("workshop_list"                        ) }}">{% trans %} user.index.menu.list_workshops        {% endtrans %}</a><br>
-                    <a id="ticket_list"        href="{{ path("listTicket"                           ) }}">{% trans %} user.index.menu.list_tickets          {% endtrans %}</a><br>
-                    <a id="listStatistics"     href="{{ path("listStatistics"                       ) }}">{% trans %} user.index.menu.list_statistics       {% endtrans %}</a><br>
-                    <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList"                   ) }}">{% trans %} user.index.menu.asign_user_to_ticket  {% endtrans %}</a><br>
-                    <a id="workshopOrdersList" href="{{ path("workshopOrder_listWorkshopOrders"     ) }}">{% trans %} user.index.menu.workshop_orders   {% endtrans %}</a><br>
+                    <a id="profile"            href="{{ path("user_profile"       ) }}">{% trans %} menu.profile                {% endtrans %}</a><br>
+                    <a id="listStatistics"     href="{{ path("listStatistics"     ) }}">{% trans %} menu.list_statistics        {% endtrans %}</a><br>
+                    <a id="workshopOrdersList" href="{{ path("list_orders"        ) }}">{% trans %} menu.list_orders            {% endtrans %}</a><br>
+                    <a id="popup_list"         href="{{ path("popup_list"         ) }}">{% trans %} menu.list_popups            {% endtrans %}</a><br>
+                    <a id="partner_list"       href="{{ path("partner_list"       ) }}">{% trans %} menu.list_partners          {% endtrans %}</a><br>
+                    <a id="shop_list"          href="{{ path("shop_list"          ) }}">{% trans %} menu.list_shops             {% endtrans %}</a><br>
+                    <a id="workshop_list"      href="{{ path("workshop_list"      ) }}">{% trans %} menu.list_workshops         {% endtrans %}</a><br>
+                    <a id="user_list"          href="{{ path("user_list"          ) }}">{% trans %} menu.list_users             {% endtrans %}</a><br>
+                    <a id="ticket_list"        href="{{ path("listTicket"         ) }}">{% trans %} menu.list_tickets           {% endtrans %}</a><br>
+                    <a id="ticketWorkshopList" href="{{ path("ticketWorkshopList" ) }}">{% trans %} menu.asign_user_to_ticket   {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -30,12 +31,12 @@
     {% elseif is_granted('ROLE_ASSESSOR') %}
         <table>
             <tr>
-                <th>{% trans %} user.index.menu.assessor_title {% endtrans %}</th>
+                <th>{% trans %} menu.title_assessor {% endtrans %}</th>
             </tr>
             <tr>
                 <td>
-                    <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile      {% endtrans %}</a><br>
-                    <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.list_tickets    {% endtrans %}</a><br>
+                    <a href="{{ path("user_profile" ) }}">{% trans %} menu.profile      {% endtrans %}</a><br>
+                    <a href="{{ path("listTicket"   ) }}">{% trans %} menu.list_tickets {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -44,12 +45,12 @@
     {% elseif is_granted('ROLE_USER') %}
         <table id="tbl_user" name="tbl_user">
             <tr>
-                <th>{% trans %} user.index.menu.user_title {% endtrans %}</th>
+                <th>{% trans %} menu.title_user {% endtrans %}</th>
             </tr>
             <tr>
                 <td>
-                    <a href="{{ path("user_profile" ) }}">{% trans %} user.index.menu.my_profile    {% endtrans %}</a><br>
-                    <a href="{{ path("listTicket"   ) }}">{% trans %} user.index.menu.my_tickets    {% endtrans %}</a><br>
+                    <a href="{{ path("user_profile" ) }}">{% trans %} menu.profile      {% endtrans %}</a><br>
+                    <a href="{{ path("listTicket"   ) }}">{% trans %} menu.list_tickets {% endtrans %}</a><br>
                 </td>
             </tr>
         </table>
@@ -58,16 +59,16 @@
     {% elseif is_granted('ROLE_AD') %}
         <table id="tbl_user" name="tbl_user">
             <tr>
-                <th>{% trans %} user.index.menu.ad_title {% endtrans %}</th>
+                <th>{% trans %} menu.title_ad {% endtrans %}</th>
             </tr>
             <tr>
                 <td>
-                    <a href="{{ path("user_profile"                     ) }}">{% trans %}user.index.menu.my_profile         {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_workshoplist"       ) }}">{% trans %}user.index.menu.workshops          {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_createNewOrder"     ) }}">{% trans %}user.index.menu.new_workshop_order {% endtrans %}</a><br>
-                    <a href="{{ path("workshopOrder_listWorkshopOrders" ) }}">{% trans %}Lista de solicitudes pendientes    {% endtrans %}</a><br>
-
-                </td>
+                    <a href="{{ path("user_profile"                ) }}">{% trans %} menu.profile            {% endtrans %}</a><br>
+                    <a href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders        {% endtrans %}</a><br>
+                    <a href="{{ path("shopOrder_listShops"         ) }}">{% trans %} menu.list_shops         {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_listWorkshops" ) }}">{% trans %} menu.list_workshops     {% endtrans %}</a><br>
+                    <a href="{{ path("shopOrder_new"               ) }}">{% trans %} menu.new_shop_order     {% endtrans %}</a><br>
+                    <a href="{{ path("workshopOrder_new"           ) }}">{% trans %} menu.new_workshop_order {% endtrans %}</a><br>                </td>
             </tr>
         </table>
     {% endif %}
@@ -87,7 +88,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-{% endblock%}
+{% endblock %}
 
 
 {% block javascripts %}
@@ -102,11 +103,11 @@
                 //a traves de la cookie solo mostramos el popup una vez
                 if ($.cookie('visited') != 1){
                     $.cookie('visited', '1');
-                    var url_ajax = "{{ path("popup_get") }}";
+                    var url_ajax = "{{ path('popup_get') }}";
                     find_popup(url_ajax);
                 }
             });
         });
     </script>
 
-{% endblock%}
+{% endblock %}

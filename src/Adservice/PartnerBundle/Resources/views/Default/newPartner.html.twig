@@ -10,11 +10,11 @@
 
     <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">Name *</label>
+            <label for="adservice_partnerbundle_partnertype">Name *</label>
             {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="new_ticket_form_importance">Code Partner * </label>
+            <label for="adservice_partnerbundle_partnertype">Code Partner * </label>
             {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
@@ -22,49 +22,49 @@
             {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
         </div>
         <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">Email1 *</label>
+            <label for="adservice_partnerbundle_partnertype">Email1 *</label>
             {{ form_widget(form.email_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">Email2</label>
+            <label for="adservice_partnerbundle_partnertype">Email2</label>
             {{ form_widget(form.email_2, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">PhoneNumber1 *</label>
+            <label for="adservice_partnerbundle_partnertype">PhoneNumber1 *</label>
             {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">PhoneNumber2</label>
+            <label for="adservice_partnerbundle_partnertype">PhoneNumber2</label>
             {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">Fax</label>
+            <label for="adservice_partnerbundle_partnertype">Fax</label>
             {{ form_widget(form.fax, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Region *</label>
+            <label for="adservice_partnerbundle_partnertype">Region *</label>
             {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Province *</label>
+            <label for="adservice_partnerbundle_partnertype">Province *</label>
             {{ form_widget(form.province, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Postal Code</label>
+            <label for="adservice_partnerbundle_partnertype">Postal Code *</label>
             {{ form_widget(form.postal_code, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Address</label>
+            <label for="adservice_partnerbundle_partnertype">Address *</label>
             {{ form_widget(form.address, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="new_ticket_form_importance">Active</label>
+            <label for="adservice_partnerbundle_partnertype">Active</label>
             {{ form_widget(form.active) }}
         </div>
         {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_create" type="submit">Create</button>
+            <button id="btn_create" type="submit">Save</button>
         </div>
     </form>
 

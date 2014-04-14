@@ -33,16 +33,27 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setSalt       ($salt);
             $entidad->setName       (Data::getName());
             $entidad->setSurname    (Data::getSurname());
-            $entidad->setEmail1     ('dmaya@grupeina.com');
             $entidad->setActive     ('1');
-            $entidad->setRegion     ($_this->getReference(Data::getRegions()));
-            $entidad->setProvince   ($_this->getReference(Data::getProvinces()));
-            $entidad->setCreatedBy  ($_this->getReference('superadmin'));
-            $entidad->setCreatedAt  (new \DateTime());
-            $entidad->setModifiedBy ($_this->getReference('superadmin'));
-            $entidad->setModifiedAt (new \DateTime());
-            $entidad->setCountry    ($_this->getReference(Data::getCountries()));
+
+            //CONTACT
+            $entidad->setCountry($_this->getReference(Data::getCountries()));
+            $entidad->setRegion($_this->getReference(Data::getRegions($entidad->getCountry()->getCountry())));
+            $entidad->setAddress('Address '.$i);
+            $entidad->setPostalCode(Data::getPostalCode());
+            $entidad->setPhoneNumber1(Data::getPhone());
+            $entidad->setPhoneNumber2(Data::getPhone());
+            $entidad->setMovileNumber1(Data::getPhone());
+            $entidad->setPhoneNumber2(Data::getPhone());
+            $entidad->setFax(Data::getPhone());
+            $entidad->setEmail1('mail'.$i.'@mail.es');
+            $entidad->setEmail2('mail'.$i.'@mail.com');
+            //CREATE/MODIFY
+            $entidad->setCreatedAt(new \DateTime());
+            $entidad->setModifiedAt(new \DateTime());
+            $entidad->setCreatedBy($_this->getReference('superadmin'));
+            $entidad->setModifiedBy($_this->getReference('superadmin'));
             $entidad->setLanguage   ($_this->getReference(Data::getLanguages()));
+
             if($workshop != null ) {
                 $entidad->setWorkshop($_this->getReference('workshop'.$i));
             }
