@@ -8,24 +8,6 @@ use Adservice\CarBundle\Entity\Model;
 
 class DefaultController extends Controller
 {
-    /**
-     * Funcion Ajax que devuelve un listado de subsistemas filtrados a partir del sistema ($system)
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function ticketSystemAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-
-        $id_system = $petition->request->get('id_system');
-
-        $system = $em->getRepository('TicketBundle:System')->find($id_system);
-
-        $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
-        foreach ($subsystems as $subsystem) {
-            $json[] = $subsystem->to_json();
-        }
-        return new Response(json_encode($json), $status = 200);
-    }
 
     /**
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)

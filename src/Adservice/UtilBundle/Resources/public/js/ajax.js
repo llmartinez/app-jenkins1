@@ -1,3 +1,4 @@
+
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
@@ -50,5 +51,96 @@ function populate_shop(url_ajax_partner, shop){
             console.log("Error al cargar las tiendas...");
         }
     });
+}
 
+/**
+ * Rellena (fill) el combo de los modelos (model) segun la marca (brand) seleccionada por el usuario
+ * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ */
+function fill_model(url_ajax) {
+
+    var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
+
+    $.ajax({
+        type: "POST",
+        url: url_ajax,
+        data: {id_brand: id_brand},
+        dataType: "json",
+        success: function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            $('#new_car_form_model').empty();
+            //Primer campo vacío
+            // $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0>Select Model..</option>");
+            $.each(data, function(idx, elm) {
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+            });
+        },
+        error: function() {
+            console.log("Error al cargar modelos...");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
+ * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ */
+function fill_version(url_ajax) {
+
+    var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
+
+    $.ajax({
+        type: "POST",
+        url: url_ajax,
+        data: {id_model: id_model},
+        dataType: "json",
+        success: function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            $('#new_car_form_version').empty();
+            //Primer campo vacío
+            // $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
+            $.each(data, function(idx, elm) {
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+            });
+        },
+        error: function() {
+            console.log("Error al cargar versiones...");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
+ * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ */
+function fill_subsystem(url_ajax, form_subsystem) {
+
+    var id_system = $('form[id=contact]').find('select[id=id_system]').val();
+
+    //Valor del subsistema del ticket al cerrar
+    var id_subsystem = ($('#'+form_subsystem).val());
+    if (id_subsystem == null) $('#'+form_subsystem).empty();
+
+    $.ajax({
+        type: "POST",
+        url: url_ajax,
+        data: {id_system: id_system},
+        dataType: "json",
+        success: function(data) {
+
+            // Limpiamos y llenamos el combo con las opciones del json
+            $('#'+form_subsystem).empty();
+
+            //Primer campo vacío
+            $.each(data, function(idx, elm) {
+                if (elm.id == id_subsystem)
+                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                else
+                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+            });
+        },
+        error: function() {
+            console.log("Error al cargar subsistemas...");
+        }
+    });
 }
