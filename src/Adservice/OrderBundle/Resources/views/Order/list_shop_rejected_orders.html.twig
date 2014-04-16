@@ -1,5 +1,5 @@
 
-    <legend>Solicitudes de Tiendas rechazadas</legend>
+    <legend>{% trans %} list.shop.rejected {% endtrans %}</legend>
 
     {% if orders is defined %}
         {% if orders|length > 0  %}
@@ -7,53 +7,49 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Shop</th>
-                        <th>Partner</th>
-                        <th>Phone Number</th>
-                        <th>Region</th>
-                        <th>Address</th>
-                        <th>Order</th>
-                        <th>Reason</th>
-                        <th>Actions</th>
+                        <th>{% trans %} shop    {% endtrans %}</th>
+                        <th>{% trans %} partner {% endtrans %}</th>
+                        <th>{% trans %} tel     {% endtrans %}</th>
+                        <th>{% trans %} region  {% endtrans %}</th>
+                        <th>{% trans %} address {% endtrans %}</th>
+                        <th>{% trans %} status  {% endtrans %}</th>
+                        <th>{% trans %} order   {% endtrans %}</th>
+                        <th>{% trans %} actions {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for shopOrder in orders %}
                         <tr>
-                            <td>{{ shopOrder.id }}</td>
-                            <td>{{ shopOrder.name }}</td>
-                            <td>{{ shopOrder.partner }}</td>
-                            <td>{{ shopOrder.phoneNumber1 }}</td>
-                            <td>{{ shopOrder.region }}</td>
-                            <td>{{ shopOrder.address}}</td>
+                            <td> {{ shopOrder.id           }} </td>
+                            <td> {{ shopOrder.name         }} </td>
+                            <td> {{ shopOrder.partner      }} </td>
+                            <td> {{ shopOrder.phoneNumber1 }} </td>
+                            <td> {{ shopOrder.region       }} </td>
+                            <td> {{ shopOrder.address      }} </td>
                             <td>
                                 {% if ((shopOrder.action == 'modify') or (shopOrder.action == 're_modify')) %}
-                                    <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
+                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
                                     <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}" ></span></a>
                                     {#{% if shopOrder.rejectionReason is not null %}
                                         <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
                                     {% endif %}#}
-
-
                                     <!-- Modal -->
-                                    <div class="modal fade" id="myModal_rejected_edit{{shopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="myModal_rejected_edit{{ shopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
+                                                    <h4 class="modal-title" id="myModalLabel">{% trans %} order.details {% endtrans %}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <b>Name:</b> {{ shopOrder.name }}<br/>
-                                                    <b>Address:</b> {{ shopOrder.address }}<br/>
-                                                    <b>Phone Number</b> {{ shopOrder.phoneNumber1 }} / {{ shopOrder.phoneNumber2 }}<br/>
-                                                    <b>Movile Number</b> {{ shopOrder.movileNumber1}} / {{ shopOrder.movileNumber1 }}<br/>
-                                                    <b>Fax</b> {{ shopOrder.fax }}<br/>
-                                                    <b>Email:</b> {{ shopOrder.email1 }} / {{ shopOrder.email2 }}<br/>
-                                                    <b>Region:</b> {{ shopOrder.region }}<br/>
+                                                    <p><b>{% trans %} shop    {% endtrans %}</b> {{ shopOrder.name   }}</p>
+                                                    <p><b>{% trans %} partner {% endtrans %}</b> {{ shopOrder.partner    }}</p>
+                                                    <p><b>{% trans %} tel     {% endtrans %}</b> {{ shopOrder.phoneNumber1 }} / {{ shopOrder.phoneNumber2 }}</p>
+                                                    <p><b>{% trans %} region  {% endtrans %}</b> {{ shopOrder.region     }}</p>
+                                                    <p><b>{% trans %} address {% endtrans %}</b> {{ shopOrder.address    }}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
@@ -61,34 +57,34 @@
 
 
                                 {% elseif shopOrder.action == 'activate'   %}
-                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
-                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'deactivate' %}
-                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
-                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'create'     %}
-                                    <span class="label label-info">    {% trans %} Create   {% endtrans %}</span>
+                                    <span class="label label-info">    {% trans %} create   {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'rejected'   %}
-                                    <span class="label label-danger">  {% trans %} Rejected {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} rejected {% endtrans %}</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <a title="{{ shopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ shopOrder.id }}" >Ver motivo del rechazo</span></a>
+                                <a title="{{ shopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ shopOrder.id }}" >{% trans %} reject.reason {% endtrans %}</span></a>
                                 <!-- Modal -->
                                     <div class="modal fade" id="myModal_rejected_reason{{shopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h4 class="modal-title" id="myModalLabel">Rejection Reason</h4>
+                                                    <h4 class="modal-title" id="myModalLabel">{% trans %} reject.reason {% endtrans %}</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     {{ shopOrder.rejectionReason|nl2br }}
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
@@ -98,11 +94,11 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                     {% if shopOrder.wantedAction != 'create' %}
-                                        <a title="Modificar datos de la tienda"             href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                                     {% endif %}
-                                    <a title="Cancelar la solicitud"                        href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
 
-                                    <a title="Solicitar de nuevo la activación de la tienda"  href="{# {{ path('shopOrder_resendOrder', {'id': shopOrder.id      }) }} #}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{# {{ path('shopOrder_resendOrder', {'id': shopOrder.id      }) }} #}"><span class="glyphicon glyphicon-refresh"></span></a>
                             {% endif %}
                             </td>
                         </tr>
@@ -110,8 +106,8 @@
                 </tbody>
             </table>
         {% else %}
-        No hay solicitudes rechazadas pendientes!!
+            {% trans %} any.order.rejected {% endtrans %}
         {% endif %}
     {% else %}
-        No hay solicitudes rechazadas pendientes!!
+        {% trans %} any.order.rejected {% endtrans %}
     {% endif %}

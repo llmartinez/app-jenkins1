@@ -3,9 +3,9 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
-      <li class="active">New ticket</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('listTicket') }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.tickets {% endtrans %}</li>
     </ol>
 
 {% endblock  %}
@@ -37,10 +37,10 @@
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-          <button id="save" name="save" class="btn btn-primary pull-right" type="submit">Save</button>
-          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">Save & close</button>{% endif %}
+          <button id="save" name="save" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create {% endtrans %}</button>
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create_close {% endtrans %}</button>{% endif %}
         </form>
 
-    {% else %}<p>Insert a workshop to create a ticket</p>  {% endif %}
+    {% endif %}
 
 {% endblock  %}

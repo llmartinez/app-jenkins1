@@ -3,12 +3,12 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Users</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_users {% endtrans %}</li>
     </ol>
 
     <legend>{% trans %} menu.list_users {% endtrans %}
-        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un usuario nuevo</a>
+        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.user {% endtrans %}</a>
     </legend>
 
     <div class="col-xs-3 col-md-3 form-group">
@@ -23,13 +23,13 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>User Name   </th>
-                <th>First Name  </th>
-                <th>Surname     </th>
-                <th>Email       </th>
-                <th>Phone Number</th>
-                <th>Region      </th>
-                <th>Actions     </th>
+                <th>{% trans %} username {% endtrans %}</th>
+                <th>{% trans %} name     {% endtrans %}</th>
+                <th>{% trans %} surname  {% endtrans %}</th>
+                <th>{% trans %} home     {% endtrans %}</th>
+                <th>{% trans %} tel      {% endtrans %}</th>
+                <th>{% trans %} region   {% endtrans %}</th>
+                <th>{% trans %} actions  {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -63,14 +63,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
+                    <h4 class="modal-title" id="myModalLabel">{% trans %} user.delete {% endtrans %}</h4>
                 </div>
                 <div class="modal-body">
-                    Estas seguro que quieres eliminar este usuario?
+                    {% trans %} user.delete.confirm {% endtrans %}
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

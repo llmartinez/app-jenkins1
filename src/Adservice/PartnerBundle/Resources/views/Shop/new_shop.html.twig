@@ -3,18 +3,18 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('shop_list') }}">List of Shops</a></li>
-      <li class="active">New Shop</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('shop_list') }}">{% trans %} menu.list_shops {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.shop {% endtrans %}</li>
     </ol>
 
     <form action="{{ path('shop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-6 col-md-6 form-group">
-            <label for="adservice_partnerbundle_shoptype">Name *</label>
+            <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
             {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">Partner * </label>
+            <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
             {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
@@ -22,7 +22,7 @@
             {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
         </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">Active</label>
+            <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
             {{ form_widget(form.active) }}
         </div>
 

@@ -1,20 +1,19 @@
 
-    <legend>Solicitudes de Talleres pendientes</legend>
+    <legend>{% trans %} list.workshop.pending {% endtrans %}</legend>
 
     {% if orders is defined %}
         {% if orders|length > 0  %}
             <table class="table table-hover" style="width: 95%; margin-left: 5%;">
                 <thead>
                     <tr>
-                        <th>#           </th>
-                        <th>Workshop    </th>
-                        <th>Partner     </th>
-                        <th>Shop        </th>
-                        <th>Phone Number</th>
-                        <th>Region      </th>
-                        <th>Test        </th>
-                        <th>Order       </th>
-                        <th>Actions     </th>
+                        <th>#</th>
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                        <th>{% trans %} partner  {% endtrans %}</th>
+                        <th>{% trans %} tel      {% endtrans %}</th>
+                        <th>{% trans %} region   {% endtrans %}</th>
+                        <th>{% trans %} test     {% endtrans %}</th>
+                        <th>{% trans %} order    {% endtrans %}</th>
+                        <th>{% trans %} actions  {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,12 +29,12 @@
                             <td> {{ workshopOrder.shop      }} </td>
                             <td> {{ workshopOrder.phoneNumber1 }} </td>
                             <td> {{ workshopOrder.region       }} </td>
-                            <td> {% if workshopOrder.test == 1 %}{% trans %} Si {% endtrans %}
-                                 {% else %}                      {% trans %} No {% endtrans %}{% endif %}</td>
+                            <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
+                                 {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
                                 {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
-                                    <span class="label label-warning"> {% trans %} Modification {% endtrans %}</span>
-                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{workshopOrder.id}}" ></span></a>
+                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
+                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></span></a>
                                     {% if workshopOrder.rejectionReason is not null %}
                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
                                     {% endif %}
@@ -45,54 +44,52 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h4 class="modal-title" id="myModalLabel">Workshop Details</h4>
+                                                    <h4 class="modal-title" id="myModalLabel">{% trans %} order.details {% endtrans %}</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <table class="table table-hover">
-                                                    <tr><th><b>              </b></th><th>   Before                        </th><th>    After                         </th></tr>
-                                                    <tr><td><b>Name          </b></td><td>{{ orderBefore.name }}         </td><td> {{ workshopOrder.name }}         </td></tr>
-                                                    <tr><td><b>Cif           </b></td><td>{{ orderBefore.cif }}          </td><td> {{ workshopOrder.cif }}          </td></tr>
-                                                    <tr><td><b>Address       </b></td><td>{{ orderBefore.address }}      </td><td> {{ workshopOrder.address }}      </td></tr>
-                                                    <tr><td><b>Phone Number  </b></td><td>{{ orderBefore.phoneNumber1 }} </td><td> {{ workshopOrder.phoneNumber1 }} </td></tr>
-                                                    <tr><td><b>Movile Number </b></td><td>{{ orderBefore.movileNumber1}}  </td><td> {{ workshopOrder.movileNumber1}}  </td></tr>
-                                                    <tr><td><b>Fax           </b></td><td>{{ orderBefore.fax }}          </td><td> {{ workshopOrder.fax }}          </td></tr>
-                                                    <tr><td><b>Email         </b></td><td>{{ orderBefore.email1 }}       </td><td> {{ workshopOrder.email1 }}       </td></tr>
-                                                    <tr><td><b>Region        </b></td><td>{{ orderBefore.region }}       </td><td> {{ workshopOrder.region }}       </td></tr>
+                                                    <tr><th>                                  </th><th>{% trans %}before{% endtrans %}</th><th>{% trans %}after{% endtrans %}</th></tr>
+                                                    <tr><td>{% trans %} workshop {% endtrans %}</td><td>{{ orderBefore.name         }}</td><td>{{ workshopOrder.name         }}</td></tr>
+                                                    <tr><td>{% trans %} partner  {% endtrans %}</td><td>{{ orderBefore.partner      }}</td><td>{{ workshopOrder.partner      }}</td></tr>
+                                                    <tr><td>{% trans %} email    {% endtrans %}</td><td>{{ orderBefore.email_1      }}</td><td>{{ workshopOrder.email_1      }}</td></tr>
+                                                    <tr><td>{% trans %} tel      {% endtrans %}</td><td>{{ orderBefore.phoneNumber1 }}</td><td>{{ workshopOrder.phoneNumber1 }}</td></tr>
+                                                    <tr><td>{% trans %} region   {% endtrans %}</td><td>{{ orderBefore.region       }}</td><td>{{ workshopOrder.region       }}</td></tr>
+                                                    <tr><td>{% trans %} address  {% endtrans %}</td><td>{{ orderBefore.address      }}</td><td>{{ workshopOrder.address      }}</td></tr>
                                                     </table>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
 
                                 {% elseif workshopOrder.action == 'activate' %}
-                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
-                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
                                 {% elseif workshopOrder.action == 'deactivate' %}
-                                    <span class="label label-success"> {% trans %} Active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
-                                    <span class="label label-danger">  {% trans %} Inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
                                 {% elseif workshopOrder.action == 'create' %}
-                                    <span class="label label-info">    {% trans %} Create   {% endtrans %}</span>
+                                    <span class="label label-info">    {% trans %} create   {% endtrans %}</span>
                                 {% elseif workshopOrder.action == 'rejected' %}
-                                    <span class="label label-danger">  {% trans %} Rejected {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} rejected {% endtrans %}</span>
 
                                 {% elseif workshopOrder.action == 'resend' and workshopOrder.rejectionReason is not null %}
-                                    <span class="label label-warning"> {% trans %} Resend {% endtrans %} {{ workshopOrder.wantedaction }} </span>
+                                    <span class="label label-warning"> {% trans %} resend {% endtrans %} {{ workshopOrder.wantedaction }} </span>
                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
                                 {% endif %}
                             </td>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td>
-                                    <a title="Aceptar"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
-                                    <a title="Rechazar" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>
-                                    <a title="Cancelar la solicitud" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
                             {% endif %}
                         </tr>
@@ -100,8 +97,8 @@
                 </tbody>
             </table>
         {% else %}
-            No hay solicitudes pendientes!!
+            {% trans %} any.order.pending {% endtrans %}
         {% endif %}
     {% else %}
-        No hay solicitudes pendientes!!
+        {% trans %} any.order.pending {% endtrans %}
 {% endif %}

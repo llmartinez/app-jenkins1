@@ -3,44 +3,44 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">Home</a></li>
-        <li class="active">Apply for new workshop</li>
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active">{% trans %} new.order.workshop {% endtrans %}</li>
     </ol>
 
-    <h1>Petición de alta de taller</h1>
+    <h1>{% trans %} new.order.workshop {% endtrans %}</h1>
 
     <form action="{{ path('workshopOrder_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="container">
             <div class="col-xs-2 col-md-2">
-                <label>Workshop Name</label>
+                <label>{% trans %} workshop {% endtrans %}</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'Name'} }) }}
+                                                     'placeholder': '{% trans %} name {% endtrans %}'} }) }}
             </div>
             <div class="col-xs-2 col-md-2">
-                <label>Cif</label>
+                <label>{% trans %} cif {% endtrans %}</label>
                 {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'Cif'} }) }}
+                                                     'placeholder': '{% trans %} cif {% endtrans %}'} }) }}
             </div>
 
             {% if is_granted('ROLE_SUPER_AD') %}
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label for="adservice_partnerbundle_shoptype">Partner * </label>
+                    <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
                     {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
                 </div>
             {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
             {% endif %}
 
             <div class="col-xs-2 col-md-2">
-                <label>Shop               </label> {{ form_widget(form.shop,            { 'attr': {'class': 'form-control'} }) }}
+                <label>{% trans %} shop {% endtrans %} </label> {{ form_widget(form.shop,            { 'attr': {'class': 'form-control'} }) }}
             </div>
 
             <div class="col-xs-2 col-md-2">
-                <label>Typology           </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
+                <label>{% trans %} typology {% endtrans %} </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="col-xs-2 col-md-2">
 
-                <label>Code Workshop      </label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                <label>{% trans %} code.workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
 
                 {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
                 {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}

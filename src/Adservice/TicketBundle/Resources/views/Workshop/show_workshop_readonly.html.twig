@@ -1,10 +1,10 @@
 
-<legend>Workshop</legend>
+<legend>{% trans %} workshop {% endtrans %}</legend>
 
 {# WORKSHOP #}
 <div class="form-group">
 	#{{ workshop.partner.id}},{{ workshop.id }}: 	 <b>{{ workshop.name }}</b>
-	{% if workshop.contact       != "" %}<b>Contact:  </b>{{ workshop.contact      }}  {% endif %}
+	{% if workshop.contact       != "" %}<b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
 </div>
 
 {# TEL/MAIL #}
@@ -21,5 +21,5 @@
 
 {# PARTNER #}
 <div class="form-group">
-	{% if workshop.partner       != "" %} Partner: {{ workshop.partner      }} {% endif %}
+	{% if workshop.partner       != "" %} {% trans %} partner {% endtrans %}: {{ workshop.partner      }} {% endif %}
 </div>

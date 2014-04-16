@@ -43,41 +43,6 @@ function confirm_delete_ticket_modal(id_ticket) {
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function fill_subsystem(url_ajax, form_subsystem) {
-
-    var id_system = $('form[id=contact]').find('select[id=id_system]').val();
-
-    //Valor del subsistema del ticket al cerrar
-    var id_subsystem = ($('#'+form_subsystem).val());
-    if (id_subsystem == null) $('#'+form_subsystem).empty();
-
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: {id_system: id_system},
-        dataType: "json",
-        success: function(data) {
-
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#'+form_subsystem).empty();
-
-            //Primer campo vacío
-            $.each(data, function(idx, elm) {
-                if (elm.id == id_subsystem)
-                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                else
-                    $('form[id=contact]').find('select[id='+form_subsystem+']').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-        },
-        error: function() {
-            console.log("Error al cargar subsistemas...");
-        }
-    });
-}
-/**
- * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
 function fill_tbl_similar(url_ajax, url_show) {
 
     var id_model     = $('form').find('select[id*=model]').val();

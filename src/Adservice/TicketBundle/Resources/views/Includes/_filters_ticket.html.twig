@@ -4,14 +4,14 @@
     {% if workshop.id is defined and workshop.id != "" %}
 
     {# New Ticket #}
-        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}">{% trans %} btn.ticket.new {% endtrans %}</a>
+        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}">{% trans %} new.ticket {% endtrans %}</a>
 
     {# <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data"> #}
         <p>
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
     {% endif %}
 
-            {% trans %} ticket.flt.searchBy.id {% endtrans %}: <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %}placeholder.ticket.id{% endtrans %}'>
+            {% trans %} ticket.flt.searchBy.id {% endtrans %}: <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
 
     {% if workshop.id is defined and workshop.id != "" %}
             <p> <input type='checkbox' id='flt_open'   name='flt_open'  > {% trans %} open   {% endtrans %}

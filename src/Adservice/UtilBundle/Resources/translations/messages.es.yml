@@ -1,5 +1,11 @@
 header.welcome: ADService España
 
+www.ad-service.es: 'www.ad-service.es'
+
+login:			'Iniciar Sesión'
+login.welcome:	'Acceso usuarios AD Service'
+login.remember:	'Recuerdame'
+
 menu.title_admin:                    MENU ADMIN
 menu.title_assessor:                 MENU ASESOR
 menu.title_user:                     MENU USUARIO
@@ -21,113 +27,238 @@ menu.new_ticket:                     Crea un nuevo ticket
 menu.new_shop_order: 				 Solicitar alta de tienda
 menu.new_workshop_order:             Solicitar alta de taller
 
+#COMUNES
+id: 					 'id'
+you: 					 'Tu'
+yes: 					 'si'
+no:  					 'no'
+all:  					 'todos'
+home: 					 'Índice'
+contact:				 'Contacto'
+language:				 'Idioma'
+datauser:    			 'Datos del Usuario'
+dataworkshop:			 'Datos del Taller'
+datashop:				 'Datos de la Tienda'
+username:				 'Usuario'
+password:				 'Contraseña'
+change_password: 		 'Cambiar Contraseña'
+change_password.confirm: 'Deseas generar una nueva clave de acesso para el usuario?'
 
-# COMUNES
-home: 			'Índice'
-contact:		'Contacto'
-datauser:    	'Datos del Usuario'
-dataworkshop:	'Datos del Taller'
-datashop:		'Datos de la Tienda'
+#ENTITY
+super_admin: 			 'Super Administrador'
+admin: 					 'Administrador'
+assessor: 				 'Asesor'
+user: 					 'Usuario'
+super_ad:  				 'Socio nacional'
+ad:  					 'Socio'
+partner:				 'Socio'
+shop:	 				 'Tienda'
+workshop: 				 'Taller'
+ticket: 				 'Ticket'
+car: 					 'Coche'
+post: 					 'Mensajes'
 
-# ENTITY
-admin: 			'Admin'
-assessor: 		'Asesor'
-user: 			'Usuario'
-partner:		'Socio'
-shop:	 		'Tienda'
-workshop: 		'Taller'
-ticket: 		'Ticket'
-car: 			'Coche'
-post: 			'Mensajes'
+#CONTACT
+name:					 'Nombre'
+surname:				 'Apellidos'
+tel:					 'Telefono'
+mobile:					 'Movil'
+phone_number_1:			 'Tel. fijo 1'
+phone_number_2:			 'Tel. fijo 2'
+movile_number_1:		 'Tel. movil 1'
+movile_number_2:		 'Tel. movil 2'
+fax:					 'Fax'
+email:					 'Correo'
+email_1:				 'Correo 1'
+email_2:				 'Correo 2'
+country:				 'País'
+region:					 'Provincia'
+address:				 'Dirección'
+postal_code:			 'Código postal'
 
-# CONTACT
-name:				'Nombre'
-phone_number_1:		'Tel. fijo 1'
-phone_number_2:		'Tel. fijo 2'
-movile_number_1:	'Tel. movil 1'
-movile_number_2:	'Tel. movil 2'
-fax:				'Fax'
-email_1:			'Correo 1'
-email_2:			'Correo 2'
-country:			'País'
-region:				'Provincia'
-address:			'Dirección'
-postal_code:		'Código postal'
+created_by:				 'Creado por'
+created_at:				 'Creado en'
+modified_by:			 'Modificado por'
+modified_at:			 'Modificado en'
 
-# FIELDS
-date: 				'Fecha'
-code:				'Código'
-code.partner:		'Código de Socio'
-code.workshop:		'Código de Taller'
-answer: 			'Respuesta'
-description: 		'Descripción'
-solution:			'Solución'
-status:				'Estado'
-testing:			'En fase de pruebas'
+#FIELDS
+date: 					 'Fecha'
+date.start: 			 'Fecha Inicial'
+date.end: 				 'Fecha Final'
+code:					 'Código'
+code.partner:			 'Código de Socio'
+code.workshop:			 'Código de Taller'
+status:					 'Estado'
+testing:				 'En fase de pruebas'
+profile_of:				 'Perfil de'
 
-# STATUS
-actions: 			'Acciones'
-open: 				'Abierto'
-closed: 			'Cerrado'
-active: 			'Activo'
-inactive: 			'Inactivo'
-rejected:			'Rechazad'
-cancel:				'Cancelado'
-action: 			'Acción'
-reason: 			'Motivo'
-action.create:	 	'Crear'
-action.active: 		'Activar'
-action.inactive:	'Desactivar'
-action.modify:	    'Modificar'
-action.reject:	    'Rechazar'
-action.rejected:	'Rechazada'
-action.accepted:	'Aceptada'
-action.cancel:		'Cancelada'
-action.resend:		'Reenviada'
-change:				'Cambio'
-of:					'de'
-to:					'a'
-back:				'Atrás'
+#STATUS
+actions: 				 'Acciones'
+open: 					 'Abierto'
+closed: 				 'Cerrado'
+active: 				 'Activo'
+inactive: 				 'Inactivo'
+create:					 'Creado'
+rejected:				 'Rechazado'
+cancel:					 'Cancelado'
+action: 				 'Acción'
+reason: 				 'Motivo'
+resend: 				 'Reenviar'
+action.create:	 		 'Crear'
+action.active: 			 'Activar'
+action.inactive:		 'Desactivar'
+action.modify:	    	 'Modificar'
+action.reject:	    	 'Rechazar'
+action.rejected:		 'Rechazada'
+action.accepted:		 'Aceptada'
+action.cancel:			 'Cancelada'
+action.resend:			 'Reenviada'
+change:					 'Cambio'
+of:						 'de'
+to:						 'a'
+back:					 'Atrás'
+before:					 'Antes'
+after:					 'Después'
 
-# NEW
-new.partner:		'Nuevo Socio'
-new.shop:			'Nueva Tienda'
-new.workshop:		'Nuevo Taller'
-new.ticket:			'Nuevo Ticket'
-new.popup:			'Nuevo Popup'
+#NEW
+new.partner:			 'Nuevo Socio'
+new.shop:				 'Nueva Tienda'
+new.workshop:			 'Nuevo Taller'
+new.ticket:				 'Nuevo Ticket'
+new.popup:				 'Nuevo Popup'
+new.order.shop:			 'Nueva Solicitud de Tienda'
+new.order.workshop:		 'Nueva Solicitud de Taller'
 
-# BOTONES
-btn.create:			'Crear'
-btn.edit:			'Editar'
-btn.search:         'Buscar'
+#EDIT
+edit.partner:			 'Editar el Socio'
+edit.shop:				 'Editar la Tienda'
+edit.workshop:			 'Editar el Taller'
+edit.car:				 'Editar el coche'
+edit.ticket:			 'Editar el Ticket'
+edit.ticket.info:		 'Editar información del Ticket'
+edit.popup:				 'Editar el Popup'
+edit.order.shop:		 'Editar Solicitud de la Tienda'
+edit.order.workshop:	 'Editar Solicitud del Taller'
+
+#ANY
+any.partner:			 'No hay socios!!'
+any.shop:				 'No hay tiendas!!'
+any.workshop:			 'No hay talleres!!'
+any.ticket:				 'No hay tickets!!'
+any.popup:				 'No hay popups!!'
+any.response:			 'Todavía no hay respuestas'
+any.order.pending: 		 'No hay solicitudes pendientes!!'
+any.order.rejected: 	 'No hay solicitudes rechazadas!!'
+
+#BOTONES
+btn.send:			 	 'Enviar'
+btn.create:			 	 'Crear'
+btn.create_close:	 	 'Crear y Cerrar'
+btn.edit:			 	 'Editar'
+btn.search:			 	 'Buscar'
+btn.open:			 	 'Abrir'
+btn.close:			 	 'Cerrar'
 
 #PLACEHOLDERS
-placeholder.ticket.id:	   	Inserta ID de ticket
+placeholder.ticket.id:	 'Inserta ID de ticket'
 
+#PARTNER
+partner.delete:			 'Borrar Socio'
+partner.delete.confirm:	 'Estas seguro que quieres eliminar este socio?'
 
+#SHOP
+shop.is_assigned:		 'La tienda tiene talleres asignados. Reasignalos para poder borrar'
+shop.activate:			 'Activar la Tienda'
+shop.deactivate:		 'Desactivar la Tienda'
+shop.delete:			 'Borrar Tienda'
+shop.delete.confirm:	 'Estas seguro que quieres eliminar esta tienda?'
 
+#WORKSHOP
+workshops:				 'Talleres'
+typology:				 'Tipo'
+cif:					 'Cif'
+test:					 'En pruebas'
+endtest:				 'En pruebas hasta'
+diagnosis_machines:		 'Maquinas de diagnosis'
+conflictive:			 'Conflictivo'
+observations:			 'Observaciones'
+observations_workshop:	 'Observaciones para el Taller'
+observations_assessor:	 'Observaciones para el Asesor'
+observations_admin:		 'Observaciones para el Administrador'
+workshop.delete:		 'Borrar Taller'
+workshop.delete.confirm: 'Estas seguro que quieres eliminar este taller?'
+workshop.activate:		 'Activar el Taller'
+workshop.deactivate:	 'Desactivar el Taller'
+workshop.search:		 'Buscar taller'
+users_in_workshop:		 'Usuarios del Taller'
+
+#USER
+user.delete:			 'Borrar Usuario'
+user.delete.confirm:	 'Estas seguro que quieres eliminar este usuario?'
+
+#CAR
+brand:					 'Marca'
+model:					 'Modelo'
+version:				 'Gama'
+year:					 'Year'
+motor:					 'Motor'
+kw:						 'kW'
+displacement:			 'Displacement'
+vin:					 'Vin'
+plate_number:			 'Matrícula'
 
 
 #TICKET
-ticket.history.title:         Historial de Tickets
-ticket.opt.all:               Todos los Tickets
-ticket.opt.open:              Tickets abiertos
-ticket.opt.closed:            Tickets cerrados
-ticket.opt.free :             Tickets libres
-ticket.opt.pending:  		  Tickets pendientes
-ticket.opt.answered: 		  Tickets respondidos
-ticket.opt.assessor.pending:  Tus tickets pendientes
-ticket.opt.assessor.answered: Tus tickets respondidos
-ticket.opt.assessor.closed:   Tus tickets cerrados
-ticket.opt.other.pending:     Otros tickets pendientes
-ticket.opt.other.answered:    Otros tickets respondidos
-ticket.opt.other.closed:      Otros tickets cerrados
-ticket.opt.owner:             Tus tickets
-ticket.opt.workshop:          Tickets de tu taller
+tickets:					  'Tickets'
+answer: 					  'Respuesta'
+description: 				  'Descripción'
+solution:					  'Solución'
+assigned:					  'Asignado'
+assign_to:					  'Asignar'
+assign_not:					  'Sin asignar'
+importance:					  'Importancia'
+system:					 	  'Sistema'
+subsystem:					  'Subsistema'
 
-ticket.title.from_workshop:   Tickets del taller
-ticket.assigned_to:			  Asignado a
-ticket.flt.searchBy.id:		  Buscar ticket por ID
+ticket_info:				  'Información del ticket'
+ticket.history.title:         'Historial de Tickets'
+ticket.opt.all:               'Todos los Tickets'
+ticket.opt.open:              'Tickets abiertos'
+ticket.opt.closed:            'Tickets cerrados'
+ticket.opt.free :             'Tickets libres'
+ticket.opt.pending:  		  'Tickets pendientes'
+ticket.opt.answered: 		  'Tickets respondidos'
+ticket.opt.assessor.pending:  'Tus tickets pendientes'
+ticket.opt.assessor.answered: 'Tus tickets respondidos'
+ticket.opt.assessor.closed:   'Tus tickets cerrados'
+ticket.opt.other.pending:     'Otros tickets pendientes'
+ticket.opt.other.answered:    'Otros tickets respondidos'
+ticket.opt.other.closed:      'Otros tickets cerrados'
+ticket.opt.owner:             'Tus tickets'
+ticket.opt.workshop:          'Tickets de tu taller'
+
+ticket.title.from_workshop:   'Tickets del taller'
+ticket.assigned_to:			  'Asignado a'
+ticket.flt.searchBy.id:		  'Buscar ticket por ID'
+ticket.search:				  'Buscar ticket'
+ticket.block:				  'Bloquear ticket para responder'
+ticket.blocked:				  'Ticket bloqueado'
+ticket.unlock:				  'Desbloquear ticket'
+ticket.close:				  'Cerrar Ticket'
+ticket.closed:				  'Ticket cerrado'
+ticket.reopen:				  'Reabrir ticket'
+ticket.delete:				  'Borrar Ticket'
+ticket.delete.confirm:		  'Estas seguro que quieres eliminar este ticket?'
+ticket.from_workshop:		  'Tickets del taller'
+ticket.similar:				  'Tickets similares'
+ticket.similar.matching:	  'Selecciona Modelo y Subsystema para buscar tickets resultos similares'#Select Model and Subsystem for matching similar tickets..
+
+#POST
+reply:						  'Responder'
+follow:						  'Seguimiento'
+
+#FILE
+file.download:				  'Descargar archivo'
 
 #STATISTIC
 statistic.general:			  'Estadísticas generales'
@@ -135,12 +266,33 @@ statistic.tickets:			  'Estadísticas de tickets'
 statistic.workshops:		  'Estadísticas de talleres'
 statistic.from_adservice:	  'de Ad-service'
 statistic.from_country:		  'de tu ciudad'
+statistic.num_users:		  'Número de Usuarios'
+statistic.num_partners:		  'Número de Socios'
+statistic.num_shops:		  'Número de Tiendas'
+statistic.num_workshops:	  'Número de Talleres'
+statistic.num_tickets:		  'Número de Tickets'
+statistic.num_tickets.open:	  'Número de Tickets abiertos'
+statistic.num_tickets.closed: 'Número de Tickets cerrados'
+
+#POPUP
+popup.delete:				  'Borrar popup'
+popup.delete.confirm:		  'Estas seguro que quieres eliminar este popup?'
 
 #ORDERS
 workshop_pending:			  	'Sol.Taller pendientes'
 workshop_rejected:				'Sol.Taller rechazadas'
 shop_pending:					'Sol.Tienda pendientes'
 shop_rejected:					'Sol.Tienda rechazadas'
+
+order.details:					'Detalles de la solicitud'
+order.cancel:					'Cancelar la solicitud'
+order.resend:					'Reenviar la solicitud'
+order.recreate:					'Vuelve a crear la solicitud del taller corrigiendo los errores indicados"'
+list.shop.pending:				'Solicitudes de Tiendas pendientes'
+list.shop.rejected:				'Solicitudes de Tiendas rechazadas'
+list.workshop.pending:			'Solicitudes de Talleres pendientes'
+list.workshop.rejected:			'Solicitudes de Talleres rechazadas'
+reject.reason:					'Motivo del rechazo'
 
 #MAIL
 mail.info.tel:							'93123123'
@@ -270,7 +422,7 @@ mail.changePassword.user:				'Tu nombre de usuario es:'
 mail.changePassword.password:			'Tu nueva contraseña es:'
 mail.changePassword.info.password:		'Para modificar tu contraseña entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
 
-mail.textDisclaimer:				AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>
+mail.textDisclaimer:				'AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>'
 
 termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos

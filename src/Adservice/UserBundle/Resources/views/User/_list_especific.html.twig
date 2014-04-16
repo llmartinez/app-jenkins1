@@ -2,12 +2,12 @@
     <tr>
         <td>{{ user.id }}</td>
         <td><a id="list_username">{{ user.username }}</a>
-            {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} Super Admin {% endtrans %}</span> {% endif %}
-            {% if role == 'admin'       %} <span class="label label-primary">{% trans %} Admin       {% endtrans %}</span> {% endif %}
-            {% if role == 'assessor'    %} <span class="label label-success">{% trans %} Assessor    {% endtrans %}</span> {% endif %}
-            {% if role == 'super_ad'    %} <span class="label label-warning">{% trans %} Super AD    {% endtrans %}</span> {% endif %}
-            {% if role == 'ad'          %} <span class="label label-warning">{% trans %} AD          {% endtrans %}</span> {% endif %}
-            {% if user.active == false  %} <span class="label label-danger"> {% trans %} Inactive    {% endtrans %}</span> {% endif %}</td>
+            {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} super_admin {% endtrans %}</span> {% endif %}
+            {% if role == 'admin'       %} <span class="label label-primary">{% trans %} admin       {% endtrans %}</span> {% endif %}
+            {% if role == 'assessor'    %} <span class="label label-success">{% trans %} assessor    {% endtrans %}</span> {% endif %}
+            {% if role == 'super_ad'    %} <span class="label label-warning">{% trans %} super_ad    {% endtrans %}</span> {% endif %}
+            {% if role == 'ad'          %} <span class="label label-warning">{% trans %} ad          {% endtrans %}</span> {% endif %}
+            {% if user.active == false  %} <span class="label label-danger"> {% trans %} inactive    {% endtrans %}</span> {% endif %}</td>
         <td>{{ user.name         }}</td>
         <td>{{ user.surname      }}</td>
         <td>{{ user.email1       }}</td>

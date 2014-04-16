@@ -14,9 +14,9 @@
 
 	{# TEL/MAIL #}
 	<div class="form-group">
-		{% if workshop.phoneNumber1 != "" %}{{ workshop.phoneNumber1 }} / {% else %}
+		{% if workshop.phoneNumber1  != "" %}{{ workshop.phoneNumber1 }} / {% else %}
 		{% if workshop.movileNumber1 != "" %}{{ workshop.movileNumber1 }} / {% endif %}{% endif %}
-		{% if workshop.email1       != "" %}{{ workshop.email1       }}   {% endif %}
+		{% if workshop.email1        != "" %}{{ workshop.email1       }}   {% endif %}
 	</div>
 
 	{# LOCATION #}
@@ -26,18 +26,18 @@
 
 	{# PARTNER #}
 	<div class="form-group">
-		{% if workshop.partner      != "" %} Partner: {{ workshop.partner      }} {% endif %}
+		{% if workshop.partner      != "" %} {% trans %} partner {% endtrans %}: {{ workshop.partner      }} {% endif %}
 	</div>
 	{# OBERVATIONS #}
 	<div class="form-group">
 		{% if is_granted('ROLE_ADMIN') %}
-			{% if workshop.observationAdmin      != "" %} Observations: {{ workshop.observationAdmin      }} {% endif %}
+			{% if workshop.observationAdmin      != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationAdmin      }} {% endif %}
 
 		{% elseif is_granted('ROLE_ASSESSOR') %}
-			{% if workshop.observationAssessor   != "" %} Observations: {{ workshop.observationAssessor   }} {% endif %}
+			{% if workshop.observationAssessor   != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationAssessor   }} {% endif %}
 
 		{% elseif is_granted('ROLE_USER') %}
-			{% if workshop.observationWorkshop   != "" %} Observations: {{ workshop.observationWorkshop   }} {% endif %}
+			{% if workshop.observationWorkshop   != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationWorkshop   }} {% endif %}
 		{% endif %}
 	</div>
 {% endif %}
