@@ -25,11 +25,3 @@ regions_from_country:
 shops_from_partner:
    pattern: /shopsFromPartner
    defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
-
-car_model:
-    pattern: /carModel/{id_brand}
-    defaults: { _controller: UtilBundle:Ajax:carModel }
-
-car_version:
-    pattern: /carVersion
-    defaults: { _controller: UtilBundle:Ajax:carVersion }
