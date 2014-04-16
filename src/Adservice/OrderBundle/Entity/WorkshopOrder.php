@@ -7,7 +7,6 @@ use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 
 /**
  * Adservice\OrderBundle\Entity\Workshop
@@ -67,90 +66,6 @@ class WorkshopOrder {
     private $cif;
 
     /**
-     * @var string $address
-     *
-     * @ORM\Column(name="address", type="string", length=255, nullable=true)
-     */
-    private $address;
-
-    /**
-     * @var string $city
-     *
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
-     */
-    private $city;
-
-    /**
-     * @var string $country
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
-     */
-    private $country;
-
-    /**
-     * @var string $region
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
-     */
-    private $region;
-
-    /**
-     * @var string $province
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Province")
-     */
-    private $province;
-
-    /**
-     * @var integer $phone_number_1
-     *
-     * @ORM\Column(name="phone_number_1", type="integer")
-     */
-    private $phone_number_1;
-
-    /**
-     * @var integer $phone_number_2
-     *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
-     */
-    private $phone_number_2;
-
-    /**
-     * @var integer $movile_number_1
-     *
-     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
-     */
-    private $movile_number_1;
-
-    /**
-     * @var integer $movile_number_2
-     *
-     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
-     */
-    private $movile_number_2;
-
-    /**
-     * @var integer $fax
-     *
-     * @ORM\Column(name="fax", type="integer", nullable=true)
-     */
-    private $fax;
-
-    /**
-     * @var string $email_1
-     *
-     * @ORM\Column(name="email_1", type="string", length=255, nullable=true)
-     */
-    private $email_1;
-
-    /**
-     * @var string $email_2
-     *
-     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
-     */
-    private $email_2;
-
-    /**
      * @var string $contact_name
      *
      * @ORM\Column(name="contact_name", type="string", length=255)
@@ -160,7 +75,7 @@ class WorkshopOrder {
     /**
      * @var string $contact_surname
      *
-     * @ORM\Column(name="contact_surname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="contact_surname", type="string", length=255)
      */
     private $contact_surname;
 
@@ -173,7 +88,7 @@ class WorkshopOrder {
 
     /**
      *
-     * @var string $observation_assessor 
+     * @var string $observation_assessor
      * @ORM\Column(name="observation_assessor", type="string", length=255, nullable=true)
      */
     private $observation_assessor;
@@ -261,43 +176,6 @@ class WorkshopOrder {
      * @ORM\Column(name="rejection_reason", type="string", length=255, nullable=true)
      */
     private $rejection_reason;
-    
-    /**
-     * @var int $num_ad_client
-     *
-     * @ORM\Column(name="num_ad_client", type="integer", nullable=true)
-     */
-    private $num_ad_client;
-
-//    /**
-//     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
-//     * @ORM\JoinTable(name="workshop_diagnosismachine",
-//     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
-//     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
-//     * )
-//     */
-//    private $diagnosis_machines;
-
-//    /**
-//     *
-//     * @var boolean $register_pending
-//     * @ORM\Column(name="register_pending", type="boolean", nullable=true)
-//     */
-//    private $register_pending;
-//    
-//    /**
-//     *
-//     * @var boolean $activate_pending
-//     * @ORM\Column(name="activate_pending", type="boolean", nullable=true)
-//     */
-//    private $activate_pending;
-//    
-//    /**
-//     *
-//     * @var boolean $deactivate_pending
-//     * @ORM\Column(name="deactivate_pending", type="boolean", nullable=true)
-//     */
-//    private $deactivate_pending;
 
     /**
      * @var integer $tickets
@@ -305,35 +183,6 @@ class WorkshopOrder {
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
      */
     private $tickets;
-
-
-    /**
-     * @var datetime $created_at
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $created_at;
-    
-    /**
-     * @var string $created_by
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
-     */
-    private $created_by;
-
-    /**
-     * @var datetime $modified_at
-     *
-     * @ORM\Column(name="modified_at", type="datetime")
-     */
-    private $modified_at;
-
-    /**
-     * @var string $modified_by
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
-     */
-    private $modified_by;
 
     /**
      * Get id
@@ -380,209 +229,22 @@ class WorkshopOrder {
         return $this->code_workshop;
     }
 
-
+    /**
+     * Get cif
+     *
+     * @return string
+     */
     public function getCif() {
         return $this->cif;
     }
 
+    /**
+     * Set cif
+     *
+     * @param string $cif
+     */
     public function setCif($cif) {
         $this->cif = $cif;
-    }
-
-    /**
-     * Set address
-     *
-     * @param string $address
-     */
-    public function setAddress($address) {
-        $this->address = $address;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string
-     */
-    public function getAddress() {
-        return $this->address;
-    }
-
-    /**
-     * Set city
-     *
-     * @param string $city
-     */
-    public function setCity($city) {
-        $this->city = $city;
-    }
-
-    /**
-     * Get city
-     *
-     * @return string
-     */
-    public function getCity() {
-        return $this->city;
-    }
-
-    public function getCountry() {
-        return $this->country;
-    }
-
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
-        $this->country = $country;
-    }
-
-    public function getRegion() {
-        return $this->region;
-    }
-
-    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
-        $this->region = $region;
-    }
-
-    /**
-     * Set province
-     *
-     * @param string $province
-     */
-    public function setProvince(\Adservice\UtilBundle\Entity\Province $province) {
-        $this->province = $province;
-    }
-
-    /**
-     * Get province
-     *
-     * @return string
-     */
-    public function getProvince() {
-        return $this->province;
-    }
-
-    /**
-     * Set phone_number_1
-     *
-     * @param integer $phoneNumber1
-     */
-    public function setPhoneNumber1($phoneNumber1) {
-        $this->phone_number_1 = $phoneNumber1;
-    }
-
-    /**
-     * Get phone_number_1
-     *
-     * @return integer
-     */
-    public function getPhoneNumber1() {
-        return $this->phone_number_1;
-    }
-
-    /**
-     * Set phone_number_2
-     *
-     * @param integer $phoneNumber2
-     */
-    public function setPhoneNumber2($phoneNumber2) {
-        $this->phone_number_2 = $phoneNumber2;
-    }
-
-    /**
-     * Get phone_number_2
-     *
-     * @return integer
-     */
-    public function getPhoneNumber2() {
-        return $this->phone_number_2;
-    }
-
-    /**
-     * Set movile_number_1
-     *
-     * @param integer $movileNumber1
-     */
-    public function setMovileNumber1($movileNumber1) {
-        $this->movile_number_1 = $movileNumber1;
-    }
-
-    /**
-     * Get movile_number_1
-     *
-     * @return integer
-     */
-    public function getMovileNumber1() {
-        return $this->movile_number_1;
-    }
-
-    /**
-     * Set movile_number_2
-     *
-     * @param integer $movileNumber2
-     */
-    public function setMovileNumber2($movileNumber2) {
-        $this->movile_number_2 = $movileNumber2;
-    }
-
-    /**
-     * Get movile_number_2
-     *
-     * @return integer
-     */
-    public function getMovileNumber2() {
-        return $this->movile_number_2;
-    }
-
-    /**
-     * Set fax
-     *
-     * @param integer $fax
-     */
-    public function setFax($fax) {
-        $this->fax = $fax;
-    }
-
-    /**
-     * Get fax
-     *
-     * @return integer
-     */
-    public function getFax() {
-        return $this->fax;
-    }
-
-    /**
-     * Set email_1
-     *
-     * @param string $email1
-     */
-    public function setEmail1($email1) {
-        $this->email_1 = $email1;
-    }
-
-    /**
-     * Get email_1
-     *
-     * @return string
-     */
-    public function getEmail1() {
-        return $this->email_1;
-    }
-
-    /**
-     * Set email_2
-     *
-     * @param string $email2
-     */
-    public function setEmail2($email2) {
-        $this->email_2 = $email2;
-    }
-
-    /**
-     * Get email_2
-     *
-     * @return string
-     */
-    public function getEmail2() {
-        return $this->email_2;
     }
 
     /**
@@ -620,7 +282,6 @@ class WorkshopOrder {
     public function getContactSurname() {
         return $this->contact_surname;
     }
-
 
     /**
      * Get contact
@@ -794,99 +455,6 @@ class WorkshopOrder {
         return $this->conflictive;
     }
 
-    /**
-     * Get num_ad_client
-     * @return int
-     */
-    public function getNumAdClient() {
-        return $this->num_ad_client;
-    }
-
-    /**
-     * Set num_ad_client
-     * @param int $num_ad_client
-     */
-    public function setNumAdClient($num_ad_client) {
-        $this->num_ad_client = $num_ad_client;
-    }
-
-    /**
-     * Set created_at
-     *
-     * @param datetime $createdAt
-     */
-    public function setCreatedAt($createdAt) {
-        $this->created_at = $createdAt;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return datetime
-     */
-    public function getCreatedAt() {
-        return $this->created_at;
-    }
-
-    /**
-     * Set modified_at
-     *
-     * @param datetime $modifiedAt
-     */
-    public function setModifiedAt($modifiedAt) {
-        $this->modified_at = $modifiedAt;
-    }
-
-    /**
-     * Get modified_at
-     *
-     * @return datetime
-     */
-    public function getModifiedAt() {
-        return $this->modified_at;
-    }
-
-    /**
-     * Set modified_by
-     *
-     * @param user $modified_by
-     */
-    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user) {
-        $this->modified_by = $user;
-    }
-
-    /**
-     * Get modified_by
-     *
-     * @return string
-     */
-    public function getModifiedBy() {
-        return $this->modified_by;
-    }
-    
-        /**
-     * Set created_by
-     *
-     * @param user created_by
-     */
-    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
-        $this->created_by = $user;
-    }
-
-    /**
-     * Get modified_by
-     *
-     * @return string
-     */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
-    
-    
-    
-    
-    
-
     public function __toString() {
         return $this->getName();
     }
@@ -973,30 +541,6 @@ class WorkshopOrder {
         $this->observation_admin = $observation_admin;
     }
 
-//    public function getRegisterPending() {
-//        return $this->register_pending;
-//    }
-//
-//    public function getActivatePending() {
-//        return $this->activate_pending;
-//    }
-//
-//    public function getDeactivatePending() {
-//        return $this->deactivate_pending;
-//    }
-//
-//    public function setRegisterPending($register_pending) {
-//        $this->register_pending = $register_pending;
-//    }
-//
-//    public function setActivatePending($activate_pending) {
-//        $this->activate_pending = $activate_pending;
-//    }
-//
-//    public function setDeactivatePending($deactivate_pending) {
-//        $this->deactivate_pending = $deactivate_pending;
-//    }
-
     public function getIdWorkshop() {
         return $this->id_workshop;
     }
@@ -1005,7 +549,6 @@ class WorkshopOrder {
         $this->id_workshop = $id_workshop;
     }
 
-        
     public function getAction() {
         return $this->action;
     }
@@ -1013,7 +556,7 @@ class WorkshopOrder {
     public function setAction($action) {
         $this->action = $action;
     }
-    
+
     public function getRejectionReason() {
         return $this->rejection_reason;
     }
@@ -1030,6 +573,398 @@ class WorkshopOrder {
         $this->wanted_action = $wanted_action;
     }
 
+//   ____ ___  _   _ _____  _    ____ _____
+//  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
+// | |  | | | |  \| | | | / _ \| |     | |
+// | |__| |_| | |\  | | |/ ___ \ |___  | |
+//  \____\___/|_| \_| |_/_/   \_\____| |_|
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
+     * @var string $region
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     */
+    private $region;
+
+    /**
+     * @var string $address
+     *
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string $postal_code
+     *
+     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     */
+    private $postal_code;
+
+    /**
+     * @var integer $phone_number_1
+     *
+     * @ORM\Column(name="phone_number_1", type="integer")
+     */
+    private $phone_number_1;
+
+    /**
+     * @var integer $phone_number_2
+     *
+     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     */
+    private $phone_number_2;
+
+    /**
+     * @var integer $movile_number_1
+     *
+     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     */
+    private $movile_number_1;
+
+    /**
+     * @var integer $movile_number_2
+     *
+     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     */
+    private $movile_number_2;
+
+    /**
+     * @var integer $fax
+     *
+     * @ORM\Column(name="fax", type="integer", nullable=true)
+     */
+    private $fax;
+
+    /**
+     * @var string $email_1
+     *
+     * @ORM\Column(name="email_1", type="string", length=255, nullable=true)
+     */
+    private $email_1;
+
+    /**
+     * @var string $email_2
+     *
+     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
+     */
+    private $email_2;
+
+//  ___________________________________________________________________
+// |___________________________________________________________________|
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry() {
+        return $this->country;
+    }
+
+    /**
+     * Set region
+     *
+     * @param string $region
+     */
+    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+        $this->region = $region;
+    }
+
+    /**
+     * Get region
+     *
+     * @return string
+     */
+    public function getRegion() {
+        return $this->region;
+    }
 
 
+    /**
+     * Set address
+     *
+     * @param string $address
+     */
+    public function setAddress($address) {
+        $this->address = $address;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress() {
+        return $this->address;
+    }
+
+    /**
+     * Set postal_code
+     *
+     * @param string $postal_code
+     */
+    public function setPostalCode($postal_code) {
+        $this->postal_code = $postal_code;
+    }
+
+    /**
+     * Get postal_code
+     *
+     * @return string
+     */
+    public function getPostalCode() {
+        return $this->postal_code;
+    }
+
+    /**
+     * Set phone_number_1
+     *
+     * @param integer $phoneNumber1
+     */
+    public function setPhoneNumber1($phoneNumber1) {
+        $this->phone_number_1 = $phoneNumber1;
+    }
+
+    /**
+     * Get phone_number_1
+     *
+     * @return integer
+     */
+    public function getPhoneNumber1() {
+        return $this->phone_number_1;
+    }
+
+    /**
+     * Set phone_number_2
+     *
+     * @param integer $phoneNumber2
+     */
+    public function setPhoneNumber2($phoneNumber2) {
+        $this->phone_number_2 = $phoneNumber2;
+    }
+
+    /**
+     * Get phone_number_2
+     *
+     * @return integer
+     */
+    public function getPhoneNumber2() {
+        return $this->phone_number_2;
+    }
+
+    /**
+     * Set movile_number_1
+     *
+     * @param integer $movileNumber1
+     */
+    public function setMovileNumber1($movileNumber1) {
+        $this->movile_number_1 = $movileNumber1;
+    }
+
+    /**
+     * Get movile_number_1
+     *
+     * @return integer
+     */
+    public function getMovileNumber1() {
+        return $this->movile_number_1;
+    }
+
+    /**
+     * Set movile_number_2
+     *
+     * @param integer $movileNumber2
+     */
+    public function setMovileNumber2($movileNumber2) {
+        $this->movile_number_2 = $movileNumber2;
+    }
+
+    /**
+     * Get movile_number_2
+     *
+     * @return integer
+     */
+    public function getMovileNumber2() {
+        return $this->movile_number_2;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param integer $fax
+     */
+    public function setFax($fax) {
+        $this->fax = $fax;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return integer
+     */
+    public function getFax() {
+        return $this->fax;
+    }
+
+    /**
+     * Set email_1
+     *
+     * @param string $email1
+     */
+    public function setEmail1($email1) {
+        $this->email_1 = $email1;
+    }
+
+    /**
+     * Get email_1
+     *
+     * @return string
+     */
+    public function getEmail1() {
+        return $this->email_1;
+    }
+
+    /**
+     * Set email_2
+     *
+     * @param string $email2
+     */
+    public function setEmail2($email2) {
+        $this->email_2 = $email2;
+    }
+
+    /**
+     * Get email_2
+     *
+     * @return string
+     */
+    public function getEmail2() {
+        return $this->email_2;
+    }
+
+//   ____ ____  _____    _  _____ _____    ____  __  ___  ____ ___ _______   __
+//  / ___|  _ \| ____|  / \|_   _| ____|  / /  \/  |/ _ \|  _ \_ _|  ___\ \ / /
+// | |   | |_) |  _|   / _ \ | | |  _|   / /| |\/| | | | | | | | || |_   \ V /
+// | |___|  _ <| |___ / ___ \| | | |___ / / | |  | | |_| | |_| | ||  _|   | |
+//  \____|_| \_\_____/_/   \_\_| |_____/_/  |_|  |_|\___/|____/___|_|     |_|
+
+    /**
+     * @var datetime $created_at
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @var string $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
+     * @var datetime $modified_at
+     *
+     * @ORM\Column(name="modified_at", type="datetime")
+     */
+    private $modified_at;
+
+    /**
+     * @var string $modified_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $modified_by;
+
+//  ___________________________________________________________________
+// |___________________________________________________________________|
+
+
+    /**
+     * Set created_at
+     *
+     * @param datetime $createdAt
+     */
+    public function setCreatedAt($createdAt) {
+        $this->created_at = $createdAt;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return datetime
+     */
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+
+    /**
+     * Set created_by
+     *
+     * @param user $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return string
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
+    }
+
+    /**
+     * Set modified_at
+     *
+     * @param datetime $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt) {
+        $this->modified_at = $modifiedAt;
+    }
+
+    /**
+     * Get modified_at
+     *
+     * @return datetime
+     */
+    public function getModifiedAt() {
+        return $this->modified_at;
+    }
+
+    /**
+     * Set modified_by
+     *
+     * @param user $modified_by
+     */
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->modified_by = $user;
+    }
+
+    /**
+     * Get modified_by
+     *
+     * @return string
+     */
+    public function getModifiedBy() {
+        return $this->modified_by;
+    }
 }

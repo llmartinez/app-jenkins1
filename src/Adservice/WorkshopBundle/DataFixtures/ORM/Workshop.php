@@ -9,7 +9,7 @@ use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Workshops extends AbstractFixture implements OrderedFixtureInterface {
 
-    public function getOrder(){ return 14; }
+    public function getOrder(){ return 16; }
 
     public function load(ObjectManager $manager) {
 

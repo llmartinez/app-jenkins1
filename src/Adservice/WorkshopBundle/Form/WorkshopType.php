@@ -22,11 +22,15 @@ class WorkshopType extends AbstractType
             ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('endtest_at', 'datetime')
+            ->add('observation_workshop', 'textarea', array('required' => false))
+            ->add('observation_assessor', 'textarea', array('required' => false))
+            ->add('observation_admin', 'textarea', array('required' => false))
+            ->add('conflictive', 'checkbox', array('required' => false))
+            //CONTACT
             ->add('country')
             ->add('region')
-            ->add('province')
             ->add('address')
-            ->add('city')
+            ->add('postal_code')
             ->add('phone_number_1', 'text')
             ->add('phone_number_2', 'text', array('required' => false))
             ->add('movile_number_1', 'text', array('required' => false))
@@ -34,10 +38,6 @@ class WorkshopType extends AbstractType
             ->add('fax', 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
-            ->add('observation_workshop', 'textarea', array('required' => false))
-            ->add('observation_assessor', 'textarea', array('required' => false))
-            ->add('observation_admin', 'textarea', array('required' => false))
-            ->add('conflictive', 'checkbox', array('required' => false))
         ;
     }
 

@@ -1,0 +1,35 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> Edit</li>
+    </ol>
+
+{% endblock  %}
+
+{% block info %}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+
+        {% set workshop = ticket.workshop %}
+        {% include 'TicketBundle:Workshop:show_workshop.html.twig'  %}
+
+    {% endif %}
+
+{% endblock  %}
+
+{% block content %}
+
+    <div class="form-group">
+        <form action="{{ path('editCar', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
+
+            <legend> Edit Car </legend>
+            {% include 'TicketBundle:Car:edit_car.html.twig'  %}
+            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+        </form>
+    </div>
+
+{% endblock  %}

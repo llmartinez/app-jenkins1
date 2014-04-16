@@ -15,21 +15,19 @@ class WorkshopRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
 
-        $query = 'SELECT w';
-        $from  = 'FROM WorkshopBundle:Workshop w
-                 WHERE w.active = 1 ';
-        $where = "";
+        $query = 'SELECT w ';
+        $from  = 'FROM WorkshopBundle:Workshop w ';
+        $where = 'WHERE w.active = 1 ';
 
         $w_id        = $request->get('w_id'       );
         $w_idpartner = $request->get('w_idpartner');
         $w_email     = $request->get('w_email'    );
         $w_tel       = $request->get('w_tel'      );
 
-        if ($w_id          != "") {  $where .= "AND w.id = ".$w_id." ";                                                             }
-        if ($w_idpartner   != "") {  $where .= "AND w.partner.code_partner = ".$w_idpartner." ";                                    }
-        // if ($w_codepartner != "") { $query .= ", p";
-        //                             $from  .= "JOIN w.partner p ";
-        //                             $where .= "AND p.code_partner = ".$w_codepartner." ";                                        }
+        if ($w_id          != "") {  $where .= "AND w.code_workshop = ".$w_id." ";                                                             }
+        if ($w_idpartner   != "") {  $query .= ", p ";
+                                     $from  .= "JOIN w.partner p ";
+                                     $where .= "AND p.code_partner = ".$w_idpartner." ";                                        }
         if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' ";           }
         if ($w_tel         != "") {  $where .= "AND w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
                                               OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%'";  }
@@ -37,9 +35,10 @@ class WorkshopRepository extends EntityRepository
         //Crea la consulta
         // echo $query.$where.' ORDER BY w.id ';die;
         $consulta = $em->createQuery($query.$from.$where.' ORDER BY w.id ');
+        $array = $consulta->getResult();
 
         //Si la consulta da resultado y hay algun campo de los filtros introducido se devuelve el resultado, sino se devuelve un array vacio
-        if ((count($consulta->getResult()) > 0) && ($w_id != "" || $w_idpartner != "" || $w_email != "" || $w_tel != "" ))
+        if ((count($consulta->getResult()) > 0) and ($w_id != "" or $w_idpartner != "" or $w_email != "" or $w_tel != "" ))
             {  return $consulta->getResult();  }
         else
             {  return array('0' => new Workshop()); }

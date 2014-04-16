@@ -12,10 +12,8 @@ use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\PartnerBundle\Form\ShopType;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 use Adservice\UtilBundle\Entity\Pagination;
-use Adservice\UtilBundle\Controller\DefaultController as UtilController;
-use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 
 class ShopController extends Controller {
 
@@ -23,14 +21,18 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1) {
+    public function listAction($page=1, $country='none', $partner='none') {
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        $params[] = array();
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $params[] = array('country', ' = '.$country);
+            else                    $params[] = array();
+        }
+        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -40,8 +42,13 @@ class ShopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array( 'shops'      => $shops,
-                                                                               'pagination' => $pagination,));
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        else $countries = array();
+
+        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'      => $shops,
+                                                                                'pagination' => $pagination,
+                                                                                'countries'  => $countries,
+                                                                                'country'    => $country,));
     }
 
     /**
@@ -63,8 +70,8 @@ class ShopController extends Controller {
 
             if ($form->isValid()) {
                 $user = $this->get('security.context')->getToken()->getUser();
-                $shop = DefaultC::newEntity($shop, $user );
-                DefaultC::saveEntity($em, $shop, $user);
+                $shop = UtilController::newEntity($shop, $user );
+                UtilController::saveEntity($em, $shop, $user);
 
                 return $this->redirect($this->generateUrl('shop_list'));
             }
@@ -97,7 +104,7 @@ class ShopController extends Controller {
 
             if ($form->isValid())
             {
-                DefaultC::saveEntity($em, $shop, $this->get('security.context')->getToken()->getUser());
+                UtilController::saveEntity($em, $shop, $this->get('security.context')->getToken()->getUser());
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }

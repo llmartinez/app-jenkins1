@@ -25,10 +25,10 @@ security:
             entity: { class: Adservice\UserBundle\Entity\User, property: username }
 
     role_hierarchy:
-        # ROLE_SUPER_ADMIN: [ROLE_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
         ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_AD]
         ROLE_ASSESSOR: ROLE_USER
-        # ROLE_AD_COUNTRY: [ROLE_AD]
+        ROLE_SUPER_AD: ROLE_AD
 
     access_control:
       - { path: ^/(es|en|fr)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }

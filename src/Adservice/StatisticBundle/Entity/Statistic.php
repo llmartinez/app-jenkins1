@@ -88,8 +88,13 @@ class Statistic {
      * @param EntityManager $em
      * @return Integer
      */
-    public function getNumUsersInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u");
+    public function getNumUsersInAdservice($em, $security) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'WHERE u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -98,8 +103,13 @@ class Statistic {
      * @param EntityManager $em
      * @return Integer
      */
-    public function getNumPartnersInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p");
+    public function getNumPartnersInAdservice($em, $security) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'WHERE p.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p ".$filter_country);
         return $query->getSingleScalarResult();
     }
     /**
@@ -107,8 +117,13 @@ class Statistic {
      * @param EntityManager $em
      * @return Integer
      */
-    public function getNumShopsInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s");
+    public function getNumShopsInAdservice($em, $security) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'WHERE s.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -117,8 +132,13 @@ class Statistic {
      * @param EntityManager $em
      * @return Integer
      */
-    public function getNumWorkshopsInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w");
+    public function getNumWorkshopsInAdservice($em, $security) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -127,8 +147,13 @@ class Statistic {
      * @param EntityManager $em
      * @return Integer
      */
-    public function getTicketsInAdservice($em) {
-        $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t");
+    public function getTicketsInAdservice($em, $security) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -138,10 +163,18 @@ class Statistic {
      * @param String $status 'closed' o 'open'
      * @return Integer
      */
-    public function getNumTicketsByStatus($em, $status){
+    public function getNumTicketsByStatus($em, $status, $security){
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $join_country   = '';
+            $filter_country = '';
+        }else{
+            $join_country   = ' JOIN t.workshop w ';
+            $filter_country = ' AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
         $query = $em->createQuery("SELECT COUNT(t.id) FROM TicketBundle:Ticket t
+                                  ".$join_country."
                                    WHERE t.status = :status
-                                  ");
+                                  ".$filter_country);
         if ($status == 'open') $query->setParameter('status', 1);
         if ($status == 'close') $query->setParameter('status', 2);
         return $query->getSingleScalarResult();

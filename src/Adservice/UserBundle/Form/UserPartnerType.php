@@ -11,31 +11,35 @@ class UserPartnerType extends AbstractType {
         $builder = $this->getbasicUserType($builder);
     }
 
-    public static function getbasicUserType($builder) {
+    public static function getbasicUserType($builder)
+    {
         $builder
-                ->add('username')
-                ->add('password', 'repeated', array('type' => 'password',
-                                                    'invalid_message' => 'Las dos contraseñas deben coincidir',
-                                                    'first_name' => 'Contraseña',
-                                                    'second_name' => 'Repite Contraseña',
-                                                    'required' => false ))
-                ->add('name')
-                ->add('surname')
-                ->add('city')
-                ->add('phone_number_1')
-                ->add('phone_number_2', 'text', array('required' => false))
-                ->add('movile_number_1', 'text', array('required' => false))
-                ->add('movile_number_2', 'text', array('required' => false))
-                ->add('fax', 'text', array('required' => false))
-                ->add('email_1', 'email')
-                ->add('email_2', 'email', array('required' => false))
-                ->add('active', 'checkbox', array('required' => false))
-                ->add('partner', 'entity', array('class'       => 'PartnerBundle:Partner',
-                                                 'property'    => 'name'))
-                ->add('region')
-                ->add('province')
-                ->add('country')
-                ->add('language')
+            ->add('username')
+            ->add('password', 'repeated', array('type'            => 'password',
+                                                'invalid_message' => 'Las dos contraseñas deben coincidir',
+                                                'first_name'      => 'Contraseña',
+                                                'second_name'     => 'Repite Contraseña',
+                                                'required'        => 'required' ))
+            ->add('name')
+            ->add('surname')
+            ->add('active' , 'checkbox', array('required' => false))
+            ->add('partner', 'entity'  , array('class'    => 'PartnerBundle:Partner',
+                                               'property' => 'name'))
+            ->add('language')
+
+            //CONTACT
+            ->add('country')
+            ->add('region')
+            ->add('address')
+            ->add('postal_code')
+            ->add('phone_number_1' , 'text')
+            ->add('phone_number_2' , 'text', array('required' => false))
+            ->add('movile_number_1', 'text', array('required' => false))
+            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('fax'            , 'text', array('required' => false))
+            ->add('email_1','email')
+            ->add('email_2','email', array('required' => false))
+            ->add('language')
         ;
         return $builder;
     }

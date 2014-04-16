@@ -22,10 +22,6 @@ showTicket:
     pattern:  /ticket/show/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
 
-listTicket:
-    pattern:  /ticket/{page}/{option}
-    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , option: null  }
-
 listTicketFiltered:
     pattern:  /ticket/filtered
     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered }
@@ -61,6 +57,10 @@ showTicketReadonly:
 reopenTicket:
     pattern: /ticket/reopen/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
+
+listTicket:
+    pattern:  /ticket/{page}/{option}
+    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , option: null  }
 
 
 ################################

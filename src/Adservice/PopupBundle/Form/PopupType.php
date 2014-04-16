@@ -12,6 +12,7 @@ class PopupType extends AbstractType {
                 ->add('name')
                 ->add('description')
                 ->add('role')
+                ->add('country')
                 ->add('startdate_at')
                 ->add('enddate_at')
                 ->add('active', 'checkbox', array('required' => false))

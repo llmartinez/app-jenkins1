@@ -40,7 +40,11 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	window.open("{{ path('workshop_list', { 'page': '1' }) }}", "_self");
+			var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+        	url = url.replace("plc_page", 1);
+    		url = url.replace("plc_country", country);
+
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
@@ -50,20 +54,28 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('workshop_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
 
-		    	window.open(url_page, "_self");
+				var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+		    	url = url.replace("plc_page", prev_page);
+        		url = url.replace("plc_country", country);
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('workshop_list', {'page': 'PLACEHOLDER'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
 
-	    	window.open(url_page, "_self");
+	    	var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+	    	url = url.replace("plc_page", $(this).text());
+    		url = url.replace("plc_country", country);
+
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
@@ -73,17 +85,28 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('workshop_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
 
-		    	window.open(url_page, "_self");
+		    	var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+		    	url = url.replace("plc_page", next_page);
+        		url = url.replace("plc_country", country);
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	window.open("{{ path('workshop_list', { 'page': totalpag }) }}", "_self");
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
+	    	var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+        	url = url.replace("plc_page", "{{ totalpag }}");
+        	url = url.replace("plc_country", country);
+
+	    	window.open(url, "_self");
 	    });
 
 	</script>

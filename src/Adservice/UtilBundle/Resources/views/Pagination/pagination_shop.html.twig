@@ -40,7 +40,15 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	window.open("{{ path('shop_list', { 'page': '1' }) }}", "_self");
+			var country = $('#flt_country').val();
+			var partner = $('#flt_partner').val();
+       		if(country == null) country = 'none';
+       		if(partner == null) partner = 'none';
+
+       		var url = "{{ path('shop_list', {'page': 1 , 'country': 'plc_country', 'partner': 'plc_partner'}) }}";
+    		url = url.replace("plc_country", country);
+            url = url.replace("plc_partner", partner);
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
@@ -50,40 +58,70 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('shop_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
+				var country = $('#flt_country').val();
+				var partner = $('#flt_partner').val();
+	       		if(country == null) country = 'none';
+       			if(partner == null) partner = 'none';
 
-		    	window.open(url_page, "_self");
+				var url = "{{ path('shop_list', {'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}";
+		    	url = url.replace("plc_page", prev_page);
+        		url = url.replace("plc_country", country);
+           		url = url.replace("plc_partner", partner);
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('shop_list', {'page': 'PLACEHOLDER'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
+			var country = $('#flt_country').val();
+			var partner = $('#flt_partner').val();
+       		if(country == null) country = 'none';
+       		if(partner == null) partner = 'none';
 
-	    	window.open(url_page, "_self");
+	    	var url = "{{ path('shop_list', {'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}";
+	    	url = url.replace("plc_page", $(this).text());
+    		url = url.replace("plc_country", country);
+            url = url.replace("plc_partner", partner);
+
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
 	    $('#btn_siguiente').click(function() {
 
+			var country = $('#flt_country').val();
+			var partner = $('#flt_partner').val();
+       		if(country == null) country = 'none';
+       		if(partner == null) partner = 'none';
+
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('shop_list', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
+		    	var url = "{{ path('shop_list', {'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}";
+		    	url = url.replace("plc_page", next_page);
+        		url = url.replace("plc_country", country);
+           		url = url.replace("plc_partner", partner);
 
-		    	window.open(url_page, "_self");
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	window.open("{{ path('shop_list', { 'page': totalpag }) }}", "_self");
+			var country = $('#flt_country').val();
+			var partner = $('#flt_partner').val();
+       		if(country == null) country = 'none';
+       		if(partner == null) partner = 'none';
+
+       		var url = "{{ path('shop_list', {'page': totalpag , 'country': 'plc_country', 'partner': 'plc_partner'}) }}";
+    		url = url.replace("plc_country", country);
+            url = url.replace("plc_partner", partner);
+
+	    	window.open(url, "_self");
 	    });
 
 	</script>

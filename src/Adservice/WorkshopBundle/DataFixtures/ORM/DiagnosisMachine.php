@@ -8,7 +8,7 @@ use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 
 class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterface {
 
-    public function getOrder(){ return 13; }
+    public function getOrder(){ return 15; }
 
     public function load(ObjectManager $manager) {
         $machines = array(

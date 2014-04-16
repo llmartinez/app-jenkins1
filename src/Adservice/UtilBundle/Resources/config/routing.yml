@@ -5,14 +5,7 @@
 changeLanguage:
     pattern: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
-    
-###########################
-#   APDO. AJAX   #
-###########################
-user_provinces: 
-    pattern: /provincesFromRegion
-    defaults: { _controller: UtilBundle:Default:provincesFromRegion }
-    
+
 #############################
 #   APDO. FILE              #
 #############################
@@ -20,4 +13,15 @@ user_provinces:
 upload:
     pattern: /upload
     defaults: { _controller: UtilBundle:Document:upload }
-    
+
+###########################
+#   APDO. AJAX   #
+###########################
+
+regions_from_country:
+   pattern: /regionsFromCountry
+   defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
+
+shops_from_partner:
+   pattern: /shopsFromPartner
+   defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }

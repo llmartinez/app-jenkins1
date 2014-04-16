@@ -9,8 +9,8 @@
 	    {% set totalpag  = pagination.totalpag  %}
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
-    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="First page"   ></span></button>
-    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="Previous page"></span></button>
+    	<button id="firstpage"    class="page_number"><span title="First page"   > First </span></button>
+    	<button id="btn_anterior" class="page_number"><span title="Previous page"> Back  </span></button>
 
 	    {# PAGINAS ANTERIORES #}
     	{% if prevpages > 0 %}
@@ -30,8 +30,8 @@
     	{% endif %}
 
 	    {# FLECHAS PAGINAS SIGUIENTES #}
-    	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="Next page"></span></button>
-    	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="Last page ({{ totalpag }})"></span></button>
+    	<button id="btn_siguiente" class="page_number"><span title="Next page"				   > Next </span></button>
+    	<button id="totalpage"     class="page_number"><span title="Last page ({{ totalpag }})"> Last </span></button>
 
     </div>
 
@@ -40,7 +40,10 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	window.open("{{ path('listTicket', { 'page': '1' }) }}", "_self");
+				var url = "{{ path(' ### your_path ### ', {'page': 'plc_page'}) }}";
+	        	url = url.replace("plc_page", 1);
+
+		    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
@@ -50,20 +53,20 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('listTicket', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
+				var url = "{{ path(' ### your_path ### ', {'page': 'plc_page') }}";
+		    	url = url.replace("plc_page", prev_page);
 
-		    	window.open(url_page, "_self");
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('listTicket', {'page': 'PLACEHOLDER'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
+		    	var url = "{{ path(' ### your_path ### ', {'page': 'plc_page'}) }}";
+		    	url = url.replace("plc_page", $(this).text());
 
-	    	window.open(url_page, "_self");
+		    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
@@ -73,17 +76,20 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('listTicket', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
+		    	var url = "{{ path(' ### your_path ### ', {'page': 'plc_page') }}";
+		    	url = url.replace("plc_page", next_page);
 
-		    	window.open(url_page, "_self");
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	window.open("{{ path('listTicket', { 'page': totalpag }) }}", "_self");
+		    	var url = "{{ path(' ### your_path ### ', {'page': 'plc_page') }}";
+	        	url = url.replace("plc_page", "{{ totalpag }}");
+
+		    	window.open(url, "_self");
 	    });
 
 	</script>

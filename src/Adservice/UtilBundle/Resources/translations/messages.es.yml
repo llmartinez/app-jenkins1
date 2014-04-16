@@ -22,67 +22,91 @@ menu.new_shop_order: 				 Solicitar alta de tienda
 menu.new_workshop_order:             Solicitar alta de taller
 
 
-# menu.active_workshop_order:          Solicitar activación/desactivación de taller
-# menu.order_list_workshop:            Ver el estado de mis solicitudes
-# menu.view_register_workshop_order:   Ver las solicitudes de altas de talleres
-# menu.view_active_workshop_order:     Ver las solicitudes de activación/desactivación de talleres
-
 # COMUNES
-home: 			Índice
-admin: 			Admin
-assessor: 		Asesor
-user: 			Usuario
-date: 			Fecha
-mail:			Correo
-tel:			Teléfono
+home: 			'Índice'
+contact:		'Contacto'
+datauser:    	'Datos del Usuario'
+dataworkshop:	'Datos del Taller'
+datashop:		'Datos de la Tienda'
 
-partner:		Socio
-shop:	 		Tienda
-workshop: 		Taller
-code:			Código
-contact:		Contacto
-datauser:    	Datos del Usuario
-dataworkshop:	Datos del Taller
-datashop:		Datos de la Tienda
+# ENTITY
+admin: 			'Admin'
+assessor: 		'Asesor'
+user: 			'Usuario'
+partner:		'Socio'
+shop:	 		'Tienda'
+workshop: 		'Taller'
+ticket: 		'Ticket'
+car: 			'Coche'
+post: 			'Mensajes'
 
-ticket: 		Ticket
-car: 			Coche
-post: 			Mensajes
-answer: 		Respuesta
-description: 	Descripción
-solution:		Solución
-status:			Estado
-testing:		En fase de pruebas
+# CONTACT
+name:				'Nombre'
+phone_number_1:		'Tel. fijo 1'
+phone_number_2:		'Tel. fijo 2'
+movile_number_1:	'Tel. movil 1'
+movile_number_2:	'Tel. movil 2'
+fax:				'Fax'
+email_1:			'Correo 1'
+email_2:			'Correo 2'
+country:			'País'
+region:				'Provincia'
+address:			'Dirección'
+postal_code:		'Código postal'
 
-actions: 			Acciones
-open: 				Abierto
-closed: 			Cerrado
-active: 			Activo
-inactive: 			Inactivo
-rejected:			Rechazad
-cancel:				Cancelado
-action: 			Acción
-reason: 			Motivo
-action.create:	 	Crear
-action.active: 		Activar
-action.inactive:	Desactivar
-action.modify:	    Modificar
-action.reject:	    Rechazar
-action.rejected:	Rechazada
-action.accepted:	Aceptada
-action.cancel:		Cancelada
-action.resend:		Reenviada
-change:				Cambio
-of:					de
-to:					a
-back:				Atrás
+# FIELDS
+date: 				'Fecha'
+code:				'Código'
+code.partner:		'Código de Socio'
+code.workshop:		'Código de Taller'
+answer: 			'Respuesta'
+description: 		'Descripción'
+solution:			'Solución'
+status:				'Estado'
+testing:			'En fase de pruebas'
+
+# STATUS
+actions: 			'Acciones'
+open: 				'Abierto'
+closed: 			'Cerrado'
+active: 			'Activo'
+inactive: 			'Inactivo'
+rejected:			'Rechazad'
+cancel:				'Cancelado'
+action: 			'Acción'
+reason: 			'Motivo'
+action.create:	 	'Crear'
+action.active: 		'Activar'
+action.inactive:	'Desactivar'
+action.modify:	    'Modificar'
+action.reject:	    'Rechazar'
+action.rejected:	'Rechazada'
+action.accepted:	'Aceptada'
+action.cancel:		'Cancelada'
+action.resend:		'Reenviada'
+change:				'Cambio'
+of:					'de'
+to:					'a'
+back:				'Atrás'
+
+# NEW
+new.partner:		'Nuevo Socio'
+new.shop:			'Nueva Tienda'
+new.workshop:		'Nuevo Taller'
+new.ticket:			'Nuevo Ticket'
+new.popup:			'Nuevo Popup'
 
 # BOTONES
-btn.ticket.new:            	Nuevo Ticket
-btn.search:                	Buscar
+btn.create:			'Crear'
+btn.edit:			'Editar'
+btn.search:         'Buscar'
 
 #PLACEHOLDERS
 placeholder.ticket.id:	   	Inserta ID de ticket
+
+
+
+
 
 #TICKET
 ticket.history.title:         Historial de Tickets
@@ -105,7 +129,21 @@ ticket.title.from_workshop:   Tickets del taller
 ticket.assigned_to:			  Asignado a
 ticket.flt.searchBy.id:		  Buscar ticket por ID
 
+#STATISTIC
+statistic.general:			  'Estadísticas generales'
+statistic.tickets:			  'Estadísticas de tickets'
+statistic.workshops:		  'Estadísticas de talleres'
+statistic.from_adservice:	  'de Ad-service'
+statistic.from_country:		  'de tu ciudad'
+
+#ORDERS
+workshop_pending:			  	'Sol.Taller pendientes'
+workshop_rejected:				'Sol.Taller rechazadas'
+shop_pending:					'Sol.Tienda pendientes'
+shop_rejected:					'Sol.Tienda rechazadas'
+
 #MAIL
+mail.info.tel:							'93123123'
 mail.info.more:							'Más información:'
 mail.testing:		                	'En fase de pruebas hasta '
 
@@ -214,8 +252,8 @@ mail.resendOrder.info.id:				'El número de referencia de la solicitud es:'
 mail.newUser.subject:					'ADService | Nuevo usuario para el taller '
 mail.newUser.title:						'Se ha creado un usuario para la plataforma AD-Service'
 mail.newUser.createdby:					'Este usuario ha sido creado a través de la plataforma AD-Service.'
-mail.newUser.info:						'Para crear o consultar tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.newUser.info.tel:					'o llama al telefono 93111111.'
+mail.newUser.info:						'Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> '
+mail.newUser.info.tel:					'o llama al telefono '
 mail.newUser.info.id:					'Tu código de taller es:'
 mail.newUser.user:						'Tu nombre de usuario es:'
 mail.newUser.password:					'Tu contraseña es:'
@@ -225,8 +263,8 @@ mail.changePassword.subject:			'ADService | Nueva contraseña para el usuario '
 mail.changePassword.title:				'Se ha cambiado la contraseña del usuario desde la plataforma AD-Service'
 mail.changePassword.createdby:			'Esta modificación ha sido realizada por:'
 mail.changePassword.createdby.user:		'Esta modificación ha sido realizada a través de la plataforma AD-Service.'
-mail.changePassword.info:				'Para crear o consultar tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.changePassword.info.tel:			'o llama al telefono 93111111.'
+mail.changePassword.info:				'Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> '
+mail.changePassword.info.tel:			'o llama al telefono '
 mail.changePassword.info.id:			'Tu código de taller es:'
 mail.changePassword.user:				'Tu nombre de usuario es:'
 mail.changePassword.password:			'Tu nueva contraseña es:'

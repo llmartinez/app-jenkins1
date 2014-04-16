@@ -3,15 +3,15 @@
 ##############################
 
 list_orders:
-    pattern: /orders/list
-    defaults: { _controller: OrderBundle:Order:listOrders}
+    pattern: /orders/list/{page}/{option}
+    defaults: { _controller: OrderBundle:Order:listOrders, page: 1, option: 'workshop_pending' }
 
 ##############################
 #   APDO. RUTAS SHOP ORDER   #
 ##############################
 shopOrder_listShops:
-    pattern: /shop/listShops
-    defaults: { _controller: OrderBundle:ShopOrder:listShops}
+    pattern: /shop/listShops/{page}/{partner}
+    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none' }
 
 shopOrder_new:
     pattern: /shop/new
@@ -55,8 +55,8 @@ shopOrder_reject:
 ###################################
 
 workshopOrder_listWorkshops:
-    pattern: /workshop/listWorkshops
-    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops }
+    pattern: /workshop/listWorkshops/{page}/{partner}
+    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , partner: 'none' }
 
 workshopOrder_new:
     pattern: /workshop/new

@@ -10,103 +10,107 @@
     <h1>Petición de modificación del taller: <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b></h1>
 
     <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        <table class="table table-hover table-list-search" style="width: 50%; margin-left: 450px;">
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th>OldValue</th>
-                    <th>New Value</th>
-                </tr>
-            </thead>
+       <div class="container">
+            <div class="col-xs-3 col-md-3">
+                <label>Workshop Name</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'Name'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <label>Cif                </label> {{ form_widget(form.cif,        { 'attr': {'class': 'form-control'} }) }}
+            </div>
 
-                <tr>
-                    <td>Name</td>
-                    <td>{{ workshop.name }}</td>
-                    <td>{{ form_widget(form.name) }}</td>
-                </tr>
-                <tr>
-                    <td>Cif</td>
-                    <td>{{ workshop.cif }}</td>
-                    <td>{{ form_widget(form.cif) }}</td>
-                </tr>
-                <tr>
-                    <td>Address</td>
-                    <td>{{ workshop.address }}</td>
-                    <td>{{ form_widget(form.address) }}</td>
-                </tr>
-                <tr>
-                    <td>City</td>
-                    <td>{{ workshop.city }}</td>
-                    <td>{{ form_widget(form.city) }}</td>
-                </tr>
-                <tr>
-                    <td>Phone Number1</td>
-                    <td>{{ workshop.phoneNumber1 }}</td>
-                    <td>{{ form_widget(form.phone_number_1) }}</td>
-                </tr>
-                <tr>
-                    <td>Phone Number2</td>
-                    <td>{{ workshop.phoneNumber2 }}</td>
-                    <td>{{ form_widget(form.phone_number_2) }}</td>
-                </tr>
-                <tr>
-                    <td>Movile Number1</td>
-                    <td>{{ workshop.movileNumber1 }}</td>
-                    <td>{{ form_widget(form.movile_number_1) }}</td>
-                </tr>
-                <tr>
-                    <td>Movile Number2</td>
-                    <td>{{ workshop.movileNumber2 }}</td>
-                    <td>{{ form_widget(form.movile_number_2) }}</td>
-                </tr>
-                <tr>
-                    <td>Fax</td>
-                    <td>{{ workshop.fax }}</td>
-                    <td>{{ form_widget(form.fax) }}</td>
-                </tr>
-                <tr>
-                    <td>Contact</td>
-                    <td>{{ workshop.contact }}</td>
-                    <td>{{ form_widget(form.contact_name ) }}{{ form_widget(form.contact_surname ) }}</td>
-                </tr>
-                <tr>
-                    <td>Email 1</td>
-                    <td>{{ workshop.email1}}</td>
-                    <td>{{ form_widget(form.email_1) }}</td>
-                </tr>
-                <tr>
-                    <td>Email 2</td>
-                    <td>{{ workshop.email2}}</td>
-                    <td>{{ form_widget(form.email_2) }}</td>
-                </tr>
-                <tr>
-                    <td>Typology</td>
-                    <td>{{ workshop.typology }}</td>
-                    <td>{{ form_widget(form.typology) }}</td>
-                </tr>
-                <tr>
-                    <td>Country</td>
-                    <td>{{ workshop.country }}</td>
-                    <td>{{ form_widget(form.country) }}</td>
-                </tr>
-                <tr>
-                    <td>Region</td>
-                    <td>{{ workshop.region }}</td>
-                    <td>{{ form_widget(form.region) }}</td>
-                </tr>
-                <tr>
-                    <td>Province</td>
-                    <td>{{ workshop.province }}</td>
-                    <td>{{ form_widget(form.province) }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><button class="btn btn-primary pull-right" type="submit">Submit</button></td>
-                </tr>
-            </tbody>
+            {% if is_granted('ROLE_SUPER_AD') %}
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label for="adservice_partnerbundle_shoptype">Partner * </label>
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                </div>
+            {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
+            {% endif %}
 
-        </table>
+            <div class="col-xs-2 col-md-2">
+                <label>Shop               </label> {{ form_widget(form.shop,            { 'attr': {'class': 'form-control'} }) }}
+            </div>
+
+            <div class="col-xs-2 col-md-2">
+                <label>Typology           </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2">
+
+                <label>Code Workshop      </label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} contact         {% endtrans %} *</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                         {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                          'min': 0,
+                                                                                                                          'required': 'required' } }) }}
+        </div>
 
         {{ form_rest(form) }}
+
+        <div class="col-xs-10 col-md-10 form-group">
+            <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+        </div>
     </form>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function(){
+
+            // REGIONS FROM COUNTRY
+            var url_ajax = "{{ path("regions_from_country") }}";
+            populate_region(url_ajax);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
+            });
+
+        });
+    </script>
 {% endblock %}

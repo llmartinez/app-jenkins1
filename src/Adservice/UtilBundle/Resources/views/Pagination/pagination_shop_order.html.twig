@@ -40,7 +40,13 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	window.open("{{ path('shopOrder_listShops', { 'page': '1' }) }}", "_self");
+            var partner = $('#flt_partner').val();
+            if(partner == null) partner = 'none';
+
+            var url = "{{ path('shopOrder_listShops', { 'page': 1, 'partner': 'plc_partner' }) }}";
+            url = url.replace("plc_partner", partner);
+
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
@@ -50,20 +56,28 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('shopOrder_listShops', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
+            var partner = $('#flt_partner').val();
+            if(partner == null) partner = 'none';
 
-		    	window.open(url_page, "_self");
+				var url = "{{ path('shopOrder_listShops', {'page': 'plc_page', 'partner': 'plc_partner' }) }}";
+		    	url = url.replace("plc_page", prev_page);
+            	url = url.replace("plc_partner", partner);
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('shopOrder_listShops', {'page': 'PLACEHOLDER'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
+            var partner = $('#flt_partner').val();
+            if(partner == null) partner = 'none';
 
-	    	window.open(url_page, "_self");
+	    	var url = "{{ path('shopOrder_listShops', {'page': 'plc_page', 'partner': 'plc_partner' }) }}";
+	    	url = url.replace("plc_page", $(this).text());
+            url = url.replace("plc_partner", partner);
+
+	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
@@ -73,17 +87,27 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('shopOrder_listShops', {'page': 'PLACEHOLDER'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
+            var partner = $('#flt_partner').val();
+            if(partner == null) partner = 'none';
 
-		    	window.open(url_page, "_self");
+		    	var url = "{{ path('shopOrder_listShops', {'page': 'plc_page', 'partner': 'plc_partner' }) }}";
+		    	url = url.replace("plc_page", next_page);
+           		url = url.replace("plc_partner", partner);
+
+		    	window.open(url, "_self");
 		    }
 	    });
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	window.open("{{ path('shopOrder_listShops', { 'page': totalpag }) }}", "_self");
+            var partner = $('#flt_partner').val();
+            if(partner == null) partner = 'none';
+
+            var url = "{{ path('shopOrder_listShops', { 'page': totalpag, 'partner': 'plc_partner' }) }}";
+            url = url.replace("plc_partner", partner);
+
+	    	window.open(url, "_self");
 	    });
 
 	</script>

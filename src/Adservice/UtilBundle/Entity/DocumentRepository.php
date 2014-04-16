@@ -15,21 +15,21 @@ class DocumentRepository extends EntityRepository
     public function findDocumentFiltered($posts)
     {
         $em = $this->getEntityManager();
-        
+
         $id_posts = array();
         foreach ($posts as $post){
             $id_posts[] = $post->getId();
         }
-        
+
         $consulta = $em->createQuery('
             SELECT d FROM UtilBundle:Document d
             WHERE d.post in (:posts)
         ');
 
         $consulta->setParameter('posts', $id_posts);
-        
-	$documents = $consulta->getResult();
-        
+
+	    $documents = $consulta->getResult();
+
         foreach ($documents as $doc)
         {
             $doc->setPath($doc->getImgPath());

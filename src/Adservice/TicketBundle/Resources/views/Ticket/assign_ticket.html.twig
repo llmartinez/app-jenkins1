@@ -1,0 +1,58 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">Home</a></li>
+        <li><a href="{{ path('ticketWorkshopList') }}">{% trans %} menu.asign_user_to_ticket {% endtrans %}</a></li>
+        <li class="active">{% trans %} menu.asign_user_to_ticket {% endtrans %}</li>
+    </ol>
+
+    {% if ticket|length > 0  %}
+    <table class="table table-hover" style="width: 80%; margin-left: 10%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ticket description</th>
+                {# <th>Importance</th> #}
+                <th>Created By</th>
+                <th>Assigned</th>
+                <th>Assign To</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="{{ path("assignUserToTicket", { 'id_ticket':ticket.id }) }}" method="post" >
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.description }} </td>
+                    {#<td>{{ ticket.importance}}</td>#}
+                    <td>{{ ticket.createdBy }}</td>
+                    <td>{{ ticket.assignedTo }}</td>
+                    <td>
+                        <select class="combobox" id="id_user" name="id_user">
+                            <option value="null">Sin asignar...</option>
+                            {% for user in users %}
+                                {% if ticket.assignedTo == user %}
+                                    <option selected="selected" value={{ user.id }} >{{ user }}</option>
+                                {% else %}
+                                    <option value={{ user.id }}>{{ user }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="hidden" name="id_ticket" value={{ ticket.id }}>
+                        <button type="submit" class="btn btn-primary" id="submitAssingTickets">Asignar</button>
+                    </td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
+
+
+    {% else %}
+        Problemas con el ticket seleccionado...
+    {% endif %}
+
+{% endblock %}

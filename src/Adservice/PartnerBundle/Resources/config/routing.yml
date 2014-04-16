@@ -2,28 +2,28 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /partner/list/{page}/{option}
-    defaults: { _controller: PartnerBundle:Default:list, page: 1 , option: null }
+    pattern:  /partner/list/{page}/{country}/{partner}
+    defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: 'none', partner: 'none' }
 
 partner_new:
     pattern: /new/partner
-    defaults: { _controller: PartnerBundle:Default:newPartner }
+    defaults: { _controller: PartnerBundle:Partner:newPartner }
 
 partner_edit:
     pattern: /edit/partner/{id}
-    defaults: { _controller: PartnerBundle:Default:editPartner }
+    defaults: { _controller: PartnerBundle:Partner:editPartner }
 
 partner_delete:
     pattern: /delete/partner/{id}
-    defaults: { _controller: PartnerBundle:Default:deletePartner }
+    defaults: { _controller: PartnerBundle:Partner:deletePartner }
 
 
 ##############################
 #   APDO. RUTAS SHOP         #
 ##############################
 shop_list:
-    pattern:  /shop/list/{page}/{option}
-    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , option: null }
+    pattern:  /shop/list/{page}/{country}
+    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: 'none' }
 
 shop_new:
     pattern: /new/shop
@@ -36,11 +36,3 @@ shop_edit:
 shop_delete:
     pattern: /delete/shop/{id}
     defaults: { _controller: PartnerBundle:Shop:deleteShop }
-
-
-##############################
-#       RUTAS AJAX           #
-##############################
-user_provinces:
-    pattern: /provincesFromRegion
-    defaults: { _controller: UtilBundle:Default:provincesFromRegion }

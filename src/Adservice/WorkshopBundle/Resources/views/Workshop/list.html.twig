@@ -1,0 +1,52 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li class="active">List of Workshops</li>
+    </ol>
+
+    <div style="width: 80%; margin-left: 10%;">
+
+        <legend>{% trans %} menu.list_workshops {% endtrans %}
+            <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un workshop nuevo</a></td>
+        </legend>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="col-xs-3 col-md-3 form-group"> <label> country </label>
+            <select id="flt_country" class='form-control'>
+                    <option value="none">All</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country }}</option>
+                {% endfor %}
+        </select></div>
+        {% endif %}
+    </div>
+    {% include 'WorkshopBundle:Workshop:_list.html.twig'  %}
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+    });
+
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#flt_country').click(function() {
+
+        var country = $('#flt_country').val();
+
+        if(country == null) country = 'none';
+
+        var url     = "{{ path('workshop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
+
+        url = url.replace("plc_page", 1);
+        url = url.replace("plc_country", country);
+
+        window.open(url, "_self");
+    });
+
+
+</script>
+
+{% endblock %}

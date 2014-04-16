@@ -1,0 +1,44 @@
+
+    <legend> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
+
+        <input type="hidden" id='slct_historyTickets' value={{ option }}>
+
+        {# Si encuentra un ticket #}
+        <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
+            <thead>
+                <tr>
+                    <th> #           </th>
+                    <th>{% trans %} date               {% endtrans %}</th>
+                    <th>{% trans %} car                {% endtrans %}</th>
+                    <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
+                    <th>{% trans %} description        {% endtrans %}</th>
+                    <th>{% trans %} status             {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                {% for ticket in tickets %}
+                    <tr id="ticketRow">
+                        <td id="id_ticket">{{ ticket.id         }}</td>
+                        <td>{{ ticket.createdAt | date("d/m/Y") }}</td>
+                        <td>{{ ticket.car                       }}</td>
+                        <td>{{ ticket.assignedTo                }}</td>
+                        <td>{{ ticket.description               }}</td>
+                        <td>{{ ticket.status                    }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'UtilBundle:Pagination:tickets_pagination.html.twig' %}
+
+<script type="text/javascript">
+
+    $("tr#ticketRow").click(function() {
+
+        var url = "{{ path('showTicket', {'id_ticket': 'PLACEHOLDER'}) }}";
+        url_show = url.replace("PLACEHOLDER", $(this).children('#id_ticket').text());
+
+        window.open(url_show, "_self");
+
+    });
+</script>

@@ -11,10 +11,11 @@
 
     //vacia tbl_similar
     $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });
+    $('#new_car_form_model').change(function() { clear_tbl_similar('model' ) });
     $('#id_system'         ).change(function() { clear_tbl_similar('system') });
 
     //llena tbl_similar
-    $('#new_car_form_model'       ).change(function() { list_tbl_similar() });
+    //$('#new_car_form_model'       ).change(function() { list_tbl_similar() });
     $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
 
     /**
@@ -51,8 +52,13 @@
 
         $( "#tbl_similar" ).empty();
 
-        if(parent == 'brand'         ) { var son = 'Model';     }
-        else { if (parent == 'system') { var son = 'Subsystem'; }}
+        if (parent == 'brand' )                 { var son = 'Model';     }
+        else {
+                if (parent == 'model' )         { var son = 'System';    }
+                else {
+                        if (parent == 'system') { var son = 'Subsystem'; }
+                }
+        }
 
         $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
     }

@@ -45,6 +45,13 @@ class Popup {
     private $role;
 
     /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
      * @var datetime $startdate_at
      *
      * @ORM\Column(name="startdate_at", type="datetime")
@@ -162,6 +169,27 @@ class Popup {
     public function getRole()
     {
         return $this->role;
+    }
+
+
+    /**
+     * Set country
+     *
+     * @param user $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**

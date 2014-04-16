@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 use Adservice\PartnerBundle\Entity\Partner;
 
 /**
@@ -66,7 +65,12 @@ class Shop {
     public function __toString() {
         return $this->getName();
     }
-
+    public function to_json(){
+        $json = array('id'      => $this->getId(),
+                      'shop'    => $this->getName(),
+                      'partner' => $this->getPartner());
+        return $json;
+    }
     /**
      * Get id
      *

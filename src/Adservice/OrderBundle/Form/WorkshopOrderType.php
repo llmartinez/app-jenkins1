@@ -32,7 +32,6 @@ class WorkshopOrderType extends AbstractType
 //            ->add('endtest_at')
             ->add('partner')
 //            ->add('conflictive', 'checkbox', array('required' => false))
-            ->add('province')
             ->add('region')
             ->add('country')
 //            ->add('order')

@@ -12,10 +12,12 @@ class Roles extends AbstractFixture implements OrderedFixtureInterface {
 
     public function load(ObjectManager $manager) {
         $roles = array(
-            array('name' => 'ROLE_ADMIN'    ),
-            array('name' => 'ROLE_ASSESSOR' ),
-            array('name' => 'ROLE_USER'     ),
-            array('name' => 'ROLE_AD'       )
+            array('name' => 'ROLE_SUPER_ADMIN'      ),
+            array('name' => 'ROLE_ADMIN'            ),
+            array('name' => 'ROLE_ASSESSOR'         ),
+            array('name' => 'ROLE_USER'             ),
+            array('name' => 'ROLE_SUPER_AD'         ),
+            array('name' => 'ROLE_AD'               )
         );
         foreach ($roles as $role) {
             $entidad = new Role();

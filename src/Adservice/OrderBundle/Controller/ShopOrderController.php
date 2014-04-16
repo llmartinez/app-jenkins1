@@ -4,7 +4,7 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\OrderBundle\Entity\ShopOrder;
 use Adservice\OrderBundle\Form\ShopOrderType;
@@ -14,7 +14,6 @@ use Adservice\OrderBundle\Form\ShopRejectOrderType;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Mailer;
 use Adservice\UtilBundle\Entity\Pagination;
-use Adservice\UtilBundle\Controller\DefaultController as UtilController;
 
 class ShopOrderController extends Controller {
 
@@ -28,14 +27,21 @@ class ShopOrderController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listShopsAction($page=1) {
+    public function listShopsAction($page=1, $partner='none') {
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        $params[] = array('partner', ' = '.$this->get('security.context')->getToken()->getUser()->getPartner()->getId());
+        if($security->isGranted('ROLE_SUPER_AD')) {
+            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
+            else                    $params[] = array();
+        }
+        else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
+
+        $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -45,8 +51,13 @@ class ShopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
+        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        else $partners = array();
+
         return $this->render('OrderBundle:ShopOrders:list_shops.html.twig', array( 'shops'      => $shops,
-                                                                                   'pagination' => $pagination,));
+                                                                                   'pagination' => $pagination,
+                                                                                   'partners'   => $partners,
+                                                                                   'partner'    => $partner,));
     }
 
 //  _   _ _______        __
@@ -80,13 +91,13 @@ class ShopOrderController extends Controller {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
-                $shopOrder = DefaultC::newEntity($shopOrder, $user);
+                $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($this->get('security.context')->isGranted('ROLE_AD_COUNTRY') === false)
                     $shopOrder->setPartner($user->getPartner());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
-                DefaultC::saveEntity($em, $shopOrder, $user);
+                UtilController::saveEntity($em, $shopOrder, $user);
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
@@ -149,7 +160,7 @@ class ShopOrderController extends Controller {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
-                $shopOrder = DefaultC::newEntity($shopOrder, $user);
+                $shopOrder = UtilController::newEntity($shopOrder, $user);
 
                 if ($shopOrder->getAction() == 'rejected' && $shopOrder->getWantedAction() == 'modify') {
                     $shopOrder->setAction('re_modify');
@@ -160,7 +171,7 @@ class ShopOrderController extends Controller {
                     $shopOrder->setAction('modify');
                     $shopOrder->setWantedAction('modify');
                 }
-                DefaultC::saveEntity($em, $shopOrder, $user);
+                UtilController::saveEntity($em, $shopOrder, $user);
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
@@ -218,7 +229,7 @@ class ShopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $shopOrder = $this->shop_to_shopOrder($shop);
-        $shopOrder = DefaultC::newEntity($shopOrder, $user);
+        $shopOrder = UtilController::newEntity($shopOrder, $user);
 
         //actualizamos el campo "action" de la orden segun queramos activar o desactivar
         if ($status == 'active'){
@@ -230,7 +241,7 @@ class ShopOrderController extends Controller {
             $shopOrder->setWantedAction('deactivate');
         }
 
-        DefaultC::saveEntity($em, $shopOrder, $user);
+        UtilController::saveEntity($em, $shopOrder, $user);
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
@@ -411,7 +422,7 @@ class ShopOrderController extends Controller {
         $action = $shopOrder->setWantedAction('delete');
         $action = $shopOrder->setAction('delete');
 
-        DefaultC::saveEntity($em, $shopOrder, $this->get('security.context')->getToken()->getUser());
+        UtilController::saveEntity($em, $shopOrder, $this->get('security.context')->getToken()->getUser());
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
@@ -462,8 +473,8 @@ class ShopOrderController extends Controller {
             $shop->setActive(true);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            DefaultC::newEntity($shop, $user);
-            DefaultC::saveEntity($em, $shop, $user);
+            UtilController::newEntity($shop, $user);
+            UtilController::saveEntity($em, $shop, $user);
 
         }elseif (( $shopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
             $shop = $em->getRepository('PartnerBundle:Shop')->findOneBy(array('id' => $shopOrder->getIdShop()));
@@ -471,14 +482,14 @@ class ShopOrderController extends Controller {
             $shop->setActive(false);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            DefaultC::saveEntity($em, $shop, $user);
+            UtilController::saveEntity($em, $shop, $user);
 
         }elseif (($shopOrder->getWantedAction() == 'modify')  && $status == 'accepted'){
             $shop = $em->getRepository('PartnerBundle:Shop')->findOneBy(array('id' => $shopOrder->getIdShop()));
             $shop = $this->shopOrder_to_shop($shop, $shopOrder);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            DefaultC::saveEntity($em, $shop, $user);
+            UtilController::saveEntity($em, $shop, $user);
 
         }elseif (($shopOrder->getWantedAction() == 'delete')  && $status == 'accepted'){
             $shop = $em->getRepository('PartnerBundle:Shop')->findOneBy(array('id' => $shopOrder->getIdShop()));
@@ -491,8 +502,8 @@ class ShopOrderController extends Controller {
             $shop = $this->shopOrder_to_shop(new Shop(), $shopOrder);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            DefaultC::newEntity($shop, $user);
-            DefaultC::saveEntity($em, $shop, $user);
+            UtilController::newEntity($shop, $user);
+            UtilController::saveEntity($em, $shop, $user);
 
         }
 
@@ -504,8 +515,8 @@ class ShopOrderController extends Controller {
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop,
                                                                                                         'action' => $action)));
         $mailer->sendMailToSpool();
-        echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
-                                                                                            'action'   => $action));die;
+        // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
+        //                                                                                     'action'   => $action));die;
 
         $user = $this->get('security.context')->getToken()->getUser();
         $shopOrders = $em->getRepository("OrderBundle:ShopOrder")->findAll();
@@ -528,8 +539,8 @@ class ShopOrderController extends Controller {
         $shopOrder->setIdShop        ($shop->getId());
         $shopOrder->setName          ($shop->getName());
         $shopOrder->setPartner       ($shop->getPartner());
+        $shopOrder->setCountry       ($shop->getCountry());
         $shopOrder->setRegion        ($shop->getRegion());
-        $shopOrder->setProvince      ($shop->getProvince());
         $shopOrder->setAddress       ($shop->getAddress());
         $shopOrder->setPostalCode    ($shop->getPostalCode());
         $shopOrder->setPhoneNumber1  ($shop->getPhoneNumber1());
@@ -565,8 +576,8 @@ class ShopOrderController extends Controller {
 
         $shop->setName          ($shopOrder->getName());
         $shop->setPartner       ($shopOrder->getPartner());
+        $shop->setCountry       ($shopOrder->getCountry());
         $shop->setRegion        ($shopOrder->getRegion());
-        $shop->setProvince      ($shopOrder->getProvince());
         $shop->setAddress       ($shopOrder->getAddress());
         $shop->setPostalCode    ($shopOrder->getPostalCode());
         $shop->setPhoneNumber1  ($shopOrder->getPhoneNumber1());
@@ -587,7 +598,7 @@ class ShopOrderController extends Controller {
         if ($shopOrder->getModifiedAt() != null ) {
             $shop->setModifiedAt($shopOrder->getModifiedAt());
         }
-        $shop->setActive(false);
+        $shop->setActive(true);
 
         return $shop;
     }

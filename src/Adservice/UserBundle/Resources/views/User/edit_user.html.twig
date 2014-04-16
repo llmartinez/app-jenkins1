@@ -1,0 +1,140 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}"> Home </a></li>
+      <li><a href="{{ path('user_list') }}"> List of Users </a></li>
+      <li class="active"> Edit User ({{ user }}) </li>
+    </ol>
+
+    <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+            {{ form_errors(form) }}
+             <div class="col-xs-4 col-md-4 form-group">
+                <label>Username *</label>
+                {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            {% if form.partner is defined %}
+             <div class="col-xs-4 col-md-4 form-group">
+                <label>Partner *</label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            {% endif %}
+            {% if form.workshop is defined %}
+             <div class="col-xs-4 col-md-4 form-group">
+                <label>Workshop *</label>
+                {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            {% endif %}
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>Active</label>
+                {{ form_widget(form.active) }}
+            </div>
+
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>Language</label>
+                {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+             <div class="col-xs-4 col-md-4 form-group">
+                {% if user.roles[0] != 'ROLE_ADMIN' %}
+                   <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
+                   <br><br>{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+                {% endif %}
+            </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                        {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                          'min': 0,
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        {{ form_rest(form) }}
+            <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                </div>
+                <div class="modal-body">
+                   <p> Deseas generar una nueva clave de acesso para el usuario? </p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm_password" type="button" class="btn btn-default" role="button">SI</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <script>
+                        $('#confirm_password').click(function(){
+
+                            var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER', 'route': 'user_edit' }) }}";
+                            url = url.replace('PLACEHOLDER', 'none');
+                            window.open(url,'_self');
+                        });
+                    </script>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+        // REGIONS FROM COUNTRY
+            var url_ajax = "{{ path("regions_from_country") }}";
+            var region = '{{ user.region }}';
+            populate_region(url_ajax, region);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
+            });
+        });
+    </script>
+{% endblock %}

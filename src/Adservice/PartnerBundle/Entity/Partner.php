@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\PartnerBundle\Entity\Shop;
 /**
@@ -41,6 +40,13 @@ class Partner {//implements EventSubscriber{
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
 
     /**
      *

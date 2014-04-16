@@ -39,14 +39,6 @@ html {
 .floating {
     float:left;
 }
-.col_izq {
-    float:left;
-    width: 30%;
-}
-.col_der {
-    float:left;
-    width: 70%;
-}
 /*
     HEADER
 */
@@ -72,6 +64,11 @@ html {
     padding: 10px;
     float: left;
 }
+.colIzq15 {
+    width: 15%;
+    padding: 10px;
+    float: left;
+}
 .colIzq {
     width: 30%;
     padding: 10px;
@@ -80,6 +77,11 @@ html {
 
 .colDer {
     width: 70%;
+    padding: 10px;
+    float: left;
+}
+.colDer85 {
+    width: 85%;
     padding: 10px;
     float: left;
 }

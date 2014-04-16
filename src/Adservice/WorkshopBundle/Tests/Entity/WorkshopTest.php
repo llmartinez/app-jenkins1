@@ -4,7 +4,6 @@ namespace Adservice\WorkshopBundle\Tests\Entity;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\UserBundle\Tests\Entity\UserTest;
 use Adservice\UtilBundle\Tests\Entity\RegionTest;
-use Adservice\UtilBundle\Tests\Entity\ProvinceTest;
 use Adservice\PartnerBundle\Tests\Entity\PartnerTest;
 
 class WorkshopTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +34,6 @@ class WorkshopTest extends \PHPUnit_Framework_TestCase
        $workshop->setPartner(PartnerTest::GetPartner());
        $workshop->setPhoneNumber1('931112233');
        $workshop->setPhoneNumber2('931112233');
-       $workshop->setProvince(ProvinceTest::GetProvince());
        $workshop->setRegion(RegionTest::GetRegion());
        $workshop->setTest(false);
        $workshop->setTypology(TypologyTest::GetTypology());

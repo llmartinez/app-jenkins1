@@ -11,40 +11,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
-    // public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null){
-
-    //     $query = 'SELECT e FROM '.$bundle.':'.$entity.' e ';
-
-    //     $where = 'WHERE e.id > 0 ';
-
-    //     foreach ($params as $param) {
-    //         $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
-    //     }
-
-    //     ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
-
-    //     if($pagination != null){
-
-    //         $consulta = $em ->createQuery($query.$where.$order)
-    //                         ->setMaxResults($pagination->getMaxRows())
-    //                         ->setFirstResult($pagination->getFirstRow());
-    //     }else{
-    //         $consulta = $em->createQuery($query.$where.$order);
-    //     }
-    //     return $consulta->getResult();
-    // }
-
-    // public function getEntityLength($em, $bundle, $entity)
-    // {
-    //     $query = 'SELECT COUNT(e) FROM '.$bundle.':'.$entity.' e ';
-
-    //     $consulta = $em->createQuery($query);
-
-    //     return $consulta->getResult()[0][1];
-    // }
-
-
-
     public function findAllFree($em, $status, $ordered=null)
     {
         $query = 'SELECT t FROM TicketBundle:Ticket t
@@ -199,28 +165,6 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    // public function findAllByOwner ($user, $status)
-    // {
-    //     if ( $status != 'all' ) { $array = array('created_by'  => $user->getId(),
-    //                                              'status' => $status->getId()); }
-
-    //     else                    { $array = array('created_by'  => $user->getId()); }
-
-    //     $tickets = $this->findBy($array);
-    //     return $tickets;
-    // }
-
-    // public function findAllByWorkshop ($user, $status)
-    // {
-    //     if ( $status != 'all' ) { $array = array('workshop'  => $user->getWorkshop()->getId(),
-    //                                              'status'    => $status->getId()); }
-
-    //     else                    { $array = array('workshop'  => $user->getWorkshop()->getId()); }
-
-    //     $tickets = $this->findBy($array);
-    //     return $tickets;
-    // }
-
     public function findTicketsFiltered($id_workshop, $id_ticket=null, $status=null)
     {
         $em     = $this->getEntityManager();
@@ -258,32 +202,82 @@ class TicketRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
 
-        $query    = 'SELECT t FROM TicketBundle:Ticket t ';
+        $query    = ' SELECT t FROM TicketBundle:Ticket t ';
         $joins    = ' ';
-        $where    = 'WHERE t.status = :status ';
-        $params[] = array('status', $status);
+        $where    = ' WHERE t.status = '.$status->getId().' ';
 
         if ($model != null)
         {
-            $joins  = 'JOIN t.car c ';
-            $where .= 'AND c.model = :model ';
-            $params[] = array('model', $model->getId());
+            $joins  .= ' JOIN t.car c ';
+            $where  .= ' AND c.model = '.$model->getId().' ';
         }
 
         if ($subsystem != null)
         {
-            $where .= 'AND t.subsystem = :subsystem ';
-            $params[] = array('subsystem', $subsystem->getId());
+            $where .=  ' AND t.subsystem = '.$subsystem->getId().' ';
         }
 
         //Crea la consulta
-        $consulta = $em->createQuery($query.$joins.$where.'ORDER BY t.id ');
-
-        //hace un recorrido de $params para extraer los parametros de la consulta
-        foreach($params as $param){
-            $consulta->setParameter($param[0], $param[1]);
-        }
+        $consulta = $em->createQuery($query.$joins.$where.' ORDER BY t.id ');
 
         return $consulta->getResult();
     }
 }
+
+
+
+
+    // public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null){
+
+    //     $query = 'SELECT e FROM '.$bundle.':'.$entity.' e ';
+
+    //     $where = 'WHERE e.id > 0 ';
+
+    //     foreach ($params as $param) {
+    //         $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+    //     }
+
+    //     ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
+
+    //     if($pagination != null){
+
+    //         $consulta = $em ->createQuery($query.$where.$order)
+    //                         ->setMaxResults($pagination->getMaxRows())
+    //                         ->setFirstResult($pagination->getFirstRow());
+    //     }else{
+    //         $consulta = $em->createQuery($query.$where.$order);
+    //     }
+    //     return $consulta->getResult();
+    // }
+
+    // public function getEntityLength($em, $bundle, $entity)
+    // {
+    //     $query = 'SELECT COUNT(e) FROM '.$bundle.':'.$entity.' e ';
+
+    //     $consulta = $em->createQuery($query);
+
+    //     return $consulta->getResult()[0][1];
+    // }
+
+
+    // public function findAllByOwner ($user, $status)
+    // {
+    //     if ( $status != 'all' ) { $array = array('created_by'  => $user->getId(),
+    //                                              'status' => $status->getId()); }
+
+    //     else                    { $array = array('created_by'  => $user->getId()); }
+
+    //     $tickets = $this->findBy($array);
+    //     return $tickets;
+    // }
+
+    // public function findAllByWorkshop ($user, $status)
+    // {
+    //     if ( $status != 'all' ) { $array = array('workshop'  => $user->getWorkshop()->getId(),
+    //                                              'status'    => $status->getId()); }
+
+    //     else                    { $array = array('workshop'  => $user->getWorkshop()->getId()); }
+
+    //     $tickets = $this->findBy($array);
+    //     return $tickets;
+    // }

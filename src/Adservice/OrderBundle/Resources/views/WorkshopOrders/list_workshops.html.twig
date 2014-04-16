@@ -4,24 +4,22 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Workshops</li>
+      <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
     </ol>
 
-    {# <table class="table" style="width: 80%; margin-left: 10%;">
-        <tr>
-            <td align="right">
-                <div class="input-group">
-                    <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
-                    <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div>
-            </td>
-        </tr>
-    </table> #}
+<legend> {% trans %} menu.list_workshops {% endtrans %} </legend>
 
-{% if workshops|length > 0  %}
+    {% if is_granted('ROLE_SUPER_AD') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> partner </label>
+        <select id="flt_partner" class='form-control'>
+                <option value="none">All</option>
+            {% for partner in partners %}
+                <option value="{{ partner.id }}">{{ partner }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
+
+    {% if workshops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
         <thead>
             <tr>
@@ -113,20 +111,37 @@
 
 
 {% block javascripts %}
-
-    <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
+    {{ parent() }}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
     <script>
         $(document).ready(function() {
+            {% if partner != 'none' %} $("#flt_partner").val('{{ partner }}');{% endif %}
+
             $('#MainContent').find('.glyphicon-trash').click(function() {
                 var workshop_id = $(this).data('id');
                 confirm_delete_workshop_modal(workshop_id);
-            })
+            });
 
+            //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+            $('#flt_partner').click(function() {
+
+                var partner = $('#flt_partner').val();
+
+                if(partner == null) partner = 'none';
+
+                var url     = "{{ path('workshopOrder_listWorkshops', { 'page': 'plc_page', 'partner': 'plc_partner'}) }}";
+
+                url = url.replace("plc_page", 1);
+                url = url.replace("plc_partner", partner);
+
+                window.open(url, "_self");
+            });
             //util.js
             table_filter();
         });
+
     </script>
 {% endblock %}
 

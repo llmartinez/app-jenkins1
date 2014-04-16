@@ -4,26 +4,25 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Shops</li>
+      <li class="active"> {% trans %} menu.list_shops {% endtrans %} </li>
     </ol>
 
-    <table class="table" style="width: 80%; margin-left: 10%;">
-        <tr>
-            <td align="right">
-                <div class="input-group">
-                    <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
-                    <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div>
-                </br>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('shop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear una tienda nueva</a>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+<legend>
+    {% trans %} menu.list_shops {% endtrans %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('shop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear una tienda nueva</a>
+    {% endif %}
+</legend>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> country </label>
+        <select id="flt_country" class='form-control'>
+                <option value="none">All</option>
+            {% for country in countries %}
+                <option value="{{ country.id }}">{{ country }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
 
     {% if shops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
@@ -34,7 +33,7 @@
                 <th>Partner     </th>
                 <th>Phone Number</th>
                 <th>Email1      </th>
-                <th>address     </th>
+                <th>region      </th>
                 <th>Actions     </th>
             </tr>
         </thead>
@@ -42,11 +41,11 @@
                 {% for shop in shops %}
             <tr>
                 <td>{{ shop.id           }}</td>
-                <td>{{ shop.partner      }}</td>
                 <td>{{ shop.name         }} {% if shop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                <td>{{ shop.partner      }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
                 <td>{{ shop.email1       }}</td>
-                <td>{{ shop.address      }}</td>
+                <td>{{ shop.region       }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -121,13 +120,31 @@ No hay tiendas!!
 
     <script>
         $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+
             $('#MainContent').find('.glyphicon-trash').click(function() {
                 var partner_id = $(this).data('id');
                 confirm_delete_partner_modal(partner_id);
-            })
+            });
+
+            //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+            $('#flt_country').click(function() {
+
+                var country = $('#flt_country').val();
+
+                if(country == null) country = 'none';
+
+                var url     = "{{ path('shop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
+
+                url = url.replace("plc_page", 1);
+                url = url.replace("plc_country", country);
+
+                window.open(url, "_self");
+            });
 
             //util.js
             table_filter();
         });
+
     </script>
 {% endblock %}

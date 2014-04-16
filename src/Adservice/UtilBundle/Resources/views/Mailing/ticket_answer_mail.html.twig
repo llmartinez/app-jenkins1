@@ -51,7 +51,6 @@
                 {% if post_length > 0 %}
                     <b>{% trans %} answer {% endtrans %}:</b> {{ ticket.posts[post_length - 1].message }}
                 {% else %}
-                    <b>{% trans %} answer {% endtrans %}:</b> {{ ticket.posts[post_length].message }}
                 {% endif %}
             </td></tr>
         </table>

@@ -9,34 +9,6 @@ use Adservice\CarBundle\Entity\Model;
 class DefaultController extends Controller
 {
     /**
-     * Asigna el usuario que ha creado la clase y la fecha de la creación.
-     * @param Class $entity
-     * @param Class $user
-     * @return Class
-     */
-    public static function newEntity($entity, $user){
-        $entity->setCreatedBy($user);
-        $entity->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        return $entity;
-    }
-
-    /**
-     * Asigna el usuario que ha modificado la clase y la fecha de la modificación.
-     * @param EntityManager $em
-     * @param Class $entity
-     * @param Bool $auto_flush true: aplica cambios en BBDD
-     * @return Bool
-     */
-    public static function saveEntity($em, $entity, $user, $auto_flush=true)
-    {
-        $entity->setModifiedBy($user);
-        $entity->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $em->persist($entity);
-        if($auto_flush) $em->flush();
-        return true;
-    }
-
-    /**
      * Funcion Ajax que devuelve un listado de subsistemas filtrados a partir del sistema ($system)
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -65,7 +37,8 @@ class DefaultController extends Controller
 
         $id_model     = $petition->request->get('id_model');
         $id_subsystem = $petition->request->get('id_subsystem');
-        $status       = $em->getRepository('TicketBundle:Status')->findByName('closed');
+
+        $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
 
         if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
         if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
