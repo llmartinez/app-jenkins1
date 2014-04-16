@@ -13,6 +13,7 @@ class Countries extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
         $countrys = array(
             array('country' => 'Spain'  , 'lang' => 'spanish'),
+            array('country' => 'England', 'lang' => 'english'),
             array('country' => 'France' , 'lang' => 'french'),
         );
         foreach ($countrys as $country) {
