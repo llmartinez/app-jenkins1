@@ -3,15 +3,15 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('popup_list') }}">List of Popups</a></li>
-      <li class="active">New Popup</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('popup_list') }}">{% trans %} menu.list_popups {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.popup {% endtrans %}</li>
     </ol>
 
     <form action="{{ path('popup_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}
         <p>
-            <button type="submit">Create</button>
+            <button type="submit">{% trans %} btn.create {% endtrans %}</button>
         </p>
     </form>
 

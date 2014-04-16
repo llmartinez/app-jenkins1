@@ -3,7 +3,7 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_popups {% endtrans %}</li>
     </ol>
 
@@ -11,13 +11,13 @@
 
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un popup nuevo</a>
+    <a href="{{ path('popup_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.popup {% endtrans %}</a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-3 col-md-3 form-group"> <label> country </label>
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control'>
-                <option value="none">All</option>
+                <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country }}</option>
             {% endfor %}
@@ -29,19 +29,19 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Country</th>
-                <th>Actions</th>
+                <th>{% trans %} name        {% endtrans %}</th>
+                <th>{% trans %} description {% endtrans %}</th>
+                <th>{% trans %} date.start  {% endtrans %}</th>
+                <th>{% trans %} date.end    {% endtrans %}</th>
+                <th>{% trans %} country     {% endtrans %}</th>
+                <th>{% trans %} actions     {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
             {% for popup in all_popups %}
                 <tr>
                     <td>{{ popup.id }}</td>
-                    <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                    <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                     <td>{{ popup.description }} </td>
                     <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
@@ -58,7 +58,7 @@
     {% include 'UtilBundle:Pagination:pagination_popup.html.twig'  %}
 
 {% else %}
-    No hay popups!!!!
+    {% trans %} any.popup {% endtrans %}
 {% endif %}
 
     <!-- Modal -->
@@ -67,14 +67,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Eliminar popup</h4>
+                    <h4 class="modal-title" id="myModalLabel">{% trans %} popup.delete {% endtrans %}</h4>
                 </div>
                 <div class="modal-body">
-                    Estas seguro que quieres eliminar este popup?
+                    {% trans %} popup.delete.confirm {% endtrans %}
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

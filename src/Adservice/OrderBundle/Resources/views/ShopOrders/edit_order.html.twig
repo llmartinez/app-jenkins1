@@ -3,21 +3,21 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">Home</a></li>
-        <li class="active">Apply for edit Shop</li>
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active">{% trans %} edit.order.shop {% endtrans %}</li>
     </ol>
 
-    <h1>Petición de modificación de la tienda: <b>{{ shop.id }}</b></h1>
+    <h1>{% trans %} edit.order.shop {% endtrans %} <b>{{ shop.id }}</b></h1>
 
     <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="col-xs-6 col-md-6 form-group">
-            <label for="adservice_partnerbundle_shoptype">Name *</label>
+            <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
             {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         {% if is_granted('ROLE_SUPER_AD') %}
             <div class="col-xs-2 col-md-2 form-group">
-                <label for="adservice_partnerbundle_shoptype">Partner * </label>
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
             </div>
         {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
@@ -65,6 +65,8 @@
                                                                                                                           'min': 0,
                                                                                                                           'required': 'required' } }) }}
         </div>
+
+        {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
             <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>

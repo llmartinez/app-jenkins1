@@ -1,6 +1,6 @@
 
    <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_car_form_brand">Brand</label>
+        <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
         <select id="new_car_form_brand" name="new_car_form_brand" class="form-control" multiple="multiple", required >
             {% for brand in brands %}
                 <option value={{ brand.id }}
@@ -11,7 +11,7 @@
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_car_form_model">Model</label>
+        <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
         <select id="new_car_form_model" name="new_car_form_model" class="form-control" multiple="multiple", required >
             {% for model in models %}
                 <option value={{ model.id }}
@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_car_form_version">Version</label>
+        <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
         <select id="new_car_form_version" name="new_car_form_version" class="form-control" multiple="multiple" >
             {% for version in versions %}
                 <option value={{ version.id }}

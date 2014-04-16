@@ -6,7 +6,7 @@
         <div class="col-md-4 col-md-offset-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Acceso usuarios AD Service</h3>
+                    <h3 class="panel-title">{% trans %} login.welcome {% endtrans %}</h3>
                 </div>
                 <div class="panel-body">
 {#                    <form accept-charset="UTF-8" role="form">#}
@@ -16,18 +16,18 @@
                         {% endif %}
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="User" name="_username" type="text" id="username" value="{{ last_username }}">
+                                <input class="form-control" placeholder="{% trans %} username {% endtrans %}" name="_username" type="text" id="username" value="{{ last_username }}">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Password" name="_password" type="password" value=""  id="password">
+                                <input class="form-control" placeholder="{% trans %} password {% endtrans %}" name="_password" type="password" value=""  id="password">
 
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input name="remember" type="checkbox" value="Remember Me"> Remember Me
+                                    <input name="remember" type="checkbox" value="Remember Me"> {% trans %} login.remember {% endtrans %}
                                 </label>
                             </div>
-                            <input class="btn btn-lg btn-success btn-block" id="btn_login" name="btn_login" type="submit" value="Login">
+                            <input class="btn btn-lg btn-success btn-block" id="btn_login" name="btn_login" type="submit" value="{% trans %} login {% endtrans %}">
                         </fieldset>
                     </form>
                 </div>
@@ -36,4 +36,4 @@
     </div>
 </div>
 
-{% endblock%}
+{% endblock %}

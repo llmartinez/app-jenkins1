@@ -1,9 +1,9 @@
 {% if is_granted('ROLE_ASSESSOR') %}
 
-	<legend> Similar Tickets </legend>
+	<legend>{% trans %} ticket.similar {% endtrans %}</legend>
 
 	<div id="tbl_similar">
-		<p>Select Model and Subsystem for matching similar tickets..</p>
+		<p>{% trans %} ticket.similar.matching {% endtrans %}</p>
 	</div>
 
 {% endif %}

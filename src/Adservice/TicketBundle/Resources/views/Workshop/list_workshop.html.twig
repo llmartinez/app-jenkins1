@@ -3,7 +3,7 @@
 {% block body %}
 
 <ol class="breadcrumb">
-    <li><a href="{{ path('user_index') }}">Home</a></li>
+    <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
     <li class="active">{% trans %} menu.asign_user_to_ticket {% endtrans %}</li>
 </ol>
 
@@ -12,21 +12,21 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Workshop Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Action</th>
+                    <th>{% trans %} workshop {% endtrans %}</th>
+                    <th>{% trans %} email    {% endtrans %}</th>
+                    <th>{% trans %} contact  {% endtrans %}</th>
+                    <th>{% trans %} action   {% endtrans %}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for workshop in workshops %}
                     <tr>
                         <td>{{ workshop.id }}</td>
-                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactivo {% endtrans %}</span>{% endif %}</td>
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
                         <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">Listado de Tickets</a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">{% trans %} menu.list_tickets {% endtrans %}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -36,7 +36,7 @@
         {% include 'UtilBundle:Pagination:pagination_workshoplist.html.twig' %}
 
     {% else %}
-        No hay talleres!!
+        {% trans %} any.workshop {% endtrans %}
     {% endif %}
 
 

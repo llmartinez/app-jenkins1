@@ -1,13 +1,13 @@
 
-    <legend> Edit Info </legend>
+    <legend> {% trans %} edit.ticket.info {% endtrans %} </legend>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_ticket_form_importance">Importance</label>
+        <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %}</label>
         {{ form_widget(form.importance, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="id_system">System</label>
+        <label for="id_system">{% trans %} system {% endtrans %}</label>
         <select class="form-control" id="id_system" multiple="multiple", required>
             {% for system in systems %}
                 <option value="{{ system.id }}"
@@ -18,6 +18,6 @@
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_ticket_form_subsystem">Subsystem</label>
+        <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
         {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
     </div>

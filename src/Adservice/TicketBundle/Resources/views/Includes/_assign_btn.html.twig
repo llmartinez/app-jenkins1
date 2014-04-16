@@ -8,25 +8,25 @@
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': 0 }) }}">
-                        <span class="glyphicon glyphicon-remove-circle"  title="Remove the bloqued status" style="color:red"></span></a>
+                        <span class="glyphicon glyphicon-remove-circle"  title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></span></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
-                    <a><span class="glyphicon glyphicon-ban-circle" title="Ticket blocked"></span></a>
+                    <a><span class="glyphicon glyphicon-ban-circle" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
 
                 {% endif %}
             {% else %}
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                    <span class="glyphicon glyphicon-link" title="Block to answer"></span></a>
+                    <span class="glyphicon glyphicon-link" title="{% trans %} ticket.block {% endtrans %}"></span></a>
             {% endif %}
         {% else %}
             {# Ticket cerrado#}
-            <span class="glyphicon glyphicon-ok"     style="color:gray"  title="Ticket closed"></span>
+            <span class="glyphicon glyphicon-ok"     style="color:gray"  title="{% trans %} ticket.closed {% endtrans %}"></span>
             {# reabrir Ticket #}
             <a href="{{ path('reopenTicket', { 'id_ticket': ticket.id }) }}" >
-                <span class="glyphicon glyphicon-repeat" title="Reopen Ticket"></span></a>
+                <span class="glyphicon glyphicon-repeat" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
         {% endif %}
     {% endif %}
 
@@ -34,7 +34,7 @@
     {% if ticket.posts | length <=1 %}
         {# puede borrarlo el usuario si el ticket no esta assignado aun #}
         {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
-            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="Delete ticket"></span></a>
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{% trans %} ticket.delete {% endtrans %}"></span></a>
         {% endif %}
     {% endif %}
 
@@ -44,14 +44,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Eliminar Ticket</h4>
+                <h4 class="modal-title" id="myModalLabel">{% trans %} ticket.delete {% endtrans %}</h4>
             </div>
             <div class="modal-body">
-                Estas seguro que quieres eliminar este ticket?
+                {% trans %} ticket.delete.confirm {% endtrans %}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

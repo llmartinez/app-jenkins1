@@ -3,9 +3,9 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('partner_list') }}">List of Partners</a></li>
-      <li class="active">Edit Partner ({{ partner }})</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('partner_list') }}">{% trans %} menu.list_partners {% endtrans %}</a></li>
+      <li class="active">{% trans %} edit.partner {% endtrans %} ({{ partner }})</li>
     </ol>
 
     <form action="{{ path("partner_edit", { 'id':partner.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >

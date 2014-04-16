@@ -2,68 +2,68 @@
 
 {% block body %}
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">Home</a></li>
-        <li class="active"> List of Statistics </li>
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active"> {% trans %} menu.list_statistics {% endtrans %} </li>
     </ol>
 
 <div class="colIzq">
 
-    <legend>Tickets</legend>
+    <legend>{% trans %} tickets {% endtrans %}</legend>
 
-        <div class="col-xs-6 col-md-6 form-group"> <label> from   </label><input id="flt_tck_from" type="date"
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_tck_from" type="date"
             {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} ></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> to     </label><input id="flt_tck_to" type="date"
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_tck_to" type="date"
             {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} ></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> country</label><select id="flt_tck_country" class='form-control'>
-                                                                                    <option value="none">All</option>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_tck_country" class='form-control'>
+                                                                                    <option value="none">{% trans %} all {% endtrans %}</option>
                                                                                 {% for country in countries %}
                                                                                     <option value="{{ country.id }}">{{ country }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> partner</label><select id="flt_tck_partner" class='form-control'>
-                                                                                    <option value="none">All</option>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_tck_partner" class='form-control'>
+                                                                                    <option value="none">{% trans %} all {% endtrans %}</option>
                                                                                 {% for partner in partners %}
                                                                                     <option value="{{ partner.id }}">{{ partner }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> status</label><select id="flt_tck_status" class='form-control'>
-                                                                                                    <option value="all"     >Todos   </option>
-                                                                                                    <option value="open"    >Open    </option>
-                                                                                                    <option value="closed"  >Closed  </option>
-                                                                                                 </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label><select id="flt_tck_status" class='form-control'>
+                                                                                                <option value="all"    >{% trans %} all    {% endtrans %}</option>
+                                                                                                <option value="open"   >{% trans %} open   {% endtrans %}</option>
+                                                                                                <option value="closed" >{% trans %} closed {% endtrans %}</option>
+                                                                                             </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_ticket">Search Tickets</button>
+            <button class="btn btn-primary btn100" id="btn_search_ticket">{% trans %} ticket.search {% endtrans %}</button>
         </div>
 
 
-    <legend>Workshops</legend>
+    <legend>{% trans %} workshops {% endtrans %}</legend>
 
-        <div class="col-xs-6 col-md-6 form-group"> <label> from   </label><input id="flt_wks_from" type="date"></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> to     </label><input id="flt_wks_to" type="date"></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_wks_from" type="date"></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_wks_to" type="date"></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> country</label><select id="flt_wks_country" class='form-control'>
-                                                                                        <option value="none">All</option>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_wks_country" class='form-control'>
+                                                                                        <option value="none">{% trans %} all {% endtrans %}</option>
                                                                                     {% for country in countries %}
                                                                                         <option value="{{ country.id }}">{{ country }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> partner</label><select id="flt_wks_partner" class='form-control'>
-                                                                                        <option value="none">All</option>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_wks_partner" class='form-control'>
+                                                                                        <option value="none">{% trans %} all {% endtrans %}</option>
                                                                                     {% for partner in partners %}
                                                                                         <option value="{{ partner.id }}">{{ partner }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label > status</label><select id="flt_wks_status" class='form-control'>
-                                                                                                    <option value="all"     >All     </option>
-                                                                                                    <option value="active"  >Active  </option>
-                                                                                                    <option value="deactive">Deactive</option>
-                                                                                                    {# <option value="noticket">Without Tickets</option> #}
-                                                                                                 </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label><select id="flt_wks_status" class='form-control'>
+                                                                                            <option value="all"     >{% trans %} all      {% endtrans %}</option>
+                                                                                            <option value="active"  >{% trans %} active   {% endtrans %}</option>
+                                                                                            <option value="deactive">{% trans %} deactive {% endtrans %}</option>
+                                                                                            {# <option value="noticket">Without Tickets</option> #}
+                                                                                         </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_workshop">Search Workshops</button>
+            <button class="btn btn-primary btn100" id="btn_search_workshop">{% trans %} workshop.search {% endtrans %}</button>
         </div>
 </div>
 
@@ -116,19 +116,19 @@
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Workshop Name</th>
-                        <th>Partner</th>
-                        <th>Email1</th>
-                        <th>Phone number 1</th>
-                        <th>Active</th>
+                        <th>{% trans %} code     {% endtrans %}</th>
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                        <th>{% trans %} partner  {% endtrans %}</th>
+                        <th>{% trans %} email    {% endtrans %}</th>
+                        <th>{% trans %} tel      {% endtrans %}</th>
+                        <th>{% trans %} active   {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
                         {% for workshop in statistic.results %}
                     <tr>
                         <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
-                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                         <td>{{ workshop.partner}}</td>
                         <td>{{ workshop.email1 }}</td>
                         <td>{{ workshop.phoneNumber1 }}</td>
@@ -140,24 +140,24 @@
         <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_workshop.html.twig' %}</div>
 
         {% else %}
-        <legend> {% trans %}statistic.general {% endtrans %}
+        <legend> {% trans %} statistic.general {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %} </legend>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Usuarios         </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumUsers         }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Socios           </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumPartners      }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tiendas          </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumShops         }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Talleres         </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumWorkshops     }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets          </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumTickets       }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets Abiertos </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumOpenTickets   }}            </div>
-            <div class="col-xs-8 col-md-8 form-group"> <label>Número de Tickets Cerrados </label></div>
-            <div class="col-xs-4 col-md-4 form-group">        {{ statistic.getNumClosedTickets }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+            <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+            <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
         {% endif %}
     {% endif %}
 

@@ -3,19 +3,19 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_partners {% endtrans %}</li>
     </ol>
 
 <legend>
     {% trans %} menu.list_partners {% endtrans %}
-    <a href="{{ path('partner_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un partner nuevo </a>
+    <a href="{{ path('partner_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.partner {% endtrans %} </a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control'>
-                <option value="none">All</option>
+                <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country }}</option>
             {% endfor %}
@@ -32,17 +32,17 @@
                 <th>{% trans %} email_1         {% endtrans %}</th>
                 <th>{% trans %} region          {% endtrans %}</th>
                 <th>{% trans %} address         {% endtrans %}</th>
-                <th>Actions</th>
+                <th>{% trans %} actions         {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
                 {% for partner in all_partners %}
             <tr>
                 <td>{{ partner.codePartner }}</td>
-                <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
-                <td>{{ partner.email1 }}</td>
-                <td>{{ partner.region }}</td>
+                <td>{{ partner.email1  }}</td>
+                <td>{{ partner.region  }}</td>
                 <td>{{ partner.address }}</td>
                 <td>
                     <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -54,7 +54,7 @@
     </table>
     {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
 {% else %}
-No hay socios!!
+    {% trans %} any.partner {% endtrans %}
 {% endif %}
 
 <!-- Modal -->
@@ -63,20 +63,20 @@ No hay socios!!
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
+                <h4 class="modal-title" id="myModalLabel">{% trans %} partner.delete {% endtrans %}</h4>
             </div>
             <div class="modal-body">
-                Estas seguro que quieres eliminar este socio?
+                {% trans %} partner.delete.confirm {% endtrans %}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-{% endblock%}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}

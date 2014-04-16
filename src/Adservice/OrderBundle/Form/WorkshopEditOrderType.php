@@ -14,6 +14,7 @@ class WorkshopEditOrderType extends AbstractType
             ->add('cif','text', array('required' => false))
             ->add('partner')
             ->add('shop')
+            ->add('code_workshop')
             ->add('typology')
             ->add('contact_name', 'text', array('required' => true))
             ->add('contact_surname', 'text', array('required' => true))
