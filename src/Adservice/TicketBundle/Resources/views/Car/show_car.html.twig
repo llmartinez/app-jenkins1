@@ -1,0 +1,22 @@
+    <legend>Car
+        {% if ticket.blockedBy == app.security.getToken().getUser() or ticket.workshop == app.security.getToken().getUser().getWorkshop() %}
+            {# editar Ticket #}
+            <a href="{{ path('editCar', { 'id_ticket': ticket.id }) }}"  title="Edit the Car"> <span class="glyphicon glyphicon-pencil" title="Edit car"></span></a></a>
+        {% endif %}
+    </legend>
+
+<input type="hidden" id="id_car" name="id_car" value="{{ car.id }}">
+
+<div class="form-group">
+	{% if car.brand        != "" %}{{ car.brand   }}{% endif %}
+	{% if car.model        != "" %}{{ car.model   }}{% endif %}
+	{% if car.version      != "" %}{{ car.version }}{% endif %}
+	{#
+	{% if car.year         != "" %}<b>year:     	</b>{{ car.year         }}  {% endif %}
+	{% if car.motor        != "" %}<b>motor:     	</b>{{ car.motor        }}  {% endif %}
+	{% if car.kW           != "" %}<b>kW:           </b>{{ car.kW           }}  {% endif %}
+	{% if car.displacement != "" %}<b>displacement: </b>{{ car.displacement }}  {% endif %}
+	{% if car.vin          != "" %}<b>vin:     	  	</b>{{ car.vin          }}  {% endif %}
+	#}
+	{% if car.plateNumber  != "" %}<b>plateNumber:  </b>{{ car.plateNumber  }}  {% endif %}
+</div>

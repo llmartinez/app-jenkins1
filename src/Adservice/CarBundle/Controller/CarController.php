@@ -3,7 +3,7 @@
 namespace Adservice\CarBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\CarBundle\Form\CarType;
 
@@ -44,7 +44,7 @@ class CarController extends Controller {
                     $car->setBrand($brand);
                     $car->setModel($model);
                     $car->setVersion($version);
-                    DefaultC::saveEntity($em, $car, $user);
+                    UtilController::saveEntity($em, $car, $user);
 
                     return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $id_ticket)));
 

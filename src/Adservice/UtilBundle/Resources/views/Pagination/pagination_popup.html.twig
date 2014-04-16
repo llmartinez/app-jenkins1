@@ -1,0 +1,112 @@
+
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content">
+
+    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+    	{% set page      = pagination.page      %}
+    	{% set prevpages = pagination.prevpages %}
+	    {% set nextpages = pagination.nextpages %}
+	    {% set totalpag  = pagination.totalpag  %}
+
+	    {# FLECHAS PAGINAS ANTERIORES #}
+    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="First page"   ></span></button>
+    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="Previous page"></span></button>
+
+	    {# PAGINAS ANTERIORES #}
+    	{% if prevpages > 0 %}
+	    	{% for prev_page in prevpages..1 %}
+	    		<button class="page_number change_page" >{{ page - prev_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+    	{# PAGINA ACTUAL #}
+	    <input  type="text"   id="page"  class="page_number page_selected" value="{{ page }}"  disabled >
+
+	    {# PAGINAS SIGUIENTES #}
+    	{% if nextpages > 0 %}
+			{% for next_page in 1..nextpages %}
+	    		<button class="page_number change_page" >{{ page + next_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+	    {# FLECHAS PAGINAS SIGUIENTES #}
+    	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="Next page"></span></button>
+    	<button type="button" id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="Last page ({{ totalpag }})"></span></button>
+
+    </div>
+
+    <script type="text/javascript">
+
+    	//REDIRIGE A LA PRIMERA PAGINA
+	    $('#firstpage').click(function() {
+
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
+       		var url = "{{ path('popup_list', {'page': 1 , 'country': 'plc_country'}) }}";
+    		url = url.replace("plc_country", country);
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA ANTERIOR PAGINA
+	    $('#btn_anterior').click(function() {
+
+	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
+
+	    	if (prev_page > 0 ) {
+
+				var country = $('#flt_country').val();
+	       		if(country == null) country = 'none';
+
+				var url = "{{ path('popup_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+		    	url = url.replace("plc_page", prev_page);
+        		url = url.replace("plc_country", country);
+
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+	    $('.change_page').click(function() {
+
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
+	    	var url = "{{ path('popup_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+	    	url = url.replace("plc_page", $(this).text());
+    		url = url.replace("plc_country", country);
+
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA SIGUIENTE PAGINA
+	    $('#btn_siguiente').click(function() {
+
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
+	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
+
+	    	if (next_page <= {{ totalpag }}) {
+
+		    	var url = "{{ path('popup_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
+		    	url = url.replace("plc_page", next_page);
+        		url = url.replace("plc_country", country);
+
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA ULTIMA PAGINA
+	    $('#totalpage').click(function() {
+
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
+       		var url = "{{ path('popup_list', {'page': totalpag , 'country': 'plc_country'}) }}";
+    		url = url.replace("plc_country", country);
+
+	    	window.open(url, "_self");
+	    });
+
+	</script>

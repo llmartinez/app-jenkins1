@@ -223,15 +223,15 @@ class Pagination
         }
 
         /* PRUEBAS */
-           // echo $query.$from.$where.$order.'<br>';
-           // var_dump($consulta->getResult());
-           // die;
+            // echo $query.$from.$where.$order.'<br>';
+            // var_dump($consulta->getResult());
+            // die;
         return $consulta->getResult();
     }
 
-    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null)
+    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null, $add='')
     {
-        $query = 'SELECT COUNT(e) ';
+        $query = 'SELECT COUNT(e) '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
 
         $where = 'WHERE e.id > 0 ';

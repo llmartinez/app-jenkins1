@@ -5,7 +5,7 @@ namespace Adservice\UserBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use \Adservice\UtilBundle\Tests\Controller\UtilFunctionTest;
 
-class DefaultControllerTest extends WebTestCase
+class UserControllerTest extends WebTestCase
 {
     protected function setUp() {
     }
@@ -204,7 +204,6 @@ class DefaultControllerTest extends WebTestCase
                                 'admin_assessor_type[email_1]'                      => 'testadmin@test.es',
                                 'admin_assessor_type[active]'                       => '1',
                                 'admin_assessor_type[region]'                       => '1',
-                                'admin_assessor_type[province]'                     => '1',
                                 'admin_assessor_type[country]'                      => '1',
 
                                 ),
@@ -219,7 +218,6 @@ class DefaultControllerTest extends WebTestCase
                                 'admin_assessor_type[email_1]'                     => 'testassessor@test.es',
                                 'admin_assessor_type[active]'                      => '1',
                                 'admin_assessor_type[region]'                      => '1',
-                                'admin_assessor_type[province]'                    => '1',
                                 'admin_assessor_type[country]'                     => '1',
                                 ),
             ),
@@ -233,7 +231,6 @@ class DefaultControllerTest extends WebTestCase
             //                     'workshop_type[email_1]'                        => 'testuser@test.es',
             //                     'workshop_type[active]'                         => '1',
             //                     'workshop_type[region]'                         => '1',
-            //                     'workshop_type[province]'                       => '1',
             //                     'workshop_type[country]'                        => '1',
             //                     'workshop_type[workshop]'                       => '1',
             //                     ),
@@ -248,7 +245,6 @@ class DefaultControllerTest extends WebTestCase
                                 'partner_type[email_1]'                     => 'testad@test.es',
                                 'partner_type[active]'                      => '1',
                                 'partner_type[region]'                      => '1',
-                                'partner_type[province]'                    => '1',
                                 'partner_type[country]'                     => '1',
                                 'partner_type[partner]'                     => '1',
                                 ),

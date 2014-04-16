@@ -2,7 +2,7 @@
 namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -45,7 +45,6 @@ class TicketController extends Controller {
         $request    = $this->getRequest();
         $security   = $this->get('security.context');
 
-        $params     = array();
         $id_user    = $this->get('security.context')->getToken()->getUser()->getId();
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
@@ -55,7 +54,6 @@ class TicketController extends Controller {
         if($option == null){
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
-
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
 
                 if($workshops[0]->getId() != "") {
@@ -74,6 +72,8 @@ class TicketController extends Controller {
                 else{ $params[] = array(); }
             }
             else{ $params[] = array(); }
+
+            $option = 'all';
         }
 
         elseif ($option == 'all'      ) { $params[] = array();  }
@@ -103,16 +103,20 @@ class TicketController extends Controller {
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
             $params[] = array('workshop', ' = '.$option);
         }
-
         $pagination = new Pagination($page);
 
-        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
-
-        $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')){
+            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+        }else{
+            $joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+        }
 
         $pagination->setTotalPagByLength($length);
 
-        return $this->render('TicketBundle:Ticket:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
+        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
                                                                                        'option'     => $option,
@@ -160,7 +164,7 @@ class TicketController extends Controller {
                     if (($form->isValid()) && ($formC->isValid())) {
 
                         //Define CAR
-                        $car = DefaultC::newEntity($car, $user);
+                        $car = UtilController::newEntity($car, $user);
 
                         $id_brand   = $request->request->get('new_car_form_brand'  );
                         $id_model   = $request->request->get('new_car_form_model'  );
@@ -173,11 +177,11 @@ class TicketController extends Controller {
                         $car->setBrand($brand);
                         $car->setModel($model);
                         $car->setVersion($version);
-                        $car = DefaultC::newEntity($car, $user);
-                        DefaultC::saveEntity($em, $car, $user, false);
+                        $car = UtilController::newEntity($car, $user);
+                        UtilController::saveEntity($em, $car, $user, false);
 
                         //Define TICKET
-                        $ticket = DefaultC::newEntity($ticket, $user);
+                        $ticket = UtilController::newEntity($ticket, $user);
                         if ($security->isGranted('ROLE_ASSESSOR'))
                         {
                             $ticket->setWorkshop($workshop);
@@ -187,7 +191,7 @@ class TicketController extends Controller {
                         }
                         $ticket->setStatus($status);
                         $ticket->setCar($car);
-                        DefaultC::saveEntity($em, $ticket, $user);
+                        UtilController::saveEntity($em, $ticket, $user);
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
@@ -212,7 +216,7 @@ class TicketController extends Controller {
         }
 
         $brands  = $em->getRepository('CarBundle:Brand'    )->findAll();
-        return $this->render('TicketBundle:Ticket:new_ticket_layout.html.twig', array('ticket' => $ticket,
+        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
                     'brands' => $brands,
@@ -243,7 +247,7 @@ class TicketController extends Controller {
             //Define CAR
             if ($form->isValid()) {
 
-                    DefaultC::saveEntity($em, $ticket, $user);
+                    UtilController::saveEntity($em, $ticket, $user);
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
@@ -261,7 +265,7 @@ class TicketController extends Controller {
 
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
-        return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', array(
+        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
                                                                                         'form'        => $form->createView(),
                                                                                         'form_name'   => $form->getName(),
                                                                                         'ticket'      => $ticket,
@@ -355,9 +359,9 @@ class TicketController extends Controller {
                 if (($formP->isValid()) and ($formD->isValid())) {
 
                     //Define Post
-                    $post = DefaultC::newEntity($post, $user);
+                    $post = UtilController::newEntity($post, $user);
                     $post->setTicket($ticket);
-                    DefaultC::saveEntity($em, $post, $user, false);
+                    UtilController::saveEntity($em, $post, $user, false);
 
                     //Define Document
                     $document->setPost($post);
@@ -381,7 +385,7 @@ class TicketController extends Controller {
                         if($primer_assessor == 0) $ticket->setAssignedTo($user);
                     }
 
-                    DefaultC::saveEntity($em, $ticket, $user);
+                    UtilController::saveEntity($em, $ticket, $user);
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
@@ -400,14 +404,14 @@ class TicketController extends Controller {
         }
 
         $array = array( 'formP'     => $formP->createView(),
-                        'form_name' => $formP->getName(),
+                        'form_name' => $form->getName(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems, );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
-        return $this->render('TicketBundle:Ticket:show_ticket_layout.html.twig', $array);
+        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -433,7 +437,7 @@ class TicketController extends Controller {
         $tickets  = $em->getRepository('TicketBundle:Ticket'    )->findTicketsFiltered($id_workshop, $id_ticket, $status);
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
 
-        return $this->render('TicketBundle:Ticket:list_ticket_layout.html.twig', array('workshop' => $workshop,
+        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop' => $workshop,
                                                                                        'tickets'  => $tickets,
                                                                               ));
     }
@@ -462,7 +466,7 @@ class TicketController extends Controller {
                     $ticket->setStatus($closed);
                     $ticket->setBlockedBy(null);
 
-                    DefaultC::saveEntity($em, $ticket, $user);
+                    UtilController::saveEntity($em, $ticket, $user);
 
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
@@ -485,7 +489,7 @@ class TicketController extends Controller {
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
 
-        return $this->render('TicketBundle:Ticket:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+        return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
                                                                                         'systems'   => $systems,
                                                                                         'form'      => $form->createView(),
                                                                                         'form_name' => $form->getName(), ));
@@ -506,7 +510,7 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         $ticket->setStatus($status);
-        DefaultC::saveEntity($em, $ticket, $user);
+        UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
@@ -535,8 +539,8 @@ class TicketController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        return $this->render('TicketBundle:Ticket:workshop/list_workshop.html.twig', array( 'workshops'  => $workshops,
-                                                                                            'pagination' => $pagination));
+        return $this->render('TicketBundle:Workshop:list_workshop.html.twig', array( 'workshops'  => $workshops,
+                                                                                     'pagination' => $pagination));
     }
 
     /**
@@ -558,7 +562,7 @@ class TicketController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $tickets));
+        return $this->render('TicketBundle:Workshop:ticketsFromWorkshop.html.twig', array('tickets' => $tickets));
     }
 
     /**
@@ -586,7 +590,7 @@ class TicketController extends Controller {
         }
 
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($ticket->getWorkshop()->getId());
-        return $this->render('TicketBundle:Ticket:workshop/ticketsFromWorkshop.html.twig', array('tickets' => $workshop->getTickets()));
+        return $this->render('TicketBundle:Workshop:ticketsFromWorkshop.html.twig', array('tickets' => $workshop->getTickets()));
     }
 
     /**
@@ -599,9 +603,9 @@ class TicketController extends Controller {
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $users = $this->getUsersToAssingFromTicket();
 
-        return $this->render('TicketBundle:Ticket:ticket/assign_ticket.html.twig', array('ticket' => $ticket,
-                                                                                         'users' => $users
-                                                                                       ));
+        return $this->render('TicketBundle:Ticket:assign_ticket.html.twig', array('ticket' => $ticket,
+                                                                                  'users' => $users
+                                                                                  ));
     }
 
     /**
@@ -634,7 +638,7 @@ class TicketController extends Controller {
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
-        return $this->render('TicketBundle:Ticket:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
+        return $this->render('TicketBundle:Layout:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
                                                                                                  'systems'   => $systems, ));
     }
 

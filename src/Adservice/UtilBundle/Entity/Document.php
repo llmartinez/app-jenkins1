@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity(repositoryClass="Adservice\UtilBundle\Entity\DocumentRepository") 
+ * @ORM\Entity(repositoryClass="Adservice\UtilBundle\Entity\DocumentRepository")
  * @ORM\Table(name="document")
  * @ORM\HasLifecycleCallbacks
  */
@@ -24,7 +24,7 @@ class Document {
 
     /**
      * @var string $post
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Post")
      */
     public $post;
@@ -38,7 +38,7 @@ class Document {
      * @Assert\File(maxSize="6000000")
      */
     private $file;
-    
+
     private $temp;
 
     /**
@@ -53,7 +53,7 @@ class Document {
     /**
      * Get post
      *
-     * @return string 
+     * @return string
      */
     public function getPost() {
         return $this->post;
@@ -99,6 +99,11 @@ class Document {
      */
     public function getFile() {
         return $this->file;
+    }
+
+    public function getMymeType() {
+        $mymetype = explode ( '.', $this->path)[1];
+        return $mymetype;
     }
 
     public function getAbsolutePath() {

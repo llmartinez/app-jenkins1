@@ -4,7 +4,7 @@ namespace Adservice\StatisticBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase {
+class StatisticControllerTest extends WebTestCase {
 
     public function testIsTrue(){
         $this->assertTrue(true);

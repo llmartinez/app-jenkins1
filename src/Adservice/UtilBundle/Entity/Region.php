@@ -27,11 +27,17 @@ class Region{
      */
     private $region;
 
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -51,14 +57,40 @@ class Region{
     /**
      * Get region
      *
-     * @return string 
+     * @return string
      */
     public function getRegion()
     {
         return $this->region;
     }
-    
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
     public function __toString() {
         return $this->getRegion();
+    }
+    public function to_json(){
+        $json = array('id'      => $this->getId(),
+                      'region'  => $this->getRegion(),
+                      'country' => $this->getCountry());
+        return $json;
     }
 }

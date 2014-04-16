@@ -12,56 +12,119 @@
     <form action="{{ path('workshopOrder_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-6 column">
-                    <label>Workshop Name</label>
-                    {{ form_widget(form.name, { 'attr': {'class': 'form-control',
-                                                         'placeholder': 'Name'} }) }}
-
-                    <label for="new_car_form_vin">Contact Name</label>
-                    {{ form_widget(form.contact_name, { 'attr': { 'class': 'form-control',
-                                                        'placeholder': 'name'} }) }}
-
-                    <label for="new_car_form_vin">Contact Surname</label>
-                    {{ form_widget(form.contact_surname, { 'attr': { 'class': 'form-control',
-                                                                'placeholder': 'surname'} }) }}
-
-
-                    <label>Email</label>
-                    {{ form_widget(form.email_1, { 'attr': {'class': 'form-control',
-                                                           'placeholder': 'Email'} }) }}
-                    <label>Phone Number</label>
-                    {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control',
-                                                                   'placeholder': 'Phone Number'} }) }}
-                    <label>Movile Phone</label>
-                    {{ form_widget(form.movile_number_1, { 'attr': {'class': 'form-control',
-                                                                   'placeholder': 'Movile Phone'} }) }}
-                </div>
-
-                <div class="col-md-6 column">
-
-                    <label>Typology</label>
-                    {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
-
-                    <label>Region</label>
-                    {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }}
-
-                    <label>Province</label>
-                    {{ form_widget(form.province, { 'attr': {'class': 'form-control'} }) }}
-
-                    <label>City</label>
-                    {{ form_widget(form.city, { 'attr': {'class': 'form-control',
-                                                         'placeholder': 'City'} }) }}
-                    <label>Adress</label>
-                    {{ form_widget(form.address, { 'attr': {'class': 'form-control',
-                                                            'placeholder': 'Address'} }) }}
-                </div>
-
-                {{ form_rest(form) }}
+            <div class="col-xs-2 col-md-2">
+                <label>Workshop Name</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'Name'} }) }}
             </div>
-            <br/>
-            <p><button type="submit">Create</button></p>
+            <div class="col-xs-2 col-md-2">
+                <label>Cif</label>
+                {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'Cif'} }) }}
+            </div>
 
+            {% if is_granted('ROLE_SUPER_AD') %}
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label for="adservice_partnerbundle_shoptype">Partner * </label>
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                </div>
+            {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
+            {% endif %}
+
+            <div class="col-xs-2 col-md-2">
+                <label>Shop               </label> {{ form_widget(form.shop,            { 'attr': {'class': 'form-control'} }) }}
+            </div>
+
+            <div class="col-xs-2 col-md-2">
+                <label>Typology           </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2">
+
+                <label>Code Workshop      </label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} contact         {% endtrans %} *</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                         {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                          'min': 0,
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+
+        {{ form_rest(form) }}
+
+        <div class="col-xs-10 col-md-10 form-group">
+            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
         </div>
     </form>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function(){
+
+            // REGIONS FROM COUNTRY
+            var url_ajax = "{{ path("regions_from_country") }}";
+            populate_region(url_ajax);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
+            });
+
+            {% if is_granted('ROLE_SUPER_AD') %}
+                // SHOPS FROM PARTNER
+                var url_ajax_partner = "{{ path("shops_from_partner") }}";
+                populate_shop(url_ajax_partner);
+
+                //si clickamos el combobox de los paises repoblamos la de las regiones
+                $('form').find('select[name*=partner]').change(function() {
+                   var url_ajax_partner = "{{ path("shops_from_partner") }}";
+                   populate_shop(url_ajax_partner);
+                });
+            {% endif %}
+        });
+    </script>
 {% endblock %}

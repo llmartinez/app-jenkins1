@@ -21,56 +21,59 @@
              {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
               {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
         </div>
-        <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">Email1 *</label>
-            {{ form_widget(form.email_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">Email2</label>
-            {{ form_widget(form.email_2, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">PhoneNumber1 *</label>
-            {{ form_widget(form.phone_number_1, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">PhoneNumber2</label>
-            {{ form_widget(form.phone_number_2, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="new_ticket_form_importance">Fax</label>
-            {{ form_widget(form.fax, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Region *</label>
-            {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Province *</label>
-            {{ form_widget(form.province, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Postal Code *</label>
-            {{ form_widget(form.postal_code, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label for="new_ticket_form_importance">Address *</label>
-            {{ form_widget(form.address, { 'attr': {'class': 'form-control' } }) }}
-        </div>
         <div class="col-xs-2 col-md-2 form-group">
             <label for="new_ticket_form_importance">Active</label>
             {{ form_widget(form.active) }}
         </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                          'min': 0,
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+
         {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_save" type="submit">Save</button>
+            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
         </div>
-        </p>
     </form>
 
 {#    WORKSHOPS ZONE#}
-    {# {% include 'WorkshopBundle:Default:_list.html.twig' with {'workshops' : partner.workshops} %} #}
+    {# {% include 'WorkshopBundle:Partner:_list.html.twig' with {'workshops' : partner.workshops} %} #}
 
 {% endblock%}
 
@@ -80,10 +83,15 @@
 
     <script>
         $(document).ready(function() {
-            //si clickamos el combobox de las regiones repoblamos la de las provincias
-            $('form[name=adservice_partnerbundle_partnertype]').find('select[name*=region]').change(function() {
-                var url_ajax = "{{ path("user_provinces") }}";
-                populate_province(url_ajax);
+            // REGIONS FROM COUNTRY
+            var url_ajax = "{{ path("regions_from_country") }}";
+            var region = '{{ shop.region }}';
+            populate_region(url_ajax, region);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
             });
         });
     </script>

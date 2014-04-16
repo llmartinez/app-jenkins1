@@ -1,0 +1,8 @@
+
+Adservice\UtilBundle\Entity\Document:
+    properties:
+        file:
+            - File:
+                maxSize: 5120k
+                mimeTypes: [application/pdf, application/x-pdf, image/bmp, image/jpeg, image/png, image/gif, text/plain, application/msword, application/mspowerpoint]
+                mimeTypesMessage: 'Please upload a valid file (image, text or pdf)'

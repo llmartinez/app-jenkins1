@@ -4,7 +4,6 @@ namespace Adservice\UserBundle\Tests\Entity;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Tests\Entity\CountryTest;
 use Adservice\UtilBundle\Tests\Entity\RegionTest;
-use Adservice\UtilBundle\Tests\Entity\ProvinceTest;
 use Adservice\UserBundle\Tests\Entity\RoleTest;
 use Adservice\WorkshopBundle\Tests\Entity\WorkshopTest;
 
@@ -24,7 +23,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
        $user->setName('Test');
        $user->setSurname('User_admin');
        $user->setCity('Badalona');
-       $user->setProvince(ProvinceTest::GetProvince());
        $user->setPhoneNumber1('931112233');
        $user->setPhoneNumber2('931112233');
        $user->setMovileNumber1('655112233');

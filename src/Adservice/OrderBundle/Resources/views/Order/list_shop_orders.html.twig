@@ -1,8 +1,9 @@
 
-    {% if shopOrders is defined %}
-            <legend>Solicitudes de Tiendas pendientes</legend>
-        {% if shopOrders|length > 0  %}
-            <table class="table table-hover" style="width: 80%; margin-left: 10%;">
+    <legend>Solicitudes de Tiendas pendientes</legend>
+
+    {% if orders is defined %}
+        {% if orders|length > 0  %}
+            <table class="table table-hover" style="width: 90%; margin-left: 10%;">
                 <thead>
                     <tr>
                         <th>#            </th>
@@ -10,7 +11,6 @@
                         <th>Partner      </th>
                         <th>Phone Number </th>
                         <th>Region       </th>
-                        <th>Province     </th>
                         <th>Address      </th>
                         <th>Status       </th>
                         <th>Order        </th>
@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for shopOrder in shopOrders %}
+                    {% for shopOrder in orders %}
 
                    {#  {% if ordersBefore[shopOrder.id] is defined %}
                         {% set orderBefore = ordersBefore[shopOrder.id] %}
@@ -29,7 +29,6 @@
                             <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.phoneNumber1 }} </td>
                             <td> {{ shopOrder.region       }} </td>
-                            <td> {{ shopOrder.province     }} </td>
                             <td> {{ shopOrder.address      }} </td>
                             <td> {% if shopOrder.active == 1 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
@@ -55,7 +54,6 @@
                                                     <tr><td><b>Partner      </b></td>{# <td>{{ orderBefore.partner }}      </td> #}<td> {{ shopOrder.partner      }} </td></tr>
                                                     <tr><td><b>Phone Number </b></td>{# <td>{{ orderBefore.phoneNumber1 }} </td> #}<td> {{ shopOrder.phoneNumber1 }} </td></tr>
                                                     <tr><td><b>Region       </b></td>{# <td>{{ orderBefore.region }}       </td> #}<td> {{ shopOrder.region       }} </td></tr>
-                                                    <tr><td><b>Province     </b></td>{# <td>{{ orderBefore.province }}     </td> #}<td> {{ shopOrder.province     }} </td></tr>
                                                     <tr><td><b>Address      </b></td>{# <td>{{ orderBefore.address  }}     </td> #}<td> {{ shopOrder.address      }} </td></tr>
                                                     </table>
                                                 </div>
@@ -103,4 +101,6 @@
         {% else %}
             No hay solicitudes pendientes!!
         {% endif %}
+    {% else %}
+        No hay solicitudes pendientes!!
 {% endif %}

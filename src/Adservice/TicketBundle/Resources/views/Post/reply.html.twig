@@ -1,0 +1,42 @@
+{# muestra el estado del ticket y permite responder y cerrarlo #}
+
+    {% if ticket.status != 'closed' %}
+
+    {# se define bloqued_by_assessor para no repetir la comprovacion if en el codigo  #}
+        {% if ( is_granted('ROLE_ASSESSOR')
+            and ticket.blockedBy is not null
+            and ticket.blockedBy.id == app.security.getToken().getUser().getId()) %}
+
+                {% set bloqued_by_assessor = 0 %}
+        {% else %}
+                {% set bloqued_by_assessor = 1 %}
+        {% endif %}
+
+
+    {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
+        {% if ( bloqued_by_assessor == 0 )
+           or ( not is_granted('ROLE_ASSESSOR')
+                and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+
+        {# formulario de respuesta de POST #}
+
+            <legend> Reply: </legend>
+            <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '4'} }) }}</div>
+
+            {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+
+            <button class="btn btn-primary pull-right btn100" type="submit">Submit</button>
+
+            {{ form_rest(formP) }}
+            {{ form_rest(formD) }}
+
+            {% if is_granted('ROLE_ASSESSOR') %}
+
+                <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id_ticket': ticket.id }) }}"> CLOSE TICKET <a>
+
+            {% endif %}
+        {% endif %}
+
+    {% else %}
+        <a class="btn btn-primary pull-right btn100" style="background-color:gray"> TICKET CLOSED </a>
+    {% endif %}

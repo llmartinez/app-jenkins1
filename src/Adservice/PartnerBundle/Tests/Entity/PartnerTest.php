@@ -4,7 +4,6 @@ namespace Adservice\PartnerBundle\Tests\Entity;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\UserBundle\Tests\Entity\UserTest;
 use Adservice\UtilBundle\Tests\Entity\RegionTest;
-use Adservice\UtilBundle\Tests\Entity\ProvinceTest;
 
 class PartnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +24,6 @@ class PartnerTest extends \PHPUnit_Framework_TestCase
        $partner->setPhoneNumber1('931112233');
        $partner->setPhoneNumber2('931112233');
        $partner->setPostalCode('08080');
-       $partner->setProvince(ProvinceTest::GetProvince());
        $partner->setRegion(RegionTest::GetRegion());
 
        $this->partner = $partner;

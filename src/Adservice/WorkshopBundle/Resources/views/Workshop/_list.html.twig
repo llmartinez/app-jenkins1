@@ -1,0 +1,102 @@
+{% if workshops|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Workshop Name</th>
+                <th>Partner</th>
+                <th>Shop</th>
+                {# <th>Address</th> #}
+                <th>Email1</th>
+                <th>Phone number 1</th>
+                <th>Active</th>
+                {# <th>Up Date</th> #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for workshop in workshops %}
+            <tr>
+                <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">Inactive</span>{% endif %}</td>
+                <td>{{ workshop.partner}}</td>
+                <td>{{ workshop.shop}}</td>
+                {# <td>{{ workshop.address }}</td> #}
+                <td>{{ workshop.email1 }}</td>
+                <td>{{ workshop.phoneNumber1 }}</td>
+                <td>{{ workshop.active }}</td>
+                {# <td>{{ workshop.updateAt | date('d-m-Y')}}</td> #}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
+                    </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Eliminar Taller</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Estas seguro que quieres eliminar este taller?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ path('workshop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                {% elseif is_granted('ROLE_AD') %}
+                    <td>
+                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
+                    </td>
+                    <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Eliminar Taller</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Estas seguro que quieres eliminar este taller?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ path('workshopOrder_remove', {'id': 'foo'}) }}" class="btn btn-default" role="button">SI</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                {% endif %}
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+        {% include 'UtilBundle:Pagination:pagination_workshop.html.twig' %}
+{% else %}
+    No hay talleres!!
+{% endif %}
+
+
+{% block javascripts %}
+
+    <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#MainContent').find('.glyphicon-trash').click(function() {
+                var workshop_id = $(this).data('id');
+                confirm_delete_workshop_modal(workshop_id);
+            })
+
+            //util.js
+            table_filter();
+        });
+    </script>
+{% endblock %}

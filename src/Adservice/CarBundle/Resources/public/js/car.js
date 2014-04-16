@@ -1,55 +1,34 @@
-/**
- * Rellena (fill) el combo de los modelos (model) segun la marca (brand) seleccionada por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function fill_model(url_ajax) {
 
-    var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
+    /**
+     * Funcion Ajax que devuelve un listado de modelos filtrados a partir de la marca ($brand)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carModelAction($id_brand) {
+        $em = $this->getDoctrine()->getEntityManager();
 
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: {id_brand: id_brand},
-        dataType: "json",
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#new_car_form_model').empty();
-            //Primer campo vacío
-            // $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0>Select Model..</option>");
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-        },
-        error: function() {
-            console.log("Error al cargar modelos...");
+        $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
+
+        $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
+        foreach ($models as $model) {
+            $json[] = $model->to_json();
         }
-    });
-}
+        return new Response(json_encode($json), $status = 200);
+    }
 
-/**
- * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function fill_version(url_ajax) {
+    /**
+     * Funcion Ajax que devuelve un listado de versiones filtrados a partir del modelo ($model)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carVersionAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
 
-    var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val()
+        $id_model = $petition->request->get('id_model');
+        $model = $em->getRepository('CarBundle:Model')->find($id_model);
 
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: {id_model: id_model},
-        dataType: "json",
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#new_car_form_version').empty();
-            //Primer campo vacío
-            // $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-        },
-        error: function() {
-            console.log("Error al cargar versiones...");
+        $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
+        foreach ($versions as $version) {
+            $json[] = $version->to_json();
         }
-    });
-}
+        return new Response(json_encode($json), $status = 200);
+    }

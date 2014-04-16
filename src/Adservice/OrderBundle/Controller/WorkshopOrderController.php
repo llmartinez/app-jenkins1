@@ -4,7 +4,7 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Adservice\TicketBundle\Controller\DefaultController as DefaultC;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\OrderBundle\Entity\WorkshopOrder;
 use Adservice\OrderBundle\Form\WorkshopOrderType;
@@ -14,7 +14,6 @@ use Adservice\OrderBundle\Form\WorkshopRejectOrderType;
 use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Mailer;
 use Adservice\UtilBundle\Entity\Pagination;
-use Adservice\UtilBundle\Controller\DefaultController as UtilController;
 
 class WorkshopOrderController extends Controller {
 
@@ -30,14 +29,22 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listWorkshopsAction($page=1 , $option=null) {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function listWorkshopsAction($page=1 , $partner='none') {
+        $security = $this->get('security.context');
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
-        $params[] = array('partner', ' = '.$this->get('security.context')->getToken()->getUser()->getPartner()->getId());
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if($security->isGranted('ROLE_SUPER_AD')) {
+            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
+            else                    $params   = array();
+        }
+        else { $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId()); }
+
+        $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -47,8 +54,13 @@ class WorkshopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array('workshops' => $workshops,
-                                                                                          'pagination' => $pagination,));
+        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        else $partners = array();
+
+        return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops' => $workshops,
+                                                                                           'pagination' => $pagination,
+                                                                                           'partners'   => $partners,
+                                                                                           'partner'    => $partner));
     }
 
     /**
@@ -120,35 +132,50 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
+            $partner = $workshopOrder->getPartner();
+            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             if ($form->isValid()) {
 
-                $user = $this->get('security.context')->getToken()->getUser();
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array( 'partner' => $partner->getId(),
+                                                                                        'code_workshop' => $workshopOrder->getCodeWorkshop()));
+                if($find == null)
+                {
+                    $user = $this->get('security.context')->getToken()->getUser();
 
-                $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
-                $workshopOrder->setPartner($user->getPartner());
-                $workshopOrder->setActive(false);
-                $workshopOrder->setAction('create');
-                $workshopOrder->setWantedAction('create');
-                DefaultC::saveEntity($em, $workshopOrder, $user);
+                    $workshopOrder = UtilController::newEntity($workshopOrder, $user);
+                    $workshopOrder->setCountry($user->getCountry());
+                    if($user->getRoles()[0] != 'ROLE_SUPER_AD') {
+                        $workshopOrder->setPartner($user->getPartner());
+                        $workshopOrder->setCountry($user->getPartner()->getCountry());
+                        $workshopOrder->setRegion($user->getPartner()->getRegion());
+                    }
+                    $workshopOrder->setActive(false);
+                    $workshopOrder->setAction('create');
+                    $workshopOrder->setWantedAction('create');
+                    UtilController::saveEntity($em, $workshopOrder, $user);
 
-                /* MAILING */
-                $mailer = $this->get('cms.mailer');
-                $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
-                $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
-                $mailer->setFrom('noreply@grupeina.com');
-                $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
-                $mailer->sendMailToSpool();
-                //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
+                    /* MAILING */
+                    $mailer = $this->get('cms.mailer');
+                    $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+                    $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
+                    $mailer->setFrom('noreply@grupeina.com');
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
+                    $mailer->sendMailToSpool();
+                    //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
 
-                return $this->redirect($this->generateUrl('list_orders'));
+                    return $this->redirect($this->generateUrl('list_orders'));
+
+                }else{
+                        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code;
+                        $this->get('session')->setFlash('error', $flash);
+                        $this->get('session')->setFlash('code' , $code);
+                }
             }
         }
-
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,
                                                                                      'form_name'        => $form->getName(),
                                                                                      'form'             => $form->createView()));
-
     }
 
 //  _____ ____ ___ _____
@@ -193,7 +220,7 @@ class WorkshopOrderController extends Controller {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
-                $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
+                $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
                 if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
                     $workshopOrder->setAction('re_modify');
@@ -204,7 +231,7 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder->setAction('modify');
                     $workshopOrder->setWantedAction('modify');
                 }
-                DefaultC::saveEntity($em, $workshopOrder, $user);
+                UtilController::saveEntity($em, $workshopOrder, $user);
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
@@ -262,7 +289,7 @@ class WorkshopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $workshopOrder = $this->workshop_to_workshopOrder($workshop);
-        $workshopOrder = DefaultC::newEntity($workshopOrder, $user);
+        $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
         //actualizamos el campo "action" de la orden segun queramos activar o desactivar
         if ($status == 'active'){
@@ -274,7 +301,7 @@ class WorkshopOrderController extends Controller {
             $workshopOrder->setWantedAction('deactivate');
         }
 
-        DefaultC::saveEntity($em, $workshopOrder, $user);
+        UtilController::saveEntity($em, $workshopOrder, $user);
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
@@ -461,8 +488,8 @@ class WorkshopOrderController extends Controller {
             $workshop->setActive(true);
             $action = $workshopOrder->getWantedAction();
             $em->remove($workshopOrder);
-            DefaultC::newEntity($workshop, $user);
-            DefaultC::saveEntity($em, $workshop, $user);
+            UtilController::newEntity($workshop, $user);
+            UtilController::saveEntity($em, $workshop, $user);
 
         }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
@@ -470,14 +497,14 @@ class WorkshopOrderController extends Controller {
             $workshop->setActive(false);
             $action = $workshopOrder->getWantedAction();
             $em->remove($workshopOrder);
-            DefaultC::saveEntity($em, $workshop, $user);
+            UtilController::saveEntity($em, $workshop, $user);
 
         }elseif (($workshopOrder->getWantedAction() == 'modify')  && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $action = $workshopOrder->getWantedAction();
             $em->remove($workshopOrder);
-            DefaultC::saveEntity($em, $workshop, $user);
+            UtilController::saveEntity($em, $workshop, $user);
 
         }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
             $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
@@ -487,8 +514,8 @@ class WorkshopOrderController extends Controller {
             }
             $action = $workshopOrder->getWantedAction();
             $em->remove($workshopOrder);
-            DefaultC::newEntity($workshop, $user);
-            DefaultC::saveEntity($em, $workshop, $user);
+            UtilController::newEntity($workshop, $user);
+            UtilController::saveEntity($em, $workshop, $user);
 
             /*CREAR USERNAME Y EVITAR REPETICIONES*/
             $username = UtilController::getUsernameUnused($em, $workshop->getName());
@@ -499,7 +526,7 @@ class WorkshopOrderController extends Controller {
             $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
             $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
 
-            $newUser = DefaultC::newEntity(new User(), $user);
+            $newUser = UtilController::newEntity(new User(), $user);
             $newUser->setUsername      ($username);
             $newUser->setPassword      ($pass);
             $newUser->setName          ($workshop->getContactName());
@@ -514,7 +541,6 @@ class WorkshopOrderController extends Controller {
             $newUser->setActive        ('1');
             $newUser->setCountry       ($workshop->getCountry());
             $newUser->setRegion        ($workshop->getRegion());
-            $newUser->setProvince      ($workshop->getProvince());
             $newUser->setCreatedBy     ($workshop->getCreatedBy());
             $newUser->setCreatedAt     (new \DateTime());
             $newUser->setModifiedBy    ($workshop->getCreatedBy());
@@ -529,7 +555,7 @@ class WorkshopOrderController extends Controller {
             $password = $encoder->encodePassword($newUser->getPassword(), $salt);
             $newUser->setPassword($password);
             $newUser->setSalt($salt);
-            DefaultC::saveEntity($em, $newUser, $user);
+            UtilController::saveEntity($em, $newUser, $user);
 
             /* MAILING */
             $mailerUser = $this->get('cms.mailer');
@@ -553,10 +579,6 @@ class WorkshopOrderController extends Controller {
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
         //                                                                                'action'   => $action));die;
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        $workshopsOrders = $em->getRepository("OrderBundle:WorkshopOrder")->findAll();
-        $ordersBefore = $this->getOrdersBefore($em, $workshopsOrders);
-
         return $this->redirect($this->generateUrl('list_orders'));
 
     }
@@ -571,14 +593,15 @@ class WorkshopOrderController extends Controller {
         $workshopOrder = new WorkshopOrder();
 
         $workshopOrder->setIdWorkshop    ($workshop->getId());
-        $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setName          ($workshop->getName());
+        $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setCif           ($workshop->getCif());
-        $workshopOrder->setAddress       ($workshop->getAddress());
-        $workshopOrder->setCity          ($workshop->getCity());
-        $workshopOrder->setRegion        ($workshop->getRegion());
-        $workshopOrder->setProvince      ($workshop->getProvince());
-        $workshopOrder->setCountry       ($workshop->getCountry());
+        $workshopOrder->setPartner       ($workshop->getPartner());
+        $workshopOrder->setShop          ($workshop->getShop());
+        $workshopOrder->setTypology      ($workshop->getTypology());
+        $workshopOrder->setTest          ($workshop->getTest());
+        $workshopOrder->setContactName   ($workshop->getContactName());
+        $workshopOrder->setContactSurname($workshop->getContactSurname());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());
         $workshopOrder->setPhoneNumber2  ($workshop->getPhoneNumber2());
         $workshopOrder->setMovileNumber1 ($workshop->getMovileNumber1());
@@ -586,16 +609,25 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setFax           ($workshop->getFax());
         $workshopOrder->setEmail1        ($workshop->getEmail1());
         $workshopOrder->setEmail2        ($workshop->getEmail2());
-        $workshopOrder->setContactName   ($workshop->getContactName());
-        $workshopOrder->setContactSurname($workshop->getContactSurname());
-        $workshopOrder->setPartner       ($workshop->getPartner());
-        $workshopOrder->setTypology      ($workshop->getTypology());
-        $workshopOrder->setTest          ($workshop->getTest());
-        $workshopOrder->setCreatedBy     ($workshop->getCreatedBy());
-        $workshopOrder->setCreatedAt     ($workshop->getCreatedAt());
-        $workshopOrder->setModifiedBy    ($workshop->getModifiedBy());
-        $workshopOrder->setModifiedAt    ($workshop->getModifiedAt());
+        $workshopOrder->setCountry       ($workshop->getCountry());
+        $workshopOrder->setRegion        ($workshop->getRegion());
+        $workshopOrder->setAddress       ($workshop->getAddress());
+        $workshopOrder->setPostalCode    ($workshop->getPostalCode());
+
+        if ($workshopOrder->getCreatedBy() != null ) {
+            $workshopOrder->setCreatedBy($workshopOrder->getCreatedBy());
+        }
+        if ($workshopOrder->getCreatedAt() != null ) {
+            $workshopOrder->setCreatedAt($workshopOrder->getCreatedAt());
+        }
+        if ($workshopOrder->getModifiedBy() != null ) {
+            $workshopOrder->setModifiedBy($workshopOrder->getModifiedBy());
+        }
+        if ($workshopOrder->getModifiedAt() != null ) {
+            $workshopOrder->setModifiedAt($workshopOrder->getModifiedAt());
+        }
         $workshopOrder->setActive(false);
+
 
         return $workshopOrder;
     }
@@ -608,32 +640,40 @@ class WorkshopOrderController extends Controller {
      */
     private function workshopOrder_to_workshop($workshop, $workshopOrder){
 
-        $workshop->setName               ($workshopOrder->getName());
-        $workshop->setCodeWorkshop       ($workshopOrder->getCodeWorkshop());
-        $workshop->setCif                ($workshopOrder->getCif());
-        $workshop->setNumAdClient        ($workshopOrder->getNumAdClient());
-        $workshop->setAddress            ($workshopOrder->getAddress());
-        $workshop->setCity               ($workshopOrder->getCity());
-        $workshop->setRegion             ($workshopOrder->getRegion());
-        $workshop->setProvince           ($workshopOrder->getProvince());
-        $workshop->setCountry            ($workshopOrder->getCountry());
-        $workshop->setPhoneNumber1       ($workshopOrder->getPhoneNumber1());
-        $workshop->setPhoneNumber2       ($workshopOrder->getPhoneNumber2());
-        $workshop->setMovileNumber1      ($workshopOrder->getMovileNumber1());
-        $workshop->setMovileNumber2      ($workshopOrder->getMovileNumber2());
-        $workshop->setFax                ($workshopOrder->getFax());
-        $workshop->setEmail1             ($workshopOrder->getEmail1());
-        $workshop->setEmail2             ($workshopOrder->getEmail2());
-        $workshop->setContactName        ($workshopOrder->getContactName());
-        $workshop->setContactSurname     ($workshopOrder->getContactSurname());
-        $workshop->setPartner            ($workshopOrder->getPartner());
-        $workshop->setTypology           ($workshopOrder->getTypology());
-        $workshop->setTest               ($workshopOrder->getTest());
+        $workshop->setName          ($workshopOrder->getName());
+        $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
+        $workshop->setCif           ($workshopOrder->getCif());
+        $workshop->setPartner       ($workshopOrder->getPartner());
+        $workshop->setShop          ($workshopOrder->getShop());
+        $workshop->setTypology      ($workshopOrder->getTypology());
+        $workshop->setTest          ($workshopOrder->getTest());
+        $workshop->setContactName   ($workshopOrder->getContactName());
+        $workshop->setContactSurname($workshopOrder->getContactSurname());
+        $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
+        $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
+        $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());
+        $workshop->setMovileNumber2 ($workshopOrder->getMovileNumber2());
+        $workshop->setFax           ($workshopOrder->getFax());
+        $workshop->setEmail1        ($workshopOrder->getEmail1());
+        $workshop->setEmail2        ($workshopOrder->getEmail2());
+        $workshop->setCountry       ($workshopOrder->getCountry());
+        $workshop->setRegion        ($workshopOrder->getRegion());
+        $workshop->setAddress       ($workshopOrder->getAddress());
+        $workshop->setPostalCode    ($workshopOrder->getPostalCode());
+
+        if ($workshopOrder->getCreatedBy() != null ) {
+            $workshop->setCreatedBy($workshopOrder->getCreatedBy());
+        }
+        if ($workshopOrder->getCreatedAt() != null ) {
+            $workshop->setCreatedAt($workshopOrder->getCreatedAt());
+        }
+        if ($workshopOrder->getModifiedBy() != null ) {
+            $workshop->setModifiedBy($workshopOrder->getModifiedBy());
+        }
+        if ($workshopOrder->getModifiedAt() != null ) {
+            $workshop->setModifiedAt($workshopOrder->getModifiedAt());
+        }
         $workshop->setActive             (true);
-        $workshop->setCreatedBy          ($workshopOrder->getCreatedBy());
-        $workshop->setCreatedAt          ($workshopOrder->getCreatedAt());
-        $workshop->setModifiedBy         ($workshopOrder->getModifiedBy());
-        $workshop->setModifiedAt         ($workshopOrder->getModifiedAt());
 
         return $workshop;
     }

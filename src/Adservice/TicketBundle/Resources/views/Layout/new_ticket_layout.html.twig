@@ -1,0 +1,46 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">Home</a></li>
+      <li><a href="{{ path('listTicket') }}">List of Tickets</a></li>
+      <li class="active">New ticket</li>
+    </ol>
+
+{% endblock  %}
+
+{% block info %}
+
+	{% if is_granted('ROLE_ASSESSOR') %}
+
+        {% if workshop.id != "" %}  {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+                                    {% include 'TicketBundle:Includes:_tbl_similar.html.twig'    %}
+        {% else %}                  {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}  {% endif %}
+
+  {% else %}
+
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% include 'TicketBundle:Workshop:show_workshop.html.twig' %}
+
+  {% endif %}
+{% endblock  %}
+
+{% block content %}
+
+    {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
+
+    {% if workshop.id != "" %}
+        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+
+          {% include 'TicketBundle:Car:new_car.html.twig'        %}
+
+          {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
+
+          <button id="save" name="save" class="btn btn-primary pull-right" type="submit">Save</button>
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">Save & close</button>{% endif %}
+        </form>
+
+    {% else %}<p>Insert a workshop to create a ticket</p>  {% endif %}
+
+{% endblock  %}

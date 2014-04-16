@@ -1,0 +1,182 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">Home</a></li>
+        <li><a href="{{ path('workshop_list') }}">list of Workshops</a></li>
+        <li class="active">New Workshop</li>
+    </ol>
+
+
+    <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <div class="container">
+            <legend>Workshop</legend>
+
+            {% if app.session.hasFlash('error') %}
+                <p class="error">{{ app.session.getFlash('error') }}</p>
+            {% endif %}
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_name">Name</label>
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_cif">CIF</label>
+            {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_typology">Typology</label>
+            {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_partner">Partner</label>
+            {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_shop">Shop</label>
+            {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label for="new_car_form_vin">Code Workshop</label>
+            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                                                           'placeholder': 'code Workshop', 'min': 1} }) }}
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+                <label for="adservice_workshopbundle_workshoptype_active">Active</label>
+                {{ form_widget(form.active) }}
+            </div>
+            <div class="col-xs-3 col-md-3 form-group">
+                <label for="adservice_workshopbundle_workshoptype_test">Test</label>
+                {{ form_widget(form.test) }}
+            </div>
+            <div class="col-xs-9 col-md-9 form-group">
+                <label for="adservice_workshopbundle_workshoptype_endtest_at">Endtest at</label>
+                {{ form_widget(form.endtest_at) }}
+            </div>
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">Diagnosis machines</label>
+            {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+        </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                        {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-5 col-md-5 form-group">
+            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                          'min': 0,
+                                                                                                                          'required': 'required' } }) }}
+        </div>
+        <legend>Observations</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <label for="adservice_workshopbundle_workshoptype_conflictive">Conflictive</label>
+            {{ form_widget(form.conflictive) }}
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_workshop">Observation Workshop</label>
+            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_assessor">Observation Assessor</label>
+            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="adservice_workshopbundle_workshoptype_observation_admin">Observation Admin</label>
+            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+        </div>
+
+    {{ form_rest(form) }}
+            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+        // REGIONS FROM COUNTRY
+            $('form').find('select[name*=country]').val({{ app.security.getToken().getUser().getCountry.getId() }});
+            var url_ajax = "{{ path("regions_from_country") }}";
+            populate_region(url_ajax);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
+            });
+
+        // DATE TEST
+            var d = new Date();
+            $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth());
+            $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
+            $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
+            $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
+            $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
+
+            $('#adservice_workshopbundle_workshoptype_test').change(function(){
+
+                    if($('#adservice_workshopbundle_workshoptype_test').is(':checked')) {
+                        var d = new Date();
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth()+1);
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
+                    }
+                    else{
+                        var d = new Date();
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
+                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
+                    }
+                });
+        });
+    </script>
+{% endblock %}

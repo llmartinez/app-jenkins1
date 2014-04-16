@@ -7,9 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Adservice\UtilBundle\DataFixtures\ORM\Data as Data;
 
 class Ads extends AbstractFixture implements OrderedFixtureInterface {
-    
-    public function getOrder(){ return 20; }
-    
+
+    public function getOrder(){ return 24; }
+
     public function load(ObjectManager $manager) {
         $type = 'ad';
         $pass = '889qsbiJy2cFLyi4DFjCvgeGgP10lJEigN8sUBQW9NokZ1HjdZxSvnOq1+YpyAbs/zK2A3dfSgOOUbujLUaaiA==';
@@ -18,7 +18,7 @@ class Ads extends AbstractFixture implements OrderedFixtureInterface {
         $partner = 'partner';
         $role = 'ROLE_AD';
         $num = Data::getNumAds();
-        
+
         $users= Users::loadUsers($manager, $this, $type, $pass, $salt, $workshop, $partner, $role, $num);
     }
 }

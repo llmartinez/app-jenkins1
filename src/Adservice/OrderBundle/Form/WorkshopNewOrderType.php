@@ -11,18 +11,26 @@ class WorkshopNewOrderType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('address', 'text', array('required' => true))
-            ->add('city', 'text', array('required' => true))
-            ->add('phone_number_1', 'text')
-            ->add('movile_number_1', 'text', array('required' => false))
-            ->add('contact_name', 'text', array('required' => true))
-            ->add('contact_surname', 'text', array('required' => true))
-            ->add('email_1','email')
-            ->add('province')
-            ->add('region')
-            ->add('country')
+            ->add('cif','text', array('required' => false))
+            ->add('partner')
+            ->add('shop')
+            ->add('code_workshop')
             ->add('typology')
             ->add('test')
+            ->add('contact_name', 'text', array('required' => true))
+            ->add('contact_surname', 'text', array('required' => true))
+             //CONTACT
+            ->add('country')
+            ->add('region')
+            ->add('address')
+            ->add('postal_code')
+            ->add('phone_number_1', 'text')
+            ->add('phone_number_2', 'text', array('required' => false))
+            ->add('movile_number_1', 'text', array('required' => false))
+            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('fax', 'text', array('required' => false))
+            ->add('email_1','email')
+            ->add('email_2','email', array('required' => false))
         ;
     }
 

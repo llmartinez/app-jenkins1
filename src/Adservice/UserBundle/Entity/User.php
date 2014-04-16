@@ -11,7 +11,6 @@ use Symfony\Component\Validator\ExecutionContext;
 use Adservice\UtilBundle\Entity\Country;
 use Adservice\UtilBundle\Entity\Language;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 
 /**
  * Adservice\UserBundle\Entity\User

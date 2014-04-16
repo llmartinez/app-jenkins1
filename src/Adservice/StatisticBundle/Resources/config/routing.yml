@@ -1,7 +1,7 @@
 listStatistics:
-    pattern:  /list/{type}/{page}/{date_from}/{date_to}/{partner}/{status}
-    defaults: { _controller: StatisticBundle:Default:list, type: null, page: 1, date_from: 'none', date_to: 'none', partner: 'none', status: 'none' }
+    pattern:  /list/{type}/{page}/{date_from}/{date_to}/{partner}/{status}/{country}
+    defaults: { _controller: StatisticBundle:Statistic:list, type: null, page: 1, date_from: 'none', date_to: 'none', partner: 'none', status: 'none', country: 'none' }
 
 doExcel:
-    pattern:  /doExcel/{type}/{page}/{date_from}/{date_to}/{partner}/{status}
-    defaults: { _controller: StatisticBundle:Default:doExcel, type: null, page: 1, date_from: 'none', date_to: 'none', partner: 'none', status: 'none' }
+    pattern:  /doExcel/{type}/{page}/{date_from}/{date_to}/{partner}/{status}/{country}
+    defaults: { _controller: StatisticBundle:Statistic:doExcel, type: null, page: 1, date_from: 'none', date_to: 'none', partner: 'none', status: 'none', country: 'none' }

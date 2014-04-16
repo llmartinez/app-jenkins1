@@ -1,0 +1,34 @@
+
+    {% if (is_granted('ROLE_ASSESSOR')) %}
+    <legend>Ticket Data</legend>
+
+    {% if app.session.hasFlash('error_ticket') %}
+        <p class="error">{{ app.session.getFlash('error_ticket') }}</p>
+    {% endif %}
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="new_ticket_form_importance">Importance *</label>
+            {{ form_widget(form.importance, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="id_system">System *</label>
+            <select class="form-control" id="id_system" multiple="multiple", required>
+                {% for system in systems %}
+                    <option value="{{ system.id }}"> {{ system.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="new_ticket_form_subsystem">Subsystem *</label>
+            {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
+        </div>
+
+    {% endif %}
+        <div class="form-group">
+            <label for="new_ticket_form_description">Description *</label>
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5', 'placeholder': "Insert Description" } }) }}
+        </div>
+
+    {{ form_widget(form._token) }}

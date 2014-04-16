@@ -45,7 +45,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setMovileNumber1(Data::getPhone());
             $entidad->setPhoneNumber2(Data::getPhone());
             $entidad->setFax(Data::getPhone());
-            $entidad->setEmail1('mail'.$i.'@mail.es');
+            $entidad->setEmail1('dmaya@grupeina.com');//('mail'.$i.'@mail.es');
             $entidad->setEmail2('mail'.$i.'@mail.com');
             //CREATE/MODIFY
             $entidad->setCreatedAt(new \DateTime());

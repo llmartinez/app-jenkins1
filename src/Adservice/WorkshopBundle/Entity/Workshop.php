@@ -8,7 +8,6 @@ use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
-use Adservice\UtilBundle\Entity\Province;
 
 /**
  * Adservice\WorkshopBundle\Entity\Workshop

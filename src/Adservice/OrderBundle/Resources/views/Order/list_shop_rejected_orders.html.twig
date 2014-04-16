@@ -1,7 +1,8 @@
 
-    {% if shopRejectedOrders is defined %}
-            <legend>Solicitudes de Tiendas rechazadas</legend>
-        {% if shopRejectedOrders|length > 0  %}
+    <legend>Solicitudes de Tiendas rechazadas</legend>
+
+    {% if orders is defined %}
+        {% if orders|length > 0  %}
             <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
                 <thead>
                     <tr>
@@ -10,7 +11,6 @@
                         <th>Partner</th>
                         <th>Phone Number</th>
                         <th>Region</th>
-                        <th>Province</th>
                         <th>Address</th>
                         <th>Order</th>
                         <th>Reason</th>
@@ -18,14 +18,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for shopOrder in shopRejectedOrders %}
+                    {% for shopOrder in orders %}
                         <tr>
                             <td>{{ shopOrder.id }}</td>
                             <td>{{ shopOrder.name }}</td>
                             <td>{{ shopOrder.partner }}</td>
                             <td>{{ shopOrder.phoneNumber1 }}</td>
                             <td>{{ shopOrder.region }}</td>
-                            <td>{{ shopOrder.province }}</td>
                             <td>{{ shopOrder.address}}</td>
                             <td>
                                 {% if ((shopOrder.action == 'modify') or (shopOrder.action == 're_modify')) %}
@@ -46,16 +45,12 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <b>Name:</b> {{ shopOrder.name }}<br/>
-                                                    <b>Num AD Client:</b> {{ shopOrder.numAdClient }}<br/>
-                                                    <b>Cif:</b> {{ shopOrder.cif }}<br/>
                                                     <b>Address:</b> {{ shopOrder.address }}<br/>
-                                                    <b>City:</b> {{ shopOrder.city }}<br/>
                                                     <b>Phone Number</b> {{ shopOrder.phoneNumber1 }} / {{ shopOrder.phoneNumber2 }}<br/>
                                                     <b>Movile Number</b> {{ shopOrder.movileNumber1}} / {{ shopOrder.movileNumber1 }}<br/>
                                                     <b>Fax</b> {{ shopOrder.fax }}<br/>
                                                     <b>Email:</b> {{ shopOrder.email1 }} / {{ shopOrder.email2 }}<br/>
                                                     <b>Region:</b> {{ shopOrder.region }}<br/>
-                                                    <b>Province:</b> {{ shopOrder.province }}<br/>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -117,4 +112,6 @@
         {% else %}
         No hay solicitudes rechazadas pendientes!!
         {% endif %}
+    {% else %}
+        No hay solicitudes rechazadas pendientes!!
     {% endif %}

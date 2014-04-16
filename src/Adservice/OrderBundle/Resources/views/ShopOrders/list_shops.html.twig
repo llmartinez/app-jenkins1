@@ -4,26 +4,20 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Shops</li>
+      <li class="active">{% trans %} menu.list_shops {% endtrans %}</li>
     </ol>
 
-{#     <table class="table" style="width: 80%; margin-left: 10%;">
-        <tr>
-            <td align="right">
-                <div class="input-group">
-                    <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
-                    <input class="form-control" id="system-search" name="q" placeholder="Filtrar por..." required>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div>
-                </br>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('shop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear una tienda nueva</a>
-                {% endif %}
-            </td>
-        </tr>
-    </table> #}
+<legend> {% trans %} menu.list_shops {% endtrans %} </legend>
+
+    {% if is_granted('ROLE_SUPER_AD') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> partner </label>
+        <select id="flt_partner" class='form-control'>
+                <option value="none">All</option>
+            {% for partner in partners %}
+                <option value="{{ partner.id }}">{{ partner }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
 
     {% if shops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
@@ -85,7 +79,9 @@
                         {% if shop.workshops|length == 0 %}
                             <a id="delete{{ shop.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
                         {% else %}
-                            <a style="color:gray"><span class="glyphicon glyphicon-trash" title="La tienda tiene talleres asignados. Reasignalos para poder borrar." onclick="alert('La tienda tiene talleres asignados. Reasignalos para poder borrar.')"></span></a>
+                            <a  title="La tienda tiene talleres asignados. Reasignalos para poder borrar."
+                                onclick="alert('La tienda tiene talleres asignados. Reasignalos para poder borrar.')"
+                                style="color:gray"><span class="glyphicon glyphicon-trash"></span></a>
                         {% endif %}
                     </td>
                     <!-- Modal -->
@@ -117,7 +113,7 @@ No hay tiendas!!
 {% endif %}
 
 
-{% endblock%}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -126,13 +122,30 @@ No hay tiendas!!
 
     <script>
         $(document).ready(function() {
+            {% if partner != 'none' %} $("#flt_partner").val('{{ partner }}');{% endif %}
+
             $('#MainContent').find('.glyphicon-trash').click(function() {
                 var partner_id = $(this).data('id');
                 confirm_delete_partner_modal(partner_id);
-            })
+            });
 
+            //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+            $('#flt_partner').click(function() {
+
+                var partner = $('#flt_partner').val();
+
+                if(partner == null) partner = 'none';
+
+                var url     = "{{ path('shopOrder_listShops', { 'page': 'plc_page', 'partner': 'plc_partner'}) }}";
+
+                url = url.replace("plc_page", 1);
+                url = url.replace("plc_partner", partner);
+
+                window.open(url, "_self");
+            });
             //util.js
             table_filter();
         });
+
     </script>
 {% endblock %}

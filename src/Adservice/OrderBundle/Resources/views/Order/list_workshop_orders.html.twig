@@ -1,25 +1,24 @@
 
-    {% if workshopOrders is defined %}
-            <legend>Solicitudes de Talleres pendientes</legend>
-        {% if workshopOrders|length > 0  %}
-            <table class="table table-hover" style="width: 80%; margin-left: 10%;">
+    <legend>Solicitudes de Talleres pendientes</legend>
+
+    {% if orders is defined %}
+        {% if orders|length > 0  %}
+            <table class="table table-hover" style="width: 95%; margin-left: 5%;">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Workshop</th>
-                        <th>Partner</th>
-                        <th>Address</th>
+                        <th>#           </th>
+                        <th>Workshop    </th>
+                        <th>Partner     </th>
+                        <th>Shop        </th>
                         <th>Phone Number</th>
-                        <th>Region</th>
-                        <th>Province</th>
-                        <th>City</th>
-                        <th>Test</th>
-                        <th>Order</th>
-                        <th>Actions</th>
+                        <th>Region      </th>
+                        <th>Test        </th>
+                        <th>Order       </th>
+                        <th>Actions     </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for workshopOrder in workshopOrders %}
+                    {% for workshopOrder in orders %}
 
                     {% if ordersBefore[workshopOrder.id] is defined %}
                         {% set orderBefore = ordersBefore[workshopOrder.id] %}
@@ -28,11 +27,9 @@
                             <td> {{ workshopOrder.id           }} </td>
                             <td> {{ workshopOrder.name         }} </td>
                             <td> {{ workshopOrder.partner      }} </td>
-                            <td> {{ workshopOrder.address      }} </td>
+                            <td> {{ workshopOrder.shop      }} </td>
                             <td> {{ workshopOrder.phoneNumber1 }} </td>
                             <td> {{ workshopOrder.region       }} </td>
-                            <td> {{ workshopOrder.province     }} </td>
-                            <td> {{ workshopOrder.city         }} </td>
                             <td> {% if workshopOrder.test == 1 %}{% trans %} Si {% endtrans %}
                                  {% else %}                      {% trans %} No {% endtrans %}{% endif %}</td>
                             <td>
@@ -56,13 +53,11 @@
                                                     <tr><td><b>Name          </b></td><td>{{ orderBefore.name }}         </td><td> {{ workshopOrder.name }}         </td></tr>
                                                     <tr><td><b>Cif           </b></td><td>{{ orderBefore.cif }}          </td><td> {{ workshopOrder.cif }}          </td></tr>
                                                     <tr><td><b>Address       </b></td><td>{{ orderBefore.address }}      </td><td> {{ workshopOrder.address }}      </td></tr>
-                                                    <tr><td><b>City          </b></td><td>{{ orderBefore.city }}         </td><td> {{ workshopOrder.city }}         </td></tr>
                                                     <tr><td><b>Phone Number  </b></td><td>{{ orderBefore.phoneNumber1 }} </td><td> {{ workshopOrder.phoneNumber1 }} </td></tr>
                                                     <tr><td><b>Movile Number </b></td><td>{{ orderBefore.movileNumber1}}  </td><td> {{ workshopOrder.movileNumber1}}  </td></tr>
                                                     <tr><td><b>Fax           </b></td><td>{{ orderBefore.fax }}          </td><td> {{ workshopOrder.fax }}          </td></tr>
                                                     <tr><td><b>Email         </b></td><td>{{ orderBefore.email1 }}       </td><td> {{ workshopOrder.email1 }}       </td></tr>
                                                     <tr><td><b>Region        </b></td><td>{{ orderBefore.region }}       </td><td> {{ workshopOrder.region }}       </td></tr>
-                                                    <tr><td><b>Province      </b></td><td>{{ orderBefore.province }}     </td><td> {{ workshopOrder.province }}     </td></tr>
                                                     </table>
                                                 </div>
                                                 <div class="modal-footer">
@@ -92,7 +87,7 @@
                             </td>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td>
-                                    <a title="Aceptar"  href="{{ path("workshopOrder_change_status", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="Aceptar"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
                                     <a title="Rechazar" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
@@ -107,4 +102,6 @@
         {% else %}
             No hay solicitudes pendientes!!
         {% endif %}
-    {% endif %}
+    {% else %}
+        No hay solicitudes pendientes!!
+{% endif %}
