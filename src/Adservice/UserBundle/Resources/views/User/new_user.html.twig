@@ -3,32 +3,32 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li><a href="{{ path('user_list') }}">List of Users</a></li>
-      <li class="active">New user</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.user {% endtrans %}</li>
     </ol>
 
     <form action="{{ path('user_new',{ 'type':user_type}) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
              <div class="col-xs-4 col-md-4 form-group">
-                <label>Username *        </label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{% trans %} username {% endtrans %} *</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
                 {{ form_widget(form.password, { 'attr': {'required': 'required' } }) }}
             </div>
             {% if form.partner is defined %}
              <div class="col-xs-4 col-md-4 form-group">
-                <label>Partner *     </label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{% trans %} partner {% endtrans %} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
             {% if form.workshop is defined %}
              <div class="col-xs-4 col-md-4 form-group">
-                <label>Workshop *    </label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{% trans %} workshop {% endtrans %} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
             <div class="col-xs-2 col-md-2 form-group">
-                <label>Active        </label> {{ form_widget(form.active) }}
+                <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active) }}
             </div>
         <div class="col-xs-2 col-md-2 form-group">
-            <label>Language</label>
+            <label>{% trans %} language {% endtrans %}</label>
             {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
         </div>
 

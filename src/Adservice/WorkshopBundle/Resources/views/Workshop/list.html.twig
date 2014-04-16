@@ -3,20 +3,20 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">Home</a></li>
-      <li class="active">List of Workshops</li>
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
     </ol>
 
     <div style="width: 80%; margin-left: 10%;">
 
         <legend>{% trans %} menu.list_workshops {% endtrans %}
-            <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Crear un workshop nuevo</a></td>
+            <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span>{% trans %} new.workshop {% endtrans %}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-3 col-md-3 form-group"> <label> country </label>
+        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
             <select id="flt_country" class='form-control'>
-                    <option value="none">All</option>
+                    <option value="none">{% trans %} all {% endtrans %}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country }}</option>
                 {% endfor %}

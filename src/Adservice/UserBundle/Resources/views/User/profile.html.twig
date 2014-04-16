@@ -3,59 +3,52 @@
 {% block body %}
 
 <ol class="breadcrumb">
-    <li><a href="{{ path('user_index') }}">Home</a></li>
-    <li class="active">My Profile</li>
+    <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+    <li class="active">{% trans %} menu.profile {% endtrans %}</li>
 </ol>
 
-<h1>Perfil de {{ app.user }} </h1>
-{# <button class="btn btn-primary pull-left" onclick="window.open('{{ path('changePassword, { 'user_id': user.id }') }}','_self')">Change Password</button> #}
-{# {% if user.roles[0] != 'ROLE_ADMIN' %} #}
-    <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">Change Password</button>
-{# {% endif %} #}
+<h1>{% trans %} profile_of {% endtrans %} {{ app.user }} </h1>
+    <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">{% trans %} change_password {% endtrans %}</button>
+
 {% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
-    {#<form action="{{ path("user_profile") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        {{ form_widget(form) }}
-        <p>
-            <button id ="btn_save" type="submit">Save</button>
-        </p>
-    </form>#}
+
 <table class="table" style="width: 80%; margin-left: 10%;">
     <tbody>
         <tr>
-            <td>Username</td><td>{{ user.username }}</td>
+            <td>{% trans %} username {% endtrans %}</td><td>{{ user.username }}</td>
         </tr>
         <tr>
-            <td>Name</td><td>{{ user.name }}</td>
+            <td>{% trans %} name     {% endtrans %}</td><td>{{ user.name }}</td>
         </tr>
         <tr>
-            <td>Surname</td><td>{{ user.surname }}</td>
+            <td>{% trans %} surname  {% endtrans %}</td><td>{{ user.surname }}</td>
         </tr>
         <tr>
-            <td>Phone Numbers</td><td>{{ user.phoneNumber1 }} / {{ user.phoneNumber2 }}</td>
+            <td>{% trans %} tel      {% endtrans %}</td><td>{{ user.phoneNumber1 }} / {{ user.phoneNumber2 }}</td>
         </tr>
         <tr>
-            <td>Movile Numbers</td><td>{{ user.movileNumber1 }} / {{ user.movileNumber2 }}</td>
+            <td>{% trans %} mobile   {% endtrans %}</td><td>{{ user.movileNumber1 }} / {{ user.movileNumber2 }}</td>
         </tr>
         <tr>
-            <td>Fax</td><td>{{ user.fax }}</td>
+            <td>{% trans %} fax      {% endtrans %}</td><td>{{ user.fax }}</td>
         </tr>
         <tr>
-            <td>Email 1</td><td>{{ user.email1 }}</td>
+            <td>{% trans %} email_1  {% endtrans %}</td><td>{{ user.email1 }}</td>
         </tr>
         <tr>
-            <td>Email 2</td><td>{{ user.email2 }}</td>
+            <td>{% trans %} email_2  {% endtrans %}</td><td>{{ user.email2 }}</td>
         </tr>
         <tr>
-            <td>Active</td><td>{{ user.active }}</td>
+            <td>{% trans %} active   {% endtrans %}</td><td>{{ user.active }}</td>
         </tr>
         <tr>
-            <td>Region</td><td>{{ user.region }}</td>
+            <td>{% trans %} region   {% endtrans %}</td><td>{{ user.region }}</td>
         </tr>
         <tr>
-            <td>Country</td><td>{{ user.country }}</td>
+            <td>{% trans %} country  {% endtrans %}</td><td>{{ user.country }}</td>
         </tr>
         <tr>
-            <td>Workshop</td><td>{{ user.workshop }}</td>
+            <td>{% trans %} workshop {% endtrans %}</td><td>{{ user.workshop }}</td>
         </tr>
 
     </tbody>
@@ -67,7 +60,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
             </div>
             <div class="modal-body">
                 <label>{% trans %} password {% endtrans %}</label>
@@ -76,8 +69,8 @@
                 <input id="new_password2" name="new_password2" type="text" placeholder="new password">
             </div>
             <div class="modal-footer">
-                <button id="confirm_password" type="button" class="btn btn-default" role="button">SI</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <button id="confirm_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
                 <script>
                     $('#confirm_password').click(function(){
                         if($('#new_password1').val() == $('#new_password2').val())
