@@ -53,6 +53,7 @@ class UtilFunctionTest
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
                                                                      '_password' => $pass));
         $crawler = $client->submit($loginForm);
+
         //cambia el ididoma a 'es'
         UtilFunctionTest::setLang($crawler, $client, 'es');
 
@@ -63,12 +64,19 @@ class UtilFunctionTest
 
 /******************************************************
  * CREA UN ARCHIVO TXT CON EL CONTENIDO DE LA PAGINA
- $ar=fopen("datos.txt","a") or die("Problemas en la creacion");
+ $ar=fopen("datos.html","a") or die("Problemas en la creacion");
  fputs($ar,$client->getResponse());
  fclose($ar);
  */
 
 /******************************************************
  * error para comprobaciones..
-$this->assertEquals(2, 1, "Probar que 1 es igual a 1");
+
+    $this->assertEquals(2, 1, "Probar que 1 es igual a 1");
+
+
+    public function testIsTrue(){
+        $this->assertTrue(true);
+        $this->assertFalse(false);
+    }
  */

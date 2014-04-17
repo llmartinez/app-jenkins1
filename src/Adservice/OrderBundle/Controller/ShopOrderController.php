@@ -609,7 +609,7 @@ class ShopOrderController extends Controller {
      * @param  Array $shopsOrders
      * @return Array
      */
-    public static function getShopOrdersBefore($shopOrders) {
+    public static function getShopOrdersBefore($em, $shopOrders) {
 
         $ordersBefore = array();
 

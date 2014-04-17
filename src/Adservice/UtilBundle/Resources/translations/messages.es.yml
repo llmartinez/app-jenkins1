@@ -6,26 +6,26 @@ login:			'Iniciar Sesión'
 login.welcome:	'Acceso usuarios AD Service'
 login.remember:	'Recuerdame'
 
-menu.title_admin:                    MENU ADMIN
-menu.title_assessor:                 MENU ASESOR
-menu.title_user:                     MENU USUARIO
-menu.title_ad:                       MENU AD
+menu.title_admin:                    'MENU Administrador'
+menu.title_assessor:                 'MENU ASESOR'
+menu.title_user:                     'MENU USUARIO'
+menu.title_ad:                       'MENU AD'
 
-menu.profile:                        Mi Perfil
-menu.list_statistics:                Consultar Estadísticas ADService
-menu.list_users:                     Listado de Usuarios ADService
-menu.list_partners:                  Listado de Socios ADService
-menu.list_shops:                     Listado de Tiendas ADService
-menu.list_workshops:                 Listado de Talleres ADService
-menu.list_tickets:                   Listado de Tickets AdService
-menu.list_popups:                    Listado de Popups ADService
-menu.list_orders: 			 	     Listado de Solicitudes pendientes
+menu.profile:                        'Mi Perfil'
+menu.list_statistics:                'Consultar Estadísticas ADService'
+menu.list_users:                     'Listado de Usuarios ADService'
+menu.list_partners:                  'Listado de Socios ADService'
+menu.list_shops:                     'Listado de Tiendas ADService'
+menu.list_workshops:                 'Listado de Talleres ADService'
+menu.list_tickets:                   'Listado de Tickets AdService'
+menu.list_popups:                    'Listado de Popups ADService'
+menu.list_orders: 			 	     'Listado de Solicitudes pendientes'
 
-menu.asign_user_to_ticket:           Asignar Tickets a Usuarios
-menu.asign_shop_to_workshop:		 Asignar Talleres a Tiendas
-menu.new_ticket:                     Crea un nuevo ticket
-menu.new_shop_order: 				 Solicitar alta de tienda
-menu.new_workshop_order:             Solicitar alta de taller
+menu.asign_user_to_ticket:           'Asignar Tickets a Usuarios'
+menu.asign_shop_to_workshop:		 'Asignar Talleres a Tiendas'
+menu.new_ticket:                     'Crea un nuevo ticket'
+menu.new_shop_order: 				 'Solicitar alta de tienda'
+menu.new_workshop_order:             'Solicitar alta de taller'
 
 #COMUNES
 id: 					 'id'
@@ -57,6 +57,7 @@ workshop: 				 'Taller'
 ticket: 				 'Ticket'
 car: 					 'Coche'
 post: 					 'Mensajes'
+order:					 'Solicitud'
 
 #CONTACT
 name:					 'Nombre'
@@ -124,6 +125,7 @@ after:					 'Después'
 new.partner:			 'Nuevo Socio'
 new.shop:				 'Nueva Tienda'
 new.workshop:			 'Nuevo Taller'
+new.user:				 'Nuevo Usuario'
 new.ticket:				 'Nuevo Ticket'
 new.popup:				 'Nuevo Popup'
 new.order.shop:			 'Nueva Solicitud de Tienda'
@@ -200,11 +202,11 @@ user.delete.confirm:	 'Estas seguro que quieres eliminar este usuario?'
 brand:					 'Marca'
 model:					 'Modelo'
 version:				 'Gama'
-year:					 'Year'
+year:					 'Año'
 motor:					 'Motor'
 kw:						 'kW'
-displacement:			 'Displacement'
-vin:					 'Vin'
+displacement:			 'Cilindrada'
+vin:					 'Número de Bastidor'
 plate_number:			 'Matrícula'
 
 
@@ -251,7 +253,7 @@ ticket.delete:				  'Borrar Ticket'
 ticket.delete.confirm:		  'Estas seguro que quieres eliminar este ticket?'
 ticket.from_workshop:		  'Tickets del taller'
 ticket.similar:				  'Tickets similares'
-ticket.similar.matching:	  'Selecciona Modelo y Subsystema para buscar tickets resultos similares'#Select Model and Subsystem for matching similar tickets..
+ticket.similar.matching:	  'Selecciona Modelo y Subsystema para buscar tickets resultos similares'
 
 #POST
 reply:						  'Responder'
@@ -265,7 +267,7 @@ statistic.general:			  'Estadísticas generales'
 statistic.tickets:			  'Estadísticas de tickets'
 statistic.workshops:		  'Estadísticas de talleres'
 statistic.from_adservice:	  'de Ad-service'
-statistic.from_country:		  'de tu ciudad'
+statistic.from_country:		  'de tu país'
 statistic.num_users:		  'Número de Usuarios'
 statistic.num_partners:		  'Número de Socios'
 statistic.num_shops:		  'Número de Tiendas'
@@ -287,12 +289,19 @@ shop_rejected:					'Sol.Tienda rechazadas'
 order.details:					'Detalles de la solicitud'
 order.cancel:					'Cancelar la solicitud'
 order.resend:					'Reenviar la solicitud'
-order.recreate:					'Vuelve a crear la solicitud del taller corrigiendo los errores indicados"'
+order.recreate:					'Vuelve a crear la solicitud corrigiendo los errores indicados'
 list.shop.pending:				'Solicitudes de Tiendas pendientes'
 list.shop.rejected:				'Solicitudes de Tiendas rechazadas'
 list.workshop.pending:			'Solicitudes de Talleres pendientes'
 list.workshop.rejected:			'Solicitudes de Talleres rechazadas'
 reject.reason:					'Motivo del rechazo'
+
+#PAGINATION
+page.first:						'Primera página'
+page.prev:						'Página anterior'
+page.goto:						'Ir a la página'
+page.next:						'Página siguiente'
+page.last:						'Última página'
 
 #MAIL
 mail.info.tel:							'93123123'
