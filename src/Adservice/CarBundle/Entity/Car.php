@@ -84,13 +84,6 @@ class Car
     private $plateNumber;
 
     /**
-     * @var string $owner
-     *
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
-     */
-    private $owner;
-
-    /**
      * @var date $created_at
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -313,26 +306,6 @@ class Car
     public function getPlateNumber()
     {
         return $this->plateNumber;
-    }
-
-    /**
-     * Set owner
-     *
-     * @param \Adservice\UserBundle\Entity\User $owner
-     */
-    public function setOwner(\Adservice\UserBundle\Entity\User $owner)
-    {
-        $this->owner = $owner;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return string
-     */
-    public function getOwner()
-    {
-        return $this->owner;
     }
 
     /**

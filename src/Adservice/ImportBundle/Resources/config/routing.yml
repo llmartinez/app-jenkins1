@@ -1,0 +1,9 @@
+
+history:
+    pattern:  /history/{history}
+    defaults: { _controller: ImportBundle:History:history, history: null }
+
+import:
+    pattern:  /{importar}
+    defaults: { _controller: ImportBundle:Import:import, importar: null }
+

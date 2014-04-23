@@ -22,6 +22,7 @@ class WorkshopNewOrderType extends AbstractType
              //CONTACT
             ->add('country')
             ->add('region')
+            ->add('city')
             ->add('address')
             ->add('postal_code')
             ->add('phone_number_1', 'text')

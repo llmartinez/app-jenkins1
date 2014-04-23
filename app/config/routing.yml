@@ -1,3 +1,12 @@
+
+############################################################################
+# LINEA PARA IMPORTAR DATOS DE LA BBDD ANTIGUA: COMENTAR UNA VEZ EJECUTADO #
+############################################################################
+ImportBundle:
+    resource: "@ImportBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/IMPORT/
+############################################################################
+
 OrderBundle:
     resource: "@OrderBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/order
@@ -37,6 +46,7 @@ UtilBundle:
 _login:
     pattern:  /
     defaults: { _controller: UserBundle:Login:goToLogin }
+
 
 #redirect:
 #    pattern: /{_locale}/{_location}/

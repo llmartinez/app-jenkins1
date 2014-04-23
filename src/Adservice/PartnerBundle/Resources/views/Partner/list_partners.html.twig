@@ -31,7 +31,7 @@
                 <th>{% trans %} phone_number_1  {% endtrans %}</th>
                 <th>{% trans %} email_1         {% endtrans %}</th>
                 <th>{% trans %} region          {% endtrans %}</th>
-                <th>{% trans %} address         {% endtrans %}</th>
+                <th>{% trans %} city            {% endtrans %}</th>
                 <th>{% trans %} actions         {% endtrans %}</th>
             </tr>
         </thead>
@@ -43,7 +43,7 @@
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
                 <td>{{ partner.region  }}</td>
-                <td>{{ partner.address }}</td>
+                <td>{{ partner.city    }}</td>
                 <td>
                     <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>

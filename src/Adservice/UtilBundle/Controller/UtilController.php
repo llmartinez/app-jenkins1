@@ -112,7 +112,11 @@ class UtilController extends Controller
         }
         return $code;
     }
+
+
+///////////////////////
 /* SIN USAR */
+///////////////////////
 
 
     // Función auxiliar usada para CIFs y NIFs especiales

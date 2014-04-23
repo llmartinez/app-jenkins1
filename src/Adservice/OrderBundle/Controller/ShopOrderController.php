@@ -541,6 +541,7 @@ class ShopOrderController extends Controller {
         $shopOrder->setPartner       ($shop->getPartner());
         $shopOrder->setCountry       ($shop->getCountry());
         $shopOrder->setRegion        ($shop->getRegion());
+        $shopOrder->setCity          ($shop->getCity());
         $shopOrder->setAddress       ($shop->getAddress());
         $shopOrder->setPostalCode    ($shop->getPostalCode());
         $shopOrder->setPhoneNumber1  ($shop->getPhoneNumber1());
@@ -578,6 +579,7 @@ class ShopOrderController extends Controller {
         $shop->setPartner       ($shopOrder->getPartner());
         $shop->setCountry       ($shopOrder->getCountry());
         $shop->setRegion        ($shopOrder->getRegion());
+        $shop->setCity          ($shopOrder->getCity());
         $shop->setAddress       ($shopOrder->getAddress());
         $shop->setPostalCode    ($shopOrder->getPostalCode());
         $shop->setPhoneNumber1  ($shopOrder->getPhoneNumber1());

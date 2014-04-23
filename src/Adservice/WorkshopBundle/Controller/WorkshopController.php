@@ -97,6 +97,7 @@ class WorkshopController extends Controller {
                     $newUser->setActive        ('1');
                     $newUser->setCountry       ($workshop->getCountry());
                     $newUser->setRegion        ($workshop->getRegion());
+                    $newUser->setCity          ($workshop->getCity());
                     $newUser->setAddress       ($workshop->getAddress());
                     $newUser->setPostalCode    ($workshop->getPostalCode());
                     $newUser->setCreatedBy     ($workshop->getCreatedBy());

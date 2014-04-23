@@ -15,40 +15,43 @@
 <table class="table" style="width: 80%; margin-left: 10%;">
     <tbody>
         <tr>
-            <td>{% trans %} username {% endtrans %}</td><td>{{ user.username }}</td>
+            <td>{% trans %} username {% endtrans %}</td><td>{{ user.username    }}</td>
         </tr>
         <tr>
-            <td>{% trans %} name     {% endtrans %}</td><td>{{ user.name }}</td>
+            <td>{% trans %} name     {% endtrans %}</td><td>{{ user.name        }}</td>
         </tr>
         <tr>
-            <td>{% trans %} surname  {% endtrans %}</td><td>{{ user.surname }}</td>
+            <td>{% trans %} surname  {% endtrans %}</td><td>{{ user.surname     }}</td>
         </tr>
         <tr>
-            <td>{% trans %} tel      {% endtrans %}</td><td>{{ user.phoneNumber1 }} / {{ user.phoneNumber2 }}</td>
+            <td>{% trans %} tel      {% endtrans %}</td><td>{{ user.phoneNumber1  }} / {{ user.phoneNumber2  }}</td>
         </tr>
         <tr>
             <td>{% trans %} mobile   {% endtrans %}</td><td>{{ user.movileNumber1 }} / {{ user.movileNumber2 }}</td>
         </tr>
         <tr>
-            <td>{% trans %} fax      {% endtrans %}</td><td>{{ user.fax }}</td>
+            <td>{% trans %} fax      {% endtrans %}</td><td>{{ user.fax         }}</td>
         </tr>
         <tr>
-            <td>{% trans %} email_1  {% endtrans %}</td><td>{{ user.email1 }}</td>
+            <td>{% trans %} email_1  {% endtrans %}</td><td>{{ user.email1      }}</td>
         </tr>
         <tr>
-            <td>{% trans %} email_2  {% endtrans %}</td><td>{{ user.email2 }}</td>
+            <td>{% trans %} email_2  {% endtrans %}</td><td>{{ user.email2      }}</td>
         </tr>
         <tr>
-            <td>{% trans %} active   {% endtrans %}</td><td>{{ user.active }}</td>
+            <td>{% trans %} active   {% endtrans %}</td><td>{{ user.active      }}</td>
         </tr>
         <tr>
-            <td>{% trans %} region   {% endtrans %}</td><td>{{ user.region }}</td>
+            <td>{% trans %} region   {% endtrans %}</td><td>{{ user.region      }}</td>
         </tr>
         <tr>
-            <td>{% trans %} country  {% endtrans %}</td><td>{{ user.country }}</td>
+            <td>{% trans %} country  {% endtrans %}</td><td>{{ user.country     }}</td>
         </tr>
         <tr>
-            <td>{% trans %} workshop {% endtrans %}</td><td>{{ user.workshop }}</td>
+            <td>{% trans %} city     {% endtrans %}</td><td>{{ user.city        }}</td>
+        </tr>
+        <tr>
+            <td>{% trans %} workshop {% endtrans %}</td><td>{{ user.workshop    }}</td>
         </tr>
 
     </tbody>
@@ -75,11 +78,14 @@
                     $('#confirm_password').click(function(){
                         if($('#new_password1').val() == $('#new_password2').val())
                         {
-                            var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER' }) }}";
-                            url = url.replace('PLACEHOLDER', $('#new_password1').val());
-                            window.open(url,'_self');
-
-                        } else alert('{% trans %} error.new_password {% endtrans %}');
+                            if($('#new_password1').val().length > 8){
+                                var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER' }) }}";
+                                url = url.replace('PLACEHOLDER', $('#new_password1').val());
+                                window.open(url,'_self');
+                            }
+                            else alert("{% trans %} error.length_password {% endtrans %}")
+                        }
+                        else alert("{% trans %} error.same_password {% endtrans %}");
                     });
                 </script>
             </div>

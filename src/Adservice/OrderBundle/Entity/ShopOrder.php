@@ -278,6 +278,13 @@ class ShopOrder {
     private $region;
 
     /**
+     * @var string $city
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\City")
+     */
+    private $city;
+
+    /**
      * @var string $address
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
@@ -379,6 +386,23 @@ class ShopOrder {
         return $this->region;
     }
 
+    /**
+     * Set city
+     *
+     * @param string $city
+     */
+    public function setCity(\Adservice\UtilBundle\Entity\City $city) {
+        $this->city = $city;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity() {
+        return $this->city;
+    }
 
     /**
      * Set address

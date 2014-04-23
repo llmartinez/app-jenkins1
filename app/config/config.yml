@@ -36,17 +36,51 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  UTF8
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            dbcon1:
+                driver:   %database2_driver%
+                host:     %database2_host%
+                port:     %database2_port%
+                dbname:   %database2_name%
+                user:     %database2_user%
+                password: %database2_password%
+                charset:  UTF8
 
     orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection:   default
+                mappings:
+                    UserBundle: ~
+                    UtilBundle: ~
+                    PartnerBundle: ~
+                    WorkshopBundle: ~
+                    TicketBundle: ~
+                    CarBundle: ~
+                    PopupBundle: ~
+                    OrderBundle: ~
+                    StatisticBundle: ~
+                # auto_mapping: true
+            emParams1:
+                connection:   dbcon1
+                mappings:
+                    ImportBundle: ~
+                # auto_mapping: true
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        # auto_mapping: true
+
+        # ORIGINAL #
+        # auto_generate_proxy_classes: %kernel.debug%
+        # auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:

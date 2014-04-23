@@ -6,6 +6,14 @@
     upstream/developers
     database_user="root"
     database_password="roger"
+
+    database2_driver="pdo_mysql"
+    database2_host="localhost"
+    database2_port=""
+    database2_name="adservice"
+    database2_user="root"
+    database2_password="password"
+
     mailer_transport="smtp"
     mailer_host="localhost"
     mailer_user=""
