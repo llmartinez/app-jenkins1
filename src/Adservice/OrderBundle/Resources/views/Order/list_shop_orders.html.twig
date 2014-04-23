@@ -20,9 +20,9 @@
                 <tbody>
                     {% for shopOrder in orders %}
 
-                   {#  {% if ordersBefore[shopOrder.id] is defined %}
+                    {% if ordersBefore[shopOrder.id] is defined %}
                         {% set orderBefore = ordersBefore[shopOrder.id] %}
-                    {% endif %} #}
+                    {% endif %}
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
                             <td> {{ shopOrder.id           }} </td>
                             <td> {{ shopOrder.name         }} </td>
@@ -65,19 +65,19 @@
                                     </div><!-- /.modal -->
 
                                 {% elseif shopOrder.action == 'activate' %}
-                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive      {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
-                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active        {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'deactivate' %}
-                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
+                                    <span class="label label-success"> {% trans %} active        {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
-                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} inactive      {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'create' %}
-                                    <span class="label label-info">    {% trans %} create   {% endtrans %}</span>
+                                    <span class="label label-info">    {% trans %} action.create {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'delete' %}
-                                    <span class="label label-danger">  {% trans %} delete   {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} delete        {% endtrans %}</span>
                                 {% elseif shopOrder.action == 'rejected' %}
-                                    <span class="label label-danger">  {% trans %} rejected {% endtrans %}</span>
+                                    <span class="label label-danger">  {% trans %} rejected      {% endtrans %}</span>
 
                                 {% elseif shopOrder.action == 'resend' and shopOrder.rejectionReason is not null %}
                                     <span class="label label-warning"> {% trans %} resend {% endtrans %} {{ shopOrder.wantedaction }} </span>

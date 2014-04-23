@@ -224,20 +224,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->surname;
     }
 
-    public function getCity() {
-        return $this->city;
-    }
-
     public function setName($name) {
         $this->name = $name;
     }
 
     public function setSurname($surname) {
         $this->surname = $surname;
-    }
-
-    public function setCity($city) {
-        $this->city = $city;
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -353,6 +345,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $region;
 
     /**
+     * @var string $city
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\City")
+     */
+    private $city;
+
+    /**
      * @var string $address
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
@@ -454,6 +453,23 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->region;
     }
 
+    /**
+     * Set city
+     *
+     * @param string $city
+     */
+    public function setCity(\Adservice\UtilBundle\Entity\City $city) {
+        $this->city = $city;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity() {
+        return $this->city;
+    }
 
     /**
      * Set address

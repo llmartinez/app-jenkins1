@@ -31,7 +31,7 @@ class Typology {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -49,7 +49,7 @@ class Typology {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getTypology() {
         return $this->typology;

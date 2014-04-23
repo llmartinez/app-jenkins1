@@ -2,7 +2,7 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /partner/list/{page}/{country}/{partner}
+    pattern:  /list/partner/{page}/{country}/{partner}
     defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: 'none', partner: 'none' }
 
 partner_new:
@@ -22,7 +22,7 @@ partner_delete:
 #   APDO. RUTAS SHOP         #
 ##############################
 shop_list:
-    pattern:  /shop/list/{page}/{country}
+    pattern:  /list/shop/{page}/{country}
     defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: 'none' }
 
 shop_new:

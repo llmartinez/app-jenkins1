@@ -16,12 +16,15 @@ class PartnerControllerTest extends WebTestCase {
      * @dataProvider partners
      */
     public function testNewPartner($partner) {
-        $client = static::createClient();
+                $client = static::createClient();
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
         UtilFunctionTest::doLogin($client, 'admin1', 'admin');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a:contains("Crear un partner nuevo")');
+        UtilFunctionTest::linkTo($client, $this, 'div legend a:contains("Nuevo Socio")');
+
+        //comprueba que vuelva a la pagina del listado de partners
+        $this->assertRegExp('/.*\/..\/partner\/new\/partner/', $client->getRequest()->getUri(), 'El usuario ve el formulario de nuevo partner');
 
         //carga el form con los datos del partner
         $newPartnerForm = $client->getCrawler()->selectButton('btn_create')->form($partner);
@@ -32,10 +35,10 @@ class PartnerControllerTest extends WebTestCase {
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         //comprueba que vuelva a la pagina del listado de partners
-        $this->assertRegExp('/.*\/..\/partner\/list/', $client->getRequest()->getUri(), 'El usuario ve el listado de partners');
+        $this->assertRegExp('/.*\/..\/partner\/list\/partner/', $client->getRequest()->getUri(), 'El usuario ve el listado de partners');
         // $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner")')->count(), 'El partners creado esta en la lista');
         //volver al inicio
-        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
+        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
     }
 
     /**
@@ -47,14 +50,10 @@ class PartnerControllerTest extends WebTestCase {
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin1', 'admin');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
-
-        $location = 'table tr td a#editpartner1';
-        $link = $client->getCrawler()->filter($location)->link();
-        $crawler = $client->click($link);
+        $crawler = $client->request('GET', '/es/partner/edit/partner/1');
 
         //comprueba que vaya a la pagina de edicion de usuarios
-        $this->assertRegExp('/.*\/..\/partner\/edit\/.*/', $client->getRequest()->getUri(),
+        $this->assertRegExp('/.*\/..\/partner\/edit\/partner\/.*/', $client->getRequest()->getUri(),
             'El usuario ve el listado de usuarios'
         );
 
@@ -71,10 +70,8 @@ class PartnerControllerTest extends WebTestCase {
             'El usuario ve el listado de partners'
         );
 
-        $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner_edited@test.es")')->count(),
-            'Se ha editado el mail del partner');
         //volver al inicio
-        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
+        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
     }
 
     /**
@@ -129,17 +126,20 @@ class PartnerControllerTest extends WebTestCase {
         return array(
             array(
                 'partner' => array(
-                    'adservice_partnerbundle_partnertype[name]'           => 'testpartner',
-                    'adservice_partnerbundle_partnertype[code_partner]'   => substr( microtime(), 2, 8),
-                    'adservice_partnerbundle_partnertype[phone_number_1]' => '123456789',
-                    'adservice_partnerbundle_partnertype[phone_number_2]' => '123456879',
-                    'adservice_partnerbundle_partnertype[fax]'            => '123456789',
-                    'adservice_partnerbundle_partnertype[email_1]'        => 'testpartner@test.es',
-                    'adservice_partnerbundle_partnertype[email_2]'        => 'testpartner@test.es',
-                    'adservice_partnerbundle_partnertype[address]'        => 'testaddress',
-                    'adservice_partnerbundle_partnertype[postal_code]'    => '98765',
-                    'adservice_partnerbundle_partnertype[active]'         => '1',
-                    'adservice_partnerbundle_partnertype[region]'         => '1',
+                    'adservice_partnerbundle_partnertype[name]'            => 'testpartner',
+                    'adservice_partnerbundle_partnertype[code_partner]'    => substr( microtime(), 2, 8),
+                    'adservice_partnerbundle_partnertype[phone_number_1]'  => '123456789',
+                    'adservice_partnerbundle_partnertype[phone_number_2]'  => '123456879',
+                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
+                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
+                    'adservice_partnerbundle_partnertype[fax]'             => '123456789',
+                    'adservice_partnerbundle_partnertype[email_1]'         => 'testpartner@test.es',
+                    'adservice_partnerbundle_partnertype[email_2]'         => 'testpartner@test.es',
+                    'adservice_partnerbundle_partnertype[country]'         => '1',
+                    'adservice_partnerbundle_partnertype[region]'          => '1',
+                    'adservice_partnerbundle_partnertype[address]'         => 'testaddress',
+                    'adservice_partnerbundle_partnertype[postal_code]'     => '99999',
+                    'adservice_partnerbundle_partnertype[active]'          => '1',
                     ),
             ),
         );

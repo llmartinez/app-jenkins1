@@ -611,6 +611,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setEmail2        ($workshop->getEmail2());
         $workshopOrder->setCountry       ($workshop->getCountry());
         $workshopOrder->setRegion        ($workshop->getRegion());
+        $workshopOrder->setCity          ($workshop->getCity());
         $workshopOrder->setAddress       ($workshop->getAddress());
         $workshopOrder->setPostalCode    ($workshop->getPostalCode());
 
@@ -658,6 +659,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setEmail2        ($workshopOrder->getEmail2());
         $workshop->setCountry       ($workshopOrder->getCountry());
         $workshop->setRegion        ($workshopOrder->getRegion());
+        $workshop->setCity          ($workshopOrder->getCity());
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
 

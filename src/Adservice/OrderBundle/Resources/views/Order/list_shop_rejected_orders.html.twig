@@ -3,7 +3,7 @@
 
     {% if orders is defined %}
         {% if orders|length > 0  %}
-            <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
+            <table class="table table-hover" style="width: 80%; margin-left: 10%;">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -98,7 +98,7 @@
                                     {% endif %}
                                     <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
 
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{# {{ path('shopOrder_resendOrder', {'id': shopOrder.id      }) }} #}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('shopOrder_resendOrder', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
                             {% endif %}
                             </td>
                         </tr>

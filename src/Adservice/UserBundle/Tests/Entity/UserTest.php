@@ -10,11 +10,11 @@ use Adservice\WorkshopBundle\Tests\Entity\WorkshopTest;
 class UserTest extends \PHPUnit_Framework_TestCase
 {
    protected $user;
-   
+
    public function testSetters()
    {
        $user = new User();
-       $user->setUsername('userTest'); 
+       $user->setUsername('userTest');
        $user->setPassword('test');
        $user->setActive('0');
        $this->assertEquals(false, $user->isEnabled(), "Probar que el usuario este deshabilitado (active = 0)");
@@ -41,17 +41,16 @@ class UserTest extends \PHPUnit_Framework_TestCase
        $this->assertEquals(new \DateTime('today'), $user->getModifiedAt(),  "Probar la fecha de modificacion: today");
        $user->setModifiedBy(UserTest::GetUser());
        $this->assertEquals('userTest', $user->getModifiedBy()->getUserName(), "Probar el usuario de modificacion: userTest");
-               
+
        $this->user = $user;
    }
-   
+
    public static function GetUser()
    {
        $user = new User();
-       $user->setUsername('userTest'); 
+       $user->setUsername('userTest');
        $user->addRole(RoleTest::GetRole());
-       
+
        return $user;
    }
 }
-           

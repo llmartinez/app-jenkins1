@@ -54,11 +54,14 @@
         <div class="col-xs-5 col-md-5 form-group">
             <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-3 col-md-3 form-group">
+        <div class="col-xs-2 col-md-2 form-group">
             <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-3 col-md-3 form-group">
+        <div class="col-xs-2 col-md-2 form-group">
             <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} city            {% endtrans %} *</label> {{ form_widget(form.city  ,           { 'attr': {'class': 'form-control'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',

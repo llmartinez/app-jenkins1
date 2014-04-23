@@ -5,13 +5,13 @@ namespace Adservice\UtilBundle\DataFixtures\ORM;
 class Data {
 
     /*Aqui asignamos el numero de objetos que se crearan por cada entidad.*/
-    private static $numAdmins    = 5;
-    private static $numAssessors = 35;
-    private static $numAds       = 150;
-    private static $numPartners  = 150;
-    private static $numShops     = 300;
-    private static $numWorkshops = 1000;
-    private static $numTickets   = 10000;
+    private static $numAdmins    = 2;
+    private static $numAssessors = 5;
+    private static $numAds       = 5;
+    private static $numPartners  = 5;
+    private static $numShops     = 10;
+    private static $numWorkshops = 50;
+    private static $numTickets   = 100;
     private static $numPosts     = 4;
 
     /**

@@ -28,7 +28,7 @@
     {% endif %}
         <div class="form-group">
             <label for="new_ticket_form_description">{% trans %} description {% endtrans %} *</label>
-            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5', 'placeholder': "{% trans %} description {% endtrans %}" } }) }}
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5', 'placeholder': "description" | trans  } }) }}
         </div>
 
     {{ form_widget(form._token) }}
