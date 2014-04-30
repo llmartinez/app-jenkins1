@@ -139,50 +139,98 @@ class ImportController extends Controller
     }
 
 
-    public function importLockAction($bbdd=null, $num=0)
+    public function importLockCarsAction($bbdd=null, $num=0)
     {
-		$em_old  = $this->getDoctrine()->getEntityManager('em_old');
+		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
 
  		$consulta = $em_old ->createQuery('SELECT oc FROM ImportBundle:old_Coche oc')
-                        ->setMaxResults($num + $max_rows)
-                        ->setFirstResult($num);
+                        	->setMaxResults($num + $max_rows)
+                        	->setFirstResult($num);
 
 		$old_Coches = $consulta->getResult();
 
 		$count = $em_old ->createQuery('SELECT count(oc) FROM ImportBundle:old_Coche oc')->getResult()[0][1];
 
 		if($count > $num){
+/////////////////////////////////////////////////////////////////////////////////////////////////
 			echo 'en desarrollo...';die;
-		}else{
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+			foreach ($old_Coches as $old_Coche)
+			{
+				$newCar  = new lockCar();
+				$gama   = $em_old->getRepository('ImportBundle:old_Gama'  )->find($old_Coche->getIdMMG());
+				$modelo = $em_old->getRepository('ImportBundle:old_Modelo')->find($gama     ->getModelo());
+				$marca  = $em_old->getRepository('ImportBundle:old_Marca' )->find($modelo   ->getMarca());
+
+				$newCar->setOldId     ($old_Coche->getId());
+				$newCar->setVersion   ($gama);
+				$newCar->setModel     ($modelo);
+				$newCar->setBrand     ($marca);
+				$newCar->setYear      ($old_Coche->getAno());
+				$newCar->setVin       ($old_Coche->getbastidor());
+				$newCar->setMotor	  ($old_Coche->getMotor());
+				$cars[] = $newCar;
+			}
+			foreach ($cars as $car) {
+				$em_lock->persist($car);
+			}
+			$em_lock->flush();
+
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
+		}else{
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', 'num' => '0' ));
 		}
-
-		// $old_Coches      = $em_old->getRepository('ImportBundle:old_Coche'    	)->findAll();	// CAR							//			 		//
-		// $old_incidencia  = $em_old->getRepository('ImportBundle:old_Incidencia'	)->findAll();	// TICKET	 			 		//
-
-		// foreach ($old_Coches as $old_Coche)
-		// {
-		// 	$newCar = UtilController::newEntity(new Car(), $sa);
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	    if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	$newCar->setVersion    ($em->getRepository('CarBundle:Version')->find($newCar->getIdMMG()));
-		// 	$newCar->setModel      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getVersion()->getModel()));
-		// 	$newCar->setBrand      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getModel()->getBrand()));
-		// 	$newCar->setYear       ($newCar->getAno());
-		// 	$newCar->setVin        ($newCar->getbastidor());
-		// 	$newCar->setMotor	   ($newCar->getMotor());
-		// 	$newCar->setModifiedBy($sa);
-		// 	$newCar->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-		// 	$em->persist($newCar);
-		// 	//UtilController::saveEntity($em, $newCar, $sa);
-		// }
-	 // $em->flush();
     }
+
+ 	public function importLockIncidencesAction($bbdd=null, $num=0)
+    {
+		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
+		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
+		$max_rows = 1000;
+
+ 		$consulta = $em_old ->createQuery('SELECT oi FROM ImportBundle:old_Incidence oi')
+                        	->setMaxResults($num + $max_rows)
+                        	->setFirstResult($num);
+
+		$old_Incidences = $consulta->getResult();
+
+		$count = $em_old ->createQuery('SELECT count(oi) FROM ImportBundle:old_Incidence oi')->getResult()[0][1];
+
+		if($count > $num){
+/////////////////////////////////////////////////////////////////////////////////////////////////
+			echo 'en desarrollo...';die;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+			foreach ($old_Incidences as $old_Incidence)
+			{
+				$newIncidence  = new lockIncidence();
+
+				$newIncidence->setAsesor     ($em_old->getRepository('ImportBundle:old_Asesor')->find($old_Incidence->getAsesor())->getNombre());
+				$newIncidence->setSocio      ($em_old->getRepository('ImportBundle:old_Socio ')->find($old_Incidence->getSocio() )->getNombre());
+				$newIncidence->setTaller     ($em_old->getRepository('ImportBundle:old_Taller')->find($old_Incidence->getTaller())->getNombre());
+				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lockCar')->findOneBy('old_id' => $old_Incidence->getCoche()));
+				$newIncidence->setOper       ($em_old->getRepository('ImportBundle:old_Oper')->find($old_Incidence->getOper() )->getNombre());
+				$newIncidence->setDescription($old_Incidence->getDescripcion());
+				$newIncidence->setTracing	 ($old_Incidence->getSeguimiento());
+				$newIncidence->setSolution   ($old_Incidence->getSolucion   ());
+				$newIncidence->setImportance ($old_Incidence->getImportancia());
+				$newIncidence->setDate   	 ($old_Incidence->getFecha());
+				$newIncidence->setActive	 ($old_Incidence->getActive());
+				$incidences[] = $newIncidence;
+			}
+			foreach ($incidences as $incidence) {
+				$em_lock->persist($incidence);
+			}
+			$em_lock->flush();
+
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
+		}else{
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', 'num' => '0' ));
+		}
+	}
 
     private function setUserFields($em, $entity, $role, $nombre)
     {
@@ -223,7 +271,7 @@ class ImportController extends Controller
         $city = $em->getRepository('UtilBundle:City')->findOneByCity($old_entity->getPoblacion());
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    ////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
+    ////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLACIONES CARGADAS    ////
     /////////////////////////////////////////////////////////////////////////////////////////////////
         if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
     /////////////////////////////////////////////////////////////////////////////////////////////////

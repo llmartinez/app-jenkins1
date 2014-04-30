@@ -8,21 +8,21 @@
 		<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
 		<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>
 
-		<button onclick="window.open('{{ path('import', { 'bbdd': 'adservice'          }) }}', '_self')"> IMPORTAR BBDD_OLD	 </button>
-		<button onclick="window.open('{{ path('lock'  , { 'bbdd': 'old_cars', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_LOCK </button>
+		<button onclick="window.open('{{ path('import'   , { 'bbdd': 'adservice'          }) }}', '_self')"> IMPORTAR BBDD_OLD	 </button>
+		<button onclick="window.open('{{ path('lock_cars', { 'bbdd': 'old_cars', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_LOCK </button>
 
 	{% elseif bbdd == 'old_cars'  %}
 
 		{% if num is defined %}
 			<h3>Importando coches... ({{ num }})</h3>
-			<script>  $(document).ready(function() { window.open('{{ path("lock", { "bbdd": "old_cars", "num": num }) }}', '_self') }); </script>
+			<script>  $(document).ready(function() { window.open('{{ path("lock_cars", { "bbdd": "old_cars", "num": num }) }}', '_self') }); </script>
 		{% endif %}
 
 	{% elseif bbdd == 'old_incidences' %}
 
 		{% if num is defined %}
 			<h3>Importando incidencias... ({{ num }})</h3>
-			<script>  $(document).ready(function() { window.open('{{ path("lock", { "bbdd": "old_incidences", "num": num }) }}', '_self') }); </script>
+			<script>  $(document).ready(function() { window.open('{{ path("lock_incidences", { "bbdd": "old_incidences", "num": num }) }}', '_self') }); </script>
 		{% endif %}
 
 	{% elseif bbdd == 'complete' %}
