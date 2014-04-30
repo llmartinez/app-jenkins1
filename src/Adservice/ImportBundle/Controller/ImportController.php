@@ -211,7 +211,7 @@ class ImportController extends Controller
 				$newIncidence->setAsesor     ($em_old->getRepository('ImportBundle:old_Asesor')->find($old_Incidence->getAsesor())->getNombre());
 				$newIncidence->setSocio      ($em_old->getRepository('ImportBundle:old_Socio ')->find($old_Incidence->getSocio() )->getNombre());
 				$newIncidence->setTaller     ($em_old->getRepository('ImportBundle:old_Taller')->find($old_Incidence->getTaller())->getNombre());
-				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lockCar')->findOneBy('old_id' => $old_Incidence->getCoche()));
+				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lockCar')->findOneBy(array('old_id' => $old_Incidence->getCoche())));
 				$newIncidence->setOper       ($em_old->getRepository('ImportBundle:old_Oper')->find($old_Incidence->getOper() )->getNombre());
 				$newIncidence->setDescription($old_Incidence->getDescripcion());
 				$newIncidence->setTracing	 ($old_Incidence->getSeguimiento());
