@@ -45,7 +45,7 @@ class old_Incidencia {
     /**
      * @var string $coche
      *
-     * @ORM\Column(name="coche", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\Adservice\ImportBundle\Entity\old_Coche")
      */
     private $coche;
 
@@ -106,7 +106,7 @@ class old_Incidencia {
 
 
     public function __toString() {
-        return $this->getNombre();
+        return $this->getDescripcion();
     }
 
     /**
@@ -175,9 +175,9 @@ class old_Incidencia {
     /**
      * Set coche
      *
-     * @param string $coche
+     * @param \Adservice\ImportBundle\Entity\Coche $coche
      */
-    public function setCoche($coche) {
+    public function setCoche(\Adservice\ImportBundle\Entity\Coche $coche) {
         $this->coche = $coche;
     }
 

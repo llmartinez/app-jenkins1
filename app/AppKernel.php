@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Adservice\OrderBundle\OrderBundle(),
             new Adservice\ImportBundle\ImportBundle(),
+            new Adservice\LockBundle\LockBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

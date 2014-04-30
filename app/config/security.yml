@@ -45,7 +45,8 @@ security:
       - { path: ^/(es|en|fr)/ticket/,                    roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr)/car/,                       roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr)/statistic/,                 roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr)/IMPORT,                     roles: [ROLE_SUPER_ADMIN]           }
+      # - { path: ^/(es|en|fr)/lock,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr)/import,                     roles: [ROLE_SUPER_ADMIN]           }
 
     encoders:
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }

@@ -4,8 +4,12 @@
 ############################################################################
 ImportBundle:
     resource: "@ImportBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/IMPORT/
+    prefix:   /{_locale}/import/
 ############################################################################
+
+LockBundle:
+    resource: "@LockBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/lock/
 
 OrderBundle:
     resource: "@OrderBundle/Resources/config/routing.yml"

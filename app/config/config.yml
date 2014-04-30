@@ -45,13 +45,21 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            dbcon1:
-                driver:   %database2_driver%
-                host:     %database2_host%
-                port:     %database2_port%
-                dbname:   %database2_name%
-                user:     %database2_user%
-                password: %database2_password%
+            db_old:
+                driver:   %database_old_driver%
+                host:     %database_old_host%
+                port:     %database_old_port%
+                dbname:   %database_old_name%
+                user:     %database_old_user%
+                password: %database_old_password%
+                charset:  UTF8
+            db_lock:
+                driver:   %database_lock_driver%
+                host:     %database_lock_host%
+                port:     %database_lock_port%
+                dbname:   %database_lock_name%
+                user:     %database_lock_user%
+                password: %database_lock_password%
                 charset:  UTF8
 
     orm:
@@ -70,10 +78,15 @@ doctrine:
                     OrderBundle: ~
                     StatisticBundle: ~
                 # auto_mapping: true
-            emParams1:
-                connection:   dbcon1
+            em_old:
+                connection:   db_old
                 mappings:
                     ImportBundle: ~
+                # auto_mapping: true
+            em_lock:
+                connection:   db_lock
+                mappings:
+                    LockBundle: ~
                 # auto_mapping: true
         auto_generate_proxy_classes: %kernel.debug%
         # auto_mapping: true
