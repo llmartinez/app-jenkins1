@@ -1,9 +1,7 @@
-
-history:
-    pattern:  /history/{history}
-    defaults: { _controller: ImportBundle:History:history, history: null }
+lock:
+    pattern:  /lock/{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:importLock, bbdd: null, num: 0 }
 
 import:
-    pattern:  /{importar}
-    defaults: { _controller: ImportBundle:Import:import, importar: null }
-
+    pattern:  /{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }

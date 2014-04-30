@@ -1,12 +1,32 @@
-<p>Deseas importar la BBDD antigua de AD-service??</p>
-<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
+{% extends '::layout.html.twig' %}
 
-{% if importar is not defined or importar == null %}
-	<button onclick="window.open('{{ path('import', { 'importar': 'adservice'   }) }}', '_self')"> IMPORTAR BBDD </button>
-{% else %}
+{% block body %}
 
-	<p>BBDD IMPORTADA!</p>
-	<p>Deseas crear el historico de Coches e Incidencias de la BBDD antigua de AD-service??</p>
+	{% if bbdd is not defined or bbdd == null %}
 
-	<button onclick="window.open('{{ path('history', { 'history': 'adservice' }) }}', '_self')"> CREAR HISTORICO </button>
-{% endif %}
+		<h3>Deseas importar la BBDD antigua de AD-service??</h3>
+		<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
+		<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>
+
+		<button onclick="window.open('{{ path('import', { 'bbdd': 'adservice'          }) }}', '_self')"> IMPORTAR BBDD_OLD	 </button>
+		<button onclick="window.open('{{ path('lock'  , { 'bbdd': 'old_cars', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_LOCK </button>
+
+	{% elseif bbdd == 'old_cars'  %}
+
+		{% if num is defined %}
+			<h3>Importando coches... ({{ num }})</h3>
+			<script>  $(document).ready(function() { window.open('{{ path("lock", { "bbdd": "old_cars", "num": num }) }}', '_self') }); </script>
+		{% endif %}
+
+	{% elseif bbdd == 'old_incidences' %}
+
+		{% if num is defined %}
+			<h3>Importando incidencias... ({{ num }})</h3>
+			<script>  $(document).ready(function() { window.open('{{ path("lock", { "bbdd": "old_incidences", "num": num }) }}', '_self') }); </script>
+		{% endif %}
+
+	{% elseif bbdd == 'complete' %}
+		<h1>BBDD IMPORTADA CORRECTAMENTE!</h1>
+	{% endif %}
+
+{% endblock %}

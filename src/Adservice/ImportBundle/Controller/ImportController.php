@@ -10,16 +10,18 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\TicketBundle\Entity\System;
 use Adservice\TicketBundle\Entity\Subsystem;
+use Adservice\ImportBundle\Controller\old_Coche;
+use Adservice\ImportBundle\Controller\old_Incidencia;
 
 class ImportController extends Controller
 {
-    public function importAction($importar=null)
+    public function importAction($bbdd=null)
     {
 		$em = $this->getDoctrine()->getEntityManager('default'  );
-		$em_old = $this->getDoctrine()->getEntityManager('emParams1');
+		$em_old = $this->getDoctrine()->getEntityManager('em_old');
 		$sa = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
 
-    	if( $importar != null )
+    	if( $bbdd == 'adservice' )
     	{
     		$old_Socios      = $em_old->getRepository('ImportBundle:old_Socio' 		)->findAll();	// PARTNER  - AD 			 	//
 
@@ -50,20 +52,17 @@ class ImportController extends Controller
 			foreach ($partners as $partner) {
 				UtilController::saveEntity($em, $partner, $sa,false);
 			}
-		$em->flush();
-			echo '- Registros "PARTNER" creados correctamente.<br>';
+			$em->flush();
 
 			foreach ($shops as $shop) {
 				UtilController::saveEntity($em, $shop, $sa,false);
 			}
-		$em->flush();
-			echo '- Registros "SHOP_DEFAULT" creados correctamente.<br>';
+			$em->flush();
 
 			foreach ($ads as $ad) {
 				UtilController::saveEntity($em, $ad, $sa,false);
 			}
-		$em->flush();
-			echo '- Usuarios de tipo "AD" creados correctamente.<br>';
+			$em->flush();
 
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// TYPOLOGY - WORKSHOP - USER 	//
 
@@ -93,14 +92,11 @@ class ImportController extends Controller
 			foreach ($workshops as $workshop) {
 				UtilController::saveEntity($em, $workshop, $sa,false);
 			}
-		$em->flush();
-			echo '- Registros "WORKSHOP" creados correctamente.<br>';
+			$em->flush();
 
 			foreach ($users as $user) {
 				UtilController::saveEntity($em, $user, $sa,false);
 			}
-		$em->flush();
-			echo '- Usuarios de tipo "User" creados correctamente.<br>';
 
 			$old_Asesores    = $em_old->getRepository('ImportBundle:old_Asesor'		)->findAll();	// ASSESSOR 					//
 
@@ -116,8 +112,6 @@ class ImportController extends Controller
 			foreach ($assessors as $assessor) {
 				UtilController::saveEntity($em, $assessor, $sa,false);
 			}
-		$em->flush();
-			echo '- Usuarios de tipo "ASSESSOR" creados correctamente.<br>';
 
     		$old_Gropers     = $em_old->getRepository('ImportBundle:old_Groper'    	)->findAll();	// SYSTEM						//
 
@@ -126,9 +120,8 @@ class ImportController extends Controller
 				$newSystem = new System();
 				$newSystem->setName($old_Groper->getNombre());
 				$em->persist($newSystem);
+				$em->flush();
 			}
-		$em->flush();
-			echo '- Registros "SYSTEM" creados correctamente.<br>';
 
 			$old_Operaciones = $em_old->getRepository('ImportBundle:old_Operacion' 	)->findAll();	// SUBSYSTEM 			 		//
 
@@ -138,15 +131,61 @@ class ImportController extends Controller
 				$newSubSystem->setName($old_Operacion->getNombre());
 				$newSubSystem->setSystem($em->getRepository('TicketBundle:System')->find($old_Operacion->getIdGrupo()));
 				$em->persist($newSubSystem);
+				$em->flush();
 			}
-		$em->flush();
-			echo '- Registros "SUBSYSTEM" creados correctamente.<br>';
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
     	}
-        return $this->render('ImportBundle:Import:import.html.twig', array('importar' => $importar ));
+        return $this->render('ImportBundle:Import:import.html.twig');
     }
 
- 	private function setUserFields($em, $entity, $role, $nombre)
-	{
+
+    public function importLockAction($bbdd=null, $num=0)
+    {
+		$em_old  = $this->getDoctrine()->getEntityManager('em_old');
+		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
+		$max_rows = 1000;
+
+ 		$consulta = $em_old ->createQuery('SELECT oc FROM ImportBundle:old_Coche oc')
+                        ->setMaxResults($num + $max_rows)
+                        ->setFirstResult($num);
+
+		$old_Coches = $consulta->getResult();
+
+		$count = $em_old ->createQuery('SELECT count(oc) FROM ImportBundle:old_Coche oc')->getResult()[0][1];
+
+		if($count > $num){
+			echo 'en desarrollo...';die;
+		}else{
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
+		}
+
+		// $old_Coches      = $em_old->getRepository('ImportBundle:old_Coche'    	)->findAll();	// CAR							//			 		//
+		// $old_incidencia  = $em_old->getRepository('ImportBundle:old_Incidencia'	)->findAll();	// TICKET	 			 		//
+
+		// foreach ($old_Coches as $old_Coche)
+		// {
+		// 	$newCar = UtilController::newEntity(new Car(), $sa);
+		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
+		// 	////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
+		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
+		// 	    if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
+		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
+		// 	$newCar->setVersion    ($em->getRepository('CarBundle:Version')->find($newCar->getIdMMG()));
+		// 	$newCar->setModel      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getVersion()->getModel()));
+		// 	$newCar->setBrand      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getModel()->getBrand()));
+		// 	$newCar->setYear       ($newCar->getAno());
+		// 	$newCar->setVin        ($newCar->getbastidor());
+		// 	$newCar->setMotor	   ($newCar->getMotor());
+		// 	$newCar->setModifiedBy($sa);
+		// 	$newCar->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+		// 	$em->persist($newCar);
+		// 	//UtilController::saveEntity($em, $newCar, $sa);
+		// }
+	 // $em->flush();
+    }
+
+    private function setUserFields($em, $entity, $role, $nombre)
+    {
 			$entity->setUsername   (UtilController::getUsernameUnused($em, $nombre));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
             $entity->setPassword   (substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
 
@@ -170,7 +209,7 @@ class ImportController extends Controller
             $entity->addRole          ($em->getRepository('UserBundle:Role')->findOneByName($role));
 
 		return $entity;
-	}
+    }
 
     private function setContactFields($em, $old_entity, $entity)
     {
