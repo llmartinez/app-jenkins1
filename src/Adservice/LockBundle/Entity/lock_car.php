@@ -5,12 +5,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Adservice\LockBundle\Entity\lockCar
+ * Adservice\LockBundle\Entity\lock_car
  *
  * @ORM\Table(name="lock_car")
  * @ORM\Entity
  */
-class lockCar {
+class lock_car {
 
     /**
      * @var integer $id
@@ -20,6 +20,13 @@ class lockCar {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string $oldId
+     *
+     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
+     */
+    private $oldId;
 
     /**
      * @var string $version
@@ -45,21 +52,21 @@ class lockCar {
     /**
      * @var string $year
      *
-     * @ORM\Column(name="year", type="string", length=255)
+     * @ORM\Column(name="year", type="string", length=255, nullable="true")
      */
     private $year;
 
     /**
      * @var string $vin
      *
-     * @ORM\Column(name="vin", type="string", length=255)
+     * @ORM\Column(name="vin", type="string", length=255, nullable="true")
      */
     private $vin;
 
     /**
      * @var string $motor
      *
-     * @ORM\Column(name="motor", type="string", length=255)
+     * @ORM\Column(name="motor", type="string", length=255, nullable="true")
      */
     private $motor;
 
@@ -82,6 +89,24 @@ class lockCar {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * Set oldId
+     *
+     * @param string $oldId
+     */
+    public function setOldId($oldId) {
+        $this->oldId = $oldId;
+    }
+
+    /**
+     * Get oldId
+     *
+     * @return string
+     */
+    public function getOldId() {
+        return $this->oldId;
     }
 
     /**

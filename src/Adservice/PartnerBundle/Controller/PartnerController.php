@@ -68,7 +68,9 @@ class PartnerController extends Controller {
             $form->bindRequest($request);
             $code = UtilController::getCodePartnerUnused($em);
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
                 if($find == null)
@@ -90,9 +92,15 @@ class PartnerController extends Controller {
             $this->get('session')->setFlash('info', $flash);
         }
 
-        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'    => $partner,
-                                                                                 'form_name'  => $form->getName(),
-                                                                                 'form'       => $form->createView()));
+        $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
+        $cities  = $em->getRepository("UtilBundle:City"  )->findAll();
+
+        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'   => $partner,
+                                                                                  'form_name' => $form->getName(),
+                                                                                  'form'      => $form->createView(),
+                                                                                  'regions'   => $regions,
+                                                                                  'cities'    => $cities,
+                                                                                 ));
     }
 
      /**

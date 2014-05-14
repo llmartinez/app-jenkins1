@@ -31,7 +31,7 @@ class old_Modelo {
     /**
      * @var string $marca
      *
-     * @ORM\Column(name="marca", type="string", length=255)
+     * @ORM\Column(name="idMarca", type="string", length=255)
      */
     private $marca;
 

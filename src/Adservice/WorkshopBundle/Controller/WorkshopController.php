@@ -1,17 +1,16 @@
 <?php
-
 namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-use Adservice\WorkshopBundle\Form\WorkshopType;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\UtilBundle\Entity\Pagination;
+use Adservice\UserBundle\Entity\User;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Entity\Typology;
+use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Form\WorkshopOrderType;
-use Adservice\UtilBundle\Entity\Pagination;
-use Adservice\UtilBundle\Controller\UtilController as UtilController;
-use Adservice\UserBundle\Entity\User;
 
 class WorkshopController extends Controller {
 
@@ -71,6 +70,7 @@ class WorkshopController extends Controller {
                 if($find == null)
                 {
                     $workshop = UtilController::newEntity($workshop, $this->get('security.context')->getToken()->getUser());
+                    if($workshop->getShop()->getName() == '...') { $workshop->setShop(null); }
                     $this->saveWorkshop($em, $workshop);
 
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
@@ -134,9 +134,11 @@ class WorkshopController extends Controller {
             }
         }
 
-        return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop'   => $workshop,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView()));
+        return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop' => $workshop,
+                                                                                     'form_name'  => $form->getName(),
+                                                                                     'form'       => $form->createView(),
+                                                                                     'locations'  => UtilController::getLocations($em),
+                                                                                    ));
     }
 
     /**

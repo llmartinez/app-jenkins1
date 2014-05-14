@@ -3,46 +3,35 @@ namespace Adservice\LockBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Adservice\UtilBundle\Controller\UtilController;
-use Adservice\CarBundle\Entity\Car;
-use Adservice\TicketBundle\Entity\Ticket;
-use Adservice\TicketBundle\Entity\Post;
+use Adservice\UtilBundle\Entity\Pagination;
 
 class LockController extends Controller
 {
-    public function historyAction($history=null)
+    public function listIncidencesAction($page=1, $id_taller=null)
     {
-    	if( $history != null ){
+        $em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
+        $security = $this->get('security.context');
+        $params = array();
 
-			// $em = $this->getDoctrine()->getEntityManager('default'  );
-			// $em_old = $this->getDoctrine()->getEntityManager('em_old');
+        if( ! $security->isGranted('ROLE_ASSESSOR')) $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
 
-			// $sa = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
+    	if( $id_taller != null ) $params[] = array('taller', ' = '.$id_taller);
 
-    		// $old_Coches      = $em_old->getRepository('ImportBundle:old_Coche'    	)->findAll();	// CAR							//			 		//
-    		// $old_incidencia  = $em_old->getRepository('ImportBundle:old_Incidencia'	)->findAll();	// TICKET	 			 		//
+        $pagination = new Pagination($page);
 
-			// foreach ($old_Coches as $old_Coche)
-			// {
-			// 	$newCar = UtilController::newEntity(new Car(), $sa);
-			// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-			// 	////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
-			// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-			// 	    if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
-			// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-			// 	$newCar->setVersion    ($em->getRepository('CarBundle:Version')->find($newCar->getIdMMG()));
-			// 	$newCar->setModel      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getVersion()->getModel()));
-			// 	$newCar->setBrand      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getModel()->getBrand()));
-			// 	$newCar->setYear       ($newCar->getAno());
-			// 	$newCar->setVin        ($newCar->getbastidor());
-			// 	$newCar->setMotor	   ($newCar->getMotor());
-			// 	$newCar->setModifiedBy($sa);
-			// 	$newCar->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-			// 	$em->persist($newCar);
-			// 	//UtilController::saveEntity($em, $newCar, $sa);
-			// }
-		 //    $em->flush();
-    		echo 'Importado el historico de coches!!<br>';
-    	}
-        return $this->render('ImportBundle:Import:import.html.twig');
+        $incidences = $pagination->getRows($em_lock, 'LockBundle', 'lock_incidence', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em_lock, 'LockBundle', 'lock_incidence', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('LockBundle:Lock:list_incidences.html.twig', array('incidences' => $incidences,
+                                                                                'pagination' => $pagination,
+                                                                                'id_taller'  => $id_taller, ));
+    }
+
+    public function showIncidenceAction($page=1, $id_taller=null)
+    {
+    	echo 'Mostrar la incidencia seleccionada';
     }
 }

@@ -340,14 +340,14 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $region
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     * @ORM\Column(name="region", type="string")
      */
     private $region;
 
     /**
      * @var string $city
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\City")
+     * @ORM\Column(name="city", type="string")
      */
     private $city;
 
@@ -440,7 +440,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $region
      */
-    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+    public function setRegion($region) {
         $this->region = $region;
     }
 
@@ -458,7 +458,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $city
      */
-    public function setCity(\Adservice\UtilBundle\Entity\City $city) {
+    public function setCity($city) {
         $this->city = $city;
     }
 

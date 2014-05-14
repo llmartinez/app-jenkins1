@@ -1,53 +1,53 @@
-header.welcome: ADService France
+header.welcome: "ADService France"
 
-user.index.menu.admin_title: 	 				MENU ADMIN
-user.index.menu.assessor_title:  				MENU CONSEILLER
-user.index.menu.user_title: 	 				MENU UTILISATEUR
-user.index.menu.ad_title:           			MENU AD
-user.index.menu.my_profile: 	 				Mon profil
-user.index.menu.list_partners: 	 				Liste des Partenaires AdService
-user.index.menu.list_users: 	 				Liste des Utilisateurs AdService
-user.index.menu.list_popups: 	 				Liste des Popups ADService
-user.index.menu.list_workshops:  				Liste des Ateliers AdService
-user.index.menu.list_tickets:    				Liste des Billets AdService
-user.index.menu.asign_user_to_ticket:   		Attribuer billets pour les utilisateurs
-user.index.menu.new_ticket:						Créer un nouveau billet
-user.index.menu.my_tickets:             		Mon Tickets
-user.index.menu.new_workshop_order:     		Postuler pour un nouvel atelier
-user.index.menu.active_workshop_order:  		Appliquer pour activer/désactiver un atelier
-user.index.menu.order_list_workshop:    		Afficher le statut actuel de ma demande
-user.index.menu.view_register_workshop_order:   Voir atelier s'applique
-user.index.menu.view_active_workshop_order:     Voir s'applique de l'activation / désactivation des ateliers
+menu.admin_title: 	 				"MENU ADMIN"
+menu.assessor_title:  				"MENU CONSEILLER"
+menu.user_title: 	 				"MENU UTILISATEUR"
+menu.ad_title:           			"MENU AD"
+menu.profile:                       "Mon profil"
+menu.list_partners: 	 			"Liste des Partenaires AdService"
+menu.list_users: 	 				"Liste des Utilisateurs AdService"
+menu.list_popups: 	 				"Liste des Popups ADService"
+menu.list_workshops:  				"Liste des Ateliers AdService"
+menu.list_tickets:    				"Liste des Billets AdService"
+menu.asign_user_to_ticket:   		"Attribuer billets pour les utilisateurs"
+menu.new_ticket:					"Créer un nouveau billet"
+menu.my_tickets:             		"Mon Tickets"
+menu.new_workshop_order:     		"Postuler pour un nouvel atelier"
+menu.active_workshop_order:  		"Appliquer pour activer/désactiver un atelier"
+menu.order_list_workshop:    		"Afficher le statut actuel de ma demande"
+menu.view_register_workshop_order:   "Voir atelier s'applique"
+menu.view_active_workshop_order:     "Voir s'applique de l'activation / désactivation des ateliers"
 
 # COMUNES
-home:      Index
-admin:     Admin
-assessor:  Conseiller
-user:      Utilisateur
-date:      Date
-workshop:  Atelier
-ticket:    Billet
-car:       Voiture
-post:      Message
+home:      "Index"
+admin:     "Admin"
+assessor:  "Conseiller"
+user:      "Utilisateur"
+date:      "Date"
+workshop:  "Atelier"
+ticket:    "Billet"
+car:       "Voiture"
+post:      "Message"
 
 #TICKET
-ticket.history.title:       Histoire Billets
-ticket.opt.all:             Voir tous les billets
-ticket.opt.all_open:        Voir tous les billets ouverts
-ticket.opt.all_closed:      Voir tous les billets fermés
-ticket.opt.free :           Billets libre
-ticket.opt.assigned :       Billets attribués
-ticket.opt.answered :       Billets répondu
-ticket.opt.other_assessor:  Billets d'un autre évaluateur
-ticket.opt.owner:           Votre ticket
-ticket.opt.workshop:        Billets pour votre atelier
+ticket.history.title:       "Histoire Billets"
+ticket.opt.all:             "Voir tous les billets"
+ticket.opt.all_open:        "Voir tous les billets ouverts"
+ticket.opt.all_closed:      "Voir tous les billets fermés"
+ticket.opt.free :           "Billets libre"
+ticket.opt.assigned :       "Billets attribués"
+ticket.opt.answered :       "Billets répondu"
+ticket.opt.other_assessor:  "Billets d'un autre évaluateur"
+ticket.opt.owner:           "Votre ticket"
+ticket.opt.workshop:        "Billets pour votre atelier"
 
-ticket.btn.newTicket:       Nuevo Ticket
-ticket.btn.search:          Buscar
+ticket.btn.newTicket:       "Nuevo Ticket"
+ticket.btn.search:          "Buscar"
 
-ticket.flt.placeholder.id:	Inserta ID de ticket
-ticket.flt.open:		 	Abierto
-ticket.flt.closed:		 	Cerrado
+ticket.flt.placeholder.id:	"Inserta ID de ticket"
+ticket.flt.open:		 	"Abierto"
+ticket.flt.closed:		 	"Cerrado"
 
 ############################
 ########### OLD ############
@@ -55,50 +55,33 @@ ticket.flt.closed:		 	Cerrado
 
 
 # Pantalla principal
-New ticket: Nouveau ticket
-My tickets: Mes tickets
-Technical information: Informations techniques
-Select language: Selectionnez la langue
-Logout: Fermer session
-Not logged in: Session non demarré
-Welcome: Bienvenue
+New ticket:				"Nouveau ticket"
+My tickets: 			"Mes tickets"
+Technical information: 	"Informations techniques"
+Select language: 		"Selectionnez la langue"
+Logout: 				"Fermer session"
+Not logged in: 			"Session non demarré"
+Welcome: 				"Bienvenue"
 
 # Titulos
-Login: S'enregistrer
+Login: 					"S'enregistrer"
 
 # Login
-Username: Nom d'utilisateur
-Password: Mot de passe
+Username: 				"Nom d'utilisateur"
+Password: 				"Mot de passe"
 
 # Index
-Start menu: Page du démarrage
-New ticket: Nouveau ticket
-Ticket list: Liste de tickets
-User configuration: Configuration de l'utilisateur
+Start menu: 			"Page du démarrage"
+New ticket: 			"Nouveau ticket"
+Ticket list: 			"Liste de tickets"
+User configuration: 	"Configuration de l'utilisateur"
 
 # Formulario de ticket
-Brand: Marque
-Model: Modèle
-Version: Version
-System: Système
-Subsystem: Sous-système
-Description: Description
-Photo attachment: Photo ci-jointe
-I want a technical expert to call me back: Je veux che un technique professionnel m'appeler
-Upload: Télécharger
-Send ticket: Envoyer ticket
-Fill the following fields before sending the ticket: Remplissez les champs suivants avant d'envoyer le ticket
-
-Select brand first: Selectionner marque premièrement
-Select model first: Selectionner modèle premièrement
-Select system first: Selectionner systeme premièrement
-
-Brand not specified: Marque non spécifié
-Model not specified: Modèle non spécifié
-Version not specified: Version non spécifié
-System not specified: Système non spécifié
-Subsystem not specified: Subsystème non spécifié
-
-Loading models from: Chargement des modèles de
-Loading versions from: Chargement des versions de
-Loading subsystems from: Chargement des subsystèmes de
+Brand: 					"Marque"
+Model: 					"Modèle"
+Version: 				"Version"
+System: 				"Système"
+Subsystem: 				"Sous-système"
+Description: 			"Description"
+Upload: 				"Télécharger"
+Send ticket: 			"Envoyer ticket"

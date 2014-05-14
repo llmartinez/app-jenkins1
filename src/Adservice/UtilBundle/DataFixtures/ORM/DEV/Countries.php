@@ -1,5 +1,5 @@
 <?php
-namespace Adservice\UtilBundle\DataFixtures\ORM\DEV;
+namespace Adservice\UtilBundle\DataFixtures\ORM\PROD;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -12,8 +12,9 @@ class Countries extends AbstractFixture implements OrderedFixtureInterface {
 
     public function load(ObjectManager $manager) {
         $countrys = array(
-            array('country' => 'Spain'  , 'lang' => 'spanish'),
-            array('country' => 'France' , 'lang' => 'french'),
+            array('country' => 'Spain'    , 'lang' => 'spanish'),
+            array('country' => 'France'   , 'lang' => 'french'),
+            array('country' => 'Portugal' , 'lang' => 'português'),
         );
         foreach ($countrys as $country) {
             $entidad = new Country();

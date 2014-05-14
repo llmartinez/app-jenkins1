@@ -52,10 +52,12 @@
                 {% endfor %}
         </tbody>
     </table>
+
     {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
-{% else %}
-    {% trans %} any.partner {% endtrans %}
-{% endif %}
+
+    {% else %}
+        {% trans %} any.partner {% endtrans %}
+    {% endif %}
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

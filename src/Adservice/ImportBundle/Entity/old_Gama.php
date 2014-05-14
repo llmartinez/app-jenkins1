@@ -31,7 +31,7 @@ class old_Gama {
     /**
      * @var string $modelo
      *
-     * @ORM\Column(name="modelo", type="string", length=255)
+     * @ORM\Column(name="idModelo", type="string", length=255)
      */
     private $modelo;
 

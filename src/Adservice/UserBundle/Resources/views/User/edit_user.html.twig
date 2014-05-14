@@ -44,50 +44,68 @@
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
-                                                                        {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                            {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
+            </div>
         </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-5 col-md-5 form-group">
+                <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-5 col-md-5 form-group">
+                <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
+            </div>
         </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
+                <br>
+                <div id="region_autocomplete">
+                    <select hidden='hidden' id="data_regions"></select>
+                    <select id="slct_region"></select>
+                </div>
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} city            {% endtrans %} *</label> {{ form_widget(form.city  ,           { 'attr': {'class': 'form-control'} }) }}
+                <br>
+                <div id="city_autocomplete">
+                    <select hidden='hidden' id="data_cities"></select>
+                    <select id="slct_city"></select>
+                </div>
+            </div>
+            <div class="col-xs-4 col-md-4 form-group">
+                <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
+                                                                                                                              'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                              'min': 0,
+                                                                                                                              'required': 'required' } }) }}
+            </div>
         </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} city            {% endtrans %} *</label> {{ form_widget(form.city  ,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
-                                                                                                                          'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                          'min': 0,
-                                                                                                                          'required': 'required' } }) }}
-        </div>
+
         {{ form_rest(form) }}
+
             <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
@@ -128,15 +146,31 @@
     <script>
         $(document).ready(function() {
 
-        // REGIONS FROM COUNTRY
+            // REGIONS FROM COUNTRY
             var url_ajax = "{{ path("regions_from_country") }}";
-            var region = '{{ user.region }}';
-            populate_region(url_ajax, region);
+            populate_region(url_ajax);
 
-            //si clickamos el combobox de los paises repoblamos la de las regiones
-            $('form').find('select[name*=country]').change(function() {
-               var url_ajax = "{{ path("regions_from_country") }}";
-               populate_region(url_ajax);
+            $('form').find('select[name*=country]').change(function(){
+                var url_ajax = "{{ path("regions_from_country") }}";
+                populate_region(url_ajax);
+            });
+
+            $("#slct_region").change(function(){
+                $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text() );
+
+                var url_ajax = "{{ path("cities_from_region") }}";
+                populate_city(url_ajax);
+            });
+
+            $("#slct_city").change(function(){
+                $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text() );
+            });
+
+            $('input[id*=_search]' ).keydown(function() {
+
+                if (event.which == 13) {
+                    alert('llega');
+                }
             });
         });
     </script>

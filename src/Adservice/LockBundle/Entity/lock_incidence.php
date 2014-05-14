@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="lock_incidence")
  * @ORM\Entity
  */
-class lockIncidence {
+class lock_incidence {
 
     /**
      * @var integer $id
@@ -22,9 +22,16 @@ class lockIncidence {
     private $id;
 
     /**
+     * @var string $old_id
+     *
+     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
+     */
+    private $old_id;
+
+    /**
      * @var string $asesor
      *
-     * @ORM\Column(name="asesor", type="string", length=255)
+     * @ORM\Column(name="asesor", type="string", length=255, nullable="true")
      */
     private $asesor;
 
@@ -45,7 +52,7 @@ class lockIncidence {
     /**
      * @var string $coche
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\LockBundle\Entity\lockCar")
+     * @ORM\ManyToOne(targetEntity="\Adservice\LockBundle\Entity\lock_car")
      */
     private $coche;
 
@@ -119,6 +126,24 @@ class lockIncidence {
     }
 
     /**
+     * Set oldId
+     *
+     * @param string $oldId
+     */
+    public function setOldId($oldId) {
+        $this->oldId = $oldId;
+    }
+
+    /**
+     * Get oldId
+     *
+     * @return string
+     */
+    public function getOldId() {
+        return $this->oldId;
+    }
+
+    /**
      * Set asesor
      *
      * @param string $asesor
@@ -175,9 +200,9 @@ class lockIncidence {
     /**
      * Set coche
      *
-     * @param \Adservice\LockBundle\Entity\lockCar $coche
+     * @param \Adservice\LockBundle\Entity\lock_car $coche
      */
-    public function setCoche(\Adservice\LockBundle\Entity\lockCar $coche) {
+    public function setCoche(\Adservice\LockBundle\Entity\lock_car $coche) {
         $this->coche = $coche;
     }
 

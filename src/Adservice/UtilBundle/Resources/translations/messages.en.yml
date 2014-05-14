@@ -154,6 +154,7 @@ any.popup:				 "No popups!!"
 any.response:			 "There are no answers"
 any.order.pending: 		 "There are no pending orders!!"
 any.order.rejected: 	 "There are no rejected orders!!"
+any.incidence: 			 "There are no incidences!!"
 
 #BOTONES
 btn.send:			 	 "Send"
@@ -435,6 +436,11 @@ mail.changePassword.password:			"Your New Password is:"
 mail.changePassword.info.password:		"Para modificar tu Password entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
 
 mail.textDisclaimer:				"AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>"
+
+
+#HISTORICO
+lock.list_incidences: 	"Incidences History"
+
 
 termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos
