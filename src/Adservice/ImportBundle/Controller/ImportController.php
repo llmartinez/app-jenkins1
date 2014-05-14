@@ -10,8 +10,12 @@ use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\TicketBundle\Entity\System;
 use Adservice\TicketBundle\Entity\Subsystem;
-use Adservice\ImportBundle\Controller\old_Coche;
-use Adservice\ImportBundle\Controller\old_Incidencia;
+use Adservice\ImportBundle\Entity\old_Asesor;
+use Adservice\ImportBundle\Entity\old_Socio;
+use Adservice\ImportBundle\Entity\old_Taller;
+use Adservice\ImportBundle\Entity\old_Oper;
+use Adservice\LockBundle\Entity\lock_car;
+use Adservice\LockBundle\Entity\lock_incidence;
 
 class ImportController extends Controller
 {
@@ -80,23 +84,20 @@ class ImportController extends Controller
 				$newWorkshop->setObservationAdmin($old_Taller->getObservaciones());
 				$newWorkshop->setObservationAssessor($old_Taller->getObservaciones());
 				$newWorkshop = $this->setContactFields($em, $old_Taller, $newWorkshop);
-				$workshops[] = $newWorkshop;
 
 				$newUser = UtilController::newEntity(new User(), $sa);
 				$newUser = $this->setUserFields($em, $newUser, 'ROLE_USER', $old_Taller->getContacto());
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser);
 				$newUser->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newUser->getCountry()->getLang()));
 				$newUser->setActive($old_Taller->getActive());
-				$users[] = $newUser;
+				$workshops[] = array('workshop' => $newWorkshop, 'user' => $newUser);
 			}
 			foreach ($workshops as $workshop) {
-				UtilController::saveEntity($em, $workshop, $sa,false);
+				UtilController::saveEntity($em, $workshop['workshop'], $sa, false);
+				$workshop['user']->setWorkshop($workshop['workshop']);
+				UtilController::saveEntity($em, $workshop['user'], $sa, false);
 			}
 			$em->flush();
-
-			foreach ($users as $user) {
-				UtilController::saveEntity($em, $user, $sa,false);
-			}
 
 			$old_Asesores    = $em_old->getRepository('ImportBundle:old_Asesor'		)->findAll();	// ASSESSOR 					//
 
@@ -133,80 +134,124 @@ class ImportController extends Controller
 				$em->persist($newSubSystem);
 				$em->flush();
 			}
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
     	}
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
-
-    public function importLockAction($bbdd=null, $num=0)
+    public function importLockCarsAction($bbdd=null, $num=0)
     {
-		$em_old  = $this->getDoctrine()->getEntityManager('em_old');
+		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
 
  		$consulta = $em_old ->createQuery('SELECT oc FROM ImportBundle:old_Coche oc')
-                        ->setMaxResults($num + $max_rows)
-                        ->setFirstResult($num);
+                        	->setMaxResults($num + $max_rows)
+                        	->setFirstResult($num);
 
 		$old_Coches = $consulta->getResult();
 
 		$count = $em_old ->createQuery('SELECT count(oc) FROM ImportBundle:old_Coche oc')->getResult()[0][1];
 
 		if($count > $num){
-			echo 'en desarrollo...';die;
+
+			foreach ($old_Coches as $old_Coche)
+			{
+				$newCar  = new lock_car();
+				$gama   = $em_old->getRepository('ImportBundle:old_Gama'  )->find($old_Coche->getIdMMG());
+				$modelo = $em_old->getRepository('ImportBundle:old_Modelo')->find($gama     ->getModelo());
+				$marca  = $em_old->getRepository('ImportBundle:old_Marca' )->find($modelo   ->getMarca());
+
+				$newCar->setOldId     ($old_Coche->getId());
+				$newCar->setVersion   ($gama);
+				$newCar->setModel     ($modelo);
+				$newCar->setBrand     ($marca);
+				$newCar->setYear      ($old_Coche->getAno());
+				$newCar->setVin       ($old_Coche->getbastidor());
+				$newCar->setMotor	  ($old_Coche->getMotor());
+				$cars[] = $newCar;
+			}
+			foreach ($cars as $car) {
+				$em_lock->persist($car);
+			}
+			$em_lock->flush();
+
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
 		}else{
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => '0' ));
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences'));
 		}
-
-		// $old_Coches      = $em_old->getRepository('ImportBundle:old_Coche'    	)->findAll();	// CAR							//			 		//
-		// $old_incidencia  = $em_old->getRepository('ImportBundle:old_Incidencia'	)->findAll();	// TICKET	 			 		//
-
-		// foreach ($old_Coches as $old_Coche)
-		// {
-		// 	$newCar = UtilController::newEntity(new Car(), $sa);
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	    if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
-		// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 	$newCar->setVersion    ($em->getRepository('CarBundle:Version')->find($newCar->getIdMMG()));
-		// 	$newCar->setModel      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getVersion()->getModel()));
-		// 	$newCar->setBrand      ($em->getRepository('CarBundle:Model'  )->findBy($newCar->getModel()->getBrand()));
-		// 	$newCar->setYear       ($newCar->getAno());
-		// 	$newCar->setVin        ($newCar->getbastidor());
-		// 	$newCar->setMotor	   ($newCar->getMotor());
-		// 	$newCar->setModifiedBy($sa);
-		// 	$newCar->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-		// 	$em->persist($newCar);
-		// 	//UtilController::saveEntity($em, $newCar, $sa);
-		// }
-	 // $em->flush();
     }
+
+ 	public function importLockIncidencesAction($bbdd=null, $num=0)
+    {
+		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
+		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
+		$max_rows = 5000;
+
+ 		$consulta = $em_old ->createQuery('SELECT oi FROM ImportBundle:old_Incidencia oi')
+                        	->setMaxResults($num + $max_rows)
+                        	->setFirstResult($num);
+
+		$old_Incidences = $consulta->getResult();
+
+		$count = $em_old ->createQuery('SELECT count(oi) FROM ImportBundle:old_Incidencia oi')->getResult()[0][1];
+
+		if($count > $num){
+
+			foreach ($old_Incidences as $old_Incidence)
+			{
+				$newIncidence  = new lock_incidence();
+
+				$newIncidence->setAsesor     ($em_old->getRepository('ImportBundle:old_Asesor'   )->find($old_Incidence->getAsesor())->getNombre());
+				$newIncidence->setSocio      ($em_old->getRepository('ImportBundle:old_Socio'    )->find($old_Incidence->getSocio() )->getNombre());
+				$newIncidence->setTaller     ($em_old->getRepository('ImportBundle:old_Taller'   )->find($old_Incidence->getTaller())->getNombre());
+				$newIncidence->setOper       ($em_old->getRepository('ImportBundle:old_Operacion')->find($old_Incidence->getOper()  )->getNombre());
+				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lock_car')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
+
+				$newIncidence->setOldId      ($old_Incidence->getId());
+				$newIncidence->setDescription($old_Incidence->getDescripcion());
+				$newIncidence->setTracing	 ($old_Incidence->getSeguimiento());
+				$newIncidence->setSolution   ($old_Incidence->getSolucion   ());
+				$newIncidence->setImportance ($old_Incidence->getImportancia());
+				$newIncidence->setDate   	 ($old_Incidence->getFecha());
+				$newIncidence->setActive	 ($old_Incidence->getActive());
+				$incidences[] = $newIncidence;
+			}
+			foreach ($incidences as $incidence) {
+				$em_lock->persist($incidence);
+			}
+			$em_lock->flush();
+
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', $num + $max_rows ));
+		}else{
+			echo date("H:i:s");
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
+		}
+	}
 
     private function setUserFields($em, $entity, $role, $nombre)
     {
-			$entity->setUsername   (UtilController::getUsernameUnused($em, $nombre));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
-            $entity->setPassword   (substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
+		$entity->setUsername   (UtilController::getUsernameUnused($em, $nombre));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
+        $entity->setPassword   ('grupeina'); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
 
-	        //password nuevo, se codifica con el nuevo salt
-	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
-	        $salt = md5(time());
-	        $password = $encoder->encodePassword($entity->getPassword(), $salt);
-	        $entity->setPassword($password);
-	        $entity->setSalt($salt);
+        //password nuevo, se codifica con el nuevo salt
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
+        $salt = md5(time());
+        $password = $encoder->encodePassword($entity->getPassword(), $salt);
+        $entity->setPassword($password);
+        $entity->setSalt($salt);
 
-	        //Se separa de la BBDD antigua el nombre y los apellidos
-            $nombre_completo = explode (' ', $nombre);
-            $name 	 = $nombre_completo[0];
-            $surname = "";
-            for($i=1; $i< count($nombre_completo);$i++){ $surname = $surname.' '.$nombre_completo[$i]; }
-            	if($name == '')    $name 	= 'sin-especificar';
-            	if($surname == '') $surname = 'sin-especificar';
+        //Se separa de la BBDD antigua el nombre y los apellidos
+        $nombre_completo = explode (' ', $nombre);
+        $name 	 = $nombre_completo[0];
+        $surname = "";
+        for($i=1; $i< count($nombre_completo);$i++){ $surname = $surname.' '.$nombre_completo[$i]; }
+        	if($name == '')    $name 	= 'sin-especificar';
+        	if($surname == '') $surname = 'sin-especificar';
 
-            $entity->setName          ($name);
-            $entity->setSurname       ($surname);
-            $entity->addRole          ($em->getRepository('UserBundle:Role')->findOneByName($role));
+        $entity->setName          ($name);
+        $entity->setSurname       ($surname);
+        $entity->addRole          ($em->getRepository('UserBundle:Role')->findOneByName($role));
 
 		return $entity;
     }
@@ -220,17 +265,20 @@ class ImportController extends Controller
         $entity->setFax           ($old_entity->getFax());
         $entity->setEmail1        ($old_entity->getEmail());
         $entity->setEmail2        ($old_entity->getEmail2());
-        $city = $em->getRepository('UtilBundle:City')->findOneByCity($old_entity->getPoblacion());
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    ////    ESTA SITUACIÓN NO DEBERIA PRODUCIRSE UNA VEZ ESTEN TODAS LAS POBLAICONES CARGADAS    ////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-        if($city == null) $city = $em->getRepository('UtilBundle:City')->find('1');
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-        $entity->setCity          ($city);
+        $cities    = $em->getRepository('UtilBundle:City'  )->findAll();
+        $regions   = $em->getRepository('UtilBundle:Region')->findAll();
 
-        $entity->setRegion        ($em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getCity()->getRegion()));
-        $entity->setCountry       ($em->getRepository('UtilBundle:Country')->findOneByCountry($entity->getRegion()->getCountry()));
+        $slug_city   = UtilController::getSlug($old_entity->getPoblacion());
+        $slug_region = UtilController::getSlug($old_entity->getProvincia());
+
+        $entity->setCity  (UtilController::normalizeString($slug_city  , $cities ));
+        $entity->setRegion(UtilController::normalizeString($slug_region, $regions));
+
+        $region = $em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getRegion());
+
+        if( $region != null ) $entity->setCountry($em->getRepository('UtilBundle:Country')->findOneByCountry($region->getCountry()));
+        else $entity->setCountry($em->getRepository('UtilBundle:Country')->findOneByCountry('Spain'));
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');

@@ -5,12 +5,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Adservice\LockBundle\Entity\lockCar
+ * Adservice\LockBundle\Entity\lock_car
  *
  * @ORM\Table(name="lock_car")
  * @ORM\Entity
  */
-class lockCar {
+class lock_car {
 
     /**
      * @var integer $id
@@ -22,11 +22,53 @@ class lockCar {
     private $id;
 
     /**
-     * @var string $nombre
+     * @var string $oldId
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
      */
-    private $nombre;
+    private $oldId;
+
+    /**
+     * @var string $version
+     *
+     * @ORM\Column(name="version", type="string", length=255)
+     */
+    private $version;
+
+    /**
+     * @var string $model
+     *
+     * @ORM\Column(name="model", type="string", length=255)
+     */
+    private $model;
+
+    /**
+     * @var string $brand
+     *
+     * @ORM\Column(name="brand", type="string", length=255)
+     */
+    private $brand;
+
+    /**
+     * @var string $year
+     *
+     * @ORM\Column(name="year", type="string", length=255, nullable="true")
+     */
+    private $year;
+
+    /**
+     * @var string $vin
+     *
+     * @ORM\Column(name="vin", type="string", length=255, nullable="true")
+     */
+    private $vin;
+
+    /**
+     * @var string $motor
+     *
+     * @ORM\Column(name="motor", type="string", length=255, nullable="true")
+     */
+    private $motor;
 
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
@@ -36,7 +78,8 @@ class lockCar {
 
 
     public function __toString() {
-        return $this->getNombre();
+        $car = $this->getBrand().' '.$this->getModel().''.$this->getVersion();
+        return $car;
     }
 
     /**
@@ -49,20 +92,128 @@ class lockCar {
     }
 
     /**
-     * Set nombre
+     * Set oldId
      *
-     * @param string $nombre
+     * @param string $oldId
      */
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
+    public function setOldId($oldId) {
+        $this->oldId = $oldId;
     }
 
     /**
-     * Get nombre
+     * Get oldId
      *
      * @return string
      */
-    public function getNombre() {
-        return $this->nombre;
+    public function getOldId() {
+        return $this->oldId;
+    }
+
+    /**
+     * Set version
+     *
+     * @param string $version
+     */
+    public function setVersion($version) {
+        $this->version = $version;
+    }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
+    public function getVersion() {
+        return $this->version;
+    }
+
+    /**
+     * Set model
+     *
+     * @param string $model
+     */
+    public function setModel($model) {
+        $this->model = $model;
+    }
+
+    /**
+     * Get model
+     *
+     * @return string
+     */
+    public function getModel() {
+        return $this->model;
+    }
+
+    /**
+     * Set brand
+     *
+     * @param string $brand
+     */
+    public function setBrand($brand) {
+        $this->brand = $brand;
+    }
+
+    /**
+     * Get brand
+     *
+     * @return string
+     */
+    public function getBrand() {
+        return $this->brand;
+    }
+
+    /**
+     * Set year
+     *
+     * @param string $year
+     */
+    public function setYear($year) {
+        $this->year = $year;
+    }
+
+    /**
+     * Get year
+     *
+     * @return string
+     */
+    public function getYear() {
+        return $this->year;
+    }
+
+    /**
+     * Set vin
+     *
+     * @param string $vin
+     */
+    public function setVin($vin) {
+        $this->vin = $vin;
+    }
+
+    /**
+     * Get vin
+     *
+     * @return string
+     */
+    public function getVin() {
+        return $this->vin;
+    }
+
+    /**
+     * Set motor
+     *
+     * @param string $motor
+     */
+    public function setMotor($motor) {
+        $this->motor = $motor;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return string
+     */
+    public function getMotor() {
+        return $this->motor;
     }
 }

@@ -1,6 +1,10 @@
-lock:
-    pattern:  /lock/{bbdd}/{num}
-    defaults: { _controller: ImportBundle:Import:importLock, bbdd: null, num: 0 }
+lock_cars:
+    pattern:  /cars/{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:importLockCars, bbdd: null, num: 0 }
+
+lock_incidences:
+    pattern:  /incidences/{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:importLockIncidences, bbdd: null, num: 0 }
 
 import:
     pattern:  /{bbdd}/{num}

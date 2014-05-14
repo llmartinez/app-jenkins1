@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-                {% for shop in shops %}
+            {% for shop in shops %}
             <tr>
                 <td>{{ shop.id           }}</td>
                 <td>{{ shop.name         }} {% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
@@ -100,9 +100,9 @@
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
-                    {% endif %}
+                {% endif %}
             </tr>
-                {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
     {% include 'UtilBundle:Pagination:pagination_shop.html.twig' %}

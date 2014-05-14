@@ -41,6 +41,32 @@ class AjaxController extends Controller
        return new Response(json_encode($json), $status = 200);
     }
 
+    //  ____ ___ _______   __
+    //  / ___|_ _|_   _\ \ / /
+    // | |    | |  | |  \ V /
+    // | |___ | |  | |   | |
+    //  \____|___| |_|   |_|
+
+    /**
+     * Funcion Ajax para obtener las ciudades de una region
+     * @return json
+     */
+    public function citiesFromRegionAction() {
+       $em = $this->getDoctrine()->getEntityManager();
+       $petition = $this->getRequest();
+       $id_region = $petition->request->get('id_region');
+
+       $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
+       if(count($cities) > 0) {
+            foreach ($cities as $city) {
+                $json[] = $city->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+       return new Response(json_encode($json), $status = 200);
+    }
+
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \
     // \___ \| |_| | | | | |_) |
@@ -55,8 +81,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
-        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $partner));
         if(count($shops) > 0) {
             foreach ($shops as $shop) {
                 $json[] = $shop->to_json();
@@ -131,5 +158,4 @@ class AjaxController extends Controller
         }
         return new Response(json_encode($json), $status = 200);
     }
-
 }

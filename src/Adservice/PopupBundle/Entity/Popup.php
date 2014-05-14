@@ -177,7 +177,7 @@ class Popup {
      *
      * @param user $country
      */
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country)
+    public function setCountry($country)
     {
         $this->country = $country;
     }

@@ -1,0 +1,99 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
+    </ol>
+
+<legend>{% trans %} lock.list_incidences {% endtrans %}</legend>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+   {#  <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="flt_country" class='form-control'>
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for country in countries %}
+                <option value="{{ country.id }}">{{ country }}</option>
+            {% endfor %}
+    </select></div> #}
+    {% endif %}
+
+    {% if incidences|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans %} date        {% endtrans %}</th>
+                <th>{% trans %} oper  		{% endtrans %}</th>
+                <th>{% trans %} car         {% endtrans %}</th>
+                <th>{% trans %} assigned_to {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for incidence in incidences %}
+            <tr id="incidenceRow">
+                <td id="id_incidence">{{ incidence.id }}</td>
+                <td>{{ incidence.date | date("d/m/Y") }}</td>
+                <td>{{ incidence.oper }}</td>
+                <td>{{ incidence.car  }}</td>
+                <td>{{ incidence.asesor  }}</td>
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
+
+    {% else %}
+        {% trans %} any.incidence {% endtrans %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/incidence/js/incidence.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+
+	<script type="text/javascript">
+
+	$("tr#incidenceRow").click(function() {
+
+	    var url = "{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}";
+	    url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());
+
+	    window.open(url, "_self");
+
+	});
+	</script>
+
+    <script>
+
+    {#####
+
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+
+        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+        $('#flt_country').click(function() {
+
+            var country = $('#flt_country').val();
+
+            if(country == null) country = 'none';
+
+            var url     = "{{ path('list_incidences', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
+
+            url = url.replace("plc_page", 1);
+            url = url.replace("plc_country", country);
+
+            window.open(url, "_self");
+        });
+            //util.js
+            table_filter();
+        });
+
+        ######}
+
+    </script>
+{% endblock %}

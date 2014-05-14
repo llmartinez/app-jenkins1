@@ -31,7 +31,7 @@ class City {
     /**
      * @var string $region
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     * @ORM\Column(name="region", type="string")
      */
     private $region;
 
@@ -71,7 +71,7 @@ class City {
      *
      * @param string $region
      */
-    public function setRegion(\Adservice\UtilBundle\Entity\Region $region)
+    public function setRegion($region)
     {
         $this->region = $region;
     }

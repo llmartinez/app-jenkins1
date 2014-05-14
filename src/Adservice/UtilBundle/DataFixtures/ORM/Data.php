@@ -125,7 +125,7 @@ class Data {
     {
         // Los lenguages soportados por la aplicación
 
-        $countries = array('Spain', 'France');
+        $countries = array('Spain', 'France', 'Andorra');
 
         return $countries[array_rand($countries)];
     }
@@ -139,7 +139,7 @@ class Data {
     {
         // Los lenguages soportados por la aplicación
 
-        $regions = array('Spain'  => array('Catalunya', 'Madrid', 'Canarias'),
+        $regions = array('Spain'  => array('Barcelona', 'Madrid', 'Canarias'),
                          'France' => array('Borgoña', 'Córcega', 'Isla de Francia')
                         );
 

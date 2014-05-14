@@ -4,6 +4,7 @@ namespace Adservice\PartnerBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class PartnerType extends AbstractType {
 
@@ -15,8 +16,8 @@ class PartnerType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country')
-            ->add('region')
-            ->add('city')
+            ->add('region', 'text')
+            ->add('city', 'text')
             ->add('address')
             ->add('postal_code')
             ->add('phone_number_1', 'text')

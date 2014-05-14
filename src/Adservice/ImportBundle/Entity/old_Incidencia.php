@@ -45,7 +45,7 @@ class old_Incidencia {
     /**
      * @var string $coche
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\ImportBundle\Entity\old_Coche")
+     * @ORM\Column(name="coche", type="string", length=255)
      */
     private $coche;
 
@@ -175,9 +175,9 @@ class old_Incidencia {
     /**
      * Set coche
      *
-     * @param \Adservice\ImportBundle\Entity\Coche $coche
+     * @param string $coche
      */
-    public function setCoche(\Adservice\ImportBundle\Entity\Coche $coche) {
+    public function setCoche($coche) {
         $this->coche = $coche;
     }
 

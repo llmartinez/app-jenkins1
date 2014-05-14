@@ -28,9 +28,10 @@ class ShopController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
+        $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
+
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
         }
         else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
@@ -68,7 +69,7 @@ class ShopController extends Controller {
 
             $form->bindRequest($request);
 
-            if ($form->isValid()) {
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
                 $user = $this->get('security.context')->getToken()->getUser();
                 $shop = UtilController::newEntity($shop, $user );
                 UtilController::saveEntity($em, $shop, $user);

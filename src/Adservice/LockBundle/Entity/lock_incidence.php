@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="lock_incidence")
  * @ORM\Entity
  */
-class lockIncidence {
+class lock_incidence {
 
     /**
      * @var integer $id
@@ -22,11 +22,88 @@ class lockIncidence {
     private $id;
 
     /**
-     * @var string $nombre
+     * @var string $old_id
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
      */
-    private $nombre;
+    private $old_id;
+
+    /**
+     * @var string $asesor
+     *
+     * @ORM\Column(name="asesor", type="string", length=255, nullable="true")
+     */
+    private $asesor;
+
+    /**
+     * @var string $socio
+     *
+     * @ORM\Column(name="socio", type="string", length=255)
+     */
+    private $socio;
+
+    /**
+     * @var string $taller
+     *
+     * @ORM\Column(name="taller", type="string", length=255)
+     */
+    private $taller;
+
+    /**
+     * @var string $coche
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\LockBundle\Entity\lock_car")
+     */
+    private $coche;
+
+    /**
+     * @var string $oper
+     *
+     * @ORM\Column(name="oper", type="string", length=255)
+     */
+    private $oper;
+
+    /**
+     * @var string $description
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @var string $tracing
+     *
+     * @ORM\Column(name="tracing", type="string", length=255)
+     */
+    private $tracing;
+
+    /**
+     * @var string $solution
+     *
+     * @ORM\Column(name="solution", type="string", length=255)
+     */
+    private $solution;
+
+    /**
+     * @var string $importance
+     *
+     * @ORM\Column(name="importance", type="string", length=255)
+     */
+    private $importance;
+
+    /**
+     * @var string $date
+     *
+     * @ORM\Column(name="date", type="string", length=255)
+     */
+    private $date;
+
+    /**
+     * @var string $active
+     *
+     * @ORM\Column(name="active", type="string", length=255)
+     */
+    private $active;
 
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
@@ -36,7 +113,7 @@ class lockIncidence {
 
 
     public function __toString() {
-        return $this->getNombre();
+        return $this->getDescription();
     }
 
     /**
@@ -49,20 +126,218 @@ class lockIncidence {
     }
 
     /**
-     * Set nombre
+     * Set oldId
      *
-     * @param string $nombre
+     * @param string $oldId
      */
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
+    public function setOldId($oldId) {
+        $this->oldId = $oldId;
     }
 
     /**
-     * Get nombre
+     * Get oldId
      *
      * @return string
      */
-    public function getNombre() {
-        return $this->nombre;
+    public function getOldId() {
+        return $this->oldId;
+    }
+
+    /**
+     * Set asesor
+     *
+     * @param string $asesor
+     */
+    public function setAsesor($asesor) {
+        $this->asesor = $asesor;
+    }
+
+    /**
+     * Get asesor
+     *
+     * @return string
+     */
+    public function getAsesor() {
+        return $this->asesor;
+    }
+
+    /**
+     * Set socio
+     *
+     * @param string $socio
+     */
+    public function setSocio($socio) {
+        $this->socio = $socio;
+    }
+
+    /**
+     * Get socio
+     *
+     * @return string
+     */
+    public function getSocio() {
+        return $this->socio;
+    }
+
+    /**
+     * Set taller
+     *
+     * @param string $taller
+     */
+    public function setTaller($taller) {
+        $this->taller = $taller;
+    }
+
+    /**
+     * Get taller
+     *
+     * @return string
+     */
+    public function getTaller() {
+        return $this->taller;
+    }
+
+    /**
+     * Set coche
+     *
+     * @param \Adservice\LockBundle\Entity\lock_car $coche
+     */
+    public function setCoche(\Adservice\LockBundle\Entity\lock_car $coche) {
+        $this->coche = $coche;
+    }
+
+    /**
+     * Get coche
+     *
+     * @return string
+     */
+    public function getCoche() {
+        return $this->coche;
+    }
+
+    /**
+     * Set oper
+     *
+     * @param string $oper
+     */
+    public function setOper($oper) {
+        $this->oper = $oper;
+    }
+
+    /**
+     * Get oper
+     *
+     * @return string
+     */
+    public function getOper() {
+        return $this->oper;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * Set tracing
+     *
+     * @param string $tracing
+     */
+    public function setTracing($tracing) {
+        $this->tracing = $tracing;
+    }
+
+    /**
+     * Get tracing
+     *
+     * @return string
+     */
+    public function getTracing() {
+        return $this->tracing;
+    }
+
+    /**
+     * Set solution
+     *
+     * @param string $solution
+     */
+    public function setSolution($solution) {
+        $this->solution = $solution;
+    }
+
+    /**
+     * Get solution
+     *
+     * @return string
+     */
+    public function getSolution() {
+        return $this->solution;
+    }
+
+    /**
+     * Set importance
+     *
+     * @param string $importance
+     */
+    public function setImportance($importance) {
+        $this->importance = $importance;
+    }
+
+    /**
+     * Get importance
+     *
+     * @return string
+     */
+    public function getImportance() {
+        return $this->importance;
+    }
+
+    /**
+     * Set date
+     *
+     * @param string $date
+     */
+    public function setDate($date) {
+        $this->date = $date;
+    }
+
+    /**
+     * Get date
+     *
+     * @return string
+     */
+    public function getDate() {
+        return $this->date;
+    }
+
+    /**
+     * Set active
+     *
+     * @param string $active
+     */
+    public function setActive($active) {
+        $this->active = $active;
+    }
+
+    /**
+     * Get active
+     *
+     * @return string
+     */
+    public function getActive() {
+        return $this->active;
     }
 }

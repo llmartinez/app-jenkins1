@@ -1,7 +1,7 @@
-lock_list:
-    pattern:  /lock/{lock}
-    defaults: { _controller: LockBundle:lock:list, lock: null }
+list_incidences:
+    pattern:  /lock/{page}/{id_taller}
+    defaults: { _controller: LockBundle:Lock:listIncidences, page: 1, id_taller: null }
 
-incidence:
-    pattern:  /lock/{lock}
-    defaults: { _controller: LockBundle:lock:list, lock: null }
+show_incidence:
+    pattern:  /lock/{id_incidence}
+    defaults: { _controller: LockBundle:Lock:showIncidence, id_incidence: null }
