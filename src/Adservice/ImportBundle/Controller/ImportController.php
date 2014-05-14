@@ -21,6 +21,7 @@ class ImportController extends Controller
 {
     public function importAction($bbdd=null)
     {
+		/**/echo date("H:i:s");
 		$em = $this->getDoctrine()->getEntityManager('default'  );
 		$em_old = $this->getDoctrine()->getEntityManager('em_old');
 		$sa = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
@@ -134,13 +135,17 @@ class ImportController extends Controller
 				$em->persist($newSubSystem);
 				$em->flush();
 			}
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
+        	return $this->render('ImportBundle:Import:import.html.twig');
     	}
+    	/**/echo '<br> IMPORTADA BBDD!! <br>';
+		/**/echo date("H:i:s");
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
     public function importLockCarsAction($bbdd=null, $num=0)
     {
+		/**/echo date("H:i:s");
 		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
@@ -176,14 +181,20 @@ class ImportController extends Controller
 			}
 			$em_lock->flush();
 
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
+			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
+        	return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences'));
+			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences'));
+        	/**/echo '<br> IMPORTADA BBDD CARS!! <br>';
+			/**/echo date("H:i:s");
+        	return $this->render('ImportBundle:Import:import.html.twig');
 		}
     }
 
  	public function importLockIncidencesAction($bbdd=null, $num=0)
     {
+		/**/echo date("H:i:s");
+
 		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 5000;
@@ -222,9 +233,11 @@ class ImportController extends Controller
 			}
 			$em_lock->flush();
 
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', $num + $max_rows ));
+			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', $num + $max_rows ));
+        	return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-			echo date("H:i:s");
+        	/**/echo 'IMPORTADA INCIDENCES!! <br>';
+			/**/echo date("H:i:s");
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
 		}
 	}
