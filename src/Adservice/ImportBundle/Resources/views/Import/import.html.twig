@@ -8,8 +8,9 @@
 		<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
 		<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>
 
-		<button onclick="window.open('{{ path('import'   , { 'bbdd': 'adservice'          }) }}', '_self')"> IMPORTAR BBDD_OLD	 </button>
-		<button onclick="window.open('{{ path('lock_cars', { 'bbdd': 'old_cars', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_LOCK </button>
+		<button onclick="window.open('{{ path('import'   ,       { 'bbdd': 'adservice'                }) }}', '_self')"> IMPORTAR BBDD_OLD	      </button>
+		<button onclick="window.open('{{ path('lock_cars',       { 'bbdd': 'old_cars',       'num': 0 }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
+		<button onclick="window.open('{{ path('lock_incidences', { 'bbdd': 'old_incidences', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>
 
 	{% elseif bbdd == 'old_cars'  %}
 

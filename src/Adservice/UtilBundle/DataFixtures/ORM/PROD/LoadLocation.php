@@ -18,7 +18,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
     private $manager;
     private $container;
 
-    public function getOrder(){ return 10; }
+    public function getOrder(){ return 2; }
 
     public function setContainer(ContainerInterface $container = null)
     {
