@@ -165,39 +165,6 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    public function findTicketsFiltered($id_workshop, $id_ticket=null, $status=null)
-    {
-        $em     = $this->getEntityManager();
-
-        $query  = 'SELECT t FROM TicketBundle:Ticket t ';
-        $joins  = 'JOIN t.workshop w ';
-        $where  = 'WHERE w.id = :w_id ';
-
-        $params[] = array('w_id', $id_workshop);
-
-        if ($id_ticket != null)
-        {
-            $where .= 'AND t.id = :id_ticket ';
-            $params[] = array('id_ticket', $id_ticket);
-        }
-
-        if ($status != null and $status->getId() != null)
-        {
-            $where .= 'AND t.status = :status ';
-            $params[] = array('status', $status->getId());
-        }
-
-        //Crea la consulta
-        $consulta = $em->createQuery($query.$joins.$where.'ORDER BY t.id ');
-
-        //hace un recorrido de $params para extraer los parametros de la consulta
-        foreach($params as $param){
-            $consulta->setParameter($param[0], $param[1]);
-        }
-
-        return $consulta->getResult();
-    }
-
     public function findSimilar($status, $model=null, $subsystem=null)
     {
         $em = $this->getEntityManager();

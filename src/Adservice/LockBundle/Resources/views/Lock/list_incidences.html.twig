@@ -34,10 +34,10 @@
                 {% for incidence in incidences %}
             <tr id="incidenceRow">
                 <td id="id_incidence">{{ incidence.id }}</td>
-                <td>{{ incidence.date | date("d/m/Y") }}</td>
-                <td>{{ incidence.oper }}</td>
-                <td>{{ incidence.car  }}</td>
-                <td>{{ incidence.asesor  }}</td>
+                <td>{{ incidence.date   }}</td> {# | date("d/m/Y") #}
+                <td>{{ incidence.oper   }}</td>
+                <td>{{ incidence.coche  }}</td>
+                <td>{{ incidence.asesor }}</td>
             </tr>
                 {% endfor %}
         </tbody>
@@ -45,6 +45,17 @@
 
     {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
 
+    <script type="text/javascript">
+
+    $("#incidenceRow").click(function() {
+
+        var url = "{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}";
+        url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());
+
+        window.open(url, "_self");
+
+    });
+    </script>
     {% else %}
         {% trans %} any.incidence {% endtrans %}
     {% endif %}
@@ -53,20 +64,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/incidence/js/incidence.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
-
-	<script type="text/javascript">
-
-	$("tr#incidenceRow").click(function() {
-
-	    var url = "{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}";
-	    url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());
-
-	    window.open(url, "_self");
-
-	});
-	</script>
 
     <script>
 

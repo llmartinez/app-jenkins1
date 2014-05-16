@@ -420,27 +420,36 @@ class TicketController extends Controller {
      * Devuelve todos los tickets realizados
      * @return url
      */
-    public function listTicketFilteredAction()
+    public function listTicketFilteredAction($page=1, $id_workshop='none', $id_ticket='none', $status='all', $option='all')
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
+        $workshop = new Workshop();
         $tickets  = array();
-        $status   = new Status();
+        $params   = array();
 
-        $id_workshop = $request->request->get('id_workshop');
-        $id_ticket   = $request->request->get('flt_id'     );
-        $st_open     = $request->request->get('flt_open'   );
-        $st_closed   = $request->request->get('flt_closed' );
+        if($id_ticket   != 'none') $params[] = array('id'    , ' = '.$id_ticket  );
+        if($id_workshop != 'none')  {
+                                        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+                                        $params[] = array('workshop'    , ' = '.$id_workshop );
+                                    }
+        if($status      != 'all' )  {
+                                        $id_status = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => $status))->getId();
+                                        $params[] = array('status', " = '".$id_status."'");
+                                    }
 
-        if($st_open != "") { $status = $em->getRepository('TicketBundle:Status')->findOneByName('open'  ); }
-        else {
-            if($st_closed != "") { $status = $em->getRepository('TicketBundle:Status')->findOneByName('closed'); }
-        }
-        $tickets  = $em->getRepository('TicketBundle:Ticket'    )->findTicketsFiltered($id_workshop, $id_ticket, $status);
-        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+        $pagination = new Pagination($page);
 
-        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop' => $workshop,
-                                                                                       'tickets'  => $tickets,
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+
+        $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshop,
+                                                                                       'pagination' => $pagination,
+                                                                                       'tickets'    => $tickets,
+                                                                                       'option'     => $option,
                                                                               ));
     }
 
