@@ -100,7 +100,7 @@ class WorkshopOrderController extends Controller {
         // if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
 
         // //creamos arrays de los valores anteriores a la modificacion/rechazo de la solicitud
-        // $ordersBefore = $this->getOrdersBefore($em, $workshopsOrders);
+        // $ordersBefore = $this->getWorkshopOrdersBefore($em, $workshopsOrders);
 
         // return $this->redirect($this->generateUrl('list_orders'));
     //}
@@ -135,7 +135,8 @@ class WorkshopOrderController extends Controller {
             $partner = $workshopOrder->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array( 'partner' => $partner->getId(),
                                                                                         'code_workshop' => $workshopOrder->getCodeWorkshop()));
@@ -215,8 +216,10 @@ class WorkshopOrderController extends Controller {
         $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
+
             $form->bindRequest($request);
-            if ($form->isValid()) {
+             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
@@ -345,7 +348,10 @@ class WorkshopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 $workshopOrder->setAction('rejected');
                 $workshopOrder->setRejectionReason($form->get('rejection_reason')->getData());     //recogemos del formulario el motivo de rechazo...
                 $em->persist($workshopOrder);

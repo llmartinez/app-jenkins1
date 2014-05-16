@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="brand")
  * @ORM\Entity
  */
-class Brand
-{
+class Brand {
     /**
      * @var integer $id
      *

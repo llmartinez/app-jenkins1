@@ -110,8 +110,12 @@ class AjaxController extends Controller
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
 
         $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
-        foreach ($models as $model) {
-            $json[] = $model->to_json();
+        if(count($models) > 0) {
+            foreach ($models as $model) {
+                $json[] = $model->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -128,8 +132,12 @@ class AjaxController extends Controller
         $model = $em->getRepository('CarBundle:Model')->find($id_model);
 
         $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
-        foreach ($versions as $version) {
-            $json[] = $version->to_json();
+        if(count($versions) > 0) {
+            foreach ($versions as $version) {
+                $json[] = $version->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -153,8 +161,12 @@ class AjaxController extends Controller
         $system = $em->getRepository('TicketBundle:System')->find($id_system);
 
         $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
-        foreach ($subsystems as $subsystem) {
-            $json[] = $subsystem->to_json();
+        if(count($subsystems) > 0) {
+            foreach ($subsystems as $subsystem) {
+                $json[] = $subsystem->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }

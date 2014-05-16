@@ -22,7 +22,7 @@ class ImportController extends Controller
     public function importAction($bbdd=null)
     {
 		/**/echo date("H:i:s");
-		$em = $this->getDoctrine()->getEntityManager('default'  );
+		$em = $this->getDoctrine()->getEntityManager('default');
 		$em_old = $this->getDoctrine()->getEntityManager('em_old');
 		$sa = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
 
@@ -148,11 +148,10 @@ class ImportController extends Controller
 		/**/echo date("H:i:s");
 		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
-		$max_rows = 1000;
-
+		$max_rows = 5000;
  		$consulta = $em_old ->createQuery('SELECT oc FROM ImportBundle:old_Coche oc')
-                        	->setMaxResults($num + $max_rows)
-                        	->setFirstResult($num);
+                        	->setFirstResult($num)
+                        	->setMaxResults($max_rows);
 
 		$old_Coches = $consulta->getResult();
 
@@ -181,8 +180,8 @@ class ImportController extends Controller
 			}
 			$em_lock->flush();
 
-			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
-        	return $this->render('ImportBundle:Import:import.html.twig');
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
+        	//return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
 			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences'));
         	/**/echo '<br> IMPORTADA BBDD CARS!! <br>';
@@ -200,8 +199,8 @@ class ImportController extends Controller
 		$max_rows = 5000;
 
  		$consulta = $em_old ->createQuery('SELECT oi FROM ImportBundle:old_Incidencia oi')
-                        	->setMaxResults($num + $max_rows)
-                        	->setFirstResult($num);
+                        	->setFirstResult($num)
+                        	->setMaxResults($max_rows);
 
 		$old_Incidences = $consulta->getResult();
 

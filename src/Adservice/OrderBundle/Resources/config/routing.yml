@@ -41,9 +41,9 @@ shopOrder_accept:
     pattern: /shop/accept/{id}/{status}
     defaults: { _controller: OrderBundle:ShopOrder:accept }
 
-# shopOrder_resendOrder:
-#     pattern: /shop/resend/{id}/
-#     defaults: { _controller: OrderBundle:ShopOrder:resend }
+shopOrder_resendOrder:
+    pattern: /shop/resend/{id}/
+    defaults: { _controller: OrderBundle:ShopOrder:resendOrder }
 
 shopOrder_reject:
     pattern: /shop/reject/{id}

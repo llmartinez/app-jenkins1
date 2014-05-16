@@ -63,14 +63,15 @@ class WorkshopController extends Controller {
             $partner = $workshop->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
                 if($find == null)
                 {
                     $workshop = UtilController::newEntity($workshop, $this->get('security.context')->getToken()->getUser());
-                    if($workshop->getShop()->getName() == '...') { $workshop->setShop(null); }
                     $this->saveWorkshop($em, $workshop);
 
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
@@ -166,8 +167,9 @@ class WorkshopController extends Controller {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
 
-            if ($form->isValid())
-            {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
