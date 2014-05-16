@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
+use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -78,6 +79,24 @@ class PartnerController extends Controller {
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
 
+                    /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
+                    $newShop = UtilController::newEntity(new Shop(), $security->getToken()->getUser());
+                    $newShop->setName('...');
+                    $newShop->setPartner($partner);
+                    $newShop->setActive('1');
+                    $newShop->setCountry       ($partner->getCountry());
+                    $newShop->setRegion        ($partner->getRegion());
+                    $newShop->setCity          ($partner->getCity());
+                    $newShop->setPhoneNumber1  ($partner->getPhoneNumber1());
+                    $newShop->setPhoneNumber2  ($partner->getPhoneNumber2());
+                    $newShop->setMovileNumber1 ($partner->getMovileNumber1());
+                    $newShop->setMovileNumber2 ($partner->getMovileNumber2());
+                    $newShop->setFax           ($partner->getFax());
+                    $newShop->setEmail1        ($partner->getEmail1());
+                    $newShop->setEmail2        ($partner->getEmail2());
+
+                    UtilController::saveEntity($em, $newShop, $security->getToken()->getUser());
+
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
                 else{
@@ -127,8 +146,9 @@ class PartnerController extends Controller {
             $last_code = $partner->getCodePartner();
             $form->bindRequest($petition);
 
-            if ($form->isValid())
-            {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+        if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
                 if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())

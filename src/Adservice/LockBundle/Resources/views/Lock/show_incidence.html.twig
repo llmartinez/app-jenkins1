@@ -1,1 +1,36 @@
-Muestra la incidencia
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+
+    {% block breadcrumb %}{% endblock  %}
+
+<div class="info">
+
+<legend>{% trans %} workshop {% endtrans %}</legend>
+
+	{% if incidence.taller	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} workshop 	 {% endtrans %}: </b>{{ incidence.taller 		 }} </div> {% endif %}
+	{% if incidence.socio	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} partner     {% endtrans %}: </b>{{ incidence.socio 		 }} </div> {% endif %}
+	{% if incidence.coche  	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} car 	  	 {% endtrans %}: </b>{{ incidence.coche 		 }} </div> {% endif %}
+	{% if incidence.asesor	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} assigned.to {% endtrans %}: </b>{{ incidence.asesor 		 }} </div> {% endif %}
+	{% if incidence.oper	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} subsystem   {% endtrans %}: </b>{{ incidence.oper 		 }} </div> {% endif %}
+</div>
+
+<!-- CONTENIDO PAGINA TICKETS -->
+
+<div class="content">
+    <div class="form-group">
+    <legend>{% trans %} incidence {% endtrans %} #{{ incidence.id }} ({{ incidence.date | date("d/m/Y") }})</legend>
+
+	    <legend>{% trans %} description {% endtrans %}</legend>
+
+		{% if incidence.description	!= "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} description {% endtrans %}: </b>{{ incidence.description 		 }} </div> {% endif %}
+
+	    <legend>{% trans %} tracing {% endtrans %}</legend>
+	    {% if ticket.tracing  	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} tracing {% endtrans %}: </b>{{ ticket.tracing 		 }} </div> {% endif %}
+
+	    <legend>{% trans %} solution {% endtrans %}</legend>
+	    {% if ticket.solution  	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} solution {% endtrans %}: </b>{{ ticket.solution 		 }} </div> {% endif %}
+	</div>
+</div>
+
+{% endblock %}

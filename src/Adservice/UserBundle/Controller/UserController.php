@@ -146,8 +146,12 @@ class UserController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid())
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 $this->saveUser($em, $user, $original_password);
+            }
             return $this->redirect($this->generateUrl('user_list'));
         }
 
@@ -244,7 +248,8 @@ class UserController extends Controller {
 
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($this->get('security.context')->getToken()->getUser());

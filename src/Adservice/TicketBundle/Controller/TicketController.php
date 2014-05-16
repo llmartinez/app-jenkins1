@@ -161,7 +161,9 @@ class TicketController extends Controller {
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
                     /*Validacion Formularios*/
-                    if (($form->isValid()) && ($formC->isValid())) {
+                        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+                        if (($form ->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
+                         && ($formC->isValid() or $formC->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                         //Define CAR
                         $car = UtilController::newEntity($car, $user);
@@ -351,12 +353,13 @@ class TicketController extends Controller {
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
 
-            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid())) or (!$security->isGranted('ROLE_ASSESSOR'))){
+            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
 
-                if (($formP->isValid()) and ($formD->isValid())) {
+                if (($formP->isValid() or $formP ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
+                and ($formD->isValid() or $formD ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                     //Define Post
                     $post = UtilController::newEntity($post, $user);
@@ -404,7 +407,6 @@ class TicketController extends Controller {
         }
 
         $array = array( 'formP'     => $formP->createView(),
-                        'form_name' => $form->getName(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems, );
@@ -458,7 +460,7 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+            if ($form->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 if($ticket->getSolution() != ""){
                     $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');

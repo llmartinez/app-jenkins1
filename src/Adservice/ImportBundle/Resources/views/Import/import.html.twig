@@ -5,7 +5,7 @@
 	{% if bbdd is not defined or bbdd == null %}
 
 		<h3>Deseas importar la BBDD antigua de AD-service??</h3>
-		<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
+		<p>Se importaran Socios, Talleres, Usuarios, Asesores y Grupos de Operaciones "Gropers".</p>
 		<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>
 
 		<button onclick="window.open('{{ path('import'   ,       { 'bbdd': 'adservice'                }) }}', '_self')"> IMPORTAR BBDD_OLD	      </button>

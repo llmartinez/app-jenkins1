@@ -16,7 +16,7 @@ class CarController extends Controller {
      * @return url
      */
     public function editCarAction($id_ticket) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em        = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
