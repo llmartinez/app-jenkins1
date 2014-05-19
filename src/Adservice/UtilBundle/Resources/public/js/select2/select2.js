@@ -290,12 +290,27 @@ the specific language governing permissions and limitations under the Apache Lic
     }
 
     function killEvent(event) {
-        event.preventDefault();
-        event.stopPropagation();
+         $('input[id*=_search]' ).keydown(function(event) {
+                if (event.which == 13) {
+                    if ($(':text[name*=region]').val() != '' && $(':text[name*=region]').val() != undefined ) {
+                        console.log('enter cities');
+                        $(':text[name*=city]').val( $(this).val() );
+                        $('#s2id_slct_city .select2-chosen').text($(this).val());
+                        $(':text[name*=address]').focus();
+                    }else{
+                        console.log('enter regions');
+                        $(':text[name*=region]').val( $(this).val() );
+                        $('#s2id_slct_region .select2-chosen').text($(this).val());
+                        $('#s2id_slct_city').focus();
+                    }
+                }
+            });
+        //event.preventDefault();
+        //event.stopPropagation();
     }
     function killEventImmediately(event) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
+        //event.preventDefault();
+        //event.stopImmediatePropagation();
     }
 
     function measureTextWidth(e) {
@@ -1369,8 +1384,8 @@ the specific language governing permissions and limitations under the Apache Lic
                             self.selectHighlighted({noFocus: true});
                         }
                         self.close();
-                        e.preventDefault();
-                        e.stopPropagation();
+                        //e.preventDefault();
+                        //e.stopPropagation();
                     }
                 });
             }
@@ -2771,7 +2786,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
                 this.open();
                 this.focusSearch();
-                e.preventDefault();
+                //e.preventDefault();
             }));
 
             this.container.on("focus", selector, this.bind(function () {
