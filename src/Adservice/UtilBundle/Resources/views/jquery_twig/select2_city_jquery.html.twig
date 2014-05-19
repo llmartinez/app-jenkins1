@@ -1,0 +1,8 @@
+
+    <script>
+        $(document).ready(function(){
+		    $("#slct_city").change(function(){
+		        $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text() );
+		    });
+        });
+    </script>

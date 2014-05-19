@@ -1,0 +1,9 @@
+    <script>
+
+    	$(document).ready(function() {
+	        $('#MainContent').find('.glyphicon-trash').click(function() {
+	            var popup_id = $(this).data('id');
+	            confirm_delete_popup_modal(popup_id);
+	        });
+        });
+    </script>

@@ -118,33 +118,5 @@
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-    <script>
-        $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
-
-            $('#MainContent').find('.glyphicon-trash').click(function() {
-                var partner_id = $(this).data('id');
-                confirm_delete_partner_modal(partner_id);
-            });
-
-            //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-            $('#flt_country').click(function() {
-
-                var country = $('#flt_country').val();
-
-                if(country == null) country = 'none';
-
-                var url     = "{{ path('shop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
-
-                url = url.replace("plc_page", 1);
-                url = url.replace("plc_country", country);
-
-                window.open(url, "_self");
-            });
-
-            //util.js
-            table_filter();
-        });
-
-    </script>
+    {% include 'UtilBundle:jquery_twig:shop_filter_country_jquery.html.twig' %}
 {% endblock %}

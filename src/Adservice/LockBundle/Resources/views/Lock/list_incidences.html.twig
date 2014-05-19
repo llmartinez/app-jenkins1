@@ -45,17 +45,8 @@
 
     {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
 
-    <script type="text/javascript">
+    {% include 'UtilBundle:jquery_twig:incidence_show_jquery.html.twig' %}
 
-    $("#incidenceRow").click(function() {
-
-        var url = "{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}";
-        url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());
-
-        window.open(url, "_self");
-
-    });
-    </script>
     {% else %}
         {% trans %} any.incidence {% endtrans %}
     {% endif %}
@@ -66,32 +57,8 @@
     {{ parent() }}
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-    <script>
+{# /***** TODO: enter en select2 setea el valor y pasa al siguiente elemento *****/
+    {% include 'UtilBundle:jquery_twig:lock_filter_country_jquery.html.twig' %}
+ /******************************************************************************/ #}
 
-    {#####
-
-        $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
-
-        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_country').click(function() {
-
-            var country = $('#flt_country').val();
-
-            if(country == null) country = 'none';
-
-            var url     = "{{ path('list_incidences', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
-
-            url = url.replace("plc_page", 1);
-            url = url.replace("plc_country", country);
-
-            window.open(url, "_self");
-        });
-            //util.js
-            table_filter();
-        });
-
-        ######}
-
-    </script>
 {% endblock %}

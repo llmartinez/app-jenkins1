@@ -26,7 +26,7 @@
                 <th>{% trans %} username {% endtrans %}</th>
                 <th>{% trans %} name     {% endtrans %}</th>
                 <th>{% trans %} surname  {% endtrans %}</th>
-                <th>{% trans %} home     {% endtrans %}</th>
+                <th>{% trans %} email    {% endtrans %}</th>
                 <th>{% trans %} tel      {% endtrans %}</th>
                 <th>{% trans %} region   {% endtrans %}</th>
                 <th>{% trans %} actions  {% endtrans %}</th>
@@ -48,16 +48,9 @@
 
     {% include 'UtilBundle:Pagination:pagination_user.html.twig' %}
 
-    <script>
-        $('#slct_role').change(function() {
-            var role = $(this).val();
-            var url_list = "{{ path('user_list', { 'page': '1', 'option': 'plc_role' }) }}";
-            url = url_list.replace('plc_role', role);
-            window.open(url, "_self");
-        });
-    </script>
+    {% include 'UtilBundle:jquery_twig:user_filter_role_jquery.html.twig' %}
 
-    <!-- Modal -->
+   {#  <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -74,7 +67,7 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div><!-- /.modal --> #}
 
 {% endblock %}
 

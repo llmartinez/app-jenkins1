@@ -94,66 +94,11 @@
     {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
 
-{# import #}
-    <script>
-        $(document).ready(function() {
+    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
 
-            // REGIONS FROM COUNTRY
-            var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
-
-            $('form').find('select[name*=country]').change(function(){
-                var url_ajax = "{{ path("regions_from_country") }}";
-                populate_region(url_ajax);
-            });
-
-            $("#slct_region").change(function(){
-                $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text() );
-
-                var url_ajax = "{{ path("cities_from_region") }}";
-                populate_city(url_ajax);
-            });
-
-            $("#slct_city").change(function(){
-                $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text() );
-            });
-
-            $('input[id*=_search]' ).keydown(function() {
-
-                if (event.which == 13) {
-                    alert('llega');
-                }
-            });
-        });
-    </script>
+    {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
+    {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
+    {% include 'UtilBundle:jquery_twig:select2_assign_on_enter_jquery.html.twig' %}
 
 {% endblock %}
 
-
-{#
-                        $(':text[name*=region]').val( $(this).val() );
-                        $('#s2id_slct_region .select2-chosen').text($(this).val());
-
-                        var url_ajax = "{{ path("cities_from_region") }}";
-                        populate_city(url_ajax);
-
-                        $("#cities").select2();
-                        $("#cities").focus();
-                    }
-alert('city');
-                        $(':text[id*=region]').val( $(this).val() );
-                        $('#s2id_slct_region .select2-chosen').text($(this).val());
-
-                        var url_ajax = "{{ path("cities_from_region") }}";
-                        populate_city(url_ajax);
-
-                        $("#cities").select2();
-                        $("#cities").focus();
-
-                    }else{
-
-                        if ($('input[id*=_search]').parent().parent().parent().find('#s2id_slct_region').html() != undefined) {
-
-
-                        }
-#}

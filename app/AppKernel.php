@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Adservice\OrderBundle\OrderBundle(),
             new Adservice\ImportBundle\ImportBundle(),
             new Adservice\LockBundle\LockBundle(),
+            //new Adservice\FOSJsRoutingBundle\JsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,0 +1,9 @@
+
+    <script>
+        $('#slct_role').change(function() {
+            var role = $(this).val();
+            var url_list = "{{ path('user_list', { 'page': '1', 'option': 'plc_role' }) }}";
+            url = url_list.replace('plc_role', role);
+            window.open(url, "_self");
+        });
+    </script>

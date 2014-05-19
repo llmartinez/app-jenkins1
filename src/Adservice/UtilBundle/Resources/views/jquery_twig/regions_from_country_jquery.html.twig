@@ -1,0 +1,16 @@
+
+    <script>
+        $(document).ready(function(){
+
+            // REGIONS FROM COUNTRY
+            var url_ajax = "{{ path("regions_from_country") }}";
+            populate_region(url_ajax);
+
+            //si clickamos el combobox de los paises repoblamos la de las regiones
+            $('form').find('select[name*=country]').change(function() {
+               var url_ajax = "{{ path("regions_from_country") }}";
+               populate_region(url_ajax);
+            });
+
+        });
+    </script>

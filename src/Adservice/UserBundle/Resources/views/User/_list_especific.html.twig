@@ -15,7 +15,7 @@
         <td>{{ user.region       }}</td>
         <td>
             <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a id="btn_delete{{ user.username }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+           {#  <a id="btn_delete{{ user.username }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a> #}
         </td>
     </tr>
 {% endfor %}

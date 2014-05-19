@@ -96,18 +96,7 @@
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
     <script src="{{ asset('bundles/util/js/jquery.cookie.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            //al cargar la pagina....
-            $(window).load(function(){
-                //a traves de la cookie solo mostramos el popup una vez
-                if ($.cookie('visited') != 1){
-                    $.cookie('visited', '1');
-                    var url_ajax = "{{ path('popup_get') }}";
-                    find_popup(url_ajax);
-                }
-            });
-        });
-    </script>
+
+    {% include 'UtilBundle:jquery_twig:popup_show_jquery.html.twig' %}
 
 {% endblock %}
