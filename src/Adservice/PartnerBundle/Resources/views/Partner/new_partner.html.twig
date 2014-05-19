@@ -54,19 +54,23 @@
                 <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-                <br>
+                <label> {% trans %} region          {% endtrans %} *</label>
+                <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
                 <div id="region_autocomplete">
                     <select hidden='hidden' id="data_regions"></select>
-                    <select id="slct_region"></select>
+                    <div id="div_regions">
+                        <select id="slct_region"></select>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} city            {% endtrans %} *</label> {{ form_widget(form.city  ,           { 'attr': {'class': 'form-control'} }) }}
-                <br>
+                <label> {% trans %} city            {% endtrans %} *</label>
+                <div hidden='hidden'> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
                 <div id="city_autocomplete">
                     <select hidden='hidden' id="data_cities"></select>
-                    <select id="slct_city"></select>
+                    <div id="div_cities">
+                        <select id="slct_city"></select>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-4 col-md-4 form-group">
@@ -98,7 +102,7 @@
 
     {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
     {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_assign_on_enter_jquery.html.twig' %}
+    <script> $(document).ready(function(){ $("#slct_city").select2(); }); </script>
 
 {% endblock %}
 
