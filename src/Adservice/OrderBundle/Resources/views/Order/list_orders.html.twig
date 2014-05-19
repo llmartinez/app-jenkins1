@@ -20,7 +20,6 @@
     {% elseif option == 'shop_pending'      %} {% include 'OrderBundle:Order:list_shop_orders.html.twig'              %}
     {% elseif option == 'shop_rejected'     %} {% include 'OrderBundle:Order:list_shop_rejected_orders.html.twig'     %}
     {% endif %}
-    {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 </div>
 
 {% endblock %}
@@ -28,10 +27,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            //util.js
-            table_filter();//util.js
-        });
-    </script>
+    <script> $(document).ready(function() { table_filter(); }); //util.js </script>
 {% endblock %}

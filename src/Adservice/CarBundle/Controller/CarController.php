@@ -9,7 +9,6 @@ use Adservice\CarBundle\Form\CarType;
 
 class CarController extends Controller {
 
-
     /**
      * Edita el car asignado a partir de su id
      * @param integer $id_ticket
@@ -31,7 +30,9 @@ class CarController extends Controller {
             $formC->bindRequest($request);
 
             //Define CAR
-            if ($formC->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($formC->isValid() or $formC->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 // if ($car->getVersion() != "") {
 
                     $id_brand = $request->request->get('new_car_form_brand');
@@ -57,7 +58,7 @@ class CarController extends Controller {
         $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getBrand()->getId());
         $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getModel()->getId());
 
-        return $this->render('TicketBundle:Ticket:edit_car_layout.html.twig', array(
+        return $this->render('TicketBundle:Layout:edit_car_layout.html.twig', array(
                     'formC'       => $formC->createView(),
                     'ticket'      => $ticket,
                     'brands'      => $brands,

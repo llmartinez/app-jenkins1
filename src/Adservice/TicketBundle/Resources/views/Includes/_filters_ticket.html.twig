@@ -18,7 +18,7 @@
                 <input type='checkbox' id='flt_closed' name='flt_closed'> {% trans %} closed {% endtrans %}</p>
     {% endif %}
 
-            <button type="button" class="btn btn-primary" id="btn_search" name="btn_search">{% trans %} btn.search {% endtrans %}</button>
+            <button type="button" class="btn btn-primary" id="btn_search" name="btn_search"> {% trans %} btn.search {% endtrans %}</button>
         </p>
     {# </form> #}
 
@@ -28,3 +28,38 @@
     {% endif %}
 
     <script type="text/javascript"> $('#newTicket').focus(); </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('#btn_search').click(function() {
+
+                var id_ticket   = $('#flt_id'     ).val();
+                var id_workshop = 'none';
+                var status      = 'all';
+
+                {% if workshop.id is defined and workshop.id != "" %}
+
+                    var id_workshop = $('#id_workshop').val();
+                    var st_open     = $('#flt_open'   ).is(':checked');
+                    var st_closed   = $('#flt_closed' ).is(':checked');
+
+                    if(st_open    == true ){ status      = 'open'   }
+                    if(st_closed  == true ){ status      = 'closed' }
+                    if((st_open   == true) && (st_closed == true))  { status = 'all' }
+
+                {% endif %}
+
+                if(id_ticket   == ""   ){ id_ticket   = 'none'   }
+                if(id_workshop == ""   ){ id_workshop = 'none'   }
+
+                var url = "{{ path('listTicketFiltered', { 'page' : 1, 'id_workshop': 'plc_w', 'id_ticket': 'plc_t', 'status': 'plc_st' }) }}";
+                url = url.replace("plc_w" , id_workshop);
+                url = url.replace("plc_t" , id_ticket  );
+                url = url.replace("plc_st", status     );
+                window.open(url, "_self");
+            });
+        });
+
+    </script>

@@ -191,6 +191,57 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
 
         $this->addReference($country->getCountry(), $country);
 
+## PORTUGAL ##
+        //LEE EL .xls Y DEVUELVE EL OBJETO EXCEL_READER
+        $data = new Spreadsheet_Excel_Reader();
+        $data->setOutputEncoding('CP1251');
+
+        $filePath = $this->container->get('kernel')->getRootDir().'/../data/xls/portugal.xls';
+
+        $data->read($filePath);
+
+        $country = new Country();
+        $country->setCountry('Portugal');
+        $country->setLang('portuguese');
+
+        //PARSEA EL EXCEL
+        for($i=1;$i<=count($data->sheets[0]['cells']);$i++){
+
+            $row = $data->sheets[0]['cells'][$i];
+
+            $province = utf8_encode($row[2]);
+
+            if($i == 1)
+            {
+                $region = new Region();
+                $region->setRegion($province);
+                $region->setCountry($country);
+
+            } elseif($province !== $region->getRegion()){
+
+                $manager->persist($region);
+
+                $region = new Region();
+                $region->setRegion($province);
+                $region->setCountry($country);
+
+                $this->addReference($region->getRegion(), $region);
+            }
+
+            //Contendrá un array con las poblaciones si hay más de una, sino un array de un elemento
+            $location = utf8_encode($row[3]);
+
+                $city = new City();
+                $city->setCity($location);
+                $city->setRegion($region);
+                $manager->persist($city);
+        }
+        //Persisto la última provincia
+        $manager->persist($region);
+        $manager->persist($country);
+
+        $this->addReference($country->getCountry(), $country);
+
         $manager->flush();
     }
 }

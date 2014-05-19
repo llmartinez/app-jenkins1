@@ -30,8 +30,12 @@ class LockController extends Controller
                                                                                 'id_taller'  => $id_taller, ));
     }
 
-    public function showIncidenceAction($page=1, $id_taller=null)
+    public function showIncidenceAction($page=1, $id_incidence=null)
     {
-    	echo 'Mostrar la incidencia seleccionada';
+    	$em_lock   = $this->getDoctrine()->getEntityManager('em_lock');
+        $incidence = $em_lock->getRepository('LockBundle:lock_incidence')->find($id_incidence);
+
+        return $this->render('LockBundle:Lock:show_incidence.html.twig', array('incidence' => $incidence));
+
     }
 }

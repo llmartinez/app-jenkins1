@@ -60,6 +60,8 @@ ticket: 				 "Ticket"
 car: 					 "Coche"
 post: 					 "Mensajes"
 order:					 "Solicitud"
+incidence:				 "Incidencia"
+info:				 	 "Información"
 
 #CONTACT
 name:					 "Nombre"

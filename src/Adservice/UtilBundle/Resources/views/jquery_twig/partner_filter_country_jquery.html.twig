@@ -1,0 +1,24 @@
+    <script>
+
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+
+        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+        $('#flt_country').click(function() {
+
+            var country = $('#flt_country').val();
+
+            if(country == null) country = 'none';
+
+            var url     = "{{ path('partner_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
+
+            url = url.replace("plc_page", 1);
+            url = url.replace("plc_country", country);
+
+            window.open(url, "_self");
+        });
+            //util.js
+            table_filter();
+        });
+
+    </script>

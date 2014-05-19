@@ -155,87 +155,11 @@
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
 
-    <script>
-        $(document).ready(function() {
+    {% include 'UtilBundle:jquery_twig:workshop_new_jquery.html.twig' %}
 
-        // REGIONS FROM COUNTRY
-            // $('form').find('select[name*=country]').val({{ app.security.getToken().getUser().getCountry() }});
-            // var url_ajax = "{{ path("regions_from_country") }}";
-            // populate_region(url_ajax);
+    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
 
-            // //si clickamos el combobox de los paises repoblamos la de las regiones
-            // $('form').find('select[name*=country]').change(function() {
-            //    var url_ajax = "{{ path("regions_from_country") }}";
-            //    populate_region(url_ajax);
-            // });
-
-            var url_ajax = "{{ path("shops_from_partner") }}";
-            populate_shop(url_ajax);
-
-            //si clickamos el combobox de los socios rellenamos el de tiendas
-            $('form').find('select[name*=partner]').change(function() {
-               var url_ajax = "{{ path("shops_from_partner") }}";
-               populate_shop(url_ajax);
-            });
-
-        // DATE TEST
-            var d = new Date();
-            $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth());
-            $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
-            $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
-            $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
-            $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
-
-            $('#adservice_workshopbundle_workshoptype_test').change(function(){
-
-                    if($('#adservice_workshopbundle_workshoptype_test').is(':checked')) {
-                        var d = new Date();
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth()+1);
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
-                    }
-                    else{
-                        var d = new Date();
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
-                        $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
-                    }
-                });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            // REGIONS FROM COUNTRY
-            var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
-
-            $('form').find('select[name*=country]').change(function(){
-                var url_ajax = "{{ path("regions_from_country") }}";
-                populate_region(url_ajax);
-            });
-
-            $("#slct_region").change(function(){
-                $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text() );
-
-                var url_ajax = "{{ path("cities_from_region") }}";
-                populate_city(url_ajax);
-            });
-
-            $("#slct_city").change(function(){
-                $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text() );
-            });
-
-            $('input[id*=_search]' ).keydown(function() {
-
-                if (event.which == 13) {
-                    alert('llega');
-                }
-            });
-        });
-    </script>
+    {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
+    {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
+    {% include 'UtilBundle:jquery_twig:select2_assign_on_enter_jquery.html.twig' %}
 {% endblock %}

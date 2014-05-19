@@ -156,8 +156,8 @@ class UserController extends Controller {
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                            'form_name' => $form->getName(),
-                                                                            'form'      => $form->createView()));
+                                                                          'form_name' => $form->getName(),
+                                                                          'form'      => $form->createView()));
     }
 
     /**

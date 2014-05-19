@@ -96,6 +96,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
+
         {% else %}
             {% trans %} any.order.pending {% endtrans %}
         {% endif %}

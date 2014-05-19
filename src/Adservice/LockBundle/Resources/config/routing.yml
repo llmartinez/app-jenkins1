@@ -1,5 +1,5 @@
 list_incidences:
-    pattern:  /lock/{page}/{id_taller}
+    pattern:  /lock/list/{page}/{id_taller}
     defaults: { _controller: LockBundle:Lock:listIncidences, page: 1, id_taller: null }
 
 show_incidence:
