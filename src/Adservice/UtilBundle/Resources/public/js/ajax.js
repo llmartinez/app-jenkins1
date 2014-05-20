@@ -25,6 +25,7 @@ function populate_region(url_ajax, region){
                 placeholder: "Select a State",
                 allowClear: true
             });
+            $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text('sin region') );
         },
         error : function(){
             console.log("Error al cargar las regiones...");

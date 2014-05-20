@@ -1,0 +1,6 @@
+ad-service.es
+
+db: test-new-adservice
+
+user: ar5012
+pass: Vt2UWG1Xnq5y
