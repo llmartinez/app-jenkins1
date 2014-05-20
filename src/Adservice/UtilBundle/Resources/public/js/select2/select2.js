@@ -288,29 +288,39 @@ the specific language governing permissions and limitations under the Apache Lic
         }
         return { offset: offset, length: length };
     }
-
-    function killEvent(event) {
-         $('input[id*=_search]' ).keydown(function(event) {
-                if (event.which == 13) {
-                    if ($(':text[name*=region]').val() != '' && $(':text[name*=region]').val() != undefined ) {
-                        console.log('enter cities');
-                        $(':text[name*=city]').val( $(this).val() );
-                        $('#s2id_slct_city .select2-chosen').text($(this).val());
-                        $(':text[name*=address]').focus();
-                    }else{
-                        console.log('enter regions');
+    /**
+     * Esta funcion permite setear un valor diferente al del listado del select2.
+     * para desactivarlo comenta su uso en la funcion: killEvent(event)
+     */
+    function populate() {
+        $('input[id*=_search]' ).keydown(function(event) {
+            //console.log('region ' + $(this).val() + ' == ' + $('#s2id_slct_region .select2-chosen').text() + ' div ' + $('#data_regions').val());
+            //console.log('city ' + $(this).val() + ' == ' + $('#s2id_slct_city .select2-chosen').text() + ' div ' + $('#data_cities').val());
+            if (event.which == 13) {
+                if ($('#div_cities .select2-container-active').length > 0 ) {
+                    //console.log('enter cities');
+                    $(':text[name*=city]').val( $(this).val() );
+                    $('#s2id_slct_city .select2-chosen').text($(this).val());
+                    $(':text[name*=address]').focus();
+                }else{
+                    if ($('#div_regions .select2-container-active').length > 0 ) {
+                        //console.log('enter regions');
                         $(':text[name*=region]').val( $(this).val() );
                         $('#s2id_slct_region .select2-chosen').text($(this).val());
                         $('#s2id_slct_city').focus();
                     }
                 }
-            });
-        //event.preventDefault();
-        //event.stopPropagation();
+            }
+        });
+    }
+    function killEvent(event) {
+        populate();
+        event.preventDefault();
+        event.stopPropagation();
     }
     function killEventImmediately(event) {
-        //event.preventDefault();
-        //event.stopImmediatePropagation();
+        event.preventDefault();
+        event.stopImmediatePropagation();
     }
 
     function measureTextWidth(e) {
