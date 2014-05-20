@@ -1,32 +1,3 @@
-{% extends '::layout.html.twig' %}
-
-{% block body %}
-
-    <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{{ path('shop_list') }}">{% trans %} menu.list_shops {% endtrans %}</a></li>
-      <li class="active">{% trans %} edit.shop {% endtrans %} ({{ shop }})</li>
-    </ol>
-
-    <form action="{{ path("shop_edit", { 'id':shop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-                    <div class="col-xs-6 col-md-6 form-group">
-            <label for="new_ticket_form_importance">{% trans %} name        {% endtrans %} *</label>
-            {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="new_ticket_form_importance">{% trans %} code.partner {% endtrans %} * </label>
-            {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-             {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-              {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="new_ticket_form_importance">{% trans %} active {% endtrans %}</label>
-            {{ form_widget(form.active) }}
-        </div>
-
-        <legend>{% trans %} contact {% endtrans %}</legend>
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2 form-group">
                 <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
@@ -86,25 +57,3 @@
                                                                                                                               'required': 'required' } }) }}
             </div>
         </div>
-
-        {{ form_rest(form) }}
-
-        <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
-        </div>
-    </form>
-
-{#    WORKSHOPS ZONE#}
-    {# {% include 'WorkshopBundle:Partner:_list.html.twig' with {'workshops' : partner.workshops} %} #}
-
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
-
-    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
-
-    {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
-{% endblock %}

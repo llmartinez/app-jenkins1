@@ -547,6 +547,7 @@ class WorkshopOrderController extends Controller {
             $newUser->setActive        ('1');
             $newUser->setCountry       ($workshop->getCountry());
             $newUser->setRegion        ($workshop->getRegion());
+            $newUser->setCity          ($workshop->getCity());
             $newUser->setCreatedBy     ($workshop->getCreatedBy());
             $newUser->setCreatedAt     (new \DateTime());
             $newUser->setModifiedBy    ($workshop->getCreatedBy());
