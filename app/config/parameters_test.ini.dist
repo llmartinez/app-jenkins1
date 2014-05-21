@@ -17,7 +17,7 @@
     database_lock_driver="pdo_mysql"
     database_lock_host="localhost"
     database_lock_port=""
-    database_lock_name="historico"
+    database_lock_name="historico-test-dani"
     database_lock_user="root"
     database_lock_password="roger"
 
