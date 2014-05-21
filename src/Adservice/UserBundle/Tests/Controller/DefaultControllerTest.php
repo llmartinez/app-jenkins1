@@ -20,11 +20,11 @@ class UserControllerTest extends WebTestCase
         $client-> followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo usuario del $type que se introduzca por dataProvider
             UtilFunctionTest::doLogin($client, 'admin', 'admin');
- $ar=fopen("datos.html","a") or die("Problemas en la creacion");
- fputs($ar,$client->getResponse());
- fclose($ar);
+ // $ar=fopen("datos.html","a") or die("Problemas en la creacion");
+ // fputs($ar,$client->getResponse());
+ // fclose($ar);
             UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
-            UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_new');
+            UtilFunctionTest::linkTo($client, $this, 'div legend a#user_new');
             UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
 
         //carga el form con los datos del usuario
@@ -42,9 +42,11 @@ class UserControllerTest extends WebTestCase
         // $this->assertGreaterThan(0, $crawler->filter('table tr td a#list_username:contains("test'.$type.'")')->count(),
         //     'El admin creado esta en la lista'
         // );
-
+$ar=fopen("datos.html","a") or die("Problemas en la creacion");
+fputs($ar,$client->getResponse());
+fclose($ar);
         //volver al inicio
-        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
+        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
 
         //comprueba que vuelva a la pagina del listado de usuarios
         $this->assertRegExp('/.*\/..\/user\/index/', $client->getRequest()->getUri(),
@@ -120,15 +122,23 @@ class UserControllerTest extends WebTestCase
         return array(
             array('type' => 'admin',
                   'user' => array(
-                                'admin_assessor_type[username]'                     => 'testadmin',
-                                'admin_assessor_type[password][Contraseña]'         => 'test',
-                                'admin_assessor_type[password][Repite Contraseña]'  => 'test',
-                                'admin_assessor_type[name]'                         => 'Test',
-                                'admin_assessor_type[surname]'                      => 'User_admin',
-                                'admin_assessor_type[email_1]'                      => 'testadmin@test.es',
-                                'admin_assessor_type[active]'                       => '1',
-                                'admin_assessor_type[region]'                       => '1',
-                                'admin_assessor_type[country]'                      => '1',
+                                'admin_assessor_type[username]'                    => 'testadmin',
+                                'admin_assessor_type[password][Contraseña]'        => 'test',
+                                'admin_assessor_type[password][Repite Contraseña]' => 'test',
+                                'admin_assessor_type[name]'                        => 'Test',
+                                'admin_assessor_type[surname]'                     => 'User_admin',
+                                'admin_assessor_type[phone_number_1]'              => '123456789',
+                                'admin_assessor_type[phone_number_2]'              => '123456879',
+                                'admin_assessor_type[movile_number_2]'             => '123456879',
+                                'admin_assessor_type[movile_number_2]'             => '123456879',
+                                'admin_assessor_type[fax]'                         => '123456789',
+                                'admin_assessor_type[email_1]'                     => 'testadmin@test.es',
+                                'admin_assessor_type[active]'                      => '1',
+                                'admin_assessor_type[country]'                     => '1',
+                                'admin_assessor_type[region]'                      => 'testregion',
+                                'admin_assessor_type[city]'                        => 'testcity',
+                                'admin_assessor_type[address]'                     => 'testaddress',
+                                'admin_assessor_type[postal_code]'                 => '99999',
 
                                 ),
             ),
@@ -139,10 +149,18 @@ class UserControllerTest extends WebTestCase
                                 'admin_assessor_type[password][Repite Contraseña]' => 'test',
                                 'admin_assessor_type[name]'                        => 'Test',
                                 'admin_assessor_type[surname]'                     => 'User_assessor',
+                                'admin_assessor_type[phone_number_1]'              => '123456789',
+                                'admin_assessor_type[phone_number_2]'              => '123456879',
+                                'admin_assessor_type[movile_number_2]'             => '123456879',
+                                'admin_assessor_type[movile_number_2]'             => '123456879',
+                                'admin_assessor_type[fax]'                         => '123456789',
                                 'admin_assessor_type[email_1]'                     => 'testassessor@test.es',
                                 'admin_assessor_type[active]'                      => '1',
-                                'admin_assessor_type[region]'                      => '1',
                                 'admin_assessor_type[country]'                     => '1',
+                                'admin_assessor_type[region]'                      => 'testregion',
+                                'admin_assessor_type[city]'                        => 'testcity',
+                                'admin_assessor_type[address]'                     => 'testaddress',
+                                'admin_assessor_type[postal_code]'                 => '99999',
                                 ),
             ),
             array('type' => 'ad',
@@ -152,11 +170,18 @@ class UserControllerTest extends WebTestCase
                                 'partner_type[password][Repite Contraseña]' => 'test',
                                 'partner_type[name]'                        => 'Test',
                                 'partner_type[surname]'                     => 'User_ad',
+                                'partner_type[phone_number_1]'              => '123456789',
+                                'partner_type[phone_number_2]'              => '123456879',
+                                'partner_type[movile_number_2]'             => '123456879',
+                                'partner_type[movile_number_2]'             => '123456879',
+                                'partner_type[fax]'                         => '123456789',
                                 'partner_type[email_1]'                     => 'testad@test.es',
                                 'partner_type[active]'                      => '1',
-                                'partner_type[region]'                      => '1',
                                 'partner_type[country]'                     => '1',
-                                'partner_type[partner]'                     => '1',
+                                'partner_type[region]'                      => 'testregion',
+                                'partner_type[city]'                        => 'testcity',
+                                'partner_type[address]'                     => 'testaddress',
+                                'partner_type[postal_code]'                 => '99999',
                                 ),
             ),
         );

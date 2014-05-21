@@ -105,14 +105,14 @@ class LoginControllerTest extends WebTestCase {
 
         return array(
             array(
-                array(array('field' => 'admin_assessor_type[username]', 'value' => 'admin1'),
-                      array('field' => 'admin_assessor_type[password]', 'value' => 'admin')),
-                array(array('field' => 'admin_assessor_type[username]', 'value' => 'assessor1'),
-                      array('field' => 'admin_assessor_type[password]', 'value' => 'assessor')),
-                array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user1'),
-                      array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user')),
-                array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user2'),
-                      array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user'))
+                array(array('field' => 'admin_assessor_type[username]', 'value' => 'admin'),
+                      array('field' => 'admin_assessor_type[password]', 'value' => 'admin'))//,
+                // array(array('field' => 'admin_assessor_type[username]', 'value' => 'assessor1'),
+                //       array('field' => 'admin_assessor_type[password]', 'value' => 'assessor')),
+                // array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user1'),
+                //       array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user')),
+                // array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user2'),
+                //       array('field' => 'adservice_userbundle_usertype[password]', 'value' => 'user'))
             )
         );
     }
