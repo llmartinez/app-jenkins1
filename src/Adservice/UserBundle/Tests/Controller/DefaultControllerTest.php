@@ -42,9 +42,9 @@ class UserControllerTest extends WebTestCase
         // $this->assertGreaterThan(0, $crawler->filter('table tr td a#list_username:contains("test'.$type.'")')->count(),
         //     'El admin creado esta en la lista'
         // );
-$ar=fopen("datos.html","a") or die("Problemas en la creacion");
-fputs($ar,$client->getResponse());
-fclose($ar);
+// $ar=fopen("datos.html","a") or die("Problemas en la creacion");
+// fputs($ar,$client->getResponse());
+// fclose($ar);
         //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
 
