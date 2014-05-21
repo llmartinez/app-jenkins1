@@ -1663,4 +1663,3889 @@ Set-Cookie: PHPSESSID=42520330251e689f72a0f0bd3e7bb478; domain=
                     </footer>
 
     </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:36:41 GMT
+X-Debug-Token: 537b768a1bdbe
+Set-Cookie: PHPSESSID=60656957eb4d9d2cefddacc47b6cf261; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:36:47 GMT
+X-Debug-Token: 537b7690033e5
+Set-Cookie: PHPSESSID=ca344a9343f6d9409764188427f255f0; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:36:51 GMT
+X-Debug-Token: 537b769404048
+Set-Cookie: PHPSESSID=9326fb23a5594b2cbed945b120892a75; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:56:16 GMT
+X-Debug-Token: 537b7b2030eeb
+Set-Cookie: PHPSESSID=4f42c58ec08daf1e3787a4932f6c9c6b; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:56:19 GMT
+X-Debug-Token: 537b7b236e176
+Set-Cookie: PHPSESSID=1f78f15187b157ef580dad3f503ed315; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 15:56:22 GMT
+X-Debug-Token: 537b7b26c84e7
+Set-Cookie: PHPSESSID=ee44f54d47b12d7c3f217e5c8ee915ce; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:01:07 GMT
+X-Debug-Token: 537b7c43b8993
+Set-Cookie: PHPSESSID=76e63fa0d567d92c55668cf125ce8dfb; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:01:11 GMT
+X-Debug-Token: 537b7c4734c99
+Set-Cookie: PHPSESSID=241a6a05b95574da83a12e37c783026f; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:01:14 GMT
+X-Debug-Token: 537b7c4a9eb5f
+Set-Cookie: PHPSESSID=02815aabf57a5ec573e2f3ba860eb7e0; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:11:54 GMT
+X-Debug-Token: 537b7ecab7e4d
+Set-Cookie: PHPSESSID=b8594912b61052a4e8d5bc3dea1010a9; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:11:59 GMT
+X-Debug-Token: 537b7ecf83eff
+Set-Cookie: PHPSESSID=7df75fd5d76d4f71f8b9eae19649130a; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Tue, 20 May 2014 16:12:03 GMT
+X-Debug-Token: 537b7ed3bc1d9
+Set-Cookie: PHPSESSID=1dc09b962beb818a4148ed7fc5a64481; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:37:30 GMT
+X-Debug-Token: 537c49aacd8de
+Set-Cookie: PHPSESSID=18b794dfdf56ed301e9ab9dcae4728b4; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:37:37 GMT
+X-Debug-Token: 537c49b21a748
+Set-Cookie: PHPSESSID=05e1717348c07de747e526cfd421584f; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:37:42 GMT
+X-Debug-Token: 537c49b6e9a8b
+Set-Cookie: PHPSESSID=1d2c01bed48cf301ac055aa5f138eee1; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:41:31 GMT
+X-Debug-Token: 537c4a9ba20b9
+Set-Cookie: PHPSESSID=a3552ace5e75a5f10f7b02f5a6c761d6; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:41:36 GMT
+X-Debug-Token: 537c4aa07bc1a
+Set-Cookie: PHPSESSID=f0ba8eec5d50a5383a58c0efb50ea82a; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:41:40 GMT
+X-Debug-Token: 537c4aa518213
+Set-Cookie: PHPSESSID=384acf2cfc190f55cb7530bd67ea96eb; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:50:29 GMT
+X-Debug-Token: 537c4cb5a7d80
+Set-Cookie: PHPSESSID=b5cfa402853450c8e6d3ca85580aee0c; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:50:33 GMT
+X-Debug-Token: 537c4cb96f854
+Set-Cookie: PHPSESSID=a249d39e8b85abe028962891b16469a9; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
+</html>HTTP/1.0 200 OK
+Cache-Control: no-cache
+Content-Type:  text/html; charset=UTF-8
+Date:          Wed, 21 May 2014 06:50:36 GMT
+X-Debug-Token: 537c4cbd05eb0
+Set-Cookie: PHPSESSID=1415263641bc7ab42a05bed01a99cf8a; domain=
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ticketing | AD Service</title>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+            
+    <link rel="stylesheet" href="/bundles/util/css/style.css">
+    <link rel="stylesheet" href="/bundles/util/css/bootstrap.css">
+    <link rel="stylesheet" href="/bundles/util/js/select2/select2.css" />
+        
+            <script src="/bundles/util/js/jquery.js"></script>
+    <script src="/bundles/util/js/dropdown.js"></script>
+    <script src="/bundles/util/js/modal.js"></script>
+    <script src="/bundles/util/js/ajax.js"></script>
+    <script src="/bundles/util/js/select2/select2.js"></script>
+
+    <script src="/bundles/user/js/user.js"></script>
+    <script src="/bundles/util/js/jquery.cookie.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            //al cargar la pagina....
+            $(window).load(function(){
+                //a traves de la cookie solo mostramos el popup una vez
+                if ($.cookie('visited') != 1){
+                    $.cookie('visited', '1');
+                    var url_ajax = "/es/popup/get";
+                    find_popup(url_ajax);
+                }
+            });
+        });
+    </script>
+    </head>
+
+
+    <body id="MainBody">
+
+                    <div class="MainHeader">
+    <div class="span4 offset2" style="margin-top:15px;">
+    </div>
+    <div class="navbar" style="padding:10px;">
+        <div class="navbar-inner">
+            <div class="span4 offset2">
+                <!-- header -->
+                <table width="100%" border="0">
+                    <tr>
+                        <td align="left">
+                            ADService España                        </td>
+                        <td align="right">
+                            
+                            <!-- Split button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">admin</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="btn pull-left" href="/es/user/index">   Home</a></li>
+                                    <li><a class="btn pull-left" href="/es/user/profile">   Profile</a></li>
+                                    <li><a class="btn pull-left" href="/es/ticket">   Tickets</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li><a class="btn pull-left" href="/es/logout">  Logout</a></li>
+                                </ul>
+                            </div>
+                                                                                                               <div id="selectLang" class="selectLang">
+                                <a href="/es/lang/en/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_great_britain.png"></a>
+                                <a href="/es/lang/es/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_spain.png"></a>
+                                <a href="/es/lang/fr/?path=%2Fes%2Fuser%2Findex"><img src="/bundles/util/images/flags/flag_france.png"></a>
+                            </div>
+                                                    </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>        
+
+        <div id="MainContent">
+            
+<ol class="breadcrumb">
+      <li class="active">Índice</li>
+    </ol>
+
+            <table name="tbl_admin">
+            <tr>
+                <th>MENU Administrador</th>
+            </tr>
+            <tr>
+                <td>
+                    <a id="profile"            href="/es/user/profile">Mi Perfil</a><br>
+                    <a id="listStatistics"     href="/es/statistic/list">Consultar Estadísticas ADService</a><br>
+                    <a id="workshopOrdersList" href="/es/order/orders/list">Listado de Solicitudes pendientes</a><br>
+                    <a id="popup_list"         href="/es/popup/list">Listado de Popups ADService</a><br>
+                    <a id="partner_list"       href="/es/partner/list/partner">Listado de Socios ADService</a><br>
+                    <a id="shop_list"          href="/es/partner/list/shop">Listado de Tiendas ADService</a><br>
+                    <a id="workshop_list"      href="/es/workshop/list">Listado de Talleres ADService</a><br>
+                    <a id="user_list"          href="/es/user/list">Listado de Usuarios ADService</a><br>
+                    <a id="ticket_list"        href="/es/ticket">Listado de Tickets AdService</a><br>
+                    <a id="ticketWorkshopList" href="/es/ticket/workshopList/1/">Asignar Tickets a Usuarios</a><br>
+                </td>
+            </tr>
+        </table>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        </div>
+
+        <footer id="MainFooter">
+                            <div class="container" style="height: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>GitHub<li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Applications<li>
+                    <li><a href="#">Product for Mac</a></li>
+                    <li><a href="#">Product for Windows</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Services<li>
+                    <li><a href="#">Web analytics</a></li>
+                    <li><a href="#">Presentations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled">
+                    <li>Documentation<li>
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-8">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+            </div>
+            <div class="col-md-4">
+                <p class="muted pull-right">© 2014 Grup Eina Digital. All rights reserved</p>
+                            </div>
+        </div>
+    </div>
+</div>
+
+                    </footer>
+
+    </body>
 </html>

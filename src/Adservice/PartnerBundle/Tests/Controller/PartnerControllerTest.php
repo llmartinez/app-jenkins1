@@ -19,7 +19,7 @@ class PartnerControllerTest extends WebTestCase {
                 $client = static::createClient();
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
-        UtilFunctionTest::doLogin($client, 'admin1', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
         UtilFunctionTest::linkTo($client, $this, 'div legend a:contains("Nuevo Socio")');
 
@@ -49,7 +49,7 @@ class PartnerControllerTest extends WebTestCase {
     {
         $client = static::createClient();
         $client-> followRedirects(true);
-        UtilFunctionTest::doLogin($client, 'admin1', 'admin');
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
         $crawler = $client->request('GET', '/es/partner/edit/partner/1');
 
         //comprueba que vaya a la pagina de edicion de usuarios
@@ -128,6 +128,7 @@ class PartnerControllerTest extends WebTestCase {
                 'partner' => array(
                     'adservice_partnerbundle_partnertype[name]'            => 'testpartner',
                     'adservice_partnerbundle_partnertype[code_partner]'    => substr( microtime(), 2, 8),
+                    'adservice_partnerbundle_partnertype[active]'          => '1',
                     'adservice_partnerbundle_partnertype[phone_number_1]'  => '123456789',
                     'adservice_partnerbundle_partnertype[phone_number_2]'  => '123456879',
                     'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
@@ -136,10 +137,10 @@ class PartnerControllerTest extends WebTestCase {
                     'adservice_partnerbundle_partnertype[email_1]'         => 'testpartner@test.es',
                     'adservice_partnerbundle_partnertype[email_2]'         => 'testpartner@test.es',
                     'adservice_partnerbundle_partnertype[country]'         => '1',
-                    'adservice_partnerbundle_partnertype[region]'          => '1',
+                    'adservice_partnerbundle_partnertype[region]'          => 'Region Test',
+                    'adservice_partnerbundle_partnertype[city]'            => 'City Test',
                     'adservice_partnerbundle_partnertype[address]'         => 'testaddress',
                     'adservice_partnerbundle_partnertype[postal_code]'     => '99999',
-                    'adservice_partnerbundle_partnertype[active]'          => '1',
                     ),
             ),
         );

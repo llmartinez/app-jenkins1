@@ -135,11 +135,12 @@ class ImportController extends Controller
 				$em->persist($newSubSystem);
 				$em->flush();
 			}
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
+        	/**/echo '<br> IMPORTADA BBDD!! <br>';
+/**/echo date("H:i:s");
+//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
         	return $this->render('ImportBundle:Import:import.html.twig');
     	}
-    	/**/echo '<br> IMPORTADA BBDD!! <br>';
-		/**/echo date("H:i:s");
+
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
@@ -155,7 +156,7 @@ class ImportController extends Controller
 
 		$old_Coches = $consulta->getResult();
 
-		$count = $em_old ->createQuery('SELECT count(oc) FROM ImportBundle:old_Coche oc')->getResult()[0][1];
+		$count = $em_old->createQuery('SELECT count(oc) FROM ImportBundle:old_Coche oc')->getResult()[0][1];
 
 		if($count > $num){
 
@@ -192,7 +193,7 @@ class ImportController extends Controller
 
  	public function importLockIncidencesAction($bbdd=null, $num=0)
     {
-		/**/echo date("H:i:s");
+		/**/echo date("d/m/Y H:i:s");
 
 		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
@@ -204,7 +205,7 @@ class ImportController extends Controller
 
 		$old_Incidences = $consulta->getResult();
 
-		$count = $em_old ->createQuery('SELECT count(oi) FROM ImportBundle:old_Incidencia oi')->getResult()[0][1];
+		$count = $em_old->createQuery('SELECT count(oi) FROM ImportBundle:old_Incidencia oi')->getResult()[0][1];
 
 		if($count > $num){
 
@@ -232,11 +233,11 @@ class ImportController extends Controller
 			}
 			$em_lock->flush();
 
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', $num + $max_rows ));
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', 'num' => $num + $max_rows ));
         	//return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
         	/**/echo 'IMPORTADA INCIDENCES!! <br>';
-			/**/echo date("H:i:s");
+			/**/echo date("d/m/Y H:i:s");
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
 		}
 	}
