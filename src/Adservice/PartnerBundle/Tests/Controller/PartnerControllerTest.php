@@ -50,6 +50,10 @@ class PartnerControllerTest extends WebTestCase {
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
+
+// $ar=fopen("datos.html","a") or die("Problemas en la creacion");
+// fputs($ar,$client->getResponse());
+// fclose($ar);
         $crawler = $client->request('GET', '/es/partner/edit/partner/1');
 
         //comprueba que vaya a la pagina de edicion de usuarios
