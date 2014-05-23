@@ -37,8 +37,7 @@ class ImportController extends Controller
     		$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// PARTNERS //
     		// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
 
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
+			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
 
 			foreach ($old_Socios as $old_Socio)
 			{
@@ -67,12 +66,11 @@ class ImportController extends Controller
 		{
 			$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// PARTNERS //
 			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
-			//MAPPING PARTNERS
-			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();	// PARTNERS //
-			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
 
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
+			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+
+			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;		}
 
 			foreach ($old_Socios as $old_Socio)
 			{
@@ -101,12 +99,9 @@ class ImportController extends Controller
     	{
 			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// SHOPS //
 			// // $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->getEntityNotEqual($em_old, 'ImportBundle', 'old_Socio', 'asociado', 0)	// SHOPS //
-			// //MAPPING PARTNERS
-			// $all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();	// PARTNERS //
-			// foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
 
-			// //MAPPING LOCATIONS
-			// $locations = $this->getLocations($em);
+			// $locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			// $all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
 
 			// foreach ($old_Socios as $old_Socio)
 			// {
@@ -135,15 +130,12 @@ class ImportController extends Controller
     	{
    			$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// SHOPS //
 			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
-			//MAPPING PARTNERS
-			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();	// PARTNERS //
+
+			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
+			$all_partners  = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+			$role          = $em->getRepository('UserBundle:Role'      )->findOneByName('ROLE_AD');	//ROLE
+
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
-
-			//MAPPING ROLE
-			$role = $em->getRepository('UserBundle:Role')->findOneByName($role);
 
 			foreach ($old_Socios as $old_Socio)
 			{
@@ -173,15 +165,12 @@ class ImportController extends Controller
     	{
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// WORKSHOP	//
 
-			//MAPPING PARTNERS
-			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();	// PARTNERS //
+			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+			$typology     = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			//find($old_Taller->getTipologia());
+
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-
-			//MAPPING TYPOLOGIES
-			$typology = $em->getRepository('WorkshopBundle:Typology')->find('1'); //find($old_Taller->getTipologia());
-
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
 
 			foreach ($old_Talleres as $old_Taller)
 			{
@@ -218,24 +207,22 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'user' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// USER 	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();		// USER 	//
 
-			//MAPPING PARTNERS
-			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();	// WORKSHOPS //
+			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
+			$all_languages = $em->getRepository('UtilBundle:Language'    )->findAll();					//MAPPING LANG
+			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
+
 			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
-
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
-
-			//MAPPING ROLE
-			$role = $em->getRepository('UserBundle:Role')->findOneByName($role);
+			foreach ($all_languages as $language) { $languages[$language->getShortName()] = $language;		}
 
 			foreach ($old_Talleres as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
 				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getContacto());
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
-				$newUser->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newUser->getCountry()->getLang()));
+				$newUser->setLanguage ($languages[$locations[$newUser->getCountry()->getLang()]]);
 				$newUser->setActive   ($old_Taller->getActive());
 				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
 
@@ -257,13 +244,10 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'assessor' )
     	{
-			$old_Asesores    = $em_old->getRepository('ImportBundle:old_Asesor'		)->findAll();	// ASSESSOR 					//
+			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();			// ASSESSOR
 
-			//MAPPING LOCATIONS
-			$locations = $this->getLocations($em);
-
-			//MAPPING ROLE
-			$role = $em->getRepository('UserBundle:Role')->findOneByName($role);
+			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
+			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_USER');	//ROLE
 
 			foreach ($old_Asesores as $old_Asesor)
 			{
@@ -436,9 +420,11 @@ class ImportController extends Controller
         $entity->setCity  (UtilController::normalizeString($slug_city  , $locations['cities' ]));
         $entity->setRegion(UtilController::normalizeString($slug_region, $locations['regions']));
 
-        $region = $em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getRegion());
-
-        if( $region != null ) $entity->setCountry($locations['countries'][$region->getCountry()]);
+        $region  = $em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getRegion());
+        if( $region != null ) {
+        	$country = $region->getCountry()->getCountry();
+        	$entity->setCountry($locations['countries'][$country]);
+        }
         else $entity->setCountry($locations['countries']['Spain']);
 
 
