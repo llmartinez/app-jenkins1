@@ -77,6 +77,50 @@ class PartnerControllerTest extends WebTestCase {
         //volver al inicio
         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
     }
+    /**
+     * DataProvider de partners: Contiene un array de partners
+     * @return array partners
+     */
+    public function partners() {
+        return array(
+            array(
+                'partner' => array(
+                    'adservice_partnerbundle_partnertype[name]'            => 'testpartner',
+                    'adservice_partnerbundle_partnertype[code_partner]'    => substr( microtime(), 2, 8),
+                    'adservice_partnerbundle_partnertype[active]'          => '1',
+                    'adservice_partnerbundle_partnertype[phone_number_1]'  => '123456789',
+                    'adservice_partnerbundle_partnertype[phone_number_2]'  => '123456879',
+                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
+                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
+                    'adservice_partnerbundle_partnertype[fax]'             => '123456789',
+                    'adservice_partnerbundle_partnertype[email_1]'         => 'testpartner@test.es',
+                    'adservice_partnerbundle_partnertype[email_2]'         => 'testpartner@test.es',
+                    'adservice_partnerbundle_partnertype[country]'         => '1',
+                    'adservice_partnerbundle_partnertype[region]'          => 'Region Test',
+                    'adservice_partnerbundle_partnertype[city]'            => 'City Test',
+                    'adservice_partnerbundle_partnertype[address]'         => 'testaddress',
+                    'adservice_partnerbundle_partnertype[postal_code]'     => '99999',
+                ),
+            ),
+        );
+    }
+
+    /**
+     * DataProvider de partners editados: Contiene dos campos de email a editar para un partner
+     * @return array editPartners
+     */
+    public function editPartners()
+    {
+        return array(
+            array('partner' => array(
+                    'adservice_partnerbundle_partnertype[email_1]'    => 'testpartner_edited@test.es',
+                    'adservice_partnerbundle_partnertype[email_2]'    => 'testpartner_edited@test.com',
+                ),
+            ),
+        );
+    }
+}
+
 
     /**
      * Test que comprueba que se borre un partner
@@ -121,47 +165,3 @@ class PartnerControllerTest extends WebTestCase {
         //volver al inicio
 /*        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
-
-    /**
-     * DataProvider de partners: Contiene un array de partners
-     * @return array partners
-     */
-    public function partners() {
-        return array(
-            array(
-                'partner' => array(
-                    'adservice_partnerbundle_partnertype[name]'            => 'testpartner',
-                    'adservice_partnerbundle_partnertype[code_partner]'    => substr( microtime(), 2, 8),
-                    'adservice_partnerbundle_partnertype[active]'          => '1',
-                    'adservice_partnerbundle_partnertype[phone_number_1]'  => '123456789',
-                    'adservice_partnerbundle_partnertype[phone_number_2]'  => '123456879',
-                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
-                    'adservice_partnerbundle_partnertype[movile_number_2]' => '123456879',
-                    'adservice_partnerbundle_partnertype[fax]'             => '123456789',
-                    'adservice_partnerbundle_partnertype[email_1]'         => 'testpartner@test.es',
-                    'adservice_partnerbundle_partnertype[email_2]'         => 'testpartner@test.es',
-                    'adservice_partnerbundle_partnertype[country]'         => '1',
-                    'adservice_partnerbundle_partnertype[region]'          => 'Region Test',
-                    'adservice_partnerbundle_partnertype[city]'            => 'City Test',
-                    'adservice_partnerbundle_partnertype[address]'         => 'testaddress',
-                    'adservice_partnerbundle_partnertype[postal_code]'     => '99999',
-                    ),
-            ),
-        );
-    }
-
-    /**
-     * DataProvider de partners editados: Contiene dos campos de email a editar para un partner
-     * @return array editPartners
-     */
-    public function editPartners()
-    {
-        return array(
-            array('partner' => array(
-                    'adservice_partnerbundle_partnertype[email_1]'    => 'testpartner_edited@test.es',
-                    'adservice_partnerbundle_partnertype[email_2]'    => 'testpartner_edited@test.com',
-                    ),
-            ),
-        );
-    }
-}

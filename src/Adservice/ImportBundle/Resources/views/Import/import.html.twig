@@ -5,31 +5,49 @@
 	{% if bbdd is not defined or bbdd == null %}
 
 		<h3>Deseas importar la BBDD antigua de AD-service??</h3>
-		<p>Se importaran Socios, Talleres, Usuarios, Asesores y Grupos de Operaciones "Gropers".</p>
+		<p>Se importaran Socios, Talleres, Usuarios y Asesores.</p>
 		<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>
 
-		<button onclick="window.open('{{ path('import'   ,       { 'bbdd': 'adservice'                }) }}', '_self')"> IMPORTAR BBDD_OLD	      </button>
-		<button onclick="window.open('{{ path('lock_cars',       { 'bbdd': 'old_cars',       'num': 0 }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
-		<button onclick="window.open('{{ path('lock_incidences', { 'bbdd': 'old_incidences', 'num': 0 }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>
+		<button onclick="window.open('{{ path('import', { 'bbdd': 'partner'  }) }}', '_self')"> COMENZAR IMPORTACIÓN </button>
+		{#
+		<button onclick="window.open('{{ path('import', { 'bbdd': 'shop'     }) }}', '_self')"> IMPORTAR TIENDAS  </button>
+		<button onclick="window.open('{{ path('import', { 'bbdd': 'workshop' }) }}', '_self')"> IMPORTAR TALLERES </button>
+		<button onclick="window.open('{{ path('import', { 'bbdd': 'assessor' }) }}', '_self')"> IMPORTAR ASESORES </button>
+
+		<button onclick="window.open('{{ path('lock_cars',  { 'bbdd': 'old_cars',   }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
+		<button onclick="window.open('{{ path('incidences', { 'bbdd': 'incidences', }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>
+		#}
+
+	{% elseif bbdd == 'complete' %}
+		<h1> BBDD IMPORTADA CORRECTAMENTE! </h1>
+		{{ "now"|date("H:m:s") }}
 
 	{% elseif bbdd == 'old_cars'  %}
 
 		{% if num is defined %}
-			<h3>Importando coches... <span class="glyphicon glyphicon-arrow-right"></span> {{ num }}</h3>
-			<script>  
-			$(document).ready(function() { 	window.open('{{ path("lock_cars", { "bbdd": "old_cars", "num": num }) }}', '_self') }); </script>
+			<h3> Importando coches... <span class="glyphicon glyphicon-arrow-right"></span> {{ num }}</h3>
+			<script> $(document).ready(function() {
+						window.open('{{ path("lock_cars", { "bbdd": "old_cars", "num": num }) }}', '_self') }); </script>
 		{% endif %}
 
-	{% elseif bbdd == 'old_incidences' %}
+	{% elseif bbdd == 'incidences' %}
 
 		{% if num is defined %}
-			<h3>Importando incidencias... <span class="glyphicon glyphicon-arrow-right">{{ num }}</h3>
-			<script>  $(document).ready(function() { window.open('{{ path("lock_incidences", { "bbdd": "old_incidences", "num": num }) }}', '_self') }); </script>
+			<h3> Importando incidencias... <span class="glyphicon glyphicon-arrow-right">{{ num }}</h3>
+			<script> $(document).ready(function() {
+						window.open('{{ path("lock_incidences", { "bbdd": "incidences", "num": num }) }}', '_self') }); </script>
 		{% endif %}
 
-	{% elseif bbdd == 'complete' %}
-		<h1>BBDD IMPORTADA CORRECTAMENTE!</h1>
-		{{ "now"|date("H:m:s") }}
+	{% else %}
+			{% set msg  = app.session.get('msg' ) %}
+			{% set info = app.session.get('info') %}
+			{% set next = app.session.get('next') %}
+			<h3> {{ msg  }} </h3>
+			<p>  {{ info }} </p>
+			{# <button onclick="window.open('{{ path('import', { 'bbdd': next }) }}', '_self')"> IMPORTAR {{ next }} </button> #}
+
+			<script> $(document).ready(function() { window.open('{{ path("import", { "bbdd": next }) }}', '_self') }); </script>
+
 	{% endif %}
 
 {% endblock %}

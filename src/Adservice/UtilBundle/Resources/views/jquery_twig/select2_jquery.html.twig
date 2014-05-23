@@ -1,0 +1,39 @@
+
+<script>
+	$(document).ready(function() {
+
+		$("#slct_region").change(function() {
+			$(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text() );
+
+			var url_ajax = "{{ path("cities_from_region") }}";
+			populate_city(url_ajax);
+		});
+
+		$("#slct_city").change(function(){
+			$(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text() );
+		});
+
+		$("#slct_city").select2();
+			$(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
+
+		$('#btn_create').click(function(){
+
+			if ($(':text[id*=region]').val() == "[object Object]"){
+
+				alert('Debes introducir la region');
+		        event.preventDefault();
+		        event.stopPropagation();
+			}
+			else{
+
+				if ($(':text[id*=city]').val() == "[object Object]"){
+
+				alert('Debes introducir la ciudad');
+			        event.preventDefault();
+			        event.stopPropagation();
+			    }
+			}
+		});
+	});
+
+</script>

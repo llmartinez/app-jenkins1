@@ -58,7 +58,6 @@ class UtilController extends Controller
      */
     static public function getSlug($cadena, $separador = '-')
     {
-      /*
         // Remove all non url friendly characters with the unaccent function
         $valor = self::sinAcentos($cadena);
 
@@ -76,15 +75,8 @@ class UtilController extends Controller
                            preg_replace('/([a-z\d])([A-Z])/', '\1_\2',
                            preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2',
                            preg_replace('/::/', '/', $valor)))));
-
-        return trim($valor, $separador);
-*/
-        // Código copiado de http://cubiq.org/the-perfect-php-clean-url-generator
-        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $cadena);
-        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug);
-        $slug = strtolower(trim($slug, $separador));
-        $slug = preg_replace("/[\/_|+ -]+/", $separador, $slug);
-        return $slug;
+        // return trim($valor, $separador));
+        return $valor;
     }
 
     /**

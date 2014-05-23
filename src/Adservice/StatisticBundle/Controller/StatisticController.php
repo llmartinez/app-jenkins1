@@ -172,7 +172,6 @@ class StatisticController extends Controller {
 
         foreach ($results as $row) {
             $excel.=$row->getId().';';
-
             $created = $row->getCreatedAt();
             $excel.=$created->format("d/m/Y").';';
             $excel.=$row->getCar().';';
@@ -182,6 +181,7 @@ class StatisticController extends Controller {
             $excel.=$row->getSolution().';';
             $excel.="\n";
         }
+        $excel = str_replace(',', '.', $excel);
         return($excel);
     }
     public function createExcelWorkshop($results){

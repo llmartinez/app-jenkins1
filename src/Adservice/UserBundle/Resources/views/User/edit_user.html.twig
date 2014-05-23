@@ -52,9 +52,9 @@
         {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
         {{ form_rest(form) }}
+        </div>
 
             <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
-        </div>
     </form>
 
     <!-- Modal -->
@@ -89,9 +89,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
-
-    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
-
-    {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
 {% endblock %}
