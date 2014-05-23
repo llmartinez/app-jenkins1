@@ -11,7 +11,7 @@
     <form action="{{ path('popup_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {{ form_rest(form) }}
         <p>
-            <button type="submit">{% trans %} btn.create {% endtrans %}</button>
+            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
         </p>
     </form>
 

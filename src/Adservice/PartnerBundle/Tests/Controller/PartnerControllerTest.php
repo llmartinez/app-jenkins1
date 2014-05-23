@@ -165,3 +165,4 @@ class PartnerControllerTest extends WebTestCase {
         //volver al inicio
 /*        UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Home")');
     }
+*/

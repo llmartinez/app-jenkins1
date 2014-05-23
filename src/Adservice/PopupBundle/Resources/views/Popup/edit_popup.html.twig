@@ -11,7 +11,7 @@
     <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
             {{ form_widget(form) }}
         <p>
-            <button type="submit">{% trans %} btn.send {% endtrans %}</button>
+            <button id="btn_edit" type="submit">{% trans %} btn.send {% endtrans %}</button>
         </p>
     </form>
 

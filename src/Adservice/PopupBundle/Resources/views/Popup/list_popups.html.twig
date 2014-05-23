@@ -11,7 +11,7 @@
 
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.popup {% endtrans %}</a>
+    <a href="{{ path('popup_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span>{% trans %}new.popup{% endtrans %}</a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
