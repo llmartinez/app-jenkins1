@@ -18,9 +18,9 @@ class PartnerControllerTest extends WebTestCase {
     public function testNewPartner($partner) {
         $client = static::createClient();
         $client->followRedirects(true);
-echo '***^^^***'.$client->getRequest()->getUri().'***^^^***';
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
+echo '***^^^***'.$client->getRequest()->getUri().'***^^^***';
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#partner_list');
         UtilFunctionTest::linkTo($client, $this, 'div legend a:contains("Nuevo Socio")');
 
