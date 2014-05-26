@@ -16,7 +16,7 @@ class PartnerControllerTest extends WebTestCase {
      * @dataProvider partners
      */
     public function testNewPartner($partner) {
-                $client = static::createClient();
+        $client = static::createClient();
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
@@ -51,7 +51,7 @@ class PartnerControllerTest extends WebTestCase {
 //         $client-> followRedirects(true);
 //         UtilFunctionTest::doLogin($client, 'admin', 'admin');
 
-//         $crawler = $client->request('GET', '/es/partner/edit/partner/211');
+//         $crawler = $client->request('GET', '/es/partner/edit/partner/101');
 
 //         //comprueba que vaya a la pagina de edicion de usuarios
 //         $this->assertRegExp('/.*\/..\/partner\/edit\/partner\/.*/', $client->getRequest()->getUri(),

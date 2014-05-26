@@ -49,7 +49,7 @@ class UtilFunctionTest
      */
     public static function doLogin($client, $user, $pass) {
         //inicia la sesion como $user
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/es/login');
         $loginForm = $crawler->selectButton('btn_login')->form(array('_username' => $user,
                                                                      '_password' => $pass));
         $crawler = $client->submit($loginForm);

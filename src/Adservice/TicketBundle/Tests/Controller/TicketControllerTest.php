@@ -16,43 +16,57 @@ class TicketControllerTest extends WebTestCase {
    // }
 
 
-   // public function testNewTicket($users) {
-   //     $client = static::createClient();
-   //     $client-> followRedirects(true);
-   //     UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]']);
-   //     $crawler = $client->getCrawler();
+    public function testNewTicket() {
+        $client = static::createClient();
+        $client->followRedirects(true);
+        //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
+        UtilFunctionTest::doLogin($client, 'admin', 'admin');
+        UtilFunctionTest::linkTo($client, $this, 'table tr td a#ticket_list');
 
-   //     //miramos que exista el link "mis tickets" y lo clickamos
-   //     $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
-   //     $crawler = $client->click($myTicket_link);
+        $newWorkshopForm = $client->getCrawler()->selectButton('btn_search')->form();
+        $newWorkshopForm['w_idpartner'] = '1';
+        $newWorkshopForm['w_id'       ] = '1';
+        $client->submit($newWorkshopForm);
 
-   //     //hay 1 boton de "New Ticket" y lo clickamos
-   //     $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
-   //     $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
-   //     $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
-   //     $crawler = $client->click($newTicket_link);
+$ar=fopen("zdatos.html","a") or die("Problemas en la creacion");
+fputs($ar,$client->getResponse());
+fclose($ar);
 
-   //     $this->checkFieldExist($crawler);
+        UtilFunctionTest::linkTo($client, $this, 'div legend a:contains("Nuevo Socio")');
 
-   //     //rellenamos el formulario y guardamos
-   //     $newTicketForm = $crawler->selectButton('Submit')->form(array('new_ticket_form[title]'      => $this->setTicketTitle(),
-   //                                                                   'new_ticket_form[importance]' => $this->getRandomNumber(1,10),
-   //                                                                 ));
-   //     $newTicketForm['brand']->select('1');
-   //     $newTicketForm['idBrand']->select('AUDI');
-   //     $brandField = $newTicketForm['form select[id="idBrand"]'];
-   //     var_dump($brandField);
-   //     $crawler->filter('form select[id="idBrand"]')->select(2);
-   //     $newTicketForm->setField('form select[id="idBrand"]', 1);
-   //     $newTicketForm['select[id="idBrand"]'];
-   //     $newTicketForm['select[id="idBrand"]']->select(2);
-   //     $brandField = $crawler->filter('form select[id="idBrand"]');
-   //     $brandField = $crawler->filter('form select#idBrand')->nextAll();
-   //     foreach ($brandField as $aa) {
-   //         var_dump($aa);
-   //     }
-   //            var_dump($brandField);
-   // }
+        $crawler = $client->getCrawler();
+
+       //miramos que exista el link "mis tickets" y lo clickamos
+       $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
+       $crawler = $client->click($myTicket_link);
+
+       //hay 1 boton de "New Ticket" y lo clickamos
+       $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
+       $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
+       $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
+       $crawler = $client->click($newTicket_link);
+
+       $this->checkFieldExist($crawler);
+
+       //rellenamos el formulario y guardamos
+       $newTicketForm = $crawler->selectButton('Submit')->form(array('new_ticket_form[title]'      => $this->setTicketTitle(),
+                                                                     'new_ticket_form[importance]' => $this->getRandomNumber(1,10),
+                                                                   ));
+       $newTicketForm['brand']->select('1');
+       $newTicketForm['idBrand']->select('AUDI');
+       $brandField = $newTicketForm['form select[id="idBrand"]'];
+       var_dump($brandField);
+       $crawler->filter('form select[id="idBrand"]')->select(2);
+       $newTicketForm->setField('form select[id="idBrand"]', 1);
+       $newTicketForm['select[id="idBrand"]'];
+       $newTicketForm['select[id="idBrand"]']->select(2);
+       $brandField = $crawler->filter('form select[id="idBrand"]');
+       $brandField = $crawler->filter('form select#idBrand')->nextAll();
+       foreach ($brandField as $aa) {
+           var_dump($aa);
+       }
+              var_dump($brandField);
+   }
 
 //    public function newTicket(){
 //

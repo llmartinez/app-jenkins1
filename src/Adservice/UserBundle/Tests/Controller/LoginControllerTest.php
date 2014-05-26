@@ -19,8 +19,8 @@ class LoginControllerTest extends WebTestCase {
         $client->followRedirects(true);
 
         //se muestra la web de login...
-        $crawler = $client->request('GET', '/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
+        //$crawler = $client->request('GET', '/');
+        //$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
 
 
         $crawler = $client->request('GET', '/es/login');
