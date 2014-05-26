@@ -1,0 +1,21 @@
+<p>Deseas importar la BBDD antigua de AD-service??</p>
+<p>Se importaran Socios, Talleres, Asesores, Gropers y Operaciones.</p>
+
+{% if importar is not defined or importar == null %}
+	<button onclick="window.open('{{ path('import', { 'importar': 'partner'   }) }}', '_self')"> IMPORTAR SOCIOS 		</button>
+{% elseif importar == 'partner'  %}
+	<button onclick="window.open('{{ path('import', { 'importar': 'workshop'  }) }}', '_self')"> IMPORTAR TALLERES 		</button>
+{% elseif importar == 'workshop' %}
+	<button onclick="window.open('{{ path('import', { 'importar': 'assessor'  }) }}', '_self')"> IMPORTAR ASESORES 		</button>
+{% elseif importar == 'assessor' %}
+	<button onclick="window.open('{{ path('import', { 'importar': 'system'    }) }}', '_self')"> IMPORTAR GROPER 		</button>
+{% elseif importar == 'system'   %}
+	<button onclick="window.open('{{ path('import', { 'importar': 'subsystem' }) }}', '_self')"> IMPORTAR OPERACIONES 	</button>
+
+{% else %}
+
+	<p>BBDD IMPORTADA!</p>
+	<p>Deseas crear el historico de Coches e Incidencias de la BBDD antigua de AD-service??</p>
+
+	<button onclick="window.open('{{ path('history', { 'history': 'adservice' }) }}', '_self')"> CREAR HISTORICO 		</button>
+{% endif %}
