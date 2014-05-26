@@ -244,10 +244,10 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'assessor' )
     	{
-			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();			// ASSESSOR
+			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
 
-			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
-			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_USER');	//ROLE
+			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
 
 			foreach ($old_Asesores as $old_Asesor)
 			{
@@ -260,6 +260,8 @@ class ImportController extends Controller
 				UtilController::saveEntity($em, $newAssessor, $sa, false);
 			}
 			$em->flush();
+			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando historico de coches e incidencias(entidad lock_car y lock_incidence)...');
 
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
@@ -319,7 +321,7 @@ class ImportController extends Controller
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
 //return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences'));
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => 0));
 		}
     }
 //  ___ _   _  ____ ___ ____  _____ _   _  ____ _____ ____
@@ -332,7 +334,7 @@ class ImportController extends Controller
     {
 		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
-		$max_rows = 1000;
+		$max_rows = 500;
 
  		$consulta = $em_old ->createQuery('SELECT oi FROM ImportBundle:old_Incidencia oi')
                         	->setFirstResult($num)
@@ -344,15 +346,31 @@ class ImportController extends Controller
 
 		if($count > $num){
 
+            $all_asesores = $em_old->createQuery('SELECT oa.id, oa.nombre FROM ImportBundle:old_Asesor oa'    )->getResult();
+            $all_socios   = $em_old->createQuery('SELECT os.id, os.nombre FROM ImportBundle:old_Socio os'     )->getResult();
+            $all_talleres = $em_old->createQuery('SELECT ot.id, ot.nombre FROM ImportBundle:old_Taller ot'    )->getResult();
+            $all_opers    = $em_old->createQuery('SELECT oo.id, oo.nombre FROM ImportBundle:old_Operacion oo' )->getResult();
+
+			$em_old->clear(); $em_old->close();
+
+			foreach ($all_asesores as $asesor ) { $asesores[$asesor['id']] = $asesor['nombre']; } 	//MAPPING OLD_ASESOR
+			foreach ($all_socios   as $socio  ) { $socios  [$socio ['id']] = $socio ['nombre']; } 	//MAPPING OLD_SOCIO
+			foreach ($all_talleres as $taller ) { $talleres[$taller['id']] = $taller['nombre']; } 	//MAPPING OLD_TALLER
+			foreach ($all_opers    as $oper   ) { $opers   [$oper  ['id']] = $oper  ['nombre']; } 	//MAPPING OLD_OPERACIONES
+			// foreach ($all_coches   as $coche  ) { $coches  [$coche ->getOldId()] = $coche; }
+
+            unset($all_asesores); unset($all_socios); unset($all_talleres); unset($all_opers);
+
 			foreach ($old_Incidences as $old_Incidence)
 			{
 				$newIncidence  = new lock_incidence();
-
-				$newIncidence->setAsesor     ($em_old->getRepository('ImportBundle:old_Asesor'   )->find($old_Incidence->getAsesor())->getNombre());
-				$newIncidence->setSocio      ($em_old->getRepository('ImportBundle:old_Socio'    )->find($old_Incidence->getSocio() )->getNombre());
-				$newIncidence->setTaller     ($em_old->getRepository('ImportBundle:old_Taller'   )->find($old_Incidence->getTaller())->getNombre());
-				$newIncidence->setOper       ($em_old->getRepository('ImportBundle:old_Operacion')->find($old_Incidence->getOper()  )->getNombre());
 				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lock_car')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
+
+				$newIncidence->setAsesor     ($asesores [$old_Incidence->getAsesor()]);
+				$newIncidence->setSocio      ($socios   [$old_Incidence->getSocio() ]);
+				$newIncidence->setTaller     ($talleres [$old_Incidence->getTaller()]);
+				$newIncidence->setOper       ($opers    [$old_Incidence->getOper()  ]);
+				// $newIncidence->setCoche      ($coches   [$old_Incidence->getCoche() ]);
 
 				$newIncidence->setOldId      ($old_Incidence->getId());
 				$newIncidence->setDescription($old_Incidence->getDescripcion());
@@ -361,13 +379,21 @@ class ImportController extends Controller
 				$newIncidence->setImportance ($old_Incidence->getImportancia());
 				$newIncidence->setDate   	 ($old_Incidence->getFecha());
 				$newIncidence->setActive	 ($old_Incidence->getActive());
-				$incidences[] = $newIncidence;
+				$em_lock->persist($newIncidence);
 				unset($newIncidence);
 			}
-			foreach ($incidences as $incidence) {
-				$em_lock->persist($incidence);
-			}
+			// foreach ($incidences as $incidence) {
+			// 	$em_lock->persist($incidence);
+			// }
+
+			unset($old_Incidences);	unset($incidences   );	unset($incidence);
+			unset($asesores 	);	unset($asesor 	);
+			unset($socios 		);	unset($socio 	);
+			unset($talleres 	);	unset($taller 	);
+			unset($opers 		);	unset($oper 	);
 			$em_lock->flush();
+			$em_lock->clear();
+			$em_lock->close();
 
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => $num + $max_rows ));
 //return $this->render('ImportBundle:Import:import.html.twig');
