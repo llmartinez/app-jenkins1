@@ -205,10 +205,6 @@ class ImportController extends Controller
 				if(isset($partners[$old_Taller->getIdGrupo()])) $newWorkshop->setPartner ($partners[$old_Taller->getIdGrupo()]);
 				else 											$newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 				$em->flush();
 			}
@@ -216,6 +212,10 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
 
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
