@@ -235,14 +235,14 @@ class ImportController extends Controller
 			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
 
 			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
-			foreach ($all_languages as $language) { $languages[$language->getShortName()] = $language;		}
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
 
 			foreach ($old_Talleres as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
 				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getContacto());
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
-				$newUser->setLanguage ($languages[$locations[$newUser->getCountry()->getLang()]]);
+				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
 				$newUser->setActive   ($old_Taller->getActive());
 				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
 
@@ -271,14 +271,17 @@ class ImportController extends Controller
 			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
 
 			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
 			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
+
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
 
 			foreach ($old_Asesores as $old_Asesor)
 			{
 				$newAssessor = UtilController::newEntity(new User(), $sa);
 				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
 				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
-				$newAssessor->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAssessor->getCountry()->getLang()));
+				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
 				$newAssessor->setActive($old_Asesor->getActive());
 
 				UtilController::saveEntity($em, $newAssessor, $sa, false);
@@ -292,8 +295,8 @@ class ImportController extends Controller
 		var_dump($session);
 /***************************************************************************************************************/
 /***************************************************************************************************************/
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
 
 /***************************************************************************************************************/
     	}
@@ -347,6 +350,10 @@ class ImportController extends Controller
 			foreach ($cars as $car) {
 				$em_lock->persist($car);
 			}
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
 			$em_lock->flush();
 
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
@@ -426,6 +433,10 @@ class ImportController extends Controller
 			unset($socios 		);	unset($socio 	);
 			unset($talleres 	);	unset($taller 	);
 			unset($opers 		);	unset($oper 	);
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
 			$em_lock->flush();
 			$em_lock->clear();
 			$em_lock->close();
@@ -490,7 +501,6 @@ class ImportController extends Controller
         	$entity->setCountry($locations['countries'][$country]);
         }
         else $entity->setCountry($locations['countries']['Spain']);
-
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');

@@ -51,7 +51,15 @@ class ShopControllerTest extends WebTestCase {
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
         UtilFunctionTest::linkTo($client, $this, 'table tr td a#shop_list');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#edittestpartner');
+/****************************************************************************************************/
+// $ar=fopen("zdatos.html","a") or die("Problemas en la creacion");
+// fputs($ar,$client->getResponse());
+// fclose($ar);
+// $ar=fopen("zurl.html","a") or die("Problemas en la creacion");
+// fputs($ar,$client->getRequest()->getUri());
+// fclose($ar);
+/****************************************************************************************************/
+        UtilFunctionTest::linkTo($client, $this, 'table tr td a#edittestshop');
 
         //comprueba que vaya a la pagina de edicion de usuarios
         $this->assertRegExp('/.*\/..\/partner\/edit\/shop\/.*/', $client->getRequest()->getUri(),

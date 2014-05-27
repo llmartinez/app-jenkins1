@@ -66,6 +66,8 @@
                 <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
             </div>
             <div class="modal-body">
+                <label>{% trans %} old_password {% endtrans %}</label>
+                <input id="old_password"  name="old_password"  type="password" placeholder="old password">
                 <label>{% trans %} password {% endtrans %}</label>
                 <input id="new_password1" name="new_password1" type="password" placeholder="new password">
                 <label>{% trans %} repeat_password {% endtrans %}</label>
@@ -79,9 +81,15 @@
                         if($('#new_password1').val() == $('#new_password2').val())
                         {
                             if($('#new_password1').val().length > 8){
-                                var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER' }) }}";
-                                url = url.replace('PLACEHOLDER', $('#new_password1').val());
-                                window.open(url,'_self');
+                                if($('#old_password').val() == user.password ){
+                                    var url = "{{ path('change_password', { 'id'      :  user.id },
+                                                                            'password': 'plc_new_pass',
+                                                                            'old_pass': 'plc_old_pass' }) }}";
+                                    url = url.replace('plc_new_pass', $('#new_password1').val());
+                                    url = url.replace('plc_old_pass', $('#old_password' ).val());
+                                    window.open(url,'_self');
+                                }
+                                else alert("{% trans %} error.old_password {% endtrans %}")
                             }
                             else alert("{% trans %} error.length_password {% endtrans %}")
                         }

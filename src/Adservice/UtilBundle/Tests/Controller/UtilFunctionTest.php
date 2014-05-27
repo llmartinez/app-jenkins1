@@ -30,14 +30,14 @@ class UtilFunctionTest
      */
     public static function linkTo($client, $_this, $location)
     {
-       $crawler = $client->getCrawler();
-       $link = $crawler->filter($location)->link();
-       $crawler = $client->click($link);
+        $crawler = $client->getCrawler();
+        $link = $crawler->filter($location)->link();
+        $crawler = $client->click($link);
 
-       $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
+        $_this->assertEquals(200, $client->getResponse()->getStatusCode(),
         '- Se muestra la pantalla del link a "'.$location.'" (status 200) '
         );
-       return $crawler;
+        return $crawler;
     }
 
     /**
