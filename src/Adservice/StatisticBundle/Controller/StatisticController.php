@@ -9,9 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatisticController extends Controller {
 
-    /**
-     * Listado de estadisticas...muy chorras...
-     */
     public function listAction($type=null, $page=1, $date_from='none', $date_to='none', $partner='none', $status='none', $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');

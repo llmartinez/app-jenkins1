@@ -26,6 +26,7 @@
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
+        {% set entity = partner %}
         {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
         {{ form_rest(form) }}

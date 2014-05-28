@@ -77,6 +77,7 @@ class PartnerController extends Controller {
                 if($find == null)
                 {
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
+                    $partner = UtilController::settersContact($partner, $partner);
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
 
                     /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
@@ -84,16 +85,7 @@ class PartnerController extends Controller {
                     $newShop->setName('...');
                     $newShop->setPartner($partner);
                     $newShop->setActive('1');
-                    $newShop->setCountry       ($partner->getCountry());
-                    $newShop->setRegion        ($partner->getRegion());
-                    $newShop->setCity          ($partner->getCity());
-                    $newShop->setPhoneNumber1  ($partner->getPhoneNumber1());
-                    $newShop->setPhoneNumber2  ($partner->getPhoneNumber2());
-                    $newShop->setMovileNumber1 ($partner->getMovileNumber1());
-                    $newShop->setMovileNumber2 ($partner->getMovileNumber2());
-                    $newShop->setFax           ($partner->getFax());
-                    $newShop->setEmail1        ($partner->getEmail1());
-                    $newShop->setEmail2        ($partner->getEmail2());
+                    $newShop = UtilController::settersContact($newShop, $partner);
 
                     UtilController::saveEntity($em, $newShop, $security->getToken()->getUser());
 
@@ -140,6 +132,8 @@ class PartnerController extends Controller {
         $petition = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
 
+        $actual_city   = $partner->getRegion();
+        $actual_region = $partner->getCity();
 
         if ($petition->getMethod() == 'POST') {
 
@@ -157,6 +151,7 @@ class PartnerController extends Controller {
                     $this->get('session')->setFlash('error', $flash);
                 }
                 else{
+                    $partner = UtilController::settersContact($partner, $partner, $actual_region, $actual_city);
                     UtilController::saveEntity($em, $partner, $this->get('security.context')->getToken()->getUser());
                     return $this->redirect($this->generateUrl('partner_list'));
                 }

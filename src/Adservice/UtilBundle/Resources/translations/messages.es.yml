@@ -43,6 +43,7 @@ username:				 "Usuario"
 password:				 "Contraseña"
 change_password: 		 "Cambiar Contraseña"
 change_password.confirm: "Deseas generar una nueva clave de acesso para el usuario?"
+repeat_password:		 "Repite tu nueva contraseña"
 error.same_password:	 "Las contraseñas no coinciden"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
@@ -311,7 +312,7 @@ page.next:						"Página siguiente"
 page.last:						"Última página"
 
 #MAIL
-mail.info.tel:							"93123123"
+mail.info.tel:							"93 395 23 08"
 mail.info.more:							"Más información:"
 mail.testing:		                	"En fase de pruebas hasta "
 

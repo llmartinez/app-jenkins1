@@ -96,7 +96,7 @@ class ShopOrderController extends Controller {
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($this->get('security.context')->isGranted('ROLE_AD_COUNTRY') === false)
-                    $shopOrder->setPartner($user->getPartner());
+                $shopOrder->setPartner($user->getPartner());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
@@ -104,7 +104,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
                 $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -180,7 +180,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
                 $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -250,7 +250,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -300,7 +300,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());*/
                 $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -342,7 +342,7 @@ class ShopOrderController extends Controller {
 
             /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+            $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
             $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -385,7 +385,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -434,7 +434,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -517,7 +517,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shop->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shop->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop,

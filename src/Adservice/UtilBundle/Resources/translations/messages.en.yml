@@ -43,6 +43,7 @@ username:				 "Username"
 password:				 "Password"
 change_password: 		 "Change Password"
 change_password.confirm: "Do you want to generate a new password for this user?"
+repeat_password:		 "Repeat your new password"
 error.same_password:	 "The passwords don't match"
 error.length_password:	 "The password must have 8 characters at least"
 error.old_password:	 	 "The password inserted don't match with the actual password"
@@ -311,7 +312,7 @@ page.next:						"Next page"
 page.last:						"Last page"
 
 #MAIL
-mail.info.tel:							"93123123"
+mail.info.tel:							"610 40 09 16"
 mail.info.more:							"More info:"
 mail.testing:		                	"In tests to "
 

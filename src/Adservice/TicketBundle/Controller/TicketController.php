@@ -197,7 +197,7 @@ class TicketController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
@@ -253,7 +253,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                    $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                     $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$ticket->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
@@ -313,7 +313,7 @@ class TicketController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$ticket->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
@@ -392,7 +392,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                    $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                     $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
@@ -481,7 +481,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
@@ -524,7 +524,7 @@ class TicketController extends Controller {
         UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+            $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$ticket->getId());
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));

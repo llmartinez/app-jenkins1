@@ -14,7 +14,8 @@
 		});
 
 		$("#slct_city").select2();
-			$(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
+            if($(':text[id*=city]').val()   != '') $("#s2id_slct_city .select2-chosen").text($(':text[id*=city]').val());
+            else                                   $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
 
 		$('#btn_create').click(function(){
 

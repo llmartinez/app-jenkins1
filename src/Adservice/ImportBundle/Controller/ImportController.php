@@ -281,7 +281,7 @@ class ImportController extends Controller
 				$newAssessor = UtilController::newEntity(new User(), $sa);
 				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
 				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
-				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
+				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
 				$newAssessor->setActive($old_Asesor->getActive());
 
 				UtilController::saveEntity($em, $newAssessor, $sa, false);
@@ -295,8 +295,8 @@ class ImportController extends Controller
 		var_dump($session);
 /***************************************************************************************************************/
 /***************************************************************************************************************/
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
 
 /***************************************************************************************************************/
     	}
