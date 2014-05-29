@@ -7,7 +7,7 @@ app/config/parameters.ini
 app/config/parameters.yml
 app/cache/*
 app/logs/*
-vendor/*
+#vendor/*
 web/bundles/*
 web/css/*
 web/js/*
