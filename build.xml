@@ -6,7 +6,7 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
 <!--<target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
-    <target name="build"            depends="parameters, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
+    <target name="build"            depends="parameters, prepare, lint, phpdoc, phpunit, phpcb"/>
 <!--
 -->
     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
@@ -169,6 +169,7 @@
         </exec>
     </target>
     
+    <!-- ENCUENTRA CODIGO DUPLICADO -->
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <exec executable="phpcpd">
             <arg value="--log-pmd" />
@@ -176,14 +177,16 @@
             <arg path="${sourcedir}" />
         </exec>
     </target>
-    
+
+    <!-- EJECUTA LOS TEST -->
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="phpunit" failonerror="true">
             <arg value="-c" />
             <arg path="${basedir}/app/phpunit.xml" />
         </exec>
     </target>
-    
+
+    <!-- GENERA LA DOCUMENTACION -->
     <target name="phpdoc" description="Generate API documentation using phpDox">
         <exec executable="phpdoc">
             <arg line="-d '${sourcedir}' -t '${builddir}/docs' --title='Tempo' " />
