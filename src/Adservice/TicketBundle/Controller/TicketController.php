@@ -72,7 +72,6 @@ class TicketController extends Controller {
                 else{ $params[] = array(); }
             }
             else{ $params[] = array(); }
-
             $option = 'all';
         }
 
@@ -105,7 +104,7 @@ class TicketController extends Controller {
         }
         $pagination = new Pagination($page);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')){
+        if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
         }else{
@@ -120,6 +119,7 @@ class TicketController extends Controller {
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
                                                                                        'option'     => $option,
+                                                                                       'form_name'  => $form->getName(),
                                                                               ));
     }
 
@@ -268,10 +268,11 @@ class TicketController extends Controller {
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
         return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
-                                                                                        'form'        => $form->createView(),
-                                                                                        'form_name'   => $form->getName(),
-                                                                                        'ticket'      => $ticket,
-                                                                                        'systems'     => $systems,
+                                                                                        'form'      => $form->createView(),
+                                                                                        'form_name' => $form->getName(),
+                                                                                        'ticket'    => $ticket,
+                                                                                        'systems'   => $systems,
+                                                                                        'form_name' => $form->getName(),
                                                                                     ));
     }
 
@@ -403,13 +404,15 @@ class TicketController extends Controller {
             return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
-                                                                            'systems'   => $systems, )));
+                                                                            'systems'   => $systems,
+                                                                            'form_name' => $form->getName(), )));
         }
 
         $array = array( 'formP'     => $formP->createView(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
-                        'systems'   => $systems, );
+                        'systems'   => $systems,
+                        'form_name' => $form->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 

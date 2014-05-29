@@ -72,9 +72,10 @@ function populate_city(url_ajax, city){
  * @param {url de tipo {{ path('mi_path') }}} url_ajax_partner
  */
 function populate_shop(url_ajax_partner, shop){
-   var id_partner = $('form').find('select[name*=partner]').val();
+    var id_partner = $('form').find('select[name*=partner]').val();
+    if(shop == undefined){ shop = ''; }
 
-   $.ajax({
+    $.ajax({
         type        : "POST",
         url         : url_ajax_partner,
         data        : {id_partner : id_partner},

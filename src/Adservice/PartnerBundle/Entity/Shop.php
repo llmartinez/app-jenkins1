@@ -68,7 +68,7 @@ class Shop {
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'shop'    => $this->getName(),
-                      'partner' => $this->getPartner());
+                      'partner' => $this->getPartner()->getName());
         return $json;
     }
     /**
