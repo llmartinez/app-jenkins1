@@ -119,7 +119,6 @@ class TicketController extends Controller {
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
                                                                                        'option'     => $option,
-                                                                                       'form_name'  => $form->getName(),
                                                                               ));
     }
 
