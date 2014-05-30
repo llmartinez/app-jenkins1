@@ -72,6 +72,7 @@ class WorkshopController extends Controller {
                 if($find == null)
                 {
                     $workshop = UtilController::newEntity($workshop, $this->get('security.context')->getToken()->getUser());
+                    $workshop = UtilController::settersContact($workshop, $workshop);
                     $this->saveWorkshop($em, $workshop);
 
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
@@ -88,19 +89,7 @@ class WorkshopController extends Controller {
                     $newUser->setPassword      ($pass);
                     $newUser->setName          ($workshop->getContactName());
                     $newUser->setSurname       ($workshop->getContactSurname());
-                    $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
-                    $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
-                    $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
-                    $newUser->setMovileNumber2 ($workshop->getMovileNumber2());
-                    $newUser->setFax           ($workshop->getFax());
-                    $newUser->setEmail1        ($workshop->getEmail1());
-                    $newUser->setEmail2        ($workshop->getEmail2());
                     $newUser->setActive        ('1');
-                    $newUser->setCountry       ($workshop->getCountry());
-                    $newUser->setRegion        ($workshop->getRegion());
-                    $newUser->setCity          ($workshop->getCity());
-                    $newUser->setAddress       ($workshop->getAddress());
-                    $newUser->setPostalCode    ($workshop->getPostalCode());
                     $newUser->setCreatedBy     ($workshop->getCreatedBy());
                     $newUser->setCreatedAt     (new \DateTime());
                     $newUser->setModifiedBy    ($workshop->getCreatedBy());
@@ -108,6 +97,7 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage      ($lang);
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
+                    $newUser = UtilController::settersContact($newUser, $workshop);
 
                     //password nuevo, se codifica con el nuevo salt
                     $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
@@ -119,7 +109,7 @@ class WorkshopController extends Controller {
 
                     /* MAILING */
                     $mailerUser = $this->get('cms.mailer');
-                    $mailerUser->setTo($newUser->getEmail1());
+                    $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
                     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
                     $mailerUser->setFrom('noreply@grupeina.com');
                     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -163,6 +153,9 @@ class WorkshopController extends Controller {
         $petition = $this->getRequest();
         $form = $this->createForm(new WorkshopType(), $workshop);
 
+        $actual_city   = $workshop->getRegion();
+        $actual_region = $workshop->getCity();
+
         if ($petition->getMethod() == 'POST') {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
@@ -175,6 +168,7 @@ class WorkshopController extends Controller {
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
                 if($find == null or $workshop->getCodeWorkshop() == $last_code)
                 {
+                    $workshop = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
                     $this->saveWorkshop($em, $workshop);
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }

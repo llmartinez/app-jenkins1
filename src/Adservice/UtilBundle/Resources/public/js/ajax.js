@@ -25,7 +25,8 @@ function populate_region(url_ajax, region){
                 placeholder: "Select a State",
                 allowClear: true
             });
-            $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text('sin region') );
+            if($(':text[id*=region]').val() != '') $("#s2id_slct_region .select2-chosen").text($(':text[id*=region]').val());
+            else                                   $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text('sin region') );
         },
         error : function(){
             console.log("Error al cargar las regiones...");
@@ -71,9 +72,10 @@ function populate_city(url_ajax, city){
  * @param {url de tipo {{ path('mi_path') }}} url_ajax_partner
  */
 function populate_shop(url_ajax_partner, shop){
-   var id_partner = $('form').find('select[name*=partner]').val();
+    var id_partner = $('form').find('select[name*=partner]').val();
+    if(shop == undefined){ shop = ''; }
 
-   $.ajax({
+    $.ajax({
         type        : "POST",
         url         : url_ajax_partner,
         data        : {id_partner : id_partner},

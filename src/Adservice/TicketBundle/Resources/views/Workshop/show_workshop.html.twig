@@ -8,7 +8,7 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		#{{ workshop.partner.id}},{{ workshop.id }}: <b>{{ workshop.name }}</b>
+		#{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b>{{ workshop.name }}</b>
 		{% if workshop.contact      != "" %}<b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
 	</div>
 

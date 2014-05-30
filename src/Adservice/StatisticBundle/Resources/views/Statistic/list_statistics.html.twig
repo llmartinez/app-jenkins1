@@ -11,9 +11,9 @@
     <legend>{% trans %} tickets {% endtrans %}</legend>
 
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_tck_from" type="date"
-            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} ></div>
+            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} class='form-control' ></div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_tck_to" type="date"
-            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} ></div>
+            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} class='form-control' ></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_tck_country" class='form-control'>
                                                                                     <option value="none">{% trans %} all {% endtrans %}</option>
@@ -40,8 +40,10 @@
 
     <legend>{% trans %} workshops {% endtrans %}</legend>
 
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_wks_from" type="date"></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_wks_to" type="date"></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_wks_from" type="date"
+            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} class='form-control'></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_wks_to" type="date"
+            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} class='form-control'></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_wks_country" class='form-control'>
                                                                                         <option value="none">{% trans %} all {% endtrans %}</option>
@@ -121,7 +123,6 @@
                         <th>{% trans %} partner  {% endtrans %}</th>
                         <th>{% trans %} email    {% endtrans %}</th>
                         <th>{% trans %} tel      {% endtrans %}</th>
-                        <th>{% trans %} active   {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,7 +133,6 @@
                         <td>{{ workshop.partner}}</td>
                         <td>{{ workshop.email1 }}</td>
                         <td>{{ workshop.phoneNumber1 }}</td>
-                        <td>{{ workshop.active }}</td>
                     </tr>
                         {% endfor %}
                 </tbody>

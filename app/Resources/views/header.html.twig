@@ -21,9 +21,29 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a class="btn pull-left" href="{{ path('user_index'  ) }}">   {% trans %}Home       {% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %}Profile    {% endtrans %}</a></li>
-                                    <li><a class="btn pull-left" href="{{ path('listTicket'  ) }}">   {% trans %}Tickets    {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('user_index'  ) }}">   {% trans %} home         {% endtrans %}</a></li>
+                                    <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
+
+                                    {# {% if is_granted('ROLE_ADMIN') %}
+                                        <li><a class="btn pull-left"  href="{{ path("listStatistics"              ) }}">{% trans %} menu.list_statistics      {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders          {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("popup_list"                  ) }}">{% trans %} menu.list_popups          {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("partner_list"                ) }}">{% trans %} menu.list_partners        {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("shop_list"                   ) }}">{% trans %} menu.list_shops           {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("workshop_list"               ) }}">{% trans %} menu.list_workshops       {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("user_list"                   ) }}">{% trans %} menu.list_users           {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("ticketWorkshopList"          ) }}">{% trans %} menu.asign_user_to_ticket {% endtrans %}</a></li>
+                                    {% elseif is_granted('ROLE_AD') %}
+                                        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile            {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders        {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("shopOrder_listShops"         ) }}">{% trans %} menu.list_shops         {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("workshopOrder_listWorkshops" ) }}">{% trans %} menu.list_workshops     {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("shopOrder_new"               ) }}">{% trans %} menu.new_shop_order     {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path("workshopOrder_new"           ) }}">{% trans %} menu.new_workshop_order {% endtrans %}</a></li>
+                                    {% else %}
+                                        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile      {% endtrans %}</a></li>
+                                    {% endif %} #}
+                                    <li><a class="btn pull-left"  href="{{ path("listTicket"                  ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                     <li><a href="#"></a></li>
                                     <li class="divider"></li>
                                     <li><a class="btn pull-left" href="{{ path('user_logout') }}">  {% trans %}Logout       {% endtrans %}</a></li>

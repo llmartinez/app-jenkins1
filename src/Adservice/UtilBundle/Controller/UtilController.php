@@ -58,7 +58,6 @@ class UtilController extends Controller
      */
     static public function getSlug($cadena, $separador = '-')
     {
-      /*
         // Remove all non url friendly characters with the unaccent function
         $valor = self::sinAcentos($cadena);
 
@@ -72,19 +71,12 @@ class UtilController extends Controller
         $valor = preg_replace('/\W/', ' ', $valor);
 
         // More stripping. Replace spaces with dashes
-        $valor = strtolower(preg_replace('/[^A-Z^a-z^0-9^\/]+/', '-',
-                           preg_replace('/([a-z\d])([A-Z])/', '\1_\2',
-                           preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2',
-                           preg_replace('/::/', '/', $valor)))));
-
-        return trim($valor, $separador);
-*/
-        // Código copiado de http://cubiq.org/the-perfect-php-clean-url-generator
-        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $cadena);
-        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug);
-        $slug = strtolower(trim($slug, $separador));
-        $slug = preg_replace("/[\/_|+ -]+/", $separador, $slug);
-        return $slug;
+        $valor = strtolower(preg_replace('/[^A-Z^a-z^0-9^\/]+/', $separador,
+                            preg_replace('/([a-z\d])([A-Z])/', '\1_\2',
+                            preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2',
+                            preg_replace('/::/', '/', $valor)))));
+        //return trim($valor, $separador);
+        return $valor;
     }
 
     /**
@@ -93,7 +85,7 @@ class UtilController extends Controller
      * @param  string        $name
      * @return string
      */
-    static public function getUsernameUnused($em, $name)
+    public static function getUsernameUnused($em, $name)
     {
         $slug = UtilController::getSlug($name);
         $unused = 1;
@@ -113,7 +105,7 @@ class UtilController extends Controller
      * @param  entityManager $em
      * @return integer
      */
-    static public function getCodePartnerUnused($em)
+    public static function getCodePartnerUnused($em)
     {
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
@@ -133,7 +125,7 @@ class UtilController extends Controller
      * @param  Partner       $partner
      * @return integer
      */
-    static public function getCodeWorkshopUnused($em, $partner)
+    public static function getCodeWorkshopUnused($em, $partner)
     {
 
         $code   = 1; //Si no hay codigo por parametro se asigna 1
@@ -156,7 +148,7 @@ class UtilController extends Controller
      * @param  string $array
      * @return string
      */
-    static public function normalizeString($string_slug, $array)
+    public static function normalizeString($string_slug, $array)
     {
         $return = '';
         foreach ($array as $var) {
@@ -169,6 +161,34 @@ class UtilController extends Controller
         if( $return == '' ) $return = $string_slug;
 
         return $return;
+    }
+
+    /**
+     * Define los campos de contacto de una entidad a partir de los campos de entidad de otra.
+     * También elimina espacios en blanco para evitar errores en numeros
+     * @param  [type] $entity [description]
+     * @param  [type] $data   [description]
+     * @return [type]         [description]
+     */
+    public static function settersContact($entity, $data, $actual_region = '', $actual_city = '')
+    {
+        $entity->setPhoneNumber1  (UtilController::getSlug($data->getPhoneNumber1() , ''));
+        $entity->setPhoneNumber2  (UtilController::getSlug($data->getPhoneNumber2() , ''));
+        $entity->setMovileNumber1 (UtilController::getSlug($data->getMovileNumber1(), ''));
+        $entity->setMovileNumber2 (UtilController::getSlug($data->getMovileNumber2(), ''));
+        $entity->setFax           (UtilController::getSlug($data->getFax()          , ''));
+        $entity->setCountry       ($data->getCountry());
+        $entity->setAddress       ($data->getAddress());
+        $entity->setPostalCode    ($data->getPostalCode());
+        $entity->setEmail1        ($data->getEmail1());
+        $entity->setEmail2        ($data->getEmail2());
+
+        if($data->getRegion() == '[object Object]') $entity->setRegion($actual_region    );
+        else                                        $entity->setRegion($data->getRegion());
+        if($data->getCity()   == '[object Object]') $entity->setCity  ($actual_city      );
+        else                                        $entity->setCity  ($data->getCity()  );
+
+        return $entity;
     }
 
     public static function sinAcentos($string)

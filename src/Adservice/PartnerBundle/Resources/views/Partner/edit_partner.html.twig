@@ -26,12 +26,13 @@
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
+        {% set entity = partner %}
         {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
         {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+            <button id="btn_edit" type="submit">{% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
 
@@ -43,9 +44,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
-
-    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_region_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_city_jquery.html.twig' %}
-
 {% endblock %}

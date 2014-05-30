@@ -66,28 +66,18 @@
                 <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
             </div>
             <div class="modal-body">
-                <label>{% trans %} password {% endtrans %}</label>
-                <input id="new_password1" name="new_password1" type="password" placeholder="new password">
-                <label>{% trans %} repeat_password {% endtrans %}</label>
-                <input id="new_password2" name="new_password2" type="password" placeholder="new password">
+                {# <label>{% trans %} old_password {% endtrans %}</label>
+                <input id="old_password"  name="old_password"  type="password" placeholder="old password"><br> #}
+                <div><label>{% trans %} password {% endtrans %}</label>
+                <input id="new_password1" name="new_password1" type="password" placeholder="new password"></div>
+                <div><label>{% trans %} repeat_password {% endtrans %}</label>
+                <input id="new_password2" name="new_password2" type="password" placeholder="new password"></div>
             </div>
             <div class="modal-footer">
                 <button id="confirm_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
-                <script>
-                    $('#confirm_password').click(function(){
-                        if($('#new_password1').val() == $('#new_password2').val())
-                        {
-                            if($('#new_password1').val().length > 8){
-                                var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER' }) }}";
-                                url = url.replace('PLACEHOLDER', $('#new_password1').val());
-                                window.open(url,'_self');
-                            }
-                            else alert("{% trans %} error.length_password {% endtrans %}")
-                        }
-                        else alert("{% trans %} error.same_password {% endtrans %}");
-                    });
-                </script>
+
+                {% include 'UtilBundle:jquery_twig:control_password_jquery.html.twig' %}
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

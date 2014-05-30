@@ -9,9 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatisticController extends Controller {
 
-    /**
-     * Listado de estadisticas...muy chorras...
-     */
     public function listAction($type=null, $page=1, $date_from='none', $date_to='none', $partner='none', $status='none', $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -172,7 +169,6 @@ class StatisticController extends Controller {
 
         foreach ($results as $row) {
             $excel.=$row->getId().';';
-
             $created = $row->getCreatedAt();
             $excel.=$created->format("d/m/Y").';';
             $excel.=$row->getCar().';';
@@ -182,6 +178,7 @@ class StatisticController extends Controller {
             $excel.=$row->getSolution().';';
             $excel.="\n";
         }
+        $excel = str_replace(',', '.', $excel);
         return($excel);
     }
     public function createExcelWorkshop($results){

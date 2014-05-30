@@ -81,9 +81,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
-        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
-        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $partner));
+        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+
         if(count($shops) > 0) {
             foreach ($shops as $shop) {
                 $json[] = $shop->to_json();

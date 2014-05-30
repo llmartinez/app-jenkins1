@@ -21,14 +21,23 @@ class ImportController extends Controller
 {
     public function importAction($bbdd=null)
     {
-		/**/echo date("H:i:s");
-		$em = $this->getDoctrine()->getEntityManager('default');
-		$em_old = $this->getDoctrine()->getEntityManager('em_old');
-		$sa = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
+    	$session = $this->get('session');
+		$em 	 = $this->getDoctrine()->getEntityManager('default');
+		$em_old  = $this->getDoctrine()->getEntityManager('em_old');
+		$sa 	 = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
 
-    	if( $bbdd == 'adservice' )
+//  ____   _    ____ _____ _   _ _____ ____
+// |  _ \ / \  |  _ \_   _| \ | | ____|  _ \
+// | |_) / _ \ | |_) || | |  \| |  _| | |_) |
+// |  __/ ___ \|  _ < | | | |\  | |___|  _ <
+// |_| /_/   \_\_| \_\|_| |_| \_|_____|_| \_\
+
+    	if( $bbdd == 'partner' )
     	{
-    		$old_Socios      = $em_old->getRepository('ImportBundle:old_Socio' 		)->findAll();	// PARTNER  - AD 			 	//
+    		$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// PARTNERS //
+    		// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
+
+			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
 
 			foreach ($old_Socios as $old_Socio)
 			{
@@ -36,117 +45,278 @@ class ImportController extends Controller
 				$newPartner->setName($old_Socio->getNombre());
 				$newPartner->setCodePartner($old_Socio->getId());
 				$newPartner->setActive('1');
-				$newPartner = $this->setContactFields($em, $old_Socio, $newPartner);
-				$partners[] = $newPartner;
+				$newPartner = $this->setContactFields($em, $old_Socio, $newPartner, $locations);
+				UtilController::saveEntity($em, $newPartner, $sa,false);
+			}
+			$em->flush();
+			$session->set('msg' ,	'Socios importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
+			$session->set('next',  	'shop-default');
 
-				/* SHOP 'SIN TIENDA' PARA CADA PARTNER*/
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
+    	}
+//  ____  _   _  ___  ____       ____  _____ _____ _   _   _ _   _____
+// / ___|| | | |/ _ \|  _ \     |  _ \| ____|  ___/ \ | | | | | |_   _|
+// \___ \| |_| | | | | |_) |____| | | |  _| | |_ / _ \| | | | |   | |
+//  ___) |  _  | |_| |  __/_____| |_| | |___|  _/ ___ \ |_| | |___| |
+// |____/|_| |_|\___/|_|        |____/|_____|_|/_/   \_\___/|_____|_|
+
+		elseif( $bbdd == 'shop-default' )
+		{
+			$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// PARTNERS //
+			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
+
+			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+
+			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;		}
+
+			foreach ($old_Socios as $old_Socio)
+			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
 				$newShop->setName('...');
-				$newShop->setPartner($newPartner);
+				$newShop->setPartner($partners[$old_Socio->getId()]);
 				$newShop->setActive('1');
-				$newShop = $this->setContactFields($em, $old_Socio, $newShop);
-				$shops[] = $newShop;
+				$newShop = $this->setContactFields($em, $old_Socio, $newShop, $locations);
+				UtilController::saveEntity($em, $newShop, $sa,false);
+			}
+			$em->flush();
+			$session->set('msg' ,	'Tiendas por defecto importadas correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
+			$session->set('next',  	'shop');
 
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
+    	}
+//  ____  _   _  ___  ____
+// / ___|| | | |/ _ \|  _ \
+// \___ \| |_| | | | | |_) |
+//  ___) |  _  | |_| |  __/
+// |____/|_| |_|\___/|_|
+
+    	elseif( $bbdd == 'shop' )
+    	{
+			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// SHOPS //
+			// // $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->getEntityNotEqual($em_old, 'ImportBundle', 'old_Socio', 'asociado', 0)	// SHOPS //
+
+			// $locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			// $all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+
+			// foreach ($old_Socios as $old_Socio)
+			// {
+			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
+			// 	$newShop->setName($old_Socio->getNombre());
+			// 	$newShop->setPartner($partners[$old_Socio->getAsociado()]);
+			// 	$newShop->setActive('1');
+			// 	$newShop = $this->setContactFields($em, $old_Socio, $newShop, $locations);
+			// 	UtilController::saveEntity($em, $newShop, $sa,false);
+			// }
+			// $em->flush();
+			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
+			$session->set('next',  	'ad');
+
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
+    	}
+//  _   _ ____  _____ ____       _    ____
+// | | | / ___|| ____|  _ \     / \  |  _ \
+// | | | \___ \|  _| | |_) |   / _ \ | | | |
+// | |_| |___) | |___|  _ <   / ___ \| |_| |
+//  \___/|____/|_____|_| \_\ /_/   \_\____/
+
+    	elseif( $bbdd == 'ad' )
+    	{
+   			$old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findAll();	// SHOPS //
+			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
+
+			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
+			$all_partners  = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+			$role          = $em->getRepository('UserBundle:Role'      )->findOneByName('ROLE_AD');	//ROLE
+
+			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
+
+			foreach ($old_Socios as $old_Socio)
+			{
 				$newAD = UtilController::newEntity(new User(), $sa);
-				$newAD = $this->setUserFields($em, $newAD, 'ROLE_AD', $old_Socio->getNombre());
-				$newAD = $this->setContactFields($em, $old_Socio, $newAD);
+				$newAD = $this->setUserFields   ($em, $newAD, $role, $old_Socio->getNombre());
+				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
 				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
 				$newAD->setActive('1');
-				$ads[] = $newAD;
-			}
-			foreach ($partners as $partner) {
-				UtilController::saveEntity($em, $partner, $sa,false);
+				$newAD->setPartner($partners[$old_Socio->getId()]);
+				UtilController::saveEntity($em, $newAD, $sa,false);
 			}
 			$em->flush();
+			$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando talleres (entidad Workshop)...');
+			$session->set('next',  	'workshop');
 
-			foreach ($shops as $shop) {
-				UtilController::saveEntity($em, $shop, $sa,false);
-			}
-			$em->flush();
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+    	}
+// __        _____  ____  _  ______  _   _  ___  ____
+// \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
+//  \ \ /\ / / | | | |_) | ' /\___ \| |_| | | | | |_) |
+//   \ V  V /| |_| |  _ <| . \ ___) |  _  | |_| |  __/
+//    \_/\_/  \___/|_| \_\_|\_\____/|_| |_|\___/|_|
 
-			foreach ($ads as $ad) {
-				UtilController::saveEntity($em, $ad, $sa,false);
-			}
-			$em->flush();
+    	elseif( $bbdd == 'workshop' )
+    	{
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// WORKSHOP	//
 
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// TYPOLOGY - WORKSHOP - USER 	//
+			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+			$typology     = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			//find($old_Taller->getTipologia());
+
+			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
 
 			foreach ($old_Talleres as $old_Taller)
 			{
 				$newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-				$newWorkshop->setName($old_Taller->getNombre());
-				$newWorkshop->setCodeWorkshop($old_Taller->getIdGrupo());
-				$newWorkshop->setPartner($em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => $old_Taller->getIdSocio())));
-				$newWorkshop->setTypology($em->getRepository('WorkshopBundle:Typology')->find('1')); //find($old_Taller->getTipologia());
-				$newWorkshop->setAddress($old_Taller->getDireccion());
-				$newWorkshop->setActive($old_Taller->getActive());
-				$newWorkshop->setContactName($old_Taller->getContacto());
-				$newWorkshop->setContactSurname('sin-especificar');
-				$newWorkshop->setObservationAdmin($old_Taller->getObservaciones());
-				$newWorkshop->setObservationAssessor($old_Taller->getObservaciones());
-				$newWorkshop = $this->setContactFields($em, $old_Taller, $newWorkshop);
+				$newWorkshop->setName 					($old_Taller->getNombre());
+				$newWorkshop->setCodeWorkshop 			($old_Taller->getId());
+				$newWorkshop->setAddress 				($old_Taller->getDireccion());
+				$newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
+				$newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
+				$newWorkshop->setActive	 				($old_Taller->getActive());
+				$newWorkshop->setContactName 			($old_Taller->getContacto());
+				$newWorkshop->setContactSurname 		('sin-especificar');
+				$newWorkshop->setTypology 				($typology); //$partners[$old_Socio->getId()]);
+				$newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
+				//COMPROVACION SI EXISTE EL SOCIO
+				if(isset($partners[$old_Taller->getIdGrupo()])) $newWorkshop->setPartner ($partners[$old_Taller->getIdGrupo()]);
+				else 											$newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
 
+				UtilController::saveEntity($em, $newWorkshop, $sa, false);
+				$em->flush();
+			}
+			$session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
+			$session->set('next',  	'user');
+
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+    	}
+//  _   _ ____  _____ ____
+// | | | / ___|| ____|  _ \
+// | | | \___ \|  _| | |_) |
+// | |_| |___) | |___|  _ <
+//  \___/|____/|_____|_| \_\
+
+    	elseif( $bbdd == 'user' )
+    	{
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();		// USER 	//
+
+			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
+			$all_languages = $em->getRepository('UtilBundle:Language'    )->findAll();					//MAPPING LANG
+			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
+
+			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
+
+			foreach ($old_Talleres as $old_Taller)
+			{
 				$newUser = UtilController::newEntity(new User(), $sa);
-				$newUser = $this->setUserFields($em, $newUser, 'ROLE_USER', $old_Taller->getContacto());
-				$newUser = $this->setContactFields($em, $old_Taller, $newUser);
-				$newUser->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newUser->getCountry()->getLang()));
-				$newUser->setActive($old_Taller->getActive());
-				$workshops[] = array('workshop' => $newWorkshop, 'user' => $newUser);
-			}
-			foreach ($workshops as $workshop) {
-				UtilController::saveEntity($em, $workshop['workshop'], $sa, false);
-				$workshop['user']->setWorkshop($workshop['workshop']);
-				UtilController::saveEntity($em, $workshop['user'], $sa, false);
-			}
-			$em->flush();
+				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getContacto());
+				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
+				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
+				$newUser->setActive   ($old_Taller->getActive());
+				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
 
-			$old_Asesores    = $em_old->getRepository('ImportBundle:old_Asesor'		)->findAll();	// ASSESSOR 					//
+				UtilController::saveEntity($em, $newUser, $sa, false);
+ 			}
+			$em->flush();
+			$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
+			$session->set('next',  	'assessor');
+
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+    	}
+//     _    ____ ____  _____ ____ ____   ___  ____
+//    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
+//   / _ \ \___ \___ \|  _| \___ \___ \| | | | |_) |
+//  / ___ \ ___) |__) | |___ ___) |__) | |_| |  _ <
+// /_/   \_\____/____/|_____|____/____/ \___/|_| \_\
+
+    	elseif( $bbdd == 'assessor' )
+    	{
+			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
+
+			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
+			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
+
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
 
 			foreach ($old_Asesores as $old_Asesor)
 			{
 				$newAssessor = UtilController::newEntity(new User(), $sa);
-				$newAssessor = $this->setUserFields($em, $newAssessor, 'ROLE_ASSESSOR', $old_Asesor->getNombre());
-				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor);
-				$newAssessor->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAssessor->getCountry()->getLang()));
+				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
+				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
+				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
 				$newAssessor->setActive($old_Asesor->getActive());
-				$assessors[] = $newAssessor;
-			}
-			foreach ($assessors as $assessor) {
-				UtilController::saveEntity($em, $assessor, $sa,false);
-			}
 
-    		$old_Gropers     = $em_old->getRepository('ImportBundle:old_Groper'    	)->findAll();	// SYSTEM						//
-
-			foreach ($old_Gropers as $old_Groper)
-			{
-				$newSystem = new System();
-				$newSystem->setName($old_Groper->getNombre());
-				$em->persist($newSystem);
-				$em->flush();
+				UtilController::saveEntity($em, $newAssessor, $sa, false);
 			}
+			$em->flush();
+			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando historico de coches e incidencias(entidad lock_car y lock_incidence)...');
 
-			$old_Operaciones = $em_old->getRepository('ImportBundle:old_Operacion' 	)->findAll();	// SUBSYSTEM 			 		//
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
 
-			foreach ($old_Operaciones as $old_Operacion)
-			{
-				$newSubSystem = new Subsystem();
-				$newSubSystem->setName($old_Operacion->getNombre());
-				$newSubSystem->setSystem($em->getRepository('TicketBundle:System')->find($old_Operacion->getIdGrupo()));
-				$em->persist($newSubSystem);
-				$em->flush();
-			}
-        	/**/echo '<br> IMPORTADA BBDD!! <br>';
-/**/echo date("H:i:s");
-//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars' ));
-        	return $this->render('ImportBundle:Import:import.html.twig');
+/***************************************************************************************************************/
     	}
+    	else{
 
-        return $this->render('ImportBundle:Import:import.html.twig');
+			$session->set('info', '<h3>Deseas importar la BBDD antigua de AD-service??</h3>
+			<p>Se importaran Socios, Talleres, Usuarios y Asesores.</p>
+			<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>');
+
+        	return $this->render('ImportBundle:Import:import.html.twig');
+        }
     }
+//  _     ___   ____ _  __   ____    _    ____  ____
+// | |   / _ \ / ___| |/ /  / ___|  / \  |  _ \/ ___|
+// | |  | | | | |   | ' /  | |     / _ \ | |_) \___ \
+// | |__| |_| | |___| . \  | |___ / ___ \|  _ < ___) |
+// |_____\___/ \____|_|\_\  \____/_/   \_\_| \_\____/
 
     public function importLockCarsAction($bbdd=null, $num=0)
     {
-		/**/echo date("H:i:s");
 		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
@@ -175,26 +345,35 @@ class ImportController extends Controller
 				$newCar->setVin       ($old_Coche->getbastidor());
 				$newCar->setMotor	  ($old_Coche->getMotor());
 				$cars[] = $newCar;
+				unset($newCar);
 			}
 			foreach ($cars as $car) {
 				$em_lock->persist($car);
 			}
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
 			$em_lock->flush();
 
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
-        	//return $this->render('ImportBundle:Import:import.html.twig');
+//return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences'));
-        	/**/echo '<br> IMPORTADA BBDD CARS!! <br>';
-			/**/echo date("H:i:s");
-        	return $this->render('ImportBundle:Import:import.html.twig');
+/***************************************************************************************************************/
+		$session->set('bbdd', array($bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => 0));
 		}
     }
+//  ___ _   _  ____ ___ ____  _____ _   _  ____ _____ ____
+// |_ _| \ | |/ ___|_ _|  _ \| ____| \ | |/ ___| ____/ ___|
+//  | ||  \| | |    | || | | |  _| |  \| | |   |  _| \___ \
+//  | || |\  | |___ | || |_| | |___| |\  | |___| |___ ___) |
+// |___|_| \_|\____|___|____/|_____|_| \_|\____|_____|____/
 
  	public function importLockIncidencesAction($bbdd=null, $num=0)
     {
-		/**/echo date("d/m/Y H:i:s");
-
 		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
@@ -209,15 +388,31 @@ class ImportController extends Controller
 
 		if($count > $num){
 
+            $all_asesores = $em_old->createQuery('SELECT oa.id, oa.nombre FROM ImportBundle:old_Asesor oa'    )->getResult();
+            $all_socios   = $em_old->createQuery('SELECT os.id, os.nombre FROM ImportBundle:old_Socio os'     )->getResult();
+            $all_talleres = $em_old->createQuery('SELECT ot.id, ot.nombre FROM ImportBundle:old_Taller ot'    )->getResult();
+            $all_opers    = $em_old->createQuery('SELECT oo.id, oo.nombre FROM ImportBundle:old_Operacion oo' )->getResult();
+
+			$em_old->clear(); $em_old->close();
+
+			foreach ($all_asesores as $asesor ) { $asesores[$asesor['id']] = $asesor['nombre']; } 	//MAPPING OLD_ASESOR
+			foreach ($all_socios   as $socio  ) { $socios  [$socio ['id']] = $socio ['nombre']; } 	//MAPPING OLD_SOCIO
+			foreach ($all_talleres as $taller ) { $talleres[$taller['id']] = $taller['nombre']; } 	//MAPPING OLD_TALLER
+			foreach ($all_opers    as $oper   ) { $opers   [$oper  ['id']] = $oper  ['nombre']; } 	//MAPPING OLD_OPERACIONES
+			// foreach ($all_coches   as $coche  ) { $coches  [$coche ->getOldId()] = $coche; }
+
+            unset($all_asesores); unset($all_socios); unset($all_talleres); unset($all_opers);
+
 			foreach ($old_Incidences as $old_Incidence)
 			{
 				$newIncidence  = new lock_incidence();
-
-				$newIncidence->setAsesor     ($em_old->getRepository('ImportBundle:old_Asesor'   )->find($old_Incidence->getAsesor())->getNombre());
-				$newIncidence->setSocio      ($em_old->getRepository('ImportBundle:old_Socio'    )->find($old_Incidence->getSocio() )->getNombre());
-				$newIncidence->setTaller     ($em_old->getRepository('ImportBundle:old_Taller'   )->find($old_Incidence->getTaller())->getNombre());
-				$newIncidence->setOper       ($em_old->getRepository('ImportBundle:old_Operacion')->find($old_Incidence->getOper()  )->getNombre());
 				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lock_car')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
+
+				$newIncidence->setAsesor     ($asesores [$old_Incidence->getAsesor()]);
+				$newIncidence->setSocio      ($socios   [$old_Incidence->getSocio() ]);
+				$newIncidence->setTaller     ($talleres [$old_Incidence->getTaller()]);
+				$newIncidence->setOper       ($opers    [$old_Incidence->getOper()  ]);
+				// $newIncidence->setCoche      ($coches   [$old_Incidence->getCoche() ]);
 
 				$newIncidence->setOldId      ($old_Incidence->getId());
 				$newIncidence->setDescription($old_Incidence->getDescripcion());
@@ -226,18 +421,33 @@ class ImportController extends Controller
 				$newIncidence->setImportance ($old_Incidence->getImportancia());
 				$newIncidence->setDate   	 ($old_Incidence->getFecha());
 				$newIncidence->setActive	 ($old_Incidence->getActive());
-				$incidences[] = $newIncidence;
+				$em_lock->persist($newIncidence);
+				unset($newIncidence);
 			}
-			foreach ($incidences as $incidence) {
-				$em_lock->persist($incidence);
-			}
-			$em_lock->flush();
+			// foreach ($incidences as $incidence) {
+			// 	$em_lock->persist($incidence);
+			// }
 
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_incidences', 'num' => $num + $max_rows ));
-        	//return $this->render('ImportBundle:Import:import.html.twig');
+			unset($old_Incidences);	unset($incidences   );	unset($incidence);
+			unset($asesores 	);	unset($asesor 	);
+			unset($socios 		);	unset($socio 	);
+			unset($talleres 	);	unset($taller 	);
+			unset($opers 		);	unset($oper 	);
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+			$em_lock->flush();
+			$em_lock->clear();
+			$em_lock->close();
+
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => $num + $max_rows ));
+//return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-        	/**/echo 'IMPORTADA INCIDENCES!! <br>';
-			/**/echo date("d/m/Y H:i:s");
+/***************************************************************************************************************/
+		$session->set('bbdd', array($bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
 		}
 	}
@@ -264,12 +474,12 @@ class ImportController extends Controller
 
         $entity->setName          ($name);
         $entity->setSurname       ($surname);
-        $entity->addRole          ($em->getRepository('UserBundle:Role')->findOneByName($role));
+        $entity->addRole          ($role);
 
 		return $entity;
     }
 
-    private function setContactFields($em, $old_entity, $entity)
+    private function setContactFields($em, $old_entity, $entity, $locations)
     {
         $entity->setPhoneNumber1  ($old_entity->getTfno());
         $entity->setPhoneNumber2  ($old_entity->getTfno2());
@@ -279,19 +489,18 @@ class ImportController extends Controller
         $entity->setEmail1        ($old_entity->getEmail());
         $entity->setEmail2        ($old_entity->getEmail2());
 
-        $cities    = $em->getRepository('UtilBundle:City'  )->findAll();
-        $regions   = $em->getRepository('UtilBundle:Region')->findAll();
-
         $slug_city   = UtilController::getSlug($old_entity->getPoblacion());
         $slug_region = UtilController::getSlug($old_entity->getProvincia());
 
-        $entity->setCity  (UtilController::normalizeString($slug_city  , $cities ));
-        $entity->setRegion(UtilController::normalizeString($slug_region, $regions));
+        $entity->setCity  (UtilController::normalizeString($slug_city  , $locations['cities' ]));
+        $entity->setRegion(UtilController::normalizeString($slug_region, $locations['regions']));
 
-        $region = $em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getRegion());
-
-        if( $region != null ) $entity->setCountry($em->getRepository('UtilBundle:Country')->findOneByCountry($region->getCountry()));
-        else $entity->setCountry($em->getRepository('UtilBundle:Country')->findOneByCountry('Spain'));
+        $region  = $em->getRepository('UtilBundle:Region')->findOneByRegion($entity->getRegion());
+        if( $region != null ) {
+        	$country = $region->getCountry()->getCountry();
+        	$entity->setCountry($locations['countries'][$country]);
+        }
+        else $entity->setCountry($locations['countries']['Spain']);
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
@@ -303,5 +512,32 @@ class ImportController extends Controller
         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
 		return $entity;
+	}
+
+    private function getEntityNotEqual($em, $bundle, $entity, $field, $value)
+    {
+    	$sql = "SELECT e FROM ".$bundle.":".$entity." e WHERE e.".$field." != ".$value;
+
+        $query = $em->createQuery($sql);
+        $result = $query->getResult();
+
+		return $result;
+	}
+    private function getLocations($em)
+    {
+		//MAPPING LOCATIONS
+		$all_cities    = $em->getRepository('UtilBundle:City'   )->findAll();
+		$all_regions   = $em->getRepository('UtilBundle:Region' )->findAll();
+		$all_countries = $em->getRepository('UtilBundle:Country')->findAll();
+
+		foreach ($all_cities as $city      ) { $cities[]    = $city->getCity();       }
+		foreach ($all_regions as $region   ) { $regions[]   = $region->getRegion();   }
+		foreach ($all_countries as $country) { $countries[$country->getCountry()] = $country; }
+
+		$locations = array(	'countries' => $countries,
+							'regions'   => $regions,
+							'cities'    => $cities
+						   );
+		return $locations;
 	}
 }
