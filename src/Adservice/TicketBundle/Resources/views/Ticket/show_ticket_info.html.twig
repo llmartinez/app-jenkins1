@@ -1,5 +1,5 @@
 
-    <legend>Info
+    <legend>{% trans %} info {% endtrans %}
         {% if ticket.blockedBy == app.security.getToken().getUser() or app.security.getToken().getUser().getWorkshop() == ticket.workshop %}
             {# editar Ticket #}
             <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <span class="glyphicon glyphicon-pencil"></span></a></a>

@@ -100,7 +100,8 @@ class City {
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'region'  => $this->getRegion(),
-                      'city'=> $this->getCity());
+                      'city'    => $this->getCity()
+                     );
         return $json;
     }
 }

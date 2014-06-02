@@ -153,10 +153,12 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         $country->setCountry('France');
         $country->setLang('french');
 
-        //PARSEA EL EXCEL
-        for($i=1;$i<=count($data->sheets[0]['cells']);$i++){
+        $rows = $data->sheets[0]['cells'];
 
-            $row = $data->sheets[0]['cells'][$i];
+        //PARSEA EL EXCEL
+        for($i=1;$i<=count($rows);$i++){
+
+            $row = $rows[$i];
 
             $province = utf8_encode($row[2]);
 
@@ -178,15 +180,15 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
             }
 
             //Contendrá un array con las poblaciones si hay más de una, sino un array de un elemento
-            $location = utf8_encode($row[3]);
+            $location = utf8_encode($row[5]);
 
                 $city = new City();
                 $city->setCity($location);
                 $city->setRegion($region);
                 $manager->persist($city);
         }
+
         //Persisto la última provincia
-        $manager->persist($region);
         $manager->persist($country);
 
         $this->addReference($country->getCountry(), $country);
