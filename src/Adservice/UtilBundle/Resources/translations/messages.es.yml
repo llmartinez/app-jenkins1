@@ -185,6 +185,7 @@ shop.delete.confirm:	 "Estas seguro que quieres eliminar esta tienda?"
 
 #WORKSHOP
 workshops:				 "Talleres"
+code_workshop:			 "Codigo de Taller"
 typology:				 "Tipo"
 cif:					 "Cif"
 test:					 "En pruebas"

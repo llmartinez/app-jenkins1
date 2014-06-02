@@ -185,6 +185,7 @@ shop.delete.confirm:	 "Are you sure you want to delete this Shop?"
 
 #WORKSHOP
 workshops:				 "Workshops"
+code_workshop:			 "Workshop Code"
 typology:				 "Typology"
 cif:					 "Cif"
 test:					 "Test"

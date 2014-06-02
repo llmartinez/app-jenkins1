@@ -49,18 +49,36 @@
                                                     <table class="table table-hover">
                                                     {% if shopOrder.wantedaction == 'modify' or shopOrder.action == 're_modify' %}
                                                         <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
-                                                        <tr><td>{% trans %} name    {% endtrans %}</td><td>{{ orderBefore.name }}         </td><td> {{ shopOrder.name         }} </td></tr>
-                                                        <tr><td>{% trans %} partner {% endtrans %}</td><td>{{ orderBefore.partner }}      </td><td> {{ shopOrder.partner      }} </td></tr>
-                                                        <tr><td>{% trans %} tel     {% endtrans %}</td><td>{{ orderBefore.phoneNumber1 }} </td><td> {{ shopOrder.phoneNumber1 }} </td></tr>
-                                                        <tr><td>{% trans %} region  {% endtrans %}</td><td>{{ orderBefore.region }}       </td><td> {{ shopOrder.region       }} </td></tr>
-                                                        <tr><td>{% trans %} address {% endtrans %}</td><td>{{ orderBefore.address  }}     </td><td> {{ shopOrder.address      }} </td></tr>
+                                                        <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ orderBefore.name          }}</td><td>{{ shopOrder.name          }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ orderBefore.phoneNumber1  }}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ orderBefore.phoneNumber2  }}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ orderBefore.movileNumber1 }}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ orderBefore.movileNumber2 }}</td><td>{{ shopOrder.movileNumber2 }}</td></tr>
+                                                        <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ orderBefore.fax           }}</td><td>{{ shopOrder.fax           }}</td></tr>
+                                                        <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ orderBefore.email1        }}</td><td>{{ shopOrder.email1        }}</td></tr>
+                                                        <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ orderBefore.email2        }}</td><td>{{ shopOrder.email2        }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country       }}</td><td>{{ shopOrder.country       }}</td></tr>
+                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ orderBefore.region        }}</td><td>{{ shopOrder.region        }}</td></tr>
+                                                        <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ orderBefore.city          }}</td><td>{{ shopOrder.city          }}</td></tr>
+                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ orderBefore.address       }}</td><td>{{ shopOrder.address       }}</td></tr>
+                                                        <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ orderBefore.postalCode    }}</td><td>{{ shopOrder.postalCode    }}</td></tr>
                                                     {% else %}
-                                                        <tr><th>                                  </th><th>{% trans %}values{% endtrans %}</th></tr>
-                                                        <tr><td>{% trans %} name    {% endtrans %}</td><td> {{ shopOrder.name         }} </td></tr>
-                                                        <tr><td>{% trans %} partner {% endtrans %}</td><td> {{ shopOrder.partner      }} </td></tr>
-                                                        <tr><td>{% trans %} tel     {% endtrans %}</td><td> {{ shopOrder.phoneNumber1 }} </td></tr>
-                                                        <tr><td>{% trans %} region  {% endtrans %}</td><td> {{ shopOrder.region       }} </td></tr>
-                                                        <tr><td>{% trans %} address {% endtrans %}</td><td> {{ shopOrder.address      }} </td></tr>
+                                                    <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ shopOrder.name          }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ shopOrder.movileNumber2 }}</td></tr>
+                                                        <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ shopOrder.fax           }}</td></tr>
+                                                        <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ shopOrder.email1        }}</td></tr>
+                                                        <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ shopOrder.email2        }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ shopOrder.country       }}</td></tr>
+                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ shopOrder.region        }}</td></tr>
+                                                        <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ shopOrder.city          }}</td></tr>
+                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ shopOrder.address       }}</td></tr>
+                                                        <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ shopOrder.postalCode    }}</td></tr>
                                                     {% endif %}
                                                     </table>
                                                 </div>
