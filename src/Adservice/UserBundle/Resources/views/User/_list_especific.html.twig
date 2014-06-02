@@ -1,7 +1,8 @@
 {% for user in users %}
     <tr>
         <td>{{ user.id }}</td>
-        <td><a id="list_username">{{ user.username }}</a>
+        <td><a id="list_username">{{ user.username }}</a></td>
+        <td>
             {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} super_admin {% endtrans %}</span> {% endif %}
             {% if role == 'admin'       %} <span class="label label-primary">{% trans %} admin       {% endtrans %}</span> {% endif %}
             {% if role == 'assessor'    %} <span class="label label-success">{% trans %} assessor    {% endtrans %}</span> {% endif %}
