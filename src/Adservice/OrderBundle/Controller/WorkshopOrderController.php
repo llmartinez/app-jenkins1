@@ -44,7 +44,7 @@ class WorkshopOrderController extends Controller {
         }
         else { $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId()); }
 
-        $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 

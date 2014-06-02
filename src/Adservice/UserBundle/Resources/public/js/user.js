@@ -1,3 +1,9 @@
+
+    $(document).ready(function() {
+        $( "input[id*='_password_Contraseña']" ).addClass( "form-control" );
+        $( "input[id*='_password_Repite Contraseña']" ).addClass( "form-control" );
+    });
+
 /**
  * Rellena (populate) el combo de las provincias segun la comunidad autonoma seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax

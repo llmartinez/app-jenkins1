@@ -205,6 +205,7 @@ users_in_workshop:		 "Usuarios del Taller"
 #USER
 user.delete:			 "Borrar Usuario"
 user.delete.confirm:	 "Estas seguro que quieres eliminar este usuario?"
+select_user_type:		 "Selecciona el tipo de usuario"
 
 #CAR
 brand:					 "Marca"

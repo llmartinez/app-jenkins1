@@ -20,7 +20,7 @@ class ShopControllerTest extends WebTestCase {
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo shop introducido por dataProvider
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#shop_list');
+        UtilFunctionTest::linkTo($client, $this, 'div a#shop_list');
         UtilFunctionTest::linkTo($client, $this, 'div legend a:contains("Nueva Tienda")');
 
         //comprueba que vuelva a la pagina del listado de shops
@@ -50,7 +50,7 @@ class ShopControllerTest extends WebTestCase {
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        UtilFunctionTest::linkTo($client, $this, 'table tr td a#shop_list');
+        UtilFunctionTest::linkTo($client, $this, 'div a#shop_list');
 /****************************************************************************************************/
 // $ar=fopen("zdatos.html","a") or die("Problemas en la creacion");
 // fputs($ar,$client->getResponse());

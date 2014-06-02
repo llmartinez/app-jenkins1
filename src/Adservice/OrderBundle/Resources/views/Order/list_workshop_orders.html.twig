@@ -33,8 +33,6 @@
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
-                                {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
-                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
                                     <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></span></a>
                                     {% if workshopOrder.rejectionReason is not null %}
                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
@@ -49,13 +47,23 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <table class="table table-hover">
-                                                    <tr><th>                                  </th><th>{% trans %}before{% endtrans %}</th><th>{% trans %}after{% endtrans %}</th></tr>
-                                                    <tr><td>{% trans %} workshop {% endtrans %}</td><td>{{ orderBefore.name         }}</td><td>{{ workshopOrder.name         }}</td></tr>
-                                                    <tr><td>{% trans %} partner  {% endtrans %}</td><td>{{ orderBefore.partner      }}</td><td>{{ workshopOrder.partner      }}</td></tr>
-                                                    <tr><td>{% trans %} email    {% endtrans %}</td><td>{{ orderBefore.email1       }}</td><td>{{ workshopOrder.email1       }}</td></tr>
-                                                    <tr><td>{% trans %} tel      {% endtrans %}</td><td>{{ orderBefore.phoneNumber1 }}</td><td>{{ workshopOrder.phoneNumber1 }}</td></tr>
-                                                    <tr><td>{% trans %} region   {% endtrans %}</td><td>{{ orderBefore.region       }}</td><td>{{ workshopOrder.region       }}</td></tr>
-                                                    <tr><td>{% trans %} address  {% endtrans %}</td><td>{{ orderBefore.address      }}</td><td>{{ workshopOrder.address      }}</td></tr>
+                                                    {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
+                                                        <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} workshop {% endtrans %}</td><td>{{ orderBefore.name         }}</td><td>{{ workshopOrder.name         }}</td></tr>
+                                                        <tr><td>{% trans %} partner  {% endtrans %}</td><td>{{ orderBefore.partner      }}</td><td>{{ workshopOrder.partner      }}</td></tr>
+                                                        <tr><td>{% trans %} email    {% endtrans %}</td><td>{{ orderBefore.email1       }}</td><td>{{ workshopOrder.email1       }}</td></tr>
+                                                        <tr><td>{% trans %} tel      {% endtrans %}</td><td>{{ orderBefore.phoneNumber1 }}</td><td>{{ workshopOrder.phoneNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} region   {% endtrans %}</td><td>{{ orderBefore.region       }}</td><td>{{ workshopOrder.region       }}</td></tr>
+                                                        <tr><td>{% trans %} address  {% endtrans %}</td><td>{{ orderBefore.address      }}</td><td>{{ workshopOrder.address      }}</td></tr>
+                                                    {% else %}
+                                                    <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} workshop {% endtrans %}</td><td>{{ workshopOrder.name         }}</td></tr>
+                                                        <tr><td>{% trans %} partner  {% endtrans %}</td><td>{{ workshopOrder.partner      }}</td></tr>
+                                                        <tr><td>{% trans %} email    {% endtrans %}</td><td>{{ workshopOrder.email1       }}</td></tr>
+                                                        <tr><td>{% trans %} tel      {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} region   {% endtrans %}</td><td>{{ workshopOrder.region       }}</td></tr>
+                                                        <tr><td>{% trans %} address  {% endtrans %}</td><td>{{ workshopOrder.address      }}</td></tr>
+                                                    {% endif %}
                                                     </table>
                                                 </div>
                                                 <div class="modal-footer">
@@ -65,6 +73,8 @@
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
 
+                                {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
+                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
                                 {% elseif workshopOrder.action == 'activate' %}
                                     <span class="label label-danger">  {% trans %} inactive      {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
