@@ -189,6 +189,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         }
 
         //Persisto la última provincia
+        $manager->persist($region);
         $manager->persist($country);
 
         $this->addReference($country->getCountry(), $country);

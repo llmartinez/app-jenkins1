@@ -26,13 +26,14 @@
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
+        <div class="col-xs-12 col-md-12 form-group">
         {% set entity = partner %}
         {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
         {{ form_rest(form) }}
 
         <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_edit" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_edit" type="submit">{% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
 

@@ -246,6 +246,11 @@ class ImportController extends Controller
 				$newUser->setActive   ($old_Taller->getActive());
 				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
 
+				if( $newUser->getName() == 'sin-especificar' and $newUser->getSurname() == 'sin-especificar') {
+					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
+					$newUser->setName($workshops[$old_Taller->getId()]->getName());
+				}
+
 				UtilController::saveEntity($em, $newUser, $sa, false);
  			}
 			$em->flush();

@@ -23,7 +23,7 @@ class UserControllerTest extends WebTestCase
  // $ar=fopen("datos.html","a") or die("Problemas en la creacion");
  // fputs($ar,$client->getResponse());
  // fclose($ar);
-            UtilFunctionTest::linkTo($client, $this, 'table tr td a#user_list');
+            UtilFunctionTest::linkTo($client, $this, 'div a#user_list');
             UtilFunctionTest::linkTo($client, $this, 'div legend a#user_new');
             UtilFunctionTest::linkTo($client, $this, 'table tr td a#type_'.$type);
 

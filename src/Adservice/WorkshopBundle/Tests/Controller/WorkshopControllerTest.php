@@ -15,7 +15,7 @@ class WorkshopControllerTest extends WebTestCase
        $client->followRedirects(true);
 
        UtilFunctionTest::doLogin($client, 'admin', 'admin');
-       UtilFunctionTest::linkTo($client, $this, 'table tr td a#workshop_list');
+       UtilFunctionTest::linkTo($client, $this, 'div a#workshop_list');
        UtilFunctionTest::linkTo($client, $this, 'div legend a#newWorkshop');
        $crawler = $client->getCrawler();
 

@@ -20,7 +20,7 @@ class PopupControllerTest extends WebTestCase {
         $client->followRedirects(true);
         //Lleva al usuario desde la pantalla de login hasta la de nuevo popup introducido por dataProvider
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        UtilFunctionTest::linkTo($client, $this, 'div#MainContent tr td a#popup_list');
+        UtilFunctionTest::linkTo($client, $this, 'div a#popup_list');
         UtilFunctionTest::linkTo($client, $this, 'div#MainContent legend a:contains("Nuevo Popup")');
 
         //comprueba que vuelva a la pagina del listado de popups
@@ -50,7 +50,7 @@ class PopupControllerTest extends WebTestCase {
         $client = static::createClient();
         $client-> followRedirects(true);
         UtilFunctionTest::doLogin($client, 'admin', 'admin');
-        UtilFunctionTest::linkTo($client, $this, 'div#MainContent tr td a#popup_list');
+        UtilFunctionTest::linkTo($client, $this, 'div a#popup_list');
         UtilFunctionTest::linkTo($client, $this, 'div#MainContent tr td a');
 
         //comprueba que vaya a la pagina de edicion de usuarios
