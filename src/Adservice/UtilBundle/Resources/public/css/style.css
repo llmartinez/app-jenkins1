@@ -9,10 +9,10 @@
 /*
     BODY
 */
-
+/*
 html {
-    background-color:  #285e8e;
-}
+    background-color:  #001739;
+}*/
 #MainBody {
     background-color: transparent;
     margin: 20px;
@@ -33,11 +33,31 @@ html {
     color: #fff;
     padding: 20px;
 }
+.img_logo {
+    max-height: 58px;
+}
 .margined {
     margin-right: 40px;
 }
 .floating {
     float:left;
+}
+.mb3 {
+    margin-bottom: 3px;
+}
+.btn-menu {
+    display: inline-block;
+    color: #ffffff;
+    background-color: #428bca;
+    /*
+    background-image: url(http://www.librosweb.es/website/css/images/logo.gif);
+    */
+    border-color: #357ebd;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 10px;
+    width: 280px;
 }
 /*
     HEADER
@@ -47,9 +67,12 @@ html {
 }
 
 .navbar {
-    background-color: azure;
+    background-color: #428bca;
+    max-height: 75px;
 }
-
+.btn-header{
+    height: 30px;
+}
 /*
     Plantillas
 */
@@ -355,7 +378,7 @@ html {
 
 /*@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
 
-html, body { background: #285e8e }
+html, body { background: #001739 }
 
 .slides {
     padding: 0;

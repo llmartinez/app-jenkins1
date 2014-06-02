@@ -90,7 +90,7 @@ class Region{
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'region'  => $this->getRegion(),
-                      'country' => $this->getCountry());
+                      'country' => $this->getCountry()->getCountry());
         return $json;
     }
 }

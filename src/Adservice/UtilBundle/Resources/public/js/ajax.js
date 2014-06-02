@@ -25,8 +25,14 @@ function populate_region(url_ajax, region){
                 placeholder: "Select a State",
                 allowClear: true
             });
-            if($(':text[id*=region]').val() != '') $("#s2id_slct_region .select2-chosen").text($(':text[id*=region]').val());
-            else                                   $(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text('sin region') );
+            if($(':text[id*=region]').val() != ''){
+                $("#s2id_slct_region .select2-chosen").text('sin region');
+                $("#s2id_slct_city .select2-chosen").text('sin ciudad');
+            }
+            else{
+                $("#s2id_slct_region .select2-chosen").text('sin region');
+                $(':text[id*=region]').val('sin region');
+            }
         },
         error : function(){
             console.log("Error al cargar las regiones...");
