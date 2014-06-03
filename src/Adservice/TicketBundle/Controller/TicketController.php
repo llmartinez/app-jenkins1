@@ -78,26 +78,36 @@ class TicketController extends Controller {
         elseif ($option == 'all'      ) { $params[] = array();  }
         elseif ($option == 'opened'   ) { $params[] = array('status'        , ' = '.$open  ->getId()); }
         elseif ($option == 'closed'   ) { $params[] = array('status'        , ' = '.$closed->getId()); }
-        elseif ($option == 'free'     ) { $params[] = array('status'        , ' = '.$open  ->getId(), 'assigned_to '  , 'IS NULL'); }
-
+        elseif ($option == 'free'     )
+        {
+            $params[] = array('status'        , ' = '.$open  ->getId());
+            $params[] = array('assigned_to '  , 'IS NULL');
+        }
         elseif ($option == 'pending'          or  $option == 'answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , 'IS NOT NULL');
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , 'IS NOT NULL');
         }
         elseif ($option == 'assessor_pending' or  $option == 'assessor_answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '= '.$id_user);
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '= '.$id_user);
         }
         elseif ($option == 'other_pending'    or  $option == 'other_answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '!= '.$id_user);
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '!= '.$id_user);
         }
-        elseif ($option == 'assessor_closed') { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '= ' .$id_user); }
-
-        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
-
-        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
-
+        elseif ($option == 'assessor_closed')
+        {
+            $params[] = array('status', ' = '.$closed->getId());
+            $params[] = array('assigned_to'   , '= ' .$id_user);
+        }
+        elseif ($option == 'other_closed')
+        {
+            $params[] = array('status', ' = '.$closed->getId());
+            $params[] = array('assigned_to'   , '!= '.$id_user);
+        }
         else{
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
             $params[] = array('workshop', ' = '.$option);
@@ -107,10 +117,49 @@ class TicketController extends Controller {
         if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
-        }else{
+        }
+        elseif(($option == 'assessor_pending') or ($option == 'assessor_answered') or ($option == 'other_pending') or ($option == 'other_answered')) {
+
+            $query = 'SELECT t FROM TicketBundle:Ticket t';
+            if     (($option == 'assessor_pending') or ($option == 'assessor_answered')) $query = $query.' WHERE t.assigned_to = '.$id_user;
+            elseif (($option == 'other_pending'   ) or ($option == 'other_answered'   )) $query = $query.' WHERE t.assigned_to != '.$id_user;
+
+            $consulta = $em->createQuery($query);
+            $query_posts = '';
+            foreach ($consulta->getResult() as $ticket)
+            {
+                $query2 = 'SELECT p FROM TicketBundle:Post p WHERE p.ticket = '.$ticket->getId();
+                $consulta2 = $em->createQuery($query2);
+                $result = $consulta2->getResult();
+                $last_post = end($result);
+
+                if(count($result) != 0 and $last_post != null
+                and ($last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ASSESSOR'
+                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ADMIN'
+                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_SUPER_ADMIN')
+                and ($option == 'assessor_answered' or $option == 'other_answered'))
+                {
+                    if($query_posts == '') $query_posts = ' e.id = '.$ticket->getId();
+                    else                   $query_posts = $query_posts.' OR e.id = '.$ticket->getId();
+                }
+                elseif((($option == 'assessor_pending' or $option == 'other_pending') and count($result) == 0)
+                    or (($option == 'assessor_pending' or $option == 'other_pending') and $last_post->getCreatedBy()->getId() != $id_user
+                                                                                      and $last_post->getCreatedBy()->getId() != $ticket->getAssignedTo()->getId() ))
+                {
+                    if($query_posts == '') $query_posts = ' e.id = '.$ticket->getId();
+                    else                   $query_posts = $query_posts.' OR e.id = '.$ticket->getId();
+                }
+            }
+            if($query_posts != '') $joins[] = array('e.status s', $query_posts);
+            else $joins = array();
+
+            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+        }
+        else{
             $joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
 
         $pagination->setTotalPagByLength($length);
@@ -404,14 +453,14 @@ class TicketController extends Controller {
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems,
-                                                                            'form_name' => $form->getName(), )));
+                                                                            'form_name' => $formP->getName(), )));
         }
 
         $array = array( 'formP'     => $formP->createView(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
-                        'form_name' => $form->getName(), );
+                        'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
