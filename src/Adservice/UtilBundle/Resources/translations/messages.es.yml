@@ -7,9 +7,9 @@ login.welcome:	"Acceso usuarios AD Service"
 login.remember:	"Recuerdame"
 
 menu.title_admin:                    "MENU Administrador"
-menu.title_assessor:                 "MENU ASESOR"
-menu.title_user:                     "MENU USUARIO"
-menu.title_ad:                       "MENU AD"
+menu.title_assessor:                 "MENU Asesor"
+menu.title_user:                     "MENU Usuario"
+menu.title_ad:                       "MENU Socio"
 
 menu.profile:                        "Mi Perfil"
 menu.list_statistics:                "Consultar Estadísticas"
