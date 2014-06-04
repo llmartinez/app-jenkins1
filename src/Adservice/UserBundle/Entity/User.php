@@ -361,7 +361,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $postal_code
      *
-     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     * @ORM\Column(name="postal_code", type="string", nullable=true)
      */
     private $postal_code;
 

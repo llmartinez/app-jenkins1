@@ -9,6 +9,7 @@
     </ol>
 
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        <div class="col-xs-12 col-md-12 form-group">
             {{ form_errors(form) }}
              <div class="col-xs-4 col-md-4 form-group">
                 <label>{% trans %} username {% endtrans %} *</label>
@@ -41,15 +42,18 @@
                    <br><br>{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
                 {% endif %}
             </div>
+        </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
         <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
-                                                                            {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
-            </div>
-        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                                {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+        </div>
 
         {{ form_rest(form) }}
 

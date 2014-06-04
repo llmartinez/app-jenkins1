@@ -395,15 +395,15 @@ class ImportController extends Controller
 
             $all_asesores = $em_old->createQuery('SELECT oa.id, oa.nombre FROM ImportBundle:old_Asesor oa'    )->getResult();
             $all_socios   = $em_old->createQuery('SELECT os.id, os.nombre FROM ImportBundle:old_Socio os'     )->getResult();
-            $all_talleres = $em_old->createQuery('SELECT ot.id, ot.nombre FROM ImportBundle:old_Taller ot'    )->getResult();
             $all_opers    = $em_old->createQuery('SELECT oo.id, oo.nombre FROM ImportBundle:old_Operacion oo' )->getResult();
+            $all_talleres = $em_old->createQuery('SELECT ot.id, ot.nombre, ot.idGrupo FROM ImportBundle:old_Taller ot'    )->getResult();
 
 			$em_old->clear(); $em_old->close();
 
 			foreach ($all_asesores as $asesor ) { $asesores[$asesor['id']] = $asesor['nombre']; } 	//MAPPING OLD_ASESOR
 			foreach ($all_socios   as $socio  ) { $socios  [$socio ['id']] = $socio ['nombre']; } 	//MAPPING OLD_SOCIO
-			foreach ($all_talleres as $taller ) { $talleres[$taller['id']] = $taller['nombre']; } 	//MAPPING OLD_TALLER
 			foreach ($all_opers    as $oper   ) { $opers   [$oper  ['id']] = $oper  ['nombre']; } 	//MAPPING OLD_OPERACIONES
+			foreach ($all_talleres as $taller ) { $talleres[$taller['id']] = array($taller['nombre'],$taller['idGrupo']); } 	//MAPPING OLD_TALLER
 			// foreach ($all_coches   as $coche  ) { $coches  [$coche ->getOldId()] = $coche; }
 
             unset($all_asesores); unset($all_socios); unset($all_talleres); unset($all_opers);
@@ -415,11 +415,12 @@ class ImportController extends Controller
 
 				$newIncidence->setAsesor     ($asesores [$old_Incidence->getAsesor()]);
 				$newIncidence->setSocio      ($socios   [$old_Incidence->getSocio() ]);
-				$newIncidence->setTaller     ($talleres [$old_Incidence->getTaller()]);
 				$newIncidence->setOper       ($opers    [$old_Incidence->getOper()  ]);
+				$newIncidence->setTaller     ($talleres [$old_Incidence->getTaller()][0]);
 				// $newIncidence->setCoche      ($coches   [$old_Incidence->getCoche() ]);
 
 				$newIncidence->setOldId      ($old_Incidence->getId());
+				$newIncidence->setIdTaller   ($talleres [$old_Incidence->getTaller()][1]);
 				$newIncidence->setDescription($old_Incidence->getDescripcion());
 				$newIncidence->setTracing	 ($old_Incidence->getSeguimiento());
 				$newIncidence->setSolution   ($old_Incidence->getSolucion   ());
