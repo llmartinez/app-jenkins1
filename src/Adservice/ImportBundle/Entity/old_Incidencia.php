@@ -43,6 +43,13 @@ class old_Incidencia {
     private $taller;
 
     /**
+     * @var string $id_taller
+     *
+     * @ORM\Column(name="id_taller", type="integer", length=255)
+     */
+    private $id_taller;
+
+    /**
      * @var string $coche
      *
      * @ORM\Column(name="coche", type="string", length=255)
@@ -170,6 +177,24 @@ class old_Incidencia {
      */
     public function getTaller() {
         return $this->taller;
+    }
+
+    /**
+     * Set id_taller
+     *
+     * @param string $id_taller
+     */
+    public function setIdTaller($id_taller) {
+        $this->id_taller = $id_taller;
+    }
+
+    /**
+     * Get id_taller
+     *
+     * @return string
+     */
+    public function getIdTaller() {
+        return $this->id_taller;
     }
 
     /**

@@ -280,7 +280,9 @@ class Workshop {
      * @return string
      */
     public function getContact() {
-        $contact = $this->contact_name.' '.$this->contact_surname;
+        if($this->contact_name    == 'sin-especificar') $name    = ''; else $name    = $this->contact_name;
+        if($this->contact_surname == 'sin-especificar') $surname = ''; else $surname = $this->contact_surname;
+        $contact = $name.' '.$surname;
         return $contact;
     }
 
@@ -586,7 +588,7 @@ class Workshop {
     /**
      * @var string $postal_code
      *
-     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     * @ORM\Column(name="postal_code", type="string", nullable=true)
      */
     private $postal_code;
 

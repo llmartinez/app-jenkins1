@@ -1,5 +1,5 @@
 /*
-    Document   : header
+    Document   : style.css
     Created on : 21-ene-2014, 10:11:21
     Author     : dani
     Description:
@@ -9,10 +9,14 @@
 /*
     BODY
 */
-/*
 html {
-    background-color:  #001739;
-}*/
+    height: 100%;
+    /*background-color:  #001739;*/
+}
+body {
+    height: 100%;
+    /*background-color:  #001739;*/
+}
 #MainBody {
     background-color: transparent;
     margin: 20px;
@@ -29,9 +33,11 @@ html {
 }
 
 #MainFooter {
-    background-color: darkgray;
+    background-color: #f5f5f5;
     color: #fff;
-    padding: 20px;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    font-size: smaller;
 }
 .img_logo {
     max-height: 58px;
@@ -59,6 +65,21 @@ html {
     margin: 10px;
     width: 280px;
 }
+.btn-footer {
+    display: inline-block;
+    color: #428bca;
+    margin-right: 10px;
+}
+.btn-date {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 5px;
+}
+.btn-blue {
+    color: #428bca;
+}
+
+
 /*
     HEADER
 */

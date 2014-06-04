@@ -9,32 +9,36 @@
     </ol>
 
     <form action="{{ path('shop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        <div class="col-xs-6 col-md-6 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
-            {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
-            {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
-            {{ form_widget(form.active) }}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
+            <div class="col-xs-4 col-md-4 form-group">
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active) }}
+            </div>
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
         <div class="col-xs-12 col-md-12 form-group">
-        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+            <div class="col-xs-12 col-md-12 form-group">
+            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
-        {{ form_rest(form) }}
+            {{ form_rest(form) }}
 
-        <div class="col-xs-10 col-md-10 form-group">
-            <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            <div class="col-xs-10 col-md-10 form-group">
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            </div>
         </div>
     </form>
 

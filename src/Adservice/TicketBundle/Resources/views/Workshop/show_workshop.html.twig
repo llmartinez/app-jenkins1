@@ -8,36 +8,41 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		#{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b>{{ workshop.name }}</b>
-		{% if workshop.contact      != "" %}<b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
+		<span class="btn-blue glyphicon glyphicon-wrench"></span> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
 	</div>
-
-	{# TEL/MAIL #}
 	<div class="form-group">
-		{% if workshop.phoneNumber1  != "" %}{{ workshop.phoneNumber1 }} / {% else %}
-		{% if workshop.movileNumber1 != "" %}{{ workshop.movileNumber1 }} / {% endif %}{% endif %}
-		{% if workshop.email1        != "" %}{{ workshop.email1       }}   {% endif %}
+		{% if workshop.contact      != "" %}<span class="btn-blue glyphicon glyphicon-user"></span> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
+	</div>
+	{# PARTNER #}
+	<div class="form-group">
+		{% if workshop.partner      != "" %} <span class="btn-blue glyphicon glyphicon-briefcase"></span> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner      }} {% endif %}
 	</div>
 
 	{# LOCATION #}
 	<div class="form-group">
-		{% if workshop.region       != "" %}{{ workshop.region       }} , {% endif %}
+		{% if workshop.region       != "" %} <span class="btn-blue glyphicon glyphicon-map-marker"></span>{% endif %}
+		{% if workshop.city         != "" %}  {{ workshop.city       }}{% endif %}
+		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
+		{% if workshop.region       != "" %}, {{ workshop.region     }}{% endif %}
 	</div>
 
-	{# PARTNER #}
+	{# TEL/MAIL #}
 	<div class="form-group">
-		{% if workshop.partner      != "" %} {% trans %} partner {% endtrans %}: {{ workshop.partner      }} {% endif %}
+		{% if workshop.phoneNumber1  != "" %} 	 <span class="btn-blue glyphicon glyphicon-phone-alt"></span> {{ workshop.phoneNumber1  }} {% endif %}
+		{% if workshop.movileNumber1 != "" %}    <span class="btn-blue glyphicon glyphicon-earphone" ></span> {{ workshop.movileNumber1 }} {% endif %}
+		{% if workshop.email1        != "" %} <p><span class="btn-blue glyphicon glyphicon-envelope" ></span> {{ workshop.email1        }} {% endif %}</p>
 	</div>
+
 	{# OBERVATIONS #}
 	<div class="form-group">
 		{% if is_granted('ROLE_ADMIN') %}
-			{% if workshop.observationAdmin      != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationAdmin      }} {% endif %}
+			{% if workshop.observationAdmin      != "" %} <span class="btn-blue glyphicon glyphicon-pushpin"></span> <b>{% trans %} observations {% endtrans %}</b>: 	{{ workshop.observationAdmin      }} {% endif %}
 
 		{% elseif is_granted('ROLE_ASSESSOR') %}
-			{% if workshop.observationAssessor   != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationAssessor   }} {% endif %}
+			{% if workshop.observationAssessor   != "" %} <span class="btn-blue glyphicon glyphicon-pushpin"></span> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor   }} {% endif %}
 
 		{% elseif is_granted('ROLE_USER') %}
-			{% if workshop.observationWorkshop   != "" %} {% trans %} observations {% endtrans %}: {{ workshop.observationWorkshop   }} {% endif %}
+			{% if workshop.observationWorkshop   != "" %} <span class="btn-blue glyphicon glyphicon-pushpin"></span> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop   }} {% endif %}
 		{% endif %}
 	</div>
 {% endif %}

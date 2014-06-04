@@ -13,9 +13,11 @@ class LockController extends Controller
         $security = $this->get('security.context');
         $params = array();
 
-        if( ! $security->isGranted('ROLE_ASSESSOR')) $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
+        if( ! $security->isGranted('ROLE_ASSESSOR')){
+                                                      $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
+        }
 
-    	if( $id_taller != null ) $params[] = array('taller', ' = '.$id_taller);
+        if( $id_taller != null ) $params[] = array('taller', ' = '.$id_taller);
 
         $pagination = new Pagination($page);
 
