@@ -2,6 +2,18 @@
     <script>
         $(document).ready(function() {
 
+        $('#slct_typology').val($('select[name*=typology]').val());
+
+        $('#slct_typology').change(function() {
+            $('select[name*=typology]').val($('#slct_typology').val());
+        });
+
+        $('#slct_diagnosis_machine').val($('select[name*=diagnosis_machine]').val());
+
+        $('#slct_diagnosis_machine').change(function() {
+            $('select[name*=diagnosis_machine]').val($('#slct_diagnosis_machine').val());
+        });
+
             var url_ajax = "{{ path("shops_from_partner") }}";
             populate_shop(url_ajax);
 

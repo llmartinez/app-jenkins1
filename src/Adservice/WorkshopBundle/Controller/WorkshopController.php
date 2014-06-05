@@ -8,9 +8,9 @@ use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UserBundle\Entity\User;
 use Adservice\WorkshopBundle\Entity\Workshop;
-use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Form\WorkshopType;
-use Adservice\WorkshopBundle\Form\WorkshopOrderType;
+use Adservice\WorkshopBundle\Entity\TypologyRepository;
+use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 
 class WorkshopController extends Controller {
 
@@ -55,7 +55,8 @@ class WorkshopController extends Controller {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $workshop = new Workshop();
-        $form = $this->createForm(new WorkshopType(), $workshop);
+
+        $form       = $this->createForm(new WorkshopType(), $workshop);
 
         if ($request->getMethod() == 'POST') {
 
@@ -125,10 +126,17 @@ class WorkshopController extends Controller {
             }
         }
 
-        return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop' => $workshop,
-                                                                                     'form_name'  => $form->getName(),
-                                                                                     'form'       => $form->createView(),
-                                                                                     'locations'  => UtilController::getLocations($em),
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId(); 
+        else $country = null;
+        $typologies = TypologyRepository::findTypologiesList($em, $country);
+        $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+
+        return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop'           => $workshop,
+                                                                                     'typologies'         => $typologies,
+                                                                                     'diagnosis_machines' => $diagnosis_machines,
+                                                                                     'form_name'          => $form->getName(),
+                                                                                     'form'               => $form->createView(),
+                                                                                     // 'locations'          => UtilController::getLocations($em),
                                                                                     ));
     }
 
@@ -148,10 +156,9 @@ class WorkshopController extends Controller {
         if (!$workshop) throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
 
         $partner = $workshop->getPartner();
-        $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-        $petition = $this->getRequest();
-        $form = $this->createForm(new WorkshopType(), $workshop);
+        $petition   = $this->getRequest();
+        $form       = $this->createForm(new WorkshopType(), $workshop);
 
         $actual_city   = $workshop->getRegion();
         $actual_region = $workshop->getCity();
@@ -173,19 +180,23 @@ class WorkshopController extends Controller {
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
                 else{
+                    $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
                     $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$last_code.').';
                     $this->get('session')->setFlash('error', $flash);
                 }
             }
         }
-        else{
-            $flash = 'El primer numero disponible es: '.$code;
-            $this->get('session')->setFlash('info', $flash);
-        }
 
-        return $this->render('WorkshopBundle:Workshop:edit_workshop.html.twig', array('workshop'   => $workshop,
-                                                                                    'form_name'  => $form->getName(),
-                                                                                    'form'       => $form->createView()));
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId(); 
+        else $country = null;
+        $typologies = TypologyRepository::findTypologiesList($em, $country);
+        $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+
+        return $this->render('WorkshopBundle:Workshop:edit_workshop.html.twig', array(  'workshop'           => $workshop,
+                                                                                        'typologies'         => $typologies,
+                                                                                        'diagnosis_machines' => $diagnosis_machines,
+                                                                                        'form_name'          => $form->getName(),
+                                                                                        'form'               => $form->createView()));
     }
 
     public function deleteWorkshopAction($id) {

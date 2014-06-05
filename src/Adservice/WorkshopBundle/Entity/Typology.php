@@ -26,7 +26,21 @@ class Typology {
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $typology;
+    private $name;
+
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
 
     /**
      * Get id
@@ -42,8 +56,8 @@ class Typology {
      *
      * @param string $name
      */
-    public function setTypology($typology) {
-        $this->typology = $typology;
+    public function setName($name) {
+        $this->name = $name;
     }
 
     /**
@@ -51,74 +65,48 @@ class Typology {
      *
      * @return string
      */
-    public function getTypology() {
-        return $this->typology;
+    public function getName() {
+        return $this->name;
     }
 
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     */
+    public function setActive($active) {
+        $this->active = $active;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive() {
+        return $this->active;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry() {
+        return $this->country;
+    }
 
     public function __toString() {
-        return $this->getTypology();
+        return $this->name;
     }
 
 }
-
-
-//namespace Adservice\WorkshopBundle\Entity;
-//
-//use Doctrine\ORM\Mapping as ORM;
-//
-///**
-// * Adservice\WorkshopBundle\Entity\Typology
-// *
-// * @ORM\Table(name="typology")
-// * @ORM\Entity
-// */
-//class Typology
-//{
-//    /**
-//     * @var integer $id
-//     *
-//     * @ORM\Column(name="id", type="integer")
-//     * @ORM\Id
-//     * @ORM\GeneratedValue(strategy="AUTO")
-//     */
-//    private $id;
-//
-//    /**
-//     * @var string $typology
-//     *
-//     * @ORM\Column(name="typology", type="string", length=255)
-//     */
-//    private $typology;
-//
-//
-//    /**
-//     * Get id
-//     *
-//     * @return integer 
-//     */
-//    public function getId()
-//    {
-//        return $this->id;
-//    }
-//
-//    /**
-//     * Set typology
-//     *
-//     * @param string $typology
-//     */
-//    public function setTypology($typology)
-//    {
-//        $this->typology = $typology;
-//    }
-//
-//    /**
-//     * Get typology
-//     *
-//     * @return string 
-//     */
-//    public function getTypology()
-//    {
-//        return $this->typology;
-//    }
-//}

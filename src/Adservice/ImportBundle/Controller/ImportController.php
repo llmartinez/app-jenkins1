@@ -322,6 +322,7 @@ class ImportController extends Controller
 
     public function importLockCarsAction($bbdd=null, $num=0)
     {
+    	$session = $this->get('session');
 		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
@@ -379,6 +380,7 @@ class ImportController extends Controller
 
  	public function importLockIncidencesAction($bbdd=null, $num=0)
     {
+    	$session = $this->get('session');
 		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
 		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
 		$max_rows = 1000;
@@ -394,15 +396,15 @@ class ImportController extends Controller
 		if($count > $num){
 
             $all_asesores = $em_old->createQuery('SELECT oa.id, oa.nombre FROM ImportBundle:old_Asesor oa'    )->getResult();
-            $all_socios   = $em_old->createQuery('SELECT os.id, os.nombre FROM ImportBundle:old_Socio os'     )->getResult();
             $all_opers    = $em_old->createQuery('SELECT oo.id, oo.nombre FROM ImportBundle:old_Operacion oo' )->getResult();
+            $all_socios   = $em_old->createQuery('SELECT os.id, os.nombre FROM ImportBundle:old_Socio os'     )->getResult();
             $all_talleres = $em_old->createQuery('SELECT ot.id, ot.nombre, ot.idGrupo FROM ImportBundle:old_Taller ot'    )->getResult();
 
 			$em_old->clear(); $em_old->close();
 
 			foreach ($all_asesores as $asesor ) { $asesores[$asesor['id']] = $asesor['nombre']; } 	//MAPPING OLD_ASESOR
-			foreach ($all_socios   as $socio  ) { $socios  [$socio ['id']] = $socio ['nombre']; } 	//MAPPING OLD_SOCIO
 			foreach ($all_opers    as $oper   ) { $opers   [$oper  ['id']] = $oper  ['nombre']; } 	//MAPPING OLD_OPERACIONES
+			foreach ($all_socios   as $socio  ) { $socios  [$socio ['id']] = $socio ['nombre']; } 	//MAPPING OLD_SOCIO
 			foreach ($all_talleres as $taller ) { $talleres[$taller['id']] = array($taller['nombre'],$taller['idGrupo']); } 	//MAPPING OLD_TALLER
 			// foreach ($all_coches   as $coche  ) { $coches  [$coche ->getOldId()] = $coche; }
 
@@ -414,12 +416,12 @@ class ImportController extends Controller
 				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lock_car')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
 
 				$newIncidence->setAsesor     ($asesores [$old_Incidence->getAsesor()]);
-				$newIncidence->setSocio      ($socios   [$old_Incidence->getSocio() ]);
 				$newIncidence->setOper       ($opers    [$old_Incidence->getOper()  ]);
+				$newIncidence->setSocio      ($socios   [$old_Incidence->getSocio() ]);
 				$newIncidence->setTaller     ($talleres [$old_Incidence->getTaller()][0]);
 				// $newIncidence->setCoche      ($coches   [$old_Incidence->getCoche() ]);
 
-				$newIncidence->setOldId      ($old_Incidence->getId());
+				$newIncidence->setIdSocio    ($old_Incidence->getSocio());
 				$newIncidence->setIdTaller   ($talleres [$old_Incidence->getTaller()][1]);
 				$newIncidence->setDescription($old_Incidence->getDescripcion());
 				$newIncidence->setTracing	 ($old_Incidence->getSeguimiento());
@@ -429,16 +431,17 @@ class ImportController extends Controller
 				$newIncidence->setActive	 ($old_Incidence->getActive());
 				$em_lock->persist($newIncidence);
 				unset($newIncidence);
+				$em_lock->flush();die;
 			}
 			// foreach ($incidences as $incidence) {
 			// 	$em_lock->persist($incidence);
 			// }
 
-			unset($old_Incidences);	unset($incidences   );	unset($incidence);
-			unset($asesores 	);	unset($asesor 	);
-			unset($socios 		);	unset($socio 	);
-			unset($talleres 	);	unset($taller 	);
-			unset($opers 		);	unset($oper 	);
+			unset($old_Incidences);	unset($incidences);	unset($incidence);
+			unset($asesores 	);	unset($asesor 	 );
+			unset($socios 		);	unset($socio 	 );
+			unset($talleres 	);	unset($taller 	 );
+			unset($opers 		);	unset($oper 	 );
 /***************************************************************************************************************/
 		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
 		var_dump($session);
