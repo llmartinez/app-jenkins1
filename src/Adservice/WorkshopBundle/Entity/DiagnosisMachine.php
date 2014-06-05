@@ -5,7 +5,7 @@ namespace Adservice\WorkshopBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\WorkshopBundle\Entity\Typology
+ * Adservice\WorkshopBundle\Entity\DiagnosisMachine
  *
  * @ORM\Table(name="diagnosis_machine")
  * @ORM\Entity
@@ -27,11 +27,25 @@ class DiagnosisMachine {
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
+
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -49,17 +63,50 @@ class DiagnosisMachine {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
-    public function getname() {
+    public function getName() {
         return $this->name;
     }
 
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     */
+    public function setActive($active) {
+        $this->active = $active;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive() {
+        return $this->active;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry() {
+        return $this->country;
+    }
 
     public function __toString() {
-        return $this->getName();
+        return $this->name;
     }
-    
-    
 
 }

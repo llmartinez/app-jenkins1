@@ -17,6 +17,16 @@
             if($(':text[id*=city]').val()   != '') $("#s2id_slct_city .select2-chosen").text($(':text[id*=city]').val());
             else                                   $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
 
+            {% if partner  is defined %} {% set entity = partner  %} {% endif %}
+            {% if shop     is defined %} {% set entity = shop     %} {% endif %}
+            {% if workshop is defined %} {% set entity = workshop %} {% endif %}
+
+            {% if entity.region != '' %}
+                                          $("#s2id_slct_region .select2-chosen").text("{{ entity.region }}");
+                                          $(':text[id*=region]').val('{{ entity.region }}');    {% endif %}
+
+            {% if entity.city   != '' %} $("#s2id_slct_city .select2-chosen"  ).text("{{ entity.city }}"  );
+                                          $(':text[id*=city]'  ).val('{{ entity.city }}');      {% endif %}
 		$('#btn_create').click(function(){
 
 			if ($(':text[id*=region]').val() == "[object Object]"){

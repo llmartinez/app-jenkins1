@@ -18,6 +18,36 @@ workshop_new:
     defaults: { _controller: WorkshopBundle:Workshop:newWorkshop }
 
 ##############################
+#   APDO. RUTAS DIAGNOSIS    #
+##############################
+diagnosis_machine_list:
+    pattern:  /diag_list/{page}/{country}
+    defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none'  }
+
+diagnosis_machine_edit:
+    pattern: /diag_edit/{id}
+    defaults: { _controller: WorkshopBundle:DiagnosisMachine:editDiagnosisMachine, id: null }
+
+# diagnosis_machine_new:
+#     pattern: /diag_new
+#     defaults: { _controller: WorkshopBundle:DiagnosisMachine:newDiagnosisMachine }
+
+##############################
+#   APDO. RUTAS TYPOLOGY     #
+##############################
+typology_list:
+    pattern:  /typo_list/{page}/{country}
+    defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1 , country: 'none'  }
+
+typology_edit:
+    pattern: /typo_edit/{id}
+    defaults: { _controller: WorkshopBundle:Typology:editTypology, id: null }
+
+# tipology_new:
+#     pattern: /typo_new
+#     defaults: { _controller: WorkshopBundle:Typology:newTypology }
+
+##############################
 #       RUTAS AJAX           #
 ##############################
 #user_provinces:

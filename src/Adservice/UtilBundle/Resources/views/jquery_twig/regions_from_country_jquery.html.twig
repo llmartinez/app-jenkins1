@@ -2,15 +2,19 @@
     <script>
         $(document).ready(function(){
 
+            {% if partner  is defined %} {% set entity = partner  %} {% endif %}
+            {% if shop     is defined %} {% set entity = shop     %} {% endif %}
+            {% if workshop is defined %} {% set entity = workshop %} {% endif %}
             // REGIONS FROM COUNTRY
             var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
+            var region   = "{{ entity.region }}";
+            var city     = "{{ entity.city }}";
+            populate_region(url_ajax, region, city);
 
             //si clickamos el combobox de los paises repoblamos la de las regiones
             $('form').find('select[name*=country]').change(function() {
                var url_ajax = "{{ path("regions_from_country") }}";
                populate_region(url_ajax);
             });
-
         });
     </script>

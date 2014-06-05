@@ -22,11 +22,18 @@ class lock_incidence {
     private $id;
 
     /**
-     * @var string $old_id
+     * @var integer $id_socio
      *
-     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
+     * @ORM\Column(name="id_socio", type="integer")
      */
-    private $old_id;
+    private $id_socio;
+
+    /**
+     * @var integer $id_taller
+     *
+     * @ORM\Column(name="id_taller", type="integer")
+     */
+    private $id_taller;
 
     /**
      * @var string $asesor
@@ -126,21 +133,39 @@ class lock_incidence {
     }
 
     /**
-     * Set oldId
+     * Set id_socio
      *
-     * @param string $oldId
+     * @param integer $id_socio
      */
-    public function setOldId($oldId) {
-        $this->oldId = $oldId;
+    public function setIdSocio($id_socio) {
+        $this->id_socio = $id_socio;
     }
 
     /**
-     * Get oldId
+     * Get id_socio
      *
-     * @return string
+     * @return integer
      */
-    public function getOldId() {
-        return $this->oldId;
+    public function getIdSocio() {
+        return $this->id_socio;
+    }
+
+    /**
+     * Set id_taller
+     *
+     * @param integer $id_taller
+     */
+    public function setIdTaller($id_taller) {
+        $this->id_taller = $id_taller;
+    }
+
+    /**
+     * Get id_taller
+     *
+     * @return integer
+     */
+    public function getIdTaller() {
+        return $this->id_taller;
     }
 
     /**

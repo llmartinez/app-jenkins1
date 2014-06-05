@@ -3,8 +3,8 @@
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function populate_region(url_ajax, region){
-   var id_country = $('form').find('select[name*=country]').val();
+function populate_region(url_ajax, region, city){
+    var id_country = $('form').find('select[name*=country]').val();
 
    $.ajax({
         type        : "POST",
@@ -15,19 +15,34 @@ function populate_region(url_ajax, region){
             // Limpiamos y llenamos el combo con las opciones del json
             $('#data_regions').empty();
             $("#slct_region").empty();
+
+            var region_edit = '';
             $.each(data, function(idx, elm) {
 
-                if(elm.region == region) $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");
-                else                     $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                if(string_to_slug(elm.region) == string_to_slug(region)) {  region_edit = elm.region; city_edit = city;
+                                            $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
+                else{
+                    if( region != '' ) { region_edit = region; city_edit = city;
+                        $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                    }
+                    else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                }
             });
             $("#slct_region").html($('#data_regions').html());
             $("#slct_region").select2({
                 placeholder: "Select a State",
                 allowClear: true
             });
+
             if($(':text[id*=region]').val() != ''){
-                $("#s2id_slct_region .select2-chosen").text('sin region');
-                $("#s2id_slct_city .select2-chosen").text('sin ciudad');
+                if(region_edit != '') {
+                                        $("#s2id_slct_region .select2-chosen").text(region_edit);
+                                        $("#s2id_slct_city .select2-chosen"  ).text(city_edit);
+                }
+                else                  {
+                                        $("#s2id_slct_region .select2-chosen").text('sin region');
+                                        $("#s2id_slct_city .select2-chosen"  ).text('sin ciudad');
+                }
             }
             else{
                 $("#s2id_slct_region .select2-chosen").text('sin region');
@@ -191,4 +206,22 @@ function fill_subsystem(url_ajax, form_subsystem) {
             console.log("Error al cargar subsistemas...");
         }
     });
+}
+
+function string_to_slug(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+    var to   = "aaaaeeeeiiiioooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
 }
