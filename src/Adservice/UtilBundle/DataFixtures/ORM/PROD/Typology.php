@@ -24,7 +24,7 @@ class Typologies extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setActive(1);
             $manager->persist($entidad);
 
-            $this->addReference($entidad->getTypology(), $entidad);
+            $this->addReference($entidad->getName(), $entidad);
         }
         $manager->flush();
     }
