@@ -24,7 +24,7 @@
             </div>
             <div class="col-xs-2 col-md-2 form-group">
                 <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
-                {{ form_widget(form.active) }}
+                {{ form_widget(form.active, { 'attr': {'checked': 'checked' } }) }}
             </div>
         </div>
 

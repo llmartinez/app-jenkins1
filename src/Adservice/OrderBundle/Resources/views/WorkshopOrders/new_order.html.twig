@@ -23,9 +23,8 @@
                                                      'placeholder': 'name' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} cif {% endtrans %}</label>
-                {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'cif' | trans } }) }}
+
+                <label>{% trans %} code.workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
             </div>
 
             {% if is_granted('ROLE_SUPER_AD') %}
@@ -44,8 +43,9 @@
                 <label>{% trans %} typology {% endtrans %} </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="col-xs-2 col-md-2">
-
-                <label>{% trans %} code.workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                <label>{% trans %} cif {% endtrans %}</label>
+                {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'cif' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2">
                 <label>{% trans %} test {% endtrans %} </label> {{ form_widget(form.test) }}

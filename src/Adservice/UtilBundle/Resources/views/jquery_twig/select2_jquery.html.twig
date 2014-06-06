@@ -17,9 +17,12 @@
             if($(':text[id*=city]').val()   != '') $("#s2id_slct_city .select2-chosen").text($(':text[id*=city]').val());
             else                                   $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
 
-            {% if partner  is defined %} {% set entity = partner  %} {% endif %}
-            {% if shop     is defined %} {% set entity = shop     %} {% endif %}
-            {% if workshop is defined %} {% set entity = workshop %} {% endif %}
+            {% if partner       is defined %} {% set entity = partner       %} {% endif %}
+            {% if shop          is defined %} {% set entity = shop          %} {% endif %}
+            {% if workshop      is defined %} {% set entity = workshop      %} {% endif %}
+            {% if user          is defined %} {% set entity = user          %} {% endif %}
+            {% if shopOrder     is defined %} {% set entity = shopOrder     %} {% endif %}
+            {% if workshopOrder is defined %} {% set entity = workshopOrder %} {% endif %}
 
             {% if entity.region != '' %}
                                           $("#s2id_slct_region .select2-chosen").text("{{ entity.region }}");

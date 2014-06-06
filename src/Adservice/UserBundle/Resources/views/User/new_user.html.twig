@@ -27,7 +27,7 @@
             {% endif %}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active) }}
+                <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} language {% endtrans %}</label>
