@@ -24,7 +24,7 @@
 
     {###  HISTORICO  ###}
     {% if workshop.id is defined and workshop.id != "" %}
-        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop }) }}')">{% trans %} lock.list_incidences {% endtrans %}</button>
+        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.partner.codePartner }) }}')">{% trans %} lock.list_incidences {% endtrans %}</button>
     {% endif %}
 
     <script type="text/javascript"> $('#newTicket').focus(); </script>

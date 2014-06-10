@@ -144,6 +144,9 @@ body {
 .pad-left {
     padding-left: 20px;
 }
+.txtComment {
+    color: #a3a3a3;
+}
 
 .txtContainer {
     border: 1px solid rgba(155,155,155,0.3);

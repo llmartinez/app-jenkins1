@@ -2,7 +2,6 @@
 
 {% block body %}
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
     </ol>
 
@@ -24,14 +23,14 @@
             <tr>
                 <th>#</th>
                 <th>{% trans %} date        {% endtrans %}</th>
-                <th>{% trans %} oper  		{% endtrans %}</th>
+                <th>{% trans %} system      {% endtrans %}</th>
                 <th>{% trans %} car         {% endtrans %}</th>
                 <th>{% trans %} assigned_to {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
                 {% for incidence in incidences %}
-            <tr id="incidenceRow">
+            <tr class="incidenceRow">
                 <td id="id_incidence">{{ incidence.id }}</td>
                 <td>{{ incidence.date   }}</td> {# | date("d/m/Y") #}
                 <td>{{ incidence.oper   }}</td>

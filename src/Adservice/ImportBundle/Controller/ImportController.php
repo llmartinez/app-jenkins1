@@ -431,7 +431,7 @@ class ImportController extends Controller
 				$newIncidence->setActive	 ($old_Incidence->getActive());
 				$em_lock->persist($newIncidence);
 				unset($newIncidence);
-				$em_lock->flush();die;
+				//$em_lock->flush();die;
 			}
 			// foreach ($incidences as $incidence) {
 			// 	$em_lock->persist($incidence);
