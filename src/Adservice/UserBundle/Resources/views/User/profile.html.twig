@@ -7,8 +7,8 @@
     <li class="active">{% trans %} menu.profile {% endtrans %}</li>
 </ol>
 
-<h1>{% trans %} profile_of {% endtrans %} {{ app.user }} </h1>
-    <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">{% trans %} change_password {% endtrans %}</button>
+<h1>{% trans %} profile_of {% endtrans %} {{ app.user }}
+    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">{% trans %} change_password {% endtrans %}</button></h1>
 
 {% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
 

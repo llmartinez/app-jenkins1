@@ -40,7 +40,7 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	var url = "{{ path('list_incidences', {'page': '1', 'id_taller': id_taller}) }}";
+	    	var url = "{{ path('list_incidences', {'page': '1', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
 	    	window.open(url, "_self");
 	    });
 
@@ -51,7 +51,7 @@
 
 	    	if (prev_page > 0 ) {
 
-				var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller}) }}";
+				var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
 		    	url = url.replace("plc_page", prev_page);
 		    	window.open(url, "_self");
 		    }
@@ -60,7 +60,7 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller}) }}";
+	    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
 	    	url = url.replace("plc_page", $(this).text());
 	    	window.open(url, "_self");
 	    });
@@ -72,7 +72,7 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-		    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller}) }}";
+		    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
 		    	url = url.replace("plc_page", next_page);
 		    	window.open(url, "_self");
 		    }
@@ -81,7 +81,7 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	var url = "{{ path('list_incidences', {'page': totalpag, 'id_taller': id_taller}) }}";
+	    	var url = "{{ path('list_incidences', {'page': totalpag, 'id_taller': id_taller, 'id_socio': id_socio}) }}";
 	    	window.open(url, "_self");
 	    });
 

@@ -1,7 +1,7 @@
 
     <script type="text/javascript">
 
-    $("#incidenceRow").click(function() {
+    $(".incidenceRow").click(function() {
 
         var url = "{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}";
         url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());

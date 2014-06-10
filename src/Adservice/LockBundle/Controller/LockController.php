@@ -7,17 +7,20 @@ use Adservice\UtilBundle\Entity\Pagination;
 
 class LockController extends Controller
 {
-    public function listIncidencesAction($page=1, $id_taller=null)
+    public function listIncidencesAction($page=1, $id_taller=null, $id_socio=null)
     {
         $em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
         $security = $this->get('security.context');
-        $params = array();
+        $params   = array();
 
         if( ! $security->isGranted('ROLE_ASSESSOR')){
                                                       $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
+                                                      $id_socio  = $security->getToken()->getUser()->getWorkshop()->getIdSocio();
         }
-
-        if( $id_taller != null ) $params[] = array('taller', ' = '.$id_taller);
+        if( $id_taller != null ){
+            $params[] = array('id_taller', ' = '.$id_taller);
+            $params[] = array('id_socio' , ' = '.$id_socio );
+        }
 
         $pagination = new Pagination($page);
 
@@ -29,7 +32,8 @@ class LockController extends Controller
 
         return $this->render('LockBundle:Lock:list_incidences.html.twig', array('incidences' => $incidences,
                                                                                 'pagination' => $pagination,
-                                                                                'id_taller'  => $id_taller, ));
+                                                                                'id_taller'  => $id_taller,
+                                                                                'id_socio'   => $id_socio, ));
     }
 
     public function showIncidenceAction($page=1, $id_incidence=null)
