@@ -5,8 +5,6 @@ echo '
 
 #CACHE CLEAR
 sudo php app/console cache:clear --no-warmup
-sudo chmod 777 -R app/cache/ app/logs/
-sudo rm -rf app/cache/* app/logs/*
 
 #SCHEMA AND FIXTURES
 php app/console doctrine:schema:drop --force
@@ -17,3 +15,6 @@ php app/console d:f:l --fixtures='src/Adservice/UtilBundle/DataFixtures/ORM/PROD
 sudo php app/console cache:clear --no-warmup
 sudo chmod 777 -R app/cache/ app/logs/
 sudo rm -rf app/cache/* app/logs/*
+
+#INSTALL ASSETS
+php app/console assets:install web
