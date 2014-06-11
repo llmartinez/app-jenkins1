@@ -26,8 +26,6 @@
                             <td>{{ workshopOrder.phoneNumber1 }}</td>
                             <td>{{ workshopOrder.region       }}</td>
                             <td>
-                                {% if ((workshopOrder.action == 'modify') or (workshopOrder.action == 're_modify')) %}
-                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
                                     <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_rejected_edit{{ workshopOrder.id }}" ></span></a>
 
                                     <!-- Modal -->
@@ -39,12 +37,28 @@
                                                     <h4 class="modal-title" id="myModalLabel">{% trans %} order.details {% endtrans %}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p><b># </b> {{ workshopOrder.partner.codePartner  }}, {{ workshopOrder.codeWorkshop  }}</p>
-                                                    <p><b>{% trans %} workshop {% endtrans %}</b> {{ workshopOrder.name         }}</p>
-                                                    <p><b>{% trans %} partner  {% endtrans %}</b> {{ workshopOrder.partner      }}</p>
-                                                    <p><b>{% trans %} shop     {% endtrans %}</b> {{ workshopOrder.shop         }}</p>
-                                                    <p><b>{% trans %} tel      {% endtrans %}</b> {{ workshopOrder.phoneNumber1 }}</p>
-                                                    <p><b>{% trans %} region   {% endtrans %}</b> {{ workshopOrder.region       }}</p>
+                                                    <table class="table table-hover">
+                                                        <tr><th>                                          </th><th>{% trans %}values{% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.name            }}</td></tr>
+                                                        <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ workshopOrder.partner         }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ workshopOrder.cif             }}</td></tr>
+                                                        <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ workshopOrder.typology        }}</td></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.contactName     }}</td></tr>
+                                                        <tr><td>{% trans %} surname         {% endtrans %}</td><td>{{ workshopOrder.contactSurname  }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber2    }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ workshopOrder.movileNumber1   }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ workshopOrder.movileNumber2   }}</td></tr>
+                                                        <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ workshopOrder.fax             }}</td></tr>
+                                                        <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
+                                                        <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country         }}</td></tr>
+                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
+                                                        <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
+                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>
+                                                        <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ workshopOrder.postalCode      }}</td></tr>
+                                                    </table>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
@@ -53,7 +67,8 @@
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
 
-
+                                {% if ((workshopOrder.action == 'modify') or (workshopOrder.action == 're_modify')) %}
+                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
                                 {% elseif workshopOrder.action == 'activate' %}
                                     <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
@@ -105,6 +120,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
+
         {% else %}
             {% trans %} any.order.rejected {% endtrans %}
         {% endif %}

@@ -72,46 +72,94 @@ class TicketController extends Controller {
                 else{ $params[] = array(); }
             }
             else{ $params[] = array(); }
-
             $option = 'all';
         }
 
         elseif ($option == 'all'      ) { $params[] = array();  }
         elseif ($option == 'opened'   ) { $params[] = array('status'        , ' = '.$open  ->getId()); }
         elseif ($option == 'closed'   ) { $params[] = array('status'        , ' = '.$closed->getId()); }
-        elseif ($option == 'free'     ) { $params[] = array('status'        , ' = '.$open  ->getId(), 'assigned_to '  , 'IS NULL'); }
-
+        elseif ($option == 'free'     )
+        {
+            $params[] = array('status'        , ' = '.$open  ->getId());
+            $params[] = array('assigned_to '  , 'IS NULL');
+        }
         elseif ($option == 'pending'          or  $option == 'answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , 'IS NOT NULL');
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , 'IS NOT NULL');
         }
         elseif ($option == 'assessor_pending' or  $option == 'assessor_answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '= '.$id_user);
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '= '.$id_user);
         }
         elseif ($option == 'other_pending'    or  $option == 'other_answered')
         {
-            $params[] = array('status', ' = '.$open->getId(), 'assigned_to'   , '!= '.$id_user);
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '!= '.$id_user);
         }
-        elseif ($option == 'assessor_closed') { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '= ' .$id_user); }
-
-        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
-
-        elseif ($option == 'other_closed')    { $params[] = array('status', ' = '.$closed->getId(), 'assigned_to'   , '!= '.$id_user); }
-
+        elseif ($option == 'assessor_closed')
+        {
+            $params[] = array('status', ' = '.$closed->getId());
+            $params[] = array('assigned_to'   , '= ' .$id_user);
+        }
+        elseif ($option == 'other_closed')
+        {
+            $params[] = array('status', ' = '.$closed->getId());
+            $params[] = array('assigned_to'   , '!= '.$id_user);
+        }
         else{
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
             $params[] = array('workshop', ' = '.$option);
         }
         $pagination = new Pagination($page);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')){
+        if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
-        }else{
+        }
+        elseif(($option == 'assessor_pending') or ($option == 'assessor_answered') or ($option == 'other_pending') or ($option == 'other_answered')) {
+
+            $query = 'SELECT t FROM TicketBundle:Ticket t';
+            if     (($option == 'assessor_pending') or ($option == 'assessor_answered')) $query = $query.' WHERE t.assigned_to = '.$id_user;
+            elseif (($option == 'other_pending'   ) or ($option == 'other_answered'   )) $query = $query.' WHERE t.assigned_to != '.$id_user;
+
+            $consulta = $em->createQuery($query);
+            $query_posts = '';
+            foreach ($consulta->getResult() as $ticket)
+            {
+                $query2 = 'SELECT p FROM TicketBundle:Post p WHERE p.ticket = '.$ticket->getId();
+                $consulta2 = $em->createQuery($query2);
+                $result = $consulta2->getResult();
+                $last_post = end($result);
+
+                if(count($result) != 0 and $last_post != null
+                and ($last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ASSESSOR'
+                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ADMIN'
+                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_SUPER_ADMIN')
+                and ($option == 'assessor_answered' or $option == 'other_answered'))
+                {
+                    if($query_posts == '') $query_posts = ' e.id = '.$ticket->getId();
+                    else                   $query_posts = $query_posts.' OR e.id = '.$ticket->getId();
+                }
+                elseif((($option == 'assessor_pending' or $option == 'other_pending') and count($result) == 0)
+                    or (($option == 'assessor_pending' or $option == 'other_pending') and $last_post->getCreatedBy()->getId() != $id_user
+                                                                                      and $last_post->getCreatedBy()->getId() != $ticket->getAssignedTo()->getId() ))
+                {
+                    if($query_posts == '') $query_posts = ' e.id = '.$ticket->getId();
+                    else                   $query_posts = $query_posts.' OR e.id = '.$ticket->getId();
+                }
+            }
+            if($query_posts != '') $joins[] = array('e.status s', $query_posts);
+            else $joins = array();
+
+            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+        }
+        else{
             $joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
 
         $pagination->setTotalPagByLength($length);
@@ -161,7 +209,9 @@ class TicketController extends Controller {
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
                     /*Validacion Formularios*/
-                    if (($form->isValid()) && ($formC->isValid())) {
+                        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+                        if (($form ->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
+                         && ($formC->isValid() or $formC->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                         //Define CAR
                         $car = UtilController::newEntity($car, $user);
@@ -195,7 +245,7 @@ class TicketController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
@@ -251,7 +301,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                    $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                     $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$ticket->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
@@ -266,10 +316,11 @@ class TicketController extends Controller {
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
         return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
-                                                                                        'form'        => $form->createView(),
-                                                                                        'form_name'   => $form->getName(),
-                                                                                        'ticket'      => $ticket,
-                                                                                        'systems'     => $systems,
+                                                                                        'form'      => $form->createView(),
+                                                                                        'form_name' => $form->getName(),
+                                                                                        'ticket'    => $ticket,
+                                                                                        'systems'   => $systems,
+                                                                                        'form_name' => $form->getName(),
                                                                                     ));
     }
 
@@ -311,7 +362,7 @@ class TicketController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$ticket->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
@@ -351,12 +402,13 @@ class TicketController extends Controller {
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
 
-            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid())) or (!$security->isGranted('ROLE_ASSESSOR'))){
+            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
 
-                if (($formP->isValid()) and ($formD->isValid())) {
+                if (($formP->isValid() or $formP ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
+                and ($formD->isValid() or $formD ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                     //Define Post
                     $post = UtilController::newEntity($post, $user);
@@ -389,7 +441,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                    $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                     $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
@@ -400,14 +452,15 @@ class TicketController extends Controller {
             return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
-                                                                            'systems'   => $systems, )));
+                                                                            'systems'   => $systems,
+                                                                            'form_name' => $formP->getName(), )));
         }
 
         $array = array( 'formP'     => $formP->createView(),
-                        'form_name' => $form->getName(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
-                        'systems'   => $systems, );
+                        'systems'   => $systems,
+                        'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
@@ -418,27 +471,36 @@ class TicketController extends Controller {
      * Devuelve todos los tickets realizados
      * @return url
      */
-    public function listTicketFilteredAction()
+    public function listTicketFilteredAction($page=1, $id_workshop='none', $id_ticket='none', $status='all', $option='all')
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
+        $workshop = new Workshop();
         $tickets  = array();
-        $status   = new Status();
+        $params   = array();
 
-        $id_workshop = $request->request->get('id_workshop');
-        $id_ticket   = $request->request->get('flt_id'     );
-        $st_open     = $request->request->get('flt_open'   );
-        $st_closed   = $request->request->get('flt_closed' );
+        if($id_ticket   != 'none') $params[] = array('id'    , ' = '.$id_ticket  );
+        if($id_workshop != 'none')  {
+                                        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+                                        $params[] = array('workshop'    , ' = '.$id_workshop );
+                                    }
+        if($status      != 'all' )  {
+                                        $id_status = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => $status))->getId();
+                                        $params[] = array('status', " = '".$id_status."'");
+                                    }
 
-        if($st_open != "") { $status = $em->getRepository('TicketBundle:Status')->findOneByName('open'  ); }
-        else {
-            if($st_closed != "") { $status = $em->getRepository('TicketBundle:Status')->findOneByName('closed'); }
-        }
-        $tickets  = $em->getRepository('TicketBundle:Ticket'    )->findTicketsFiltered($id_workshop, $id_ticket, $status);
-        $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
+        $pagination = new Pagination($page);
 
-        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop' => $workshop,
-                                                                                       'tickets'  => $tickets,
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
+
+        $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshop,
+                                                                                       'pagination' => $pagination,
+                                                                                       'tickets'    => $tickets,
+                                                                                       'option'     => $option,
                                                                               ));
     }
 
@@ -458,7 +520,7 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+            if ($form->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 if($ticket->getSolution() != ""){
                     $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
@@ -470,7 +532,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
@@ -513,7 +575,7 @@ class TicketController extends Controller {
         UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+            $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$ticket->getId());
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));

@@ -28,6 +28,7 @@
 
         <div class="widget-content" >
 
+        {% if tickets|length > 0 %}
             <table class="table table-striped table-bordered table-hover table-list-search">
 
                 <thead id="ticketHead">
@@ -51,35 +52,16 @@
                     {% endfor %}
                 </tbody>
             </table>
-
             {% include 'UtilBundle:Pagination:tickets_history_pagination.html.twig' %}
 
-            <script type="text/javascript">
+        {% else %}
+            <legend class="padded" align="center">{% trans %} No hay tickets de este tipo {% endtrans %}</legend>
+        {% endif %}
 
-                $(document).ready(function() {
+            {% include 'UtilBundle:jquery_twig:ticket_history_jquery.html.twig' %}
 
-                    $('#slct_historyTickets').val("{{ option }}");
-
-                });
-
-                $("#slct_historyTickets").click(function() {
-
-                    var url = "{{ path('listTicket', {'page': '1', 'option': 'PLACEHOLDER'}) }}";
-                    url_show = url.replace("PLACEHOLDER", $(this).val());
-
-                    window.open(url_show, "_self");
-
-                });
-
-                $("tr#ticketRow").click(function() {
-
-                    var url = "{{ path('showTicket', {'id_ticket': 'PLACEHOLDER'}) }}";
-                    url_show = url.replace("PLACEHOLDER", $(this).children('#id_ticket').text());
-
-                    window.open(url_show, "_self");
-
-                });
-            </script>
+            {% include 'UtilBundle:jquery_twig:ticket_show_jquery.html.twig' %}
 
         </div>
     </div>
+

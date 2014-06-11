@@ -224,20 +224,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->surname;
     }
 
-    public function getCity() {
-        return $this->city;
-    }
-
     public function setName($name) {
         $this->name = $name;
     }
 
     public function setSurname($surname) {
         $this->surname = $surname;
-    }
-
-    public function setCity($city) {
-        $this->city = $city;
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -348,9 +340,16 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $region
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Region")
+     * @ORM\Column(name="region", type="string")
      */
     private $region;
+
+    /**
+     * @var string $city
+     *
+     * @ORM\Column(name="city", type="string")
+     */
+    private $city;
 
     /**
      * @var string $address
@@ -362,7 +361,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $postal_code
      *
-     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     * @ORM\Column(name="postal_code", type="string", nullable=true)
      */
     private $postal_code;
 
@@ -441,7 +440,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $region
      */
-    public function setRegion(\Adservice\UtilBundle\Entity\Region $region) {
+    public function setRegion($region) {
         $this->region = $region;
     }
 
@@ -454,6 +453,23 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->region;
     }
 
+    /**
+     * Set city
+     *
+     * @param string $city
+     */
+    public function setCity($city) {
+        $this->city = $city;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity() {
+        return $this->city;
+    }
 
     /**
      * Set address

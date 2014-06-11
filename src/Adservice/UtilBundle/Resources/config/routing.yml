@@ -22,6 +22,10 @@ regions_from_country:
    pattern: /regionsFromCountry
    defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
 
+cities_from_region:
+   pattern: /citiesFromRegion
+   defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
+
 shops_from_partner:
    pattern: /shopsFromPartner
    defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }

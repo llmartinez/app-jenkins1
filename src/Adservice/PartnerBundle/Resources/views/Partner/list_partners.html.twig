@@ -23,15 +23,16 @@
     {% endif %}
 
     {% if all_partners|length > 0  %}
-    <table class="table table-hover table-list-search" style="width: 80%; margin-left: 10%;">
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
             <tr>
                 <th>#</th>
                 <th>{% trans %} name            {% endtrans %}</th>
+                <th>{% trans %}                 {% endtrans %}</th>
                 <th>{% trans %} phone_number_1  {% endtrans %}</th>
                 <th>{% trans %} email_1         {% endtrans %}</th>
                 <th>{% trans %} region          {% endtrans %}</th>
-                <th>{% trans %} address         {% endtrans %}</th>
+                <th>{% trans %} city            {% endtrans %}</th>
                 <th>{% trans %} actions         {% endtrans %}</th>
             </tr>
         </thead>
@@ -39,24 +40,27 @@
                 {% for partner in all_partners %}
             <tr>
                 <td>{{ partner.codePartner }}</td>
-                <td>{{ partner.name }} {% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ partner.name        }}</td>
+                <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
                 <td>{{ partner.region  }}</td>
-                <td>{{ partner.address }}</td>
+                <td>{{ partner.city    }}</td>
                 <td>
                     <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a>
+                    {# <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a> #}
                 </td>
             </tr>
                 {% endfor %}
         </tbody>
     </table>
-    {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
-{% else %}
-    {% trans %} any.partner {% endtrans %}
-{% endif %}
 
+    {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
+
+    {% else %}
+        {% trans %} any.partner {% endtrans %}
+    {% endif %}
+{#
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -74,7 +78,7 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- /.modal --> #}
 
 {% endblock %}
 
@@ -83,33 +87,6 @@
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-    <script>
-        $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
-
-            $('#MainContent').find('.glyphicon-trash').click(function() {
-                var partner_id = $(this).data('id');
-                confirm_delete_partner_modal(partner_id);
-            })
-
-        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_country').click(function() {
-
-            var country = $('#flt_country').val();
-
-            if(country == null) country = 'none';
-
-            var url     = "{{ path('partner_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
-
-            url = url.replace("plc_page", 1);
-            url = url.replace("plc_country", country);
-
-            window.open(url, "_self");
-        });
-            //util.js
-            table_filter();
-        });
-
-
-    </script>
+    {% include 'UtilBundle:jquery_twig:partner_filter_country_jquery.html.twig' %}
+{#  {% include 'UtilBundle:jquery_twig:partner_delete_jquery.html.twig' %}  #}
 {% endblock %}

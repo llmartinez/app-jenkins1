@@ -27,8 +27,10 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setActive     ('1');
 
             //CONTACT
-            $entidad->setCountry($this->getReference(Data::getCountries()));
-            $entidad->setRegion($this->getReference(Data::getRegions($entidad->getCountry()->getCountry())));
+            $entidad->setLanguage($this->getReference('es_ES'));
+            $entidad->setCountry($this->getReference('Spain'));
+            $entidad->setRegion('Barcelona');
+            $entidad->setCity('Badalona');
             $entidad->setAddress('Address SA');
             $entidad->setPostalCode(Data::getPostalCode());
             $entidad->setPhoneNumber1(Data::getPhone());

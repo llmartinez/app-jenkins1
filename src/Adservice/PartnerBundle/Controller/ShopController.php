@@ -28,9 +28,10 @@ class ShopController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
+        $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
+
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
         }
         else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
@@ -68,9 +69,12 @@ class ShopController extends Controller {
 
             $form->bindRequest($request);
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 $user = $this->get('security.context')->getToken()->getUser();
                 $shop = UtilController::newEntity($shop, $user );
+                $shop = UtilController::settersContact($shop, $shop);
                 UtilController::saveEntity($em, $shop, $user);
 
                 return $this->redirect($this->generateUrl('shop_list'));
@@ -99,11 +103,16 @@ class ShopController extends Controller {
         $petition = $this->getRequest();
         $form = $this->createForm(new ShopType(), $shop);
 
+        $actual_city   = $shop->getRegion();
+        $actual_region = $shop->getCity();
+
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            if ($form->isValid())
-            {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+        if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                $shop = UtilController::settersContact($shop, $shop, $actual_region, $actual_city);
                 UtilController::saveEntity($em, $shop, $this->get('security.context')->getToken()->getUser());
                 return $this->redirect($this->generateUrl('shop_list'));
             }

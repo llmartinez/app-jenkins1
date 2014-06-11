@@ -1,7 +1,8 @@
 {% for user in users %}
     <tr>
         <td>{{ user.id }}</td>
-        <td><a id="list_username">{{ user.username }}</a>
+        <td><a id="list_username">{{ user.username }}</a></td>
+        <td>
             {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} super_admin {% endtrans %}</span> {% endif %}
             {% if role == 'admin'       %} <span class="label label-primary">{% trans %} admin       {% endtrans %}</span> {% endif %}
             {% if role == 'assessor'    %} <span class="label label-success">{% trans %} assessor    {% endtrans %}</span> {% endif %}
@@ -15,7 +16,7 @@
         <td>{{ user.region       }}</td>
         <td>
             <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a id="btn_delete{{ user.username }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+           {#  <a id="btn_delete{{ user.username }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a> #}
         </td>
     </tr>
 {% endfor %}

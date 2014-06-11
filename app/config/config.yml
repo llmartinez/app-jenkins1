@@ -36,17 +36,64 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  UTF8
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            db_old:
+                driver:   %database_old_driver%
+                host:     %database_old_host%
+                port:     %database_old_port%
+                dbname:   %database_old_name%
+                user:     %database_old_user%
+                password: %database_old_password%
+                charset:  UTF8
+            db_lock:
+                driver:   %database_lock_driver%
+                host:     %database_lock_host%
+                port:     %database_lock_port%
+                dbname:   %database_lock_name%
+                user:     %database_lock_user%
+                password: %database_lock_password%
+                charset:  UTF8
 
     orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection:   default
+                mappings:
+                    UserBundle: ~
+                    UtilBundle: ~
+                    PartnerBundle: ~
+                    WorkshopBundle: ~
+                    TicketBundle: ~
+                    CarBundle: ~
+                    PopupBundle: ~
+                    OrderBundle: ~
+                    StatisticBundle: ~
+                # auto_mapping: true
+            em_old:
+                connection:   db_old
+                mappings:
+                    ImportBundle: ~
+                # auto_mapping: true
+            em_lock:
+                connection:   db_lock
+                mappings:
+                    LockBundle: ~
+                # auto_mapping: true
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        # auto_mapping: true
+
+        # ORIGINAL #
+        # auto_generate_proxy_classes: %kernel.debug%
+        # auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:

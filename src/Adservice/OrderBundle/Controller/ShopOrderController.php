@@ -35,13 +35,15 @@ class ShopOrderController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
+        $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
+
         if($security->isGranted('ROLE_SUPER_AD')) {
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
             else                    $params[] = array();
         }
         else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
 
-        $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -87,13 +89,14 @@ class ShopOrderController extends Controller {
 
             $form->bindRequest($request);
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($this->get('security.context')->isGranted('ROLE_AD_COUNTRY') === false)
-                    $shopOrder->setPartner($user->getPartner());
+                $shopOrder->setPartner($user->getPartner());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
@@ -101,7 +104,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
                 $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -156,7 +159,9 @@ class ShopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+
+             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
@@ -175,7 +180,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
                 $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -245,7 +250,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -284,7 +289,10 @@ class ShopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+
+             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 $shopOrder->setAction('rejected');
                 $shopOrder->setRejectionReason($form->get('rejection_reason')->getData());     //recogemos del formulario el motivo de rechazo...
                 $em->persist($shopOrder);
@@ -292,7 +300,7 @@ class ShopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());*/
                 $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
@@ -325,22 +333,22 @@ class ShopOrderController extends Controller {
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
-        $shopOrder = $em->getRepository("WorkshopBundle:WorkshopOrder")->find($id);
-        if ($shopOrder && $workshopOrder->getAction() == 'rejected'){
-            $workshopOrder->setAction($workshopOrder->getWantedAction());
-            $em->persist($workshopOrder);
+        $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->find($id);
+        if ($shopOrder->getAction() == 'rejected'){
+            $shopOrder->setAction($shopOrder->getWantedAction());
+            $em->persist($shopOrder);
 
-            $action = $workshopOrder->getWantedAction();
+            $action = $shopOrder->getWantedAction();
 
             /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
-            $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$workshopOrder->getId());
+            $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
+            $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@grupeina.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder,
-                                                                                                       'action'        => $action)));
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder,
+                                                                                                            'action'    => $action)));
             $mailer->sendMailToSpool();
-            // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder,
+            // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                'action'   => $action));die;
 
             $em->flush();
@@ -377,7 +385,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -426,7 +434,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shopOrder->getCreatedBy()->getEmail1()); */
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
@@ -509,7 +517,7 @@ class ShopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($shop->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($shop->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop,
@@ -520,7 +528,7 @@ class ShopOrderController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $shopOrders = $em->getRepository("OrderBundle:ShopOrder")->findAll();
-        $ordersBefore = $this->getOrdersBefore($shopOrders);
+        $ordersBefore = $this->getShopOrdersBefore($em, $shopOrders);
 
         return $this->redirect($this->generateUrl('list_orders'));
 
@@ -541,6 +549,7 @@ class ShopOrderController extends Controller {
         $shopOrder->setPartner       ($shop->getPartner());
         $shopOrder->setCountry       ($shop->getCountry());
         $shopOrder->setRegion        ($shop->getRegion());
+        $shopOrder->setCity          ($shop->getCity());
         $shopOrder->setAddress       ($shop->getAddress());
         $shopOrder->setPostalCode    ($shop->getPostalCode());
         $shopOrder->setPhoneNumber1  ($shop->getPhoneNumber1());
@@ -578,6 +587,7 @@ class ShopOrderController extends Controller {
         $shop->setPartner       ($shopOrder->getPartner());
         $shop->setCountry       ($shopOrder->getCountry());
         $shop->setRegion        ($shopOrder->getRegion());
+        $shop->setCity          ($shopOrder->getCity());
         $shop->setAddress       ($shopOrder->getAddress());
         $shop->setPostalCode    ($shopOrder->getPostalCode());
         $shop->setPhoneNumber1  ($shopOrder->getPhoneNumber1());

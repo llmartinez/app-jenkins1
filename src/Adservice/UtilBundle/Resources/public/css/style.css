@@ -1,5 +1,5 @@
 /*
-    Document   : header
+    Document   : style.css
     Created on : 21-ene-2014, 10:11:21
     Author     : dani
     Description:
@@ -9,9 +9,13 @@
 /*
     BODY
 */
-
 html {
-    background-color:  #285e8e;
+    height: 100%;
+    /*background-color:  #001739;*/
+}
+body {
+    height: 100%;
+    /*background-color:  #001739;*/
 }
 #MainBody {
     background-color: transparent;
@@ -29,9 +33,14 @@ html {
 }
 
 #MainFooter {
-    background-color: darkgray;
+    background-color: #f5f5f5;
     color: #fff;
-    padding: 20px;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    font-size: smaller;
+}
+.img_logo {
+    max-height: 58px;
 }
 .margined {
     margin-right: 40px;
@@ -39,6 +48,41 @@ html {
 .floating {
     float:left;
 }
+.mb3 {
+    margin-bottom: 3px;
+}
+.btn-menu {
+    display: inline-block;
+    color: #ffffff;
+    background-color: #428bca;
+    /*
+    background-image: url(http://www.librosweb.es/website/css/images/logo.gif);
+    */
+    border-color: #357ebd;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 10px;
+    width: 280px;
+}
+.btn-menu:hover {
+    text-decoration: none;
+}
+.btn-footer {
+    display: inline-block;
+    color: #428bca;
+    margin-right: 10px;
+}
+.btn-date {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 5px;
+}
+.btn-blue {
+    color: #428bca;
+}
+
+
 /*
     HEADER
 */
@@ -47,9 +91,12 @@ html {
 }
 
 .navbar {
-    background-color: azure;
+    background-color: #428bca;
+    max-height: 75px;
 }
-
+.btn-header{
+    height: 30px;
+}
 /*
     Plantillas
 */
@@ -96,6 +143,9 @@ html {
 }
 .pad-left {
     padding-left: 20px;
+}
+.txtComment {
+    color: #a3a3a3;
 }
 
 .txtContainer {
@@ -355,7 +405,7 @@ html {
 
 /*@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
 
-html, body { background: #285e8e }
+html, body { background: #001739 }
 
 .slides {
     padding: 0;

@@ -33,18 +33,20 @@ security:
     access_control:
       - { path: ^/(es|en|fr)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr)/partner/shop,               roles: [ROLE_AD]                    }
-      - { path: ^/(es|en|fr)/partner/,                   roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr)/shop/,                      roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr)/partner,                    roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
       - { path: ^/(es|en|fr)/user/list,                  roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr)/user/,                      roles: [ROLE_USER, ROLE_AD]         }
-      - { path: ^/(es|en|fr)/popup/,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/workshop/,                  roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr)/user,                       roles: [ROLE_USER, ROLE_AD]         }
+      - { path: ^/(es|en|fr)/popup,                      roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD]        }
       - { path: ^/(es|en|fr)/ticket/workshopList,        roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
       - { path: ^/(es|en|fr)/ticket/close,               roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr)/ticket/,                    roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/car/,                       roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/statistic/,                 roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr)/ticket,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr)/car,                        roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr)/statistic,                  roles: [ROLE_ADMIN]                 }
+      # - { path: ^/(es|en|fr)/lock,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr)/import,                     roles: [ROLE_SUPER_ADMIN]           }
 
     encoders:
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }

@@ -1,0 +1,33 @@
+
+<script>
+
+	$(document).ready(function() {
+		$( "#w_idpartner" ).focus();
+	});
+
+	$( "#w_idpartner" ).on( "keydown", function( event ) {
+
+		if (event.which == 13) {
+		  	event.preventDefault();
+		  	$( "#w_id" ).focus();
+		}
+	});
+
+	$( "#w_id" ).on( "keydown", function( event ) {
+
+	  	if (event.which == 13 && $( "#w_idpartner" ).val() == "") {
+	  		event.preventDefault();
+			$( "#w_idpartner" ).focus();
+			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+	  	}
+	});
+
+	$( "#btn_check" ).click(function() {
+
+	  	if ($( "#w_id" ).val() != "" && $( "#w_idpartner" ).val() == "") {
+	  		event.preventDefault();
+			$( "#w_idpartner" ).focus();
+			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+	  	}
+	});
+</script>

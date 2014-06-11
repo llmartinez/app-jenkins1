@@ -1,6 +1,6 @@
 
     {% if (is_granted('ROLE_ASSESSOR')) %}
-    <legend>{% trans %} ticket.info {% endtrans %}</legend>
+    <legend>{% trans %} ticket_info {% endtrans %}</legend>
 
     {% if app.session.hasFlash('error_ticket') %}
         <p class="error">{{ app.session.getFlash('error_ticket') }}</p>

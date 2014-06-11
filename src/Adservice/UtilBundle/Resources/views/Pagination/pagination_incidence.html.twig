@@ -1,0 +1,88 @@
+
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content">
+
+    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+    	{% set page      = pagination.page      %}
+    	{% set prevpages = pagination.prevpages %}
+	    {% set nextpages = pagination.nextpages %}
+	    {% set totalpag  = pagination.totalpag  %}
+
+	    {# FLECHAS PAGINAS ANTERIORES #}
+    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"   ></span></button>
+    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="{% trans %} page.prev {% endtrans %}"></span></button>
+
+	    {# PAGINAS ANTERIORES #}
+    	{% if prevpages > 0 %}
+	    	{% for prev_page in prevpages..1 %}
+	    		<button class="page_number change_page" >{{ page - prev_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+    	{# PAGINA ACTUAL #}
+	    <input  type="text"   id="page"  class="page_number page_selected" value="{{ page }}" title="{% trans %} page.goto {% endtrans %} {{ page }}" disabled >
+
+	    {# PAGINAS SIGUIENTES #}
+    	{% if nextpages > 0 %}
+			{% for next_page in 1..nextpages %}
+	    		<button class="page_number change_page" >{{ page + next_page }}</button>
+	    	{% endfor %}
+    	{% endif %}
+
+	    {# FLECHAS PAGINAS SIGUIENTES #}
+    	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="{% trans %} page.next {% endtrans %}"></span></button>
+    	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
+
+    </div>
+
+    <script type="text/javascript">
+
+    	//REDIRIGE A LA PRIMERA PAGINA
+	    $('#firstpage').click(function() {
+
+	    	var url = "{{ path('list_incidences', {'page': '1', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA ANTERIOR PAGINA
+	    $('#btn_anterior').click(function() {
+
+	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
+
+	    	if (prev_page > 0 ) {
+
+				var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
+		    	url = url.replace("plc_page", prev_page);
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+	    $('.change_page').click(function() {
+
+	    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
+	    	url = url.replace("plc_page", $(this).text());
+	    	window.open(url, "_self");
+	    });
+
+	    //REDIRIGE A LA SIGUIENTE PAGINA
+	    $('#btn_siguiente').click(function() {
+
+	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
+
+	    	if (next_page <= {{ totalpag }}) {
+
+		    	var url = "{{ path('list_incidences', {'page': 'plc_page', 'id_taller': id_taller, 'id_socio': id_socio}) }}";
+		    	url = url.replace("plc_page", next_page);
+		    	window.open(url, "_self");
+		    }
+	    });
+
+	    //REDIRIGE A LA ULTIMA PAGINA
+	    $('#totalpage').click(function() {
+
+	    	var url = "{{ path('list_incidences', {'page': totalpag, 'id_taller': id_taller, 'id_socio': id_socio}) }}";
+	    	window.open(url, "_self");
+	    });
+
+	</script>

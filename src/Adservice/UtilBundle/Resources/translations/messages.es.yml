@@ -1,437 +1,461 @@
-header.welcome: ADService España
+header.welcome: "ADService España"
 
-www.ad-service.es: 'www.ad-service.es'
+www.ad-service.es: "www.ad-service.es"
 
-login:			'Iniciar Sesión'
-login.welcome:	'Acceso usuarios AD Service'
-login.remember:	'Recuerdame'
+login:			"Iniciar Sesión"
+login.welcome:	"Acceso usuarios AD Service"
+login.remember:	"Recuerdame"
 
-menu.title_admin:                    'MENU Administrador'
-menu.title_assessor:                 'MENU ASESOR'
-menu.title_user:                     'MENU USUARIO'
-menu.title_ad:                       'MENU AD'
+menu.title_admin:                    "MENU Administrador"
+menu.title_assessor:                 "MENU Asesor"
+menu.title_user:                     "MENU Usuario"
+menu.title_ad:                       "MENU Socio"
 
-menu.profile:                        'Mi Perfil'
-menu.list_statistics:                'Consultar Estadísticas ADService'
-menu.list_users:                     'Listado de Usuarios ADService'
-menu.list_partners:                  'Listado de Socios ADService'
-menu.list_shops:                     'Listado de Tiendas ADService'
-menu.list_workshops:                 'Listado de Talleres ADService'
-menu.list_tickets:                   'Listado de Tickets AdService'
-menu.list_popups:                    'Listado de Popups ADService'
-menu.list_orders: 			 	     'Listado de Solicitudes pendientes'
+menu.profile:                        "Mi Perfil"
+menu.list_statistics:                "Consultar Estadísticas"
+menu.list_users:                     "Listado de Usuarios"
+menu.list_partners:                  "Listado de Socios"
+menu.list_shops:                     "Listado de Tiendas"
+menu.list_workshops:                 "Listado de Talleres"
+menu.list_typologies:				 "Listado de Tipologias"
+menu.list_diagnosis_machines:		 "Listado de Máquinas de Diagnosis"
+menu.list_tickets:                   "Listado de Tickets"
+menu.list_popups:                    "Listado de Popups"
+menu.list_orders: 			 	     "Listado de Solicitudes pendientes"
 
-menu.asign_user_to_ticket:           'Asignar Tickets a Usuarios'
-menu.asign_shop_to_workshop:		 'Asignar Talleres a Tiendas'
-menu.new_ticket:                     'Crea un nuevo ticket'
-menu.new_shop_order: 				 'Solicitar alta de tienda'
-menu.new_workshop_order:             'Solicitar alta de taller'
+menu.asign_user_to_ticket:           "Asignar Tickets a Usuarios"
+menu.asign_shop_to_workshop:		 "Asignar Talleres a Tiendas"
+menu.new_ticket:                     "Crea un nuevo ticket"
+menu.new_shop_order: 				 "Solicitar alta de tienda"
+menu.new_workshop_order:             "Solicitar alta de taller"
 
 #COMUNES
-id: 					 'id'
-you: 					 'Tu'
-yes: 					 'si'
-no:  					 'no'
-all:  					 'todos'
-home: 					 'Índice'
-contact:				 'Contacto'
-language:				 'Idioma'
-datauser:    			 'Datos del Usuario'
-dataworkshop:			 'Datos del Taller'
-datashop:				 'Datos de la Tienda'
-username:				 'Usuario'
-password:				 'Contraseña'
-change_password: 		 'Cambiar Contraseña'
-change_password.confirm: 'Deseas generar una nueva clave de acesso para el usuario?'
+id: 					 "id"
+you: 					 "Tu"
+yes: 					 "si"
+no:  					 "no"
+all:  					 "todos"
+home: 					 "Índice"
+contact:				 "Contacto"
+language:				 "Idioma"
+datauser:    			 "Datos del Usuario"
+dataworkshop:			 "Datos del Taller"
+datashop:				 "Datos de la Tienda"
+username:				 "Usuario"
+password:				 "Contraseña"
+change_password: 		 "Cambiar Contraseña"
+change_password.confirm: "Deseas generar una nueva clave de acesso para el usuario?"
+repeat_password:		 "Repite tu nueva contraseña"
+error.same_password:	 "Las contraseñas no coinciden"
+error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
+error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 
 #ENTITY
-super_admin: 			 'Super Administrador'
-admin: 					 'Administrador'
-assessor: 				 'Asesor'
-user: 					 'Usuario'
-super_ad:  				 'Socio nacional'
-ad:  					 'Socio'
-partner:				 'Socio'
-shop:	 				 'Tienda'
-workshop: 				 'Taller'
-ticket: 				 'Ticket'
-car: 					 'Coche'
-post: 					 'Mensajes'
-order:					 'Solicitud'
+super_admin: 			 "Super Administrador"
+admin: 					 "Administrador"
+assessor: 				 "Asesor"
+user: 					 "Usuario"
+super_ad:  				 "Socio nacional"
+ad:  					 "Socio"
+partner:				 "Socio"
+shop:	 				 "Tienda"
+workshop: 				 "Taller"
+typology:		 		 "Tipología"
+diagnosis_machine:		 "Máquina de Diagnosis"
+diagnosis_machines:		 "Máquinas de diagnosis"
+ticket: 				 "Ticket"
+car: 					 "Coche"
+post: 					 "Mensajes"
+order:					 "Solicitud"
+incidence:				 "Incidencia"
+info:				 	 "Información"
 
 #CONTACT
-name:					 'Nombre'
-surname:				 'Apellidos'
-tel:					 'Telefono'
-mobile:					 'Movil'
-phone_number_1:			 'Tel. fijo 1'
-phone_number_2:			 'Tel. fijo 2'
-movile_number_1:		 'Tel. movil 1'
-movile_number_2:		 'Tel. movil 2'
-fax:					 'Fax'
-email:					 'Correo'
-email_1:				 'Correo 1'
-email_2:				 'Correo 2'
-country:				 'País'
-region:					 'Provincia'
-address:				 'Dirección'
-postal_code:			 'Código postal'
+name:					 "Nombre"
+surname:				 "Apellidos"
+tel:					 "Telefono"
+mobile:					 "Movil"
+phone_number_1:			 "Tel. fijo 1"
+phone_number_2:			 "Tel. fijo 2"
+movile_number_1:		 "Tel. movil 1"
+movile_number_2:		 "Tel. movil 2"
+fax:					 "Fax"
+email:					 "Correo"
+email_1:				 "Correo 1"
+email_2:				 "Correo 2"
+country:				 "País"
+region:					 "Provincia"
+city:					 "Población"
+address:				 "Dirección"
+postal_code:			 "Código postal"
 
-created_by:				 'Creado por'
-created_at:				 'Creado en'
-modified_by:			 'Modificado por'
-modified_at:			 'Modificado en'
+created_by:				 "Creado por"
+created_at:				 "Creado en"
+modified_by:			 "Modificado por"
+modified_at:			 "Modificado en"
 
 #FIELDS
-date: 					 'Fecha'
-date.start: 			 'Fecha Inicial'
-date.end: 				 'Fecha Final'
-code:					 'Código'
-code.partner:			 'Código de Socio'
-code.workshop:			 'Código de Taller'
-status:					 'Estado'
-testing:				 'En fase de pruebas'
-profile_of:				 'Perfil de'
+date: 					 "Fecha"
+date.start: 			 "Fecha Inicial"
+date.end: 				 "Fecha Final"
+code:					 "Código"
+code.partner:			 "Código de Socio"
+code.workshop:			 "Código de Taller"
+status:					 "Estado"
+testing:				 "En fase de pruebas"
+profile_of:				 "Perfil de"
 
 #STATUS
-actions: 				 'Acciones'
-open: 					 'Abierto'
-closed: 				 'Cerrado'
-active: 				 'Activo'
-inactive: 				 'Inactivo'
-create:					 'Creado'
-rejected:				 'Rechazado'
-cancel:					 'Cancelado'
-action: 				 'Acción'
-reason: 				 'Motivo'
-resend: 				 'Reenviar'
-action.create:	 		 'Crear'
-action.active: 			 'Activar'
-action.inactive:		 'Desactivar'
-action.modify:	    	 'Modificar'
-action.reject:	    	 'Rechazar'
-action.rejected:		 'Rechazada'
-action.accepted:		 'Aceptada'
-action.cancel:			 'Cancelada'
-action.resend:			 'Reenviada'
-change:					 'Cambio'
-of:						 'de'
-to:						 'a'
-back:					 'Atrás'
-before:					 'Antes'
-after:					 'Después'
+actions: 				 "Acciones"
+open: 					 "Abierto"
+closed: 				 "Cerrado"
+active: 				 "Activo"
+inactive: 				 "Inactivo"
+create:					 "Creado"
+rejected:				 "Rechazado"
+cancel:					 "Cancelado"
+action: 				 "Acción"
+reason: 				 "Motivo"
+resend: 				 "Reenviar"
+action.create:	 		 "Crear"
+action.active: 			 "Activar"
+action.inactive:		 "Desactivar"
+action.modify:	    	 "Modificar"
+action.reject:	    	 "Rechazar"
+action.rejected:		 "Rechazada"
+action.accepted:		 "Aceptada"
+action.cancel:			 "Cancelada"
+action.resend:			 "Reenviada"
+change:					 "Cambio"
+of:						 "de"
+to:						 "a"
+back:					 "Atrás"
+before:					 "Antes"
+after:					 "Después"
 
 #NEW
-new.partner:			 'Nuevo Socio'
-new.shop:				 'Nueva Tienda'
-new.workshop:			 'Nuevo Taller'
-new.user:				 'Nuevo Usuario'
-new.ticket:				 'Nuevo Ticket'
-new.popup:				 'Nuevo Popup'
-new.order.shop:			 'Nueva Solicitud de Tienda'
-new.order.workshop:		 'Nueva Solicitud de Taller'
+new.partner:			 "Nuevo Socio"
+new.shop:				 "Nueva Tienda"
+new.workshop:			 "Nuevo Taller"
+new.user:				 "Nuevo Usuario"
+new.ticket:				 "Nuevo Ticket"
+new.typology:			 "Nueva Tipologia"
+new.diagnosis_machine:   "Nueva Máquina de Diagnosis"
+new.popup:				 "Nuevo Popup"
+new.order.shop:			 "Nueva Solicitud de Tienda"
+new.order.workshop:		 "Nueva Solicitud de Taller"
 
 #EDIT
-edit.partner:			 'Editar el Socio'
-edit.shop:				 'Editar la Tienda'
-edit.workshop:			 'Editar el Taller'
-edit.car:				 'Editar el coche'
-edit.ticket:			 'Editar el Ticket'
-edit.ticket.info:		 'Editar información del Ticket'
-edit.popup:				 'Editar el Popup'
-edit.order.shop:		 'Editar Solicitud de la Tienda'
-edit.order.workshop:	 'Editar Solicitud del Taller'
+edit.partner:			 "Editar el Socio"
+edit.shop:				 "Editar la Tienda"
+edit.workshop:			 "Editar el Taller"
+edit.user:			 	 "Editar Usuario"
+edit.car:				 "Editar el coche"
+edit.ticket:			 "Editar el Ticket"
+edit.typology:			 "Editar Tipologia"
+edit.diagnosis_machine:  "Editar Máquina de Diagnosis"
+edit.ticket.info:		 "Editar información del Ticket"
+edit.popup:				 "Editar el Popup"
+edit.order.shop:		 "Editar Solicitud de la Tienda"
+edit.order.workshop:	 "Editar Solicitud del Taller"
 
 #ANY
-any.partner:			 'No hay socios!!'
-any.shop:				 'No hay tiendas!!'
-any.workshop:			 'No hay talleres!!'
-any.ticket:				 'No hay tickets!!'
-any.popup:				 'No hay popups!!'
-any.response:			 'Todavía no hay respuestas'
-any.order.pending: 		 'No hay solicitudes pendientes!!'
-any.order.rejected: 	 'No hay solicitudes rechazadas!!'
+any.partner:			 "No hay socios!!"
+any.shop:				 "No hay tiendas!!"
+any.workshop:			 "No hay talleres!!"
+any.ticket:				 "No hay tickets!!"
+any.typology:			 "No hay Tipologias"
+any.diagnosis_machine:   "No hay Máquinas de Diagnosis!!"
+any.popup:				 "No hay popups!!"
+any.response:			 "Todavía no hay respuestas"
+any.order.pending: 		 "No hay solicitudes pendientes!!"
+any.order.rejected: 	 "No hay solicitudes rechazadas!!"
+any.incidence: 			 "No hay incidencias!!"
 
 #BOTONES
-btn.send:			 	 'Enviar'
-btn.create:			 	 'Crear'
-btn.create_close:	 	 'Crear y Cerrar'
-btn.edit:			 	 'Editar'
-btn.search:			 	 'Buscar'
-btn.open:			 	 'Abrir'
-btn.close:			 	 'Cerrar'
+btn.send:			 	 "Enviar"
+btn.create:			 	 "Crear"
+btn.create_close:	 	 "Crear y Cerrar"
+btn.edit:			 	 "Editar"
+btn.search:			 	 "Buscar"
+btn.open:			 	 "Abrir"
+btn.close:			 	 "Cerrar"
 
 #PLACEHOLDERS
-placeholder.ticket.id:	 'Inserta ID de ticket'
+placeholder.ticket.id:	 "Inserta ID de ticket"
 
 #PARTNER
-partner.delete:			 'Borrar Socio'
-partner.delete.confirm:	 'Estas seguro que quieres eliminar este socio?'
+partner.delete:			 "Borrar Socio"
+partner.delete.confirm:	 "Estas seguro que quieres eliminar este socio?"
 
 #SHOP
-shop.is_assigned:		 'La tienda tiene talleres asignados. Reasignalos para poder borrar'
-shop.activate:			 'Activar la Tienda'
-shop.deactivate:		 'Desactivar la Tienda'
-shop.delete:			 'Borrar Tienda'
-shop.delete.confirm:	 'Estas seguro que quieres eliminar esta tienda?'
+shop.is_assigned:		 "La tienda tiene talleres asignados. Reasignalos para poder borrar"
+shop.activate:			 "Activar la Tienda"
+shop.deactivate:		 "Desactivar la Tienda"
+shop.delete:			 "Borrar Tienda"
+shop.delete.confirm:	 "Estas seguro que quieres eliminar esta tienda?"
 
 #WORKSHOP
-workshops:				 'Talleres'
-typology:				 'Tipo'
-cif:					 'Cif'
-test:					 'En pruebas'
-endtest:				 'En pruebas hasta'
-diagnosis_machines:		 'Maquinas de diagnosis'
-conflictive:			 'Conflictivo'
-observations:			 'Observaciones'
-observations_workshop:	 'Observaciones para el Taller'
-observations_assessor:	 'Observaciones para el Asesor'
-observations_admin:		 'Observaciones para el Administrador'
-workshop.delete:		 'Borrar Taller'
-workshop.delete.confirm: 'Estas seguro que quieres eliminar este taller?'
-workshop.activate:		 'Activar el Taller'
-workshop.deactivate:	 'Desactivar el Taller'
-workshop.search:		 'Buscar taller'
-users_in_workshop:		 'Usuarios del Taller'
+workshops:				 "Talleres"
+code_workshop:			 "Codigo de Taller"
+cif:					 "Cif"
+test:					 "En pruebas"
+endtest:				 "En pruebas hasta"
+conflictive:			 "Conflictivo"
+observations:			 "Observaciones"
+observations_workshop:	 "Observaciones para el Taller"
+observations_assessor:	 "Observaciones para el Asesor"
+observations_admin:		 "Observaciones para el Administrador"
+workshop.delete:		 "Borrar Taller"
+workshop.delete.confirm: "Estas seguro que quieres eliminar este taller?"
+workshop.activate:		 "Activar el Taller"
+workshop.deactivate:	 "Desactivar el Taller"
+workshop.search:		 "Buscar taller"
+users_in_workshop:		 "Usuarios del Taller"
 
 #USER
-user.delete:			 'Borrar Usuario'
-user.delete.confirm:	 'Estas seguro que quieres eliminar este usuario?'
+user.delete:			 "Borrar Usuario"
+user.delete.confirm:	 "Estas seguro que quieres eliminar este usuario?"
+select_user_type:		 "Selecciona el tipo de usuario"
 
 #CAR
-brand:					 'Marca'
-model:					 'Modelo'
-version:				 'Gama'
-year:					 'Año'
-motor:					 'Motor'
-kw:						 'kW'
-displacement:			 'Cilindrada'
-vin:					 'Número de Bastidor'
-plate_number:			 'Matrícula'
+brand:					 "Marca"
+model:					 "Modelo"
+version:				 "Gama"
+year:					 "Año"
+motor:					 "Motor"
+kw:						 "kW"
+displacement:			 "Cilindrada"
+vin:					 "Número de Bastidor"
+plate_number:			 "Matrícula"
 
 
 #TICKET
-tickets:					  'Tickets'
-answer: 					  'Respuesta'
-description: 				  'Descripción'
-solution:					  'Solución'
-assigned:					  'Asignado'
-assign_to:					  'Asignar'
-assign_not:					  'Sin asignar'
-importance:					  'Importancia'
-system:					 	  'Sistema'
-subsystem:					  'Subsistema'
+tickets:					  "Tickets"
+answer: 					  "Respuesta"
+description: 				  "Descripción"
+solution:					  "Solución"
+assigned:					  "Asignado"
+assigned_to:			 	  "Asignado a"
+assign_to:					  "Asignar"
+assign_not:					  "Sin asignar"
+importance:					  "Importancia"
+system:					 	  "Sistema"
+subsystem:					  "Subsistema"
 
-ticket_info:				  'Información del ticket'
-ticket.history.title:         'Historial de Tickets'
-ticket.opt.all:               'Todos los Tickets'
-ticket.opt.open:              'Tickets abiertos'
-ticket.opt.closed:            'Tickets cerrados'
-ticket.opt.free :             'Tickets libres'
-ticket.opt.pending:  		  'Tickets pendientes'
-ticket.opt.answered: 		  'Tickets respondidos'
-ticket.opt.assessor.pending:  'Tus tickets pendientes'
-ticket.opt.assessor.answered: 'Tus tickets respondidos'
-ticket.opt.assessor.closed:   'Tus tickets cerrados'
-ticket.opt.other.pending:     'Otros tickets pendientes'
-ticket.opt.other.answered:    'Otros tickets respondidos'
-ticket.opt.other.closed:      'Otros tickets cerrados'
-ticket.opt.owner:             'Tus tickets'
-ticket.opt.workshop:          'Tickets de tu taller'
+ticket_info:				  "Información del ticket"
+ticket.history.title:         "Historial de Tickets"
+ticket.opt.all:               "Todos los Tickets"
+ticket.opt.open:              "Tickets abiertos"
+ticket.opt.closed:            "Tickets cerrados"
+ticket.opt.free :             "Tickets libres"
+ticket.opt.pending:  		  "Tickets pendientes"
+ticket.opt.answered: 		  "Tickets respondidos"
+ticket.opt.assessor.pending:  "Tus tickets pendientes"
+ticket.opt.assessor.answered: "Tus tickets respondidos"
+ticket.opt.assessor.closed:   "Tus tickets cerrados"
+ticket.opt.other.pending:     "Otros tickets pendientes"
+ticket.opt.other.answered:    "Otros tickets respondidos"
+ticket.opt.other.closed:      "Otros tickets cerrados"
+ticket.opt.owner:             "Tus tickets"
+ticket.opt.workshop:          "Tickets de tu taller"
 
-ticket.title.from_workshop:   'Tickets del taller'
-ticket.assigned_to:			  'Asignado a'
-ticket.flt.searchBy.id:		  'Buscar ticket por ID'
-ticket.search:				  'Buscar ticket'
-ticket.block:				  'Bloquear ticket para responder'
-ticket.blocked:				  'Ticket bloqueado'
-ticket.unlock:				  'Desbloquear ticket'
-ticket.close:				  'Cerrar Ticket'
-ticket.closed:				  'Ticket cerrado'
-ticket.reopen:				  'Reabrir ticket'
-ticket.delete:				  'Borrar Ticket'
-ticket.delete.confirm:		  'Estas seguro que quieres eliminar este ticket?'
-ticket.from_workshop:		  'Tickets del taller'
-ticket.similar:				  'Tickets similares'
-ticket.similar.matching:	  'Selecciona Modelo y Subsystema para buscar tickets resultos similares'
+ticket.title.from_workshop:   "Tickets del taller"
+ticket.assigned_to:			  "Asignado a"
+ticket.flt.searchBy.id:		  "Buscar ticket por ID"
+ticket.search:				  "Buscar ticket"
+ticket.block:				  "Bloquear ticket para responder"
+ticket.blocked:				  "Ticket bloqueado"
+ticket.unlock:				  "Desbloquear ticket"
+ticket.close:				  "Cerrar Ticket"
+ticket.closed:				  "Ticket cerrado"
+ticket.reopen:				  "Reabrir ticket"
+ticket.delete:				  "Borrar Ticket"
+ticket.delete.confirm:		  "Estas seguro que quieres eliminar este ticket?"
+ticket.from_workshop:		  "Tickets del taller"
+ticket.similar:				  "Tickets similares"
+ticket.similar.matching:	  "Selecciona Modelo y Subsystema para buscar tickets resultos similares"
 
 #POST
-reply:						  'Responder'
-follow:						  'Seguimiento'
+reply:						  "Responder"
+follow:						  "Seguimiento"
 
 #FILE
-file.download:				  'Descargar archivo'
+file.download:				  "Descargar archivo"
 
 #STATISTIC
-statistic.general:			  'Estadísticas generales'
-statistic.tickets:			  'Estadísticas de tickets'
-statistic.workshops:		  'Estadísticas de talleres'
-statistic.from_adservice:	  'de Ad-service'
-statistic.from_country:		  'de tu país'
-statistic.num_users:		  'Número de Usuarios'
-statistic.num_partners:		  'Número de Socios'
-statistic.num_shops:		  'Número de Tiendas'
-statistic.num_workshops:	  'Número de Talleres'
-statistic.num_tickets:		  'Número de Tickets'
-statistic.num_tickets.open:	  'Número de Tickets abiertos'
-statistic.num_tickets.closed: 'Número de Tickets cerrados'
+statistic.general:			  "Estadísticas generales"
+statistic.tickets:			  "Estadísticas de tickets"
+statistic.workshops:		  "Estadísticas de talleres"
+statistic.from_adservice:	  "de Ad-service"
+statistic.from_country:		  "de tu país"
+statistic.num_users:		  "Número de Usuarios"
+statistic.num_partners:		  "Número de Socios"
+statistic.num_shops:		  "Número de Tiendas"
+statistic.num_workshops:	  "Número de Talleres"
+statistic.num_tickets:		  "Número de Tickets"
+statistic.num_tickets.open:	  "Número de Tickets abiertos"
+statistic.num_tickets.closed: "Número de Tickets cerrados"
 
 #POPUP
-popup.delete:				  'Borrar popup'
-popup.delete.confirm:		  'Estas seguro que quieres eliminar este popup?'
+popup.delete:				  "Borrar popup"
+popup.delete.confirm:		  "Estas seguro que quieres eliminar este popup?"
 
 #ORDERS
-workshop_pending:			  	'Sol.Taller pendientes'
-workshop_rejected:				'Sol.Taller rechazadas'
-shop_pending:					'Sol.Tienda pendientes'
-shop_rejected:					'Sol.Tienda rechazadas'
+workshop_pending:			  	"Sol.Taller pendientes"
+workshop_rejected:				"Sol.Taller rechazadas"
+shop_pending:					"Sol.Tienda pendientes"
+shop_rejected:					"Sol.Tienda rechazadas"
 
-order.details:					'Detalles de la solicitud'
-order.cancel:					'Cancelar la solicitud'
-order.resend:					'Reenviar la solicitud'
-order.recreate:					'Vuelve a crear la solicitud corrigiendo los errores indicados'
-list.shop.pending:				'Solicitudes de Tiendas pendientes'
-list.shop.rejected:				'Solicitudes de Tiendas rechazadas'
-list.workshop.pending:			'Solicitudes de Talleres pendientes'
-list.workshop.rejected:			'Solicitudes de Talleres rechazadas'
-reject.reason:					'Motivo del rechazo'
+order.details:					"Detalles de la solicitud"
+order.cancel:					"Cancelar la solicitud"
+order.resend:					"Reenviar la solicitud"
+order.recreate:					"Vuelve a crear la solicitud corrigiendo los errores indicados"
+list.shop.pending:				"Solicitudes de Tiendas pendientes"
+list.shop.rejected:				"Solicitudes de Tiendas rechazadas"
+list.workshop.pending:			"Solicitudes de Talleres pendientes"
+list.workshop.rejected:			"Solicitudes de Talleres rechazadas"
+reject.reason:					"Motivo del rechazo"
 
 #PAGINATION
-page.first:						'Primera página'
-page.prev:						'Página anterior'
-page.goto:						'Ir a la página'
-page.next:						'Página siguiente'
-page.last:						'Última página'
+page.first:						"Primera página"
+page.prev:						"Página anterior"
+page.goto:						"Ir a la página"
+page.next:						"Página siguiente"
+page.last:						"Última página"
 
 #MAIL
-mail.info.tel:							'93123123'
-mail.info.more:							'Más información:'
-mail.testing:		                	'En fase de pruebas hasta '
+mail.info.tel:							"93 395 23 08"
+mail.info.more:							"Más información:"
+mail.testing:		                	"En fase de pruebas hasta "
 
-mail.newTicket.subject:					'ADService | Nuevo Ticket creado con id #'
-mail.newTicket.title:					'Se ha creado un ticket'
-mail.newTicket.createdby:				'Este ticket se ha creado vía teléfono con:'
-mail.newTicket.createdby.user:			'Este ticket ha sido creado a través de la plataforma AD-Service.'
-mail.newTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.newTicket.info.id:					'El código del ticket es:'
+mail.newTicket.subject:					"ADService | Nuevo Ticket creado con id #"
+mail.newTicket.title:					"Se ha creado un ticket"
+mail.newTicket.createdby:				"Este ticket se ha creado vía teléfono con:"
+mail.newTicket.createdby.user:			"Este ticket ha sido creado a través de la plataforma AD-Service."
+mail.newTicket.info:					"Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.newTicket.info.id:					"El código del ticket es:"
 
-mail.editTicket.subject:				'ADService | Ticket editado con id #'
-mail.editTicket.title:					'Se ha editado un ticket'
-mail.editTicket.createdby:				'Este ticket ha sido editado por:'
-mail.editTicket.createdby.user:			'Has editado el ticket a través de la plataforma AD-Service.'
-mail.editTicket.info:					'Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.editTicket.info.id:				'El código del ticket es:'
+mail.editTicket.subject:				"ADService | Ticket editado con id #"
+mail.editTicket.title:					"Se ha editado un ticket"
+mail.editTicket.createdby:				"Este ticket ha sido editado por:"
+mail.editTicket.createdby.user:			"Has editado el ticket a través de la plataforma AD-Service."
+mail.editTicket.info:					"Para consultar o modificar este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.editTicket.info.id:				"El código del ticket es:"
 
-mail.deleteTicket.subject:				'ADService | Ticket borrado con id #'
-mail.deleteTicket.title:				'Se ha borrado un ticket'
-mail.deleteTicket.createdby:			'Este ticket ha sido borrado por:'
-mail.deleteTicket.createdby.user:		'Has borrado el ticket a través de la plataforma AD-Service.'
-mail.deleteTicket.info:					'Para consultar tus tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.deleteTicket.info.id:				'El código del ticket borrado es:'
+mail.deleteTicket.subject:				"ADService | Ticket borrado con id #"
+mail.deleteTicket.title:				"Se ha borrado un ticket"
+mail.deleteTicket.createdby:			"Este ticket ha sido borrado por:"
+mail.deleteTicket.createdby.user:		"Has borrado el ticket a través de la plataforma AD-Service."
+mail.deleteTicket.info:					"Para consultar tus tickets entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.deleteTicket.info.id:				"El código del ticket borrado es:"
 
-mail.closeTicket.subject:				'ADService | Ticket cerrado con id #'
-mail.closeTicket.title:					'Se ha cerrado un ticket'
-mail.closeTicket.createdby:				'Este ticket ha sido cerrado por:'
-mail.closeTicket.createdby.user:		'Has cerrado el ticket a través de la plataforma AD-Service.'
-mail.closeTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.closeTicket.info.id:				'El código del ticket cerrado es:'
+mail.closeTicket.subject:				"ADService | Ticket cerrado con id #"
+mail.closeTicket.title:					"Se ha cerrado un ticket"
+mail.closeTicket.createdby:				"Este ticket ha sido cerrado por:"
+mail.closeTicket.createdby.user:		"Has cerrado el ticket a través de la plataforma AD-Service."
+mail.closeTicket.info:					"Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.closeTicket.info.id:				"El código del ticket cerrado es:"
 
-mail.reopenTicket.subject:				'ADService | Ticket reabierto con id #'
-mail.reopenTicket.title:				'Se ha reabierto un ticket'
-mail.reopenTicket.createdby:			'Este ticket ha sido reabierto por:'
-mail.reopenTicket.createdby.user:		'Has reabierto el ticket a través de la plataforma AD-Service.'
-mail.reopenTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.reopenTicket.info.id:				'El código del ticket reabierto es:'
+mail.reopenTicket.subject:				"ADService | Ticket reabierto con id #"
+mail.reopenTicket.title:				"Se ha reabierto un ticket"
+mail.reopenTicket.createdby:			"Este ticket ha sido reabierto por:"
+mail.reopenTicket.createdby.user:		"Has reabierto el ticket a través de la plataforma AD-Service."
+mail.reopenTicket.info:					"Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.reopenTicket.info.id:				"El código del ticket reabierto es:"
 
-mail.answerTicket.subject:				'ADService | Ticket respondido con id #'
-mail.answerTicket.title:				'Se ha respondido un ticket'
-mail.answerTicket.createdby:			'Este ticket ha sido respondido por:'
-mail.answerTicket.createdby.user:		'Has respondido el ticket a través de la plataforma AD-Service.'
-mail.answerTicket.info:					'Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.answerTicket.info.id:				'El código del ticket respondido es:'
+mail.answerTicket.subject:				"ADService | Ticket respondido con id #"
+mail.answerTicket.title:				"Se ha respondido un ticket"
+mail.answerTicket.createdby:			"Este ticket ha sido respondido por:"
+mail.answerTicket.createdby.user:		"Has respondido el ticket a través de la plataforma AD-Service."
+mail.answerTicket.info:					"Para acceder a este ticket introduce el código de referencia del ticket en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.answerTicket.info.id:				"El código del ticket respondido es:"
 
-mail.newOrder.subject:					'ADService | Solicitud de creación con id #'
-mail.newOrder.title:					'Se ha creado una solicitud para un nuevo taller'
-mail.newOrder.shop.title:				'Se ha creado una solicitud para una nueva tienda'
-mail.newOrder.createdby:				'Esta solicitud ha sido creada por:'
-mail.newOrder.createdby.user:			'Esta solicitud ha sido creada a través de la plataforma AD-Service.'
-mail.newOrder.info:						'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.newOrder.info.id:					'El número de referencia de la solicitud es:'
+mail.newOrder.subject:					"ADService | Solicitud de creación con id #"
+mail.newOrder.title:					"Se ha creado una solicitud para un nuevo taller"
+mail.newOrder.shop.title:				"Se ha creado una solicitud para una nueva tienda"
+mail.newOrder.createdby:				"Esta solicitud ha sido creada por:"
+mail.newOrder.createdby.user:			"Esta solicitud ha sido creada a través de la plataforma AD-Service."
+mail.newOrder.info:						"Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.newOrder.info.id:					"El número de referencia de la solicitud es:"
 
-mail.editOrder.subject:					'ADService | Solicitud de edición con id #'
-mail.editOrder.shop.title:				'Se ha creado una solicitud para editar una tienda'
-mail.editOrder.shop.createdby:			'Esta tienda ha sido editada por:'
-mail.editOrder.shop.createdby.user:		'Esta tienda ha sido editada a través de la plataforma AD-Service.'
-mail.editOrder.title:					'Se ha creado una solicitud para editar un taller'
-mail.editOrder.createdby:				'Este taller ha sido editado por:'
-mail.editOrder.createdby.user:			'Este taller ha sido editado a través de la plataforma AD-Service.'
-mail.editOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.editOrder.info.id:					'El número de referencia de la solicitud es:'
+mail.editOrder.subject:					"ADService | Solicitud de edición con id #"
+mail.editOrder.shop.title:				"Se ha creado una solicitud para editar una tienda"
+mail.editOrder.shop.createdby:			"Esta tienda ha sido editada por:"
+mail.editOrder.shop.createdby.user:		"Esta tienda ha sido editada a través de la plataforma AD-Service."
+mail.editOrder.title:					"Se ha creado una solicitud para editar un taller"
+mail.editOrder.createdby:				"Este taller ha sido editado por:"
+mail.editOrder.createdby.user:			"Este taller ha sido editado a través de la plataforma AD-Service."
+mail.editOrder.info:					"Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.editOrder.info.id:					"El número de referencia de la solicitud es:"
 
-mail.changeOrder.subject:				'ADService | Solicitud de activación/desactivación con id #'
-mail.changeOrder.shop.title:			'Se ha creado una solicitud para modificar una tienda'
-mail.changeOrder.shop.createdby:		'Esta tienda ha sido modificada por:'
-mail.changeOrder.shop.createdby.user:	'Esta tienda ha sido modificada a través de la plataforma AD-Service.'
-mail.changeOrder.title:					'Se ha creado una solicitud para modificar un taller'
-mail.changeOrder.createdby:				'Este taller ha sido modificado por:'
-mail.changeOrder.createdby.user:		'Este taller ha sido modificado a través de la plataforma AD-Service.'
-mail.changeOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.changeOrder.info.id:				'El número de referencia de la solicitud es:'
+mail.changeOrder.subject:				"ADService | Solicitud de activación/desactivación con id #"
+mail.changeOrder.shop.title:			"Se ha creado una solicitud para modificar una tienda"
+mail.changeOrder.shop.createdby:		"Esta tienda ha sido modificada por:"
+mail.changeOrder.shop.createdby.user:	"Esta tienda ha sido modificada a través de la plataforma AD-Service."
+mail.changeOrder.title:					"Se ha creado una solicitud para modificar un taller"
+mail.changeOrder.createdby:				"Este taller ha sido modificado por:"
+mail.changeOrder.createdby.user:		"Este taller ha sido modificado a través de la plataforma AD-Service."
+mail.changeOrder.info:					"Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.changeOrder.info.id:				"El número de referencia de la solicitud es:"
 
-mail.rejectOrder.subject:				'ADService | Solicitud rechazada con id #'
-mail.rejectOrder.title:					'Se ha denegado la solicitud de '
-mail.rejectOrder.createdby:				'Esta solicitud ha sido denegada por:'
-mail.rejectOrder.createdby.user:		'Esta solicitud ha sido denegada a través de la plataforma AD-Service.'
-mail.rejectOrder.info:					'Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.rejectOrder.info.id:				'El número de referencia de la solicitud es:'
+mail.rejectOrder.subject:				"ADService | Solicitud rechazada con id #"
+mail.rejectOrder.title:					"Se ha denegado la solicitud de "
+mail.rejectOrder.createdby:				"Esta solicitud ha sido denegada por:"
+mail.rejectOrder.createdby.user:		"Esta solicitud ha sido denegada a través de la plataforma AD-Service."
+mail.rejectOrder.info:					"Para acceder a esta solicitud entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.rejectOrder.info.id:				"El número de referencia de la solicitud es:"
 
-mail.acceptOrder.subject:				'ADService | Solicitud aceptada para el taller con id #'
-mail.acceptOrder.shop.subject:			'ADService | Solicitud aceptada para la tienda con id #'
-mail.acceptOrder.title:					'Se ha aceptado la solicitud de '
-mail.acceptOrder.createdby:				'Esta solicitud ha sido aceptada por:'
-mail.acceptOrder.createdby.user:		'Esta solicitud ha sido aceptada a través de la plataforma AD-Service.'
-mail.acceptOrder.info:					'Para acceder a este taller entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.acceptOrder.shop.info:				'Para acceder a esta tienda entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.acceptOrder.info.id:				'El número de referencia del taller es:'
-mail.acceptOrder.shop.info.id:			'El número de referencia de la tienda es:'
+mail.acceptOrder.subject:				"ADService | Solicitud aceptada para el taller con id #"
+mail.acceptOrder.shop.subject:			"ADService | Solicitud aceptada para la tienda con id #"
+mail.acceptOrder.title:					"Se ha aceptado la solicitud de "
+mail.acceptOrder.createdby:				"Esta solicitud ha sido aceptada por:"
+mail.acceptOrder.createdby.user:		"Esta solicitud ha sido aceptada a través de la plataforma AD-Service."
+mail.acceptOrder.info:					"Para acceder a este taller entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.acceptOrder.shop.info:				"Para acceder a esta tienda entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.acceptOrder.info.id:				"El número de referencia del taller es:"
+mail.acceptOrder.shop.info.id:			"El número de referencia de la tienda es:"
 
-mail.removeOrder.subject:				'ADService | Solicitud cancelada con id #'
-mail.removeOrder.title:					'Se ha cancelado la solicitud de '
-mail.removeOrder.createdby:				'Esta solicitud ha sido cancelada por:'
-mail.removeOrder.createdby.user:		'Esta solicitud ha sido cancelada a través de la plataforma AD-Service.'
-mail.removeOrder.info:					'Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.removeOrder.info.id:				'El número de referencia del taller es:'
-mail.removeOrder.shop.info.id:			'El número de referencia de la tienda es:'
+mail.removeOrder.subject:				"ADService | Solicitud cancelada con id #"
+mail.removeOrder.title:					"Se ha cancelado la solicitud de "
+mail.removeOrder.createdby:				"Esta solicitud ha sido cancelada por:"
+mail.removeOrder.createdby.user:		"Esta solicitud ha sido cancelada a través de la plataforma AD-Service."
+mail.removeOrder.info:					"Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.removeOrder.info.id:				"El número de referencia del taller es:"
+mail.removeOrder.shop.info.id:			"El número de referencia de la tienda es:"
 
-mail.resendOrder.subject:				'ADService | Solicitud reenviada con id #'
-mail.resendOrder.title:					'Se ha reenviado la solicitud de '
-mail.resendOrder.createdby:				'Esta solicitud ha sido reenviada por:'
-mail.resendOrder.createdby.user:		'Esta solicitud ha sido reenviada a través de la plataforma AD-Service.'
-mail.resendOrder.info:					'Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
-mail.resendOrder.info.id:				'El número de referencia de la solicitud es:'
+mail.resendOrder.subject:				"ADService | Solicitud reenviada con id #"
+mail.resendOrder.title:					"Se ha reenviado la solicitud de "
+mail.resendOrder.createdby:				"Esta solicitud ha sido reenviada por:"
+mail.resendOrder.createdby.user:		"Esta solicitud ha sido reenviada a través de la plataforma AD-Service."
+mail.resendOrder.info:					"Para consultar tus solicitudes entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
+mail.resendOrder.info.id:				"El número de referencia de la solicitud es:"
 
-mail.newUser.subject:					'ADService | Nuevo usuario para el taller '
-mail.newUser.title:						'Se ha creado un usuario para la plataforma AD-Service'
-mail.newUser.createdby:					'Este usuario ha sido creado a través de la plataforma AD-Service.'
-mail.newUser.info:						'Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> '
-mail.newUser.info.tel:					'o llama al telefono '
-mail.newUser.info.id:					'Tu código de taller es:'
-mail.newUser.user:						'Tu nombre de usuario es:'
-mail.newUser.password:					'Tu contraseña es:'
-mail.newUser.info.password:				'Para modificar tu contraseña entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.newUser.subject:					"ADService | Nuevo usuario para el taller "
+mail.newUser.title:						"Se ha creado un usuario para la plataforma AD-Service"
+mail.newUser.createdby:					"Este usuario ha sido creado a través de la plataforma AD-Service."
+mail.newUser.info:						"Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> "
+mail.newUser.info.tel:					"o llama al telefono "
+mail.newUser.info.id:					"Tu código de taller es:"
+mail.newUser.user:						"Tu nombre de usuario es:"
+mail.newUser.password:					"Tu contraseña es:"
+mail.newUser.info.password:				"Para modificar tu contraseña entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
 
-mail.changePassword.subject:			'ADService | Nueva contraseña para el usuario '
-mail.changePassword.title:				'Se ha cambiado la contraseña del usuario desde la plataforma AD-Service'
-mail.changePassword.createdby:			'Esta modificación ha sido realizada por:'
-mail.changePassword.createdby.user:		'Esta modificación ha sido realizada a través de la plataforma AD-Service.'
-mail.changePassword.info:				'Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> '
-mail.changePassword.info.tel:			'o llama al telefono '
-mail.changePassword.info.id:			'Tu código de taller es:'
-mail.changePassword.user:				'Tu nombre de usuario es:'
-mail.changePassword.password:			'Tu nueva contraseña es:'
-mail.changePassword.info.password:		'Para modificar tu contraseña entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección '
+mail.changePassword.subject:			"ADService | Nueva contraseña para el usuario "
+mail.changePassword.title:				"Se ha cambiado la contraseña del usuario desde la plataforma AD-Service"
+mail.changePassword.createdby:			"Esta modificación ha sido realizada por:"
+mail.changePassword.createdby.user:		"Esta modificación ha sido realizada a través de la plataforma AD-Service."
+mail.changePassword.info:				"Para mas información entra en la plataforma <a href="http://www.ad-service.es">www.ad-service.es</a> "
+mail.changePassword.info.tel:			"o llama al telefono "
+mail.changePassword.info.id:			"Tu código de taller es:"
+mail.changePassword.user:				"Tu nombre de usuario es:"
+mail.changePassword.password:			"Tu nueva contraseña es:"
+mail.changePassword.info.password:		"Para modificar tu contraseña entra en <a href="http://www.ad-service.es">www.ad-service.es</a> en la sección "
 
-mail.textDisclaimer:				'AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>'
+mail.textDisclaimer:				"AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>"
+
+#HISTORICO
+lock.list_incidences: 	"Historico de Incidencias"
 
 termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos

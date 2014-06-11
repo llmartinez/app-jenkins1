@@ -9,10 +9,37 @@
     </ol>
 
     <form action="{{ path('popup_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} name        {% endtrans %}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} role        {% endtrans %}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} country     {% endtrans %}*</label> {{ form_widget(form.country,      { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} startdate   {% endtrans %}*</label> {{ form_widget(form.startdate_at, { 'attr': {'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} enddate     {% endtrans %}*</label> {{ form_widget(form.enddate_at,   { 'attr': {'required': 'required' } }) }}
+        </div>
+        <div class="col-xs-4 col-md-4 form-group">
+            <label>{% trans %} active      {% endtrans %}*</label> {{ form_widget(form.active,       { 'attr': {'checked': 'checked' } }) }}
+        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <label>{% trans %} description {% endtrans %}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3' } }) }}
+        </div>
         {{ form_rest(form) }}
         <p>
-            <button type="submit">{% trans %} btn.create {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
         </p>
     </form>
+    <script>
+        $(document).ready(function() {
+            $('select[id*=_at_date_').addClass('btn-date');
+            $('select[id*=_at_time_').addClass('btn-date');
+        });
+    </script>
 
 {% endblock %}

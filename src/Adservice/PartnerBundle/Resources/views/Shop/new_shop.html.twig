@@ -9,66 +9,36 @@
     </ol>
 
     <form action="{{ path('shop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        <div class="col-xs-6 col-md-6 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
-            {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
-            {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-            {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
-            {{ form_widget(form.active) }}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
+            <div class="col-xs-4 col-md-4 form-group">
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active, { 'attr': {'checked': 'checked' } }) }}
+            </div>
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
-                                                                                                                          'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                          'min': 0,
-                                                                                                                          'required': 'required' } }) }}
-        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
-        {{ form_rest(form) }}
+            {{ form_rest(form) }}
 
-        <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            <div class="col-xs-10 col-md-10 form-group">
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            </div>
         </div>
     </form>
 
@@ -78,21 +48,4 @@
     {{ parent() }}
     {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
-
-    <script>
-        $(document).ready(function(){
-
-        // REGIONS FROM COUNTRY
-            $('form').find('select[name*=country]').val({{ app.security.getToken().getUser().getCountry.getId() }});
-            var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
-
-            //si clickamos el combobox de los paises repoblamos la de las regiones
-            $('form').find('select[name*=country]').change(function() {
-               var url_ajax = "{{ path("regions_from_country") }}";
-               populate_region(url_ajax);
-            });
-
-        });
-    </script>
 {% endblock %}

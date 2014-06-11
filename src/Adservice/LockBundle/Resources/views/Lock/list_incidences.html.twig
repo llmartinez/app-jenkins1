@@ -1,0 +1,62 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+      <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
+    </ol>
+
+<legend>{% trans %} lock.list_incidences {% endtrans %}</legend>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+   {#  <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="flt_country" class='form-control'>
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for country in countries %}
+                <option value="{{ country.id }}">{{ country }}</option>
+            {% endfor %}
+    </select></div> #}
+    {% endif %}
+
+    {% if incidences|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans %} date        {% endtrans %}</th>
+                <th>{% trans %} system      {% endtrans %}</th>
+                <th>{% trans %} car         {% endtrans %}</th>
+                <th>{% trans %} assigned_to {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for incidence in incidences %}
+            <tr class="incidenceRow">
+                <td id="id_incidence">{{ incidence.id }}</td>
+                <td>{{ incidence.date   }}</td> {# | date("d/m/Y") #}
+                <td>{{ incidence.oper   }}</td>
+                <td>{{ incidence.coche  }}</td>
+                <td>{{ incidence.asesor }}</td>
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
+
+    {% include 'UtilBundle:jquery_twig:incidence_show_jquery.html.twig' %}
+
+    {% else %}
+        {% trans %} any.incidence {% endtrans %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+
+{# /***** TODO: enter en select2 setea el valor y pasa al siguiente elemento *****/
+    {% include 'UtilBundle:jquery_twig:lock_filter_country_jquery.html.twig' %}
+ /******************************************************************************/ #}
+
+{% endblock %}

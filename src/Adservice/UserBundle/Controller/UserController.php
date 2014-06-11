@@ -19,6 +19,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 
 class UserController extends Controller {
 
@@ -144,16 +145,24 @@ class UserController extends Controller {
         elseif ($role[0]->getRole() == "ROLE_SUPER_AD")     $form = $this->createForm(new EditUserPartnerType()      , $user);
         elseif ($role[0]->getRole() == "ROLE_AD")           $form = $this->createForm(new EditUserPartnerType()      , $user);
 
+        $actual_city   = $user->getRegion();
+        $actual_region = $user->getCity();
+
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid())
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
+            }
             return $this->redirect($this->generateUrl('user_list'));
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                            'form_name' => $form->getName(),
-                                                                            'form'      => $form->createView()));
+                                                                          'form_name' => $form->getName(),
+                                                                          'form'      => $form->createView()));
     }
 
     /**
@@ -186,14 +195,16 @@ class UserController extends Controller {
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
+
         /*CREAR PASSWORD AUTOMATICAMENTE*/
         if ($password == null or $password == 'none') $password = substr( md5(microtime()), 1, 8);
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
+
         /* MAILING */
         $mailerUser = $this->get('cms.mailer');
-        $mailerUser->setTo($user->getEmail1());
+        $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($user->getEmail1());*/
         $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
         $mailerUser->setFrom('noreply@grupeina.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
@@ -244,17 +255,19 @@ class UserController extends Controller {
 
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($this->get('security.context')->getToken()->getUser());
 //            $partner = $form->getData('partner');
+            $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:User:new_user.html.twig', array('user'       => $user,
+        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
                                                                            'user_type'  => $type,
                                                                            'form_name'  => $form->getName(),
                                                                            'form'       => $form->createView()));

@@ -7,17 +7,22 @@
         <li class="active">{% trans %} edit.order.workshop {% endtrans %}</li>
     </ol>
 
-    <h1>{% trans %} edit.order.workshop {% endtrans %}<b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b></h1>
+    <h1>{% trans %} edit.order.workshop {% endtrans %} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b></h1>
 
     <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-       <div class="container">
-            <div class="col-xs-3 col-md-3">
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-4 col-md-4">
                 <label>{% trans %} name {% endtrans %}</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control',
                                                      'placeholder': 'name' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} cif {% endtrans %} </label> {{ form_widget(form.cif,        { 'attr': {'class': 'form-control'} }) }}
+
+                <label>{% trans %} code.workshop {% endtrans %} </label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             </div>
 
             {% if is_granted('ROLE_SUPER_AD') %}
@@ -33,85 +38,28 @@
             </div>
 
             <div class="col-xs-2 col-md-2">
-
-                <label>{% trans %} code.workshop {% endtrans %} </label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
-
-                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+                <label>{% trans %} cif {% endtrans %} </label> {{ form_widget(form.cif,        { 'attr': {'class': 'form-control'} }) }}
             </div>
 
             <div class="col-xs-2 col-md-2">
                 <label>{% trans %} typology {% endtrans %} </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
             </div>
+        </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
+        <div class="col-xs-12 col-md-12 form-group">
         <div class="col-xs-2 col-md-2 form-group">
             <label> {% trans %} contact         {% endtrans %} *</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
                                                                          {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
-                                                                                                                          'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                          'min': 0,
-                                                                                                                          'required': 'required' } }) }}
-        </div>
+        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
         {{ form_rest(form) }}
 
-        <div class="col-xs-10 col-md-10 form-group">
-            <button id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+        <div class="col-xs-12 col-md-12 form-group">
+            <button class="btn btn-primary pull-right" id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
 
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    <script>
-        $(document).ready(function(){
-
-            // REGIONS FROM COUNTRY
-            var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
-
-            //si clickamos el combobox de los paises repoblamos la de las regiones
-            $('form').find('select[name*=country]').change(function() {
-               var url_ajax = "{{ path("regions_from_country") }}";
-               populate_region(url_ajax);
-            });
-
-        });
-    </script>
 {% endblock %}

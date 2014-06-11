@@ -11,48 +11,49 @@ class TicketControllerTest extends WebTestCase {
         $this->assertFalse(false);
     }
 
-   // protected function setUp() {
+    /**
+     * Test que comprueba que se cree un ticket
+     * @dataProvider tickets
+     */
+    public function testNewTicket($ticket) {
+//         $client = static::createClient();
+//         $client->followRedirects(true);
+//         //Lleva al usuario desde la pantalla de login hasta la de nuevo partner introducido por dataProvider
+//         UtilFunctionTest::doLogin($client, 'admin', 'admin');
+//         UtilFunctionTest::linkTo($client, $this, 'table tr td a#ticket_list');
 
-   // }
+//         $form['w_idpartner'] = '1';
+//         $form['w_id'       ] = '1';
+
+//         $newWorkshopForm = $client->getCrawler()->selectButton('btn_check')->form($form);
+//         $newWorkshopForm['w_idpartner'] = '1';
+//         $newWorkshopForm['w_id'       ] = '1';
+//         $client->submit($newWorkshopForm);
+
+//         UtilFunctionTest::linkTo($client, $this, 'div.info a#newTicket');
+
+//         //carga el form con los datos del partner
+//         $newTicketForm = $client->getCrawler()->selectButton('btn_create')->form($ticket);
+//         //ejecuta el submit del form
+//         $crawler = $client->submit($newTicketForm);
+
+//         //comprueba que devuelva una pagina sin error
+//         $this->assertTrue($client->getResponse()->isSuccessful());
+
+// // $ar=fopen("zdatos.html","a") or die("Problemas en la creacion");
+// // fputs($ar,$client->getResponse());
+// // fclose($ar);
+// // $ar=fopen("zurl.html","a") or die("Problemas en la creacion");
+// // fputs($ar,$client->getRequest()->getUri());
+// // fclose($ar);
+//         //comprueba que vuelva a la pagina del listado de partners
+//         $this->assertRegExp('/.*\/..\/partner\/list\/partner/', $client->getRequest()->getUri(), 'El usuario ve el listado de partners');
+//         // $this->assertGreaterThan(0, $crawler->filter('table tr td:contains("testpartner")')->count(), 'El partners creado esta en la lista');
+//         //volver al inicio
+//         UtilFunctionTest::linkTo($client, $this, 'ol li a:contains("Índice")');
 
 
-   // public function testNewTicket($users) {
-   //     $client = static::createClient();
-   //     $client-> followRedirects(true);
-   //     UtilFunctionTest::doLogin($client, $users['adservice_userbundle_usertype[username]'], $users['adservice_userbundle_usertype[password]']);
-   //     $crawler = $client->getCrawler();
-
-   //     //miramos que exista el link "mis tickets" y lo clickamos
-   //     $myTicket_link = $crawler->filter('table[name=tbl_user]')->selectLink('Mis Tickets')->link();
-   //     $crawler = $client->click($myTicket_link);
-
-   //     //hay 1 boton de "New Ticket" y lo clickamos
-   //     $newTicket_link = $crawler->filter('div.tblContainer')->selectLink('New Ticket')->link();
-   //     $num_newTicketLinks = $crawler->filter('a[id=newTicket]')->count();
-   //     $this->assertEquals(1, $num_newTicketLinks, 'Hay un botón "New Ticket" en "/es/ticket"');
-   //     $crawler = $client->click($newTicket_link);
-
-   //     $this->checkFieldExist($crawler);
-
-   //     //rellenamos el formulario y guardamos
-   //     $newTicketForm = $crawler->selectButton('Submit')->form(array('new_ticket_form[title]'      => $this->setTicketTitle(),
-   //                                                                   'new_ticket_form[importance]' => $this->getRandomNumber(1,10),
-   //                                                                 ));
-   //     $newTicketForm['brand']->select('1');
-   //     $newTicketForm['idBrand']->select('AUDI');
-   //     $brandField = $newTicketForm['form select[id="idBrand"]'];
-   //     var_dump($brandField);
-   //     $crawler->filter('form select[id="idBrand"]')->select(2);
-   //     $newTicketForm->setField('form select[id="idBrand"]', 1);
-   //     $newTicketForm['select[id="idBrand"]'];
-   //     $newTicketForm['select[id="idBrand"]']->select(2);
-   //     $brandField = $crawler->filter('form select[id="idBrand"]');
-   //     $brandField = $crawler->filter('form select#idBrand')->nextAll();
-   //     foreach ($brandField as $aa) {
-   //         var_dump($aa);
-   //     }
-   //            var_dump($brandField);
-   // }
+    }
 
 //    public function newTicket(){
 //
@@ -62,26 +63,32 @@ class TicketControllerTest extends WebTestCase {
 //        parent::tearDown();
 //    }
 
-
-//    public function users() {
-////        admin               admin
-////        admin1-2-3-4        admin
-////        assessor1-2-3-4     assessor
-////        user1-2-3-4         user
-//
-//        return array(
-//            array(
-////                array('adservice_userbundle_usertype[username]' => 'admin1',
-////                    'adservice_userbundle_usertype[password]' => 'admin'),
-////                array('adservice_userbundle_usertype[username]' => 'assessor1',
-////                    'adservice_userbundle_usertype[password]' => 'assessor'),
-//                array('adservice_userbundle_usertype[username]' => 'user1',
-//                    'adservice_userbundle_usertype[password]' => 'user'),
-//                array('adservice_userbundle_usertype[username]' => 'user2',
-//                    'adservice_userbundle_usertype[password]' => 'user')
-//            )
-//        );
-//    }
+    /**
+     * DataProvider de tickets: Contiene un array de tickets
+     * @return array tickets
+     */
+   public function tickets() {
+       return array(
+           array( 'ticket' => array(
+                        'new_car_form_brand'           => '1',
+                        'new_car_form_model'           => '1',
+                        'new_car_form_version'         => '1',
+                        'new_car_form[year]'           => '1',
+                        'new_car_form[motor]'          => '1',
+                        'new_car_form[kW]'             => '1',
+                        'new_car_form[displacement]'   => '1',
+                        'new_car_form[vin]'            => '1',
+                        'new_car_form[plateNumber]'    => '1',
+                        'new_car_form[importance]'     => '1',
+                        'new_car_form[plateNumber]'    => '1',
+                        'new_car_form[plateNumber]'    => '1',
+                        'id_system'                    => '1',
+                        'new_ticket_form[subsystem]'   => '1',
+                        'new_ticket_form[description]' => '1',
+                )
+           )
+       );
+   }
 
 //    private function checkFieldExist($crawler){
 //         //CAMPOS DE TICKET

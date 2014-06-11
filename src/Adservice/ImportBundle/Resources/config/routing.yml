@@ -1,9 +1,11 @@
+lock_cars:
+    pattern:  /cars/{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:importLockCars, bbdd: 'old_cars', num: 0 }
 
-history:
-    pattern:  /history/{history}
-    defaults: { _controller: ImportBundle:History:history, history: null }
+incidences:
+    pattern:  /incidences/{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:importLockIncidences, bbdd: 'incidences', num: 0 }
 
 import:
-    pattern:  /{importar}
-    defaults: { _controller: ImportBundle:Import:import, importar: null }
-
+    pattern:  /{bbdd}/{num}
+    defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }

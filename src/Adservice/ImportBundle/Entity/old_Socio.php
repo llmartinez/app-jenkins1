@@ -22,6 +22,13 @@ class old_Socio {
     private $id;
 
     /**
+     * @var string $asociado
+     *
+     * @ORM\Column(name="asociado", type="string", length=255)
+     */
+    //private $asociado;
+
+    /**
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string", length=255)
@@ -111,6 +118,24 @@ class old_Socio {
     public function getId() {
         return $this->id;
     }
+
+    /**
+     * Set asociado
+     *
+     * @param string $asociado
+     */
+    // public function setAsociado($asociado) {
+    //     $this->asociado = $asociado;
+    // }
+
+    /**
+     * Get asociado
+     *
+     * @return string
+     */
+    // public function getAsociado() {
+    //     return $this->asociado;
+    // }
 
     /**
      * Set nombre

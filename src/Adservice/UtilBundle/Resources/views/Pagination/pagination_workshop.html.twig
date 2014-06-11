@@ -40,6 +40,9 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
+			var country = $('#flt_country').val();
+       		if(country == null) country = 'none';
+
 			var url = "{{ path('workshop_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
         	url = url.replace("plc_page", 1);
     		url = url.replace("plc_country", country);

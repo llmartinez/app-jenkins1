@@ -10,73 +10,45 @@
 
     <form action="{{ path('user_new',{ 'type':user_type}) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
+        <div class="col-xs-12 col-md-12 form-group">
              <div class="col-xs-4 col-md-4 form-group">
                 <label>{% trans %} username {% endtrans %} *</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+             <div class="col-xs-4 col-md-4 form-group">
                 {{ form_widget(form.password, { 'attr': {'required': 'required' } }) }}
             </div>
+             <div class="col-xs-4 col-md-4 form-group">
             {% if form.partner is defined %}
-             <div class="col-xs-4 col-md-4 form-group">
                 <label>{% trans %} partner {% endtrans %} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-            </div>
             {% endif %}
-            {% if form.workshop is defined %}
-             <div class="col-xs-4 col-md-4 form-group">
+            {% if form.workshop is defined %} {# DEPRECATED #}
                 <label>{% trans %} workshop {% endtrans %} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
-            <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active) }}
             </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label>{% trans %} language {% endtrans %}</label>
-            {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} language {% endtrans %}</label>
+                {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
+            </div>
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
-                                                                        {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
-                                                                                                                          'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                          'min': 0,
-                                                                                                                          'required': 'required' } }) }}
-        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                                {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
-        {{ form_rest(form) }}
-            <button id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            {{ form_rest(form) }}
+
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+            </div>
         </div>
     </form>
 
@@ -85,20 +57,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
-
-    <script>
-        $(document).ready(function(){
-
-            // REGIONS FROM COUNTRY
-            $('form').find('select[name*=country]').val({{ app.security.getToken().getUser().getCountry.getId() }});
-            var url_ajax = "{{ path("regions_from_country") }}";
-            populate_region(url_ajax);
-
-            //si clickamos el combobox de los paises repoblamos la de las regiones
-            $('form').find('select[name*=country]').change(function() {
-               var url_ajax = "{{ path("regions_from_country") }}";
-               populate_region(url_ajax);
-            });
-        });
-    </script>
 {% endblock %}

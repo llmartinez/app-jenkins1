@@ -41,6 +41,32 @@ class AjaxController extends Controller
        return new Response(json_encode($json), $status = 200);
     }
 
+    //  ____ ___ _______   __
+    //  / ___|_ _|_   _\ \ / /
+    // | |    | |  | |  \ V /
+    // | |___ | |  | |   | |
+    //  \____|___| |_|   |_|
+
+    /**
+     * Funcion Ajax para obtener las ciudades de una region
+     * @return json
+     */
+    public function citiesFromRegionAction() {
+       $em = $this->getDoctrine()->getEntityManager();
+       $petition = $this->getRequest();
+       $id_region = $petition->request->get('id_region');
+
+       $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
+       if(count($cities) > 0) {
+            foreach ($cities as $city) {
+                $json[] = $city->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+       return new Response(json_encode($json), $status = 200);
+    }
+
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \
     // \___ \| |_| | | | | |_) |
@@ -57,6 +83,7 @@ class AjaxController extends Controller
         $id_partner = $petition->request->get('id_partner');
 
         $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+
         if(count($shops) > 0) {
             foreach ($shops as $shop) {
                 $json[] = $shop->to_json();
@@ -83,8 +110,12 @@ class AjaxController extends Controller
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
 
         $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
-        foreach ($models as $model) {
-            $json[] = $model->to_json();
+        if(count($models) > 0) {
+            foreach ($models as $model) {
+                $json[] = $model->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -101,8 +132,12 @@ class AjaxController extends Controller
         $model = $em->getRepository('CarBundle:Model')->find($id_model);
 
         $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
-        foreach ($versions as $version) {
-            $json[] = $version->to_json();
+        if(count($versions) > 0) {
+            foreach ($versions as $version) {
+                $json[] = $version->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -126,10 +161,13 @@ class AjaxController extends Controller
         $system = $em->getRepository('TicketBundle:System')->find($id_system);
 
         $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
-        foreach ($subsystems as $subsystem) {
-            $json[] = $subsystem->to_json();
+        if(count($subsystems) > 0) {
+            foreach ($subsystems as $subsystem) {
+                $json[] = $subsystem->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
-
 }

@@ -10,7 +10,7 @@ class PopupType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
                 ->add('name')
-                ->add('description')
+                ->add('description', 'textarea')
                 ->add('role')
                 ->add('country')
                 ->add('startdate_at')

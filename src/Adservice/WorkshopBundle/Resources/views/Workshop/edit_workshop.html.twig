@@ -14,97 +14,79 @@
         <div class="container">
             <legend>{% trans %} workshop {% endtrans %}</legend>
 
+        <div class="col-xs-12 col-md-12 form-group">
             {% if app.session.hasFlash('error') %}
                 <p class="error">{{ app.session.getFlash('error') }}</p>
             {% endif %}
 
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %}</label>
-            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %}</label>
-            {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_typology">{% trans %} typology {% endtrans %}</label>
-            {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %}</label>
-            {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
-            {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label for="new_car_form_vin">{% trans %} code.workshop {% endtrans %}</label>
-            {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
-                                                           'placeholder': 'code.workshop' | trans , 'min': 1} }) }}
-        </div>
-
-        <div class="col-xs-4 col-md-4 form-group">
-            <div class="col-xs-12 col-md-12 form-group">
-                <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
-                {{ form_widget(form.active) }}
+            <div class="col-xs-8 col-md-8 form-group">
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %}</label>
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-xs-3 col-md-3 form-group">
+                    <label for="new_car_form_vin">{% trans %} code.workshop {% endtrans %}</label>
+                    {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                                                                   'placeholder': 'code.workshop' | trans, 'min': 1} }) }}
+                </div>
+                <div class="col-xs-3 col-md-3 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %}</label>
+                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %}</label>
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
+                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+                </div>
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_typology">{% trans %} typology {% endtrans %}</label>
+                    <div hidden='hidden'> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }} </div>
+                    <select id="slct_typology" class="form-control">
+                        {% for typology in typologies %}
+                            <option value='{{ typology.id }}'>{{ typology.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">{% trans %} diagnosis_machines {% endtrans %}</label>
+                    <div hidden='hidden'> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control', 'required': 'required'} }) }} </div>
+                    <select id="slct_diagnosis_machine" class="form-control">
+                        {% for diagnosis_machine in diagnosis_machines %}
+                            <option value='{{ diagnosis_machine.id }}'>{{ diagnosis_machine.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <div class="col-xs-3 col-md-3 form-group">
-                <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
-                {{ form_widget(form.test) }}
+            <div class="col-xs-4 col-md-4 form-group">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
+                    {{ form_widget(form.active) }}
+                </div>
+                <div class="col-xs-3 col-md-3 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
+                    {{ form_widget(form.test) }}
+                </div>
+                <div class="col-xs-9 col-md-9 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
+                    {{ form_widget(form.endtest_at) }}
+                </div>
             </div>
-            <div class="col-xs-9 col-md-9 form-group">
-                <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
-                {{ form_widget(form.endtest_at) }}
-            </div>
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">{% trans %} diagnosis_machines {% endtrans %}</label>
-            {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
-                                                                        {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+        <div class="col-xs-12 col-md-12 form-group">
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-2 col-md-2 form-group">
+                <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                            {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
         </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_1 {% endtrans %}  </label> {{ form_widget(form.movile_number_1,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} movile_number_2 {% endtrans %}  </label> {{ form_widget(form.movile_number_2,  { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-5 col-md-5 form-group">
-            <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} region          {% endtrans %} *</label> {{ form_widget(form.region,           { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-xs-4 col-md-4 form-group">
-            <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class': 'form-control',
-                                                                                                                          'required': 'required' } }) }}
-        </div>
-        <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                          'min': 0,
-                                                                                                                          'required': 'required' } }) }}
-        </div>
+
         <legend>{% trans %} observations {% endtrans %}</legend>
 
         <div class="col-xs-12 col-md-12 form-group">
@@ -126,13 +108,19 @@
         </div>
 
     {{ form_rest(form) }}
-            <button id="btn_create" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
+    <script>
+        $(document).ready(function() {
+            $('select[id*=_at_date_').addClass('btn-date');
+            $('select[id*=_at_time_').addClass('btn-date');
+        });
+    </script>
 
 {#    USERS ZONE #}
-    <legend>{% trans %} users_in_workshop {% endtrans %}</legend>
-    {% include 'UserBundle:User:_list.html.twig' with { users : workshop.users } %}
+    {# <legend>{% trans %} users_in_workshop {% endtrans %}</legend>
+    {% include 'UserBundle:User:_list.html.twig' with { users : workshop.users } %} #}
 
 {% endblock %}
 
@@ -140,40 +128,5 @@
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
 
-    <script>
-        $(document).ready(function() {
-
-        // REGIONS FROM COUNTRY
-            var url_ajax = "{{ path("regions_from_country") }}";
-            var region = '{{ workshop.region }}';
-            populate_region(url_ajax, region);
-
-            //si clickamos el combobox de los paises repoblamos la de las regiones
-            $('form').find('select[name*=country]').change(function() {
-               var url_ajax = "{{ path("regions_from_country") }}";
-               populate_region(url_ajax);
-            });
-
-        // DATE TEST
-            $('#adservice_workshopbundle_workshoptype_test').change(function(){
-
-                if($('#adservice_workshopbundle_workshoptype_test').is(':checked')) {
-                    var d = new Date();
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth()+1);
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
-                }
-                else{
-                    var d = new Date();
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_month' ).val(d.getMonth());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_day'   ).val(d.getDay());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_date_year'  ).val(d.getFullYear());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_time_hour'  ).val(d.getHours());
-                    $('#adservice_workshopbundle_workshoptype_endtest_at_time_minute').val(d.getMinutes());
-                }
-            });
-        });
-    </script>
+    {% include 'UtilBundle:jquery_twig:workshop_edit_jquery.html.twig' %}
 {% endblock %}

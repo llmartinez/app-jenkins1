@@ -68,7 +68,9 @@ class PopupController extends Controller {
         $form = $this->createForm(new PopupType(), $popup);
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+        if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
             $em = $this->getDoctrine()->getEntityManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $popup->setCreatedBy($this->get('security.context')->getToken()->getUser());
@@ -101,7 +103,10 @@ class PopupController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-            if ($form->isValid()) $this->savePopup($em, $popup);
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+                $this->savePopup($em, $popup); }
             return $this->redirect($this->generateUrl('popup_list'));
         }
 

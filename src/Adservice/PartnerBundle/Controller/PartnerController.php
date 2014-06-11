@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
+use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -68,13 +69,25 @@ class PartnerController extends Controller {
             $form->bindRequest($request);
             $code = UtilController::getCodePartnerUnused($em);
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
                 if($find == null)
                 {
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
+                    $partner = UtilController::settersContact($partner, $partner);
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
+
+                    /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
+                    $newShop = UtilController::newEntity(new Shop(), $security->getToken()->getUser());
+                    $newShop->setName('...');
+                    $newShop->setPartner($partner);
+                    $newShop->setActive('1');
+                    $newShop = UtilController::settersContact($newShop, $partner);
+
+                    UtilController::saveEntity($em, $newShop, $security->getToken()->getUser());
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
@@ -90,9 +103,15 @@ class PartnerController extends Controller {
             $this->get('session')->setFlash('info', $flash);
         }
 
-        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'    => $partner,
-                                                                                 'form_name'  => $form->getName(),
-                                                                                 'form'       => $form->createView()));
+        $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
+        $cities  = $em->getRepository("UtilBundle:City"  )->findAll();
+
+        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'   => $partner,
+                                                                                  'form_name' => $form->getName(),
+                                                                                  'form'      => $form->createView(),
+                                                                                  'regions'   => $regions,
+                                                                                  'cities'    => $cities,
+                                                                                 ));
     }
 
      /**
@@ -113,14 +132,17 @@ class PartnerController extends Controller {
         $petition = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
 
+        $actual_city   = $partner->getRegion();
+        $actual_region = $partner->getCity();
 
         if ($petition->getMethod() == 'POST') {
 
             $last_code = $partner->getCodePartner();
             $form->bindRequest($petition);
 
-            if ($form->isValid())
-            {
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+        if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
                 if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())
@@ -129,6 +151,7 @@ class PartnerController extends Controller {
                     $this->get('session')->setFlash('error', $flash);
                 }
                 else{
+                    $partner = UtilController::settersContact($partner, $partner, $actual_region, $actual_city);
                     UtilController::saveEntity($em, $partner, $this->get('security.context')->getToken()->getUser());
                     return $this->redirect($this->generateUrl('partner_list'));
                 }

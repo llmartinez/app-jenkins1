@@ -69,7 +69,7 @@ class Region{
      *
      * @param string $country
      */
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country)
+    public function setCountry($country)
     {
         $this->country = $country;
     }
@@ -90,7 +90,7 @@ class Region{
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'region'  => $this->getRegion(),
-                      'country' => $this->getCountry());
+                      'country' => $this->getCountry()->getCountry());
         return $json;
     }
 }

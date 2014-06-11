@@ -37,7 +37,7 @@
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-          <button id="save" name="save" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create {% endtrans %}</button>
+          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create {% endtrans %}</button>
           {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create_close {% endtrans %}</button>{% endif %}
         </form>
 

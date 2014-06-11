@@ -7,7 +7,7 @@
       <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
     </ol>
 
-    <div style="width: 80%; margin-left: 10%;">
+    <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_workshops {% endtrans %}
             <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span>{% trans %} new.workshop {% endtrans %}</a></td>
@@ -25,28 +25,6 @@
     </div>
     {% include 'WorkshopBundle:Workshop:_list.html.twig'  %}
 
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
-    });
-
-    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-    $('#flt_country').click(function() {
-
-        var country = $('#flt_country').val();
-
-        if(country == null) country = 'none';
-
-        var url     = "{{ path('workshop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
-
-        url = url.replace("plc_page", 1);
-        url = url.replace("plc_country", country);
-
-        window.open(url, "_self");
-    });
-
-
-</script>
+    {% include 'UtilBundle:jquery_twig:workshop_filter_country_jquery.html.twig' %}
 
 {% endblock %}

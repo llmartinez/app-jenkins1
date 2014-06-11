@@ -1,0 +1,41 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+    <ol class="breadcrumb">
+      <li><a href="{{ path('list_incidences', { 'page': 1, 'id_taller': incidence.idTaller, 'id_socio': incidence.idSocio }) }}">
+      					 {% trans %} lock.list_incidences {% endtrans %}</a></li>
+      <li class="active">{% trans %} incidence 			  {% endtrans %}</li>
+    </ol>
+
+<div class="info">
+
+<legend>{% trans %} info {% endtrans %}</legend>
+
+	{% if incidence.taller != "" %}<div class="form-group"><span class="btn-blue glyphicon glyphicon-wrench"    ></span> {{ incidence.taller 		}}</div>{% endif %}
+	{% if incidence.coche  != "" %}<div class="form-group"><span class="btn-blue glyphicon glyphicon-screenshot"></span> {{ incidence.coche  		}}</div>{% endif %}
+	{% if incidence.socio  != "" %}<div class="form-group"><span class="btn-blue glyphicon glyphicon-briefcase" ></span> <b>{% trans %} partner     {% endtrans %}</b>:{{ incidence.socio  }}</div>{% endif %}
+	{% if incidence.asesor != "" %}<div class="form-group"><span class="btn-blue glyphicon glyphicon-user"      ></span> <b>{% trans %} assigned_to {% endtrans %}:</b>
+																							{% if incidence.asesor	!= 0 %} {{ incidence.asesor 	}}
+																												 {% else %} Anonimo 				{% endif %} </div> {% endif %}
+	{% if incidence.oper   != "" %}<div class="form-group"><span class="btn-blue glyphicon glyphicon-cog"       ></span> {{ incidence.oper   		}}</div>{% endif %}
+</div>
+
+<!-- CONTENIDO PAGINA TICKETS -->
+
+<div class="content">
+    <div class="form-group">
+    <legend>{% trans %} incidence {% endtrans %} #{{ incidence.id }} <a class="txtComment">({{ incidence.date }})</a></legend>{# | date("d/m/Y") #}
+
+	    <legend>{% trans %} description {% endtrans %}</legend>
+
+		{% if incidence.description	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.description }} </div> {% endif %}
+
+	    <legend>{% trans %} tracing {% endtrans %}</legend>
+	    {% if incidence.tracing  	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.tracing 	}} </div> {% endif %}
+
+	    <legend>{% trans %} solution {% endtrans %}</legend>
+	    {% if incidence.solution  	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.solution 	}} </div> {% endif %}
+	</div>
+</div>
+
+{% endblock %}

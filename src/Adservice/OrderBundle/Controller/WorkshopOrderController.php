@@ -44,7 +44,7 @@ class WorkshopOrderController extends Controller {
         }
         else { $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId()); }
 
-        $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -100,7 +100,7 @@ class WorkshopOrderController extends Controller {
         // if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
 
         // //creamos arrays de los valores anteriores a la modificacion/rechazo de la solicitud
-        // $ordersBefore = $this->getOrdersBefore($em, $workshopsOrders);
+        // $ordersBefore = $this->getWorkshopOrdersBefore($em, $workshopsOrders);
 
         // return $this->redirect($this->generateUrl('list_orders'));
     //}
@@ -135,7 +135,8 @@ class WorkshopOrderController extends Controller {
             $partner = $workshopOrder->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array( 'partner' => $partner->getId(),
                                                                                         'code_workshop' => $workshopOrder->getCodeWorkshop()));
@@ -157,7 +158,7 @@ class WorkshopOrderController extends Controller {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+                    $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
                     $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
@@ -215,8 +216,10 @@ class WorkshopOrderController extends Controller {
         $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
+
             $form->bindRequest($request);
-            if ($form->isValid()) {
+             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $user = $this->get('security.context')->getToken()->getUser();
 
@@ -235,7 +238,7 @@ class WorkshopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
                 $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
@@ -305,7 +308,7 @@ class WorkshopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$workshopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_mail.html.twig', array('workshopOrder' => $workshopOrder)));
@@ -345,7 +348,10 @@ class WorkshopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+
                 $workshopOrder->setAction('rejected');
                 $workshopOrder->setRejectionReason($form->get('rejection_reason')->getData());     //recogemos del formulario el motivo de rechazo...
                 $em->persist($workshopOrder);
@@ -353,7 +359,7 @@ class WorkshopOrderController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+                $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
                 $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$workshopOrder->getId());
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_mail.html.twig', array('workshopOrder' => $workshopOrder)));
@@ -395,7 +401,7 @@ class WorkshopOrderController extends Controller {
 
             /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+            $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
             $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$workshopOrder->getId());
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder,
@@ -437,7 +443,7 @@ class WorkshopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshopOrder->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$workshopOrder->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_mail.html.twig', array('workshopOrder' => $workshopOrder,
@@ -541,6 +547,7 @@ class WorkshopOrderController extends Controller {
             $newUser->setActive        ('1');
             $newUser->setCountry       ($workshop->getCountry());
             $newUser->setRegion        ($workshop->getRegion());
+            $newUser->setCity          ($workshop->getCity());
             $newUser->setCreatedBy     ($workshop->getCreatedBy());
             $newUser->setCreatedAt     (new \DateTime());
             $newUser->setModifiedBy    ($workshop->getCreatedBy());
@@ -559,7 +566,7 @@ class WorkshopOrderController extends Controller {
 
             /* MAILING */
             $mailerUser = $this->get('cms.mailer');
-            $mailerUser->setTo($newUser->getEmail1());
+            $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
             $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
             $mailerUser->setFrom('noreply@grupeina.com');
             $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -570,7 +577,7 @@ class WorkshopOrderController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($workshop->getCreatedBy()->getEmail1());
+        $mailer->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshop->getCreatedBy()->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
@@ -611,6 +618,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setEmail2        ($workshop->getEmail2());
         $workshopOrder->setCountry       ($workshop->getCountry());
         $workshopOrder->setRegion        ($workshop->getRegion());
+        $workshopOrder->setCity          ($workshop->getCity());
         $workshopOrder->setAddress       ($workshop->getAddress());
         $workshopOrder->setPostalCode    ($workshop->getPostalCode());
 
@@ -658,6 +666,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setEmail2        ($workshopOrder->getEmail2());
         $workshop->setCountry       ($workshopOrder->getCountry());
         $workshop->setRegion        ($workshopOrder->getRegion());
+        $workshop->setCity          ($workshopOrder->getCity());
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
 
