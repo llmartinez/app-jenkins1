@@ -23,8 +23,7 @@ class LoginControllerTest extends WebTestCase {
         //$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
 
 
-        $url = $router->generate('user_login');
-        $crawler = $client->request('GET', $url);
+        $crawler = $client->request('GET', '/es/login');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
 
         //aparece el boton login...
