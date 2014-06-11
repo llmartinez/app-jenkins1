@@ -194,6 +194,7 @@ class ImportController extends Controller
 				$newWorkshop->setName 					($old_Taller->getNombre());
 				$newWorkshop->setCodeWorkshop 			($old_Taller->getId());
 				$newWorkshop->setAddress 				($old_Taller->getDireccion());
+				$newWorkshop->setConflictive     		($old_Taller->getConflictivo());
 				$newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
 				$newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
 				$newWorkshop->setActive	 				($old_Taller->getActive());
