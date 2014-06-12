@@ -6,7 +6,8 @@
     <property name="builddir"  value="${workspace}/app/build" />
 
 <!-- <target name="build"            depends="parameters, prepare, vendors, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
-     <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
+<!-- <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
+     <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit"/>
 <!-- <target name="build"            depends="parameters, prepare, phpunit, phpcb"/> -->
 <!--
 -->
