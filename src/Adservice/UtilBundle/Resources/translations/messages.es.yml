@@ -34,7 +34,7 @@ id: 					 "id"
 you: 					 "Tu"
 yes: 					 "si"
 no:  					 "no"
-all:  					 "todos"
+all:  					 "Todos"
 home: 					 "Índice"
 contact:				 "Contacto"
 language:				 "Idioma"
@@ -51,7 +51,7 @@ error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 
 #ENTITY
-super_admin: 			 "Super Administrador"
+super_admin: 			 "Super Admin"
 admin: 					 "Administrador"
 assessor: 				 "Asesor"
 user: 					 "Usuario"
@@ -183,6 +183,41 @@ btn.close:			 	 "Cerrar"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Inserta ID de ticket"
+
+#COUNTRY
+spain: 					 "España"
+andorra:				 "Andorra"
+france:					 "Francia"
+portugal:				 "Portugal"
+
+#LANGUAGE
+english:				 "Inglés"
+spanish:				 "Español"
+french:				     "Francés"
+portuguese:				 "Portugués"
+
+#IMPORTANCE
+information:			 "Información"
+specific_information:	 "Información específica"
+diagnosis_and_repair:	 "Diagnóstico y reparación"
+advanced_diagnostics:	 "Diagnóstico Avanzado"
+
+#SYSTEM
+body: 					 "CARROCERÍA"
+comfort: 				 "CONFORT"
+steering: 				 "DIRECCIÓN"
+electricity:			 "ELECTRICIDAD"
+brakes:					 "FRENOS"
+diesel_engine:			 "MOTOR DIESEL"
+gasoline_engine:		 "MOTOR GASOLINA"
+programming_and_coding:	 "PROGRAMACIÓN Y CODIFICACIÓN"
+safety:					 "SEGURIDAD"
+suspension:				 "SUSPENSIÓN"
+transmission:			 "TRANSMISIÓN"
+various:				 "VARIOS"
+
+#SUBSYSTEM
+
 
 #PARTNER
 partner.delete:			 "Borrar Socio"

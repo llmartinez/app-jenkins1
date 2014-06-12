@@ -30,9 +30,9 @@
                             <td>{{ ticket.createdBy }}</td>
                             <td>{{ ticket.assignedTo }}</td>
                             <td>
-                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"><span class="glyphicon glyphicon-search" title="Show ticket"></span></a>
-                                <a href="{{ path('assignTicket', {'id_ticket':ticket.id})}}"   ><span class="glyphicon glyphicon-user" title="Asignar Ticket"></span></a>
-                                <a href="#" title="{% trans %} ticket.delete {% endtrans %}"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
+                                <a href="{{ path('showTicket', { 'id_ticket' : ticket.id }) }}"><img class="img_icon" src="{{ asset('/icon/ticket_show.png') }}" title="Show ticket"></span></a>
+                                <a href="{{ path('assignTicket', {'id_ticket':ticket.id})}}"   ><img class="img_icon" src="{{ asset('/icon/ticket_assign.png') }}" title="Asignar Ticket"></span></a>
+                                <a href="#" title="{% trans %} ticket.delete {% endtrans %}"   ><img class="img_icon" src="{{ asset('/icon/ticket_delete.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}"></span></a>
                             </td>
                         </tr>
                     {% endfor %}

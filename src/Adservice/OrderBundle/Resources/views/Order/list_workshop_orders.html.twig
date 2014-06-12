@@ -33,9 +33,9 @@
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></span></a>
+                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></span></a>
                                     {% if workshopOrder.rejectionReason is not null %}
-                                        <a title="{{ workshopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                        <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('/icon/tag_red.png') }}"></a>
                                     {% endif %}
                                     <!-- Modal -->
                                     <div class="modal fade" id="myModal_edit_{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -121,8 +121,8 @@
                             </td>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td>
-                                    <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><span class="glyphicon glyphicon-ok"></span></a>
-                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('/icon/tick.png') }}"> </a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('/icon/cross.png') }}"> </a>
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>

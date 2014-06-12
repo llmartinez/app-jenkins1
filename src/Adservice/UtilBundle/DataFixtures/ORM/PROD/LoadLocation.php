@@ -39,7 +39,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         $data->read($filePath);
 
         $country = new Country();
-        $country->setCountry('Spain');
+        $country->setCountry('spain');
         $country->setLang('spanish');
 
         //PARSEA EL EXCEL
@@ -94,7 +94,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         $data->read($filePath);
 
         $country = new Country();
-        $country->setCountry('Andorra');
+        $country->setCountry('andorra');
         $country->setLang('spanish');
 
         //PARSEA EL EXCEL
@@ -150,7 +150,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         $data->read($filePath);
 
         $country = new Country();
-        $country->setCountry('France');
+        $country->setCountry('france');
         $country->setLang('french');
 
         $rows = $data->sheets[0]['cells'];
@@ -204,7 +204,7 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
         $data->read($filePath);
 
         $country = new Country();
-        $country->setCountry('Portugal');
+        $country->setCountry('portugal');
         $country->setLang('portuguese');
 
         //PARSEA EL EXCEL

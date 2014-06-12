@@ -37,8 +37,8 @@
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create {% endtrans %}</button>
-          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit">{% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
         </form>
 
     {% endif %}

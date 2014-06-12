@@ -9,9 +9,9 @@
 <!-- <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
      <target name="build"            depends="parameters, prepare, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit"/>
 <!-- <target name="build"            depends="parameters, prepare, phpunit, phpcb"/> -->
-<!--
--->
-    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+
+    <!-- <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/> -->
+    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit"/>
 
     <!--<target name="build"            depends="parameters, prepare, lint, phploc"/>-->
 

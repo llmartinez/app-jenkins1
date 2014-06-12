@@ -181,6 +181,41 @@ btn.close:			 	 "Close"
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Insert ticket ID"
 
+#COUNTRY
+spain: 					 "Spain"
+andorra:				 "Andorra"
+france:					 "France"
+portugal:				 "Portugal"
+
+#LANGUAGE
+english:				 "English"
+spanish:				 "Spanish"
+french:				     "French"
+portuguese:				 "Portuguese"
+
+#IMPORTANCE
+information:			 "Information"
+specific_information:	 "Specific Information"
+diagnosis_and_repair:	 "Diagnosis and Repair"
+advanced_diagnostics:	 "Advanced Diagnostics"
+
+#SYSTEM
+body: 					 "Body"
+comfort: 				 "Comfort"
+steering: 				 "Steering"
+electricity:			 "Electricity"
+brakes:					 "Brakes"
+diesel_engine:			 "Diesel Engine"
+gasoline_engine:		 "Gasoline Engine"
+programming_and_coding:	 "Programming and Coding"
+safety:					 "Safety"
+suspension:				 "Suspension"
+transmission:			 "Transmission"
+various:				 "Various"
+
+#SUBSYSTEM
+
+
 #PARTNER
 partner.delete:			 "Delete Partner"
 partner.delete.confirm:	 "Are you sure you want to delete this Partner?"

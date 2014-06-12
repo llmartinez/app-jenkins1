@@ -29,7 +29,7 @@
                             <td> {{ shopOrder.region       }} </td>
                             <td> {{ shopOrder.address      }} </td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><span class="glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}" ></span></a>
+                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('/icon/search.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}" ></span></a>
                                     {#{% if shopOrder.rejectionReason is not null %}
                                         <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
                                     {% endif %}#}
@@ -102,7 +102,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a title="{{ shopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ shopOrder.id }}" >{% trans %} reject.reason {% endtrans %}</span></a>
+                                <a title="{{ shopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ shopOrder.id }}" ><img class="img_icon" src="{{ asset('/icon/reject_reason.png') }}"> {% trans %} reject.reason {% endtrans %}</span></a>
                                 <!-- Modal -->
                                     <div class="modal fade" id="myModal_rejected_reason{{shopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">

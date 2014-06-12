@@ -42,6 +42,9 @@ body {
 .img_logo {
     max-height: 58px;
 }
+.img_icon {
+    max-height: 20px;
+}
 .margined {
     margin-right: 40px;
 }
