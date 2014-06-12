@@ -12,10 +12,10 @@ class Importances extends AbstractFixture implements OrderedFixtureInterface {
 
     public function load(ObjectManager $manager) {
         $importances = array(
-            array('importance' => 'Information'),
-            array('importance' => 'Specific information' ),
-            array('importance' => 'Diagnosis and repair' ),
-            array('importance' => 'Advanced diagnostics' ),
+            array('importance' => 'information'),
+            array('importance' => 'specific_information' ),
+            array('importance' => 'diagnosis_and_repair' ),
+            array('importance' => 'advanced_diagnostics' ),
         );
         foreach ($importances as $importance) {
             $entidad = new Importance();

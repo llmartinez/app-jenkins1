@@ -10,7 +10,7 @@
     <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_diagnosis_machines {% endtrans %}
-            <a id="newDiagnosisMachine" href="{{ path('diagnosis_machine_edit') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.diagnosis_machine {% endtrans %}</a></td>
+            <a id="newDiagnosisMachine" href="{{ path('diagnosis_machine_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('/icon/diagnostic_machine_new.png') }}"> {% trans %} new.diagnosis_machine {% endtrans %}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}

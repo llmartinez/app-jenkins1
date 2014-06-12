@@ -223,7 +223,7 @@ class Pagination
         }
 
         /* PRUEBAS */
-            // echo $query.$from.$where.$order.'<br>';
+            echo $query.$from.$where.$order.'<br>';
             // var_dump($consulta->getResult());
             // die;
         return $consulta->getResult();

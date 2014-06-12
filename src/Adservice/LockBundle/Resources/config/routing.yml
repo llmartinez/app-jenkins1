@@ -1,6 +1,6 @@
 list_incidences:
-    pattern:  /lock/list/{page}/{id_taller}/{id_socio}
-    defaults: { _controller: LockBundle:Lock:listIncidences, page: 1, id_taller: null, id_socio: null }
+    pattern:  /lock/list/{page}/{id_taller}/{id_socio}/{texto}/{brand}/{model}/{version}
+    defaults: { _controller: LockBundle:Lock:listIncidences, page: 1, id_taller: null, id_socio: null, texto: null, brand: null, model: null, version: null }
 
 show_incidence:
     pattern:  /lock/{id_incidence}

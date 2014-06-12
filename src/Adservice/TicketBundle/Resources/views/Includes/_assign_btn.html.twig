@@ -8,25 +8,25 @@
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': 0 }) }}">
-                        <span class="glyphicon glyphicon-remove-circle"  title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></span></a>
+                        <img class="img_icon" src="{{ asset('/icon/ticket_unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></span></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
-                    <a><span class="glyphicon glyphicon-ban-circle" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+                    <a><img class="img_icon" src="{{ asset('/icon/ticket_assigned.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
 
                 {% endif %}
             {% else %}
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                    <span class="glyphicon glyphicon-link" title="{% trans %} ticket.block {% endtrans %}"></span></a>
+                    <img class="img_icon" src="{{ asset('/icon/ticket_blocked.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
             {% endif %}
         {% else %}
             {# Ticket cerrado#}
-            <span class="glyphicon glyphicon-ok"     style="color:gray"  title="{% trans %} ticket.closed {% endtrans %}"></span>
+            <img class="img_icon" src="{{ asset('/icon/ticket_closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
             {# reabrir Ticket #}
             <a href="{{ path('reopenTicket', { 'id_ticket': ticket.id }) }}" >
-                <span class="glyphicon glyphicon-repeat" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
+                <img class="img_icon" src="{{ asset('/icon/ticket_reopen.png') }}" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
         {% endif %}
     {% endif %}
 
@@ -50,8 +50,8 @@
                 {% trans %} ticket.delete.confirm {% endtrans %}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -18,7 +18,7 @@
                 {% if country == 'none' %}<td>{{ diagnosis_machine.country }}</td>{% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('/icon/diagnostic_machine_edit.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>

@@ -10,7 +10,7 @@
     <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_typologies {% endtrans %}
-            <a id="newTypology" href="{{ path('typology_edit') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.typology {% endtrans %}</a></td>
+            <a id="newTypology" href="{{ path('typology_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('/icon/typology_new.png') }}"> {% trans %} new.typology {% endtrans %}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}

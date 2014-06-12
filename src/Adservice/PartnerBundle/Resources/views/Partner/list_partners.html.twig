@@ -9,7 +9,7 @@
 
 <legend>
     {% trans %} menu.list_partners {% endtrans %}
-    <a href="{{ path('partner_new') }}" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> {% trans %} new.partner {% endtrans %} </a>
+    <a href="{{ path('partner_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('/icon/partner_new.png') }}"> {% trans %} new.partner {% endtrans %} </a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -47,7 +47,7 @@
                 <td>{{ partner.region  }}</td>
                 <td>{{ partner.city    }}</td>
                 <td>
-                    <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('/icon/partner_edit.png') }}"></a>
                     {# <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a> #}
                 </td>
             </tr>

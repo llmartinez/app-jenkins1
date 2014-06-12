@@ -29,7 +29,7 @@
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
                         <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}">{% trans %} menu.list_tickets {% endtrans %}</a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}"><img class="img_icon" src="{{ asset('/icon/tickets.png') }}"> {% trans %} menu.list_tickets {% endtrans %}</a>
                         </td>
                     </tr>
                 {% endfor %}

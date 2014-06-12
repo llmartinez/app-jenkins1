@@ -25,14 +25,14 @@
 
             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
-            <button class="btn btn-primary pull-right btn100" type="submit">{% trans %} btn.send {% endtrans %}</button>
+            <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
 
             {{ form_rest(formP) }}
             {{ form_rest(formD) }}
 
             {% if is_granted('ROLE_ASSESSOR') %}
 
-                <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id_ticket': ticket.id }) }}">{% trans %} ticket.close {% endtrans %}<a>
+                <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id_ticket': ticket.id }) }}"><img class="img_icon" src="{{ asset('/icon/ticket_send.png') }}"> {% trans %} ticket.close {% endtrans %}<a>
 
             {% endif %}
         {% endif %}

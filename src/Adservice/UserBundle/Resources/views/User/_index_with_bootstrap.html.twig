@@ -1,0 +1,127 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+<ol class="breadcrumb">
+      <li class="active">{% trans %} home {% endtrans %}</li>
+    </ol>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div name="tbl_admin" align="center">
+            <legend>{% trans %} menu.title_admin {% endtrans %}</legend>
+            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+                                                                                                <span class="glyphicon glyphicon-home"></span>
+                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+        </div>
+        <div name="tbl_admin" align="center">
+            <a class="btn-menu" id="listStatistics"         href="{{ path("listStatistics"          ) }}">
+                                                                                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                                                                                            {% trans %} menu.list_statistics         {% endtrans %}</a>
+            <a class="btn-menu" id="workshopOrdersList"     href="{{ path("list_orders"             ) }}">
+                                                                                                            <span class="glyphicon glyphicon-file"></span>
+                                                                                                            {% trans %} menu.list_orders             {% endtrans %}</a>
+            <a class="btn-menu" id="popup_list"             href="{{ path("popup_list"              ) }}">
+                                                                                                            <span class="glyphicon glyphicon-comment"></span>
+                                                                                                            {% trans %} menu.list_popups             {% endtrans %}</a>
+            <a class="btn-menu" id="partner_list"           href="{{ path("partner_list"            ) }}">
+                                                                                                            <span class="glyphicon glyphicon-briefcase"></span>
+                                                                                                            {% trans %} menu.list_partners           {% endtrans %}</a>
+            <a class="btn-menu" id="shop_list"              href="{{ path("shop_list"               ) }}">
+                                                                                                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                                                                                                            {% trans %} menu.list_shops              {% endtrans %}</a>
+            <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
+                                                                                                            <span class="glyphicon glyphicon-wrench"></span>
+                                                                                                            {% trans %} menu.list_workshops          {% endtrans %}</a>
+            <a class="btn-menu" id="diagnosis_machine_list" href="{{ path("diagnosis_machine_list"  ) }}">
+                                                                                                            <span class="glyphicon glyphicon-wrench"></span>
+                                                                                                            {% trans %} menu.list_diagnosis_machines {% endtrans %}</a>
+            <a class="btn-menu" id="typology_list"          href="{{ path("typology_list"          ) }}">
+                                                                                                            <span class="glyphicon glyphicon-wrench"></span>
+                                                                                                            {% trans %} menu.list_typologies         {% endtrans %}</a>
+            <a class="btn-menu" id="user_list"              href="{{ path("user_list"              ) }}">
+                                                                                                            <span class="glyphicon glyphicon-user"></span>
+                                                                                                            {% trans %} menu.list_users              {% endtrans %}</a>
+            <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket"             ) }}">
+                                                                                                            <span class="glyphicon glyphicon-th-list"></span>
+                                                                                                            {% trans %} menu.list_tickets            {% endtrans %}</a>
+            <a class="btn-menu" id="ticketWorkshopList"     href="{{ path("ticketWorkshopList"     ) }}">
+                                                                                                            <span class="glyphicon glyphicon-random"></span>
+                                                                                                            {% trans %} menu.asign_user_to_ticket    {% endtrans %}</a>
+        </div>
+{#    {% endif %}#}
+
+    {% elseif is_granted('ROLE_ASSESSOR') %}
+         <div name="tbl_asesor" align="center">
+            <legend>{% trans %} menu.title_assessor {% endtrans %}</legend>
+            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+                                                                                                <span class="glyphicon glyphicon-home"></span>
+                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket"         ) }}">
+                                                                                                <span class="glyphicon glyphicon-th-list"></span>
+                                                                                                {% trans %} menu.list_tickets         {% endtrans %}</a>
+        </div>
+{#    {% endif %}#}
+
+    {% elseif is_granted('ROLE_USER') %}
+        <div name="tbl_user" align="center">
+            <legend>{% trans %} menu.title_user {% endtrans %}</legend>
+            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+                                                                                                <span class="glyphicon glyphicon-home"></span>
+                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket"         ) }}">
+                                                                                                <span class="glyphicon glyphicon-th-list"></span>
+                                                                                                {% trans %} menu.list_tickets         {% endtrans %}</a>
+        </div>
+{#    {% endif %}#}
+
+    {% elseif is_granted('ROLE_AD') %}
+         <div name="tbl_user" align="center">
+            <legend>{% trans %} menu.title_ad {% endtrans %}</legend>
+            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+                                                                                                <span class="glyphicon glyphicon-home"></span>
+                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+            <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
+                                                                                                <span class="glyphicon glyphicon-th-list"></span>
+                                                                                                {% trans %} menu.list_orders         {% endtrans %}</a>
+            <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
+                                                                                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                                                                                {% trans %} menu.list_shops         {% endtrans %}</a>
+            <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops" ) }}">
+                                                                                                <span class="glyphicon glyphicon-wrench"></span>
+                                                                                                {% trans %} menu.list_workshops         {% endtrans %}</a>
+            <a class="btn-menu"                         href="{{ path("shopOrder_new"       ) }}">
+                                                                                                <span class="glyphicon glyphicon-shopping-cart"></span><span class="glyphicon glyphicon-log-in"></span>
+                                                                                                {% trans %} menu.new_shop_order         {% endtrans %}</a>
+            <a class="btn-menu"                         href="{{ path("workshopOrder_new"   ) }}">
+                                                                                                <span class="glyphicon glyphicon-wrench"></span><span class="glyphicon glyphicon-log-in"></span>
+                                                                                                {% trans %} menu.new_workshop_order         {% endtrans %}</a>
+        </div>
+    {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><div id="popup_modal_title"></div></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="popup_modal_description"></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/jquery.cookie.js') }}"></script>
+
+    {% include 'UtilBundle:jquery_twig:popup_show_jquery.html.twig' %}
+
+{% endblock %}
