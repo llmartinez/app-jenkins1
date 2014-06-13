@@ -19,7 +19,7 @@ class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterfa
         foreach ($machines as $machine) {
             $entidad = new DiagnosisMachine();
             $entidad->setName($machine['name']);
-            $entidad->setCountry( $this->getReference('Spain'));
+            $entidad->setCountry( $this->getReference('spain'));
             $entidad->setActive(1);
             $manager->persist($entidad);
 
