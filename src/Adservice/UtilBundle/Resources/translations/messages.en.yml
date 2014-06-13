@@ -293,6 +293,7 @@ users_in_workshop:		 "Users from Workshop"
 user.delete:			 "Delete User"
 user.delete.confirm:	 "Are you sure you want to delete this User?"
 select_user_type:		 "Select the type of the new user"
+anonimo:				 "Anonymous"
 
 #CAR
 brand:					 "Brand"
