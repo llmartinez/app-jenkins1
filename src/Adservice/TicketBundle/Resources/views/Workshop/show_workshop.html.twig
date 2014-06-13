@@ -8,7 +8,7 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		<img class='img_icon' src='{{ asset('/icon/workshop.png') }}'> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
+		<img class='img_icon' src='{{ asset('/icon/menu_workshop.png') }}'> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
 	</div>
 	<div class="form-group">
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('/icon/menu_user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}

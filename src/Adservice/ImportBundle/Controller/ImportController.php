@@ -207,8 +207,8 @@ class ImportController extends Controller
 				else 											$newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
 
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
-				$em->flush();
 			}
+			$em->flush();
 			$session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
@@ -252,8 +252,12 @@ class ImportController extends Controller
 					$newUser->setName($workshops[$old_Taller->getId()]->getName());
 				}
 
+				if(($newUser->getEmail1 == '' or $newUser->getEmail1 == 0) and ($newUser->getEmail2 == '' or $newUser->getEmail2 == 0)){
+					$users_email_log[] = $newUser;
+				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
  			}
+ 			if(isset($users_email_log)) $this->doExcelAction($users_email_log);
 			$em->flush();
 			$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
@@ -510,7 +514,7 @@ class ImportController extends Controller
         	$country = $region->getCountry()->getCountry();
         	$entity->setCountry($locations['countries'][$country]);
         }
-        else $entity->setCountry($locations['countries']['Spain']);
+        else $entity->setCountry($locations['countries']['spain']);
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
@@ -550,4 +554,52 @@ class ImportController extends Controller
 						   );
 		return $locations;
 	}
+
+    private function doExcelAction($users_email_log){
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+        $response->headers->set('Pragma', 'public');
+        $date    = new \DateTime();
+        $response->setLastModified($date);
+
+        $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+        $excel   = $this->createExcelTicket($users_email_log);
+
+        $response->setContent($excel);
+        return $response;
+    }
+
+    public function createExcelTicket($users_email_log){
+        //Creación de cabecera
+        $excel ='id;code_partner;code_workshop;name;error;';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($users_email_log as $row) {
+            $excel.=$row->getId().';';
+            $excel.=$row->getPartner()->getCodePartner().';';
+            $excel.=$row->getCodeWorkshop().';';
+            $excel.=$row->getName().';';
+            $error = 'Este taller no tiene email. Contacta con el taller para crear el usuario correctamente.';
+            if($row->getPhoneNumber1() != '' or $row->getPhoneNumber2() != '' or $row->getMovileNumber1() != '' or $row->getMovileNumber2() != '' ){
+            	$error = $error.' Puedes llamar al telefono: ';
+            	if($row->getPhoneNumber1()  != '') $error = $error.'->'.$row->getPhoneNumber1() .' ';
+            	if($row->getPhoneNumber2()  != '') $error = $error.'->'.$row->getPhoneNumber2() .' ';
+            	if($row->getMovileNumber1() != '') $error = $error.'->'.$row->getMovileNumber1().' ';
+            	if($row->getMovileNumber2() != '') $error = $error.'->'.$row->getMovileNumber2().' ';
+            }
+            $excel.=$error.';';
+            $excel.="\n";
+        }
+        $excel = str_replace(',', '.', $excel);
+        return($excel);
+    }
 }

@@ -20,7 +20,7 @@ class Typologies extends AbstractFixture implements OrderedFixtureInterface {
         foreach ($typologies as $typology) {
             $entidad = new Typology();
             $entidad->setName($typology['name']);
-            $entidad->setCountry($this->getReference('Spain'));
+            $entidad->setCountry($this->getReference('spain'));
             $entidad->setActive(1);
             $manager->persist($entidad);
 
