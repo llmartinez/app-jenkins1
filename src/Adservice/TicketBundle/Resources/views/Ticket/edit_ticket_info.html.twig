@@ -12,7 +12,7 @@
             {% for system in systems %}
                 <option value="{{ system.id }}"
                     {% if ticket.subsystem != null and ticket.subsystem.system.id == system.id %} selected {% endif %}
-                > {{ system.name }} </option>
+                > {{ system.name | trans }} </option>
             {% endfor %}
         </select>
     </div>

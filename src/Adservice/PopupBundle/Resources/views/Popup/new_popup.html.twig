@@ -10,25 +10,25 @@
 
     <form action="{{ path('popup_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} name        {% endtrans %}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            <label>{% trans %} name        {% endtrans %}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} role        {% endtrans %}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            <label>{% trans %} role        {% endtrans %}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' , 'placeholder': 'role' | trans} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label>{% trans %} country     {% endtrans %}*</label> {{ form_widget(form.country,      { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} startdate   {% endtrans %}*</label> {{ form_widget(form.startdate_at, { 'attr': {'required': 'required' } }) }}
+            <label>{% trans %} date.start   {% endtrans %}*</label> {{ form_widget(form.startdate_at, { 'attr': {'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} enddate     {% endtrans %}*</label> {{ form_widget(form.enddate_at,   { 'attr': {'required': 'required' } }) }}
+            <label>{% trans %} date.end     {% endtrans %}*</label> {{ form_widget(form.enddate_at,   { 'attr': {'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label>{% trans %} active      {% endtrans %}*</label> {{ form_widget(form.active,       { 'attr': {'checked': 'checked' } }) }}
         </div>
         <div class="col-xs-12 col-md-12 form-group">
-            <label>{% trans %} description {% endtrans %}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3' } }) }}
+            <label>{% trans %} description {% endtrans %}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3', 'placeholder': 'description' | trans } }) }}
         </div>
         {{ form_rest(form) }}
         <p>

@@ -5,7 +5,7 @@
 	    <legend>{% trans %} description {% endtrans %}</legend>
 	    <p> {{ ticket.description }} </p>
 
-	    {% if ticket.assignedTo != "" %}<p><b>{% trans %} ticket.assigned_to {% endtrans %}:</b>{{ ticket.assignedTo }} </p>{% endif %}
+	    {% if ticket.assignedTo != "" %}<p><b>{% trans %} ticket.assigned_to {% endtrans %}:</b> {{ ticket.assignedTo }} </p>{% endif %}
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}
 

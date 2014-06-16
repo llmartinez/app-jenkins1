@@ -15,7 +15,7 @@
 
 		$("#slct_city").select2();
             if($(':text[id*=city]').val()   != '') $("#s2id_slct_city .select2-chosen").text($(':text[id*=city]').val());
-            else                                   $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('sin ciudad') );
+            else                                   $(':text[id*=city]').val( $("#s2id_slct_city .select2-chosen").text('...') );
 
             {% if partner       is defined %} {% set entity = partner       %} {% endif %}
             {% if shop          is defined %} {% set entity = shop          %} {% endif %}

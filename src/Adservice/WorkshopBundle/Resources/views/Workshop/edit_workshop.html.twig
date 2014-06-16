@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
         <li><a href="{{ path('workshop_list') }}">{% trans %} menu.list_workshops {% endtrans %}</a></li>
-        <li class="active">{% trans %} edit.workshop {% endtrans %}({{ workshop }})</li>
+        <li class="active">{% trans %} edit.workshop {% endtrans %} ({{ workshop }})</li>
     </ol>
 
 
@@ -22,7 +22,7 @@
             <div class="col-xs-8 col-md-8 form-group">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %}</label>
-                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="new_car_form_vin">{% trans %} code.workshop {% endtrans %}</label>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %}</label>
-                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %}</label>
@@ -96,15 +96,15 @@
 
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_workshop">{% trans %} observations_workshop {% endtrans %}</label>
-            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_workshop' | trans } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_assessor">{% trans %} observations_assessor {% endtrans %}</label>
-            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_assessor' | trans } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_admin">{% trans %} observations_admin {% endtrans %}</label>
-            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3'} }) }}
+            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_admin' | trans } }) }}
         </div>
 
     {{ form_rest(form) }}

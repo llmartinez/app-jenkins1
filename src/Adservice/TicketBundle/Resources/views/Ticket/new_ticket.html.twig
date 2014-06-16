@@ -15,7 +15,7 @@
             <label for="id_system">{% trans %} system {% endtrans %} *</label>
             <select class="form-control" id="id_system" multiple="multiple", required>
                 {% for system in systems %}
-                    <option value="{{ system.id }}"> {{ system.name }} </option>
+                    <option value="{{ system.id }}"> {{ system.name | trans }} </option>
                 {% endfor %}
             </select>
         </div>

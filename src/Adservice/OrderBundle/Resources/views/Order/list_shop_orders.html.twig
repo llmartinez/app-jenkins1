@@ -33,7 +33,7 @@
                             <td> {% if shopOrder.active == 1 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></span></a>
+                                    <a title="{% trans %} workshop_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></span></a>
                                     {% if shopOrder.rejectionReason is not null %}
                                         <a title="{{ shopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('/icon/tag_red.png') }}"></a>
                                     {% endif %}

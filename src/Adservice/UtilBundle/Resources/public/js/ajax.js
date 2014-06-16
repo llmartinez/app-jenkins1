@@ -40,13 +40,13 @@ function populate_region(url_ajax, region, city){
                                         $("#s2id_slct_city .select2-chosen"  ).text(city_edit);
                 }
                 else                  {
-                                        $("#s2id_slct_region .select2-chosen").text('sin region');
-                                        $("#s2id_slct_city .select2-chosen"  ).text('sin ciudad');
+                                        $("#s2id_slct_region .select2-chosen").text('...');
+                                        $("#s2id_slct_city .select2-chosen"  ).text('...');
                 }
             }
             else{
-                $("#s2id_slct_region .select2-chosen").text('sin region');
-                $(':text[id*=region]').val('sin region');
+                $("#s2id_slct_region .select2-chosen").text('...');
+                $(':text[id*=region]').val('...');
             }
         },
         error : function(){

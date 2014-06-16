@@ -312,7 +312,6 @@ class TicketController extends Controller {
 
             }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
         }
-
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
         return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
@@ -772,16 +771,10 @@ class TicketController extends Controller {
      */
     private function getUsersToAssingFromTicket() {
         $em = $this->getDoctrine()->getEntityManager();
-        $users = $em->getRepository('UserBundle:user')->findAll();
 
-        $users_for_assign = array();
-        foreach ($users as $user) {
-            $role = $user->getRoles();
-            if (($role[0]->getRole() == "ROLE_ADMIN") || ($role[0]->getRole() == "ROLE_ASSESSOR")) {
-                $users_for_assign[] = $user;
-            }
-        }
-        return $users_for_assign;
+        $query    = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ADMIN' OR r.name = 'ROLE_ASSESSOR'";
+        $consulta = $em->createQuery($query);
+        return $consulta->getResult();
     }
 
     /**
