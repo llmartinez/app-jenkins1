@@ -137,13 +137,11 @@ class UserController extends Controller {
         $petition = $this->getRequest();
 
         //que tipo de usuario estamos editando (los formtype varian...)
-        $role = $user->getRoles();
-        if     ($role[0]->getRole() == "ROLE_SUPER_ADMIN")  $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        if     ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_ASSESSOR")     $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_USER")         $form = $this->createForm(new EditUserWorkshopType()     , $user);
-        elseif ($role[0]->getRole() == "ROLE_SUPER_AD")     $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role[0]->getRole() == "ROLE_AD")           $form = $this->createForm(new EditUserPartnerType()      , $user);
+        $role = $user->getRoles()[0]->getRole();
+
+        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
+        elseif ($role == "ROLE_SUPER_AD"    or $role == "ROLE_AD")                                $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
