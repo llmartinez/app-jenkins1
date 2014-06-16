@@ -10,7 +10,7 @@
 <h1>{% trans %} profile_of {% endtrans %} {{ app.user }}
     <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('/icon/change_password.png') }}"> {% trans %} change_password {% endtrans %}</button></h1>
 
-{% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+{% if app.session.hasFlash('password' ) %} <p class="error pull-right">{{ app.session.getFlash('password') }}</p> {% endif %}
 
 <table class="table" style="width: 90%; margin-left: 5%;">
     <tbody>
@@ -66,12 +66,14 @@
                 <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
             </div>
             <div class="modal-body">
-                <div><label>{% trans %} old_password    {% endtrans %}</label>
-                <input id="old_password"  name="old_password"  type="password" placeholder="{% trans %} old_password {% endtrans %}"></div>
-                <div><label>{% trans %} password        {% endtrans %}</label>
-                <input id="new_password1" name="new_password1" type="password" placeholder="{% trans %} password     {% endtrans %}"></div>
-                <div><label>{% trans %} repeat_password {% endtrans %}</label>
-                <input id="new_password2" name="new_password2" type="password" placeholder="{% trans %} password     {% endtrans %}"></div>
+                <table>
+                    <tr><td><label>{% trans %} old_password    {% endtrans %}</label></td>
+                        <td><input id="old_password"  name="old_password"  type="password" placeholder="{% trans %} old_password {% endtrans %}"></td>
+                    <tr><td><label>{% trans %} new_password    {% endtrans %}</label></td>
+                        <td><input id="new_password1" name="new_password1" type="password" placeholder="{% trans %} new_password     {% endtrans %}"></td></tr>
+                    <tr><td><div><label>{% trans %} repeat_password {% endtrans %}</label>
+                        <td><input id="new_password2" name="new_password2" type="password" placeholder="{% trans %} new_password     {% endtrans %}"></td></tr>
+                </table>
             </div>
             <div class="modal-footer">
                 <button id="confirm_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
