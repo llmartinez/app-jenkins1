@@ -162,8 +162,11 @@ class AjaxController extends Controller
 
         $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
         if(count($subsystems) > 0) {
+            $j = 0;
             foreach ($subsystems as $subsystem) {
                 $json[] = $subsystem->to_json();
+                $json[$j]['name'] = $this->get('translator')->trans($json[$j]['name']);
+                $j++;
             }
         }else{
                 $json = array( 'error' => 'No hay coincidencias');

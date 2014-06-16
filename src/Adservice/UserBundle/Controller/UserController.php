@@ -137,13 +137,11 @@ class UserController extends Controller {
         $petition = $this->getRequest();
 
         //que tipo de usuario estamos editando (los formtype varian...)
-        $role = $user->getRoles();
-        if     ($role[0]->getRole() == "ROLE_SUPER_ADMIN")  $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        if     ($role[0]->getRole() == "ROLE_ADMIN")        $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_ASSESSOR")     $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role[0]->getRole() == "ROLE_USER")         $form = $this->createForm(new EditUserWorkshopType()     , $user);
-        elseif ($role[0]->getRole() == "ROLE_SUPER_AD")     $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role[0]->getRole() == "ROLE_AD")           $form = $this->createForm(new EditUserPartnerType()      , $user);
+        $role = $user->getRoles()[0]->getRole();
+
+        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
+        elseif ($role == "ROLE_SUPER_AD"    or $role == "ROLE_AD")                                $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
@@ -188,20 +186,42 @@ class UserController extends Controller {
     }
 
 
-    public function changePasswordAction($id, $password='none', $route=null) {
+    public function changePasswordAction($id, $password='none', $route=null, $old_pass='none') {
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
-
         /*CREAR PASSWORD AUTOMATICAMENTE*/
-        if ($password == null or $password == 'none') $password = substr( md5(microtime()), 1, 8);
+        if ($password == null or $password == 'none')
+        {
+            $password = substr( md5(microtime()), 1, 8);
+            $this->savePassword($em, $user, $password);
+        }
+        /*CREAR PASSWORD MANUALMENTE*/
+        else {
+            $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
+            $pass     = $encoder->encodePassword( $old_pass, $user->getSalt());
+
+            if ($pass == $user->getPassword())
+            {
+                $this->savePassword($em, $user, $password);
+            }
+            else{
+                $flash =  $this->get('translator')->trans('change_password.error');
+                $this->get('session')->setFlash('password', $flash);
+            }
+        }
+
+        if     ($route == null or $route == 'none' ) return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
+        elseif ($route == 'user_edit'              ) return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
+    }
+
+    private function savePassword($em, $user, $password){
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
-
         /* MAILING */
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($user->getEmail1());*/
@@ -211,11 +231,8 @@ class UserController extends Controller {
         $mailerUser->sendMailToSpool();
         //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
-        $flash = 'Password cambiado correctamente. Se enviará un mail al usuario con sus nuevas credenciales.';
+        $flash =  $this->get('translator')->trans('change_password.correct');
         $this->get('session')->setFlash('password', $flash);
-
-        if     ($route == null) return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
-        elseif ($route == 'user_edit') return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
     }
 
     /**

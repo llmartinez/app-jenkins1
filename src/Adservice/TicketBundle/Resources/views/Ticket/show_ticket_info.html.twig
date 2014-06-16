@@ -8,7 +8,7 @@
 
 	    <input type="hidden" id="id_ticket" name="id_ticket" value="{{ ticket.id }}">
 
-	    {% if ticket.importance  	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} importance {% endtrans %}: </b>{{ ticket.importance 		 }} </div> {% endif %}
-	    {% if ticket.subsystem.system != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} system     {% endtrans %}: </b>{{ ticket.subsystem.system }} </div> {% endif %}
-	    {% if ticket.subsystem   	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} subsystem  {% endtrans %}: </b>{{ ticket.subsystem  		 }} </div> {% endif %}
+	    {% if ticket.importance  	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} importance {% endtrans %}: </b>{{ ticket.importance | trans  		}} </div> {% endif %}
+	    {% if ticket.subsystem.system != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} system     {% endtrans %}: </b>{{ ticket.subsystem.system | trans }} </div> {% endif %}
+	    {% if ticket.subsystem   	  != "" %}<div class="col-xs-4 col-md-4 form-group"><b>{% trans %} subsystem  {% endtrans %}: </b>{{ ticket.subsystem | trans          }} </div> {% endif %}
     </div>

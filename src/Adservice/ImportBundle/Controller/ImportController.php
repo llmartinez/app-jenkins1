@@ -200,7 +200,7 @@ class ImportController extends Controller
 				$newWorkshop->setActive	 				($old_Taller->getActive());
 				$newWorkshop->setContactName 			($old_Taller->getContacto());
 				$newWorkshop->setContactSurname 		('sin-especificar');
-				$newWorkshop->setTypology 				($typology); //$partners[$old_Socio->getId()]);
+				$newWorkshop->setTypology 				($typology);
 				$newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
 				//COMPROVACION SI EXISTE EL SOCIO
 				if(isset($partners[$old_Taller->getIdGrupo()])) $newWorkshop->setPartner ($partners[$old_Taller->getIdGrupo()]);
