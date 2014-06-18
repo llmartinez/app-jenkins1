@@ -54,10 +54,6 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop-default');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
     	}
@@ -91,10 +87,6 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
 			$session->set('next',  	'shop');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
     	}
@@ -126,10 +118,6 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
     	}
@@ -165,10 +153,6 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
 			$session->set('next',  	'assessor');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
     	}
@@ -203,15 +187,9 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando talleres (entidad Workshop)...');
 			$session->set('next',  	'workshop');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
-/***************************************************************************************************************/
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
+        	//return $this->render('ImportBundle:Import:import.html.twig');
 
-/***************************************************************************************************************/
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
@@ -255,10 +233,6 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
 
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
@@ -298,8 +272,7 @@ class ImportController extends Controller
 					$users_email_log[] = $newUser;
 				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
-/***************************************************************************************************************/
-			$em->flush();
+ 			}
  			if(isset($users_email_log)) {
 				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
 				$session->set('info',  	'Generarando excel con los ususarios erroneos...
@@ -310,21 +283,6 @@ class ImportController extends Controller
 				$session->set('response' ,	$response);
  			}
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
-/***************************************************************************************************************/
- 			}
-			$em->flush();
- 			if(isset($users_email_log)) $response = $this->doExcelAction($users_email_log);
-			$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Haz click en Importar Lock para importar el historico de coches e incidencias(entidad lock_car y lock_incidence)...');
-			$session->set('next',  	'user_log');
-
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
-			//return $this->render('ImportBundle:Import:import.html.twig');
-			if(isset($response)) return $response;
-			else 				 return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'user'));
     	}
     	elseif( $bbdd == 'user_log' )
     	{
@@ -387,19 +345,11 @@ class ImportController extends Controller
 			foreach ($cars as $car) {
 				$em_lock->persist($car);
 			}
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			$em_lock->flush();
 
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars', 'num' => $num + $max_rows ));
 //return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-/***************************************************************************************************************/
-		$session->set('bbdd', array($bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => 0));
 		}
     }
@@ -473,10 +423,6 @@ class ImportController extends Controller
 			unset($socios 		);	unset($socio 	 );
 			unset($talleres 	);	unset($taller 	 );
 			unset($opers 		);	unset($oper 	 );
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			$em_lock->flush();
 			$em_lock->clear();
 			$em_lock->close();
@@ -484,10 +430,6 @@ class ImportController extends Controller
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => $num + $max_rows ));
 //return $this->render('ImportBundle:Import:import.html.twig');
 		}else{
-/***************************************************************************************************************/
-		$session->set('bbdd', array($bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
 		}
 	}
