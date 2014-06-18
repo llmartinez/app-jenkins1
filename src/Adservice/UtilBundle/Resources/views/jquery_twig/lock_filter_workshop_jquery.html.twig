@@ -1,0 +1,34 @@
+    <script>
+
+        $(document).ready(function() {
+            {% if id_socio  != 'none' %} $("#flt_socio" ).val('{{ id_socio }}' );{% endif %}
+            {% if id_taller != 'none' %} $("#flt_taller").val('{{ id_taller }}');{% endif %}
+
+        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+        $('#btn_search').click(function() {
+
+            if ($( "#flt_taller" ).val() != "" && $( "#flt_socio" ).val() == "") {
+                event.preventDefault();
+                $( "#flt_socio" ).focus();
+                $( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+            }
+
+            var id_socio  = $('#flt_socio' ).val();
+            var id_taller = $('#flt_taller').val();
+
+            if( id_socio  == null ) id_socio  = 'none';
+            if( id_taller == null ) id_taller = 'none';
+
+            var url = "{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}";
+
+            url = url.replace("plc_page", 1);
+            url = url.replace("plc_socio" , id_socio );
+            url = url.replace("plc_taller", id_taller);
+
+            window.open(url, "_self");
+        });
+            //util.js
+            table_filter();
+        });
+
+    </script>

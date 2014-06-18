@@ -1,3 +1,0 @@
-Servidor: 	clientes.ad-service.es
-Usuario: 	ae9526
-Contraseña: 	clienftpser20

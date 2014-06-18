@@ -1,6 +1,0 @@
-ad-service.es
-
-db: test-new-adservice-historic
-
-user: ac4917
-pass: 9Cpa3ztaW5NU

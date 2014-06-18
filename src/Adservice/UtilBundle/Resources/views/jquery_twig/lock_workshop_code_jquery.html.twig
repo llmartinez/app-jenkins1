@@ -1,0 +1,24 @@
+
+<script>
+
+	$(document).ready(function() {
+		$( "#flt_socio" ).focus();
+	});
+
+	$( "#flt_socio" ).on( "keydown", function( event ) {
+
+		if (event.which == 13) {
+		  	event.preventDefault();
+		  	$( "#flt_taller" ).focus();
+		}
+	});
+
+	$( "#flt_taller" ).on( "keydown", function( event ) {
+
+	  	if (event.which == 13 && $( "#flt_socio" ).val() == "") {
+	  		event.preventDefault();
+			$( "#flt_socio" ).focus();
+			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+	  	}
+	});
+</script>

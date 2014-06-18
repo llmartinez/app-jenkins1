@@ -5,16 +5,29 @@
       <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
     </ol>
 
-<legend>{% trans %} lock.list_incidences {% endtrans %}</legend>
+<legend>{% trans %} lock.list_incidences {% endtrans %}
+        {% if id_socio != 'none' %} {% trans %} workshop {% endtrans %} <a>#{{ id_socio }},{{ id_taller }}{% endif %}</a></legend>
 
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
-   {#  <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+   {#  {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control'>
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
-                <option value="{{ country.id }}">{{ country }}</option>
+                <option value="{{ country }}">{{ country }}</option>
             {% endfor %}
-    </select></div> #}
+    </select></div>
+    {% endif %} #}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <div class="col-xs-6 col-md-6 form-group">
+            <div class="col-xs-2 col-md-2"><label> {% trans %} code {% endtrans %} </label></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{% trans %} partner  {% endtrans %}"></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{% trans %} workshop {% endtrans %}"></div>
+            <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{% trans %} btn.search {% endtrans %}"></div>
+        </div>
+
+        {% include 'UtilBundle:jquery_twig:lock_filter_workshop_jquery.html.twig' %}
+        {% include 'UtilBundle:jquery_twig:lock_workshop_code_jquery.html.twig'   %}
     {% endif %}
 
     {% if incidences|length > 0  %}
@@ -55,8 +68,7 @@
     {{ parent() }}
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-{# /***** TODO: enter en select2 setea el valor y pasa al siguiente elemento *****/
-    {% include 'UtilBundle:jquery_twig:lock_filter_country_jquery.html.twig' %}
- /******************************************************************************/ #}
+{# /***** TODO: enter en select2 setea el valor y pasa al siguiente elemento *****/#}
+    {# {% include 'UtilBundle:jquery_twig:lock_filter_country_jquery.html.twig' %} #}
 
 {% endblock %}

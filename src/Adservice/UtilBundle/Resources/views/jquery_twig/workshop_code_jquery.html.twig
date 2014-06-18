@@ -5,12 +5,13 @@
 		$( "#w_idpartner" ).focus();
 	});
 
-	$( "#w_idpartner" ).on( "keydown", function( event ) {
+	$( "#btn_check" ).click(function() {
 
-		if (event.which == 13) {
-		  	event.preventDefault();
-		  	$( "#w_id" ).focus();
-		}
+	  	if (($( "#w_id" ).val() == "" || $( "#w_idpartner" ).val() == "") && $( "#w_email" ).val() == '' && $( "#w_tel" ).val() ) {
+	  		event.preventDefault();
+			$( "#w_idpartner" ).focus();
+			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+	  	}
 	});
 
 	$( "#w_id" ).on( "keydown", function( event ) {
@@ -22,12 +23,11 @@
 	  	}
 	});
 
-	$( "#btn_check" ).click(function() {
+	$( "#w_idpartner" ).on( "keydown", function( event ) {
 
-	  	if ($( "#w_id" ).val() != "" && $( "#w_idpartner" ).val() == "") {
-	  		event.preventDefault();
-			$( "#w_idpartner" ).focus();
-			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
-	  	}
+		if (event.which == 13) {
+		  	event.preventDefault();
+		  	$( "#w_id" ).focus();
+		}
 	});
 </script>
