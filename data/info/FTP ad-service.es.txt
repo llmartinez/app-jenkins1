@@ -1,3 +1,0 @@
-Servidor: 	ftp.ad-service.es
-Usuario: 	adservice11
-Contraseña: 	servdiag2411

@@ -2,6 +2,7 @@
 namespace Adservice\ImportBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Controller\UtilController;
 use Adservice\UserBundle\Entity\User;
 use Adservice\PartnerBundle\Entity\Partner;
@@ -161,8 +162,8 @@ class ImportController extends Controller
 			}
 			$em->flush();
 			$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando talleres (entidad Workshop)...');
-			$session->set('next',  	'workshop');
+			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
+			$session->set('next',  	'assessor');
 
 /***************************************************************************************************************/
 		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
@@ -170,6 +171,47 @@ class ImportController extends Controller
 /***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+    	}
+//     _    ____ ____  _____ ____ ____   ___  ____
+//    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
+//   / _ \ \___ \___ \|  _| \___ \___ \| | | | |_) |
+//  / ___ \ ___) |__) | |___ ___) |__) | |_| |  _ <
+// /_/   \_\____/____/|_____|____/____/ \___/|_| \_\
+
+    	elseif( $bbdd == 'assessor' )
+    	{
+			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
+
+			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
+			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
+
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
+
+			foreach ($old_Asesores as $old_Asesor)
+			{
+				$newAssessor = UtilController::newEntity(new User(), $sa);
+				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
+				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
+				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
+				$newAssessor->setActive($old_Asesor->getActive());
+
+				UtilController::saveEntity($em, $newAssessor, $sa, false);
+			}
+			$em->flush();
+			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
+			$session->set('info',  	'Importando talleres (entidad Workshop)...');
+			$session->set('next',  	'workshop');
+
+/***************************************************************************************************************/
+		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
+		var_dump($session);
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
+
+/***************************************************************************************************************/
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
@@ -252,68 +294,52 @@ class ImportController extends Controller
 					$newUser->setName($workshops[$old_Taller->getId()]->getName());
 				}
 
-				if(($newUser->getEmail1 == '' or $newUser->getEmail1 == 0) and ($newUser->getEmail2 == '' or $newUser->getEmail2 == 0)){
+				if(($newUser->getEmail1() == '' or $newUser->getEmail1() == 0) and ($newUser->getEmail2() == '' or $newUser->getEmail2() == 0)){
 					$users_email_log[] = $newUser;
 				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
- 			}
- 			if(isset($users_email_log)) $this->doExcelAction($users_email_log);
+/***************************************************************************************************************/
 			$em->flush();
+ 			if(isset($users_email_log)) {
+				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
+				$session->set('info',  	'Generarando excel con los ususarios erroneos...
+										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad lock_car y lock_incidence)...');
+				$session->set('next',  	'user_log');
+
+				$response = $this->doExcelAction($users_email_log);
+				$session->set('response' ,	$response);
+ 			}
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
+/***************************************************************************************************************/
+ 			}
+			$em->flush();
+ 			if(isset($users_email_log)) $response = $this->doExcelAction($users_email_log);
 			$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
-			$session->set('next',  	'assessor');
+			$session->set('info',  	'Haz click en Importar Lock para importar el historico de coches e incidencias(entidad lock_car y lock_incidence)...');
+			$session->set('next',  	'user_log');
 
 /***************************************************************************************************************/
 		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
 		var_dump($session);
 /***************************************************************************************************************/
 			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+			if(isset($response)) return $response;
+			else 				 return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'user'));
     	}
-//     _    ____ ____  _____ ____ ____   ___  ____
-//    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
-//   / _ \ \___ \___ \|  _| \___ \___ \| | | | |_) |
-//  / ___ \ ___) |__) | |___ ___) |__) | |_| |  _ <
-// /_/   \_\____/____/|_____|____/____/ \___/|_| \_\
-
-    	elseif( $bbdd == 'assessor' )
+    	elseif( $bbdd == 'user_log' )
     	{
-			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
+    		$response = $session->get('response');
+ 			if(isset($response)) {
+ 				return $response;
+ 			}else{
+ 				return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
+ 			}
 
-			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
-			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
-			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
-
-			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
-
-			foreach ($old_Asesores as $old_Asesor)
-			{
-				$newAssessor = UtilController::newEntity(new User(), $sa);
-				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
-				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
-				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
-				$newAssessor->setActive($old_Asesor->getActive());
-
-				UtilController::saveEntity($em, $newAssessor, $sa, false);
-			}
-			$em->flush();
-			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando historico de coches e incidencias(entidad lock_car y lock_incidence)...');
-
-/***************************************************************************************************************/
-		$session->set('time-'.$bbdd, array('time-'.$bbdd => date("H:i:d -- d/m/Y")));
-		var_dump($session);
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'old_cars'));
-
-/***************************************************************************************************************/
     	}
     	else{
 
 			$session->set('info', '<h3>Deseas importar la BBDD antigua de AD-service??</h3>
-			<p>Se importaran Socios, Talleres, Usuarios y Asesores.</p>
+			<p>Se importaran Socios, Asesores, Talleres y Usuarios.</p>
 			<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>');
 
         	return $this->render('ImportBundle:Import:import.html.twig');
@@ -569,7 +595,7 @@ class ImportController extends Controller
         $date    = new \DateTime();
         $response->setLastModified($date);
 
-        $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="usuarios_sin_mail_('.date("d-m-Y").').csv"');
         $excel   = $this->createExcelTicket($users_email_log);
 
         $response->setContent($excel);
@@ -578,24 +604,25 @@ class ImportController extends Controller
 
     public function createExcelTicket($users_email_log){
         //Creación de cabecera
-        $excel ='id;code_partner;code_workshop;name;error;';
+        $excel ='id;Código Socio;Código Taller;Taller;Contacto;Fijo 1;Fijo 2;Movil 1;Movil 2;Población;Provincia;Dirección;error;';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($users_email_log as $row) {
             $excel.=$row->getId().';';
-            $excel.=$row->getPartner()->getCodePartner().';';
-            $excel.=$row->getCodeWorkshop().';';
+            $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row->getWorkshop()->getCodeWorkshop().';';
+            $excel.=$row->getWorkshop()->getName().';';
             $excel.=$row->getName().';';
-            $error = 'Este taller no tiene email. Contacta con el taller para crear el usuario correctamente.';
-            if($row->getPhoneNumber1() != '' or $row->getPhoneNumber2() != '' or $row->getMovileNumber1() != '' or $row->getMovileNumber2() != '' ){
-            	$error = $error.' Puedes llamar al telefono: ';
-            	if($row->getPhoneNumber1()  != '') $error = $error.'->'.$row->getPhoneNumber1() .' ';
-            	if($row->getPhoneNumber2()  != '') $error = $error.'->'.$row->getPhoneNumber2() .' ';
-            	if($row->getMovileNumber1() != '') $error = $error.'->'.$row->getMovileNumber1().' ';
-            	if($row->getMovileNumber2() != '') $error = $error.'->'.$row->getMovileNumber2().' ';
-            }
+            $excel.=$row->getPhoneNumber1().';';
+            $excel.=$row->getPhoneNumber2().';';
+            $excel.=$row->getMovileNumber1().';';
+            $excel.=$row->getMovileNumber2().';';
+            $excel.=$row->getRegion().';';
+            $excel.=$row->getCity().';';
+            $excel.=$row->getAddress().';';
+            $error = 'Este taller no tiene email. Contacta con el taller para solucionarlo.';
             $excel.=$error.';';
             $excel.="\n";
         }
