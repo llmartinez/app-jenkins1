@@ -6,6 +6,11 @@ incidences:
     pattern:  /incidences/{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:importLockIncidences, bbdd: 'incidences', num: 0 }
 
+test_mail:
+    pattern:  /mail
+    defaults: { _controller: ImportBundle:Import:testMailing }
+    
 import:
     pattern:  /{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }
+    
