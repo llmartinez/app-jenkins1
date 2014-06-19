@@ -45,9 +45,9 @@
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                         {% if shop.workshops|length == 0 %}
-                            <a id="delete{{ shop.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
+                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_rejected.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
                         {% else %}
-                            <a style="color:gray"><span class="glyphicon glyphicon-trash" title="{% trans %} shop.is_assigned {% endtrans %}" onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"></span></a>
+                            <a style="color:gray"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_rejected.png') }}" title="{% trans %} shop.is_assigned {% endtrans %}" onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"></span></a>
                         {% endif %}
                     </td>
                     <!-- Modal -->
@@ -70,18 +70,18 @@
                     </div><!-- /.modal -->
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_edit.png') }}"></a>
                         {% if shop.active == true %}
-                            <a title="{% trans %} shop.deactivate {% endtrans %}"   href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'inactive'  }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a title="{% trans %} shop.deactivate {% endtrans %}"   href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></span></a>
                         {% else %}
-                            <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                            <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"></a>
                         {% endif %}
                         {% if shop.workshops|length == 0 %}
-                            <a id="delete{{ shop.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
+                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
                         {% else %}
                             <a  title="{% trans %} shop.is_assigned {% endtrans %}"
                                 onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"
-                                style="color:gray"><span class="glyphicon glyphicon-trash"></span></a>
+                                style="color:gray"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_closed.png') }}" ></a>
                         {% endif %}
                     </td>
                     <!-- Modal -->

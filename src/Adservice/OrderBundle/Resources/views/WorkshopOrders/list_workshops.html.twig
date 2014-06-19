@@ -45,7 +45,7 @@
                 <td>{{ workshop.active }}       </td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"></a>
                         <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
                     </td>
                         <!-- Modal -->
@@ -68,13 +68,12 @@
                         </div><!-- /.modal -->
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}" </a>
                         {% if workshop.active == true %}
-                            <a title="{% trans %} workshop.activate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a title="{% trans %} workshop.activate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}" </a>
                         {% else %}
-                            <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><span class="glyphicon glyphicon-ok"></span></a>
+                            <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}" </a>
                         {% endif %}
-                        {# <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a> #}
                     </td>
                     <!-- Modal -->
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
