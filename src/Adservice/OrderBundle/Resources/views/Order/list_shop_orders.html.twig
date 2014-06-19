@@ -33,7 +33,7 @@
                             <td> {% if shopOrder.active == 1 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
                             <td>
-                                    <a title="{% trans %} workshop_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></span></a>
+                                    <a title="{% trans %} workshop_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></a>
                                     {% if shopOrder.rejectionReason is not null %}
                                         <a title="{{ shopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
                                     {% endif %}
@@ -108,7 +108,7 @@
 
                                 {% elseif shopOrder.action == 'resend' and shopOrder.rejectionReason is not null %}
                                     <span class="label label-warning"> {% trans %} resend {% endtrans %} {{ shopOrder.wantedaction }} </span>
-                                        <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
+                                        <a title="{{ shopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
                                 {% endif %}
                             </td>
                             {% if is_granted('ROLE_ADMIN') %}
@@ -118,7 +118,7 @@
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>
-                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('shopOrder_remove', {'id' : shopOrder.id}) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('shopOrder_remove', {'id' : shopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></a>
                                 </td>
                             {% endif %}
                         </tr>

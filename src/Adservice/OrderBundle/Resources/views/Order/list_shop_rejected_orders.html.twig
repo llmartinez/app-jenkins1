@@ -29,7 +29,7 @@
                             <td> {{ shopOrder.region       }} </td>
                             <td> {{ shopOrder.address      }} </td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}" ></span></a>
+                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}"></a>
                                     {#{% if shopOrder.rejectionReason is not null %}
                                         <a title="{{ shopOrder.rejectionReason }}" href="#"><span class="glyphicon glyphicon-fire" style="color: red;"></span></a>
                                     {% endif %}#}
@@ -125,11 +125,11 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                     {% if shopOrder.wantedAction != 'create' %}
-                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_edit.png') }}"> </a>
                                     {% endif %}
-                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}"></a>
 
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('shopOrder_resendOrder', {'id': shopOrder.id }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('shopOrder_resendOrder', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
                             {% endif %}
                             </td>
                         </tr>

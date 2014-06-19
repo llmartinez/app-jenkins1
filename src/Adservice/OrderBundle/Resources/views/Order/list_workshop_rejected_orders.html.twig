@@ -26,7 +26,7 @@
                             <td>{{ workshopOrder.phoneNumber1 }}</td>
                             <td>{{ workshopOrder.region       }}</td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{ workshopOrder.id }}" ></span></a>
+                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{ workshopOrder.id }}" ></a>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="myModal_rejected_edit{{ workshopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -107,13 +107,13 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                     {% if workshopOrder.wantedAction != 'create' %}
-                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"></a>
                                     {% else %}
-                                        <a title="{% trans %} order.recreate {% endtrans %}"  onclick="alert('{% trans %} order.recreate {% endtrans %}')"><span class="glyphicon glyphicon-asterisk" style="color:red"></span></a>
+                                        <a title="{% trans %} order.recreate {% endtrans %}"  onclick="alert('{% trans %} order.recreate {% endtrans %}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
                                     {% endif %}
-                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('workshopOrder_remove', {'id': workshopOrder.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('workshopOrder_remove', {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}"></a>
 
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><span class="glyphicon glyphicon-refresh"></span></a>
+                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
                             {% endif %}
                             </td>
                         </tr>
