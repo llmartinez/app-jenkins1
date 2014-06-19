@@ -8,19 +8,19 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		<img class='img_icon' src='{{ asset('/icon/menu_workshop.png') }}'> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
+		<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_workshop.png') }}'> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
 	</div>
 	<div class="form-group">
-		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('/icon/menu_user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
+		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
 	</div>
 	{# PARTNER #}
 	<div class="form-group">
-		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('/icon/menu_partner.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner      }} {% endif %}
+		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_partner.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner      }} {% endif %}
 	</div>
 
 	{# LOCATION #}
 	<div class="form-group">
-		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('/icon/map.png') }}'>{% endif %}
+		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/map.png') }}'>{% endif %}
 		{% if workshop.city         != "" %}  {{ workshop.city       }}{% endif %}
 		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
 		{% if workshop.region       != "" %}, {{ workshop.region     }}{% endif %}
@@ -28,22 +28,22 @@
 
 	{# TEL/MAIL #}
 	<div class="form-group">
-		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
-		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}
-		{% if workshop.email1        != "" %} <p><img class='img_icon' src='{{ asset('/icon/email.png'       ) }}'> {{ workshop.email1        }} {% endif %}</p>
+		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
+		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
+		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}
+		{% if workshop.email1        != "" %} <p><img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png'       ) }}'> {{ workshop.email1        }} {% endif %}</p>
 	</div>
 
 	{# OBERVATIONS #}
 	<div class="form-group">
 		{% if is_granted('ROLE_ADMIN') %}
-			{% if workshop.observationAdmin      != "" %} <img class='img_icon' src='{{ asset('/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: 	{{ workshop.observationAdmin      }} {% endif %}
+			{% if workshop.observationAdmin      != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: 	{{ workshop.observationAdmin      }} {% endif %}
 
 		{% elseif is_granted('ROLE_ASSESSOR') %}
-			{% if workshop.observationAssessor   != "" %} <img class='img_icon' src='{{ asset('/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor   }} {% endif %}
+			{% if workshop.observationAssessor   != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor   }} {% endif %}
 
 		{% elseif is_granted('ROLE_USER') %}
-			{% if workshop.observationWorkshop   != "" %} <img class='img_icon' src='{{ asset('/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop   }} {% endif %}
+			{% if workshop.observationWorkshop   != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop   }} {% endif %}
 		{% endif %}
 	</div>
 {% endif %}

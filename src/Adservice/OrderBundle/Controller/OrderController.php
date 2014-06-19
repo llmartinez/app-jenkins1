@@ -22,7 +22,9 @@ class OrderController extends Controller
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->get('security.context')->getToken()->getUser();
-        $role = $user->getRoles()[0]->getRole();
+        $role = $user->getRoles();
+        $role = $role[0];
+        $role = $role->getRole();
 
         $workshop_pending = array();
         $workshop_rejected = array();

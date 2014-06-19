@@ -2,7 +2,7 @@
     <legend>{% trans %} info {% endtrans %}
         {% if ticket.blockedBy == app.security.getToken().getUser() or app.security.getToken().getUser().getWorkshop() == ticket.workshop %}
             {# editar Ticket #}
-            <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <img class="img_icon" src="{{ asset('/icon/ticket_edit.png') }}"> </a></a>
+            <a href="{{ path('editTicket', { 'id_ticket': ticket.id }) }}"  title="Edit the Ticket"> <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_edit.png') }}"> </a></a>
         {% endif %}
     </legend>
 

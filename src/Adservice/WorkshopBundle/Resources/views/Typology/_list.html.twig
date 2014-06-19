@@ -19,7 +19,7 @@
                 {% if country == 'none' %}<td>{{ typology.country }}</td>{% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path("typology_edit", { 'id':typology.id }) }}"><img class="img_icon" src="{{ asset('/icon/typology_edit.png') }}"> </a>
+                        <a href="{{ path("typology_edit", { 'id':typology.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/typology_edit.png') }}"> </a>
                     </td>
                 {% endif %}
             </tr>

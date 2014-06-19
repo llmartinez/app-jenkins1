@@ -65,7 +65,15 @@ class WorkshopController extends Controller {
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+            $form_errors = $form->getErrors();
+	    $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{ 
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
@@ -168,7 +176,15 @@ class WorkshopController extends Controller {
             $form->bindRequest($petition);
 
             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+            $form_errors = $form->getErrors();
+	    $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{ 
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),

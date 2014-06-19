@@ -137,7 +137,9 @@ class UserController extends Controller {
         $petition = $this->getRequest();
 
         //que tipo de usuario estamos editando (los formtype varian...)
-        $role = $user->getRoles()[0]->getRole();
+	$role = $user->getRoles();
+	$role = $role[0];        
+	$role = $role->getRole();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_SUPER_AD"    or $role == "ROLE_AD")                                $form = $this->createForm(new EditUserPartnerType()      , $user);
@@ -150,7 +152,15 @@ class UserController extends Controller {
             $form->bindRequest($petition);
 
             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+            $form_errors = $form->getErrors();
+	    $form_errors = $form->getErrors();
+            if(isset($form_errors[0])) {
+                $form_errors = $form_errors[0];
+                $form_errors = $form_errors->getMessageTemplate();
+            }else{ 
+                $form_errors = 'none';
+            }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
@@ -273,7 +283,15 @@ class UserController extends Controller {
         $form->bindRequest($request);
 
         //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            if ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+            $form_errors = $form->getErrors();
+	    $form_errors = $form->getErrors();
+            if(isset($form_errors[0])) {
+                $form_errors = $form_errors[0];
+                $form_errors = $form_errors->getMessageTemplate();
+            }else{ 
+                $form_errors = 'none';
+            }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($this->get('security.context')->getToken()->getUser());

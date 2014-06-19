@@ -247,8 +247,11 @@ class Pagination
         ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
 
             $consulta = $em ->createQuery($query.$from.$where.$order);
-
-        return $consulta->getResult()[0][1];
+	
+	$result = $consulta->getResult();
+	$result = $result[0];
+	$result = $result[1];
+        return $result;
     }
 
 }

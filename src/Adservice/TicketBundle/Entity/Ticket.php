@@ -432,7 +432,10 @@ class Ticket {
     public function to_json() {
 
         // CREATED
-        if ($this->getCreatedBy()->getRoles()[0] == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
+	$roles = $this->getCreatedBy();
+	$roles = $roles->getRoles();
+	$roles = $roles[0];
+        if ($roles == 'ROLE_USER') { $created = 'workshop'; } else { $created = 'assessor'; }
 
         //CAR
         $car = $this->getCar()->getBrand()." ".$this->getCar()->getModel();
