@@ -54,9 +54,19 @@ class TicketRepository extends EntityRepository
         //$last_post = end($posts);
         $num_posts = count($ticket->getPosts());
 
-        if    ($num_posts > 0)                   { $last_post_role = $posts[$num_posts-1]->getCreatedBy()->getRoles()[0]->getName(); }
+        if    ($num_posts > 0) { 
+				$last_post_role = $posts[$num_posts-1]; 
+				$last_post_role = $last_post_role->getRoles(); 
+				$last_post_role = $last_post_role[0]; 
+				$last_post_role = $last_post_role->getName(); 
+	}
         // elseif($ticket->getAssignedTo() != null) { $last_post_role = $ticket->getAssignedTo()->getRoles()[0]->getName(); }
-        else                                     { $last_post_role = $ticket->getCreatedBy()->getRoles()[0]->getName(); }
+        else                   { 
+				$last_post_role = $ticket->getCreatedBy(); 
+				$last_post_role = $last_post_role->getRoles(); 
+				$last_post_role = $last_post_role[0]; 
+				$last_post_role = $last_post_role->getName(); 
+	}
 
         return $last_post_role;
     }

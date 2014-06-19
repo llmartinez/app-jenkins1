@@ -24,7 +24,7 @@
                 <td>{{ workshop.phoneNumber1 }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('/icon/workshop_edit.png') }}"></a>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_edit.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>

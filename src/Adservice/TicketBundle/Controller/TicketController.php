@@ -52,26 +52,25 @@ class TicketController extends Controller {
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
         if($option == null){
+            $params[] = array();
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
-
                 if($workshops[0]->getId() != "") {
-                    $params[] = array('workshop', '= '.$workshops[0]->getId());
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop().' AND w.partner = '.$workshops[0]->getPartner().' ');
                     $option = $workshops[0]->getId();
                 }
-                else{ $params[] = array(); }
+                else{ $joins[] = array(); }
             }
             elseif (!$security->isGranted('ROLE_ASSESSOR')) {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $security->getToken()->getUser()->getWorkshop()->getId()));
-
                 if($workshops[0]->getId() != "") {
-                    $params[] = array('workshop', '= '.$workshops[0]->getId());
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop().' AND w.partner = '.$workshops[0]->getPartner().' ');
                     $option = $workshops[0]->getId();
                 }
-                else{ $params[] = array(); }
+                else{ $joins[] = array(); }
             }
-            else{ $params[] = array(); }
+            else{ $joins[] = array(); }
             $option = 'all';
         }
 
@@ -133,10 +132,16 @@ class TicketController extends Controller {
                 $result = $consulta2->getResult();
                 $last_post = end($result);
 
+		if($last_post != null){
+		   $last_post_role = $last_post->getCreatedBy();
+		   $last_post_role = $last_post->getRoles();
+		   $last_post_role = $last_post[0];
+		}
+
                 if(count($result) != 0 and $last_post != null
-                and ($last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ASSESSOR'
-                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_ADMIN'
-                  or $last_post->getCreatedBy()->getRoles()[0] == 'ROLE_SUPER_ADMIN')
+                and ($last_post_role == 'ROLE_ASSESSOR'
+                  or $last_post_role == 'ROLE_ADMIN'
+                  or $last_post_role == 'ROLE_SUPER_ADMIN')
                 and ($option == 'assessor_answered' or $option == 'other_answered'))
                 {
                     if($query_posts == '') $query_posts = ' e.id = '.$ticket->getId();
@@ -210,8 +215,22 @@ class TicketController extends Controller {
 
                     /*Validacion Formularios*/
                         //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-                        if (($form ->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
-                         && ($formC->isValid() or $formC->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                        $form_errors = $form->getErrors();
+                        if(isset($form_errors[0])) {
+                            $form_errors = $form_errors[0];
+                            $form_errors = $form_errors->getMessageTemplate();
+                        }else{ 
+                            $form_errors = 'none';
+                        }
+                        $formC_errors = $formC->getErrors();
+                        if(isset($formC_errors[0])) {
+                            $formC_errors = $formC_errors[0];
+                            $formC_errors = $formC_errors->getMessageTemplate();
+                        }else{ 
+                            $formC_errors = 'none';
+                        }
+                        if (($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
+                         && ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                         //Define CAR
                         $car = UtilController::newEntity($car, $user);
@@ -400,14 +419,37 @@ class TicketController extends Controller {
             $user = $security->getToken()->getUser();
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
-
-            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
+                    
+                $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{ 
+                    $form_errors = 'none';
+                }
+            
+            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
 
-                if (($formP->isValid() or $formP ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')
-                and ($formD->isValid() or $formD ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                $formP_errors = $formP->getErrors();
+                if(isset($formP_errors[0])) {
+                    $formP_errors = $formP_errors[0];
+                    $formP_errors = $formP_errors->getMessageTemplate();
+                }else{ 
+                    $formP_errors = 'none';
+                }
+                $formD_errors = $formD->getErrors();
+                if(isset($formD_errors[0])) {
+                    $formD_errors = $formD_errors[0];
+                    $formD_errors = $formD_errors->getMessageTemplate();
+                }else{ 
+                    $formD_errors = 'none';
+                }
+                
+                if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
+                and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                     //Define Post
                     $post = UtilController::newEntity($post, $user);
@@ -429,7 +471,11 @@ class TicketController extends Controller {
                         $posts = $ticket->getPosts();
                         $primer_assessor = 0;
                         foreach ($posts as $post) {
-                            if ($post->getCreatedBy()->getRoles()[0]->getName() == 'ROLE_ASSESSOR') {
+			    $post_role = $post->getCreatedBy();
+			    $post_role = $post_role->getRoles();
+			    $post_role = $post_role[0];
+			    $post_role = $post_role->getName();
+                            if ($post_role == 'ROLE_ASSESSOR') {
                                 $primer_assessor = 1;
                             }
                         }
@@ -519,7 +565,14 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid() or $form ->getErrors()[0]->getMessageTemplate() == 'The uploaded file was too large. Please try to upload a smaller file') {
+                $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{ 
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 if($ticket->getSolution() != ""){
                     $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');

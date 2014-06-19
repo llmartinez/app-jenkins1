@@ -4,7 +4,7 @@
     {% if workshop.id is defined and workshop.id != "" %}
 
     {# New Ticket #}
-        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
 
     {# <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data"> #}
         <p>
@@ -18,15 +18,15 @@
                 <input type='checkbox' id='flt_closed' name='flt_closed'> {% trans %} closed {% endtrans %}</p>
     {% endif %}
 
-            <button type="button" class="btn btn-primary" id="btn_search" name="btn_search"><img class="img_icon" src="{{ asset('/icon/search.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+            <button type="button" class="btn btn-primary" id="btn_search" name="btn_search"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}">  {% trans %} btn.search {% endtrans %}</button>
         </p>
     {# </form> #}
 
     {###  HISTORICO  ###}
     {% if workshop.id is defined and workshop.id != "" %}
-        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.partner.codePartner }) }}')"><img class="img_icon" src="{{ asset('/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.partner.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
     {% else %}
-        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+        <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
     {% endif %}
 
     <script type="text/javascript"> $('#newTicket').focus(); </script>

@@ -70,7 +70,9 @@ class UserRepository extends EntityRepository
         }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option);
-
-        return $consulta->getResult()[0][1];
+	$result = $consulta->getResult();
+	$result = $result[0];
+	$result = $result[1];
+        return $result;
     }
 }

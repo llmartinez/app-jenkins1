@@ -11,7 +11,7 @@
 
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('/icon/popup_new.png') }}"> {% trans %} new.popup {% endtrans %}</a>
+    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/popup_new.png') }}"> {% trans %} new.popup {% endtrans %}</a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -47,8 +47,8 @@
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.country }} </td>
                     <td>
-                        <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><img class="img_icon" src="{{ asset('/icon/popup_edit.png') }}"></a>
-                        <a href="#"><img class="img_icon" src="{{ asset('/icon/popup_delete.png') }}"data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
+                        <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/popup_edit.png') }}"></a>
+                        <a href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/popup_delete.png') }}"data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
                     </td>
                 </tr>
             {% endfor %}
@@ -73,8 +73,8 @@
                     {% trans %} popup.delete.confirm {% endtrans %}
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
+                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

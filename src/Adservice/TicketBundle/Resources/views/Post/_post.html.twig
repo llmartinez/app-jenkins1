@@ -21,7 +21,7 @@
 
         	{% if 	  post.document.mymetype == 'doc' or post.document.mymetype == 'pdf' or post.document.mymetype == 'ppt' or post.document.mymetype == 'txt' %}
 
-        		<a href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}"><img class="img_icon" src="{{ asset('/icon/download.png') }}"> {% trans %} file.download {% endtrans %}</a>
+        		<a href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} file.download {% endtrans %}</a>
 
         	{% elseif post.document.mymetype == 'bmp' or post.document.mymetype == 'gif' or post.document.mymetype == 'jpg' or post.document.mymetype == 'png' %}
 

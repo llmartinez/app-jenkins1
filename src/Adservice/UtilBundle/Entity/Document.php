@@ -102,7 +102,8 @@ class Document {
     }
 
     public function getMymeType() {
-        $mymetype = explode ( '.', $this->path)[1];
+        $mymetype = explode ( '.', $this->path);
+	$mymetype = $mymetype[1];
         return $mymetype;
     }
 

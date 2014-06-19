@@ -16,7 +16,8 @@ class PopupRepository extends EntityRepository{
     public function findPopupByDate($date, $user){
 
         $em = $this->getEntityManager();
-        $role = $user->getRoles()[0];
+        $role = $user->getRoles();
+        $role = $role[0];
 
         $query = "SELECT p FROM PopupBundle:Popup p
                   WHERE p.startdate_at <= :start_date

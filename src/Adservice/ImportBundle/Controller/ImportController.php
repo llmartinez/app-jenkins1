@@ -267,8 +267,7 @@ class ImportController extends Controller
 					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
 					$newUser->setName($workshops[$old_Taller->getId()]->getName());
 				}
-
-				if(($newUser->getEmail1() == '' or $newUser->getEmail1() == 0) and ($newUser->getEmail2() == '' or $newUser->getEmail2() == 0)){
+				if($newUser->getEmail1() == '' or $newUser->getEmail1() == '0'){
 					$users_email_log[] = $newUser;
 				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
@@ -300,7 +299,7 @@ class ImportController extends Controller
 			<p>Se importaran Socios, Asesores, Talleres y Usuarios.</p>
 			<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>');
 
-        	return $this->render('ImportBundle:Import:import.html.twig');
+			return $this->render('ImportBundle:Import:import.html.twig');
         }
     }
 //  _     ___   ____ _  __   ____    _    ____  ____

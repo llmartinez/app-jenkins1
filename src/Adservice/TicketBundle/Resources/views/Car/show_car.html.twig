@@ -1,7 +1,7 @@
     <legend>{% trans %} car {% endtrans %}
         {% if ticket.blockedBy == app.security.getToken().getUser() or ticket.workshop == app.security.getToken().getUser().getWorkshop() %}
             {# editar Ticket #}
-            <a href="{{ path('editCar', { 'id_ticket': ticket.id }) }}"  title="Edit the Car"><img class="img_icon" src="{{ asset('/icon/car_edit.png') }}" title="{% trans %} edit.car {% endtrans %}"></span></a></a>
+            <a href="{{ path('editCar', { 'id_ticket': ticket.id }) }}"  title="Edit the Car"><img class="img_icon" src="{{ asset('bundles/util/images/icon/car_edit.png') }}" title="{% trans %} edit.car {% endtrans %}"></span></a></a>
         {% endif %}
     </legend>
 
