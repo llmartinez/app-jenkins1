@@ -1,7 +1,7 @@
     <script>
 
     	$(document).ready(function() {
-	        $('#MainContent').find('.glyphicon-trash').click(function() {
+	        $('#MainContent').find('#delete_popup').click(function() {
 	            var popup_id = $(this).data('id');
 	            confirm_delete_popup_modal(popup_id);
 	        });
