@@ -105,6 +105,7 @@ date.end: 				 "End Date"
 code:					 "Code"
 code.partner:			 "Partner Code"
 code.workshop:			 "Workshop Code"
+code.numeric:			 "The code is not a number"
 code.error:				 "The code is not correct"
 status:					 "Status"
 testing:				 "Testing"
@@ -456,7 +457,7 @@ mail.answerTicket.createdby.user:		"This ticket has been answered through AD-Ser
 mail.answerTicket.info:					"To access to this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
 mail.answerTicket.info.id:				"The reference number of the answered Ticket is:"
 
-mail.newOrder.subject:					"ADService | new Order with id #"
+mail.newOrder.subject:					"ADService | New Order with id #"
 mail.newOrder.title:					"A new Workshop Order has been created"
 mail.newOrder.shop.title:				"A new Shop Order has been created"
 mail.newOrder.createdby:				"This Order has been created by:"
@@ -464,7 +465,7 @@ mail.newOrder.createdby.user:			"This Order has been created through AD-Service 
 mail.newOrder.info:						"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
 mail.newOrder.info.id:					"The reference number of the order is:"
 
-mail.editOrder.subject:					"ADService | edit Order with id #"
+mail.editOrder.subject:					"ADService | Edit Order with id #"
 mail.editOrder.shop.title:				"An edit Shop Order has been created"
 mail.editOrder.shop.createdby:			"This Shop has been edited by:"
 mail.editOrder.shop.createdby.user:		"This Shop has been edited through AD-Service Platform."
@@ -474,7 +475,7 @@ mail.editOrder.createdby.user:			"This Workshop has been edited through AD-Servi
 mail.editOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
 mail.editOrder.info.id:					"The reference number of the order is:"
 
-mail.changeOrder.subject:				"ADService | activation/deactivation Order with id #"
+mail.changeOrder.subject:				"ADService | Activation/deactivation Order with id #"
 mail.changeOrder.shop.title:			"A modify Shop Order has been created"
 mail.changeOrder.shop.createdby:		"This Shop has been edited by:"
 mail.changeOrder.shop.createdby.user:	"This Shop has been edited through AD-Service Platform."
@@ -484,7 +485,7 @@ mail.changeOrder.createdby.user:		"This Workshop has been edited through AD-Serv
 mail.changeOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
 mail.changeOrder.info.id:				"The reference number of the order is:"
 
-mail.rejectOrder.subject:				"ADService | rejected Order with id #"
+mail.rejectOrder.subject:				"ADService | Rejected Order with id #"
 mail.rejectOrder.title:					"The rejected Order is of "
 mail.rejectOrder.createdby:				"This Order has been edited by:"
 mail.rejectOrder.createdby.user:		"This Order has been edited through AD-Service Platform."
@@ -537,12 +538,14 @@ mail.changePassword.user:				"Your User Name is:"
 mail.changePassword.password:			"Your New Password is:"
 mail.changePassword.info.password:		"For modify your Password enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
 
-mail.textDisclaimer:				"AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>"
+mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be in the nature of reserved. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized, may be illegal. If you are not the addressee, please proceed to remove its contents."
+_mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be in the nature of reserved. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized, may be illegal. If you are not the addressee, please proceed to remove its contents. <b>soporte@ad-service.com</b>"
 
 
 #HISTORICO
 lock.list_incidences: 	"Incidences History"
 
 
-termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
+termsConditions: 	" "
+_termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Center of Innovation and Resources
