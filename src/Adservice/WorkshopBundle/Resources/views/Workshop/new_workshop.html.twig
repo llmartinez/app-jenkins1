@@ -22,16 +22,16 @@
             <div class="col-xs-8 col-md-8 form-group">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %}</label>
-                    {{ form_widget(form.name, { 'attr': { 'class': 'form-control', 'placeholder': 'name' | trans } }) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="new_car_form_vin">{% trans %} code.workshop {% endtrans %}</label>
-                    {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                    {{ form_widget(form.code_workshop, {'attr': { 'class': 'form-control',
                                                                    'placeholder': 'code.workshop' | trans, 'min': 1} }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %}</label>
-                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans} }) }}
+                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %}</label>

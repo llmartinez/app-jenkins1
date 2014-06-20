@@ -14,7 +14,7 @@
         <div class="container">
             <legend>{% trans %} workshop {% endtrans %}</legend>
 
-        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
             {% if app.session.hasFlash('error') %}
                 <p class="error">{{ app.session.getFlash('error') }}</p>
             {% endif %}
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="new_car_form_vin">{% trans %} code.workshop {% endtrans %}</label>
-                    {{ form_widget(form.code_workshop, { 'attr': { 'class': 'form-control',
+                    {{ form_widget(form.code_workshop, {'attr': { 'class': 'form-control',
                                                                    'placeholder': 'code.workshop' | trans, 'min': 1} }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
