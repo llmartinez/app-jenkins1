@@ -8,7 +8,7 @@
 	function codeNumeric(){
 		if (!$.isNumeric($( "#w_id" ).val()) || !$.isNumeric($( "#w_idpartner" ).val())) {
 			event.preventDefault();
-			alert('{% trans %} error.numeric {% endtrans %}');
+			alert('{% trans %} code.numeric {% endtrans %}');
 		}
 	}
 

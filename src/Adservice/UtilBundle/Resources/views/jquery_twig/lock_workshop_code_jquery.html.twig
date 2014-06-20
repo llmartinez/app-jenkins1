@@ -12,7 +12,7 @@
 	function codeNumeric(){
 		if (!$.isNumeric($( "#flt_taller" ).val()) || !$.isNumeric($( "#flt_socio" ).val())) {
 			event.preventDefault();
-			alert('{% trans %} error.numeric {% endtrans %}');
+			alert('{% trans %} code.numeric {% endtrans %}');
 		}else{
             list_incidences();
         }
