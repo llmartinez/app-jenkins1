@@ -51,57 +51,11 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_edit.png') }}"> </a>
-                        {% if shop.workshops|length == 0 %}
-                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_delete.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></a>
-                        {% else %}
-                            <a style="color:gray"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_info.png') }}" title="{% trans %} shop.is_assigned {% endtrans %}" onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"></a>
-                        {% endif %}
                     </td>
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">{% trans %} shop.delete {% endtrans %}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    {% trans %} shop.delete.confirm {% endtrans %}
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="{{ path('shop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}">  {% trans %} yes {% endtrans %}</a>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}">  {% trans %} no {% endtrans %}</button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_edit.png') }}"></a>
-                        {% if shop.workshops|length == 0 %}
-                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_delete.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
-                        {% else %}
-                            <a style="color:gray"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_info.png') }}" title="{% trans %} shop.is_assigned {% endtrans %}" onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"></a>
-                        {% endif %}
                     </td>
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">{% trans %} shop.delete {% endtrans %}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    {% trans %} shop.delete.confirm {% endtrans %}
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="{# {{ path('shopOrder_remove', {'id': 'foo'}) }} #}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}">  {% trans %} yes {% endtrans %}</a>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
                 {% endif %}
             </tr>
             {% endfor %}
