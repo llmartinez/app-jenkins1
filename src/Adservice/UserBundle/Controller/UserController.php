@@ -107,7 +107,7 @@ class UserController extends Controller {
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
 
-        return $this->render('UserBundle:User:list.html.twig', array('users_role_super_admin' => $users_role_super_admin,
+        return $this->render('UserBundle:User:list.html.twig', array(   'users_role_super_admin' => $users_role_super_admin,
                                                                         'users_role_admin'       => $users_role_admin,
                                                                         'users_role_user'        => $users_role_user,
                                                                         'users_role_assessor'    => $users_role_assessor,
