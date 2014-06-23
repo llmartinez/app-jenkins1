@@ -21,12 +21,6 @@
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
-            {% if form.workshop is defined %}
-             <div class="col-xs-4 col-md-4 form-group">
-                <label>{% trans %} workshop {% endtrans %} *</label>
-                {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-            </div>
-            {% endif %}
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} active {% endtrans %}</label>
                 {{ form_widget(form.active) }}
@@ -77,8 +71,7 @@
                     <script>
                         $('#confirm_password').click(function(){
 
-                            var url = "{{ path('change_password', {'id': user.id, 'password': 'PLACEHOLDER', 'route': 'user_edit' }) }}";
-                            url = url.replace('PLACEHOLDER', 'none');
+                            var url = "{{ path('generate_password', {'id': user.id }) }}";
                             window.open(url,'_self');
                         });
                     </script>

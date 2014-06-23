@@ -16,8 +16,6 @@ class EditUserWorkshopType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('workshop', 'entity', array('class'    => 'WorkshopBundle:Workshop',
-                                              'property' => 'name'))
             ->add('language')
 
             //CONTACT

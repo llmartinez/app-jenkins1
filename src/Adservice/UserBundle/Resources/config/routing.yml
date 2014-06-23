@@ -49,9 +49,13 @@ user_select_new:
     pattern: /user/selectNewUser
     defaults: { _controller: UserBundle:User:selectNewUser }
 
+generate_password:
+    pattern: /user/changePassword/{id}
+    defaults: { _controller: UserBundle:User:generatePassword }
+
 change_password:
-    pattern: /user/changePassword/{id}/{password}/{route}/{old_pass}
-    defaults: { _controller: UserBundle:User:changePassword, password: 'none', route: null, old_pass: 'none' }
+    pattern: /user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}
+    defaults: { _controller: UserBundle:User:changePassword, new_pass: 'none', rep_pass: 'none', old_pass: 'none' }
 
 ##############################
 #       RUTAS AJAX           #
