@@ -9,9 +9,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UserBundle\Form\UserAdminAssessorType;
+use Adservice\UserBundle\Form\UserSuperPartnerType;
 use Adservice\UserBundle\Form\UserPartnerType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 use Adservice\UserBundle\Form\EditUserAdminAssessorType;
+use Adservice\UserBundle\Form\EditUserSuperPartnerType;
 use Adservice\UserBundle\Form\EditUserPartnerType;
 use Adservice\UserBundle\Form\EditUserWorkshopType;
 
@@ -138,11 +140,12 @@ class UserController extends Controller {
 
         //que tipo de usuario estamos editando (los formtype varian...)
 	$role = $user->getRoles();
-	$role = $role[0];        
+	$role = $role[0];
 	$role = $role->getRole();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_SUPER_AD"    or $role == "ROLE_AD")                                $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_SUPER_AD")                                                         $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")                                                               $form = $this->createForm(new EditUserPartnerType()      , $user);
         elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_city   = $user->getRegion();
@@ -153,11 +156,10 @@ class UserController extends Controller {
 
             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
             $form_errors = $form->getErrors();
-	    $form_errors = $form->getErrors();
             if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -264,18 +266,18 @@ class UserController extends Controller {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserAdminAssessorType(), $user);
-        } elseif ($type == 'assessor') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
+        }elseif ($type == 'super_ad') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_SUPER_AD');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
-        // } elseif ($type == 'user') {
-        //     $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_USER');
-        //     $user->setUserRoles($rol);
-        //     $form = $this->createForm(new UserWorkshopType(), $user);
+            $form = $this->createForm(new UserSuperPartnerType(), $user);
         }elseif ($type == 'ad') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserPartnerType(), $user);
+        } elseif ($type == 'assessor') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserAdminAssessorType(), $user);
         }
 
         $request = $this->getRequest();
@@ -284,11 +286,11 @@ class UserController extends Controller {
 
         //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
             $form_errors = $form->getErrors();
-	    $form_errors = $form->getErrors();
+
             if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {

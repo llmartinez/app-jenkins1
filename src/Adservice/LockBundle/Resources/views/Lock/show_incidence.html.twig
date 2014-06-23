@@ -11,14 +11,14 @@
 
 <legend>{% trans %} info {% endtrans %}</legend>
 
-	{% if incidence.taller != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('/icon/menu_workshop.png') }}'> {{ incidence.taller 		}}</div>{% endif %}
-	{% if incidence.coche  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('/icon/car.png') }}'> {{ incidence.coche  		}}</div>{% endif %}
-	{% if incidence.socio  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('/icon/menu_partner.png') }}'> <b>{% trans %} partner     {% endtrans %}</b>:{{ incidence.socio  }}</div>{% endif %}
-	{% if incidence.asesor != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('/icon/menu_ticket_assign.png') }}'> <b>{% trans %} assigned_to {% endtrans %}:</b>
+	{% if incidence.taller != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_workshop.png') }}'> {{ incidence.taller 		}}</div>{% endif %}
+	{% if incidence.coche  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/car.png') }}'> {{ incidence.coche  		}}</div>{% endif %}
+	{% if incidence.socio  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_partner.png') }}'> <b>{% trans %} partner     {% endtrans %}</b>:{{ incidence.socio  }}</div>{% endif %}
+	{% if incidence.asesor != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_ticket_assign.png') }}'> <b>{% trans %} assigned_to {% endtrans %}:</b>
 																							{% if incidence.asesor	!= 0 %} {{ incidence.asesor 	}}
 																							{% else %} {% trans %} anonimo {% endtrans %}{% endif %}
 																							</div> {% endif %}
-	{% if incidence.oper   != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('/icon/cog.png') }}'> {{ incidence.oper   		}}</div>{% endif %}
+	{% if incidence.oper   != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/cog.png') }}'> {{ incidence.oper   		}}</div>{% endif %}
 </div>
 
 <!-- CONTENIDO PAGINA TICKETS -->

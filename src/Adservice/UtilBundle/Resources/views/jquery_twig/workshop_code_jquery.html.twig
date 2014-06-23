@@ -6,7 +6,7 @@
 	});
 
 	function codeNumeric(){
-		if (!$.isNumeric($( "#w_id" ).val()) || !$.isNumeric($( "#w_idpartner" ).val())) {
+		if (($( "#w_id" ).val() != '' && !$.isNumeric($( "#w_id" ).val())) || ($( "#w_idpartner" ).val() != '' && !$.isNumeric($( "#w_idpartner" ).val()))) {
 			event.preventDefault();
 			alert('{% trans %} code.numeric {% endtrans %}');
 		}

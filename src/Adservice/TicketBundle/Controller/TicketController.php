@@ -134,8 +134,8 @@ class TicketController extends Controller {
 
 		if($last_post != null){
 		   $last_post_role = $last_post->getCreatedBy();
-		   $last_post_role = $last_post->getRoles();
-		   $last_post_role = $last_post[0];
+		   $last_post_role = $last_post_role->getRoles();
+		   $last_post_role = $last_post_role[0];
 		}
 
                 if(count($result) != 0 and $last_post != null
@@ -419,16 +419,17 @@ class TicketController extends Controller {
             $user = $security->getToken()->getUser();
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
-                    
-                $form_errors = $form->getErrors();
+
+                $form_errors = $formP->getErrors();
                 if(isset($form_errors[0])) {
                     $form_errors = $form_errors[0];
                     $form_errors = $form_errors->getMessageTemplate();
-                }else{ 
+                }else{
                     $form_errors = 'none';
                 }
-            
-            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
+
+
+            if(($security->isGranted('ROLE_ASSESSOR') and ($formP->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
@@ -437,17 +438,17 @@ class TicketController extends Controller {
                 if(isset($formP_errors[0])) {
                     $formP_errors = $formP_errors[0];
                     $formP_errors = $formP_errors->getMessageTemplate();
-                }else{ 
+                }else{
                     $formP_errors = 'none';
                 }
                 $formD_errors = $formD->getErrors();
                 if(isset($formD_errors[0])) {
                     $formD_errors = $formD_errors[0];
                     $formD_errors = $formD_errors->getMessageTemplate();
-                }else{ 
+                }else{
                     $formD_errors = 'none';
                 }
-                
+
                 if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
                 and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
