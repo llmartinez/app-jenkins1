@@ -126,8 +126,9 @@ class WorkshopOrderController extends Controller {
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
-        $request = $this->getRequest();
-        $form = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
+        $id_partner    = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
+        $request       = $this->getRequest();
+        $form          = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
 
@@ -140,7 +141,7 @@ class WorkshopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -154,7 +155,7 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
-		    $roles = $roles[0];
+		            $roles = $roles[0];
                     if($roles != 'ROLE_SUPER_AD') {
                         $workshopOrder->setPartner($user->getPartner());
                         $workshopOrder->setCountry($user->getPartner()->getCountry());
@@ -185,7 +186,8 @@ class WorkshopOrderController extends Controller {
         }
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,
                                                                                      'form_name'        => $form->getName(),
-                                                                                     'form'             => $form->createView()));
+                                                                                     'form'             => $form->createView(),
+                                                                                     'id_partner'       => $id_partner));
     }
 
 //  _____ ____ ___ _____

@@ -1,0 +1,17 @@
+
+    <script>
+        $(document).ready(function() {
+
+            $('form').find('select[name*=partner]').val('{{ id_partner }}');
+
+            var url_ajax = "{{ path("shops_from_partner") }}";
+            populate_shop(url_ajax);
+
+            //si clickamos el combobox de los socios rellenamos el de tiendas
+            $('form').find('select[name*=partner]').change(function() {
+                var url_ajax = "{{ path("shops_from_partner") }}";
+                populate_shop(url_ajax);
+            });
+        });
+
+    </script>
