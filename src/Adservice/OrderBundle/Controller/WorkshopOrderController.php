@@ -126,7 +126,11 @@ class WorkshopOrderController extends Controller {
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
-        $id_partner    = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD') === false)
+                $id_partner = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
+        else {
+            $id_partner = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->get('security.context')->getToken()->getUser()->getCountry()->getId()));
+         }
         $request       = $this->getRequest();
         $form          = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 

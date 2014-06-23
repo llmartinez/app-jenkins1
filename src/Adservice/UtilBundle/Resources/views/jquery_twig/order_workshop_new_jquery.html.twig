@@ -2,7 +2,18 @@
     <script>
         $(document).ready(function() {
 
-            $('form').find('select[name*=partner]').val('{{ id_partner }}');
+            {% if id_partner is iterable %}
+
+                $('#workshopOrder_newOrder_partner').empty();
+
+                {% for partner in id_partner %}
+
+                    $('#workshopOrder_newOrder_partner').append(new Option("{{ partner.name }}", "{{ partner.id }}"));
+
+                {% endfor %}
+            {% else %}
+                $('form').find('select[name*=partner]').val('{{ id_partner }}');
+            {% endif %}
 
             var url_ajax = "{{ path("shops_from_partner") }}";
             populate_shop(url_ajax);
