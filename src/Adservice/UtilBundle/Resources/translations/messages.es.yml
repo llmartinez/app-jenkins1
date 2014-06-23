@@ -57,6 +57,12 @@ error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 
 #ENTITY
 role:					 "Rol"
+ROLE_SUPER_ADMIN: 		 "Super Admin"
+ROLE_ASSESSOR: 			 "Asesor"
+ROLE_ADMIN: 			 "Administrador"
+ROLE_USER: 				 "Usuario"
+ROLE_SUPER_AD:  		 "Socio nacional"
+ROLE_AD:  				 "Socio"
 super_admin: 			 "Super Admin"
 admin: 					 "Administrador"
 assessor: 				 "Asesor"

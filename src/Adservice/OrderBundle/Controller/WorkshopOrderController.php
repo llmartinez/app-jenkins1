@@ -63,48 +63,6 @@ class WorkshopOrderController extends Controller {
                                                                                            'partner'    => $partner));
     }
 
-    /**
-     * Lista todas las workshopsOrders
-     * @return type
-     * @throws AccessDeniedException
-     */
-    //public function listAction(){
-
-        // if ($this->get('security.context')->isGranted('ROLE_AD') === false)
-        //     throw new AccessDeniedException();
-
-        // $em = $this->getDoctrine()->getEntityManager();
-        // $user = $this->get('security.context')->getToken()->getUser();
-        // $role = $user->getRoles();
-
-        // //segun el rol puede ver sus talleres o todos los que haya
-        // if ($role[0]->getRole() == "ROLE_AD"){
-        //     $workshopsOrders = $em->getRepository("OrderBundle:WorkshopOrder")->findBy(array('partner' => $user->getPartner()->getId()));
-        //     $workshopsRejectedOrders = $em->getRepository("OrderBundle:WorkshopOrder")->findBy(array('partner'   => $user->getPartner()->getId(),
-        //                                                                                                 'action'    => 'rejected'));
-        // }elseif ($role[0]->getRole() == "ROLE_ADMIN"){
-        //     $workshopsOrders = $em->getRepository("OrderBundle:WorkshopOrder")->findAll();
-        //     $workshopsRejectedOrders = $em->getRepository("OrderBundle:WorkshopOrder")->findByAction('rejected');
-        // }
-
-        // //eliminamos de la lista de "todos" los que ya tenemos en la lista de rechazados
-
-        // foreach ($workshopsOrders as $key => $workshopOrder) {
-
-        //     if (in_array($workshopOrder, $workshopsRejectedOrders)){
-        //         unset($workshopsOrders[$key]);
-        //     }
-        // }
-
-        // //casos que todas esten en rechazadas... (el "unset" de todos los elementos elimina el array....)
-        // if (count($workshopsOrders) <= 0 )  $workshopsOrders = array();
-
-        // //creamos arrays de los valores anteriores a la modificacion/rechazo de la solicitud
-        // $ordersBefore = $this->getWorkshopOrdersBefore($em, $workshopsOrders);
-
-        // return $this->redirect($this->generateUrl('list_orders'));
-    //}
-
 //  _   _ _______        __
 // | \ | | ____\ \      / /
 // |  \| |  _|  \ \ /\ / /
