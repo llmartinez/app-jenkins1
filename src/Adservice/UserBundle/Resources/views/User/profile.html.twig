@@ -68,11 +68,11 @@
             <div class="modal-body">
                 <table>
                     <tr><td><label>{% trans %} old_password    {% endtrans %}</label></td>
-                        <td><input id="old_password"  name="old_password"  type="password" placeholder="{% trans %} old_password {% endtrans %}"></td>
+                        <td><input id="old_password"  name="old_password"  type="password" placeholder="{% trans %} old_password {% endtrans %}" required></td></tr>
                     <tr><td><label>{% trans %} new_password    {% endtrans %}</label></td>
-                        <td><input id="new_password1" name="new_password1" type="password" placeholder="{% trans %} new_password     {% endtrans %}"></td></tr>
-                    <tr><td><div><label>{% trans %} repeat_password {% endtrans %}</label>
-                        <td><input id="new_password2" name="new_password2" type="password" placeholder="{% trans %} new_password     {% endtrans %}"></td></tr>
+                        <td><input id="new_password1" name="new_password1" type="password" placeholder="{% trans %} new_password {% endtrans %}" required></td></tr>
+                    <tr><td><label>{% trans %} repeat_password {% endtrans %}</label></td>
+                        <td><input id="new_password2" name="new_password2" type="password" placeholder="{% trans %} new_password {% endtrans %}" required></td></tr>
                 </table>
             </div>
             <div class="modal-footer">

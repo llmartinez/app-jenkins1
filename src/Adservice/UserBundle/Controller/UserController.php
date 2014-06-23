@@ -42,9 +42,9 @@ class UserController extends Controller {
      * Obtener los datos del usuario logueado para verlos
      */
     public function profileAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em             = $this->getDoctrine()->getEntityManager();
         $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-        $user = $em->getRepository('UserBundle:User')->find($id_logged_user);
+        $user           = $em->getRepository('UserBundle:User')->find($id_logged_user);
 
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
@@ -197,37 +197,52 @@ class UserController extends Controller {
         return $this->redirect($this->generateUrl('user_list'));
     }
 
-
-    public function changePasswordAction($id, $password='none', $route=null, $old_pass='none') {
-
-        $em = $this->getDoctrine()->getEntityManager();
+    public function generatePasswordAction($id)
+    {
+        $em   = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
         /*CREAR PASSWORD AUTOMATICAMENTE*/
-        if ($password == null or $password == 'none')
-        {
-            $password = substr( md5(microtime()), 1, 8);
-            $this->savePassword($em, $user, $password);
-        }
-        /*CREAR PASSWORD MANUALMENTE*/
-        else {
-            $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
-            $pass     = $encoder->encodePassword( $old_pass, $user->getSalt());
+        $password = substr( md5(microtime()), 1, 8);
+        $this->savePassword($em, $user, $password);
 
-            if ($pass == $user->getPassword())
+        return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
+    }
+
+    public function changePasswordAction($id, $new_pass='none', $rep_pass='none', $old_pass='none')
+    {
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        if (!$user)
+            throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
+
+        /*CREAR PASSWORD MANUALMENTE*/
+        $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
+        $pass     = $encoder->encodePassword( $old_pass, $user->getSalt());
+
+        if ($pass == $user->getPassword())
+        {
+            if($new_pass == $rep_pass)
             {
-                $this->savePassword($em, $user, $password);
-            }
-            else{
-                $flash =  $this->get('translator')->trans('change_password.error');
+                if(strlen($new_pass) >= 8)
+                {
+                    $this->savePassword($em, $user, $new_pass);
+                }else{
+                    $flash =  $this->get('translator')->trans('error.length_password');
+                    $this->get('session')->setFlash('password', $flash);
+                }
+            }else{
+                $flash =  $this->get('translator')->trans('error.same_password');
                 $this->get('session')->setFlash('password', $flash);
             }
         }
-
-        if     ($route == null or $route == 'none' ) return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
-        elseif ($route == 'user_edit'              ) return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
+        else{
+            $flash =  $this->get('translator')->trans('change_password.error');
+            $this->get('session')->setFlash('password', $flash);
+        }
+        return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
     }
 
     private function savePassword($em, $user, $password){
