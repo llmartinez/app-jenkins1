@@ -15,7 +15,7 @@
         <select id="slct_role" class="form-control"> <option val="all">...</option>
             {% for role in roles %} <option val="{{ role.id }}"
                                         {% if option is defined and option == role.name %} selected {% endif %}
-                                    >{{ role.name }}</option> {% endfor %}
+                                    >{{ role.name | trans }}</option> {% endfor %}
         </select>
     </div>
 

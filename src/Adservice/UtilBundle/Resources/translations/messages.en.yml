@@ -56,6 +56,12 @@ error.old_password:	 	 "The password inserted don't match with the actual passwo
 
 #ENTITY
 role:					 "Role"
+ROLE_SUPER_ADMIN: 		 "Super Admin"
+ROLE_ADMIN: 			 "Admin"
+ROLE_ASSESSOR: 			 "Assessor"
+ROLE_USER: 				 "User"
+ROLE_SUPER_AD:  		 "National Partner"
+ROLE_AD:  				 "Partner"
 super_admin: 			 "Super Admin"
 admin: 					 "Admin"
 assessor: 				 "Assessor"
