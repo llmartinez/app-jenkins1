@@ -420,7 +420,7 @@ class TicketController extends Controller {
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
 
-                $form_errors = $formP->getErrors();
+                $form_errors = $form->getErrors();
                 if(isset($form_errors[0])) {
                     $form_errors = $form_errors[0];
                     $form_errors = $form_errors->getMessageTemplate();
@@ -428,8 +428,7 @@ class TicketController extends Controller {
                     $form_errors = 'none';
                 }
 
-
-            if(($security->isGranted('ROLE_ASSESSOR') and ($formP->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
+            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
@@ -472,10 +471,10 @@ class TicketController extends Controller {
                         $posts = $ticket->getPosts();
                         $primer_assessor = 0;
                         foreach ($posts as $post) {
-			    $post_role = $post->getCreatedBy();
-			    $post_role = $post_role->getRoles();
-			    $post_role = $post_role[0];
-			    $post_role = $post_role->getName();
+            			    $post_role = $post->getCreatedBy();
+            			    $post_role = $post_role->getRoles();
+            			    $post_role = $post_role[0];
+            			    $post_role = $post_role->getName();
                             if ($post_role == 'ROLE_ASSESSOR') {
                                 $primer_assessor = 1;
                             }

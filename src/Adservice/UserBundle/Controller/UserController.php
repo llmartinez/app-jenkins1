@@ -85,26 +85,29 @@ class UserController extends Controller {
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
         }else{
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $option, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $option);
+                $role     = $em->getRepository("UserBundle:Role")->find($option);
+                $role_id  = $role->getId();
+                $role     = $role->getName();
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $role, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $role);
         }
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
-            $role = $user->getRoles();
-            if     ($role[0]->getRole() == "ROLE_SUPER_ADMIN")  $users_role_super_admin[] = $user;
-            elseif ($role[0]->getRole() == "ROLE_ADMIN")        $users_role_admin[]       = $user;
-            elseif ($role[0]->getRole() == "ROLE_USER")         $users_role_user[]        = $user;
-            elseif ($role[0]->getRole() == "ROLE_ASSESSOR")     $users_role_assessor[]    = $user;
-            elseif ($role[0]->getRole() == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
-            elseif ($role[0]->getRole() == "ROLE_AD")           $users_role_ad[]          = $user;
+            // $role = $user->getRoles();
+            if     ($role == "ROLE_SUPER_ADMIN")  $users_role_super_admin[] = $user;
+            elseif ($role == "ROLE_ADMIN")        $users_role_admin[]       = $user;
+            elseif ($role == "ROLE_USER")         $users_role_user[]        = $user;
+            elseif ($role == "ROLE_ASSESSOR")     $users_role_assessor[]    = $user;
+            elseif ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
+            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
         }
 
         $length = $pagination->setTotalPagByLength($length);
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
 
-        return $this->render('UserBundle:User:list.html.twig', array('users_role_super_admin' => $users_role_super_admin,
+        return $this->render('UserBundle:User:list.html.twig', array(   'users_role_super_admin' => $users_role_super_admin,
                                                                         'users_role_admin'       => $users_role_admin,
                                                                         'users_role_user'        => $users_role_user,
                                                                         'users_role_assessor'    => $users_role_assessor,
@@ -112,7 +115,7 @@ class UserController extends Controller {
                                                                         'users_role_ad'          => $users_role_ad,
                                                                         'pagination'             => $pagination,
                                                                         'roles'                  => $roles,
-                                                                        'option'                 => $option,
+                                                                        'option'                 => $role_id,
                                                                        ));
     }
 
