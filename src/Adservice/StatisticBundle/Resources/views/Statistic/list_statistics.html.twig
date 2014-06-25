@@ -100,7 +100,7 @@
                             <td>{{ ticket.car                       }}</td>
                             <td>{{ ticket.assignedTo                }}</td>
                             <td>{{ ticket.description               }}</td>
-                            <td>{{ ticket.status                    }}</td>
+                            <td>{{ ticket.status | trans            }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
