@@ -35,7 +35,25 @@
                             <td>
                                     <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
                                     {% if workshopOrder.rejectionReason is not null %}
-                                        <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
+                                        {# <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bund les/util/images/icon/tag_red.png') }}"></a> #}
+                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"> {% trans %} reject.reason {% endtrans %}</span></a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal_rejected_reason{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">{% trans %} reject.reason {% endtrans %}</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ workshopOrder.rejectionReason|nl2br }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
                                     {% endif %}
                                     <!-- Modal -->
                                     <div class="modal fade" id="myModal_edit_{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
