@@ -84,6 +84,7 @@ class UserController extends Controller {
                 else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
+                $role_id  = 'none';
         }else{
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
@@ -95,12 +96,19 @@ class UserController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
+            if ( ! isset($role) and ($option == null or $option == '...') ){
+                $role     = $user->getRoles();
+                $role     = $role[0];
+                $role     = $role->getName();
+            }
             if     ($role == "ROLE_SUPER_ADMIN")  $users_role_super_admin[] = $user;
             elseif ($role == "ROLE_ADMIN")        $users_role_admin[]       = $user;
             elseif ($role == "ROLE_USER")         $users_role_user[]        = $user;
             elseif ($role == "ROLE_ASSESSOR")     $users_role_assessor[]    = $user;
             elseif ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
-            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
+            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user; 
+
+            if($option == null or $option == '...') unset($role);
         }
 
         $length = $pagination->setTotalPagByLength($length);
