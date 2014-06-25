@@ -35,9 +35,9 @@
         <tbody>
                 {% for shop in shops %}
             <tr>
-                <td>{{ shop.id           }}</td>
-                <td>{{ shop.partner      }}</td>
-                <td>{{ shop.name         }}{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ shop.id       }}</td>
+                <td>{{ shop.name     }}{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ shop.partner  }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
                 <td>{{ shop.email1       }}</td>
                 <td>{{ shop.address      }}</td>
@@ -71,10 +71,10 @@
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_edit.png') }}"></a>
-                        {% if shop.active == true %}
-                            <a title="{% trans %} shop.deactivate {% endtrans %}"   href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></span></a>
+                        {% if shop.active == 1 %}
+                            <a title="{% trans %} shop.deactivate {% endtrans %}"   href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"></span></a>
                         {% else %}
-                            <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"></a>
+                            <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"></a>
                         {% endif %}
                         {% if shop.workshops|length == 0 %}
                             <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
