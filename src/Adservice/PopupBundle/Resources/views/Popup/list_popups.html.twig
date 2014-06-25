@@ -19,7 +19,7 @@
         <select id="flt_country" class='form-control'>
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
-                <option value="{{ country.id }}">{{ country }}</option>
+                <option value="{{ country.id }}">{{ country | trans }}</option>
             {% endfor %}
     </select></div>
     {% endif %}
