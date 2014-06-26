@@ -25,8 +25,9 @@
 
         	{% elseif post.document.mymetype == 'bmp' or post.document.mymetype == 'gif' or post.document.mymetype == 'jpg' or post.document.mymetype == 'png' %}
 
-            	<img class="imgPost hover" src="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}">
-
+            	<a target='_blank' href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}" imageanchor="1">
+            		<img class="imgPost hover" src="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}">
+            	</a>
         	{% endif %}
         {% endif %}
     </div>
