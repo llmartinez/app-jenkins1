@@ -171,6 +171,7 @@ class AjaxController extends Controller
         }else{
                 $json = array( 'error' => 'No hay coincidencias');
         }
+        //var_dump($json);
         return new Response(json_encode($json), $status = 200);
     }
 }
