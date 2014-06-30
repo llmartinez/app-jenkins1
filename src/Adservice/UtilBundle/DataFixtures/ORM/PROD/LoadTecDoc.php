@@ -72,7 +72,12 @@ class LoadTecDoc extends AbstractFixture implements FixtureInterface, OrderedFix
 
             $idTecDoc  = utf8_encode($row[3]);
             $brandId   = utf8_encode($row[1]);
-            $modelName = utf8_encode($row[2]);
+
+            if(utf8_encode($row[4]) != 0) $start = substr(utf8_encode($row[4]), 2, 2); else $start = '';
+            if(utf8_encode($row[5]) != 0) $end   = substr(utf8_encode($row[5]), 2, 2); else $end   = '';
+
+            if($start != '')              $modelName = utf8_encode($row[2]).' ('.$start.'-'.$end.')';
+            else                          $modelName = utf8_encode($row[2]);
 
             $model = new Model();
             $model->setIdTecDoc($idTecDoc);
@@ -102,7 +107,8 @@ class LoadTecDoc extends AbstractFixture implements FixtureInterface, OrderedFix
 
             $idTecDoc    = utf8_encode($row[4]);
             $modelId     = utf8_encode($row[2]);
-            $versionName = utf8_encode($row[3]);
+            if(isset($row[5])) $motor   = utf8_encode($row[5]); else $motor   = '';
+            $versionName = utf8_encode($row[3]).' ('.utf8_encode($row[9]).') ('.$motor.')';
 
             $version = new Version();
             $version->setIdTecDoc($idTecDoc);

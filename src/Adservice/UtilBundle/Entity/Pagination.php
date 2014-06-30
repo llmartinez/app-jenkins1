@@ -233,7 +233,6 @@ class Pagination
     {
         $query = 'SELECT COUNT(e) '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
-
         $where = 'WHERE e.id > 0 ';
 
         if($joins != null and $joins[0] != null) {
@@ -246,11 +245,12 @@ class Pagination
 
         ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
 
-            $consulta = $em ->createQuery($query.$from.$where.$order);
-	
-	$result = $consulta->getResult();
-	$result = $result[0];
-	$result = $result[1];
+        $consulta = $em ->createQuery($query.$from.$where.$order);
+
+        $result = $consulta->getResult();
+        $result = $result[0];
+        $result = $result[1];
+
         return $result;
     }
 
