@@ -206,14 +206,14 @@ class WorkshopController extends Controller {
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
         $workshop_machines  = $workshop->getDiagnosisMachines();
-        if($workshop_machines[0] and !isset($id_machine)){
-            $id_machine = $workshop_machines[0];
-            $id_machine = $id_machine->getId();
-        }
+        // if($workshop_machines[0] and !isset($id_machine)){
+        //     $id_machine = $workshop_machines[0];
+        //     $id_machine = $id_machine->getId();
+        // }
 
         return $this->render('WorkshopBundle:Workshop:edit_workshop.html.twig', array(  'workshop'           => $workshop,
                                                                                         'typologies'         => $typologies,
-                                                                                        'id_machine'         => $id_machine,
+                                                                                        // 'id_machine'         => $id_machine,
                                                                                         'diagnosis_machines' => $diagnosis_machines,
                                                                                         'form_name'          => $form->getName(),
                                                                                         'form'               => $form->createView()));
