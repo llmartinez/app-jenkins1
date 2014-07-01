@@ -49,7 +49,7 @@ class TicketController extends Controller {
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
         $workshops  = array('0' => new Workshop());
-        $joins[]    = array();
+        $joins      = array();
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
         if($option == null){
@@ -70,7 +70,7 @@ class TicketController extends Controller {
                     $option  = $workshops[0]->getCodeWorkshop();
                 }
             }
-            $option = 'all';
+            //$option = 'all';
         }
 
         elseif ($option == 'all'      ) { $params[] = array();  }
@@ -111,10 +111,9 @@ class TicketController extends Controller {
             $params[] = array('workshop', ' = '.$option);
         }
         $pagination = new Pagination($page);
-
         if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
         elseif(($option == 'assessor_pending') or ($option == 'assessor_answered') or ($option == 'other_pending') or ($option == 'other_answered')) {
 
@@ -131,11 +130,11 @@ class TicketController extends Controller {
                 $result = $consulta2->getResult();
                 $last_post = end($result);
 
-		if($last_post != null){
-		   $last_post_role = $last_post->getCreatedBy();
-		   $last_post_role = $last_post_role->getRoles();
-		   $last_post_role = $last_post_role[0];
-		}
+        		if($last_post != null){
+        		   $last_post_role = $last_post->getCreatedBy();
+        		   $last_post_role = $last_post_role->getRoles();
+        		   $last_post_role = $last_post_role[0];
+        		}
 
                 if(count($result) != 0 and $last_post != null
                 and ($last_post_role == 'ROLE_ASSESSOR'
@@ -161,7 +160,8 @@ class TicketController extends Controller {
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
         else{
-            $joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+            $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
+            //$joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
             $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
