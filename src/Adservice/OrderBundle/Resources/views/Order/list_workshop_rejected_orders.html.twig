@@ -53,7 +53,7 @@
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ workshopOrder.fax             }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
-                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country         }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>
@@ -108,12 +108,12 @@
 
                                     {% if workshopOrder.wantedAction != 'create' %}
                                         <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"></a>
+
+                                        <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
                                     {% else %}
-                                        <a title="{% trans %} order.recreate {% endtrans %}"  onclick="alert('{% trans %} order.recreate {% endtrans %}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
+                                        <a title="{% trans %} order.recreate {% endtrans %}"  onclick="alert('{% trans %} order.recreate {% endtrans %}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/exclamation.png') }}"></a>
                                     {% endif %}
                                     <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('workshopOrder_remove', {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}"></a>
-
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
                             {% endif %}
                             </td>
                         </tr>

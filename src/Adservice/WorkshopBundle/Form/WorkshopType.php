@@ -2,6 +2,7 @@
 
 namespace Adservice\WorkshopBundle\Form;
 
+use Adservice\WorkshopBundle\Form\DiagnosisMachineType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 

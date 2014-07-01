@@ -11,17 +11,19 @@
         </thead>
         <tbody>
             {% for diagnosis_machine in diagnosis_machines %}
-            <tr>
-                <td>{{ diagnosis_machine.id       }}</td>
-                <td>{{ diagnosis_machine.name }}</td>
-                <td>{% if diagnosis_machine.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                {% if country == 'none' %}<td>{{ diagnosis_machine.country }}</td>{% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <td>
-                        <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/diagnostic_machine_edit.png') }}"></a>
-                    </td>
+                {% if diagnosis_machine.name != '...' %}
+                <tr>
+                    <td>{{ diagnosis_machine.id       }}</td>
+                    <td>{{ diagnosis_machine.name | trans }}</td>
+                    <td>{% if diagnosis_machine.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                    {% if country == 'none' %}<td>{{ diagnosis_machine.country }}</td>{% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/diagnostic_machine_edit.png') }}"></a>
+                        </td>
+                    {% endif %}
+                </tr>
                 {% endif %}
-            </tr>
             {% endfor %}
         </tbody>
     </table>

@@ -70,9 +70,9 @@ function populate_city(url_ajax, city){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#data_cities').empty();
-            $("#slct_city").empty();
-            $.each(data, function(idx, elm) {
-
+            $("#slct_city"  ).empty();
+            $.each(data, function(idx, elm)
+            {
                 if(elm.city == city) $('#data_cities').append("<option value="+elm.id+" selected>"+elm.city+"</option>");
                 else                 $('#data_cities').append("<option value="+elm.id+">"+elm.city+"</option>");
             });
@@ -81,6 +81,7 @@ function populate_city(url_ajax, city){
                 placeholder: "Select a State",
                 allowClear: true
             });
+            $('div#div_regions span.select2-chosen').text(id_region);
         },
         error : function(){
             console.log("Error al cargar las ciudades...");

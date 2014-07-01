@@ -81,7 +81,7 @@
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ orderBefore.fax             }}</td><td>{{ workshopOrder.fax             }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ orderBefore.email1          }}</td><td>{{ workshopOrder.email1          }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ orderBefore.email2          }}</td><td>{{ workshopOrder.email2          }}</td></tr>
-                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country         }}</td><td>{{ workshopOrder.country         }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country|trans   }}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ orderBefore.region          }}</td><td>{{ workshopOrder.region          }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ orderBefore.city            }}</td><td>{{ workshopOrder.city            }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ orderBefore.address         }}</td><td>{{ workshopOrder.address         }}</td></tr>
@@ -102,7 +102,7 @@
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ workshopOrder.fax             }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
-                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country         }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>

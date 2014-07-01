@@ -387,6 +387,7 @@ tracing:					  "Seguimiento"
 
 #FILE
 file.download:				  "Descargar archivo"
+statistics.download:		  "Descargar estadísticas"
 
 #STATISTIC
 statistic.general:			  "Estadísticas generales"

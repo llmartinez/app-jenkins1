@@ -384,6 +384,7 @@ tracing:					  "Tracing"
 
 #FILE
 file.download:				  "Download file"
+statistics.download:		  "Download statistics"
 
 #STATISTIC
 statistic.general:			  "General Statistics"
