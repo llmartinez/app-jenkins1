@@ -431,6 +431,7 @@ page.next:						"Página siguiente"
 page.last:						"Última página"
 
 #MAIL
+mail.image:								"http://ad-service.es/testproject/web/logo_adservice.png"
 mail.info.tel:							"93 395 23 08"
 mail.info.more:							"Más información:"
 mail.testing:		                	"En fase de pruebas hasta "
