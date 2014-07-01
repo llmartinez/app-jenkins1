@@ -296,17 +296,24 @@ the specific language governing permissions and limitations under the Apache Lic
         $('input[id*=_search]' ).keydown(function(event) {
             //console.log('region ' + $(this).val() + ' == ' + $('#s2id_slct_region .select2-chosen').text() + ' div ' + $('#data_regions').val());
             //console.log('city ' + $(this).val() + ' == ' + $('#s2id_slct_city .select2-chosen').text() + ' div ' + $('#data_cities').val());
-            if (event.which == 13) {
-                if ($('#div_cities .select2-container-active').length > 0 ) {
+            if (event.which == 13)
+            {
+                if ($('#div_cities .select2-container-active').length > 0 )
+                {
                     //console.log('enter cities');
                     $(':text[name*=city]').val( $(this).val() );
-                    $('#s2id_slct_city .select2-chosen').text($(this).val());
+                    $(':input[name*=city]').val( $(this).val() );
+                    $(':input[name*=city]').val($('#s2id_slct_city .select2-chosen').val());
                     $(':text[name*=address]').focus();
                 }else{
-                    if ($('#div_regions .select2-container-active').length > 0 ) {
+                    if ($('#div_regions .select2-container-active').length > 0 )
+                    {
                         //console.log('enter regions');
                         $(':text[name*=region]').val( $(this).val() );
+                        $(':input[name*=region]').val( $(this).val() );
                         $('#s2id_slct_region .select2-chosen').text($(this).val());
+                        $(':input[name*=region]').val($('#s2id_slct_region .select2-chosen').val());
+                        $(':text[name*=city]').focus();
                         $('#s2id_slct_city').focus();
                     }
                 }

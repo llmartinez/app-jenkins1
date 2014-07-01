@@ -1,9 +1,9 @@
-
 <script>
 	$(document).ready(function() {
 
 		$("#slct_region").change(function() {
 			$(':text[id*=region]').val( $("#s2id_slct_region .select2-chosen").text() );
+			var choices = $('.select2-choice');
 
 			var url_ajax = "{{ path("cities_from_region") }}";
 			populate_city(url_ajax);
@@ -49,5 +49,4 @@
 			}
 		});
 	});
-
 </script>

@@ -12,14 +12,18 @@ class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterfa
 
     public function load(ObjectManager $manager) {
         $machines = array(
-            array( 'name' => 'Machine 1', ),
-            array( 'name' => 'Machine 2', ),
-            array( 'name' => 'Machine 3', ),
+            array( 'name' => 'none'     , 'country' => 'spain'   ),
+            array( 'name' => 'none'     , 'country' => 'andorra' ),
+            array( 'name' => 'none'     , 'country' => 'france'  ),
+            array( 'name' => 'none'     , 'country' => 'portugal'),
+            array( 'name' => 'Machine 1', 'country' => 'spain'   ),
+            array( 'name' => 'Machine 2', 'country' => 'spain'   ),
+            array( 'name' => 'Machine 3', 'country' => 'spain'   ),
         );
         foreach ($machines as $machine) {
             $entidad = new DiagnosisMachine();
             $entidad->setName($machine['name']);
-            $entidad->setCountry( $this->getReference('spain'));
+            $entidad->setCountry( $this->getReference($machine['country']));
             $entidad->setActive(1);
             $manager->persist($entidad);
 

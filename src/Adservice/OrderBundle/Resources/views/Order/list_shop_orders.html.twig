@@ -30,7 +30,7 @@
                             <td> {{ shopOrder.phoneNumber1 }} </td>
                             <td> {{ shopOrder.region       }} </td>
                             <td> {{ shopOrder.address      }} </td>
-                            <td> {% if shopOrder.active == 1 %}{% trans %} active   {% endtrans %}
+                            <td> {% if shopOrder.active == 0 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
                             <td>
                                     <a title="{% trans %} workshop_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ shopOrder.id }}" ></a>
@@ -77,7 +77,7 @@
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ orderBefore.fax           }}</td><td>{{ shopOrder.fax           }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ orderBefore.email1        }}</td><td>{{ shopOrder.email1        }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ orderBefore.email2        }}</td><td>{{ shopOrder.email2        }}</td></tr>
-                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country       }}</td><td>{{ shopOrder.country       }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country|trans }}</td><td>{{ shopOrder.country|trans }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ orderBefore.region        }}</td><td>{{ shopOrder.region        }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ orderBefore.city          }}</td><td>{{ shopOrder.city          }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ orderBefore.address       }}</td><td>{{ shopOrder.address       }}</td></tr>
@@ -93,7 +93,7 @@
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ shopOrder.fax           }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ shopOrder.email1        }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ shopOrder.email2        }}</td></tr>
-                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ shopOrder.country       }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ shopOrder.country|trans }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ shopOrder.region        }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ shopOrder.city          }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ shopOrder.address       }}</td></tr>

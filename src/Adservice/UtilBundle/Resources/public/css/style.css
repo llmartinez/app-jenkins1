@@ -403,11 +403,6 @@ body {
 .imgPost {
     width:50%;
 }
-.hover:hover {
-    -ms-transform: scale(4,4); /* IE 9 */
-    -webkit-transform: scale(4,4); /* Chrome, Safari, Opera */
-    transform: scale(4,4);
-}
 
 /***************************************************************************/
 

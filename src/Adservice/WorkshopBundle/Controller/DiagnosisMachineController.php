@@ -69,19 +69,24 @@ class DiagnosisMachineController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
+            if ($diagnosis_machine->getName() != '...'){
+                //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+                $form_errors = $form->getErrors();
+                    if(isset($form_errors[0])) {
+                        $form_errors = $form_errors[0];
+                        $form_errors = $form_errors->getMessageTemplate();
+                    }else{
+                        $form_errors = 'none';
+                    }
+                if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
+                    $this->saveDiagnosisMachine($em, $diagnosis_machine);
+                    return $this->redirect($this->generateUrl('diagnosis_machine_list'));
                 }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
-
-                $this->saveDiagnosisMachine($em, $diagnosis_machine);
-                return $this->redirect($this->generateUrl('diagnosis_machine_list'));
+            }else
+            {
+                $flash = 'No puedes insertar el nombre "..."';
+                $this->get('session')->setFlash('error', $flash);
             }
         }
 

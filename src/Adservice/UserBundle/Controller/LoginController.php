@@ -22,7 +22,6 @@ class LoginController extends Controller {
 
         return $this->render('UserBundle:Login:login.html.twig', array('last_username'  => $session->get(SecurityContext::LAST_USERNAME),
                                                                        'error'          => $error));
-
     }
 
     public function goToLoginAction() {

@@ -56,7 +56,7 @@ class WorkshopController extends Controller {
         $request  = $this->getRequest();
         $workshop = new Workshop();
 
-        $form       = $this->createForm(new WorkshopType(), $workshop);
+        $form     = $this->createForm(new WorkshopType(), $workshop);
 
         if ($request->getMethod() == 'POST') {
 
@@ -117,7 +117,7 @@ class WorkshopController extends Controller {
 
                     /* MAILING */
                     $mailerUser = $this->get('cms.mailer');
-                    $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
+                    $mailerUser->setTo('dmaya@grupeina.com'); /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
                     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
                     $mailerUser->setFrom('noreply@grupeina.com');
                     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -189,7 +189,7 @@ class WorkshopController extends Controller {
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
                 if($find == null or $workshop->getCodeWorkshop() == $last_code)
                 {
-                    $workshop = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+                    $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
                     $this->saveWorkshop($em, $workshop);
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
@@ -205,9 +205,15 @@ class WorkshopController extends Controller {
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+        $workshop_machines  = $workshop->getDiagnosisMachines();
+        if($workshop_machines[0] and !isset($id_machine)){
+            $id_machine = $workshop_machines[0];
+            $id_machine = $id_machine->getId();
+        }
 
         return $this->render('WorkshopBundle:Workshop:edit_workshop.html.twig', array(  'workshop'           => $workshop,
                                                                                         'typologies'         => $typologies,
+                                                                                        'id_machine'         => $id_machine,
                                                                                         'diagnosis_machines' => $diagnosis_machines,
                                                                                         'form_name'          => $form->getName(),
                                                                                         'form'               => $form->createView()));

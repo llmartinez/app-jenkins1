@@ -55,18 +55,18 @@ class TicketController extends Controller {
             $params[] = array();
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
-                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
+                $workshops   = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
                 if($workshops[0]->getId() != "") {
-                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop().' AND w.partner = '.$workshops[0]->getPartner().' ');
-                    $option = $workshops[0]->getId();
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
+                    $option  = $workshops[0]->getId();
                 }
                 else{ $joins[] = array(); }
             }
             elseif (!$security->isGranted('ROLE_ASSESSOR')) {
-                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $security->getToken()->getUser()->getWorkshop()->getId()));
+                $workshops   = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $security->getToken()->getUser()->getWorkshop()->getId()));
                 if($workshops[0]->getId() != "") {
-                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop().' AND w.partner = '.$workshops[0]->getPartner().' ');
-                    $option = $workshops[0]->getId();
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
+                    $option  = $workshops[0]->getCodeWorkshop();
                 }
                 else{ $joins[] = array(); }
             }
@@ -114,8 +114,8 @@ class TicketController extends Controller {
         $pagination = new Pagination($page);
 
         if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
-            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination);
-            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params);
+            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+            $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
         elseif(($option == 'assessor_pending') or ($option == 'assessor_answered') or ($option == 'other_pending') or ($option == 'other_answered')) {
 
@@ -397,11 +397,11 @@ class TicketController extends Controller {
      * @return url
      */
     public function showTicketAction($id_ticket) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $security = $this->get('security.context');
 
-        $post = new Post();
+        $post     = new Post();
         $document = new Document();
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
 
@@ -418,7 +418,7 @@ class TicketController extends Controller {
             //Define User
             $user = $security->getToken()->getUser();
             //Define Ticket
-            if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request); }
+            if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request);
 
                 $form_errors = $form->getErrors();
                 if(isset($form_errors[0])) {
@@ -427,8 +427,9 @@ class TicketController extends Controller {
                 }else{
                     $form_errors = 'none';
                 }
+            }
 
-            if(($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file')) or (!$security->isGranted('ROLE_ASSESSOR'))){
+            if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file'))){
 
                 $formP->bindRequest($request);
                 $formD->bindRequest($request);
