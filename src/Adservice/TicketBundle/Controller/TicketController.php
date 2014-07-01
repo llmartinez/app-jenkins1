@@ -49,6 +49,7 @@ class TicketController extends Controller {
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
         $workshops  = array('0' => new Workshop());
+        $joins[]    = array();
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
         if($option == null){
@@ -68,9 +69,7 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
                     $option  = $workshops[0]->getCodeWorkshop();
                 }
-                else{ $joins[] = array(); }
             }
-            else{ $joins[] = array(); }
             $option = 'all';
         }
 
