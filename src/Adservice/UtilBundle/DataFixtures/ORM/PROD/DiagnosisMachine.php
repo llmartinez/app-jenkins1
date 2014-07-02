@@ -12,13 +12,13 @@ class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterfa
 
     public function load(ObjectManager $manager) {
         $machines = array(
-            array( 'name' => 'none'     , 'country' => 'spain'   ),
-            array( 'name' => 'none'     , 'country' => 'andorra' ),
-            array( 'name' => 'none'     , 'country' => 'france'  ),
-            array( 'name' => 'none'     , 'country' => 'portugal'),
-            array( 'name' => 'Machine 1', 'country' => 'spain'   ),
-            array( 'name' => 'Machine 2', 'country' => 'spain'   ),
-            array( 'name' => 'Machine 3', 'country' => 'spain'   ),
+            array( 'name' => 'none'     , 'country' => 'spain'   , 'ref' => 'none_es'),
+            array( 'name' => 'none'     , 'country' => 'andorra' , 'ref' => 'none_an'),
+            array( 'name' => 'none'     , 'country' => 'france'  , 'ref' => 'none_fr'),
+            array( 'name' => 'none'     , 'country' => 'portugal', 'ref' => 'none_pt'),
+            array( 'name' => 'Machine 1', 'country' => 'spain'   , 'ref' => ''),
+            array( 'name' => 'Machine 2', 'country' => 'spain'   , 'ref' => ''),
+            array( 'name' => 'Machine 3', 'country' => 'spain'   , 'ref' => ''),
         );
         foreach ($machines as $machine) {
             $entidad = new DiagnosisMachine();
@@ -27,7 +27,10 @@ class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterfa
             $entidad->setActive(1);
             $manager->persist($entidad);
 
-            $this->addReference($entidad->getName(), $entidad);
+            $ref = $machine['ref'];
+            if ($ref == '') $ref = $entidad->getName();
+
+            $this->addReference($ref, $entidad);
         }
         $manager->flush();
     }
