@@ -193,7 +193,6 @@ class TicketRepository extends EntityRepository
         {
             $where .=  ' AND t.subsystem = '.$subsystem->getId().' ';
         }
-
         //Crea la consulta
         $consulta = $em->createQuery($query.$joins.$where.' ORDER BY t.id ');
 
