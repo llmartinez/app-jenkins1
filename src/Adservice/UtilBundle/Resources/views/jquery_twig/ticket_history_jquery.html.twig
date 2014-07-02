@@ -7,7 +7,7 @@
 
         });
 
-        $("#slct_historyTickets").click(function() {
+        $("#slct_historyTickets").change(function() {
 
             var url = "{{ path('listTicket', {'page': '1', 'option': 'PLACEHOLDER'}) }}";
             url_show = url.replace("PLACEHOLDER", $(this).val());

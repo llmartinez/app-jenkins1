@@ -1,0 +1,17 @@
+    <script>
+
+        $(document).ready(function() {
+            var locale = "{{ app.session.locale }}";
+
+            if        (locale == 'en') { $('#slct_lang option').eq(0).attr("selected","selected"); }
+            else { if (locale == 'es') { $('#slct_lang option').eq(1).attr("selected","selected"); }
+            else { if (locale == 'fr') { $('#slct_lang option').eq(2).attr("selected","selected"); }
+            }}
+        });
+
+        $('#slct_lang').change(function(){
+
+            var url = $('#slct_lang').val();
+            window.open(url,'_self');
+    });
+    </script>

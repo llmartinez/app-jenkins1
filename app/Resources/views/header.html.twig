@@ -1,7 +1,7 @@
 <div class="MainHeader">
     <div class="span4 offset2" style="margin-top:15px;">
     </div>
-    <div class="navbar" style="padding:10px;">
+    <div class="navbar">
         <div class="navbar-inner">
             <div class="span4 offset2">
                 <!-- header -->
@@ -12,9 +12,17 @@
                         </td>
                         <td align="right">
                             <div id="selectLang" class="selectLang mb3">
-                                <a href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
-                                <a href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
-                                <a href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}"><img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
+                            <select id="slct_lang" class="form-control" >
+                                <option value='{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}'><a>
+                                    <img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}">{% trans %} english {% endtrans %}</a>
+                                </option>
+                                <option value='{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}'><a>
+                                    <img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}">{% trans %} spanish {% endtrans %}</a>
+                                </option>
+                                <option value='{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}'><a>
+                                    <img src="{{ asset('bundles/util/images/flags/flag_france.png') }}">{% trans %} french {% endtrans %}</a>
+                                </option>
+                            </select>
                             </div>
                             {% if app.user.username is defined %}
 
@@ -50,6 +58,7 @@
     </div>
 </div>
 {% include 'UtilBundle:jquery_twig:popup_cookie_logout_jquery.html.twig'  %}
+{% include 'UtilBundle:jquery_twig:change_language.html.twig'  %}
 
 {#
 *************************
