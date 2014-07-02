@@ -39,7 +39,7 @@ class ImportController extends Controller
 
     	if( $bbdd == 'partner' )
     	{
-    		$old_Socios = $em_old->createQuery('SELECT os.id FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
+    		$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
 			$locations  = $this->getLocations($em);																							 //MAPPING LOCATIONS
 
 			foreach ($old_Socios as $old_Socio)
@@ -67,7 +67,7 @@ class ImportController extends Controller
 
 		elseif( $bbdd == 'shop-default' )
 		{
-			$old_Socios   = $em_old->createQuery('SELECT os.id FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); 	// PARTNERS //
+			$old_Socios   = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); 	// PARTNERS //
 			$locations    = $this->getLocations($em);																						   	//MAPPING LOCATIONS
 			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();																//MAPPING PARTNERS
 
@@ -98,7 +98,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'shop' )
     	{
-			$old_Tiendas = $em_old->createQuery('SELECT os.id FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
+			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
 			$locations   = $this->getLocations($em);																							 //MAPPING LOCATIONS
 			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
@@ -127,7 +127,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'ad' )
     	{
-   			$old_Socios = $em_old->createQuery('SELECT os.id FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
+   			$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
 			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
 
 			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
