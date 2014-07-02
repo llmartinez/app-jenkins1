@@ -5,7 +5,7 @@
     {# se define bloqued_by_assessor para no repetir la comprovacion if en el codigo  #}
         {% if ( is_granted('ROLE_ASSESSOR')
             and ticket.blockedBy is not null
-            and ticket.blockedBy.id == app.security.getToken().getUser().getId()) %}
+            and ticket.blockedBy == app.security.getToken().getUser()) %}
 
                 {% set bloqued_by_assessor = 0 %}
         {% else %}

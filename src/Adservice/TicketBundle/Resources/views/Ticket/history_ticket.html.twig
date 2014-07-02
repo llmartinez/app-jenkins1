@@ -3,22 +3,22 @@
     <select id="slct_historyTickets" class="form-control">
 
         {% if is_granted('ROLE_ADMIN') %}
-                <option value="all" selected         >{% trans %} ticket.opt.all               {% endtrans %}</option>
-                <option value="opened"               >{% trans %} ticket.opt.open              {% endtrans %}</option>
-                <option value="closed"               >{% trans %} ticket.opt.closed            {% endtrans %}</option>
-                <option value="free"                 >{% trans %} ticket.opt.free              {% endtrans %}</option>
-                <option value="pending"              >{% trans %} ticket.opt.pending           {% endtrans %}</option>
-                <option value="answered"             >{% trans %} ticket.opt.answered          {% endtrans %}</option>
+                <option value="all" selected="selected" >{% trans %} ticket.opt.all               {% endtrans %}</option>
+                <option value="opened"                  >{% trans %} ticket.opt.open              {% endtrans %}</option>
+                <option value="closed"                  >{% trans %} ticket.opt.closed            {% endtrans %}</option>
+                <option value="free"                    >{% trans %} ticket.opt.free              {% endtrans %}</option>
+                <option value="pending"                 >{% trans %} ticket.opt.pending           {% endtrans %}</option>
+                <option value="answered"                >{% trans %} ticket.opt.answered          {% endtrans %}</option>
         {% else %}
             {% if is_granted('ROLE_ASSESSOR') %}
-                <option value="free" selected        >{% trans %} ticket.opt.free              {% endtrans %}</option>
-                <option value="assessor_pending"     >{% trans %} ticket.opt.assessor.pending  {% endtrans %}</option>
-                <option value="assessor_answered"    >{% trans %} ticket.opt.assessor.answered {% endtrans %}</option>
-                <option value="assessor_closed"      >{% trans %} ticket.opt.assessor.closed   {% endtrans %}</option>
-                <option value="other_pending"        >{% trans %} ticket.opt.other.pending     {% endtrans %}</option>
-                <option value="other_answered"       >{% trans %} ticket.opt.other.answered    {% endtrans %}</option>
-                <option value="other_closed"         >{% trans %} ticket.opt.other.closed      {% endtrans %}</option>
-                <option value="all"                  >{% trans %} ticket.opt.all               {% endtrans %}</option>
+                <option value="free" selected="selected">{% trans %} ticket.opt.free              {% endtrans %}</option>
+                <option value="assessor_pending"        >{% trans %} ticket.opt.assessor.pending  {% endtrans %}</option>
+                <option value="assessor_answered"       >{% trans %} ticket.opt.assessor.answered {% endtrans %}</option>
+                <option value="assessor_closed"         >{% trans %} ticket.opt.assessor.closed   {% endtrans %}</option>
+                <option value="other_pending"           >{% trans %} ticket.opt.other.pending     {% endtrans %}</option>
+                <option value="other_answered"          >{% trans %} ticket.opt.other.answered    {% endtrans %}</option>
+                <option value="other_closed"            >{% trans %} ticket.opt.other.closed      {% endtrans %}</option>
+                <option value="all"                     >{% trans %} ticket.opt.all               {% endtrans %}</option>
                 {# ALL #}
             {% endif %}
         {% endif %}

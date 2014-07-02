@@ -408,6 +408,7 @@ popup.delete:				  "Borrar popup"
 popup.delete.confirm:		  "Estas seguro que quieres eliminar este popup?"
 
 #ORDERS
+values:							"Valores"
 workshop_pending:			  	"Sol.Taller pendientes"
 workshop_rejected:				"Sol.Taller rechazadas"
 shop_pending:					"Sol.Tienda pendientes"
