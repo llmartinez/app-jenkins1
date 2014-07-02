@@ -405,6 +405,7 @@ popup.delete:				  "Delete popup"
 popup.delete.confirm:		  "Are you sure you want to delete this popup?"
 
 #ORDERS
+values:							"Values"
 workshop_pending:			  	"Pending Workshop Orders"
 workshop_rejected:				"Rejected Workshop Orders"
 shop_pending:					"Pending Shop Orders"

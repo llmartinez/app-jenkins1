@@ -17,6 +17,9 @@ body {
     height: 100%;
     /*background-color:  #001739;*/
 }
+legend {
+    clear:  both;
+}
 #MainBody {
     background-color: transparent;
     margin: 20px;
