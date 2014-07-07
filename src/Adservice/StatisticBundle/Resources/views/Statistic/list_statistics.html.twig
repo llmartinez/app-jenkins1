@@ -10,10 +10,19 @@
 
     <legend>{% trans %} tickets {% endtrans %}</legend>
 
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_tck_from" type="date"
-            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}"  {% endif %} class='form-control' ></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end   {% endtrans %} </label><input id="flt_tck_to" type="date"
-            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}"  {% endif %} class='form-control' ></div>
+        <div class="col-xs-12 col-md-12 form-group"> 
+        <table>
+            <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
+                <input id="tck_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_from_m" type="number" {% if from_m != 'none' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            </td></tr>
+            <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
+                <input id="tck_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_to_m"   type="number" {% if to_m   != 'none' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            </td></tr>
+        </table></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_tck_country" class='form-control'>
                                                                                     <option value="none">{% trans %} all {% endtrans %}</option>
@@ -40,10 +49,19 @@
 
     <legend>{% trans %} workshops {% endtrans %}</legend>
 
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.start {% endtrans %} </label><input id="flt_wks_from" type="date"
-            {% if date_from != 'none' %} value="{{ date_from | date ('Y-m-d')}}" {% endif %} class='form-control'></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} date.end {% endtrans %} </label><input id="flt_wks_to" type="date"
-            {% if date_to != 'none'   %} value="{{ date_to   | date ('Y-m-d')}}" {% endif %} class='form-control'></div>
+        <div class="col-xs-12 col-md-12 form-group">
+        <table>
+            <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
+                <input id="wks_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_m" type="number" {% if from_m != 'none' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            </td></tr>
+            <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
+                <input id="wks_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_m"   type="number" {% if to_m   != 'none' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            </td></tr>
+        </table></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_wks_country" class='form-control'>
                                                                                         <option value="none">{% trans %} all {% endtrans %}</option>

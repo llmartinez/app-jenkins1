@@ -230,14 +230,13 @@ class ImportController extends Controller
 				if(isset($partners[$idSocio]))
 				{
 					$newWorkshop->setPartner ($partners[$idSocio]);
-					$newWorkshop->setShop    ($shops   [$idSocio]);
 				}
 				elseif($idSocio >= 60 AND $idSocio <= 78){
 						 $newWorkshop->setShop    ($shops[$idSocio]);
-						 $newWorkshop->setPartner ($partners['28']);						//Tiendas asociadas con VEMARE, S.L.
+						 $newWorkshop->setPartner ($partners['28']);	//Tiendas asociadas con VEMARE, S.L.
 					}
 				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
-				//UtilController::saveEntity($em, $newWorkshop, $sa, false);
+				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 			}
 			$em->flush();
 			$session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
@@ -496,7 +495,7 @@ class ImportController extends Controller
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@grupeina.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -723,7 +722,7 @@ class ImportController extends Controller
 
     	/* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo('dmaya@grupeina.com');
+        $mailer->setTo('test@ad-service.es');
         $mailer->setFrom('noreply@grupeina.com');
          
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');

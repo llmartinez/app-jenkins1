@@ -4,12 +4,15 @@ namespace Adservice\StatisticBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Adservice\StatisticBundle\Entity\Statistic;
+use Adservice\StatisticBundle\Form\DateType;
 use Adservice\UtilBundle\Entity\Pagination;
 use Symfony\Component\HttpFoundation\Response;
 
 class StatisticController extends Controller {
 
-    public function listAction($type=null, $page=1, $date_from='none', $date_to='none', $partner='none', $status='none', $country='none') {
+    public function listAction($type=null, $page=1, $from_y ='none', $from_m='none', $from_d ='none',
+                                                    $to_y   ='none', $to_m  ='none', $to_d   ='none',
+                                                    $partner='none', $status='none', $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $statistic = new Statistic();
@@ -19,8 +22,12 @@ class StatisticController extends Controller {
 
         if($type != null){
 
-            if ($date_from != "none") { $params[] = array('created_at', " >= '".$date_from." 00:00:00'"); }
-            if ($date_to   != "none") { $params[] = array('created_at', " <= '".$date_to  ." 23:59:59'"  ); }
+            if ($from_y != "none" and $from_m != "none" and $from_d != "none") {
+                $params[]  = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'");
+            }
+            if ($to_y != "none" and $to_m != "none" and $to_d != "none") {
+                $params[] = array('created_at', " >= '".$to_y.'-'.$to_m.'-'.$to_d." 23:59:59'");
+            }
 
             if     ($type == 'ticket'  ){
                                         $bundle = 'TicketBundle';
@@ -80,15 +87,19 @@ class StatisticController extends Controller {
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('StatisticBundle:Statistic:list_statistics.html.twig', array('statistic' => $statistic,
-                                                                             'partners'  => $partners,
-                                                                             'countries' => $countries,
-                                                                             'pagination'=> $pagination,
-                                                                             'type'      => $type,
-                                                                             'date_from' => $date_from,
-                                                                             'date_to'   => $date_to,
-                                                                             'partner'   => $partner,
-                                                                             'status'    => $status,
-                                                                             'country'   => $country,
+                                                                                          'from_y'    => $from_y,
+                                                                                          'from_m'    => $from_m,
+                                                                                          'from_d'    => $from_d,
+                                                                                          'to_y'      => $to_y  ,
+                                                                                          'to_m'      => $to_m ,
+                                                                                          'to_d'      => $to_d  ,
+                                                                                          'partners'  => $partners,
+                                                                                          'countries' => $countries,
+                                                                                          'pagination'=> $pagination,
+                                                                                          'type'      => $type,
+                                                                                          'partner'   => $partner,
+                                                                                          'status'    => $status,
+                                                                                          'country'   => $country,
                                                                             ));
     }
 

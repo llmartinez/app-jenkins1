@@ -40,20 +40,32 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-	    	var from    = $('#flt_wks_from').val();
-	    	var to      = $('#flt_wks_to').val();
+	    	var from_y  = $('#wks_from_y').val();
+	        var from_m  = $('#wks_from_m').val();
+	        var from_d  = $('#wks_from_d').val();
+	        var to_y    = $('#wks_to_y').val();
+	        var to_m    = $('#wks_to_m').val();
+	        var to_d    = $('#wks_to_d').val();
 	    	var partner = $('#flt_wks_partner').val();
 	    	var status  = $('#flt_wks_status').val();
 
-	    	if(from    == ""  ) from    = 'none';
-	    	if(to      == ""  ) to      = 'none';
+	        if(from_y  == ""  ) from_y  = 'none';
+	        if(from_m  == ""  ) from_m  = 'none';
+	        if(from_d  == ""  ) from_d  = 'none';
+	        if(to_y    == ""  ) to_y    = 'none';
+	        if(to_m    == ""  ) to_m    = 'none';
+	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
 	    	if(status  == null) status  = 'none';
 
-	    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': '1', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+	    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': '1', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
 
-	    	url = url.replace("plc_from", from);
-	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_from_y", from_y);
+	        url = url.replace("plc_from_m", from_m);
+	        url = url.replace("plc_from_d", from_d);
+	        url = url.replace("plc_to_y", to_y);
+	        url = url.replace("plc_to_m", to_m);
+	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
 	    	url = url.replace("plc_status", status);
 
@@ -67,22 +79,34 @@
 
 	    	if (prev_page > 0 ) {
 
-	    		var from    = $('#flt_wks_from').val();
-	    		var to      = $('#flt_wks_to').val();
+	    		var from_y  = $('#wks_from_y').val();
+		        var from_m  = $('#wks_from_m').val();
+		        var from_d  = $('#wks_from_d').val();
+		        var to_y    = $('#wks_to_y').val();
+		        var to_m    = $('#wks_to_m').val();
+		        var to_d    = $('#wks_to_d').val();
 	    		var partner = $('#flt_wks_partner').val();
 
 	    		var status  = $('#flt_wks_status').val();
 
-		    	if(from    == ""  ) from    = 'none';
-		    	if(to      == ""  ) to      = 'none';
+		        if(from_y  == ""  ) from_y  = 'none';
+		        if(from_m  == ""  ) from_m  = 'none';
+		        if(from_d  == ""  ) from_d  = 'none';
+		        if(to_y    == ""  ) to_y    = 'none';
+		        if(to_m    == ""  ) to_m    = 'none';
+		        if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
 		    	if(status  == null) status  = 'none';
 
-		    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+		    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
 
 		    	url = url.replace("plc_page", prev_page);
-		    	url = url.replace("plc_from", from);
-		    	url = url.replace("plc_to", to);
+		    	url = url.replace("plc_from_y", from_y);
+		        url = url.replace("plc_from_m", from_m);
+		        url = url.replace("plc_from_d", from_d);
+		        url = url.replace("plc_to_y", to_y);
+		        url = url.replace("plc_to_m", to_m);
+		        url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
 		    	url = url.replace("plc_status", status);
 
@@ -93,21 +117,33 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-	    	var from    = $('#flt_wks_from').val();
-	    	var to      = $('#flt_wks_to').val();
+	    	var from_y  = $('#wks_from_y').val();
+	        var from_m  = $('#wks_from_m').val();
+	        var from_d  = $('#wks_from_d').val();
+	        var to_y    = $('#wks_to_y').val();
+	        var to_m    = $('#wks_to_m').val();
+	        var to_d    = $('#wks_to_d').val();
 	    	var partner = $('#flt_wks_partner').val();
 	    	var status  = $('#flt_wks_status').val();
 
-	    	if(from    == ""  ) from    = 'none';
-	    	if(to      == ""  ) to      = 'none';
+	        if(from_y  == ""  ) from_y  = 'none';
+	        if(from_m  == ""  ) from_m  = 'none';
+	        if(from_d  == ""  ) from_d  = 'none';
+	        if(to_y    == ""  ) to_y    = 'none';
+	        if(to_m    == ""  ) to_m    = 'none';
+	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
 	    	if(status  == null) status  = 'none';
 
-	    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+	    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
 
 	    	url = url.replace("plc_page", $(this).text());
-	    	url = url.replace("plc_from", from);
-	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_from_y", from_y);
+	        url = url.replace("plc_from_m", from_m);
+	        url = url.replace("plc_from_d", from_d);
+	        url = url.replace("plc_to_y", to_y);
+	        url = url.replace("plc_to_m", to_m);
+	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
 	    	url = url.replace("plc_status", status);
 
@@ -122,22 +158,33 @@
 
 	    	if (next_page <= {{ totalpag }}) {
 
-	    		var from    = $('#flt_wks_from').val();
-	    		var to      = $('#flt_wks_to').val();
+	    		var from_y  = $('#wks_from_y').val();
+		        var from_m  = $('#wks_from_m').val();
+		        var from_d  = $('#wks_from_d').val();
+		        var to_y    = $('#wks_to_y').val();
+		        var to_m    = $('#wks_to_m').val();
+		        var to_d    = $('#wks_to_d').val();
 	    		var partner = $('#flt_wks_partner').val();
-
 	    		var status  = $('#flt_wks_status').val();
 
-		    	if(from    == ""  ) from    = 'none';
-		    	if(to      == ""  ) to      = 'none';
+		        if(from_y  == ""  ) from_y  = 'none';
+		        if(from_m  == ""  ) from_m  = 'none';
+		        if(from_d  == ""  ) from_d  = 'none';
+		        if(to_y    == ""  ) to_y    = 'none';
+		        if(to_m    == ""  ) to_m    = 'none';
+		        if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
 		    	if(status  == null) status  = 'none';
 
-		    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
+		    	var url     = "{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status' }) }}";
 
 		    	url = url.replace("plc_page", next_page);
-		    	url = url.replace("plc_from", from);
-		    	url = url.replace("plc_to", to);
+		    	url = url.replace("plc_from_y", from_y);
+		        url = url.replace("plc_from_m", from_m);
+		        url = url.replace("plc_from_d", from_d);
+		        url = url.replace("plc_to_y", to_y);
+		        url = url.replace("plc_to_m", to_m);
+	        	url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
 
 		    	url = url.replace("plc_status", status);
@@ -150,20 +197,33 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-	    	var from    = $('#flt_wks_from').val();
-	    	var to      = $('#flt_wks_to').val();
+	    	var from_y  = $('#wks_from_y').val();
+	        var from_m  = $('#wks_from_m').val();
+	        var from_d  = $('#wks_from_d').val();
+	        var to_y    = $('#wks_to_y').val();
+	        var to_m    = $('#wks_to_m').val();
+	        var to_d    = $('#wks_to_d').val();
+
 	    	var partner = $('#flt_wks_partner').val();
 	    	var status  = $('#flt_wks_status').val();
 
-	    	if(from    == ""  ) from    = 'none';
-	    	if(to      == ""  ) to      = 'none';
+	        if(from_y  == ""  ) from_y  = 'none';
+	        if(from_m  == ""  ) from_m  = 'none';
+	        if(from_d  == ""  ) from_d  = 'none';
+	        if(to_y    == ""  ) to_y    = 'none';
+	        if(to_m    == ""  ) to_m    = 'none';
+	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
 	    	if(status  == null) status  = 'none';
 
-            var     url = "{{ path('listStatistics', { 'type': 'workshop', 'page': totalpag , 'date_from': 'plc_from', 'date_to': 'plc_to', 'partner': 'plc_partner', 'status': 'plc_status'}) }}";
+            var     url = "{{ path('listStatistics', { 'type': 'workshop', 'page': totalpag , 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status'}) }}";
 
-	    	url = url.replace("plc_from", from);
-	    	url = url.replace("plc_to", to);
+	    	url = url.replace("plc_from_y", from_y);
+	        url = url.replace("plc_from_m", from_m);
+	        url = url.replace("plc_from_d", from_d);
+	        url = url.replace("plc_to_y", to_y);
+	        url = url.replace("plc_to_m", to_m);
+	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
 	    	url = url.replace("plc_status", status);
 
