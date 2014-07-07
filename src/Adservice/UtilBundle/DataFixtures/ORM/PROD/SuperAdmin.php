@@ -38,7 +38,7 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setMovileNumber1(Data::getPhone());
             $entidad->setPhoneNumber2(Data::getPhone());
             $entidad->setFax(Data::getPhone());
-            $entidad->setEmail1('dmaya@grupeina.com');
+            $entidad->setEmail1('test@ad-service.es');
             $entidad->setEmail2('mail@mail.com');
             //CREATE/MODIFY
             $entidad->setCreatedAt(new \DateTime());

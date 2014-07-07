@@ -68,8 +68,8 @@ class ImportController extends Controller
 		elseif( $bbdd == 'shop-default' )
 		{
 			$old_Socios   = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); 	// PARTNERS //
-			$locations    = $this->getLocations($em);																						   	//MAPPING LOCATIONS
-			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();																//MAPPING PARTNERS
+			$locations    = $this->getLocations($em);																						//MAPPING LOCATIONS
+			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();															//MAPPING PARTNERS
 
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;		}
 
@@ -77,6 +77,7 @@ class ImportController extends Controller
 			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
 				$newShop->setName('...');
+				$newShop->setCodeShop($old_Socio->getId());
 				$newShop->setPartner($partners[$old_Socio->getId()]);
 				$newShop->setActive('1');
 				$newShop = $this->setContactFields($em, $old_Socio, $newShop, $locations);
@@ -105,6 +106,7 @@ class ImportController extends Controller
 			foreach ($old_Tiendas as $old_Tienda)
 			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
+				$newShop->setCodeShop($old_Tienda->getId());
 				$newShop->setName($old_Tienda->getNombre());
 				$newShop->setPartner($partner);
 				$newShop->setActive('1');
@@ -187,7 +189,6 @@ class ImportController extends Controller
 
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
         	//return $this->render('ImportBundle:Import:import.html.twig');
-
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
@@ -201,11 +202,13 @@ class ImportController extends Controller
 
 			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
 			$all_partners = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+			$all_shops    = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
 			$typology     = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
 			//find($old_Taller->getTipologia());
 
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-
+			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getCodeShop()]    = $shop;	}
+			//var_dump($all_shops);die;
 			foreach ($old_Talleres as $old_Taller)
 			{
 				$newWorkshop = UtilController::newEntity(new Workshop(), $sa);
@@ -220,17 +223,19 @@ class ImportController extends Controller
 				$newWorkshop->setContactSurname 		('sin-especificar');
 				$newWorkshop->setTypology 				($typology);
 				$newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
-				//COMPROVACION SI EXISTE EL SOCIO
-				if(isset($partners[$old_Taller->getIdGrupo()]))
-				{
-					if($old_Taller->getIdGrupo() >= 60 AND $old_Taller->getIdGrupo() <= 78){
-						 $newWorkshop->setShop    ($partners[$old_Taller->getIdGrupo()]);
-						 $newWorkshop->setPartner ($partners['28']);						//Tiendas asociadas con VEMARE, S.L.
-					}
-					else $newWorkshop->setPartner ($partners[$old_Taller->getIdGrupo()]);
-				}
-				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
 
+				//COMPROVACION SI EXISTE EL SOCIO
+				$idSocio    = $old_Taller->getIdSocio();
+
+				if(isset($partners[$idSocio]))
+				{
+					$newWorkshop->setPartner ($partners[$idSocio]);
+				}
+				elseif($idSocio >= 60 AND $idSocio <= 78){
+						 $newWorkshop->setShop    ($shops[$idSocio]);
+						 $newWorkshop->setPartner ($partners['28']);	//Tiendas asociadas con VEMARE, S.L.
+					}
+				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 			}
 			$em->flush();
@@ -257,9 +262,9 @@ class ImportController extends Controller
 			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
 
 			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
-			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
+			foreach ($all_languages as $language) { $languages[$language->getLanguage()    ] = $language;	}
 
-			foreach ($old_Talleres as $old_Taller)
+			foreach ($old_Talleres  as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
 				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getContacto());
@@ -490,7 +495,7 @@ class ImportController extends Controller
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('dmaya@grupeina.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@grupeina.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -717,7 +722,7 @@ class ImportController extends Controller
 
     	/* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo('dmaya@grupeina.com');
+        $mailer->setTo('test@ad-service.es');
         $mailer->setFrom('noreply@grupeina.com');
          
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');
