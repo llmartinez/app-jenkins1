@@ -206,9 +206,13 @@ portugal:				 "Portugal"
 
 #LANGUAGE
 english:				 "Inglés"
+en:						 "Inglés"
 spanish:				 "Español"
+es:						 "Español"
 french:				     "Francés"
+fr:					     "Francés"
 portuguese:				 "Portugués"
+pt:						 "Portugués"
 
 #IMPORTANCE
 information:			 "Información"
