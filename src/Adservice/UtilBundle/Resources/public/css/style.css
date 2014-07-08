@@ -9,42 +9,50 @@
 /*
     BODY
 */
-html {
-    height: 100%;
-    /*background-color:  #001739;*/
+
+html, body { 
+    background: url(../images/icon/background.jpg) repeat;
 }
-body {
-    height: 100%;
-    /*background-color:  #001739;*/
-}
+
 legend {
-    clear:  both;
+    clear: both;
 }
+
 #MainBody {
     background-color: transparent;
     margin: 20px;
 }
 
-#MainHeader {
+.MainHeader {
     background-color:  transparent;
+    min-width: 800px;
 }
 
 #MainContent {
     background-color:  white;
-    padding: 20px;
+    padding: 20px 20px 100px 20px;
     overflow: hidden;
+    min-width: 800px;
 }
 
 #MainFooter {
-    background-color: #f5f5f5;
+    background-color: #428BCA;
     color: #fff;
-    padding-top: 15px;
-    padding-bottom: 5px;
+    padding: 10px 0;
     font-size: smaller;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 4px;
 }
-.img_logo {
-    max-height: 58px;
+
+#MainFooter p {
+    margin: 0 !important;
 }
+
+#profile {background: #004493;}
+
+#profile:hover {color: #428BCA;}
+
 .img_icon {
     max-height: 20px;
 }
@@ -74,11 +82,11 @@ legend {
 .btn-menu:hover {
     text-decoration: none;
 }
-.btn-footer {
+/*.btn-footer {
     display: inline-block;
     color: #428bca;
     margin-right: 10px;
-}
+}*/
 .btn-date {
     background-color: #f5f5f5;
     border-radius: 5px;
@@ -98,8 +106,10 @@ legend {
 
 .navbar {
     background-color: #428bca;
-    max-height: 75px;
+    height: 124px;
+    padding: 0 37px;
 }
+
 .btn-header{
     height: 30px;
 }
@@ -123,15 +133,15 @@ legend {
     float: left;
 }
 .colIzq {
-    width: 30%;
     padding: 10px;
     float: left;
+    width: 350px;
 }
 
 .colDer {
-    width: 70%;
     padding: 10px;
     float: left;
+    width: 60%;
 }
 .colDer85 {
     width: 85%;
@@ -411,8 +421,6 @@ legend {
 
 /*@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
 
-html, body { background: #001739 }
-
 .slides {
     padding: 0;
     width: 609px;
@@ -523,3 +531,48 @@ input#img-5:checked ~ .nav-dots label#img-dot-5,
 input#img-6:checked ~ .nav-dots label#img-dot-6 {
 	background: rgba(0, 0, 0, 0.8);
 }
+
+.form-control_ged {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+}
+.form-control_ged:focus {
+    border-color: #66AFE9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+.form-control_ged:-moz-placeholder {
+    color: #999999;
+}
+.form-control_ged::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+.form-control_ged[disabled], .form-control_ged[readonly], fieldset[disabled] .form-control_ged {
+    background-color: #EEEEEE;
+    cursor: not-allowed;
+}
+textarea.form-control_ged {
+    height: auto;
+}
+.language {
+    margin-top: 18px;
+}
+
+.user {
+    margin-top: 15px;
+}
+
+.img_logo {margin-top: 30px;}
+

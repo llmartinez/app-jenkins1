@@ -202,9 +202,13 @@ portugal:				 "Portugal"
 
 #LANGUAGE
 english:				 "English"
+en:						 "English"
 spanish:				 "Spanish"
+es: 					 "Spanish"
 french:				     "French"
+fr:						 "French"
 portuguese:				 "Portuguese"
+pt:						 "Portuguese"
 
 #IMPORTANCE
 information:			 "Information"
