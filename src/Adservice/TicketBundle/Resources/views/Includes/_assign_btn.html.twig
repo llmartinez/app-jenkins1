@@ -1,5 +1,8 @@
 {# muestra los botones de editar y bloquear/desbloquear del asesor #}
 
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="pull-right" href="{{ path('assignTicket', {'id_ticket':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_assign.png') }}" title="{% trans %} ticket.assign {% endtrans %}"></span></a>
+    {% endif %}
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if ticket.status == 'open' %}
             {% if ticket.blockedBy is not null %}

@@ -3,7 +3,7 @@
 
         $(document).ready(function() {
 
-            {% if option != '' %} $('#slct_historyTickets').val("{{ option }}"); {% endif %}
+            {% if option != '' %} $('#slct_historyTickets').val("{{ option }}"); {% else %} $('#slct_historyTickets').val('all'); {% endif %}
 
         });
 
