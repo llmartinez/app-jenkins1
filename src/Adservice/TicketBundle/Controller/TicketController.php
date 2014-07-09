@@ -160,10 +160,16 @@ class TicketController extends Controller {
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
         }
         else{
-            $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
-            //$joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            if($workshops[0]->getId()){
+                $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
+                //$joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            }else{
+                $joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
+                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
+                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            }
         }
 
         $pagination->setTotalPagByLength($length);
@@ -225,7 +231,7 @@ class TicketController extends Controller {
                         if(isset($formC_errors[0])) {
                             $formC_errors = $formC_errors[0];
                             $formC_errors = $formC_errors->getMessageTemplate();
-                        }else{ 
+                        }else{
                             $formC_errors = 'none';
                         }
                         if (($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
