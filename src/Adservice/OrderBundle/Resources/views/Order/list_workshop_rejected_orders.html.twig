@@ -84,7 +84,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" >{% trans %} reject.reason {% endtrans %}</span></a>
+                                <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/reject_reason.png') }}">{% trans %} reject.reason {% endtrans %}</span></a>
                                 <!-- Modal -->
                                     <div class="modal fade" id="myModal_rejected_reason{{ workshopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">

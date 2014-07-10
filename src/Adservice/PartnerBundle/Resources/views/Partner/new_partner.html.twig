@@ -8,6 +8,8 @@
       <li class="active">                      {% trans %} new.partner        {% endtrans %}</li>
     </ol>
 
+    <legend>{% trans %} new.partner {% endtrans %}</legend>
+
     <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-6 col-md-6 form-group">

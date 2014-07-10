@@ -5,7 +5,7 @@
 
      <form action="{{ path('workshopOrder_reject', { 'id': workshopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
-        <label for="rejection_reason">{% trans %} reject.reason {% endtrans %}</label>
+        <label for="rejection_reason">{# {% trans %} reject.reason {% endtrans %} #}</label>
         <div class="col-xs-12 col-md-12 margined">
         	{{ form_widget(form.rejection_reason, { 'attr': {'class': 'form-control', 'rows': '4', 'required': 'required' } }) }}
         </div>

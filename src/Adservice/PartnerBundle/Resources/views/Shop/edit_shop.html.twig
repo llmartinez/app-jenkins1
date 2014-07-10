@@ -8,6 +8,8 @@
       <li class="active">{% trans %} edit.shop {% endtrans %} ({{ shop }})</li>
     </ol>
 
+    <legend>{% trans %} edit.shop {% endtrans %}</legend>
+
     <form action="{{ path("shop_edit", { 'id':shop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-6 col-md-6 form-group">
