@@ -8,6 +8,8 @@
       <li class="active">{% trans %} edit.popup {% endtrans %} ({{ popup }})</li>
     </ol>
 
+    <legend>{% trans %} edit.popup {% endtrans %}</legend>
+
     <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-4 col-md-4 form-group">
             <label>{% trans %} name        {% endtrans %}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
