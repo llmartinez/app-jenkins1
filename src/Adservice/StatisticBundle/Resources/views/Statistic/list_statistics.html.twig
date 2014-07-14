@@ -10,7 +10,7 @@
 
     <legend>{% trans %} tickets {% endtrans %}</legend>
 
-        <div class="col-xs-12 col-md-12 form-group"> 
+        <div class="col-xs-12 col-md-12 form-group">
         <table>
             <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
                 <input id="tck_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
