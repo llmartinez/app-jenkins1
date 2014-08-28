@@ -16,10 +16,10 @@
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control'>
+        <select id="flt_country" class='form-control' data-url="{{ path('shop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
-            {% for country in countries %}
-                <option value="{{ country.id }}">{{ country | trans }}</option>
+            {% for _country in countries %}
+                <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %} >{{ _country | trans }}</option>
             {% endfor %}
     </select></div>
     {% endif %}
@@ -74,5 +74,4 @@
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-    {% include 'UtilBundle:jquery_twig:shop_filter_country_jquery.html.twig' %}
 {% endblock %}

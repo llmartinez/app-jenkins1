@@ -15,16 +15,20 @@
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-            <select id="flt_country" class='form-control'>
+            <select id="flt_country" class='form-control' data-url="{{ path('diagnosis_machine_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                     <option value="none">{% trans %} all {% endtrans %}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}
         </select></div>
+
+        <script>
+            $(document).ready(function() {
+                {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+            });
+        </script>
         {% endif %}
     </div>
     {% include 'WorkshopBundle:DiagnosisMachine:_list.html.twig'  %}
-
-    {% include 'UtilBundle:jquery_twig:diagnosis_machine_filter_country_jquery.html.twig' %}
 
 {% endblock %}

@@ -76,10 +76,12 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button id="confirm_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal"               >{% trans %} no  {% endtrans %}</button>
-
-                {% include 'UtilBundle:jquery_twig:control_password_jquery.html.twig' %}
+                <button id="confirm_password" type="button" class="btn btn-default" role="button" data-url="{{ path('change_password', { 'id'      :  user.id      ,
+                                                                                                                                         'new_pass': 'plc_new_pass',
+                                                                                                                                         'rep_pass': 'plc_rep_pass',
+                                                                                                                                         'old_pass': 'plc_old_pass' }) }}">
+                                                                                                                                        {% trans %} yes {% endtrans %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no  {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
