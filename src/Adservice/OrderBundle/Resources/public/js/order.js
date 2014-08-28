@@ -23,7 +23,4 @@
 
             window.open(url, "_self");
         });
-        //util.js
-        table_filter();
-
     });

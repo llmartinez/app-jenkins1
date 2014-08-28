@@ -38,7 +38,4 @@ function confirm_delete_popup_modal(id){
 
             window.open(url, "_self");
         });
-
-        //util.js
-        table_filter();
     });
