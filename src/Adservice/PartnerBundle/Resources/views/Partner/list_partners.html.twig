@@ -14,7 +14,7 @@
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control'>
+        <select id="flt_country" class='form-control' data-url="{{ path('partner_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country | trans }}</option>
@@ -48,7 +48,6 @@
                 <td>{{ partner.city    }}</td>
                 <td>
                     <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/partner_edit.png') }}"></a>
-                    {# <a id="delete{{ partner.name }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ partner.id }}"></span></a> #}
                 </td>
             </tr>
                 {% endfor %}
@@ -60,25 +59,6 @@
     {% else %}
         {% trans %} any.partner {% endtrans %}
     {% endif %}
-{#
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{% trans %} partner.delete {% endtrans %}</h4>
-            </div>
-            <div class="modal-body">
-                {% trans %} partner.delete.confirm {% endtrans %}
-            </div>
-            <div class="modal-footer">
-                <a href="{{ path('partner_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal --> #}
 
 {% endblock %}
 
@@ -86,7 +66,9 @@
     {{ parent() }}
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
-
-    {% include 'UtilBundle:jquery_twig:partner_filter_country_jquery.html.twig' %}
-{#  {% include 'UtilBundle:jquery_twig:partner_delete_jquery.html.twig' %}  #}
+    <script>
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+        });
+    </script>
 {% endblock %}

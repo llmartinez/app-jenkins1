@@ -43,7 +43,8 @@
                                                                                                 <option value="closed" >{% trans %} closed {% endtrans %}</option>
                                                                                              </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_ticket"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} ticket.search {% endtrans %}</button>
+            <button class="btn btn-primary btn100" id="btn_search_ticket" data-url="{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} ticket.search {% endtrans %}</button>
         </div>
 
 
@@ -83,7 +84,8 @@
                                                                                             {# <option value="noticket">Without Tickets</option> #}
                                                                                          </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_workshop"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} workshop.search {% endtrans %}</button>
+            <button class="btn btn-primary btn100" id="btn_search_workshop" data-url="{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} workshop.search {% endtrans %}</button>
         </div>
 </div>
 
@@ -96,7 +98,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
-            <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}" data-url="{{ path('doExcel', { 'type': 'ticket', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
         </legend>
 
             <table class="table table-hover table-list-search">
@@ -130,7 +132,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
-           <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+           <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}" data-url="{{ path('doExcel', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
         </legend>
 
             <table class="table table-hover table-list-search">
@@ -181,5 +183,4 @@
 
 </div>
 
-    {% include 'UtilBundle:jquery_twig:statistics_jquery.html.twig' %}
 {% endblock %}

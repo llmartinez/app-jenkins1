@@ -1,7 +1,5 @@
 
-    <script>
-        $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+  $(document).ready(function() {
 
             $('#MainContent').find('.glyphicon-trash').click(function() {
                 var partner_id = $(this).data('id');
@@ -15,7 +13,9 @@
 
                 if(country == null) country = 'none';
 
-                var url     = "{{ path('shop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}";
+                var select = document.querySelector('#new_car_form_brand');
+                var data   = select.dataset;
+                var url    = data.url;
 
                 url = url.replace("plc_page", 1);
                 url = url.replace("plc_country", country);
@@ -25,6 +25,4 @@
 
             //util.js
             table_filter();
-        });
-
-    </script>
+  });

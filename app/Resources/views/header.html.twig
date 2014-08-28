@@ -62,7 +62,7 @@
                                         <li><a class="btn pull-left"  href="{{ path("listTicket"                  ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                         <li><a href="#"></a></li>
                                         <li class="divider"></li>
-                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}">  {% trans %}Logout       {% endtrans %}</a></li>
+                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}Logout       {% endtrans %}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -80,7 +80,6 @@
         </div>
     </div>
 </div>
-{% include 'UtilBundle:jquery_twig:popup_cookie_logout_jquery.html.twig'  %}
 {% include 'UtilBundle:jquery_twig:change_language.html.twig'  %}
 
 {#

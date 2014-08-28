@@ -10,10 +10,20 @@ class LanguageController extends Controller{
     public function changeLanguageAction($lang){
         // Cambio el idioma
         $request = $this->getRequest();
+        $currentLocale = $request->getLocale();
         $request->setLocale($lang);
-        $path = substr($request->get('path'), 3);
-        $url = $request->getBaseUrl().'/'.$request->getLocale().$path;
+        $currentPath = $_SERVER['HTTP_REFERER'];
+        $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+
         // Vuelvo a dónde estaba (fuera donde fuera)
-        return new RedirectResponse($url);
+        return new RedirectResponse($currentPath);
+
+        // Cambio el idioma
+        // $request = $this->getRequest();
+        // $request->setLocale($lang);
+        // $path = substr($request->get('path'), 3);
+        // $url = $request->getBaseUrl().'/'.$request->getLocale().$path;
+        // // Vuelvo a dónde estaba (fuera donde fuera)
+        // return new RedirectResponse($url);
     }
 }

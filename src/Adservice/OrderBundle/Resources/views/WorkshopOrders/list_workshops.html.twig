@@ -11,11 +11,12 @@
 
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
-        <select id="flt_partner" class='form-control'>
+        <select id="flt_partner" class='form-control' data-url="{{ path('workshopOrder_listWorkshops', { 'page': 'plc_page', 'partner': 'plc_partner'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
-            {% for partner in partners %}
-                <option value="{{ partner.id }}">{{ partner }}</option>
+            {% for _partner in partners %}
+                <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>
             {% endfor %}
+    </select></div>
     </select></div>
     {% endif %}
 
@@ -68,12 +69,11 @@
                         </div><!-- /.modal -->
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}" </a>
-                        {{workshop.active}}
+                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"> </a>
                         {% if workshop.active == 1 %}
-                            <a title="{% trans %} workshop.deactivate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}" </a>
+                            <a title="{% trans %} workshop.deactivate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
                         {% else %}
-                            <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}" </a>
+                            <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"> </a>
                         {% endif %}
                     </td>
                     <!-- Modal -->
@@ -111,6 +111,5 @@
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
-    {% include 'UtilBundle:jquery_twig:workshop_order_filter_partner_jquery.html.twig' %}
 {% endblock %}
 
