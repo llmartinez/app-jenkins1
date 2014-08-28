@@ -1,5 +1,5 @@
 
-    $(document).ready(function() {
+$(document).ready(function() {
 //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     $('#btn_search_ticket').click(function() {
 
@@ -64,7 +64,7 @@
         if(status  == null) status  = 'none';
         if(country == null) country = 'none';
 
-        var select = document.querySelector('#btn_search_ticket');
+        var select = document.querySelector('#btn_search_workshop');
         var data   = select.dataset;
         var url    = data.url;
 
@@ -163,3 +163,4 @@
 
         window.open(url, "_self");
     });
+});
