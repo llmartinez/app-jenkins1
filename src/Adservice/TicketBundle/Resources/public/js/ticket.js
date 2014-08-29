@@ -1,4 +1,71 @@
 
+$(document).ready(function() {
+
+    // Limpiamos el combo de subsystem del formulario y cargamos subsistemas
+    list_tbl_subsystem();
+
+    //cambiar model en funcion de brand
+    $('#id_system').change(function() { list_tbl_subsystem(); });
+
+    //vacia tbl_similar
+    $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });
+    $('#new_car_form_model').change(function() { clear_tbl_similar('model' ) });
+    $('#id_system'         ).change(function() { clear_tbl_similar('system') });
+
+    //llena tbl_similar
+    //$('#new_car_form_model'       ).change(function() { list_tbl_similar() });
+    $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
+});
+
+/**
+ * Vacia el combo de subsystem del formulario y cargamos subsistemas
+ * @return AjaxFunction
+ */
+function list_tbl_subsystem() {
+
+    var select = document.querySelector('#form_data');
+    var data   = select.dataset;
+
+    var form_subsystem = data.formname;
+    var url_ajax       = data.subsystemajax;
+
+    fill_subsystem(url_ajax, form_subsystem);
+}
+
+/**
+ * busca tickets que coincidan en modelo o subsistema con el ticket actual
+ * @return AjaxFunction
+ */
+function list_tbl_similar() {
+
+    var select = document.querySelector('#form_data');
+    var data   = select.dataset;
+
+    var url_ajax = data.similarajax;
+    var url_show = data.similarshow;
+
+    fill_tbl_similar(url_ajax, url_show);
+}
+
+/**
+ * vacia tbl_similar
+ * @return AjaxFunction
+ */
+function clear_tbl_similar(parent) {
+
+    $( "#tbl_similar" ).empty();
+
+    if (parent == 'brand' )                 { var son = 'Model';     }
+    else {
+            if (parent == 'model' )         { var son = 'System';    }
+            else {
+                    if (parent == 'system') { var son = 'Subsystem'; }
+            }
+    }
+
+    $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
+}
+
 /**
  * Comprueba el checkbox open/closed
  */

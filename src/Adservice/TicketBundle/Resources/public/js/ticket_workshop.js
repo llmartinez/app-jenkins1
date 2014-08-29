@@ -1,14 +1,15 @@
 
-<script>
-
-	$(document).ready(function() {
-		$( "#w_idpartner" ).focus();
-	});
+$(document).ready(function() {
+	$( "#w_idpartner" ).focus();
 
 	function codeNumeric(){
 		if (($( "#w_id" ).val() != '' && !$.isNumeric($( "#w_id" ).val())) || ($( "#w_idpartner" ).val() != '' && !$.isNumeric($( "#w_idpartner" ).val()))) {
 			event.preventDefault();
-			alert('{% trans %} code.numeric {% endtrans %}');
+
+            var select = document.querySelector('#form_workshop_info');
+            var data   = select.dataset;
+            var txt    = data.numeric;
+            alert(txt);
 		}
 	}
 
@@ -16,8 +17,13 @@
 
 	  	if (($( "#w_id" ).val() == "" || $( "#w_idpartner" ).val() == "") && $( "#w_email" ).val() == '' && $( "#w_tel" ).val() == '' ) {
 	  		event.preventDefault();
+
+            var select = document.querySelector('#form_workshop_info');
+            var data   = select.dataset;
+            var txt    = data.check;
+
 			$( "#w_idpartner" ).focus();
-			$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+			$( "#lbl_code" ).html(txt);
 	  	}else{
 	  		codeNumeric();
 	  	}
@@ -28,8 +34,13 @@
 	  	if (event.which == 13) {
 	  		if ($( "#w_idpartner" ).val() == "") {
 		  		event.preventDefault();
+
+	            var select = document.querySelector('#form_workshop_info');
+	            var data   = select.dataset;
+	            var txt    = data.check;
+
 				$( "#w_idpartner" ).focus();
-				$( "#lbl_code" ).html("{% trans %} code.partner {% endtrans %}");
+				$( "#lbl_code" ).html(txt);
 			}else{
 	  			codeNumeric();
 	  		}
@@ -44,4 +55,8 @@
 		}
 	});
 
-</script>
+    // $('#MainContent').find('.glyphicon-trash').click(function() {
+    //     var workshop_id = $(this).data('id');
+    //     confirm_delete_workshop_modal(workshop_id);
+    // });
+});

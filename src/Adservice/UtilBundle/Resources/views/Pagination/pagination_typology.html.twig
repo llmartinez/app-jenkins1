@@ -1,12 +1,12 @@
 
-    {# PAGINACION #}
-    <div id="pagination"  class="pagination_content">
+	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+	{% set page      = pagination.page      %}
+	{% set prevpages = pagination.prevpages %}
+    {% set nextpages = pagination.nextpages %}
+    {% set totalpag  = pagination.totalpag  %}
 
-    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
-    	{% set page      = pagination.page      %}
-    	{% set prevpages = pagination.prevpages %}
-	    {% set nextpages = pagination.nextpages %}
-	    {% set totalpag  = pagination.totalpag  %}
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content" data-url="{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}" data-total="{{ totalpag }}">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"   ></span></button>
@@ -34,82 +34,3 @@
     	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
 
     </div>
-
-    <script type="text/javascript">
-
-    	//REDIRIGE A LA PRIMERA PAGINA
-	    $('#firstpage').click(function() {
-
-			var country = $('#flt_country').val();
-       		if(country == null) country = 'none';
-
-			var url = "{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
-        	url = url.replace("plc_page", 1);
-    		url = url.replace("plc_country", country);
-
-	    	window.open(url, "_self");
-	    });
-
-	    //REDIRIGE A LA ANTERIOR PAGINA
-	    $('#btn_anterior').click(function() {
-
-	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
-
-	    	if (prev_page > 0 ) {
-
-			var country = $('#flt_country').val();
-       		if(country == null) country = 'none';
-
-				var url = "{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
-		    	url = url.replace("plc_page", prev_page);
-        		url = url.replace("plc_country", country);
-
-		    	window.open(url, "_self");
-		    }
-	    });
-
-	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-	    $('.change_page').click(function() {
-
-			var country = $('#flt_country').val();
-       		if(country == null) country = 'none';
-
-	    	var url = "{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
-	    	url = url.replace("plc_page", $(this).text());
-    		url = url.replace("plc_country", country);
-
-	    	window.open(url, "_self");
-	    });
-
-	    //REDIRIGE A LA SIGUIENTE PAGINA
-	    $('#btn_siguiente').click(function() {
-
-	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
-
-	    	if (next_page <= {{ totalpag }}) {
-
-			var country = $('#flt_country').val();
-       		if(country == null) country = 'none';
-
-		    	var url = "{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
-		    	url = url.replace("plc_page", next_page);
-        		url = url.replace("plc_country", country);
-
-		    	window.open(url, "_self");
-		    }
-	    });
-
-	    //REDIRIGE A LA ULTIMA PAGINA
-	    $('#totalpage').click(function() {
-
-			var country = $('#flt_country').val();
-       		if(country == null) country = 'none';
-
-	    	var url = "{{ path('typology_list', {'page': 'plc_page', 'country': 'plc_country'}) }}";
-        	url = url.replace("plc_page", "{{ totalpag }}");
-        	url = url.replace("plc_country", country);
-
-	    	window.open(url, "_self");
-	    });
-
-	</script>

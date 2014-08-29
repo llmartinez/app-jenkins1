@@ -184,3 +184,14 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination_statistic_ticket.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_statistic_workshop.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+        });
+    </script>
+{% endblock %}

@@ -1,9 +1,9 @@
 
-    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
-    	{% set page      = pagination.page      %}
-    	{% set prevpages = pagination.prevpages %}
-	    {% set nextpages = pagination.nextpages %}
-	    {% set totalpag  = pagination.totalpag  %}
+	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+	{% set page      = pagination.page      %}
+	{% set prevpages = pagination.prevpages %}
+    {% set nextpages = pagination.nextpages %}
+    {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
     <div id="pagination"  class="pagination_content" data-url="{{ path('diagnosis_machine_list', {'page': 'plc_page', 'country': 'plc_country'}) }}" data-total="{{ totalpag }}" >

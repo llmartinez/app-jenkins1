@@ -8,25 +8,12 @@
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
-                            <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> {# {% trans %} header.welcome {% endtrans %} #}
+                            <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}">
                         </td>
                         <td align="right">
-                            {# <div id="selectLang" class="selectLang mb3">
-                            <select id="slct_lang" class="form-control_ged" >
-                                <option value='{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}'><a>
-                                    {% trans %} english {% endtrans %}</a>
-                                </option>
-                                <option value='{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}'><a>
-                                    {% trans %} spanish {% endtrans %}</a>
-                                </option>
-                                <option value='{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}'><a>
-                                   {% trans %} french {% endtrans %}</a>
-                                </option>
-                            </select>
-                            </div> #}
-
                             <!-- Split button -->
                             <div class="language">
+                                <input type="hidden" id="data_locale" data-locale="{{ app.session.locale }}">
                                 <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
                                 <div class="btn-group" >
                                     <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
@@ -42,7 +29,6 @@
                                     </ul>
                                 </div>
                             </div>
-
 
                             {% if app.user.username is defined %}
 
@@ -80,7 +66,6 @@
         </div>
     </div>
 </div>
-{% include 'UtilBundle:jquery_twig:change_language.html.twig'  %}
 
 {#
 *************************

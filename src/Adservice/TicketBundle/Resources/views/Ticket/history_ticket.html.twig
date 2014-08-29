@@ -1,6 +1,6 @@
 
     <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
-    <select id="slct_historyTickets" class="form-control">
+    <select id="slct_historyTickets" class="form-control" data-url="{{ path('listTicket', {'page': '1', 'option': 'plc_option'}) }}">
 
         {% if is_granted('ROLE_ADMIN') %}
                 <option value="all" selected="selected" >{% trans %} ticket.opt.all               {% endtrans %}</option>
@@ -58,10 +58,10 @@
             <legend class="padded" align="center">{% trans %} No hay tickets de este tipo {% endtrans %}</legend>
         {% endif %}
 
-            {% include 'UtilBundle:jquery_twig:ticket_history_jquery.html.twig' %}
-
             {% include 'UtilBundle:jquery_twig:ticket_show_jquery.html.twig' %}
 
         </div>
     </div>
+
+    <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>
 

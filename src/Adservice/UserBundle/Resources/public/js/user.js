@@ -2,6 +2,15 @@
     $(document).ready(function() {
         $( "input[id*='_password_Contraseña']" ).addClass( "form-control" );
         $( "input[id*='_password_Repite Contraseña']" ).addClass( "form-control" );
+
+        $('#slct_role').change(function() {
+            var role = $(this).val();
+            var select = document.querySelector('#slct_role');
+            var data   = select.dataset;
+            var url    = data.url;
+            url = url.replace('plc_role', role);
+            window.open(url, "_self");
+        });
     });
 
 /**
