@@ -1,12 +1,12 @@
 
-    {# PAGINACION #}
-    <div id="pagination"  class="pagination_content">
+	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+	{% set page      = pagination.page      %}
+	{% set prevpages = pagination.prevpages %}
+    {% set nextpages = pagination.nextpages %}
+    {% set totalpag  = pagination.totalpag  %}
 
-    	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
-    	{% set page      = pagination.page      %}
-    	{% set prevpages = pagination.prevpages %}
-	    {% set nextpages = pagination.nextpages %}
-	    {% set totalpag  = pagination.totalpag  %}
+    {# PAGINACION #}
+    <div id="pagination"  class="pagination_content" data-url="{{ path('listTicket', {'page': 'plc_page', 'option': 'plc_option'}) }}" data-total="{{ totalpag }}" data-option="{{ workshop.id }}">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"   ></span></button>
@@ -34,69 +34,3 @@
     	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
 
     </div>
-
-    <script type="text/javascript">
-
-    	//REDIRIGE A LA PRIMERA PAGINA
-	    $('#firstpage').click(function() {
-
-    		var option = {{ workshop.id }};
-	    	var url = "{{ path('listTicket', {'page': '1', 'option': 'PLACEHOLDER_OPTION'}) }}";
-	    	url_page = url.replace("PLACEHOLDER_OPTION", option);
-	    	window.open(url_page, "_self");
-	    });
-
-	    //REDIRIGE A LA ANTERIOR PAGINA
-	    $('#btn_anterior').click(function() {
-
-	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
-
-	    	if (prev_page > 0 ) {
-
-    			var option = {{ workshop.id }};
-				var url = "{{ path('listTicket', {'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", prev_page);
-		    	url_page = url_page.replace("PLACEHOLDER_OPTION", option);
-
-		    	window.open(url_page, "_self");
-		    }
-	    });
-
-	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-	    $('.change_page').click(function() {
-
-    		var option = {{ workshop.id }};
-	    	var url = "{{ path('listTicket', {'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION'}) }}";
-	    	url_page = url.replace("PLACEHOLDER", $(this).text());
-	    	url_page = url_page.replace("PLACEHOLDER_OPTION", option);
-
-	    	window.open(url_page, "_self");
-	    });
-
-	    //REDIRIGE A LA SIGUIENTE PAGINA
-	    $('#btn_siguiente').click(function() {
-
-	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
-
-	    	if (next_page <= {{ totalpag }}) {
-
-    			var option = {{ workshop.id }};
-		    	var url = "{{ path('listTicket', {'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION'}) }}";
-		    	url_page = url.replace("PLACEHOLDER", next_page);
-	    		url_page = url_page.replace("PLACEHOLDER_OPTION", option);
-
-		    	window.open(url_page, "_self");
-		    }
-	    });
-
-	    //REDIRIGE A LA ULTIMA PAGINA
-	    $('#totalpage').click(function() {
-
-    		var option = {{ workshop.id }};
-	    	var url = "{{ path('listTicket', {'page': totalpag, 'option': 'PLACEHOLDER_OPTION'}) }}";
-	    	url_page = url.replace("PLACEHOLDER_OPTION", option);
-
-	    	window.open(url_page, "_self");
-	    });
-
-	</script>

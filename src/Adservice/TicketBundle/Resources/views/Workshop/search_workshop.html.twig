@@ -1,5 +1,5 @@
 
-<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
+<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data"  data-numeric="{% trans %} code.numeric {% endtrans %}" data-check="{% trans %} code.partner {% endtrans %}">
     <div class="form-group">
         <label style="width: 100%;">{% trans %} code {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
         <input type="text" id="w_idpartner" name="w_idpartner" class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} partner {% endtrans %}">
@@ -10,5 +10,3 @@
         <input type="submit" class="btn btn-primary" id="btn_check" value="{% trans %} btn.search {% endtrans %}">
     </div>
 </form>
-
-    {% include 'UtilBundle:jquery_twig:workshop_code_jquery.html.twig' %}
