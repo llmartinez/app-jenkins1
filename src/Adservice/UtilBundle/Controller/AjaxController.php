@@ -157,7 +157,7 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_system = $petition->request->get('id_system');
-var_dump($id_system);die;
+// var_dump($id_system);die;
 
         $system = $em->getRepository('TicketBundle:System')->find($id_system);
 

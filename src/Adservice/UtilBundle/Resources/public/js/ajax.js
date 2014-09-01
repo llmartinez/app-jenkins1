@@ -152,15 +152,19 @@ function fill_model(route) {
 
 /**
  * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ * @param {url de tipo {{ path('mi_path') }}} route
  */
-function fill_version(url_ajax) {
+function fill_version(route) {
 
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
+    var select = document.querySelector('#data_locale');
+    var data   = select.dataset;
+    var locale = data.locale;
+
     $.ajax({
         type: "POST",
-        url: url_ajax,
+        url: Routing.generate(route, {_locale: locale, id_model: id_model}),
         data: {id_model: id_model},
         dataType: "json",
         success: function(data) {
