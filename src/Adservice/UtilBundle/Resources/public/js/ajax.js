@@ -19,10 +19,10 @@ function populate_region(url_ajax, region, city){
             var region_edit = '';
             $.each(data, function(idx, elm) {
 
-                if(string_to_slug(elm.region) == string_to_slug(region)) {  region_edit = elm.region; city_edit = city;
+                if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region))) {  region_edit = elm.region; city_edit = city;
                                             $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
                 else{
-                    if( region != '' ) { region_edit = region; city_edit = city;
+                    if( region != 'none' ) { region_edit = region; city_edit = city;
                         $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
                     }
                     else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
@@ -46,6 +46,7 @@ function populate_region(url_ajax, region, city){
             }
             else{
                 $("#s2id_slct_region .select2-chosen").text($('#no-region').val());
+
                 $(':text[id*=region]').val($('#no-region').val());
             }
         },
@@ -121,13 +122,17 @@ function populate_shop(url_ajax_partner, shop){
  * Rellena (fill) el combo de los modelos (model) segun la marca (brand) seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function fill_model(url_ajax) {
+function fill_model(route) {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
+    var select = document.querySelector('#data_locale');
+    var data   = select.dataset;
+    var locale = data.locale;
+
     $.ajax({
         type: "POST",
-        url: url_ajax,
+        url: Routing.generate(route, {_locale: locale, id_brand: id_brand}),
         data: {id_brand: id_brand},
         dataType: "json",
         success: function(data) {

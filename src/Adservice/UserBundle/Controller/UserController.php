@@ -79,7 +79,7 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
-        if($option == null or $option == '...'){
+        if($option == null or $option == 'all'){
                 if($security->isGranted('ROLE_SUPER_ADMIN')) $params[] = array();
                 else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
@@ -96,7 +96,7 @@ class UserController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
-            if ( ! isset($role) and ($option == null or $option == '...') ){
+            if ( ! isset($role) and ($option == null or $option == 'all') ){
                 $role     = $user->getRoles();
                 $role     = $role[0];
                 $role     = $role->getName();
@@ -106,9 +106,9 @@ class UserController extends Controller {
             elseif ($role == "ROLE_USER")         $users_role_user[]        = $user;
             elseif ($role == "ROLE_ASSESSOR")     $users_role_assessor[]    = $user;
             elseif ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
-            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user; 
+            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
 
-            if($option == null or $option == '...') unset($role);
+            if($option == null or $option == 'all') unset($role);
         }
 
         $length = $pagination->setTotalPagByLength($length);

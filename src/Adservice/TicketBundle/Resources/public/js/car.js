@@ -5,12 +5,8 @@
         //cambiar model en funcion de brand
         $('#new_car_form_brand').change(function() {
 
-            var select = document.querySelector('#new_car_form_brand');
-            var data   = select.dataset;
-            var url    = data.url;
-            var id_brand = parseInt($('form[id=contact]').find('select[id=new_car_form_brand]').val())
-            var url_ajax = url.replace("PLACEHOLDER", id_brand);
-            fill_model(url_ajax);
+            var route = 'car_model';
+            fill_model(route);
         });
 
         //cambiar version en funcion de model

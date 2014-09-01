@@ -8,7 +8,7 @@
             var data   = select.dataset;
             var url    = data.url;
 	    	url = url.replace("plc_page", 1);
-            url = url.replace('PLACEHOLDER_OPTION', option);
+            url = url.replace('plc_option', option);
 	    	window.open(url, "_self");
 	    });
 
@@ -24,7 +24,7 @@
 	            var data   = select.dataset;
 	            var url    = data.url;
 		    	url = url.replace("plc_page", prev_page);
-	            url = url.replace('PLACEHOLDER_OPTION', option);
+	            url = url.replace('plc_option', option);
 
 		    	window.open(url, "_self");
 		    }
@@ -38,7 +38,7 @@
             var data   = select.dataset;
             var url    = data.url;
 	    	url = url.replace("plc_page", $(this).text());
-            url = url.replace('PLACEHOLDER_OPTION', option);
+            url = url.replace('plc_option', option);
 
 	    	window.open(url, "_self");
 	    });
@@ -56,7 +56,7 @@
 
 		    	var option = $('#slct_role').val();
 		    	url = url.replace("plc_page", next_page);
-	            url = url.replace('PLACEHOLDER_OPTION', option);
+	            url = url.replace('plc_option', option);
 
 		    	window.open(url, "_self");
 		    }
@@ -71,7 +71,7 @@
         	var total  = data.total;
             var url    = data.url;
 	    	url = url.replace("plc_page", total);
-            url = url.replace('PLACEHOLDER_OPTION', option);
+            url = url.replace('plc_option', option);
 	    	window.open(url, "_self");
 	    });
     });

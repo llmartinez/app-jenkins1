@@ -19,25 +19,37 @@ upload:
 ###########################
 
 regions_from_country:
-   pattern: /regionsFromCountry
-   defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
+    pattern: /regionsFromCountry
+    defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
+    options:
+        expose: true
 
 cities_from_region:
-   pattern: /citiesFromRegion
-   defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
+    pattern: /citiesFromRegion
+    defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
+    options:
+        expose: true
 
 shops_from_partner:
-   pattern: /shopsFromPartner
-   defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
+    pattern: /shopsFromPartner
+    defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
+    options:
+        expose: true
 
 car_model:
     pattern: /carModel/{id_brand}
     defaults: { _controller: UtilBundle:Ajax:carModel }
+    options:
+        expose: true
 
 car_version:
     pattern: /carVersion
     defaults: { _controller: UtilBundle:Ajax:carVersion }
+    options:
+        expose: true
 
 ticket_system:
     pattern: /ticketSystem
     defaults: { _controller: UtilBundle:Ajax:ticketSystem }
+    options:
+        expose: true
