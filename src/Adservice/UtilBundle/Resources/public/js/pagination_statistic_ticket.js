@@ -10,8 +10,19 @@
 	        var to_y    = $('#tck_to_y').val();
 	        var to_m    = $('#tck_to_m').val();
 	        var to_d    = $('#tck_to_d').val();
-	    	var partner = $('#flt_tck_partner').val();
-	    	var status  = $('#flt_tck_status').val();
+
+            var select = document.querySelector('#statistics_legend');
+            var data   = select.dataset;
+            var type    = data.type;
+            if(type == 'ticket') {
+		    	var partner = $('#flt_tck_partner').val();
+	        	var country = $('#flt_tck_country').val();
+	        	var status  = $('#flt_tck_status').val();
+	        }else{
+		    	var partner = $('#flt_wks_partner').val();
+	        	var country = $('#flt_wks_country').val();
+	        	var status  = $('#flt_wks_status').val();
+	        }
 
 	        if(from_y  == ""  ) from_y  = 'none';
 	        if(from_m  == ""  ) from_m  = 'none';
@@ -20,6 +31,7 @@
 	        if(to_m    == ""  ) to_m    = 'none';
 	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
             var select = document.querySelector('#pagination');
@@ -33,6 +45,7 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
 
 	    	window.open(url, "_self");
@@ -51,9 +64,19 @@
 		        var to_y    = $('#tck_to_y').val();
 		        var to_m    = $('#tck_to_m').val();
 		        var to_d    = $('#tck_to_d').val();
-	    		var partner = $('#flt_tck_partner').val();
 
-	    		var status  = $('#flt_tck_status').val();
+	            var select = document.querySelector('#statistics_legend');
+	            var data   = select.dataset;
+	            var type    = data.type;
+	            if(type == 'ticket') {
+			    	var partner = $('#flt_tck_partner').val();
+		        	var country = $('#flt_tck_country').val();
+		        	var status  = $('#flt_tck_status').val();
+		        }else{
+			    	var partner = $('#flt_wks_partner').val();
+		        	var country = $('#flt_wks_country').val();
+		        	var status  = $('#flt_wks_status').val();
+		        }
 
 		        if(from_y  == ""  ) from_y  = 'none';
 		        if(from_m  == ""  ) from_m  = 'none';
@@ -62,7 +85,7 @@
 		        if(to_m    == ""  ) to_m    = 'none';
 		        if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
-
+	        	if(country == null) country = 'none';
 		    	if(status  == null) status  = 'none';
 
 	            var select = document.querySelector('#pagination');
@@ -77,6 +100,7 @@
 		        url = url.replace("plc_to_m", to_m);
 		        url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
+	        	url = url.replace("plc_country", country);
 		    	url = url.replace("plc_status", status);
 
 		    	window.open(url, "_self");
@@ -92,8 +116,19 @@
 	        var to_y    = $('#tck_to_y').val();
 	        var to_m    = $('#tck_to_m').val();
 	        var to_d    = $('#tck_to_d').val();
-	    	var partner = $('#flt_tck_partner').val();
-	    	var status  = $('#flt_tck_status').val();
+
+            var select = document.querySelector('#statistics_legend');
+            var data   = select.dataset;
+            var type    = data.type;
+            if(type == 'ticket') {
+		    	var partner = $('#flt_tck_partner').val();
+	        	var country = $('#flt_tck_country').val();
+	        	var status  = $('#flt_tck_status').val();
+	        }else{
+		    	var partner = $('#flt_wks_partner').val();
+	        	var country = $('#flt_wks_country').val();
+	        	var status  = $('#flt_wks_status').val();
+	        }
 
 	        if(from_y  == ""  ) from_y  = 'none';
 	        if(from_m  == ""  ) from_m  = 'none';
@@ -102,6 +137,7 @@
 	        if(to_m    == ""  ) to_m    = 'none';
 	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
             var select = document.querySelector('#pagination');
@@ -117,6 +153,7 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
 
 
@@ -141,9 +178,19 @@
 		        var to_y    = $('#tck_to_y').val();
 		        var to_m    = $('#tck_to_m').val();
 		        var to_d    = $('#tck_to_d').val();
-	    		var partner = $('#flt_tck_partner').val();
 
-	    		var status  = $('#flt_tck_status').val();
+	            var select = document.querySelector('#statistics_legend');
+	            var data   = select.dataset;
+	            var type    = data.type;
+	            if(type == 'ticket') {
+			    	var partner = $('#flt_tck_partner').val();
+		        	var country = $('#flt_tck_country').val();
+		        	var status  = $('#flt_tck_status').val();
+		        }else{
+			    	var partner = $('#flt_wks_partner').val();
+		        	var country = $('#flt_wks_country').val();
+		        	var status  = $('#flt_wks_status').val();
+		        }
 
 		        if(from_y  == ""  ) from_y  = 'none';
 		        if(from_m  == ""  ) from_m  = 'none';
@@ -152,6 +199,7 @@
 		        if(to_m    == ""  ) to_m    = 'none';
 	        	if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
+	        	if(country == null) country = 'none';
 		    	if(status  == null) status  = 'none';
 
 		    	url = url.replace("plc_page", next_page);
@@ -162,7 +210,7 @@
 		        url = url.replace("plc_to_m", to_m);
 		        url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
-
+	        	url = url.replace("plc_country", country);
 		    	url = url.replace("plc_status", status);
 
 
@@ -179,8 +227,19 @@
 	        var to_y    = $('#tck_to_y').val();
 	        var to_m    = $('#tck_to_m').val();
 	        var to_d    = $('#tck_to_d').val();
-	    	var partner = $('#flt_tck_partner').val();
-	    	var status  = $('#flt_tck_status').val();
+
+            var select = document.querySelector('#statistics_legend');
+            var data   = select.dataset;
+            var type    = data.type;
+            if(type == 'ticket') {
+		    	var partner = $('#flt_tck_partner').val();
+	        	var country = $('#flt_tck_country').val();
+	        	var status  = $('#flt_tck_status').val();
+	        }else{
+		    	var partner = $('#flt_wks_partner').val();
+	        	var country = $('#flt_wks_country').val();
+	        	var status  = $('#flt_wks_status').val();
+	        }
 
 	        if(from_y  == ""  ) from_y  = 'none';
 	        if(from_m  == ""  ) from_m  = 'none';
@@ -189,6 +248,7 @@
 	        if(to_m    == ""  ) to_m    = 'none';
 	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
 	        var select = document.querySelector('#pagination');
@@ -204,6 +264,7 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
 
 

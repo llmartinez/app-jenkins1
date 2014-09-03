@@ -1,4 +1,5 @@
 
+    $.ajaxSetup({ cache: false });
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
@@ -92,15 +93,19 @@ function populate_city(url_ajax, city){
 
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax_partner
+ * @param route
  */
-function populate_shop(url_ajax_partner, shop){
+function populate_shop(route, id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
-    if(shop == undefined){ shop = ''; }
+    if(id_shop == undefined){ id_shop = ''; }
+
+    var select = document.querySelector('#data_locale');
+    var data   = select.dataset;
+    var locale = data.locale;
 
     $.ajax({
         type        : "POST",
-        url         : url_ajax_partner,
+        url         : Routing.generate(route, {_locale: locale }),
         data        : {id_partner : id_partner},
         dataType    : "json",
         success : function(data) {
@@ -108,8 +113,8 @@ function populate_shop(url_ajax_partner, shop){
             $('form').find('select[id*=_shop]').empty();
             $.each(data, function(idx, elm) {
 
-                if(elm.shop == shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
-                else                 $('form').find('select[id*=_shop]').append("<option value="+elm.id+">"+elm.shop+"</option>");
+                if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
+                else                  $('form').find('select[id*=_shop]').append("<option value="+elm.id+">"+elm.shop+"</option>");
             });
         },
         error : function(){
@@ -119,9 +124,10 @@ function populate_shop(url_ajax_partner, shop){
 }
 
 /**
- * Rellena (fill) el combo de los modelos (model) segun la marca (brand) seleccionada por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ * Rellena el combo de los modelos segun la marca seleccionada por el usuario
+ * @param route
  */
+
 function fill_model(route) {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
@@ -152,7 +158,7 @@ function fill_model(route) {
 
 /**
  * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} route
+ * @param route
  */
 function fill_version(route) {
 
@@ -184,11 +190,15 @@ function fill_version(route) {
 
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ * @param route
  */
-function fill_subsystem(url_ajax, form_subsystem) {
+function fill_subsystem(route, form_subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
+
+    var select = document.querySelector('#data_locale');
+    var data   = select.dataset;
+    var locale = data.locale;
 
     //Valor del subsistema del ticket al cerrar
     var id_subsystem = ($('select[id*=_subsystem]').val());
@@ -196,7 +206,7 @@ function fill_subsystem(url_ajax, form_subsystem) {
 
     $.ajax({
         type: "POST",
-        url: url_ajax,
+        url: Routing.generate(route, {_locale: locale }),
         data: {id_system: id_system},
         dataType: "json",
         success: function(data) {
@@ -206,10 +216,8 @@ function fill_subsystem(url_ajax, form_subsystem) {
 
             //Primer campo vacío
             $.each(data, function(idx, elm) {
-                if (elm.id == id_subsystem)
-                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                else
-                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                if (elm.id == id_subsystem) $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                else                        $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {

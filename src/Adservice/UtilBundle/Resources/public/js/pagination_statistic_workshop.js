@@ -11,6 +11,7 @@
 	        var to_m    = $('#wks_to_m').val();
 	        var to_d    = $('#wks_to_d').val();
 	    	var partner = $('#flt_wks_partner').val();
+        	var country = $('#flt_wks_country').val();
 	    	var status  = $('#flt_wks_status').val();
 
 	        if(from_y  == ""  ) from_y  = 'none';
@@ -20,6 +21,7 @@
 	        if(to_m    == ""  ) to_m    = 'none';
 	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
             var select = document.querySelector('#btn_search_workshop');
@@ -34,6 +36,7 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
 
 	    	window.open(url, "_self");
@@ -52,9 +55,9 @@
 		        var to_y    = $('#wks_to_y').val();
 		        var to_m    = $('#wks_to_m').val();
 		        var to_d    = $('#wks_to_d').val();
-	    		var partner = $('#flt_wks_partner').val();
-
-	    		var status  = $('#flt_wks_status').val();
+		    	var partner = $('#flt_wks_partner').val();
+	        	var country = $('#flt_wks_country').val();
+		    	var status  = $('#flt_wks_status').val();
 
 		        if(from_y  == ""  ) from_y  = 'none';
 		        if(from_m  == ""  ) from_m  = 'none';
@@ -63,6 +66,7 @@
 		        if(to_m    == ""  ) to_m    = 'none';
 		        if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
+	        	if(country == null) country = 'none';
 		    	if(status  == null) status  = 'none';
 
 		        var select = document.querySelector('#btn_search_workshop');
@@ -77,6 +81,7 @@
 		        url = url.replace("plc_to_m", to_m);
 		        url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
+	        	url = url.replace("plc_country", country);
 		    	url = url.replace("plc_status", status);
 
 		    	window.open(url, "_self");
@@ -93,6 +98,7 @@
 	        var to_m    = $('#wks_to_m').val();
 	        var to_d    = $('#wks_to_d').val();
 	    	var partner = $('#flt_wks_partner').val();
+        	var country = $('#flt_wks_country').val();
 	    	var status  = $('#flt_wks_status').val();
 
 	        if(from_y  == ""  ) from_y  = 'none';
@@ -100,8 +106,8 @@
 	        if(from_d  == ""  ) from_d  = 'none';
 	        if(to_y    == ""  ) to_y    = 'none';
 	        if(to_m    == ""  ) to_m    = 'none';
-	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
 	        var select = document.querySelector('#btn_search_workshop');
@@ -116,6 +122,7 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
 
 
@@ -132,7 +139,7 @@
 	        var total  = data.total;
 	        var url    = data.url;
 
-	    	if (next_page <= {{ total }}) {
+	    	if (next_page <= total ) {
 
 	    		var from_y  = $('#wks_from_y').val();
 		        var from_m  = $('#wks_from_m').val();
@@ -140,8 +147,9 @@
 		        var to_y    = $('#wks_to_y').val();
 		        var to_m    = $('#wks_to_m').val();
 		        var to_d    = $('#wks_to_d').val();
-	    		var partner = $('#flt_wks_partner').val();
-	    		var status  = $('#flt_wks_status').val();
+		    	var partner = $('#flt_wks_partner').val();
+	        	var country = $('#flt_wks_country').val();
+		    	var status  = $('#flt_wks_status').val();
 
 		        if(from_y  == ""  ) from_y  = 'none';
 		        if(from_m  == ""  ) from_m  = 'none';
@@ -150,6 +158,7 @@
 		        if(to_m    == ""  ) to_m    = 'none';
 		        if(to_d    == ""  ) to_d    = 'none';
 		    	if(partner == null) partner = 'none';
+	        	if(country == null) country = 'none';
 		    	if(status  == null) status  = 'none';
 
 		    	url = url.replace("plc_page", next_page);
@@ -160,7 +169,7 @@
 		        url = url.replace("plc_to_m", to_m);
 	        	url = url.replace("plc_to_d", to_d);
 		    	url = url.replace("plc_partner", partner);
-
+	        	url = url.replace("plc_country", country);
 		    	url = url.replace("plc_status", status);
 
 		    	window.open(url, "_self");
@@ -176,8 +185,8 @@
 	        var to_y    = $('#wks_to_y').val();
 	        var to_m    = $('#wks_to_m').val();
 	        var to_d    = $('#wks_to_d').val();
-
 	    	var partner = $('#flt_wks_partner').val();
+        	var country = $('#flt_wks_country').val();
 	    	var status  = $('#flt_wks_status').val();
 
 	        if(from_y  == ""  ) from_y  = 'none';
@@ -185,8 +194,8 @@
 	        if(from_d  == ""  ) from_d  = 'none';
 	        if(to_y    == ""  ) to_y    = 'none';
 	        if(to_m    == ""  ) to_m    = 'none';
-	        if(to_d    == ""  ) to_d    = 'none';
 	    	if(partner == null) partner = 'none';
+        	if(country == null) country = 'none';
 	    	if(status  == null) status  = 'none';
 
 	        var select = document.querySelector('#btn_search_workshop');
@@ -202,8 +211,8 @@
 	        url = url.replace("plc_to_m", to_m);
 	        url = url.replace("plc_to_d", to_d);
 	    	url = url.replace("plc_partner", partner);
+        	url = url.replace("plc_country", country);
 	    	url = url.replace("plc_status", status);
-
 
 	    	window.open(url, "_self");
 	    });

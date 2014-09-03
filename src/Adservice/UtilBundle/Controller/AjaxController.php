@@ -26,12 +26,13 @@ class AjaxController extends Controller
      * @return json
      */
     public function regionsFromCountryAction() {
-       $em = $this->getDoctrine()->getEntityManager();
-       $petition = $this->getRequest();
-       $id_country = $petition->request->get('id_country');
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $id_country = $petition->request->get('id_country');
 
-       $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => $id_country));
-       if(count($regions) > 0) {
+        $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => $id_country));
+        $size = sizeOf($regions);
+        if($size > 0) {
             foreach ($regions as $region) {
                 $json[] = $region->to_json();
             }
@@ -52,12 +53,13 @@ class AjaxController extends Controller
      * @return json
      */
     public function citiesFromRegionAction() {
-       $em = $this->getDoctrine()->getEntityManager();
-       $petition = $this->getRequest();
-       $id_region = $petition->request->get('id_region');
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $id_region = $petition->request->get('id_region');
 
-       $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
-       if(count($cities) > 0) {
+        $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
+        $size = sizeOf($cities);
+        if($size > 0) {
             foreach ($cities as $city) {
                 $json[] = $city->to_json();
             }
@@ -83,8 +85,8 @@ class AjaxController extends Controller
         $id_partner = $petition->request->get('id_partner');
 
         $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
-
-        if(count($shops) > 0) {
+        $size = sizeOf($shops);
+        if($size > 0) {
             foreach ($shops as $shop) {
                 $json[] = $shop->to_json();
             }
@@ -110,7 +112,8 @@ class AjaxController extends Controller
         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
 
         $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
-        if(count($models) > 0) {
+        $size = sizeOf($models);
+        if($size > 0) {
             foreach ($models as $model) {
                 $json[] = $model->to_json();
             }
@@ -132,7 +135,8 @@ class AjaxController extends Controller
         $model = $em->getRepository('CarBundle:Model')->find($id_model);
 
         $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
-        if(count($versions) > 0) {
+        $size = sizeOf($versions);
+        if($size > 0) {
             foreach ($versions as $version) {
                 $json[] = $version->to_json();
             }
@@ -157,12 +161,11 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_system = $petition->request->get('id_system');
-// var_dump($id_system);die;
-
         $system = $em->getRepository('TicketBundle:System')->find($id_system);
-
         $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
-        if(count($subsystems) > 0) {
+
+        $size = sizeOf($subsystems);
+        if($size > 0) {
             $j = 0;
             foreach ($subsystems as $subsystem) {
                 $json[] = $subsystem->to_json();

@@ -94,7 +94,7 @@
     {% if statistic.results is defined %}
 
         {% if type == 'ticket' %}
-        <legend> {% trans %} statistic.tickets {% endtrans %}
+        <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
@@ -128,7 +128,7 @@
         <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_ticket.html.twig' %}</div>
 
         {% elseif type == 'workshop' %}
-        <legend> {% trans %} statistic.workshops {% endtrans %}
+        <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
@@ -187,11 +187,19 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination_statistic_ticket.js') }}"></script>
-    <script src="{{ asset('bundles/util/js/pagination_statistic_workshop.js') }}"></script>
+    {% if     type == 'ticket'   %} <script src="{{ asset('bundles/util/js/pagination_statistic_ticket.js') }}"></script>
+    {% elseif type == 'workshop' %} <script src="{{ asset('bundles/util/js/pagination_statistic_workshop.js') }}"></script> {% endif %}
     <script>
         $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+            {% if type == 'ticket'   %}
+                {% if partner != 'none' %}  $("#flt_tck_partner").val('{{ partner }}'); {% endif %}
+                {% if country != 'none' %}  $("#flt_tck_country").val('{{ country }}'); {% endif %}
+                {% if status  != 'none' %}  $("#flt_tck_status" ).val('{{ status  }}'); {% endif %}
+            {% elseif type == 'workshop' %}
+                {% if partner != 'none' %}  $("#flt_wks_partner").val('{{ partner }}'); {% endif %}
+                {% if country != 'none' %}  $("#flt_wks_country").val('{{ country }}'); {% endif %}
+                {% if status  != 'none' %}  $("#flt_wks_status" ).val('{{ status  }}'); {% endif %}
+            {% endif %}
         });
     </script>
 {% endblock %}

@@ -35,8 +35,8 @@ $(document).ready(function() {
         url = url.replace("plc_to_m", to_m);
         url = url.replace("plc_to_d", to_d);
         url = url.replace("plc_partner", partner);
-        url = url.replace("plc_status", status);
         url = url.replace("plc_country", country);
+        url = url.replace("plc_status", status);
 
         window.open(url, "_self");
     });
