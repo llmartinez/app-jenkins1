@@ -8,6 +8,6 @@ $(document).ready(function() {
     //si clickamos el combobox de los socios rellenamos el de tiendas
     $('form').find('select[name*=partner]').change(function() {
         var route = 'shops_from_partner';
-       populate_shop(route);
+        populate_shop(route);
     });
 });

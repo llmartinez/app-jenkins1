@@ -34,5 +34,12 @@
         </form>
     </div>
 
-<input type="hidden" id="form_data" data-formname="{{ form_name }}" data-subsystemajax="{{ path("ticket_system") }}" data-similarajax="{{ path("tbl_similar") }}" data-similarshow="{{ path("showTicketReadonly", { "id_ticket": "PLACEHOLDER" }) }}">
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <input type="hidden" id="form_data" data-formname="{{ form_name }}" data-subsystemajax="{{ path("ticket_system") }}" data-similarajax="{{ path("tbl_similar") }}" data-similarshow="{{ path("showTicketReadonly", { "id_ticket": "PLACEHOLDER" }) }}">
+    {% endif %}
 {% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+{% endblock %}

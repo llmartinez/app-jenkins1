@@ -99,9 +99,7 @@ function populate_shop(route, id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
     if(id_shop == undefined){ id_shop = ''; }
 
-    var select = document.querySelector('#data_locale');
-    var data   = select.dataset;
-    var locale = data.locale;
+    var locale = $(document).find("#data_locale").val();
 
     $.ajax({
         type        : "POST",
@@ -132,9 +130,7 @@ function fill_model(route) {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
-    var select = document.querySelector('#data_locale');
-    var data   = select.dataset;
-    var locale = data.locale;
+    var locale = $(document).find("#data_locale").val();
 
     $.ajax({
         type: "POST",
@@ -164,9 +160,7 @@ function fill_version(route) {
 
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
-    var select = document.querySelector('#data_locale');
-    var data   = select.dataset;
-    var locale = data.locale;
+    var locale = $(document).find("#data_locale").val();
 
     $.ajax({
         type: "POST",
@@ -196,9 +190,7 @@ function fill_subsystem(route, form_subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
 
-    var select = document.querySelector('#data_locale');
-    var data   = select.dataset;
-    var locale = data.locale;
+    var locale = $(document).find("#data_locale").val();
 
     //Valor del subsistema del ticket al cerrar
     var id_subsystem = ($('select[id*=_subsystem]').val());
