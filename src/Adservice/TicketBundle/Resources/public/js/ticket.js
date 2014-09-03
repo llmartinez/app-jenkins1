@@ -1,12 +1,6 @@
 
 $(document).ready(function() {
 
-    // Limpiamos el combo de subsystem del formulario y cargamos subsistemas
-    list_tbl_subsystem();
-
-    //cambiar model en funcion de brand
-    $('#id_system').change(function() { list_tbl_subsystem(); });
-
     //vacia tbl_similar
     $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });
     $('#new_car_form_model').change(function() { clear_tbl_similar('model' ) });
@@ -16,21 +10,6 @@ $(document).ready(function() {
     //$('#new_car_form_model'       ).change(function() { list_tbl_similar() });
     $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
 });
-
-/**
- * Vacia el combo de subsystem del formulario y cargamos subsistemas
- * @return AjaxFunction
- */
-function list_tbl_subsystem() {
-
-    var select = document.querySelector('#form_data');
-    var data   = select.dataset;
-
-    var form_subsystem = data.formname;
-    var url_ajax       = data.subsystemajax;
-
-    fill_subsystem(url_ajax, form_subsystem);
-}
 
 /**
  * busca tickets que coincidan en modelo o subsistema con el ticket actual

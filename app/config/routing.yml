@@ -51,8 +51,8 @@ _login:
     pattern:  /
     defaults: { _controller: UserBundle:Login:goToLogin }
 
-# fos_js_routing:
-#     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 #redirect:
 #    pattern: /{_locale}/{_location}/

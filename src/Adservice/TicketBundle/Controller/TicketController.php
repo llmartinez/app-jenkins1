@@ -224,7 +224,7 @@ class TicketController extends Controller {
                         if(isset($form_errors[0])) {
                             $form_errors = $form_errors[0];
                             $form_errors = $form_errors->getMessageTemplate();
-                        }else{ 
+                        }else{
                             $form_errors = 'none';
                         }
                         $formC_errors = $formC->getErrors();

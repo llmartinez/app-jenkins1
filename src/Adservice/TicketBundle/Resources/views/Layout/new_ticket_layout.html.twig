@@ -41,7 +41,12 @@
           {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
         </form>
 
-    {% endif %}
+<input type="hidden" id="form_data" data-formname="{{ form_name }}" data-similarajax="{{ path("tbl_similar") }}" data-similarshow="{{ path("showTicketReadonly", { "id_ticket": "PLACEHOLDER" }) }}">
 
-<input type="hidden" id="form_data" data-formname="{{ form_name }}" data-subsystemajax="{{ path("ticket_system") }}" data-similarajax="{{ path("tbl_similar") }}" data-similarshow="{{ path("showTicketReadonly", { "id_ticket": "PLACEHOLDER" }) }}">
+    {% endif %}
 {% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+{% endblock %}

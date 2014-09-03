@@ -6,7 +6,7 @@
     {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
-    <div id="pagination"  class="pagination_content" data-url="{{ path('user_list', { 'page': 'PLACEHOLDER', 'option': 'PLACEHOLDER_OPTION' }) }}" data-total="{{ totalpag }}">
+    <div id="pagination"  class="pagination_content" data-url="{{ path('user_list', { 'page': 'plc_page', 'option': 'plc_option' }) }}" data-total="{{ totalpag }}">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"   ></span></button>

@@ -13,7 +13,7 @@
                         <td align="right">
                             <!-- Split button -->
                             <div class="language">
-                                <input type="hidden" id="data_locale" data-locale="{{ app.session.locale }}">
+                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
                                 <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
                                 <div class="btn-group" >
                                     <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>

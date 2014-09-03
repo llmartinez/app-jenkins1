@@ -16,6 +16,6 @@ class NewTicketType extends AbstractType
     }
     public function getName()
     {
-        return 'new_ticket_form';
+        return 'ticket_form';
     }
 }

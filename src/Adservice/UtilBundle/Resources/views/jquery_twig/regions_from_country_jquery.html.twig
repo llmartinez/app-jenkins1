@@ -9,10 +9,12 @@
             {% if user          is defined %} {% set entity = user          %} {% endif %}
             {% if shopOrder     is defined %} {% set entity = shopOrder     %} {% endif %}
             {% if workshopOrder is defined %} {% set entity = workshopOrder %} {% endif %}
+
             // REGIONS FROM COUNTRY
-            var url_ajax = "{{ path("regions_from_country") }}";
+            var url_ajax = "{{ path('regions_from_country') }}";
             var region   = "{{ entity.region }}";
             var city     = "{{ entity.city }}";
+            if(region == "") region = 'none';
             populate_region(url_ajax, region, city);
         {% else %}
             populate_region(url_ajax);
