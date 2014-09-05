@@ -58,10 +58,9 @@
             <legend class="padded" align="center">{% trans %} No hay tickets de este tipo {% endtrans %}</legend>
         {% endif %}
 
-            {% include 'UtilBundle:jquery_twig:ticket_show_jquery.html.twig' %}
-
         </div>
     </div>
 
+    <script src="{{ asset('bundles/util/js/pagination_ticket_show.js') }}"></script>
     <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>
 

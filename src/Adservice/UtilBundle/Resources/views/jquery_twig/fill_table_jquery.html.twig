@@ -19,8 +19,9 @@
             });
 
             function tickets_ajax() {
-                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
-                var url_ajax = "{{ path("fill_tickets") }}";
+                var locale   = $(document).find("#data_locale").val();
+                var url_show = Routing.generate('showTicket'  , {_locale: locale, id_ticket: 'PLACEHOLDER' });
+                var url_ajax = Routing.generate('fill_tickets', {_locale: locale});
 
                 fill_tickets(url_ajax, url_show);
             }
@@ -32,8 +33,9 @@
             });
 
             function tickets_from_workshop_ajax() {
-                var url_show = "{{ path("showTicket", { "id_ticket": "PLACEHOLDER" }) }}";
-                var url_ajax = "{{ path("tickets_from_workshop") }}";
+                var locale = $(document).find("#data_locale").val();
+                var url_show = Routing.generate('showTicket'  , {_locale: locale, id_ticket: 'PLACEHOLDER' });
+                var url_ajax = Routing.generate('tickets_from_workshop', {_locale: locale});
                 var user = "{{ app.security.getToken().getUser().getId() }}";
 
                 fill_tickets_from_workshop(url_ajax, url_show, user);

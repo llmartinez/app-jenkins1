@@ -60,5 +60,25 @@
                                                                                                                               'required': 'required' } }) }}
             </div>
         </div>
-    {% include 'UtilBundle:jquery_twig:regions_from_country_jquery.html.twig' %}
-    {% include 'UtilBundle:jquery_twig:select2_jquery.html.twig' %}
+
+        {% if partner is defined or shop is defined or workshop is defined or user is defined or shopOrder is defined or workshopOrder is defined %}
+
+            {% if partner       is defined %} {% set entity = partner       %} {% endif %}
+            {% if shop          is defined %} {% set entity = shop          %} {% endif %}
+            {% if workshop      is defined %} {% set entity = workshop      %} {% endif %}
+            {% if user          is defined %} {% set entity = user          %} {% endif %}
+            {% if shopOrder     is defined %} {% set entity = shopOrder     %} {% endif %}
+            {% if workshopOrder is defined %} {% set entity = workshopOrder %} {% endif %}
+
+            <input type="hidden" id="entity" value="edit">
+            <input type="hidden" id="entity_region" value="{{ entity.region }}">
+            <input type="hidden" id="entity_city"   value="{{ entity.city }}">
+
+        {% else %}
+            <input type="hidden" id="entity" value="new">
+            <input type="hidden" id="entity_region" value="">
+            <input type="hidden" id="entity_city"   value="">
+        {% endif %}
+
+    <script src="{{ asset('bundles/util/js/contact.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/select2_jquery.js') }}"></script>

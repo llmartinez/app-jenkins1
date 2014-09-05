@@ -1,5 +1,68 @@
 
 $(document).ready(function() {
+
+    //Rellena los campos socio, pais y estado del filtro de ticket o taller con la busqueda realizada
+    var type    = $(document).find("#type").val();
+    var from_y  = $(document).find("#type_from_y" ).val();
+    var from_m  = $(document).find("#type_from_m" ).val();
+    var from_d  = $(document).find("#type_from_d" ).val();
+    var to_y    = $(document).find("#type_to_y"   ).val();
+    var to_m    = $(document).find("#type_to_m"   ).val();
+    var to_d    = $(document).find("#type_to_d"   ).val();
+    var partner = $(document).find("#type_partner").val();
+    var country = $(document).find("#type_country").val();
+    var status  = $(document).find("#type_status" ).val();
+
+    if(type == 'all') $(document).find("#type").val(0);
+
+    if(type == 'ticket') {
+            $("#tck_from_y" ).val(from_y );
+            $("#wks_from_y" ).val('');
+            $("#tck_from_m" ).val(from_m );
+            $("#wks_from_m" ).val('');
+            $("#tck_from_d" ).val(from_d );
+            $("#wks_from_d" ).val('');
+            $("#tck_to_y"   ).val(to_y   );
+            $("#wks_to_y"   ).val('');
+            $("#tck_to_m"   ).val(to_m   );
+            $("#wks_to_m"   ).val('');
+            $("#tck_to_d"   ).val(to_d   );
+            $("#wks_to_d"   ).val('');
+            $("#flt_tck_partner").val(partner);
+            $("#flt_tck_country").val(country);
+            $("#flt_tck_status" ).val(status );
+    }else{
+        if(type == 'workshop') {
+            $("#tck_from_y" ).val('');
+            $("#wks_from_y" ).val(from_y );
+            $("#tck_from_m" ).val('');
+            $("#wks_from_m" ).val(from_m );
+            $("#tck_from_d" ).val('');
+            $("#wks_from_d" ).val(from_d );
+            $("#tck_to_y"   ).val('');
+            $("#wks_to_y"   ).val(to_y   );
+            $("#tck_to_m"   ).val('');
+            $("#wks_to_m"   ).val(to_m   );
+            $("#tck_to_d"   ).val('');
+            $("#wks_to_d"   ).val(to_d   );
+            $("#flt_wks_partner").val(partner);
+            $("#flt_wks_country").val(country);
+            $("#flt_wks_status" ).val(status );
+        }
+    }
+    if(from_y  == 0 ) { $("#tck_from_y" ).val('');
+                        $("#wks_from_y" ).val(''); }
+    if(from_m  == 0 ) { $("#tck_from_m" ).val('');
+                        $("#wks_from_m" ).val(''); }
+    if(from_d  == 0 ) { $("#tck_from_d" ).val('');
+                        $("#wks_from_d" ).val(''); }
+    if(to_y    == 0 ) { $("#tck_to_y"   ).val('');
+                        $("#wks_to_y"   ).val(''); }
+    if(to_m    == 0 ) { $("#tck_to_m"   ).val('');
+                        $("#wks_to_m"   ).val(''); }
+    if(to_d    == 0 ) { $("#tck_to_d"   ).val('');
+                        $("#wks_to_d"   ).val(''); }
+
 //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     $('#btn_search_ticket').click(function() {
 
@@ -13,30 +76,16 @@ $(document).ready(function() {
         var country = $('#flt_tck_country').val();
         var status  = $('#flt_tck_status').val();
 
-        if(from_y  == ""  ) from_y  = 'none';
-        if(from_m  == ""  ) from_m  = 'none';
-        if(from_d  == ""  ) from_d  = 'none';
-        if(to_y    == ""  ) to_y    = 'none';
-        if(to_m    == ""  ) to_m    = 'none';
-        if(to_d    == ""  ) to_d    = 'none';
-        if(partner == null) partner = 'none';
-        if(status  == null) status  = 'none';
-        if(country == null) country = 'none';
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
-        var select = document.querySelector('#btn_search_ticket');
-        var data   = select.dataset;
-        var url    = data.url;
-
-        url = url.replace("plc_page", 1);
-        url = url.replace("plc_from_y", from_y);
-        url = url.replace("plc_from_m", from_m);
-        url = url.replace("plc_from_d", from_d);
-        url = url.replace("plc_to_y", to_y);
-        url = url.replace("plc_to_m", to_m);
-        url = url.replace("plc_to_d", to_d);
-        url = url.replace("plc_partner", partner);
-        url = url.replace("plc_country", country);
-        url = url.replace("plc_status", status);
+        var route  = 'listStatistics';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -54,30 +103,16 @@ $(document).ready(function() {
         var country = $('#flt_wks_country').val();
         var status  = $('#flt_wks_status').val();
 
-        if(from_y  == ""  ) from_y  = 'none';
-        if(from_m  == ""  ) from_m  = 'none';
-        if(from_d  == ""  ) from_d  = 'none';
-        if(to_y    == ""  ) to_y    = 'none';
-        if(to_m    == ""  ) to_m    = 'none';
-        if(to_d    == ""  ) to_d    = 'none';
-        if(partner == null) partner = 'none';
-        if(status  == null) status  = 'none';
-        if(country == null) country = 'none';
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
-        var select = document.querySelector('#btn_search_workshop');
-        var data   = select.dataset;
-        var url    = data.url;
-
-        url = url.replace("plc_page", 1);
-        url = url.replace("plc_from_y", from_y);
-        url = url.replace("plc_from_m", from_m);
-        url = url.replace("plc_from_d", from_d);
-        url = url.replace("plc_to_y", to_y);
-        url = url.replace("plc_to_m", to_m);
-        url = url.replace("plc_to_d", to_d);
-        url = url.replace("plc_partner", partner);
-        url = url.replace("plc_status", status);
-        url = url.replace("plc_country", country);
+        var route  = 'listStatistics';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -94,31 +129,16 @@ $(document).ready(function() {
         var country = $('#flt_tck_country').val();
         var status  = $('#flt_tck_status').val();
 
-        if(from_y  == ""  ) from_y  = 'none';
-        if(from_m  == ""  ) from_m  = 'none';
-        if(from_d  == ""  ) from_d  = 'none';
-        if(to_y    == ""  ) to_y    = 'none';
-        if(to_m    == ""  ) to_m    = 'none';
-        if(to_d    == ""  ) to_d    = 'none';
-        if(partner == null) partner = 'none';
-        if(status  == null) status  = 'none';
-        if(country == null) country = 'none';
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
-        var select = document.querySelector('#doExcel_ticket');
-        var data   = select.dataset;
-        var url    = data.url;
-
-        url = url.replace("plc_page", 1);
-        url = url.replace("plc_from_y", from_y);
-        url = url.replace("plc_from_m", from_m);
-        url = url.replace("plc_from_d", from_d);
-        url = url.replace("plc_to_y", to_y);
-        url = url.replace("plc_to_m", to_m);
-        url = url.replace("plc_to_d", to_d);
-        url = url.replace("plc_partner", partner);
-        url = url.replace("plc_status", status);
-        url = url.replace("plc_country", country);
-
+        var route  = 'doExcel';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -135,31 +155,16 @@ $(document).ready(function() {
         var country = $('#flt_wks_country').val();
         var status  = $('#flt_wks_status').val();
 
-        if(from_y  == ""  ) from_y  = 'none';
-        if(from_m  == ""  ) from_m  = 'none';
-        if(from_d  == ""  ) from_d  = 'none';
-        if(to_y    == ""  ) to_y    = 'none';
-        if(to_m    == ""  ) to_m    = 'none';
-        if(to_d    == ""  ) to_d    = 'none';
-        if(partner == null) partner = 'none';
-        if(status  == null) status  = 'none';
-        if(country == null) country = 'none';
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
-        var select = document.querySelector('#doExcel_workshop');
-        var data   = select.dataset;
-        var url    = data.url;
-
-        url = url.replace("plc_page", 1);
-        url = url.replace("plc_from_y", from_y);
-        url = url.replace("plc_from_m", from_m);
-        url = url.replace("plc_from_d", from_d);
-        url = url.replace("plc_to_y", to_y);
-        url = url.replace("plc_to_m", to_m);
-        url = url.replace("plc_to_d", to_d);
-        url = url.replace("plc_partner", partner);
-        url = url.replace("plc_status", status);
-        url = url.replace("plc_country", country);
-
+        var route  = 'doExcel';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
 
         window.open(url, "_self");
     });
