@@ -2,14 +2,16 @@
     $.ajaxSetup({ cache: false });
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
+ * @param {url de tipo {{ path('mi_path') }}} route
  */
-function populate_region(url_ajax, region, city){
+function populate_region(route, region, city){
     var id_country = $('form').find('select[name*=country]').val();
+    var route = 'regions_from_country';
+    var locale = $(document).find("#data_locale").val();
 
-   $.ajax({
+    $.ajax({
         type        : "POST",
-        url         : url_ajax,
+        url         : Routing.generate(route, {_locale: locale}),
         data        : {id_country : id_country},
         dataType    : "json",
         success : function(data) {
@@ -23,7 +25,7 @@ function populate_region(url_ajax, region, city){
                 if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region))) {  region_edit = elm.region; city_edit = city;
                                             $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
                 else{
-                    if( region != 'none' ) { region_edit = region; city_edit = city;
+                    if( region != 'no-region' ) { region_edit = region; city_edit = city;
                         $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
                     }
                     else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
@@ -59,14 +61,15 @@ function populate_region(url_ajax, region, city){
 
 /**
  * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function populate_city(url_ajax, city){
-   var id_region = $('#s2id_slct_region .select2-chosen').text();
+function populate_city(){
+    var id_region = $('#s2id_slct_region .select2-chosen').text();
+    var route = 'cities_from_region';
+    var locale = $(document).find("#data_locale").val();
 
-   $.ajax({
+    $.ajax({
         type        : "POST",
-        url         : url_ajax,
+        url         : Routing.generate(route, {_locale: locale}),
         data        : {id_region : id_region},
         dataType    : "json",
         success : function(data) {
@@ -93,12 +96,12 @@ function populate_city(url_ajax, city){
 
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
- * @param route
  */
-function populate_shop(route, id_shop){
+function populate_shop(id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
     if(id_shop == undefined){ id_shop = ''; }
 
+    var route  = 'shops_from_partner';
     var locale = $(document).find("#data_locale").val();
 
     $.ajax({
@@ -123,13 +126,13 @@ function populate_shop(route, id_shop){
 
 /**
  * Rellena el combo de los modelos segun la marca seleccionada por el usuario
- * @param route
  */
 
-function fill_model(route) {
+function fill_model() {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
+    var route  = 'car_model';
     var locale = $(document).find("#data_locale").val();
 
     $.ajax({
@@ -154,12 +157,12 @@ function fill_model(route) {
 
 /**
  * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
- * @param route
  */
-function fill_version(route) {
+function fill_version() {
 
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
+    var route  = 'car_version';
     var locale = $(document).find("#data_locale").val();
 
     $.ajax({
@@ -184,12 +187,12 @@ function fill_version(route) {
 
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
- * @param route
  */
-function fill_subsystem(route, form_subsystem) {
+function fill_subsystem(form_subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
 
+    var route  = 'ticket_system';
     var locale = $(document).find("#data_locale").val();
 
     //Valor del subsistema del ticket al cerrar

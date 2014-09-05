@@ -19,7 +19,6 @@ function list_tbl_subsystem() {
     // var form_subsystem = data.formname;
 
     var form_subsystem = 'ticket_form';
-    var route          = 'ticket_system';
 
-    fill_subsystem(route, form_subsystem);
+    fill_subsystem(form_subsystem);
 }

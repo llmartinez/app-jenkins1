@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatisticController extends Controller {
 
-    public function listAction($type=null, $page=1, $from_y ='none', $from_m='none', $from_d ='none',
-                                                    $to_y   ='none', $to_m  ='none', $to_d   ='none',
-                                                    $partner='none', $status='none', $country='none') {
+    public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
+                                                 $to_y   ='0', $to_m  ='0', $to_d   ='0',
+                                                 $partner='0', $status='0', $country='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $statistic = new Statistic();
@@ -20,13 +20,13 @@ class StatisticController extends Controller {
         $params = array();
         $joins  = array();
 
-        if($type != null){
+        if($type != '0'){
 
-            if ($from_y != "none" and $from_m != "none" and $from_d != "none") {
+            if ($from_y != '0' and $from_m != '0' and $from_d != '0') {
                 $params[]  = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'");
             }
-            if ($to_y != "none" and $to_m != "none" and $to_d != "none") {
-                $params[] = array('created_at', " >= '".$to_y.'-'.$to_m.'-'.$to_d." 23:59:59'");
+            if ($to_y != '0' and $to_m != '0' and $to_d != '0') {
+                $params[] = array('created_at', " <= '".$to_y.'-'.$to_m.'-'.$to_d." 23:59:59'");
             }
 
             if     ($type == 'ticket'  ){
@@ -38,11 +38,11 @@ class StatisticController extends Controller {
                                         elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
                                                                         $params[] = array('status', ' = '.$closed->getId());
                                         }
-                                        if    ($partner != "none"  ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
+                                        if    ($partner != '0'     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
                                                                         $joins[]  = array('w.partner  p', 'p.id = '.$partner);
                                         }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
-                                            if    ($country != "none"  ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
+                                            if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
                                         }else{
                                             $joins[] = array('e.workshop wks', ' wks.country = '.$security->getToken()->getUser()->getCountry()->getId());
                                         }
@@ -50,11 +50,11 @@ class StatisticController extends Controller {
             elseif ($type == 'workshop'){
                                         $bundle = 'WorkshopBundle';
                                         $entity = 'Workshop';
-                                        if     ($partner!= "none"    ) { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($partner!= '0'       ) { $params[] = array('partner', ' = '.$partner); }
                                         if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
                                         elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
-                                            if    ($country != "none"  ) { $params[] = array('country', ' = '.$country); }
+                                            if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
                                         }else{
                                             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                                         }
@@ -68,7 +68,7 @@ class StatisticController extends Controller {
             $pagination->setTotalPagByLength($length);
 
         }else{
-            $type = 'all';
+            $type = '0';
 
             $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
             $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
@@ -103,7 +103,9 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
-    public function doExcelAction($type=null, $page=1, $date_from='none', $date_to='none', $partner='none', $status='none', $country='none'){
+    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
+                                                      $to_y   ='0', $to_m  ='0', $to_d   ='0',
+                                                      $partner='0', $status='0', $country='0'){
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -121,10 +123,9 @@ class StatisticController extends Controller {
         $date = new \DateTime();
         $response->setLastModified($date);
 
-        if($type != null){
-
-            if ($date_from != "none") { $params[] = array('created_at', " >= '".$date_from." 00:00:00'"); }
-            if ($date_to   != "none") { $params[] = array('created_at', " <= '".$date_to  ." 23:59:59'"  ); }
+        if($type != '0'){
+            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $params[] = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"); }
+            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $params[] = array('created_at', " <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"); }
 
             if     ($type == 'ticket'  ){
                                         $bundle = 'TicketBundle';
@@ -135,29 +136,29 @@ class StatisticController extends Controller {
                                         elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
                                                                         $params[] = array('status', ' = '.$closed->getId());
                                         }
-                                        if    ($partner != "none"  ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
+                                        if    ($partner != "0"     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
                                                                         $joins[]  = array('w.partner  p', 'p.id = '.$partner);
                                         }
                                         if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                                             $joins[] = array('e.workshop wks', ' wks.country = '.$security->getToken()->getUser()->getCountry()->getId());
                                         }else{
-                                            if    ($country != "none"  ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
+                                            if    ($country != "0"  ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
                                         }
 
-                $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+                $results = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelTicket($results);
             }
             elseif ($type == 'workshop'){
                                         $bundle = 'WorkshopBundle';
                                         $entity = 'Workshop';
-                                        if     ($partner!= "none"    ) { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($partner!= "0"       ) { $params[] = array('partner', ' = '.$partner); }
                                         if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
                                         elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
                                         if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                                             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                                         }else{
-                                            if    ($country != "none"  ) { $params[] = array('country', ' = '.$country); }
+                                            if    ($country != "0"  ) { $params[] = array('country', ' = '.$country); }
                                         }
 
                 $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);

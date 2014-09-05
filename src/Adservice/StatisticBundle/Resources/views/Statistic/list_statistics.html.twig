@@ -13,37 +13,37 @@
         <div class="col-xs-12 col-md-12 form-group">
         <table>
             <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
-                <input id="tck_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="tck_from_m" type="number" {% if from_m != 'none' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="tck_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <input id="tck_from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
             <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
-                <input id="tck_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="tck_to_m"   type="number" {% if to_m   != 'none' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="tck_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <input id="tck_to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('d')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="tck_to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
         </table></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_tck_country" class='form-control'>
-                                                                                    <option value="none">{% trans %} all {% endtrans %}</option>
+                                                                                    <option value="0">{% trans %} all {% endtrans %}</option>
                                                                                 {% for country in countries %}
                                                                                     <option value="{{ country.id }}">{{ country | trans }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
         {% endif %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_tck_partner" class='form-control'>
-                                                                                    <option value="none">{% trans %} all {% endtrans %}</option>
+                                                                                    <option value="0">{% trans %} all {% endtrans %}</option>
                                                                                 {% for partner in partners %}
                                                                                     <option value="{{ partner.id }}">{{ partner }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label><select id="flt_tck_status" class='form-control'>
-                                                                                                <option value="all"    >{% trans %} all    {% endtrans %}</option>
+                                                                                                <option value="0"    >{% trans %} all    {% endtrans %}</option>
                                                                                                 <option value="open"   >{% trans %} open   {% endtrans %}</option>
                                                                                                 <option value="closed" >{% trans %} closed {% endtrans %}</option>
                                                                                              </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_ticket" data-url="{{ path('listStatistics', { 'type': 'ticket', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+            <button class="btn btn-primary btn100" id="btn_search_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} ticket.search {% endtrans %}</button>
         </div>
 
@@ -53,26 +53,26 @@
         <div class="col-xs-12 col-md-12 form-group">
         <table>
             <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
-                <input id="wks_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_m" type="number" {% if from_m != 'none' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_y" type="number" {% if from_y != 'none' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <input id="wks_from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
             <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
-                <input id="wks_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_m"   type="number" {% if to_m   != 'none' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_y"   type="number" {% if to_y   != 'none' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <input id="wks_to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
         </table></div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_wks_country" class='form-control'>
-                                                                                        <option value="none">{% trans %} all {% endtrans %}</option>
+                                                                                        <option value="0">{% trans %} all {% endtrans %}</option>
                                                                                     {% for country in countries %}
                                                                                         <option value="{{ country.id }}">{{ country | trans }}</option>
                                                                                 {% endfor %}
                                                                           </select></div>
         {% endif %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_wks_partner" class='form-control'>
-                                                                                        <option value="none">{% trans %} all {% endtrans %}</option>
+                                                                                        <option value="0">{% trans %} all {% endtrans %}</option>
                                                                                     {% for partner in partners %}
                                                                                         <option value="{{ partner.id }}">{{ partner }}</option>
                                                                                 {% endfor %}
@@ -84,7 +84,7 @@
                                                                                             {# <option value="noticket">Without Tickets</option> #}
                                                                                          </select></div>
         <div class="col-xs-12 col-md-12 form-group">
-            <button class="btn btn-primary btn100" id="btn_search_workshop" data-url="{{ path('listStatistics', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+            <button class="btn btn-primary btn100" id="btn_search_workshop">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}"> {% trans %} workshop.search {% endtrans %}</button>
         </div>
 </div>
@@ -98,7 +98,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
-            <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}" data-url="{{ path('doExcel', { 'type': 'ticket', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+            <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
             <table class="table table-hover table-list-search">
@@ -110,6 +110,7 @@
                         <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
                         <th>{% trans %} description        {% endtrans %}</th>
                         <th>{% trans %} status             {% endtrans %}</th>
+                        <th>{% trans %} action             {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody id="ticketBody">
@@ -121,18 +122,19 @@
                             <td>{{ ticket.assignedTo                }}</td>
                             <td>{{ ticket.description               }}</td>
                             <td>{{ ticket.status | trans            }}</td>
+                            <td><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_ticket.html.twig' %}</div>
+        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% elseif type == 'workshop' %}
         <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
         {% endif %}
-           <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}" data-url="{{ path('doExcel', { 'type': 'workshop', 'page': 'plc_page', 'from_y': 'plc_from_y', 'from_m': 'plc_from_m', 'from_d': 'plc_from_d', 'to_y': 'plc_to_y', 'to_m': 'plc_to_m', 'to_d': 'plc_to_d', 'partner': 'plc_partner', 'status': 'plc_status', 'country': 'plc_country'}) }}">
+           <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
             <table class="table table-hover table-list-search">
@@ -157,7 +159,7 @@
                         {% endfor %}
                 </tbody>
             </table>
-        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic_workshop.html.twig' %}</div>
+        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% else %}
         <legend> {% trans %} statistic.general {% endtrans %}
@@ -182,24 +184,23 @@
     {% endif %}
 
 </div>
+    <input type="hidden" id="type" value="{{ type }}">
+        <input type="hidden" id="type_from_y"  value="{{ from_y  }}">
+        <input type="hidden" id="type_from_m"  value="{{ from_m  }}">
+        <input type="hidden" id="type_from_d"  value="{{ from_d  }}">
+        <input type="hidden" id="type_to_y"    value="{{ to_y    }}">
+        <input type="hidden" id="type_to_m"    value="{{ to_m    }}">
+        <input type="hidden" id="type_to_d"    value="{{ to_d    }}">
+        <input type="hidden" id="type_status"  value="{{ status  }}">
+        <input type="hidden" id="type_partner" value="{{ partner }}">
+        <input type="hidden" id="type_country" value="{{ country }}">
+        <input type="hidden" id="type_status"  value="{{ status  }}">
 
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {% if     type == 'ticket'   %} <script src="{{ asset('bundles/util/js/pagination_statistic_ticket.js') }}"></script>
-    {% elseif type == 'workshop' %} <script src="{{ asset('bundles/util/js/pagination_statistic_workshop.js') }}"></script> {% endif %}
-    <script>
-        $(document).ready(function() {
-            {% if type == 'ticket'   %}
-                {% if partner != 'none' %}  $("#flt_tck_partner").val('{{ partner }}'); {% endif %}
-                {% if country != 'none' %}  $("#flt_tck_country").val('{{ country }}'); {% endif %}
-                {% if status  != 'none' %}  $("#flt_tck_status" ).val('{{ status  }}'); {% endif %}
-            {% elseif type == 'workshop' %}
-                {% if partner != 'none' %}  $("#flt_wks_partner").val('{{ partner }}'); {% endif %}
-                {% if country != 'none' %}  $("#flt_wks_country").val('{{ country }}'); {% endif %}
-                {% if status  != 'none' %}  $("#flt_wks_status" ).val('{{ status  }}'); {% endif %}
-            {% endif %}
-        });
-    </script>
+    <script src="{{ asset('bundles/statistic/js/statistic.js') }}"></script>
+    {% if     type == 'ticket'   %} <script src="{{ asset('bundles/util/js/pagination_statistic.js') }}"></script>
+    {% elseif type == 'workshop' %} <script src="{{ asset('bundles/util/js/pagination_statistic.js') }}"></script> {% endif %}
 {% endblock %}

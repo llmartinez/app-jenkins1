@@ -52,11 +52,11 @@ function confirm_delete_user_modal(user_id) {
  * Busca si se tiene que mostrar un POP UP nada mas entrar en la aplicación
  * Si es asi, lanza un modal con la informacion del popup
  */
-function find_popup(url_ajax) {
+function find_popup() {
 
     $.ajax({
         type: "POST",
-        url: url_ajax,
+        url: Routing.generate('find_popup', {_locale: locale}),
         dataType: "json",
         success: function(data) {
             //solo mostramos el modal, si tenemos un popup que mostrar
