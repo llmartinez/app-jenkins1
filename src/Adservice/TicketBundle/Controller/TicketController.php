@@ -748,21 +748,6 @@ class TicketController extends Controller {
     }
 
     /**
-     * Muestra los posts que pertenecen a un ticket
-     * @param integer $id_ticket
-     * @return url
-     */
-    public function showTicketReadonlyAction($id_ticket) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $systems  = $em->getRepository('TicketBundle:System')->findAll();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
-
-        return $this->render('TicketBundle:Layout:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
-                                                                                                 'systems'   => $systems, ));
-    }
-
-    /**
      * Funcion que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
      * @return array
      */

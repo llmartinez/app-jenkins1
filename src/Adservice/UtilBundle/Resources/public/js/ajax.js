@@ -64,8 +64,9 @@ function populate_region(route, region, city){
  */
 function populate_city(){
     var id_region = $('#s2id_slct_region .select2-chosen').text();
-    var route = 'cities_from_region';
-    var locale = $(document).find("#data_locale").val();
+    var city      = $('#s2id_slct_city .select2-chosen').text();
+    var route     = 'cities_from_region';
+    var locale    = $(document).find("#data_locale").val();
 
     $.ajax({
         type        : "POST",
@@ -188,7 +189,7 @@ function fill_version() {
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
  */
-function fill_subsystem(form_subsystem) {
+function fill_subsystem() {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
 
@@ -217,6 +218,45 @@ function fill_subsystem(form_subsystem) {
         },
         error: function() {
             console.log("Error al cargar subsistemas...");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
+ */
+function fill_tbl_similar() {
+
+    var route  = 'tbl_similar';
+    var locale = $(document).find("#data_locale").val();
+    var id_model     = $('form').find('select[id*=model]').val();
+    var id_subsystem = $('form').find('select[id*=subsystem]').val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale }),
+        data: { id_model: id_model, id_subsystem: id_subsystem },
+        dataType: "json",
+        success: function(data) {
+
+            // Limpiamos y llenamos el combo con las opciones del json
+            $( "#tbl_similar" ).empty();
+            $( "#tbl_similar" ).append("<tr><th class='padded'> CAR </th><th class='padded'> DESCRIPTION </th></tr>");
+            //Primer campo vacío
+            $.each(data, function(idx, elm) {
+
+                if (idx != "error") {
+                    var url = Routing.generate('showTicketReadonly', {_locale: locale, id_ticket: elm.id }),;
+                    $("#tbl_similar").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"Ticket #"+ elm.id +"\", \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
+                }
+                else{
+                    $( "#tbl_similar" ).empty();
+                    $( "#tbl_similar" ).append("<tr><td>" + elm + "</td></tr>");
+                }
+            });
+        },
+        error: function() {
+            console.log("Error al cargar tickets de subsistemas...");
         }
     });
 }

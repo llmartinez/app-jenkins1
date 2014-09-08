@@ -32,3 +32,8 @@
     {% include 'WorkshopBundle:DiagnosisMachine:_list.html.twig'  %}
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/workshop/js/diagnosis_machine.js') }}"></script>
+{% endblock %}

@@ -60,8 +60,19 @@
                                                                              {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
             </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
-            {% include 'UtilBundle:jquery_twig:order_workshop_new_jquery.html.twig' %}
-            {# <input type="hidden" id="data_values" data-url="{{ path("shops_from_partner") }}" data-partner="{{ partner.name }}" data-idpartner="{{ partner.id }}"> #}
+
+            <input type="hidden" id="id_partner" value="{{ id_partner }}">
+            <div hidden="hidden">
+                {% if partners is iterable %}
+                    <select id="partners">
+                        {% for partner in partners %}
+                            <option val="{{ partner.id }}">{{ partner.name }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <select id="partners"><option val="0">0</option></select>
+                {% endif %}
+            </div>
 
             {{ form_rest(form) }}
 
@@ -69,4 +80,10 @@
             <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
         </div>
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/order/js/order_workshop.js') }}"></script>
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
 {% endblock %}

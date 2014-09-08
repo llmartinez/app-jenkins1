@@ -34,7 +34,6 @@
         {% include 'TicketBundle:Ticket:list_ticket.html.twig' %}
     {% endif %}
 
-<input type="hidden" id="form_data" data-formname="" data-subsystemajax="{{ path("ticket_system") }}" data-similarajax="{{ path("tbl_similar") }}" data-similarshow="{{ path("showTicketReadonly", { "id_ticket": "PLACEHOLDER" }) }}">
 {% endblock  %}
 
 {% block additionalJavascripts %}{% endblock %}

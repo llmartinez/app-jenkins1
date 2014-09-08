@@ -20,10 +20,9 @@ function list_tbl_similar() {
     var select = document.querySelector('#form_data');
     var data   = select.dataset;
 
-    var url_ajax = data.similarajax;
     var url_show = data.similarshow;
 
-    fill_tbl_similar(url_ajax, url_show);
+    fill_tbl_similar(url_show);
 }
 
 /**
@@ -84,47 +83,6 @@ function confirm_delete_ticket_modal(id_ticket) {
     custom_href = custom_href.replace('foo', id_ticket);
     $('.modal-footer').find('a').attr('href', custom_href);
 }
-
-/**
- * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} url_ajax
- */
-function fill_tbl_similar(url_ajax, url_show) {
-
-    var id_model     = $('form').find('select[id*=model]').val();
-    var id_subsystem = $('form').find('select[id*=subsystem]').val();
-
-    $.ajax({
-        type: "POST",
-        url: url_ajax,
-        data: { id_model: id_model, id_subsystem: id_subsystem, url_show: url_show },
-        dataType: "json",
-        success: function(data) {
-
-            // Limpiamos y llenamos el combo con las opciones del json
-            $( "#tbl_similar" ).empty();
-            $( "#tbl_similar" ).append("<tr><th class='padded'> CAR </th><th class='padded'> DESCRIPTION </th></tr>");
-            //Primer campo vacío
-            $.each(data, function(idx, elm) {
-
-                if (idx != "error") {
-                    url = url_show.replace("PLACEHOLDER", elm.id);
-                    $("#tbl_similar").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"Ticket #"+ elm.id +"\", \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
-                }
-                else{
-                    $( "#tbl_similar" ).empty();
-                    $( "#tbl_similar" ).append("<tr><td>" + elm + "</td></tr>");
-                }
-            });
-        },
-        error: function() {
-            console.log("Error al cargar tickets de subsistemas...");
-        }
-    });
-}
-
-
-
 
 // /**
 //  * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario

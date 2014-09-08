@@ -50,10 +50,6 @@ closeTicket:
     pattern:  /ticket/close/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:closeTicket, id_ticket: null }
 
-showTicketReadonly:
-    pattern:  /ticket/show_read/{id_ticket}
-    defaults: { _controller: TicketBundle:Ticket:showTicketReadonly }
-
 reopenTicket:
     pattern: /ticket/reopen/{id_ticket}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
@@ -70,19 +66,3 @@ listTicket:
 showPost:
     pattern:  /ticket/posts/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
-
-###########################
-#   APDO. AJAX            #
-###########################
-
-fill_tickets:
-    pattern:  /ticket/ajax
-    defaults: { _controller: TicketBundle:Ticket:fill_tickets }
-
-tickets_from_workshop:
-    pattern: /ticket/tickets_from_workshop
-    defaults: { _controller: TicketBundle:Default:fill_ticketsFromWorkshop }
-
-tbl_similar:
-    pattern: /tblSimilar
-    defaults: { _controller: TicketBundle:Default:tblSimilar }

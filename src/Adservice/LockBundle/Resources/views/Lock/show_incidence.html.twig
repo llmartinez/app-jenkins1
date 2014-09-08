@@ -40,3 +40,8 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/lock/js/incidence.js') }}"></script>
+{% endblock %}

@@ -31,7 +31,7 @@ class WorkshopOrderController extends Controller {
      */
     public function listWorkshopsAction($page=1 , $partner='none') {
         $security = $this->get('security.context');
-
+        $user     = $security->getToken()->getUser();
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
@@ -41,8 +41,9 @@ class WorkshopOrderController extends Controller {
         if($security->isGranted('ROLE_SUPER_AD')) {
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
             else                    $params   = array();
+            $params[] = array('country', ' = '.$user->getCountry()->getId());
         }
-        else { $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId()); }
+        else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
@@ -54,7 +55,7 @@ class WorkshopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()));
         else $partners = array();
 
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops' => $workshops,
@@ -84,11 +85,13 @@ class WorkshopOrderController extends Controller {
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD') === false)
-                $id_partner = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
-        else {
-            $id_partner = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->get('security.context')->getToken()->getUser()->getCountry()->getId()));
-         }
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+            $id_partner = '0';
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->get('security.context')->getToken()->getUser()->getCountry()->getId()));
+        }
+        else { $id_partner = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
+               $partners   = '0';
+        }
         $request       = $this->getRequest();
         $form          = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
@@ -149,6 +152,7 @@ class WorkshopOrderController extends Controller {
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,
                                                                                      'form_name'        => $form->getName(),
                                                                                      'form'             => $form->createView(),
+                                                                                     'partners'         => $partners,
                                                                                      'id_partner'       => $id_partner));
     }
 
