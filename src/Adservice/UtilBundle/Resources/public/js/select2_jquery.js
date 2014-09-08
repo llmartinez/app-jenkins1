@@ -1,4 +1,4 @@
-<script>
+
 	$(document).ready(function() {
 
 		$("#slct_region").change(function() {
@@ -46,4 +46,3 @@
 			}
 		});
 	});
-</script>

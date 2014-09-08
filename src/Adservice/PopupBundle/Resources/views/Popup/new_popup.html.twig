@@ -45,3 +45,8 @@
     </script>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/popup/js/popup.js') }}"></script>
+{% endblock %}

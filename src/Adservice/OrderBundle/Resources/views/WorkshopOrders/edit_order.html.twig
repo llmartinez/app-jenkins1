@@ -63,3 +63,8 @@
     </form>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+{% endblock %}

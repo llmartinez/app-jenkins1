@@ -48,8 +48,20 @@ car_version:
     options:
         expose: true
 
+showTicketReadonly:
+    pattern:  /ticket/show_read/{id_ticket}
+    defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }
+
 ticket_system:
     pattern: /ticketSystem
     defaults: { _controller: UtilBundle:Ajax:ticketSystem }
     options:
         expose: true
+
+tickets_from_workshop:
+    pattern: /ticket/tickets_from_workshop
+    defaults: { _controller: UtilBundle:Ajax:fill_ticketsFromWorkshop }
+
+tbl_similar:
+    pattern: /tblSimilar
+    defaults: { _controller: UtilBundle:Ajax:tblSimilar }

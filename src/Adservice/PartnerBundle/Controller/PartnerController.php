@@ -74,7 +74,7 @@ class PartnerController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -89,6 +89,7 @@ class PartnerController extends Controller {
 
                     /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
                     $newShop = UtilController::newEntity(new Shop(), $security->getToken()->getUser());
+                    $newShop->setCodeShop(0);
                     $newShop->setName('...');
                     $newShop->setPartner($partner);
                     $newShop->setActive('1');
