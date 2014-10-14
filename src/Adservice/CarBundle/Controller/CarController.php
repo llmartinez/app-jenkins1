@@ -11,16 +11,15 @@ class CarController extends Controller {
 
     /**
      * Edita el car asignado a partir de su id
-     * @param integer $id_ticket
+     * @Route("/car/edit/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function editCarAction($id_ticket) {
+    public function editCarAction($id, $ticket) {
         $em        = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $car = $ticket->getCar();
-
         $formC = $this->createForm(new CarType(), $car);
 
         if ($request->getMethod() == 'POST') {
@@ -35,7 +34,7 @@ class CarController extends Controller {
 	    if(isset($formC_errors[0])) {
                 $formC_errors = $formC_errors[0];
                 $formC_errors = $formC_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $formC_errors = 'none';
             }
             if ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file') {

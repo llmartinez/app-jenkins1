@@ -2,12 +2,11 @@
 namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Adservice\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\TicketBundle\Entity\TicketRepository;
@@ -22,6 +21,9 @@ use Adservice\CarBundle\Form\CarType;
 use Adservice\TicketBundle\Entity\Post;
 use Adservice\TicketBundle\Form\PostType;
 
+use Adservice\UserBundle\Entity\User;
+
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\UtilBundle\Entity\Document;
 use Adservice\UtilBundle\Entity\DocumentRepository;
 use Adservice\UtilBundle\Form\DocumentType;
@@ -301,14 +303,13 @@ class TicketController extends Controller {
 
     /**
      * Edita el ticket y el car asignado a partir de su id
-     * @param integer $id_ticket
+     * @Route("/ticket/edit/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function editTicketAction($id_ticket) {
+    public function editTicketAction($id, $ticket) {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         $form = $this->createForm(new EditTicketType(), $ticket);
 
@@ -326,13 +327,13 @@ class TicketController extends Controller {
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-                    $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$ticket->getId());
+                    $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $id)));
 
             }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
         }
@@ -349,19 +350,17 @@ class TicketController extends Controller {
 
     /**
      * Elimina el ticket de la bbdd si no tiene respuesta (posts == 1)
-     * @param Int $id
+     * @Route("/ticket/delete/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteTicketAction($id_ticket){
+    public function deleteTicketAction($id, $ticket){
 
         if ($this->get('security.context')->isGranted('ROLE_USER') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $ticket = $em->getRepository("TicketBundle:Ticket")->find($id_ticket);
-
-        if (!$ticket) throw $this->createNotFoundException('Ticket no encontrado en la BBDD.. '.$id_ticket);
 
         //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
         $posts = $ticket->getPosts(); //echo count($posts);
@@ -386,7 +385,7 @@ class TicketController extends Controller {
         /* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-        $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$ticket->getId());
+        $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
@@ -398,10 +397,11 @@ class TicketController extends Controller {
 
     /**
      * Muestra los posts que pertenecen a un ticket
-     * @param integer $id_ticket
+     * @Route("/ticket/show/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketAction($id_ticket) {
+    public function showTicketAction($id, $ticket) {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $security = $this->get('security.context');
@@ -409,9 +409,6 @@ class TicketController extends Controller {
         $post     = new Post();
         $document = new Document();
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
-
-        //Define ticket al que pertenecen los posts
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         //Define Forms
         if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
@@ -493,14 +490,14 @@ class TicketController extends Controller {
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-                    $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                    $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$id);
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
                 }
             }
-            return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $ticket->getId(),
+            return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $id,
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems,
@@ -557,15 +554,15 @@ class TicketController extends Controller {
 
     /**
      * Cierra el ticket
-     * @param  Entity $id_ticket
+     * @Route("/ticket/close/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function closeTicketAction($id_ticket=null)
+    public function closeTicketAction($id, $ticket)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         $form = $this->createForm(new CloseTicketType(), $ticket);
 
@@ -591,13 +588,13 @@ class TicketController extends Controller {
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-                        $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
+                        $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
                         $mailer->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
+                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
                 }
                 else{
                     $this->get('session')->setFlash('error', '¡Error! Debes introducir una solucion');
@@ -617,30 +614,30 @@ class TicketController extends Controller {
 
     /**
      * Reabre el ticket
-     * @param  Entity $id_ticket
+     * @Route("/ticket/reopen/{id}/")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function reopenTicketAction($id_ticket)
+    public function reopenTicketAction($id, $ticket)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
         $user = $security->getToken()->getUser();
         $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         $ticket->setStatus($status);
         UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
             $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-            $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$ticket->getId());
+            $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:ticket_reopen_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
 
-        return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId()) ));
+        return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
     }
 
     /**
@@ -687,12 +684,13 @@ class TicketController extends Controller {
 
     /**
      * Asigna un ticket a un usuario si se le pasa un $id_usuario, sino se pone a null
-     * @param Int $id_ticket puede venir por POST o por parametro de la funcion
+     * @Route("/ticket/assign/{id}/")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function assignUserToTicketAction($id_ticket, $id_user = null) {
+    public function assignUserToTicketAction($ticket, $id_user = null) {
         $em = $this->getDoctrine()->getEntityManager();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         //id_user puede venir por parametro o por post
         if ($id_user == null) {
@@ -715,12 +713,12 @@ class TicketController extends Controller {
 
     /**
      * Busca los posibles usuarios al cual podemos asingar un ticket
-     * @param type $id_ticket
+     * @Route("/ticket/assingTicket/{id}/")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return type
      */
-    public function assignTicketSelectUserAction($id_ticket) {
+    public function assignTicketSelectUserAction($ticket) {
         $em = $this->getDoctrine()->getEntityManager();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $users = $this->getUsersToAssingFromTicket();
 
         return $this->render('TicketBundle:Ticket:assign_ticket.html.twig', array('ticket' => $ticket,
@@ -730,13 +728,14 @@ class TicketController extends Controller {
 
     /**
      * Bloquea un ticket al asesor para que conteste
-     * @param Int $id_ticket puede venir por POST o por parametro de la funcion
+     * @Route("/ticket/assingAssesor/{id}/{id_user}/")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function blockTicketAction($id_ticket, $id_user = null) {
+    public function blockTicketAction($id, $ticket, $id_user = null) {
 
         $em = $this->getDoctrine()->getEntityManager();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
         ($user != null and $id_user != 0) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
@@ -744,7 +743,7 @@ class TicketController extends Controller {
         $em->persist($ticket);
         $em->flush();
 
-        return $this->showTicketAction($id_ticket);
+        return $this->showTicketAction($id);
     }
 
     /**

@@ -1,6 +1,7 @@
 
 {% if workshop.id         != "" %}
 	<legend>{% trans %} workshop {% endtrans %}
+			{% if workshop.test        == 1 %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/asterisk.png') }}' title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
 			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a></a>
 	</legend>
 
@@ -36,14 +37,17 @@
 
 	{# OBERVATIONS #}
 	<div class="form-group">
+		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+		{% else %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'>
+		{% endif %}
 		{% if is_granted('ROLE_ADMIN') %}
-			{% if workshop.observationAdmin      != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: 	{{ workshop.observationAdmin      }} {% endif %}
-
+			{% if workshop.observationAdmin      != "" %}<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin    }} {% endif %}
 		{% elseif is_granted('ROLE_ASSESSOR') %}
-			{% if workshop.observationAssessor   != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor   }} {% endif %}
-
+			{% if workshop.observationAssessor   != "" %}<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor }} {% endif %}
 		{% elseif is_granted('ROLE_USER') %}
-			{% if workshop.observationWorkshop   != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'> <b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop   }} {% endif %}
+			{% if workshop.observationWorkshop   != "" %}<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop }} {% endif %}
 		{% endif %}
 	</div>
 {% endif %}

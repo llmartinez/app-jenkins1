@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li><a href="{{ path('listTicket') }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active"><a href="{{ path('showTicket', {'id_ticket': ticket.id}) }}">#{{ ticket.id }}</a> {% trans %} edit.car {% endtrans %}</li>
+      <li class="active"><a href="{{ path('showTicket', {'id': ticket.id}) }}">#{{ ticket.id }}</a> {% trans %} edit.car {% endtrans %}</li>
     </ol>
 
 {% endblock  %}
@@ -24,7 +24,7 @@
 {% block content %}
 
     <div class="form-group">
-        <form action="{{ path('editCar', { 'id_ticket': ticket.id }) }}" id="contact" class="form" role="form" method="post">
+        <form action="{{ path('editCar', { 'id': ticket.id }) }}" id="contact" class="form" role="form" method="post">
 
             <legend> {% trans %} edit.car {% endtrans %} </legend>
             {% include 'TicketBundle:Car:edit_car.html.twig'  %}

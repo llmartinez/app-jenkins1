@@ -107,7 +107,7 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                     {% if workshopOrder.wantedAction != 'create' %}
-                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"></a>
+                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
 
                                         <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
                                     {% else %}

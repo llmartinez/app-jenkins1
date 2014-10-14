@@ -45,7 +45,7 @@
                 <td>{{ workshop.active }}       </td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"></a>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                         <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
                     </td>
                         <!-- Modal -->
@@ -68,7 +68,7 @@
                         </div><!-- /.modal -->
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_edit.png') }}"> </a>
+                        <a href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                         {% if workshop.active == 1 %}
                             <a title="{% trans %} workshop.deactivate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
                         {% else %}

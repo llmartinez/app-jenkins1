@@ -7,11 +7,11 @@ newTicket:
     defaults: { _controller: TicketBundle:Ticket:newTicket, id_workshop: null }
 
 editTicket:
-    pattern:  /ticket/edit/{id_ticket}
+    pattern:  /ticket/edit/{id}
     defaults: { _controller: TicketBundle:Ticket:editTicket }
 
 deleteTicket:
-    pattern:  /ticket/delete/{id_ticket}
+    pattern:  /ticket/delete/{id}
     defaults: { _controller: TicketBundle:Ticket:deleteTicket }
 
 findTicket:
@@ -19,7 +19,7 @@ findTicket:
     defaults: { _controller: TicketBundle:Ticket:findTicket }
 
 showTicket:
-    pattern:  /ticket/show/{id_ticket}
+    pattern:  /ticket/show/{id}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
 
 listTicketFiltered:
@@ -35,23 +35,23 @@ ticketsFromWorkshop:
     defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop, page: 1 }
 
 assignTicket:
-    pattern: /ticket/assingTicket/{id_ticket}/
+    pattern: /ticket/assingTicket/{id}/
     defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
 
 assignUserToTicket:
-    pattern:  /ticket/assign/{id_ticket}/
+    pattern:  /ticket/assign/{id}/
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
 
 blockTicket:
-    pattern: /ticket/assingAssesor/{id_ticket}/{id_user}
+    pattern: /ticket/assingAssesor/{id}/{id_user}
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
 
 closeTicket:
-    pattern:  /ticket/close/{id_ticket}/
-    defaults: { _controller: TicketBundle:Ticket:closeTicket, id_ticket: null }
+    pattern:  /ticket/close/{id}
+    defaults: { _controller: TicketBundle:Ticket:closeTicket, id: null }
 
 reopenTicket:
-    pattern: /ticket/reopen/{id_ticket}/
+    pattern: /ticket/reopen/{id}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 listTicket:

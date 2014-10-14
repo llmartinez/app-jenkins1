@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
@@ -122,20 +124,20 @@ class PartnerController extends Controller {
                                                                                  ));
     }
 
-     /**
+    /**
      * Obtener los datos del partner a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
+     * @Route("/edit/partner/{id}")
+     * @ParamConverter("partner", class="PartnerBundle:Partner")
+     * @return type
      */
-    public function editPartnerAction($id){
+    public function editPartnerAction($partner){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
-        $partner = $em->getRepository("PartnerBundle:Partner")->find($id);
-
-        if (!$partner) throw $this->createNotFoundException('Partner no encontrado en la BBDD');
 
         $petition = $this->getRequest();
         $form = $this->createForm(new PartnerType(), $partner);
@@ -153,7 +155,7 @@ class PartnerController extends Controller {
 	   if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -180,19 +182,17 @@ class PartnerController extends Controller {
 
     /**
      * Elimina el socio con $id de la bbdd
-     * @param Int $id
+     * @Route("/delete/partner/{id}")
+     * @ParamConverter("partner", class="PartnerBundle:Partner")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deletePartnerAction($id){
+    public function deletePartnerAction($partner){
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $partner = $em->getRepository("PartnerBundle:Partner")->find($id);
-        if (!$partner) throw $this->createNotFoundException('Partner no encontrado en la BBDD');
-
         $em->remove($partner);
         $em->flush();
 

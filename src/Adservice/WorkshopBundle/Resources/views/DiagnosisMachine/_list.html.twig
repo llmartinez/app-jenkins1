@@ -19,7 +19,7 @@
                     {% if country == 'none' %}<td>{{ diagnosis_machine.country }}</td>{% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/diagnostic_machine_edit.png') }}"></a>
+                            <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                         </td>
                     {% endif %}
                 </tr>

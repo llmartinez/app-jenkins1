@@ -1,7 +1,7 @@
 {# muestra los botones de editar y bloquear/desbloquear del asesor #}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="pull-right" href="{{ path('assignTicket', {'id_ticket':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_assign.png') }}" title="{% trans %} ticket.assign {% endtrans %}"></span></a>
+        <a class="pull-right" href="{{ path('assignTicket', {'id':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_assign.png') }}" title="{% trans %} ticket.assign {% endtrans %}"></span></a>
     {% endif %}
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if ticket.status == 'open' %}
@@ -10,7 +10,7 @@
                 {% if ticket.blockedBy == app.security.getToken().getUser() %}
 
                     {# desbloquear Ticket #}
-                    <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': 0 }) }}">
+                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': 0 }) }}">
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></span></a>
                 {% else %}
 
@@ -21,14 +21,14 @@
             {% else %}
 
                 {# bloquear Ticket #}
-                <a href="{{ path('blockTicket', { 'id_ticket': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+                <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_blocked.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
             {% endif %}
         {% else %}
             {# Ticket cerrado#}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
             {# reabrir Ticket #}
-            <a href="{{ path('reopenTicket', { 'id_ticket': ticket.id }) }}" >
+            <a href="{{ path('reopenTicket', { 'id': ticket.id }) }}" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
         {% endif %}
     {% endif %}
@@ -53,7 +53,7 @@
                 {% trans %} ticket.delete.confirm {% endtrans %}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('deleteTicket', {'id_ticket': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
+                <a href="{{ path('deleteTicket', {'id': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
@@ -63,8 +63,8 @@
     <script>
         $(document).ready(function() {
             $('#MainContent').find('.glyphicon-trash').click(function() {
-                var id_ticket = {{ ticket.id }};
-                confirm_delete_ticket_modal(id_ticket);
+                var id = {{ ticket.id }};
+                confirm_delete_ticket_modal(id);
             })
 
             //util.js

@@ -27,7 +27,7 @@
 {% block content %}
 
     <div class="form-group">
-        <form action="{{ path('showTicket', {'id_ticket' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
             {% include 'TicketBundle:Ticket:show_ticket.html.twig'  %}
 

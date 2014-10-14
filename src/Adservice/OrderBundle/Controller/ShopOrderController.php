@@ -4,6 +4,8 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\OrderBundle\Entity\ShopOrder;
@@ -136,10 +138,9 @@ class ShopOrderController extends Controller {
 
     /**
      * Crea una solicitud (shopOrder) del tipo "modify"
-     * @param integer $id del workshop que queremos modificar
+     * @Route("/shop/edit/{id}")
      * @return type
      * @throws AccessDeniedException
-     * @throws type
      */
     public function editAction($id) {
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
@@ -172,7 +173,7 @@ class ShopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -222,21 +223,19 @@ class ShopOrderController extends Controller {
 
     /**
      * Crea una solicitud (shopOrder) del tipo "activate" o "deactivate" segun el $status
-     * @param integer $id del shop que queremos modificar
+     * @Route("/shop/change_status/{id}/{status}")
+     * @ParamConverter("shop", class="PartnerBundle:Shop")
      * @param string $status (active | inactive)
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function changeStatusAction($id, $status){
+    public function changeStatusAction($id, $status, $shop){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $shop = $em->getRepository("PartnerBundle:Shop")->find($id);
-        if (!$shop)
-            throw $this->createNotFoundException('Taller no encontrado en la BBDD');
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la shopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -283,21 +282,18 @@ class ShopOrderController extends Controller {
 
     /**
      * Actualiza el campo "rejection_reason" de la shopOrder i pone su estado en "rejected"
-     * @param type $id
+     * @Route("/shop/reject/{id}")
+     * @ParamConverter("shopOrder", class="OrderBundle:ShopOrder")
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function rejectAction($id){
+    public function rejectAction($shopOrder){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
-        $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->find($id);
-        if (!$shopOrder)
-            throw $this->createNotFoundException('Solicitud de Tienda no encontrada en la BBDD: (id:'.$id.')');
 
         $form = $this->createForm(new ShopRejectOrderType(), $shopOrder);
 
@@ -309,7 +305,7 @@ class ShopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -344,8 +340,13 @@ class ShopOrderController extends Controller {
 // |  _ <| |___ ___) | |___| |\  | |_| |
 // |_| \_\_____|____/|_____|_| \_|____/
 
-
-    public function resendOrderAction($id){
+    /**
+     * Reenvia la solicitud
+     * @Route("/shop/resend/{id}")
+     * @ParamConverter("shopOrder", class="OrderBundle:ShopOrder")
+     * @return type
+     */
+    public function resendOrderAction($shopOrder){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -354,7 +355,6 @@ class ShopOrderController extends Controller {
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
-        $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->find($id);
         if ($shopOrder->getAction() == 'rejected'){
             $shopOrder->setAction($shopOrder->getWantedAction());
             $em->persist($shopOrder);
@@ -383,25 +383,20 @@ class ShopOrderController extends Controller {
 // |  _ <| |___| |  | | |_| |\ V / | |___
 // |_| \_\_____|_|  |_|\___/  \_/  |_____|
 
-
     /**
      * Elimina una shop segun el $id
-     * @param integer $id del shop que queremos eliminar
+     * @Route("/shop/remove/{id}")
+     * @ParamConverter("shopOrder", class="OrderBundle:ShopOrder")
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function removeAction($id){
+    public function removeAction($shopOrder){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->find($id);
-        if (!$shopOrder)
-            throw $this->createNotFoundException('Orden de Tienda no encontrado en la BBDD: (id:'.$id.')');
-
         $action = $shopOrder->getWantedAction();
 
         /* MAILING */
@@ -431,22 +426,18 @@ class ShopOrderController extends Controller {
 
     /**
      * Elimina una shop segun el $id
-     * @param integer $id del shop que queremos eliminar
+     * @Route("/shop/delete/{id}")
+     * @ParamConverter("shop", class="PartnerBundle:Shop")
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function deleteAction($id){
+    public function deleteAction($shop){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        $shop = $em->getRepository("PartnerBundle:Shop")->find($id);
-        if (!$shop)
-            throw $this->createNotFoundException('Orden de Tienda no encontrada en la BBDD: (id:'.$id.')');
-
         $shopOrder = $this->shop_to_shopOrder($shop);
         $action = $shopOrder->setWantedAction('delete');
         $action = $shopOrder->setAction('delete');
@@ -475,19 +466,19 @@ class ShopOrderController extends Controller {
 // /_/   \_\____\____|_____|_|    |_|
 
     /**
-     * @param integer $id del shopOrder
+     * Acepta la solicitud
+     * @Route("/shop/accept/{id}/{status}")
+     * @ParamConverter("shopOrder", class="OrderBundle:ShopOrder")
      * @param string $status (accepted)
      * @return type
      * @throws AccessDeniedException
      */
-    public function acceptAction($id, $status){
+    public function acceptAction($shopOrder, $status){
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        $shopOrder = $em->getRepository('OrderBundle:ShopOrder')->find($id);
 
         // activate   + accepted = setActive a TRUE  and delete shopOrder
         // deactivate + accepted = setActive a FALSE and delete shopOrder

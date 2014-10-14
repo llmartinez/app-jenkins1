@@ -125,7 +125,7 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                     {% if shopOrder.wantedAction != 'create' %}
-                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_edit.png') }}"> </a>
+                                        <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                                     {% endif %}
                                     <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}"></a>
 
