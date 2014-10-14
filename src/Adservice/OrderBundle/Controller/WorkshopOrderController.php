@@ -4,6 +4,8 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\OrderBundle\Entity\WorkshopOrder;
@@ -249,21 +251,19 @@ class WorkshopOrderController extends Controller {
 
     /**
      * Crea una solicitud (workshopOrder) del tipo "activate" o "deactivate" segun el $status
-     * @param integer $id del workshop que queremos modificar
+     * @Route("/workshop/change_status/{id}/{status}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
      * @param string $status (active | inactive)
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function changeStatusAction($id, $status){
+    public function changeStatusAction($id, $status, $workshop){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
-        if (!$workshop)
-            throw $this->createNotFoundException('Taller no encontrado en la BBDD');
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -310,22 +310,19 @@ class WorkshopOrderController extends Controller {
 
 
     /**
-     * Actualiza el campo "rejection_reason" de la workshopOrder i pone su estada en "rejected"
-     * @param type $id
+     * Actualiza el campo "rejection_reason" de la workshopOrder y pone su estada en "rejected"
+     * @Route("/workshop/reject/{id}")
+     * @ParamConverter("workshopOrder", class="OrderBundle:WorkshopOrder")
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function rejectAction($id){
+    public function rejectAction($workshopOrder){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
-        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->find($id);
-        if (!$workshopOrder)
-            throw $this->createNotFoundException('Orden de Taller no encontrado en la BBDD: (id:'.$id.')');
 
         $form = $this->createForm(new WorkshopRejectOrderType(), $workshopOrder);
 
@@ -337,7 +334,7 @@ class WorkshopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -362,8 +359,8 @@ class WorkshopOrderController extends Controller {
         }
 
         return $this->render('OrderBundle:WorkshopOrders:reject_order.html.twig', array('workshopOrder' => $workshopOrder,
-                                                                                                    'form_name'     => $form->getName(),
-                                                                                                    'form'          => $form->createView()));
+                                                                                        'form_name'     => $form->getName(),
+                                                                                        'form'          => $form->createView()));
     }
 
 //  ____  _____ ____  _____ _   _ ____
@@ -372,8 +369,13 @@ class WorkshopOrderController extends Controller {
 // |  _ <| |___ ___) | |___| |\  | |_| |
 // |_| \_\_____|____/|_____|_| \_|____/
 
-
-    public function resendAction($id){
+    /**
+     * Reenvia la solicitud
+     * @Route("/workshop/resend/{id}")
+     * @ParamConverter("workshopOrder", class="OrderBundle:WorkshopOrder")
+     * @return type
+     */
+    public function resendAction($workshopOrder){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -382,7 +384,6 @@ class WorkshopOrderController extends Controller {
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
-        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->find($id);
         if ($workshopOrder && $workshopOrder->getAction() == 'rejected'){
             $workshopOrder->setAction($workshopOrder->getWantedAction());
             $em->persist($workshopOrder);
@@ -413,21 +414,18 @@ class WorkshopOrderController extends Controller {
 
     /**
      * Elimina una workshopOrder segun el $id
-     * @param integer $id del workshopOrder que queremos eliminar
+     * @Route("/workshop/remove/{id}")
+     * @ParamConverter("workshopOrder", class="OrderBundle:WorkshopOrder")
      * @return type
      * @throws AccessDeniedException
      * @throws type
      */
-    public function removeAction($id){
+    public function removeAction($workshopOrder){
 
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->find($id);
-        if (!$workshopOrder)
-            throw $this->createNotFoundException('Orden de Taller no encontrado en la BBDD: (id:'.$id.')');
 
         $action = $workshopOrder->getWantedAction();
 
@@ -457,19 +455,19 @@ class WorkshopOrderController extends Controller {
 
 
     /**
-     * @param integer $id del workshopOrder
+     * Acepta la solicitud
+     * @Route("/workshop/accept/{id}")
+     * @ParamConverter("workshopOrder", class="OrderBundle:WorkshopOrder")
      * @param string $status (accepted)
      * @return type
      * @throws AccessDeniedException
      */
-    public function acceptAction($id, $status){
+    public function acceptAction($workshopOrder, $status){
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        $workshopOrder = $em->getRepository('OrderBundle:WorkshopOrder')->find($id);
 
         // activate   + accepted = setActive a TRUE  and delete workshopOrder
         // deactivate + accepted = setActive a FALSE and delete workshopOrder

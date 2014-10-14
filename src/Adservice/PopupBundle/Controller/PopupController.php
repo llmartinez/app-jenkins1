@@ -4,6 +4,9 @@ namespace Adservice\PopupBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 use Adservice\PopupBundle\Entity\Popup;
 use Adservice\PopupBundle\Entity\PopupRepository;
 use Adservice\PopupBundle\Form\PopupType;
@@ -94,16 +97,15 @@ class PopupController extends Controller {
      * Obtener los datos del popup a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
+     * @Route("/edit/{id}")
+     * @ParamConverter("popup", class="PopupBundle:Popup")
      */
-    public function editPopupAction($id){
+    public function editPopupAction($popup){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
-        $popup = $em->getRepository("PopupBundle:Popup")->find($id);
-
-        if (!$popup) throw $this->createNotFoundException('Popup no encontrado en la BBDD');
 
         $petition = $this->getRequest();
         $form = $this->createForm(new PopupType(), $popup);
@@ -116,7 +118,7 @@ class PopupController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -124,26 +126,24 @@ class PopupController extends Controller {
             return $this->redirect($this->generateUrl('popup_list'));
         }
 
-        return $this->render('PopupBundle:Popup:edit_popup.html.twig', array('popup'      => $popup,
+        return $this->render('PopupBundle:Popup:edit_popup.html.twig', array('popup'     => $popup,
                                                                             'form_name'  => $form->getName(),
                                                                             'form'       => $form->createView()));
     }
 
     /**
      * Elimina el popup con $id de la bbdd
-     * @param Int $id
+     * @Route("/delete/{id}")
+     * @ParamConverter("popup", class="PopupBundle:Popup")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deletePopupAction($id){
+    public function deletePopupAction($popup){
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $popup = $em->getRepository("PopupBundle:Popup")->find($id);
-        if (!$popup) throw $this->createNotFoundException('Popup no encontrado en la BBDD');
-
         $em->remove($popup);
         $em->flush();
 

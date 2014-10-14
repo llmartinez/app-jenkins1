@@ -25,7 +25,7 @@
                         <td>{{ ticket.assignedTo                }}</td>
                         <td>{{ ticket.description               }}</td>
                         <td>{{ ticket.status | trans            }}</td>
-                        <td><a href="{{ path('showTicket', { 'id_ticket': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                        <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

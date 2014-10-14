@@ -4,6 +4,9 @@ namespace Adservice\UtilBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\CarBundle\Entity\Brand;
@@ -109,9 +112,7 @@ class AjaxController extends Controller
     public function carModelAction($id_brand) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
-
-        $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $brand->getId()));
+        $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand));
         $size = sizeOf($models);
         if($size > 0) {
             foreach ($models as $model) {
@@ -154,14 +155,14 @@ class AjaxController extends Controller
 
     /**
      * Muestra los posts que pertenecen a un ticket
-     * @param integer $id_ticket
+     * @Route("/ticket/show_read/{id_ticket}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket", options={"id" = "id_ticket"})
      * @return url
      */
-    public function showTicketReadonlyAction($id_ticket) {
+    public function showTicketReadonlyAction($ticket) {
         $em = $this->getDoctrine()->getEntityManager();
 
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id_ticket);
 
         return $this->render('TicketBundle:Layout:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
                                                                                                  'systems'   => $systems, ));

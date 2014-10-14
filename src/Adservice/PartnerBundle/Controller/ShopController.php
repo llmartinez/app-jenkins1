@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\PartnerBundle\Form\PartnerType;
@@ -92,21 +94,19 @@ class ShopController extends Controller {
                                                                             'form'      => $form->createView()));
     }
 
-     /**
-     * Obtener los datos de la tienda a partir de su ID para poder editarlo
+    /**
+     * Edita una tienda
+     * @Route("/edit/shop/{id}")
+     * @ParamConverter("shop", class="PartnerBundle:Shop")
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editShopAction($id){
+    public function editShopAction($shop){
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
-        $shop = $em->getRepository("PartnerBundle:Shop")->find($id);
-
-        if (!$shop) throw $this->createNotFoundException('Shop no encontrado en la BBDD');
-
         $petition = $this->getRequest();
         $form = $this->createForm(new ShopType(), $shop);
 
@@ -121,7 +121,7 @@ class ShopController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -139,19 +139,17 @@ class ShopController extends Controller {
 
     /**
      * Elimina la tienda con $id de la bbdd
-     * @param Int $id
+     * @Route("/delete/shop/{id}")
+     * @ParamConverter("shop", class="PartnerBundle:Shop")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteShopAction($id){
+    public function deleteShopAction($shop){
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $shop = $em->getRepository("PartnerBundle:Shop")->find($id);
-        if (!$shop) throw $this->createNotFoundException('Tienda no encontrada en la BBDD');
-
         $em->remove($shop);
         $em->flush();
 

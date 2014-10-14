@@ -27,7 +27,7 @@
 {% block content %}
 
     <div class="form-group">
-        <form action="{{ path('closeTicket', {'id_ticket' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('closeTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
             {% include 'TicketBundle:Ticket:close_ticket.html.twig'  %}
 

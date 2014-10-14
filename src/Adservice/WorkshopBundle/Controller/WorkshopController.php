@@ -3,6 +3,8 @@ namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\UtilBundle\Entity\Pagination;
@@ -149,19 +151,17 @@ class WorkshopController extends Controller {
 
     /**
      * Obtener los datos del workshop a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
+     * @Route("/edit/{id}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editWorkshopAction($id) {
+    public function editWorkshopAction($workshop) {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
-        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
-
-        if (!$workshop) throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
-
         $partner = $workshop->getPartner();
 
         $petition   = $this->getRequest();

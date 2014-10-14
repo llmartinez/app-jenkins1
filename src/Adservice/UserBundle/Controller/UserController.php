@@ -7,6 +7,8 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\UserBundle\Form\UserAdminAssessorType;
 use Adservice\UserBundle\Form\UserSuperPartnerType;
@@ -132,8 +134,10 @@ class UserController extends Controller {
      * El ROLE_USER debe usar el profileAction (solo se puede editar a si mismo)
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
+     * @Route("/user/edit/{id}")
+     * @ParamConverter("user", class="UserBundle:User")
      */
-    public function editUserAction($id) {
+    public function editUserAction($user) {
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
@@ -141,18 +145,15 @@ class UserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        $user = $em->getRepository("UserBundle:User")->find($id);
-        if (!$user)throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
         //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
 
         $petition = $this->getRequest();
 
         //que tipo de usuario estamos editando (los formtype varian...)
-	$role = $user->getRoles();
-	$role = $role[0];
-	$role = $role->getRole();
+    	$role = $user->getRoles();
+    	$role = $role[0];
+    	$role = $role->getRole();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_SUPER_AD")                                                         $form = $this->createForm(new EditUserSuperPartnerType() , $user);
@@ -188,7 +189,8 @@ class UserController extends Controller {
 
     /**
      * Elimina el usuario con la $id de la bbdd
-     * @param Int $id
+     * @Route("/user/delete/{id}")
+     * @ParamConverter("user", class="UserBundle:User")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
@@ -198,17 +200,19 @@ class UserController extends Controller {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository("UserBundle:User")->find($id);
-        if (!$user)
-            throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
         $em->remove($user);
         $em->flush();
 
         return $this->redirect($this->generateUrl('user_list'));
     }
 
-    public function generatePasswordAction($id)
+    /**
+     * Genera el password para un usuario
+     * @Route("/user/changePassword/{id}")
+     * @ParamConverter("user", class="UserBundle:User")
+     * @return type
+     */
+    public function generatePasswordAction($id, $user)
     {
         $em   = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
@@ -222,12 +226,18 @@ class UserController extends Controller {
         return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
     }
 
-    public function changePasswordAction($id, $new_pass='none', $rep_pass='none', $old_pass='none')
+    /**
+     * Cambia el password de un ususario
+     * @Route("/user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}")
+     * @ParamConverter("user", class="UserBundle:User")
+     * @param  string $new_pass
+     * @param  string $rep_pass
+     * @param  string $old_pass
+     * @return type
+     */
+    public function changePasswordAction($user, $new_pass='none', $rep_pass='none', $old_pass='none')
     {
         $em   = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository("UserBundle:User")->find($id);
-        if (!$user)
-            throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
 
         /*CREAR PASSWORD MANUALMENTE*/
         $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
@@ -256,6 +266,13 @@ class UserController extends Controller {
         return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
     }
 
+    /**
+     * Guarda el password del usuario y envia mail con credenciales
+     * @param  EntityManager $em
+     * @param  Entity $user
+     * @param  string $password
+     * @return type
+     */
     private function savePassword($em, $user, $password){
 
         $user->setPassword($password);

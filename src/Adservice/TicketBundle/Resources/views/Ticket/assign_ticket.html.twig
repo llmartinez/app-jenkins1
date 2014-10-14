@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <form action="{{ path("assignUserToTicket", { 'id_ticket':ticket.id }) }}" method="post" >
+            <form action="{{ path("assignUserToTicket", { 'id':ticket.id }) }}" method="post" >
                 <tr>
                     <td>{{ ticket.id          }}</td>
                     <td>{{ ticket.description }} </td>
