@@ -50,11 +50,11 @@
                 <td>{{ shop.region       }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_edit.png') }}"> </a>
+                        <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                     </td>
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_edit.png') }}"></a>
+                        <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>
