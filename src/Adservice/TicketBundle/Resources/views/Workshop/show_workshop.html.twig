@@ -38,7 +38,7 @@
 	{# OBERVATIONS #}
 	<div class="form-group">
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/conflictive.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
 		{% else %}
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'>
 		{% endif %}
