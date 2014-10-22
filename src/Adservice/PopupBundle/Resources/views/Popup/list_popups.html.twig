@@ -11,7 +11,7 @@
 
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/popup_new.png') }}"> {% trans %} new.popup {% endtrans %}</a>
+    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.popup {% endtrans %}</a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -48,7 +48,7 @@
                     <td>{{ popup.country }} </td>
                     <td>
                         <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                        <a href="#"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/popup_delete.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
+                        <a href="#"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
                     </td>
                 </tr>
             {% endfor %}

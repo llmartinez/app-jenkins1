@@ -10,7 +10,7 @@
     <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_workshops {% endtrans %}
-            <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}"> {% trans %} new.workshop {% endtrans %}</a></td>
+            <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.workshop {% endtrans %}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}

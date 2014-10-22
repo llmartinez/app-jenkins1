@@ -8,6 +8,7 @@
 <input type="hidden" id="id_car" name="id_car" value="{{ car.id }}">
 
 <div class="form-group">
+	<img class="img_icon" src="{{ asset('bundles/util/images/icon/car.png') }}">
 	{% if car.brand        != "" %}{{ car.brand   }}{% endif %}
 	{% if car.model        != "" %}{{ car.model   }}{% endif %}
 	{% if car.version      != "" %}{{ car.version }}{% endif %}

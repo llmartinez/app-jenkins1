@@ -10,7 +10,7 @@
 <legend>
     {% trans %} menu.list_shops {% endtrans %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_new.png') }}"> {% trans %} new.shop {% endtrans %}</a>
+        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.shop {% endtrans %}</a>
     {% endif %}
 </legend>
 
