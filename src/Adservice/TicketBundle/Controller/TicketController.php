@@ -279,9 +279,9 @@ class TicketController extends Controller {
                         //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
                         if (isset($_POST['save&close'])){
-                            return $this->redirect($this->generateUrl('closeTicket', array( 'id_ticket' => $ticket->getId())));
+                            return $this->redirect($this->generateUrl('closeTicket', array( 'id' => $ticket->getId())));
                         }else{
-                            return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $ticket->getId())));
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
                     } else { $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
@@ -333,7 +333,7 @@ class TicketController extends Controller {
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $id)));
+                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
             }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
         }
@@ -401,7 +401,7 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketAction($id, $ticket) {
+    public function showTicketAction($ticket) {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $security = $this->get('security.context');
@@ -490,14 +490,14 @@ class TicketController extends Controller {
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
-                    $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$id);
+                    $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                     $mailer->setFrom('noreply@grupeina.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
                 }
             }
-            return $this->redirect($this->generateUrl('showTicket', array(  'id_ticket' => $id,
+            return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems,
@@ -733,7 +733,7 @@ class TicketController extends Controller {
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function blockTicketAction($id, $ticket, $id_user = null) {
+    public function blockTicketAction($ticket, $id_user = null) {
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository('UserBundle:User')->find($id_user);
@@ -743,7 +743,7 @@ class TicketController extends Controller {
         $em->persist($ticket);
         $em->flush();
 
-        return $this->showTicketAction($id);
+        return $this->showTicketAction($ticket);
     }
 
     /**
