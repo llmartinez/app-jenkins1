@@ -71,6 +71,7 @@ class UserController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+
         $users_role_super_admin = array();
         $users_role_admin       = array();
         $users_role_assessor    = array();
@@ -79,21 +80,32 @@ class UserController extends Controller {
         $users_role_ad          = array();
 
 
-        $pagination = new Pagination($page);
+        if($option == null or $option == 'all')
+        {
+            $role_id  = 'all';
 
-        if($option == null or $option == 'all'){
-                if($security->isGranted('ROLE_SUPER_ADMIN')) $params[] = array();
-                else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
-                $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
-                $role_id  = 'none';
+            $dql = 'SELECT e FROM UserBundle:User e WHERE e.id > 0 ';
+
+            if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                // POSIBLE MEJORA: LISTAR USUARIOS SEGUN EL PAIS
+                // if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
+            }
+            else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
         }else{
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
                 $role     = $role->getName();
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $role, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $role);
+
+                $dql = "SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = '".$role."' ";
+
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
+                    $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+                }
         }
+
+        $pagination = new Pagination($page, $em, $dql);
+
+        $users = $pagination->getResult();
 
         //separamos los tipos de usuario...
         foreach ($users as $user) {
@@ -112,8 +124,6 @@ class UserController extends Controller {
 
             if($option == null or $option == 'all') unset($role);
         }
-
-        $length = $pagination->setTotalPagByLength($length);
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
 
