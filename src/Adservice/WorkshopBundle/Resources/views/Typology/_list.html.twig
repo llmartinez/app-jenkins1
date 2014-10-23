@@ -26,7 +26,7 @@
             {% endfor %}
         </tbody>
     </table>
-        {% include 'UtilBundle:Pagination:pagination_typology.html.twig' %}
+        {% include 'UtilBundle:Pagination:pagination.html.twig' %}
 {% else %}
     {% trans %} any.typology {% endtrans %}
 {% endif %}
@@ -35,5 +35,7 @@
 {% block javascripts %}
 
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/workshop/js/typology.js') }}"></script>
 
 {% endblock %}
