@@ -25,33 +25,41 @@ class ShopController extends Controller {
      */
     public function listAction($page=1, $country='none', $partner='none') {
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
+        $dql = "SELECT e FROM PartnerBundle:Shop e WHERE e.id > 0 AND e.name != '...' ";
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
 
-        $pagination = new Pagination($page);
+        if ($partner != 'none') $dql .=' AND e.partner = '.$partner.' ';
 
-        $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
+        $pagination = new Pagination($page, $em, $dql);
 
-        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Shop', $params);
-
-        $pagination->setTotalPagByLength($length);
+        $shops = $pagination->getResult();
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'      => $shops,
-                                                                                'pagination' => $pagination,
-                                                                                'countries'  => $countries,
-                                                                                'country'    => $country,));
+        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
+        else                   $country_name = 'none';
+
+        if($partner != 'none') $partner_name = $em->getRepository('UtilBundle:Country')->find($partner)->getCountry();
+        else                   $partner_name = 'none';
+
+        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
+                                                                                'pagination'   => $pagination,
+                                                                                'countries'    => $countries,
+                                                                                'country'      => $country,
+                                                                                'country_name' => $country_name,
+                                                                                'partner_name' => $partner_name,
+                                                                                ));
     }
 
     /**
