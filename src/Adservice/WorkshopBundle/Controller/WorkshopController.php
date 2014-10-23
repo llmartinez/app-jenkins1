@@ -22,33 +22,32 @@ class WorkshopController extends Controller {
      * @throws AccessDeniedException
      */
     public function listAction($page=1 , $country='none') {
-        $em = $this->getDoctrine()->getEntityManager();
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
+        $em = $this->getDoctrine()->getEntityManager();
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+        $dql = 'SELECT e FROM WorkshopBundle:Workshop e WHERE e.id > 0 ';
+
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
 
-        $pagination = new Pagination($page);
+        $pagination = new Pagination($page, $em, $dql);
 
-        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination);
-
-        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params);
-
-        $pagination->setTotalPagByLength($length);
+        $workshops = $pagination->getResult();
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'  => $workshops,
-                                                                            'pagination' => $pagination,
-                                                                            'countries'  => $countries,
-                                                                            'country'    => $country,));
+        return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'   => $workshops,
+                                                                            'pagination'   => $pagination,
+                                                                            'countries'    => $countries,
+                                                                            'country'      => $country,
+                                                                            ));
     }
 
     public function newWorkshopAction() {

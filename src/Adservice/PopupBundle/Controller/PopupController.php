@@ -54,14 +54,10 @@ class PopupController extends Controller {
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
-        else                   $country_name = 'none';
-
         return $this->render('PopupBundle:Popup:list_popups.html.twig', array(  'all_popups'   => $popups,
                                                                                 'pagination'   => $pagination,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
-                                                                                'country_name' => $country_name,
                                                                                 ));
     }
 

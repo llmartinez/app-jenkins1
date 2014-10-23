@@ -233,7 +233,7 @@ class Pagination
                         ->setFirstResult($this->getFirstRow());
 
         /* PRUEBAS */
-            // echo $query.'<br>';
+             echo $query.'<br>';
             // var_dump($consulta->getResult());
             // die;
         $this->result = $consulta->getResult();

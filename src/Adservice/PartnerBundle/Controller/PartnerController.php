@@ -44,14 +44,10 @@ class PartnerController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
-        else                   $country_name = 'none';
-
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
                                                                                     'country'      => $country,
-                                                                                    'country_name' => $country_name,
                                                                                     ));
     }
     /**

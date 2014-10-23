@@ -23,7 +23,7 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $partner='none') {
+    public function listAction($page=1, $country='none') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
@@ -47,18 +47,10 @@ class ShopController extends Controller {
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
-        else                   $country_name = 'none';
-
-        if($partner != 'none') $partner_name = $em->getRepository('UtilBundle:Partner')->find($partner)->getCountry();
-        else                   $partner_name = 'none';
-
         return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
                                                                                 'pagination'   => $pagination,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
-                                                                                'country_name' => $country_name,
-                                                                                'partner_name' => $partner_name,
                                                                                 ));
     }
 
