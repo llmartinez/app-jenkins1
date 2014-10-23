@@ -1,13 +1,13 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'popup_list' %}
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_popups {% endtrans %}</li>
     </ol>
-
-{# <legend>{% trans %}  {% endtrans %}</legend> #}
 
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
@@ -16,7 +16,7 @@
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control' data-url="{{ path('popup_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+        <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
@@ -55,7 +55,7 @@
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination_popup.html.twig'  %}
+    {% include 'UtilBundle:Pagination:pagination.html.twig'  %}
 
 {% else %}
     {% trans %} any.popup {% endtrans %}

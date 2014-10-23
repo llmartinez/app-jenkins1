@@ -33,33 +33,36 @@ class PopupController extends Controller {
     }
 
     public function popupListAction($page=1 , $country='none') {
+
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+        $dql = 'SELECT e FROM PopupBundle:Popup e WHERE e.id > 0  ';
+
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
 
-        $pagination = new Pagination($page);
+        $pagination = new Pagination($page, $em, $dql);
 
-        $popups = $pagination->getRows($em, 'PopupBundle', 'Popup', $params, $pagination);
-
-        $length = $pagination->getRowsLength($em, 'PopupBundle', 'Popup', $params);
-
-        $pagination->setTotalPagByLength($length);
+        $popups = $pagination->getResult();
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('PopupBundle:Popup:list_popups.html.twig', array( 'all_popups' => $popups,
-                                                                        'pagination' => $pagination,
-                                                                        'countries'  => $countries,
-                                                                        'country'    => $country,));
+        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
+        else                   $country_name = 'none';
+
+        return $this->render('PopupBundle:Popup:list_popups.html.twig', array(  'all_popups'   => $popups,
+                                                                                'pagination'   => $pagination,
+                                                                                'countries'    => $countries,
+                                                                                'country'      => $country,
+                                                                                'country_name' => $country_name,
+                                                                                ));
     }
 
     public function newPopupAction(){

@@ -2,6 +2,8 @@
 
 {% block body %}
 
+    {% set route = 'partner_list' %}
+
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_partners {% endtrans %}</li>
@@ -14,7 +16,7 @@
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control' data-url="{{ path('partner_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+        <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country | trans }}</option>
@@ -54,7 +56,7 @@
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
+    {% include 'UtilBundle:Pagination:pagination.html.twig' %}
 
     {% else %}
         {% trans %} any.partner {% endtrans %}
