@@ -1,26 +1,35 @@
 <?php
-
 namespace Adservice\UtilBundle\Entity;
 
 /**
+ * Genera código para paginar una sentencia DQL
+ *
  * Adservice\UtilBundle\Entity\Pagination
+ * @author DMF
  */
 class Pagination
 {
-    private $max_rows; //Maximo de registros por pagina
+    private $max_rows;       //Maximo de registros por pagina
     private $num_side_pages; //Numero de paginas a cada lado de la pagina actual
 
     private $page;           //Numero de la pagina actual
     private $first_row;      //Numero del primer registro a mostrar
     private $last_row;       //Numero del ultimo registro a mostrar
     private $total_pag;      //Numero total de paginas
+    private $result;         //Resultado de la consulta
 
-    public function __construct($page=1) {
+    public function __construct($page=1, $em=null, $dql=null) {
         $this->setMaxRows(10);
-        $this->setNumSidePages(5);
+        $this->setNumSidePages(7);
         $this->setPage($page);
         $this->setLastRow($this->getMaxRows() * $page);
         $this->setFirstRow($this->getLastRow() - $this->getMaxRows()  );
+
+        if($em!=null and $dql!=null) {
+            $this->setResult($this->getRows($em, $dql));
+            $length = $this->getRowsLength($em, $dql);
+            $this->setTotalPagByLength($length);
+        }
     }
 
     public function __toString() {
@@ -146,9 +155,29 @@ class Pagination
     }
 
     /**
+     * Set result
+     *
+     * @param string $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
+
+    /**
+     * Get result
+     *
+     * @return string
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
      * Set total_pag
      *
-     * @param string $total_pag
+     * @param string $length
      */
     public function setTotalPagByLength($length)
     {
@@ -197,61 +226,28 @@ class Pagination
      *
      * @return string
      */
-    public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null, $joins=null, $add='')
+    public function getRows($em, $query)
     {
-        $query = 'SELECT e '.$add;
-        $from  = 'FROM '.$bundle.':'.$entity.' e ';
-        $where = 'WHERE e.id > 0 ';
-
-        if($joins != null and $joins[0] != null) {
-            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
-                                        $where = $where.'AND '.$join[1].' '; }
-        }
-        if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
-        }
-
-        ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
-
-        if($pagination != null){
-
-            $consulta = $em ->createQuery($query.$from.$where.$order)
-                            ->setMaxResults($pagination->getMaxRows())
-                            ->setFirstResult($pagination->getFirstRow());
-        }else{
-            $consulta = $em->createQuery($query.$from.$where.$order);
-        }
+        $consulta = $em ->createQuery($query)
+                        ->setMaxResults($this->getMaxRows())
+                        ->setFirstResult($this->getFirstRow());
 
         /* PRUEBAS */
-            // echo $query.$from.$where.$order.'<br>';
+            // echo $query.'<br>';
             // var_dump($consulta->getResult());
             // die;
+        $this->result = $consulta->getResult();
         return $consulta->getResult();
     }
 
-    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null, $add='')
+    public function getRowsLength($em, $query)
     {
-        $query = 'SELECT COUNT(e) '.$add;
-        $from  = 'FROM '.$bundle.':'.$entity.' e ';
-        $where = 'WHERE e.id > 0 ';
-
-        if($joins != null and $joins[0] != null) {
-            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
-                                        $where = $where.'AND '.$join[1].' '; }
-        }
-        if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
-        }
-
-        ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
-
-        $consulta = $em ->createQuery($query.$from.$where.$order);
+        $consulta = $em ->createQuery($query);
 
         $result = $consulta->getResult();
-        $result = $result[0];
-        $result = $result[1];
+        $count  = count($result);
 
-        return $result;
+        return $count;
     }
 
 }

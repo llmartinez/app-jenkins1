@@ -30,27 +30,29 @@ class PartnerController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
+        $dql = 'SELECT e FROM PartnerBundle:Partner e WHERE e.id > 0 ';
+
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
         }
-        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
 
-        $pagination = new Pagination($page);
+        $pagination = new Pagination($page, $em, $dql);
 
-        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
-
-        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
-
-        $pagination->setTotalPagByLength($length);
+        $partners = $pagination->getResult();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
+        if($country != 'none') $country_name = $em->getRepository('UtilBundle:Country')->find($country)->getCountry();
+        else                   $country_name = 'none';
+
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
-                                                                                    'country'      => $country,));
+                                                                                    'country'      => $country,
+                                                                                    'country_name' => $country_name,
+                                                                                    ));
     }
     /**
      * Crea un socio en la bbdd

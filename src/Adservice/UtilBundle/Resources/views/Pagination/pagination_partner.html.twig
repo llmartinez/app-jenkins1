@@ -3,19 +3,40 @@
     	{% set page      = pagination.page      %}
     	{% set prevpages = pagination.prevpages %}
 	    {% set nextpages = pagination.nextpages %}
-	    {% set totalpag  = pagination.totalpag  %}
+        {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
-    <div id="pagination"  class="pagination_content" data-url="{{ path('partner_list', {'page': 'plc_page', 'country': 'plc_country'})}}" data-total="{{ totalpag }}">
+
+        <input type="hidden" id="totalpag" value="{{ totalpag }}">
+        {# <input type="hidden" id="order_by" value="{{ order_by }}"> #}
+        {# <input type="hidden" id="trend"    value="{{ trend    }}"> #}
+        {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
+
+    <div id="pagination"  class="pagination_content">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
-    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"></span></button>
-    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="{% trans %} page.prev {% endtrans %}"></span></button>
+    	<a id="firstpage"    class="page_number" title="{% trans %} page.first {% endtrans %}"
+            href="{{ path('partner_list', { page: 1, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left_double.png') }}">
+        </a>
+
+        {% if page-1 <= 0 %} {% set this_prev_page = 1 %} {% else %} {% set this_prev_page = page-1 %}{% endif %}
+
+    	<a id="btn_anterior" class="page_number" title="{% trans %} page.prev {% endtrans %}"
+            href="{{ path('partner_list', { page: this_prev_page, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left.png') }}">
+        </a>
 
 	    {# PAGINAS ANTERIORES #}
     	{% if prevpages > 0 %}
 	    	{% for prev_page in prevpages..1 %}
-	    		<button class="page_number change_page" >{{ page - prev_page }}</button>
+
+                {% set this_prev_page = page - prev_page %}
+
+                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}"
+                    href="{{ path('partner_list', { page: this_prev_page, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+                    {{ this_prev_page }}
+                </a>
 	    	{% endfor %}
     	{% endif %}
 
@@ -25,12 +46,27 @@
 	    {# PAGINAS SIGUIENTES #}
     	{% if nextpages > 0 %}
 			{% for next_page in 1..nextpages %}
-	    		<button class="page_number change_page" >{{ page + next_page }}</button>
+
+                {% set this_next_page = page + next_page %}
+
+                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}"
+                    href="{{ path('partner_list', { page: this_next_page, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+                    {{ this_next_page }}
+                </a>
 	    	{% endfor %}
     	{% endif %}
 
 	    {# FLECHAS PAGINAS SIGUIENTES #}
-    	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="{% trans %} page.next {% endtrans %}"></span></button>
-    	<button type="button" id="totalpage" class="page_number"><span class="glyphicon glyphicon-forward" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
+
+        {% if page+1 >= totalpag %} {% set this_next_page = totalpag %} {% else %} {% set this_next_page = page+1 %}{% endif %}
+
+        <a id="btn_siguiente" class="page_number" title="{% trans %} page.next {% endtrans %}"
+            href="{{ path('partner_list', { page: this_next_page, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right.png') }}">
+        </a>
+        <a id="totalpag"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
+            href="{{ path('partner_list', { page: totalpag, country: country_name }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right_double.png') }}">
+        </a>
 
     </div>
