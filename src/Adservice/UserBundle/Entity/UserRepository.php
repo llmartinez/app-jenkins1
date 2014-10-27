@@ -37,42 +37,42 @@ class UserRepository extends EntityRepository
         return $users;
     }
 
- //     /**
- //     * Get 10 rows of a role
- //     *
- //     * @return string
- //     */
- //    public function findByOption($em, $security, $option, $pagination)
- //    {
- //        $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+     /**
+     * Get 10 rows of a role
+     *
+     * @return string
+     */
+    public function findByOption($em, $security, $option, $pagination)
+    {
+        $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
- //        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
- //            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
- //        }
- //        $consulta = $em ->createQuery($query)
- //                        ->setParameter('role', $option)
- //                        ->setMaxResults($pagination->getMaxRows())
- //                        ->setFirstResult($pagination->getFirstRow());
+        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
+            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option)
+                        ->setMaxResults($pagination->getMaxRows())
+                        ->setFirstResult($pagination->getFirstRow());
 
- //        return $consulta->getResult();
- //    }
- //    /**
- //     * Get 10 rows of a role
- //     *
- //     * @return string
- //     */
- //    public function findLengthOption($em, $security, $option)
- //    {
- //        $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+        return $consulta->getResult();
+    }
+    /**
+     * Get 10 rows of a role
+     *
+     * @return string
+     */
+    public function findLengthOption($em, $security, $option)
+    {
+        $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
- //        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
- //            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
- //        }
- //        $consulta = $em ->createQuery($query)
- //                        ->setParameter('role', $option);
-	// $result = $consulta->getResult();
-	// $result = $result[0];
-	// $result = $result[1];
- //        return $result;
- //    }
+        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
+            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option);
+	$result = $consulta->getResult();
+	$result = $result[0];
+	$result = $result[1];
+        return $result;
+    }
 }

@@ -1,6 +1,6 @@
 
     <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
-    <select id="slct_historyTickets" class="form-control" data-url="{{ path('listTicket', {'page': '1', 'option': 'plc_option'}) }}">
+    <select id="slct_historyTickets" class="form-control" data-url="{{ path(route, {'page': '1', 'option': 'plc_option'}) }}">
 
         {% if is_granted('ROLE_ADMIN') %}
                 <option value="all" selected="selected" >{% trans %} ticket.opt.all               {% endtrans %}</option>
@@ -12,6 +12,7 @@
         {% else %}
             {% if is_granted('ROLE_ASSESSOR') %}
                 <option value="free" selected="selected">{% trans %} ticket.opt.free              {% endtrans %}</option>
+                <option value="all_mine"                >{% trans %} ticket.opt.all_mine          {% endtrans %}</option>
                 <option value="assessor_pending"        >{% trans %} ticket.opt.assessor.pending  {% endtrans %}</option>
                 <option value="assessor_answered"       >{% trans %} ticket.opt.assessor.answered {% endtrans %}</option>
                 <option value="assessor_closed"         >{% trans %} ticket.opt.assessor.closed   {% endtrans %}</option>
@@ -72,6 +73,4 @@
 
         </div>
     </div>
-
-    <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>
 

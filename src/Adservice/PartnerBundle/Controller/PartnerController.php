@@ -30,16 +30,19 @@ class PartnerController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        $dql = 'SELECT e FROM PartnerBundle:Partner e WHERE e.id > 0 ';
-
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
+            if ($country != 'none') $params[] = array('country', ' = '.$country);
+            else                    $params[] = array();
         }
-        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-        $pagination = new Pagination($page, $em, $dql);
+        $pagination = new Pagination($page);
 
-        $partners = $pagination->getResult();
+        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
+
+        $pagination->setTotalPagByLength($length);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();

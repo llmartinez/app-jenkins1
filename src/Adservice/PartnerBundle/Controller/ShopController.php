@@ -31,18 +31,20 @@ class ShopController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        $dql = "SELECT e FROM PartnerBundle:Shop e WHERE e.id > 0 AND e.name != '...' ";
+        $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $params[] = array('country', ' = '.$country);
         }
-        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
-        if ($partner != 'none') $dql .=' AND e.partner = '.$partner.' ';
+        $pagination = new Pagination($page);
 
-        $pagination = new Pagination($page, $em, $dql);
+        $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
 
-        $shops = $pagination->getResult();
+        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Shop', $params);
+
+        $pagination->setTotalPagByLength($length);
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();

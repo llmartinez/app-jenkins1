@@ -7,7 +7,7 @@
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}
 
-	    {% if ticket.assignedTo != "" %}<p><b>{% trans %} ticket.assigned_to {% endtrans %}:</b> {{ ticket.assignedTo }} </p>{% endif %}
+	    	{% if ticket.assignedTo != "" %}<p><b>{% trans %} ticket.assigned_to {% endtrans %}:</b> {{ ticket.assignedTo }} </p>{% endif %}
 
     		{% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %}
 

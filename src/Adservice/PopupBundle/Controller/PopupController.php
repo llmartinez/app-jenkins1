@@ -40,16 +40,19 @@ class PopupController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        $dql = 'SELECT e FROM PopupBundle:Popup e WHERE e.id > 0  ';
-
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $dql .=' AND e.country = '.$country.' ';
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $params[] = array('country', ' = '.$country);
+            else                    $params[] = array();
         }
-        else $dql .=' AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
-        $pagination = new Pagination($page, $em, $dql);
+        $pagination = new Pagination($page);
 
-        $popups = $pagination->getResult();
+        $popups = $pagination->getRows($em, 'PopupBundle', 'Popup', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'PopupBundle', 'Popup', $params);
+
+        $pagination->setTotalPagByLength($length);
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();

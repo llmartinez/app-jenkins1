@@ -22,9 +22,13 @@ showTicket:
     pattern:  /ticket/show/{id}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
 
-listTicketFiltered:
-    pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
-    defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
+findTicketById:
+    pattern:  /ticket/findTicketById/
+    defaults: { _controller: TicketBundle:Ticket:findTicketById }
+
+# listTicketFiltered:
+#     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
+#     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
 
 ticketWorkshopList:
     pattern:  /ticket/workshopList/{page}/

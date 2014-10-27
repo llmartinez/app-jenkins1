@@ -7,9 +7,16 @@
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
+	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
+
 	{# WORKSHOP #}
 	<div class="form-group">
 		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}},{{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
+	</div>
+
+	{# CIF #}
+	<div class="form-group">
+		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif      }} {% endif %}
 	</div>
 	<div class="form-group">
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
@@ -30,13 +37,22 @@
 	{# TEL #}
 	<div class="form-group">
 		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
+		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
+	</div>
+	<div class="form-group">
 		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
+		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+	</div>
+	<div class="form-group">
 		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}
 	</div>
 
 	{# MAIL #}
 	<div class="form-group">
-		{% if workshop.email1 != "" %} <img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png') }}'> {{ workshop.email1 }} {% endif %}
+		<table>
+		{% if workshop.email1 != "" %} <tr><td><img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png') }}'></td><td> {{ workshop.email1 }} </td></tr>{% endif %}
+		{% if workshop.email2 != "" %} <tr><td></td><td> {{ workshop.email2 }} </td></tr>{% endif %}
+		</table>
 	</div>
 
 	{# OBERVATIONS #}
@@ -44,7 +60,7 @@
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
 		{% else %}
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info.png') }}'>
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
 		{% endif %}
 		{% if is_granted('ROLE_ADMIN') %}
 			{% if workshop.observationAdmin      != "" %}<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin    }} {% endif %}

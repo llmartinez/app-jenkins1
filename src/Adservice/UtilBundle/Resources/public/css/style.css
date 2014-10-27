@@ -582,3 +582,11 @@ textarea.form-control_ged {
 .ml15 {
     margin-left: 15px;
 }
+.change_page {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.pdl0 {
+    padding-left: 0px !important;
+}

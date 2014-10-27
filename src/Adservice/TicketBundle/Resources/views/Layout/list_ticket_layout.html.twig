@@ -25,6 +25,8 @@
 {% endblock  %}
 
 {% block content %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'listTicket' %}
 
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
