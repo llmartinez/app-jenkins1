@@ -56,7 +56,7 @@
                 {% for incidence in incidences %}
             <tr class="incidenceRow" data-url="{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}">
                 <td id="id_incidence">{{ incidence.id }}</td>
-                <td>{{ incidence.date   }}</td> {# | date("d/m/Y") #}
+                <td>{{ incidence.date|date("d/m/y")   }}</td>
                 <td>{{ incidence.oper   }}</td>
                 <td>{{ incidence.coche  }}</td>
                 <td>{{ incidence.asesor }}</td>

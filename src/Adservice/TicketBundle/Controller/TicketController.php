@@ -41,7 +41,7 @@ class TicketController extends Controller {
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page=1 , $option=null)
+    public function listTicketAction($page=1, $num_rows=10, $option=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request    = $this->getRequest();
@@ -125,6 +125,8 @@ class TicketController extends Controller {
 
         $pagination = new Pagination($page);
 
+        if($pagination->getMaxRows() != $num_rows) $pagination = $pagination->changeMaxRows($page, $num_rows);
+
         if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
@@ -197,10 +199,13 @@ class TicketController extends Controller {
             $this->get('session')->setFlash('error', $error);
         }
 
+        if ($option == null) $option = 'all';
+
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
                                                                                        'option'     => $option,
+                                                                                       'num_rows'   => $num_rows,
                                                                               ));
     }
 
@@ -819,7 +824,8 @@ class TicketController extends Controller {
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
-                                                                                       'option'     => 'none',
+                                                                                       'option'     => 'all',
+                                                                                       'num_rows'   => 10,
                                                                                   ));
     }
 

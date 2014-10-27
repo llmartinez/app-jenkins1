@@ -193,6 +193,20 @@ class Pagination
     }
 
     /**
+     * Cambia el maximo de resultados que muestra la paginación
+     *
+     * @return string
+     */
+    public function changeMaxRows($page, $rows)
+    {
+        $this->setMaxRows($rows);
+        $this->setLastRow($this->getMaxRows() * $page);
+        $this->setFirstRow($this->getLastRow() - $this->getMaxRows());
+
+        return $this;
+    }
+
+    /**
      * Get rows
      *
      * @return string
@@ -212,6 +226,7 @@ class Pagination
         }
 
         ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
+        // ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
 
         if($pagination != null){
 
@@ -223,7 +238,7 @@ class Pagination
         }
 
         /* PRUEBAS */
-            // echo $query.$from.$where.$order.'<br>';
+            echo $query.$from.$where.$order.'<br>';
             // var_dump($consulta->getResult());
             //die;
         return $consulta->getResult();

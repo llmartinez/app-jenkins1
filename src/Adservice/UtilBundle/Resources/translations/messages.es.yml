@@ -319,7 +319,7 @@ workshop.search:		 "Buscar taller"
 users_in_workshop:		 "Usuarios del Taller"
 workshop_details:		 "Ver detalles del taller"
 workshop_inactive:		 "El taller esta dado de baja o no existe"
-workshop_confirm:		 "Comprueba si es el taller correcto. Hay varios talleres que coinciden con los parámetros insertados "
+workshop_confirm:		 "Tus datos coinciden con mas de un taller "
 workshop_name:		 	 "Nombre del taller"
 
 

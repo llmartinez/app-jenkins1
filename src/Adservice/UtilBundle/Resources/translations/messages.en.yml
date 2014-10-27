@@ -316,7 +316,7 @@ workshop.deactivate:	 "Deactive Workshop"
 workshop.search:		 "Search Workshop"
 users_in_workshop:		 "Users from Workshop"
 workshop_inactive:		 "The workshop is disabled or not exist"
-workshop_confirm:		 "Check if the chosen workshop is correct. There are many workshop matched with the parameters inserted "
+workshop_confirm:		 "We found more than one workshop "
 workshop_name:		 	 "Workshop name"
 
 #USER

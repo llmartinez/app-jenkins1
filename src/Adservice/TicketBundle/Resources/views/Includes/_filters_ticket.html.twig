@@ -7,7 +7,7 @@
         {% if workshop.active == 1 %}
             <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
         {% else %}
-            <a class="btn" id="newTicket" title="{{ workshop.inactive }}" alt="{{ workshop.inactive }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            {# <a class="btn" id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
         {% endif %}
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
     {% else  %}
@@ -36,38 +36,3 @@
         {% endif %}
     {% endif %}
     </div>
-
-    <script type="text/javascript">
-
-    //     $(document).ready(function() {
-
-    //         $('#btn_search').click(function() {
-
-    //             var id_ticket   = $('#flt_id'     ).val();
-    //             var id_workshop = 'none';
-    //             var status      = 'all';
-
-    //             {% if workshop.id is defined and workshop.id != "" %}
-
-    //                 var id_workshop = $('#id_workshop').val();
-    //                 var st_open     = $('#flt_open'   ).is(':checked');
-    //                 var st_closed   = $('#flt_closed' ).is(':checked');
-
-    //                 if(st_open    == true ){ status      = 'open'   }
-    //                 if(st_closed  == true ){ status      = 'closed' }
-    //                 if((st_open   == true) && (st_closed == true))  { status = 'all' }
-
-    //             {% endif %}
-
-    //             if(id_ticket   == ""   ){ id_ticket   = 'none'   }
-    //             if(id_workshop == ""   ){ id_workshop = 'none'   }
-
-    //             var url = "{{ path('findTicketById', { 'page' : 1, 'id_workshop': 'plc_w', 'id_ticket': 'plc_t', 'status': 'plc_st' }) }}";
-    //             url = url.replace("plc_w" , id_workshop);
-    //             url = url.replace("plc_t" , id_ticket  );
-    //             url = url.replace("plc_st", status     );
-    //             window.open(url, "_self");
-    //         });
-    //     });
-
-    </script>
