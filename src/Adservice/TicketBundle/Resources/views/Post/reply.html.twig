@@ -21,12 +21,14 @@
         {# formulario de respuesta de POST #}
 
             <legend> {% trans %} reply {% endtrans %}: </legend>
+            <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
             <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '4', 'placeholder': 'answer' | trans } }) }}</div>
 
             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
             <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
-
+            {% if app.session.hasFlash('error') %} 
+            {% endif %}
             {{ form_rest(formP) }}
             {{ form_rest(formD) }}
 

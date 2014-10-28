@@ -46,6 +46,9 @@
                                         <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
 
                                         <li><a class="btn pull-left"  href="{{ path("listTicket"                  ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+                                        {% if is_granted('ROLE_ASSESSOR') and workshop is not defined or workshop.id == "" %}
+                                            <li><a class="btn pull-left"  href="{{ path("newTicket") }}">{% trans %} new.ticket {% endtrans %}</a></li>
+                                        {% endif %}
                                         <li><a href="#"></a></li>
                                         <li class="divider"></li>
                                         <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}Logout       {% endtrans %}</a></li>

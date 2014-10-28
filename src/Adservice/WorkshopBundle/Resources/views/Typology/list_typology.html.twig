@@ -1,6 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'typology_list' %}
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -10,12 +12,12 @@
     <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_typologies {% endtrans %}
-            <a id="newTypology" href="{{ path('typology_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/typology_new.png') }}"> {% trans %} new.typology {% endtrans %}</a></td>
+            <a id="newTypology" href="{{ path('typology_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.typology {% endtrans %}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-            <select id="flt_country" class='form-control' data-url="{{ path('typology_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+            <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                     <option value="none">{% trans %} all {% endtrans %}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
@@ -29,8 +31,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
-    <script src="{{ asset('bundles/util/js/typology.js') }}"></script>
+    <script src="{{ asset('bundles/workshop/js/typology.js') }}"></script>
     <script>
         $(document).ready(function() {
             {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}

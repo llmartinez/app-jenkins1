@@ -1,22 +1,22 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'popup_list' %}
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_popups {% endtrans %}</li>
     </ol>
 
-{# <legend>{% trans %}  {% endtrans %}</legend> #}
-
 <legend>
     {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/popup_new.png') }}"> {% trans %} new.popup {% endtrans %}</a>
+    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.popup {% endtrans %}</a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control' data-url="{{ path('popup_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+        <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
@@ -48,14 +48,14 @@
                     <td>{{ popup.country }} </td>
                     <td>
                         <a href="{{ path("popup_edit", { 'id':popup.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                        <a href="#"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/popup_delete.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
+                        <a href="#"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination_popup.html.twig'  %}
+    {% include 'UtilBundle:Pagination:pagination.html.twig'  %}
 
 {% else %}
     {% trans %} any.popup {% endtrans %}

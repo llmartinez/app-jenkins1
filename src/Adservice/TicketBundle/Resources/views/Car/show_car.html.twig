@@ -8,15 +8,18 @@
 <input type="hidden" id="id_car" name="id_car" value="{{ car.id }}">
 
 <div class="form-group">
-	{% if car.brand        != "" %}{{ car.brand   }}{% endif %}
-	{% if car.model        != "" %}{{ car.model   }}{% endif %}
-	{% if car.version      != "" %}{{ car.version }}{% endif %}
-	{#
-	{% if car.year         != "" %}<b>year:     	</b>{{ car.year         }}  {% endif %}
-	{% if car.motor        != "" %}<b>motor:     	</b>{{ car.motor        }}  {% endif %}
-	{% if car.kW           != "" %}<b>kW:           </b>{{ car.kW           }}  {% endif %}
-	{% if car.displacement != "" %}<b>displacement: </b>{{ car.displacement }}  {% endif %}
-	{% if car.vin          != "" %}<b>vin:     	  	</b>{{ car.vin          }}  {% endif %}
-	#}
-	{% if car.plateNumber  != "" %}<b>{% trans %} plate_number {% endtrans %}:  </b>{{ car.plateNumber  }}  {% endif %}
+	<table>
+		<tr><td><img class="img_icon" src="{{ asset('bundles/util/images/icon/car.png') }}"></td><td>{% if car.brand        != "" %}{{ car.brand   }}</td>{% endif %}</tr>
+
+		{% if car.model        != "" %}<tr><td><b>{% trans %} model   {% endtrans %}:</b> </td><td>{{ car.model   }}</td></tr>{% endif %}
+		{% if car.version      != "" %}<tr><td><b>{% trans %} version {% endtrans %}:</b> </td><td>{{ car.version }}</td></tr>{% endif %}
+		{#
+		{% if car.year         != "" %}<tr><td><b>year:			</b><td>{{ car.year         }}</td></tr>{% endif %}
+		{% if car.motor        != "" %}<tr><td><b>motor:		</b><td>{{ car.motor        }}</td></tr>{% endif %}
+		{% if car.kW           != "" %}<tr><td><b>kW:			</b><td>{{ car.kW           }}</td></tr>{% endif %}
+		{% if car.displacement != "" %}<tr><td><b>displacement:	</b><td>{{ car.displacement }}</td></tr>{% endif %}
+		{% if car.vin          != "" %}<tr><td><b>vin:			</b><td>{{ car.vin          }}</td></tr>{% endif %}
+		#}
+		{% if car.plateNumber  != "" %}<tr><td><b>{% trans %} plate_number {% endtrans %}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
+	</table>
 </div>

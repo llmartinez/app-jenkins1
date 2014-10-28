@@ -8,10 +8,10 @@
             <thead>
                 <tr>
                     <th> #                                           </th>
+                    <th>{% trans %} status             {% endtrans %}</th>
                     <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
                     <th>{% trans %} car                {% endtrans %}</th>
                     <th>{% trans %} description        {% endtrans %}</th>
-                    <th>{% trans %} status             {% endtrans %}</th>
                     <th></th>
                     <th>{% trans %} date               {% endtrans %}</th>
                 </tr>
@@ -20,10 +20,24 @@
                 {% for ticket in tickets %}
                     <tr id="ticketRow">
                         <td id="id_ticket">{{ ticket.id         }}</td>
-                        <td>{{ ticket.assignedTo                }}</td>
-                        <td>{{ ticket.car                       }}</td>
-                        <td>{{ ticket.description               }}</td>
-                        <td>{{ ticket.status | trans            }}</td>
+
+                        {% if ticket.status == 'open' %}
+                                {% if ticket.assignedTo == null %}
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_green.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                {% else %}
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_blue.png') }}" title="{{'ticket_assigned'|trans}}" alt="{{ ticket.status | trans }}"></td>
+                                {% endif %}
+                            {% elseif ticket.status == 'closed' %}
+                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_red.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}"></td>
+                            {% endif %}
+
+                        <td title="{{ticket.assignedTo}}" >   {{ ticket.assignedTo|length > 15 ? ticket.assignedTo|slice(0, 15) ~ '...' : ticket.assignedTo  }}</td>
+
+                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
+
+                        <td title="{{ticket.description}}">   {{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description  }}</td>
+
                         <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                         <td>{{ ticket.createdAt | date("d/m/y") }}</td>
                     </tr>
@@ -31,5 +45,5 @@
             </tbody>
         </table>
 
-        {% include 'UtilBundle:Pagination:tickets_pagination.html.twig' %}
-        <script src="{{ asset('bundles/util/js/pagination_ticket.js') }}"></script>
+        {% include 'UtilBundle:Pagination:tickets_history_pagination.html.twig' %}
+        <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>

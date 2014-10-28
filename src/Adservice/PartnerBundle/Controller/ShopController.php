@@ -23,9 +23,10 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $partner='none') {
+    public function listAction($page=1, $country='none') {
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
@@ -48,10 +49,11 @@ class ShopController extends Controller {
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'      => $shops,
-                                                                                'pagination' => $pagination,
-                                                                                'countries'  => $countries,
-                                                                                'country'    => $country,));
+        return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
+                                                                                'pagination'   => $pagination,
+                                                                                'countries'    => $countries,
+                                                                                'country'      => $country,
+                                                                                ));
     }
 
     /**
@@ -76,7 +78,7 @@ class ShopController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {

@@ -1,69 +1,70 @@
 
-<legend>{% trans %} actions {% endtrans %}</legend>
-
     {% if workshop.id is defined and workshop.id != "" %}
 
-    {# New Ticket #}
-        <a class="btn btn-primary" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
-
-    {# <form action="{{ path('listTicketFiltered') }}" id="listTicketFiltered" class="form" role="form" method="post" enctype="multipart/form-data"> #}
-        <p>
+        {# New Ticket #}
+        {% if workshop.active == 1 %}
+            <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+        {% else %}
+            {# <a class="btn" id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
+        {% endif %}
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
+    {% else  %}
+
+        <form action="{{ path('findTicketById') }}" id="findTicketById" class="form" role="form" method="post" enctype="multipart/form-data">
+
+            <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p>
+            <div class="col-xs-8 col-md-8 form-group pdl0">
+                <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+            </div>
+            <div class="col-xs-4 col-md-4 form-group pdl0">
+                    <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+            </div>
+        </form>
+
+        <form action="{{ path('findTicketByBMV') }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="col-xs-12 col-md-12 form-group pdl0">{% trans %} ticket.flt.searchBy.car {% endtrans %}: </div>
+
+            <div class="col-xs-8 col-md-8 form-group  pdl0">
+                <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
+                <select id="new_car_form_brand" name="new_car_form_brand" class="form-control h65" multiple="multiple", required>
+                    {% for brand in brands %}
+                        <option value={{ brand.id }}>{{ brand.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-xs-8 col-md-8 form-group  pdl0">
+                <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
+                <select id="new_car_form_model" name="new_car_form_model" class="form-control h65" multiple="multiple", required></select>
+            </div>
+
+            <div class="col-xs-8 col-md-8 form-group  pdl0">
+                <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
+                <select id="new_car_form_version" name="new_car_form_version" class="form-control h65" multiple="multiple" >
+                </select>
+            </div>
+
+            <div class="col-xs-12 col-md-12 form-group pdl0">
+                <div class="col-xs-8 col-md-8 form-group pdl0"></div>
+                <div class="col-xs-3 col-md-3 form-group pdl0">
+                        <button type="submit" class="btn btn-primary" id="btn_search_by_bmv" name="btn_search_by_bmv">
+                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+                </div>
+            </div>
+        </form>
+        <br>
+
+        <div class="col-xs-12 col-md-12 form-group pdl0">{% trans %} ticket.history.check {% endtrans %}:</div>
     {% endif %}
-
-            {% trans %} ticket.flt.searchBy.id {% endtrans %}: <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
-
-    {% if workshop.id is defined and workshop.id != "" %}
-            <p> <input type='checkbox' id='flt_open'   name='flt_open'  > {% trans %} open   {% endtrans %}
-                <input type='checkbox' id='flt_closed' name='flt_closed'> {% trans %} closed {% endtrans %}</p>
-    {% endif %}
-
-            <button type="button" class="btn btn-primary" id="btn_search" name="btn_search"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}">  {% trans %} btn.search {% endtrans %}</button>
-        </p>
-    {# </form> #}
-
     {###  HISTORICO  ###}
     {% if is_granted('ROLE_ASSESSOR') %}
+        <div class="col-xs-12 col-md-12 form-group pdl0">
         {% if workshop.id is defined and workshop.id != "" %}
             <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.partner.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
         {% else %}
             <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
         {% endif %}
     {% endif %}
-
-    <script type="text/javascript"> $('#newTicket').focus(); </script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-
-            $('#btn_search').click(function() {
-
-                var id_ticket   = $('#flt_id'     ).val();
-                var id_workshop = 'none';
-                var status      = 'all';
-
-                {% if workshop.id is defined and workshop.id != "" %}
-
-                    var id_workshop = $('#id_workshop').val();
-                    var st_open     = $('#flt_open'   ).is(':checked');
-                    var st_closed   = $('#flt_closed' ).is(':checked');
-
-                    if(st_open    == true ){ status      = 'open'   }
-                    if(st_closed  == true ){ status      = 'closed' }
-                    if((st_open   == true) && (st_closed == true))  { status = 'all' }
-
-                {% endif %}
-
-                if(id_ticket   == ""   ){ id_ticket   = 'none'   }
-                if(id_workshop == ""   ){ id_workshop = 'none'   }
-
-                var url = "{{ path('listTicketFiltered', { 'page' : 1, 'id_workshop': 'plc_w', 'id_ticket': 'plc_t', 'status': 'plc_st' }) }}";
-                url = url.replace("plc_w" , id_workshop);
-                url = url.replace("plc_t" , id_ticket  );
-                url = url.replace("plc_st", status     );
-                window.open(url, "_self");
-            });
-        });
-
-    </script>
+    </div>

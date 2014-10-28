@@ -1,6 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'partner_list' %}
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -9,12 +11,12 @@
 
 <legend>
     {% trans %} menu.list_partners {% endtrans %}
-    <a href="{{ path('partner_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/partner_new.png') }}"> {% trans %} new.partner {% endtrans %} </a>
+    <a href="{{ path('partner_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.partner {% endtrans %} </a>
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control' data-url="{{ path('partner_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+        <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country | trans }}</option>
@@ -54,7 +56,7 @@
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination_partner.html.twig' %}
+    {% include 'UtilBundle:Pagination:pagination.html.twig' %}
 
     {% else %}
         {% trans %} any.partner {% endtrans %}

@@ -5,10 +5,14 @@
 				 style="background: azure;"> <a style="color:black; text-decoration:none; padding-left:20px;">{% trans %} you {% endtrans %}</a>
         {% else %}
 	             class="legend">
-	             	{% if post.createdBy.roles[0] == 'ROLE_ADMIN' 		 %} {% trans %} admin    {% endtrans %}
-	                {% elseif post.createdBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} assessor {% endtrans %}
+	             	{% if post.createdBy.roles[0] == 'ROLE_ADMIN' or post.createdBy.roles[0] == 'ROLE_SUPER_ADMIN' %}
+                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/assessor_.png') }}">
+                                                                            {% trans %} admin    {% endtrans %}
+                                                                            {% if ( is_granted('ROLE_ASSESSOR')) %}{{ post.createdBy.name }}{% endif %}
+	                {% elseif post.createdBy.roles[0] == 'ROLE_ASSESSOR' %} <img class="img_icon" src="{{ asset('bundles/util/images/icon/assessor_.png') }}">
+                                                                            {% trans %} assessor {% endtrans %}
+                                                                            {% if ( is_granted('ROLE_ASSESSOR')) %}{{ post.createdBy.name }}{% endif %}
 	                {% else %} 										        {% trans %} user     {% endtrans %} 	{% endif %}
-																		{{ post.createdBy.name }}
         {% endif %}
         <a style="color:gray; float:right; text-decoration:none;"> {{ post.created_at | date("H:i (d/m/y) ") }} </a>
 	</legend>

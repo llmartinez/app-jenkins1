@@ -71,6 +71,7 @@ class UserController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+
         $users_role_super_admin = array();
         $users_role_admin       = array();
         $users_role_assessor    = array();
@@ -81,7 +82,7 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
-        if($option == null or $option == 'all'){
+        if($option == null or $option == 'all' or $option == 'none'){
                 if($security->isGranted('ROLE_SUPER_ADMIN')) $params[] = array();
                 else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
@@ -98,7 +99,7 @@ class UserController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
-            if ( ! isset($role) and ($option == null or $option == 'all') ){
+            if ( ! isset($role) and ($option == null or $option == 'all' or $option == 'none') ){
                 $role     = $user->getRoles();
                 $role     = $role[0];
                 $role     = $role->getName();

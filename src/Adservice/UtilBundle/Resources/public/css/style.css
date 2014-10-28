@@ -576,9 +576,26 @@ textarea.form-control_ged {
 
 .img_logo {margin-top: 30px;}
 
+.h65 {
+    height: 65px !important;
+}
+.mb15 {
+    margin-bottom: 15px !important;
+}
 .mr15 {
     margin-right: 15px;
 }
 .ml15 {
     margin-left: 15px;
+}
+.fr{
+    float: right;
+}
+.change_page {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.pdl0 {
+    padding-left: 0px !important;
 }

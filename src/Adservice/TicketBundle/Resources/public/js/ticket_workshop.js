@@ -15,7 +15,11 @@ $(document).ready(function() {
 
 	$( "#btn_check" ).click(function() {
 
-	  	if (($( "#w_id" ).val() == "" || $( "#w_idpartner" ).val() == "") && $( "#w_email" ).val() == '' && $( "#w_tel" ).val() == '' ) {
+	  	if (($( "#w_id"    ).val() == "" || $( "#w_idpartner" ).val() == "") 
+	  	  && $( "#w_name"  ).val() == '' && $( "#w_cif" ).val() == ''
+	  	  && $( "#w_email" ).val() == '' && $( "#w_tel" ).val() == '' 
+	  	  && $( "#w_region").val() == ''
+	  	  ) {
 	  		event.preventDefault();
 
             var select = document.querySelector('#form_workshop_info');

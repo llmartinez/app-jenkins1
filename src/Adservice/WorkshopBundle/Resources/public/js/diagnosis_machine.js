@@ -1,7 +1,6 @@
 
-    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-
     $(document).ready(function() {
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
         $('#flt_country').click(function() {
 
             var country = $('#flt_country').val();

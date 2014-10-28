@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
 
-    <ol class="breadcrumb">
+    <ol class="breadcrumb" id="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_tickets {% endtrans %}</li>
     </ol>
@@ -25,6 +25,8 @@
 {% endblock  %}
 
 {% block content %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'listTicket' %}
 
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}

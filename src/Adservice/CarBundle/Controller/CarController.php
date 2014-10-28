@@ -3,8 +3,11 @@
 namespace Adservice\CarBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\CarBundle\Form\CarType;
 
 class CarController extends Controller {
@@ -53,7 +56,7 @@ class CarController extends Controller {
                     $car->setVersion($version);
                     UtilController::saveEntity($em, $car, $user);
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id_ticket' => $id_ticket)));
+                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
                 // } else { $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente'); }
 

@@ -127,9 +127,9 @@
                                     {% if shopOrder.wantedAction != 'create' %}
                                         <a title="{% trans %} edit.shop {% endtrans %}" href="{{ path('shopOrder_edit',   {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                                     {% endif %}
-                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}"></a>
+                                    <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('shopOrder_remove', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"></a>
 
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('shopOrder_resendOrder', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_reopen.png') }}"></a>
+                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('shopOrder_resendOrder', {'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}"></a>
                             {% endif %}
                             </td>
                         </tr>

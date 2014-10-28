@@ -33,6 +33,7 @@ class PopupController extends Controller {
     }
 
     public function popupListAction($page=1 , $country='none') {
+
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
@@ -56,10 +57,11 @@ class PopupController extends Controller {
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('PopupBundle:Popup:list_popups.html.twig', array( 'all_popups' => $popups,
-                                                                        'pagination' => $pagination,
-                                                                        'countries'  => $countries,
-                                                                        'country'    => $country,));
+        return $this->render('PopupBundle:Popup:list_popups.html.twig', array(  'all_popups'   => $popups,
+                                                                                'pagination'   => $pagination,
+                                                                                'countries'    => $countries,
+                                                                                'country'      => $country,
+                                                                                ));
     }
 
     public function newPopupAction(){

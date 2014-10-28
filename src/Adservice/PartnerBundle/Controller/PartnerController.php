@@ -50,7 +50,8 @@ class PartnerController extends Controller {
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
-                                                                                    'country'      => $country,));
+                                                                                    'country'      => $country,
+                                                                                    ));
     }
     /**
      * Crea un socio en la bbdd

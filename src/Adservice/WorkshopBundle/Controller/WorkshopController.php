@@ -119,7 +119,7 @@ class WorkshopController extends Controller {
 
                     /* MAILING */
                     $mailerUser = $this->get('cms.mailer');
-                    $mailerUser->setTo('test@ad-service.es'); /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
+                    $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es'); /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
                     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
                     $mailerUser->setFrom('noreply@grupeina.com');
                     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));

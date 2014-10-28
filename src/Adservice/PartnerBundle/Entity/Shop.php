@@ -34,12 +34,12 @@ class Shop {
      */
     private $partner;
 
-    /**
-     * @var integer $code_shop
-     *
-     * @ORM\Column(name="code_shop", type="integer")
-     */
-    private $code_shop;
+//    /**
+//     * @var integer $code_shop
+//     *
+//     * @ORM\Column(name="code_shop", type="integer")
+//     */
+//    private $code_shop;
 
     /**
      * @var string $name
@@ -105,23 +105,23 @@ class Shop {
         return $this->partner;
     }
 
-    /**
-     * Set code_shop
-     *
-     * @param string $code_shop
-     */
-    public function setCodeShop($code_shop) {
-        $this->code_shop = $code_shop;
-    }
+    // /**
+    //  * Set code_shop
+    //  *
+    //  * @param string $code_shop
+    //  */
+    // public function setCodeShop($code_shop) {
+    //     $this->code_shop = $code_shop;
+    // }
 
-    /**
-     * Get code_shop
-     *
-     * @return string
-     */
-    public function getCodeShop() {
-        return $this->code_shop;
-    }
+    // /**
+    //  * Get code_shop
+    //  *
+    //  * @return string
+    //  */
+    // public function getCodeShop() {
+    //     return $this->code_shop;
+    // }
 
     /**
      * Set name

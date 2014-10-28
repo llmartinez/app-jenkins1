@@ -1,6 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'shop_list' %}
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -10,13 +12,13 @@
 <legend>
     {% trans %} menu.list_shops {% endtrans %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_new.png') }}"> {% trans %} new.shop {% endtrans %}</a>
+        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.shop {% endtrans %}</a>
     {% endif %}
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-        <select id="flt_country" class='form-control' data-url="{{ path('shop_list', { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+        <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %} >{{ _country | trans }}</option>
@@ -61,7 +63,7 @@
             {% endfor %}
         </tbody>
     </table>
-    {% include 'UtilBundle:Pagination:pagination_shop.html.twig' %}
+    {% include 'UtilBundle:Pagination:pagination.html.twig' %}
 {% else %}
 {% trans %} any.shop {% endtrans %}
 {% endif %}
@@ -71,7 +73,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination_shop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 

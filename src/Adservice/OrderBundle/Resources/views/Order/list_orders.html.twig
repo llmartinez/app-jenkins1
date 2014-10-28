@@ -9,13 +9,13 @@
 
 <div class='colIzq15'>
     <button onclick="window.open('{{ path('list_orders', { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_pending.png') }}"> {% trans %} workshop_pending  {% endtrans %} ({{ length_workshop_pending  }})</button>
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br> ({{ length_workshop_pending  }})</button>
     <button onclick="window.open('{{ path('list_orders', { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_workshop_rejected.png') }}"> {% trans %} workshop_rejected {% endtrans %} ({{ length_workshop_rejected }})</button>
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br> ({{ length_workshop_rejected }})</button>
     <button onclick="window.open('{{ path('list_orders', { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_pending.png') }}"> {% trans %} shop_pending      {% endtrans %} ({{ length_shop_pending      }})</button>
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br> ({{ length_shop_pending      }})</button>
     <button onclick="window.open('{{ path('list_orders', { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_rejected.png') }}"> {% trans %} shop_rejected     {% endtrans %} ({{ length_shop_rejected     }})</button>
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br> ({{ length_shop_rejected     }})</button>
 </div>
 
 <div class='colDer85'>

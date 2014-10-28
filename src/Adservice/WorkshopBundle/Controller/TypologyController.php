@@ -19,6 +19,7 @@ class TypologyController extends Controller {
      */
     public function listTypologyAction($page=1, $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
 
         if (! $this->get('security.context')->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
@@ -38,7 +39,7 @@ class TypologyController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
         return $this->render('WorkshopBundle:Typology:list_typology.html.twig', array('typologies' => $typologies,
