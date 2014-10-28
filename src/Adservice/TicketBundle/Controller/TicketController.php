@@ -439,6 +439,17 @@ class TicketController extends Controller {
         $document = new Document();
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
 
+        //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
+        $now = new \DateTime(\date("Y-m-d H:i:s"));
+        $last_modified = $ticket->getModifiedAt();
+
+        $interval = $last_modified->diff($now);
+        if($interval->h > 1) {
+            $ticket->setBlockedBy(null);
+            $em->persist($ticket);
+            $em->flush();
+        }
+
         //Define Forms
         if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
         $formP = $this->createForm(new PostType(), $post);
@@ -739,12 +750,15 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
-        ($user != null and $id_user != 0) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
+        if ($user != null and $id_user != 0) {
 
-//MODIFIED_AT
-
-        $em->persist($ticket);
-        $em->flush();
+            $ticket->setBlockedBy($user);
+            UtilController::saveEntity($em, $ticket, $user);
+        }else{
+            $ticket->setBlockedBy(null);
+            $em->persist($ticket);
+            $em->flush();
+        }
 
         return $this->showTicketAction($ticket);
     }
@@ -826,9 +840,12 @@ class TicketController extends Controller {
         if($ticket) $tickets = array($ticket);
         else        $tickets = array();
 
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
+                                                                                       'brands'     => $brands,
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
                                                                                   ));
