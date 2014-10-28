@@ -28,5 +28,4 @@
             window.open(url, "_self");
 
         });
-        
     });

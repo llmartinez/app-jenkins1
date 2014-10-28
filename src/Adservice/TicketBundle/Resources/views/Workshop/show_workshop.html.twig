@@ -1,8 +1,17 @@
 
 {% if workshop.id         != "" %}
 	<legend>{% trans %} workshop {% endtrans %}
-			{% if workshop.test        == 1 %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/asterisk.png') }}' title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
-			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a></a>
+
+			{% if is_granted('ROLE_ADMIN')%}
+				<a href="{{ path('workshop_edit', { 'id': workshop.id }) }}">
+					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
+						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %}
+
+			{% if workshop.test        == 1 %}
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/asterisk.png') }}'
+					 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
+
+			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">

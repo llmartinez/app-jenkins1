@@ -201,11 +201,14 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
                                                                                        'option'     => $option,
                                                                                        'num_rows'   => $num_rows,
+                                                                                       'brands'     => $brands,
                                                                               ));
     }
 
@@ -738,6 +741,8 @@ class TicketController extends Controller {
 
         ($user != null and $id_user != 0) ? $ticket->setBlockedBy($user) : $ticket->setBlockedBy(null);
 
+//MODIFIED_AT
+
         $em->persist($ticket);
         $em->flush();
 
@@ -824,6 +829,51 @@ class TicketController extends Controller {
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
+                                                                                       'option'     => 'all',
+                                                                                       'num_rows'   => 10,
+                                                                                  ));
+    }
+
+    /**
+     * Devuelve un ticket segun la id enviada por parametro
+     * @return url
+     */
+    public function findTicketByBMVAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->getRequest();
+        $brand   = $request->get('new_car_form_brand'  );
+        $model   = $request->get('new_car_form_model'  );
+        $version = $request->get('new_car_form_version');
+
+        $params  = array('brand'   => $brand,
+                         'model'   => $model
+                         );
+        if($version != '') $params[] = array('verion' => $version);
+
+        $cars    = $em->getRepository('CarBundle:Car')->findBy($params);
+        $tickets = array();
+
+        $key = array_keys($cars);
+        $size = sizeOf($key);
+
+        if($size > 0){
+
+            for ($i=0; $i<$size; $i++){
+
+                $id     = $cars[$key[$i]]->getId();
+                $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                $tickets[] = $ticket;
+            }
+        }
+
+        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+
+        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
+                                                                                       'pagination' => new Pagination(0),
+                                                                                       'tickets'    => $tickets,
+                                                                                       'brands'     => $brands,
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
                                                                                   ));

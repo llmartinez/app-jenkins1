@@ -39,7 +39,7 @@
             <a class="btn-menu" id="user_list"              href="{{ path("user_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
                                                                                                             {% trans %} menu.list_users         {% endtrans %}</a>
-            <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket"             ) }}">
+            <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket") }}#breadcrumb" >
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
                                                                                                             {% trans %} menu.list_tickets       {% endtrans %}</a>
            {#  <a class="btn-menu" id="ticketWorkshopList"     href="{{ path("ticketWorkshopList"     ) }}">
@@ -54,7 +54,7 @@
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
                                                                                                 {% trans %} menu.profile              {% endtrans %}</a>
-            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket"         ) }}">
+            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket") }}#breadcrumb">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
                                                                                                 {% trans %} menu.list_tickets         {% endtrans %}</a>
         </div>
@@ -66,7 +66,7 @@
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
                                                                                                 {% trans %} menu.profile      {% endtrans %}</a>
-            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket"         ) }}">
+            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket") }}#breadcrumb">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
                                                                                                 {% trans %} menu.list_tickets         {% endtrans %}</a>
         </div>

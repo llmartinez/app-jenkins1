@@ -26,6 +26,10 @@ findTicketById:
     pattern:  /ticket/findTicketById/
     defaults: { _controller: TicketBundle:Ticket:findTicketById }
 
+findTicketByBMV:
+    pattern:  /ticket/findTicketByBMV/
+    defaults: { _controller: TicketBundle:Ticket:findTicketByBMV }
+
 # listTicketFiltered:
 #     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
 #     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
