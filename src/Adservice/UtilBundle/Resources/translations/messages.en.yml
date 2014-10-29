@@ -22,6 +22,7 @@ menu.list_diagnosis_machines:		 "Diagnosis Machines"
 menu.list_tickets:                   "Tickets"
 menu.list_popups:                    "Popups"
 menu.list_orders: 			 	     "Pending Orders"
+menu.list_sentences:				 "Sentences"
 
 menu.asign_user_to_ticket:           "Assign Tickets to Users"
 menu.asign_shop_to_workshop:		 "Assign Workshops to Shops"
@@ -74,6 +75,7 @@ workshop: 				 "Workshop"
 typology:		 		 "Typology"
 diagnosis_machine:		 "Diagnosis Machine"
 ticket: 				 "Ticket"
+sentence:		 		 "Sentence"
 car: 					 "Car"
 post: 					 "Messages"
 order:					 "Order"
@@ -156,6 +158,7 @@ new.diagnosis_machine:   "New Diagnosis Machine"
 new.popup:				 "New Popup"
 new.order.shop:			 "New Shop Order"
 new.order.workshop:		 "New Workshop Order"
+new.sentence:			 "New Sentence"
 
 #EDIT
 edit.partner:			 "Edit Partner"
@@ -170,6 +173,7 @@ edit.diagnosis_machine:  "Edit Diagnosis Machine"
 edit.popup:				 "Edit Popup"
 edit.order.shop:		 "Edit Shop Order"
 edit.order.workshop:	 "Edit Workshop Order"
+edit.sentence:			 "Edit Sentence"
 
 #ANY
 any.partner:			 "No partners!!"
@@ -181,6 +185,8 @@ any.response:			 "There are no answers"
 any.order.pending: 		 "There are no pending orders!!"
 any.order.rejected: 	 "There are no rejected orders!!"
 any.incidence: 			 "There are no incidences!!"
+edit.typology:			 "There are no typologies!!"
+edit.sentence:			 "There are no sentences!!"
 
 #BOTONES
 btn.send:			 	 "Send"
@@ -349,6 +355,7 @@ assign_not:					  "not assigned"
 importance:					  "Importance"
 system:					 	  "System"
 subsystem:					  "Subsystem"
+sentence:				 	  "Sentence"
 
 ticket_info:				  "Ticket info"
 ticket.history.title:         "Tickets Hystory"
@@ -387,6 +394,8 @@ ticket.delete.confirm:		  "Are you sure you want to delete this ticket?"
 ticket.from_workshop:		  "Tickets from Workshop"
 ticket.similar:				  "Similar Tickets"
 ticket.similar.matching:	  "Select Model and Subsystem for matching similar tickets"
+
+sentence.default:			  "Default sentences.."
 
 #POST
 reply:						  "Answer"
