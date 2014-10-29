@@ -553,10 +553,13 @@ class TicketController extends Controller {
                                                                             'form_name' => $formP->getName(), )));
         }
 
+        $sentences = $em->getRepository('TicketBundle:Sentence')->findAll();
+
         $array = array( 'formP'     => $formP->createView(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
+                        'sentences' => $sentences,
                         'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }

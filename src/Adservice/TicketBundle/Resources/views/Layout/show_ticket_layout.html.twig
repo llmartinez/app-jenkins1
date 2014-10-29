@@ -40,5 +40,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/sentence.js') }}"></script>
   {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
 {% endblock %}

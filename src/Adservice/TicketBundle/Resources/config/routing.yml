@@ -74,3 +74,14 @@ listTicket:
 showPost:
     pattern:  /ticket/posts/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
+
+##############################
+#   APDO. RUTAS TYPOLOGY     #
+##############################
+sentence_list:
+    pattern:  /sentence_list/{page}/{country}
+    defaults: { _controller: TicketBundle:Sentence:listSentence, page: 1 , country: 'none'  }
+
+sentence_edit:
+    pattern: /sentence_edit/{id}
+    defaults: { _controller: TicketBundle:Sentence:editSentence, id: null }

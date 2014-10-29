@@ -595,7 +595,9 @@ textarea.form-control_ged {
     padding-left: 10px;
     padding-right: 10px;
 }
-
 .pdl0 {
     padding-left: 0px !important;
+}
+.prl0 {
+    padding-right: 0px !important;
 }
