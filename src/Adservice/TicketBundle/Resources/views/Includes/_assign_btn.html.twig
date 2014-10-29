@@ -16,6 +16,7 @@
 
                     {# Ticket asignado a otro assessor #}
                     <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+                    <a href="">{% trans %} blocked_by {% endtrans %} {{ ticket.blockedBy }} {% trans %} at {% endtrans %} {{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</a>
 
                 {% endif %}
             {% else %}

@@ -434,21 +434,28 @@ class TicketController extends Controller {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $security = $this->get('security.context');
+        $user     = $security->getToken()->getUser();
 
         $post     = new Post();
         $document = new Document();
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
+        $block    = null;
 
-        //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
-        $now = new \DateTime(\date("Y-m-d H:i:s"));
-        $last_modified = $ticket->getModifiedAt();
+        // if ($ticket->getBlockedBy() != null and $ticket->getBlockedBy() != $user) {
 
-        $interval = $last_modified->diff($now);
-        if($interval->h > 1) {
-            $ticket->setBlockedBy(null);
-            $em->persist($ticket);
-            $em->flush();
-        }
+        //     //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
+        //     $now = new \DateTime(\date("Y-m-d H:i:s"));
+        //     $last_modified = $ticket->getModifiedAt();
+
+        //     $interval = $last_modified->diff($now);
+
+        //     $block = $interval->h.'h '.$interval->m.'m ';
+        //     echo $block;die;
+        //     if($interval->h > 1) {
+        //         $ticket->setBlockedBy(null);
+        //     }
+
+        // }
 
         //Define Forms
         if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
@@ -457,8 +464,6 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            //Define User
-            $user = $security->getToken()->getUser();
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request);
 
