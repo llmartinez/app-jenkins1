@@ -3,6 +3,8 @@ namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -157,7 +159,7 @@ class WorkshopController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editWorkshopAction($workshop) {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false){
             throw new AccessDeniedException();
         }
 
@@ -185,13 +187,15 @@ class WorkshopController extends Controller {
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $partner->getId(),
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
                 if($find == null or $workshop->getCodeWorkshop() == $last_code)
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
                     $this->saveWorkshop($em, $workshop);
-                    return $this->redirect($this->generateUrl('workshop_list'));
+
+                    if    ($this->get('security.context')->isGranted('ROLE_ADMIN'   )) return $this->redirect($this->generateUrl('workshop_list'));
+                    elseif($this->get('security.context')->isGranted('ROLE_ASSESSOR')) return $this->redirect($this->generateUrl('listTicket'));
                 }
                 else{
                     $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
@@ -201,7 +205,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId(); 
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);

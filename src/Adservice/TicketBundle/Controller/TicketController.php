@@ -434,21 +434,28 @@ class TicketController extends Controller {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $security = $this->get('security.context');
+        $user     = $security->getToken()->getUser();
 
         $post     = new Post();
         $document = new Document();
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
+        $block    = null;
 
-        //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
-        $now = new \DateTime(\date("Y-m-d H:i:s"));
-        $last_modified = $ticket->getModifiedAt();
+        // if ($ticket->getBlockedBy() != null and $ticket->getBlockedBy() != $user) {
 
-        $interval = $last_modified->diff($now);
-        if($interval->h > 1) {
-            $ticket->setBlockedBy(null);
-            $em->persist($ticket);
-            $em->flush();
-        }
+        //     //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
+        //     $now = new \DateTime(\date("Y-m-d H:i:s"));
+        //     $last_modified = $ticket->getModifiedAt();
+
+        //     $interval = $last_modified->diff($now);
+
+        //     $block = $interval->h.'h '.$interval->m.'m ';
+        //     echo $block;die;
+        //     if($interval->h > 1) {
+        //         $ticket->setBlockedBy(null);
+        //     }
+
+        // }
 
         //Define Forms
         if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
@@ -457,8 +464,6 @@ class TicketController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            //Define User
-            $user = $security->getToken()->getUser();
             //Define Ticket
             if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request);
 
@@ -559,12 +564,53 @@ class TicketController extends Controller {
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
-                        'sentences' => $sentences,
+                        'sentences'   => $sentences,
                         'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
         return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+    }
+
+    /**
+     * @Route("/post_edit/{id}")
+     * @ParamConverter("post", class="TicketBundle:Post")
+     */
+    public function editPostAction($post) {
+        if (! $this->get('security.context')->isGranted('ROLE_USER')){
+            throw new AccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $ticket = $post->getTicket();
+
+        $petition = $this->getRequest();
+        $form = $this->createForm(new PostType(), $post);
+
+        if ($petition->getMethod() == 'POST') {
+            $form->bindRequest($petition);
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                $em->persist($post);
+                $em->flush();
+                return $this->redirect($this->generateUrl('showTicket', array('id'=> $ticket->getId())));
+                //return $this->showTicketAction($ticket);
+            }
+        }
+
+        return $this->render('TicketBundle:Post:edit_post.html.twig', array('post'      => $post,
+                                                                            'ticket'    => $ticket,
+                                                                            'form_name' => $form->getName(),
+                                                                            'form'      => $form->createView()));
     }
 
     /**

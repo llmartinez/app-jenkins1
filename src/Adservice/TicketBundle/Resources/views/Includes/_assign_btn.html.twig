@@ -11,11 +11,14 @@
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': 0 }) }}">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></span></a>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
                     <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+                    <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{{ ticket.blockedBy }}</strong> {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket_reassign {% endtrans %}"></a>
 
                 {% endif %}
             {% else %}

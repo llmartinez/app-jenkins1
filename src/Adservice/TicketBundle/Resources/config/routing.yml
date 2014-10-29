@@ -75,6 +75,10 @@ showPost:
     pattern:  /ticket/posts/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
 
+post_edit:
+    pattern:  /ticket/edit_post/{id}/
+    defaults: { _controller: TicketBundle:Ticket:editPost, id: null }
+
 ##############################
 #   APDO. RUTAS TYPOLOGY     #
 ##############################

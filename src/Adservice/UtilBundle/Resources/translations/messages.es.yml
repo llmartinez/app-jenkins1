@@ -401,6 +401,9 @@ ticket.delete.confirm:		  "Estas seguro que quieres eliminar este ticket?"
 ticket.from_workshop:		  "Tickets del taller"
 ticket.similar:				  "Tickets similares"
 ticket.similar.matching:	  "Selecciona Modelo y Subsistema para buscar tickets resultos similares"
+ticket_blocked_by:			  "Ticket bloqueado por "
+ticket_at:					  "a fecha "
+ticket_reassign:			  "Desbloquea y reassigna"
 
 sentence.default:			  "Sentencias por defecto.."
 
