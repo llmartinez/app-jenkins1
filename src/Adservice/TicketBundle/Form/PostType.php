@@ -13,6 +13,6 @@ class PostType extends AbstractType
     }
     public function getName()
     {
-        return 'ticket_form';
+        return 'post_form';
     }
 }

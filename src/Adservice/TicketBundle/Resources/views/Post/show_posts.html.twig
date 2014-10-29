@@ -4,6 +4,9 @@
 
 	{% if ticket.posts | length > 0 %}
 
+		{% set post_length = ticket.posts | length  %}
+		{% set last_post   = ticket.posts[post_length - 1]  %}
+
 		{% for post in ticket.posts %}
 
 			{% include 'TicketBundle:Post:_post.html.twig' %}

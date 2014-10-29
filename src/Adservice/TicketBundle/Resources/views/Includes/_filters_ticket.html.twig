@@ -66,5 +66,5 @@
         {% else %}
             <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
         {% endif %}
+        </div>
     {% endif %}
-    </div>

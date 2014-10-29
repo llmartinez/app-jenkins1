@@ -22,16 +22,18 @@
 
             <legend> {% trans %} reply {% endtrans %}:
 
-            <div class="col-xs-4 col-md-4 form-group pull-right prl0">
-                <select class="form-control pull-right" id="default_sentences">
-                    <option>{% trans %} sentence.default {% endtrans %}</option>
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <div class="col-xs-4 col-md-4 form-group pull-right prl0">
+                    <select class="form-control pull-right" id="default_sentences">
+                        <option>{% trans %} sentence.default {% endtrans %}</option>
 
-                    {% for sentence in sentences %}
-                        <option>{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
-                    {% endfor %}
+                        {% for sentence in sentences %}
+                            <option>{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
+                        {% endfor %}
 
-                </select>
-            </div>
+                    </select>
+                </div>
+            {% endif %}
             </legend>
 
             <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>

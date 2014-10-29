@@ -14,6 +14,10 @@
                                                                             {% if ( is_granted('ROLE_ASSESSOR')) %}{{ post.createdBy.name }}{% endif %}
 	                {% else %} 										        {% trans %} user     {% endtrans %} 	{% endif %}
         {% endif %}
+
+         {% if ( is_granted('ROLE_ADMIN')) or post.id == last_post.id and post.createdBy == app.security.getToken().getUser() %}
+            <a href="{{ path("post_edit", { 'id': post.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+        {% endif %}
         <a style="color:gray; float:right; text-decoration:none;"> {{ post.created_at | date("H:i (d/m/y) ") }} </a>
 	</legend>
 
