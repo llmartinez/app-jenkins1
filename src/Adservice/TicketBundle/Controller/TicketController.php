@@ -327,7 +327,6 @@ class TicketController extends Controller {
                             $em->flush();
                         }
 
-
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/

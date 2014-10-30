@@ -7,9 +7,10 @@
         fill_model();
     });
 
-    $(document).ready(function() {
-        //cambiar version en funcion de model
-        $('#new_car_form_model').change(function() {
-            fill_version();
-        });
+    $(document).on('change','#new_car_form_model',function(){
+        fill_version();
+    });
+
+    $(document).on('change','#new_car_form_version',function(){
+        fill_car_data();
     });

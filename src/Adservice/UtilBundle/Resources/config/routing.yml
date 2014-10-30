@@ -48,6 +48,12 @@ car_version:
     options:
         expose: true
 
+car_data:
+    pattern: /carData
+    defaults: { _controller: UtilBundle:Ajax:carData }
+    options:
+        expose: true
+
 showTicketReadonly:
     pattern:  /ticket/show_read/{id_ticket}
     defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }

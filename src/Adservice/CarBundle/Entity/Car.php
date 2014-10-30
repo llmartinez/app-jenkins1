@@ -44,7 +44,7 @@ class Car
     /**
      * @var integer $year
      *
-     * @ORM\Column(name="year", type="integer", length=4, nullable="true")
+     * @ORM\Column(name="year", type="string", length=255, nullable="true")
      */
     private $year;
 
