@@ -105,15 +105,26 @@ class LoadTecDoc extends AbstractFixture implements FixtureInterface, OrderedFix
 
             $row = $data->sheets[0]['cells'][$i];
 
-            $idTecDoc    = utf8_encode($row[4]);
-            $modelId     = utf8_encode($row[2]);
             if(isset($row[5])) $motor   = utf8_encode($row[5]); else $motor   = '';
-            $versionName = utf8_encode($row[3]).' ('.utf8_encode($row[9]).') ('.$motor.')';
+            $idTecDoc     = utf8_encode($row[4]);
+            $modelId      = utf8_encode($row[2]);
+            $versionName  = utf8_encode($row[3]).' ('.utf8_encode($row[9]).') ('.$motor.')';
+
+            $fechaI = substr(utf8_encode($row[6]), 0, 4);
+            $fechaF = substr(utf8_encode($row[7]), 0, 4);
+
+            $year         = $fechaI.' - '.$fechaF;
+            $kw           = utf8_encode($row[8]);
+            $displacement = utf8_encode($row[9]);
 
             $version = new Version();
             $version->setIdTecDoc($idTecDoc);
             $version->setModel($this->getReference('model'.$modelId));
             $version->setName($versionName);
+            $version->setYear($year);
+            $version->setMotor($motor);
+            $version->setKw($kw);
+            $version->setDisplacement($displacement);
 
             $manager->persist($version);
             $this->addReference('version'.$version->getIdTecDoc(), $version);

@@ -92,7 +92,6 @@ class PartnerController extends Controller {
 
                     /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
                     $newShop = UtilController::newEntity(new Shop(), $security->getToken()->getUser());
-                    $newShop->setCodeShop(0);
                     $newShop->setName('...');
                     $newShop->setPartner($partner);
                     $newShop->setActive('1');

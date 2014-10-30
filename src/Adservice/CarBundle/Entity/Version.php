@@ -41,6 +41,34 @@ class Version {
      */
     private $idTecDoc;
 
+    /**
+     * @var string $year
+     *
+     * @ORM\Column(name="year", type="string", length=255)
+     */
+    private $year;
+
+    /**
+     * @var string $motor
+     *
+     * @ORM\Column(name="motor", type="string", length=255)
+     */
+    private $motor;
+
+    /**
+     * @var string $kw
+     *
+     * @ORM\Column(name="kw", type="string", length=255)
+     */
+    private $kw;
+
+    /**
+     * @var string $displacement
+     *
+     * @ORM\Column(name="displacement", type="string", length=255)
+     */
+    private $displacement;
+
 
     /**
      * Get id
@@ -112,9 +140,86 @@ class Version {
         return $this->idTecDoc;
     }
 
-    public function __toString() {
-        return $this->name;
+    /**
+     * Set year
+     *
+     * @param string $year
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
     }
+
+    /**
+     * Get year
+     *
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * Set motor
+     *
+     * @param string $motor
+     */
+    public function setMotor($motor)
+    {
+        $this->motor = $motor;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return string
+     */
+    public function getMotor()
+    {
+        return $this->motor;
+    }
+
+    /**
+     * Set kw
+     *
+     * @param string $kw
+     */
+    public function setKw($kw)
+    {
+        $this->kw = $kw;
+    }
+
+    /**
+     * Get kw
+     *
+     * @return string
+     */
+    public function getKw()
+    {
+        return $this->kw;
+    }
+
+    /**
+     * Set displacement
+     *
+     * @param string $displacement
+     */
+    public function setDisplacement($displacement)
+    {
+        $this->displacement = $displacement;
+    }
+
+    /**
+     * Get displacement
+     *
+     * @return string
+     */
+    public function getDisplacement()
+    {
+        return $this->displacement;
+    }
+
 
 //    public function jsonSerialize() {
 //        return [
@@ -123,9 +228,17 @@ class Version {
 //        ];
 //    }
 
+    public function __toString() {
+        return $this->name;
+    }
+
     public function to_json(){
-        $json = array('id'  => $this->getId(),
-                      'name'=> $this->getName());
+        $json = array('id'           => $this->getId(),
+                      'name'         => $this->getName(),
+                      'year'         => $this->getYear(),
+                      'motor'        => $this->getMotor(),
+                      'kw'           => $this->getKw(),
+                      'displacement' => $this->getDisplacement());
         return $json;
     }
 }

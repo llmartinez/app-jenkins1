@@ -147,6 +147,23 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
+    /**
+     * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carDataAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $id_version = $petition->request->get('id_version');
+        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+
+        if(isset($version)) $json[] = $version->to_json();
+        else                $json   = array( 'error' => 'No hay coincidencias');
+
+        return new Response(json_encode($json), $status = 200);
+    }
+
 //  _____ ___ ____ _  _______ _____
 // |_   _|_ _/ ___| |/ / ____|_   _|
 //   | |  | | |   | ' /|  _|   | |

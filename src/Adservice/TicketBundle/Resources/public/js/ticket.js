@@ -9,6 +9,11 @@ $(document).ready(function() {
     //llena tbl_similar
     //$('#new_car_form_model'       ).change(function() { list_tbl_similar() });
     $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
+
+    var new_ticket = $('#newTicket');
+    if (typeof new_ticket != 'undefined') {
+        new_ticket.focus();
+    }
 });
 
 /**

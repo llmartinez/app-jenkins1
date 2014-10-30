@@ -145,7 +145,6 @@ function fill_model() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_model').empty();
             //Primer campo vacío
-            // $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0>Select Model..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
@@ -175,13 +174,42 @@ function fill_version() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             //Primer campo vacío
-            // $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>Select Version..</option>");
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {
             console.log("Error al cargar versiones...");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
+ */
+function fill_car_data() {
+
+    var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
+
+    var route  = 'car_data';
+    var locale = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale, id_version: id_version}),
+        data: {id_version: id_version},
+        dataType: "json",
+        success: function(data) {
+            // Limpiamos y llenamos los campos del coche
+            $.each(data, function(idx, elm) {
+                $('form[id=contact]').find('#new_car_form_year'        ).val(elm.year        );
+                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor       );
+                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw          );
+                $('form[id=contact]').find('#new_car_form_displacement').val(elm.displacement);
+            });
+        },
+        error: function() {
+            console.log("Error al cargar datos de coche...");
         }
     });
 }
