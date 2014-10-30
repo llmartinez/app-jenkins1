@@ -219,9 +219,10 @@ class TicketController extends Controller {
     public function newTicketAction($id_workshop=null) {
 
         $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
-        $ticket = new Ticket();
-        $car = new Car();
+        $request  = $this->getRequest();
+        $ticket   = new Ticket();
+        $car      = new Car();
+        $document = new Document();
 
         if ($id_workshop != null)
             { $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop); }
@@ -232,6 +233,7 @@ class TicketController extends Controller {
         //Define Forms
         $form  = $this->createForm(new NewTicketType(), $ticket);
         $formC = $this->createForm(new CarType(), $car);
+        $formD = $this->createForm(new DocumentType(), $document);
 
         if ($request->getMethod() == 'POST') {
 
@@ -242,6 +244,7 @@ class TicketController extends Controller {
 
             $form ->bindRequest($request);
             $formC->bindRequest($request);
+            $formD->bindRequest($request);
 
             /*Validacion Car*/
             // if (($car->getModel()[0] != "") && ($car->getBrand()[0] != "")) {
@@ -258,6 +261,7 @@ class TicketController extends Controller {
                         }else{
                             $form_errors = 'none';
                         }
+
                         $formC_errors = $formC->getErrors();
                         if(isset($formC_errors[0])) {
                             $formC_errors = $formC_errors[0];
@@ -265,8 +269,18 @@ class TicketController extends Controller {
                         }else{
                             $formC_errors = 'none';
                         }
-                        if (($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
-                         && ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+
+                        $formD_errors = $formD->getErrors();
+                        if(isset($formD_errors[0])) {
+                            $formD_errors = $formD_errors[0];
+                            $formD_errors = $formD_errors->getMessageTemplate();
+                        }else{
+                            $formD_errors = 'none';
+                        }
+
+                        if ((($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
+                         &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
+                         &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                         //Define CAR
                         $car = UtilController::newEntity($car, $user);
@@ -298,6 +312,22 @@ class TicketController extends Controller {
                         $ticket->setCar($car);
                         UtilController::saveEntity($em, $ticket, $user);
 
+                        //Define Document
+                        if ($document->getFile() != "") {
+
+                            //Define Post
+                            $post = new Post();
+                            $post = UtilController::newEntity($post, $user);
+                            $post->setTicket($ticket);
+                            $post->setMessage(" ");
+                            UtilController::saveEntity($em, $post, $user, false);
+
+                            $document->setPost($post);
+                            $em->persist($document);
+                            $em->flush();
+                        }
+
+
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
@@ -324,6 +354,7 @@ class TicketController extends Controller {
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
+                    'formD' => $formD->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
                     'workshop' => $workshop,
