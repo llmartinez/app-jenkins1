@@ -37,20 +37,32 @@ shops_from_partner:
         expose: true
 
 car_model:
-    pattern: /carModel/{id_brand}
-    defaults: { _controller: UtilBundle:Ajax:carModel }
+    pattern: /carModel/{id_brand}/{filter}/{filter_value}
+    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''} }
     options:
         expose: true
 
 car_version:
-    pattern: /carVersion
-    defaults: { _controller: UtilBundle:Ajax:carVersion }
+    pattern: /carVersion/{id_model}/{filter}/{filter_value}
+    defaults: { _controller: UtilBundle:Ajax:carVersion, id_model: 0, filter: '', filter_value: '' }
     options:
         expose: true
 
 car_data:
     pattern: /carData
     defaults: { _controller: UtilBundle:Ajax:carData }
+    options:
+        expose: true
+
+car_by_year:
+    pattern: /carByYear
+    defaults: { _controller: UtilBundle:Ajax:carByYear }
+    options:
+        expose: true
+
+car_by_motor:
+    pattern: /carByMotor
+    defaults: { _controller: UtilBundle:Ajax:carByMotor }
     options:
         expose: true
 

@@ -14,3 +14,11 @@
     $(document).on('change','#new_car_form_version',function(){
         fill_car_data();
     });
+
+    $(document).on('click','#filter_year',function(){
+        fill_car_by_year();
+    });
+
+    $(document).on('click','#filter_motor',function(){
+        fill_car_by_motor();
+    });

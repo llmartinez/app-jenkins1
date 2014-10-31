@@ -397,6 +397,8 @@ ticket.similar.matching:	  "Select Model and Subsystem for matching similar tick
 ticket_blocked_by:			  "Ticket blocked by "
 ticket_at:					  "at date "
 ticket_reassign:			  "Unlock and reassign"
+filter_by_year: 			  "Filter by year"
+filter_by_motor: 			  "Filter by motor"
 
 sentence.default:			  "Default sentences.."
 

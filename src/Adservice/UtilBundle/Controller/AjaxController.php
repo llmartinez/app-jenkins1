@@ -109,10 +109,19 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de modelos filtrados a partir de la marca ($brand)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carModelAction($id_brand) {
+    public function carModelAction($id_brand, $filter='', $filter_value='') {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand));
+        if($filter != '') {
+            $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
+                      WHERE b.id = m.brand AND m.id = v.model AND b.id = ".$id_brand." AND v.".$filter." like '%".$filter_value."%' ";
+            $consulta = $em->createQuery($query);
+            $models   = $consulta->getResult();
+        }
+        else{
+            $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand));
+        }
+
         $size = sizeOf($models);
         if($size > 0) {
             foreach ($models as $model) {
@@ -128,14 +137,21 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de versiones filtrados a partir del modelo ($model)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carVersionAction() {
+    public function carVersionAction($id_model, $filter='', $filter_value='') {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $id_model = $petition->request->get('id_model');
-        $model = $em->getRepository('CarBundle:Model')->find($id_model);
+        if($filter != '') {
+            $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
+                      WHERE b.id = m.brand AND m.id = v.model AND m.id = ".$id_model." AND v.".$filter." like '%".$filter_value."%' ";
+            $consulta = $em->createQuery($query);
+            $versions   = $consulta->getResult();
+        }
+        else{
+            $model = $em->getRepository('CarBundle:Model')->find($id_model);
+            $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
+        }
 
-        $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
         $size = sizeOf($versions);
         if($size > 0) {
             foreach ($versions as $version) {
@@ -160,6 +176,58 @@ class AjaxController extends Controller
 
         if(isset($version)) $json[] = $version->to_json();
         else                $json   = array( 'error' => 'No hay coincidencias');
+
+        return new Response(json_encode($json), $status = 200);
+    }
+
+    /**
+     * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carByYearAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $year = $petition->request->get('year');
+
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.year like '%".$year."%'";
+        $consulta = $em->createQuery($query);
+        $brands   = $consulta->getResult();
+
+        $size = sizeOf($brands);
+        if($size > 0) {
+            foreach ($brands as $brand) {
+                $json[] = $brand->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+
+        return new Response(json_encode($json), $status = 200);
+    }
+
+    /**
+     * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carByMotorAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $motor = $petition->request->get('motor');
+
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.motor like '%".$motor."%'";
+        $consulta = $em->createQuery($query);
+        $brands   = $consulta->getResult();
+
+        $size = sizeOf($brands);
+        if($size > 0) {
+            foreach ($brands as $brand) {
+                $json[] = $brand->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
 
         return new Response(json_encode($json), $status = 200);
     }
