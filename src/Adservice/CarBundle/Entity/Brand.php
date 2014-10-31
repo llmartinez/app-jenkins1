@@ -91,10 +91,6 @@ class Brand {
     {
         return $this->idTecDoc;
     }
-
-    public function __toString() {
-        return $this->name;
-    }
     public function __construct()
     {
         $this->models = new \Doctrine\Common\Collections\ArrayCollection();
@@ -118,5 +114,15 @@ class Brand {
     public function getModels()
     {
         return $this->models;
+    }
+
+    public function to_json(){
+        $json = array('id'  => $this->getId(),
+                      'name'=> $this->getName());
+        return $json;
+    }
+
+    public function __toString() {
+        return $this->name;
     }
 }

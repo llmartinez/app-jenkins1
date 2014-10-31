@@ -1,11 +1,16 @@
 
+    <input type="hidden" id="funnel"          value="{{ asset('bundles/util/images/icon/funnel.png') }}">
+    <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
+
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_car_form_year">{% trans %} year {% endtrans %}</label>
+        <label for="new_car_form_year">{% trans %} year {% endtrans %} </label>
+        <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
         {{ form_widget(formC.year, { 'attr': { 'class': 'form-control', 'placeholder': 'year' | trans } }) }}
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        <label for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
+        <label for="new_car_form_motor">{% trans %} motor {% endtrans %} </label>
+        <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
         {{ form_widget(formC.motor, { 'attr': { 'class': 'form-control', 'placeholder': 'motor' | trans } }) }}
     </div>
 
