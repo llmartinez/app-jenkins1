@@ -195,7 +195,7 @@ class TicketRepository extends EntityRepository
         }
         //Crea la consulta
         $consulta = $em->createQuery($query.$joins.$where.' ORDER BY t.id ');
-
+echo $query.$joins.$where.' ORDER BY t.id ';die;
         return $consulta->getResult();
     }
 }

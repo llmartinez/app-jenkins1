@@ -1,34 +1,18 @@
 
 $(document).ready(function() {
 
-    //vacia tbl_similar
-    $('#new_car_form_brand').change(function() { clear_tbl_similar('brand' ) });
-    $('#new_car_form_model').change(function() { clear_tbl_similar('model' ) });
-    $('#id_system'         ).change(function() { clear_tbl_similar('system') });
-
-    //llena tbl_similar
-    //$('#new_car_form_model'       ).change(function() { list_tbl_similar() });
-    $("#new_ticket_form_subsystem").change(function() { list_tbl_similar() });
-
     var new_ticket = $('#newTicket');
     if (typeof new_ticket != 'undefined') {
         new_ticket.focus();
     }
 });
 
-/**
- * busca tickets que coincidan en modelo o subsistema con el ticket actual
- * @return AjaxFunction
- */
-function list_tbl_similar() {
-
-    var select = document.querySelector('#form_data');
-    var data   = select.dataset;
-
-    var url_show = data.similarshow;
-
-    fill_tbl_similar(url_show);
-}
+    //vacia tbl_similar
+    $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); });
+    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); });
+    $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); });
+    //llena tbl_similar
+    $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
 
 /**
  * vacia tbl_similar

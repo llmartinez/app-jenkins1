@@ -370,7 +370,7 @@ function fill_tbl_similar() {
             });
         },
         error: function() {
-            console.log("Error al cargar tickets de subsistemas...");
+            console.log("Error al cargar tickets similares..");
         }
     });
 }
