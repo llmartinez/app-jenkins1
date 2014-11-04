@@ -37,7 +37,7 @@
     {% endif %}
 
     {# se borran los tickets solo si no tienen respuesta (1 post) #}
-    {% if ticket.posts | length <=1 %}
+    {% if ticket.posts | length <= 1 %}
         {# puede borrarlo el usuario si el ticket no esta assignado aun #}
         {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
             <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{% trans %} ticket.delete {% endtrans %}"></span></a>

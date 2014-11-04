@@ -26,18 +26,18 @@
                 <div class="col-xs-4 col-md-4 form-group pull-right prl0">
                     <select class="form-control pull-right" id="default_sentences">
                         <option>{% trans %} sentence.default {% endtrans %}</option>
+                        <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
 
                         {% for sentence in sentences %}
                             <option>{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
                         {% endfor %}
-
                     </select>
                 </div>
             {% endif %}
             </legend>
 
             <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
-            <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '4', 'placeholder': 'answer' | trans } }) }}</div>
+            <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 

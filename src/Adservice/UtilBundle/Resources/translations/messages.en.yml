@@ -118,6 +118,8 @@ code.error:				 "The code is not correct"
 status:					 "Status"
 testing:				 "Testing"
 profile_of:				 "Profile of"
+insert_gas_table:		 "Insert gas table"
+gas_table:				 "Gases values: \n   O2: \n   CO: \n   CO2: \n   HC:"
 
 #STATUS
 actions: 				 "Actions"

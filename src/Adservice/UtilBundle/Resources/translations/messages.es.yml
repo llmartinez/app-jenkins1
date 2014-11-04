@@ -120,6 +120,8 @@ code.error:				 "El código que has introducido no es correcto"
 status:					 "Estado"
 testing:				 "En fase de pruebas"
 profile_of:				 "Perfil de"
+insert_gas_table:		 "Insertar tabla de gases"
+gas_table:				 "Valores de gases: \n   O2: \n   CO: \n   CO2: \n   HC:"
 
 #STATUS
 actions: 				 "Acciones"
