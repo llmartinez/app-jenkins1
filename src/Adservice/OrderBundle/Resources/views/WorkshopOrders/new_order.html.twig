@@ -26,11 +26,18 @@
 
                 <label>{% trans %} code.workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
             </div>
-
             {% if is_granted('ROLE_SUPER_AD') %}
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
-                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                    <label for="workshopOrder_newOrder_partner">{% trans %} partner {% endtrans %} * </label>
+                    {% if partners is iterable %}
+                        <select id="partner" name="partner" required="required" class="form-control">
+                            {% for partner in partners %}
+                                <option value={{ partner.id }}>{{ partner.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <select id="partners"><option value=0>0</option></select>
+                    {% endif %}
                 </div>
             {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
             {% endif %}
@@ -66,7 +73,7 @@
                 {% if partners is iterable %}
                     <select id="partners">
                         {% for partner in partners %}
-                            <option val="{{ partner.id }}">{{ partner.name }}</option>
+                            <option value={{ partner.id }}>{{ partner.name }}</option>
                         {% endfor %}
                     </select>
                 {% else %}

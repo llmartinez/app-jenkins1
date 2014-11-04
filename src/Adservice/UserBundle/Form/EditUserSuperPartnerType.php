@@ -19,6 +19,8 @@ class EditUserSuperPartnerType extends AbstractType {
             ->add('surname')
             ->add('active' , 'checkbox', array('required' => false))
             ->add('language')
+            ->add('partner', 'entity'  , array('class'    => 'PartnerBundle:Partner',
+                                               'property' => 'name'))
 
             //CONTACT
             ->add('country')

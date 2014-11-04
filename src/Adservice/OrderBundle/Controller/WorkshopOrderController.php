@@ -98,14 +98,15 @@ class WorkshopOrderController extends Controller {
         $form          = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
-
             $form->bindRequest($request);
-            $partner = $workshopOrder->getPartner();
+            $id_partner = $request->request->get('partner');
+            $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-	    $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
+    	    $form_errors = $form->getErrors();
+    	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
             }else{
@@ -118,8 +119,8 @@ class WorkshopOrderController extends Controller {
                 if($find == null)
                 {
                     $user = $this->get('security.context')->getToken()->getUser();
-
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
+                    $workshopOrder->setPartner($partner);
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
 		            $roles = $roles[0];
@@ -149,6 +150,8 @@ class WorkshopOrderController extends Controller {
                         $this->get('session')->setFlash('error', $flash);
                         $this->get('session')->setFlash('code' , $code);
                 }
+            }else{
+                var_dump($form_errors);
             }
         }
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,

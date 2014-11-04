@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="lock_car")
  * @ORM\Entity
  */
-class lock_car {
+class LockCar {
 
     /**
      * @var integer $id

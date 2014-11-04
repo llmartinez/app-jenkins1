@@ -24,7 +24,7 @@
     mailer_host="localhost"
     mailer_user=""
     mailer_password=""
-    locale="en"
+    locale="es"
     secret="db5af6fd668f327cafd579d177d8fad7"
 
     mailer_transport  = smtp

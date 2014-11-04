@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="lock_incidence")
  * @ORM\Entity
  */
-class lock_incidence {
+class LockIncidence {
 
     /**
      * @var integer $id
@@ -59,7 +59,7 @@ class lock_incidence {
     /**
      * @var string $coche
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\LockBundle\Entity\lock_car")
+     * @ORM\ManyToOne(targetEntity="\Adservice\LockBundle\Entity\LockCar")
      */
     private $coche;
 
@@ -225,9 +225,9 @@ class lock_incidence {
     /**
      * Set coche
      *
-     * @param \Adservice\LockBundle\Entity\lock_car $coche
+     * @param \Adservice\LockBundle\Entity\LockCar $coche
      */
-    public function setCoche(\Adservice\LockBundle\Entity\lock_car $coche) {
+    public function setCoche(\Adservice\LockBundle\Entity\LockCar $coche) {
         $this->coche = $coche;
     }
 
