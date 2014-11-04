@@ -56,7 +56,7 @@
                 {% trans %} ticket.delete.confirm {% endtrans %}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('deleteTicket', {'id': 'foo'}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
+                <a href="{{ path('deleteTicket', {'id': ticket.id}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
