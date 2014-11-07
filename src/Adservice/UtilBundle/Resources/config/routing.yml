@@ -67,8 +67,10 @@ car_by_motor:
         expose: true
 
 showTicketReadonly:
-    pattern:  /ticket/show_read/{id_ticket}
+    pattern:  /show_ticket_readonly/{id}
     defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }
+    options:
+        expose: true
 
 ticket_system:
     pattern: /ticketSystem
@@ -79,7 +81,11 @@ ticket_system:
 tickets_from_workshop:
     pattern: /ticket/tickets_from_workshop
     defaults: { _controller: UtilBundle:Ajax:fill_ticketsFromWorkshop }
+    options:
+        expose: true
 
 tbl_similar:
-    pattern: /tblSimilar
+    pattern: /tbl_similar
     defaults: { _controller: UtilBundle:Ajax:tblSimilar }
+    options:
+        expose: true

@@ -109,7 +109,7 @@ class StatisticController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
-        $pagination = new PaginationTicket($page);
+        $pagination = new Pagination($page);
         $params = array();
         $joins  = array();
 

@@ -33,7 +33,7 @@
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
-                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
+                                    <a title="Ver detalles del taller" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
                                     {% if workshopOrder.rejectionReason is not null %}
                                         {# <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bund les/util/images/icon/tag_red.png') }}"></a> #}
                                          <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"> {% trans %} reject.reason {% endtrans %}</span></a>
@@ -140,11 +140,11 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td>
                                     <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> </a>
-                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> </a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"> </a>
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>
-                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></a>
+                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"></a>
                                 </td>
                             {% endif %}
                         </tr>

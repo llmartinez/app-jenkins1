@@ -41,7 +41,6 @@ class ShopOrderController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_AD')) {
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
-            else                    $params[] = array();
         }
         else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
 
@@ -96,7 +95,7 @@ class ShopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {

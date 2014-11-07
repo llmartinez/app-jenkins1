@@ -15,8 +15,8 @@ use Adservice\ImportBundle\Entity\old_Asesor;
 use Adservice\ImportBundle\Entity\old_Socio;
 use Adservice\ImportBundle\Entity\old_Taller;
 use Adservice\ImportBundle\Entity\old_Oper;
-use Adservice\LockBundle\Entity\lock_car;
-use Adservice\LockBundle\Entity\lock_incidence;
+use Adservice\LockBundle\Entity\LockCar;
+use Adservice\LockBundle\Entity\LockIncidence;
 use Adservice\TicketBundle\Entity\Ticket;
 use Adservice\CarBundle\Entity\Car;
 use Adservice\OrderBundle\Entity\ShopOrder;
@@ -285,7 +285,7 @@ class ImportController extends Controller
  			if(isset($users_email_log)) {
 				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
 				$session->set('info',  	'Generarando excel con los ususarios erroneos...
-										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad lock_car y lock_incidence)...');
+										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
 				$session->set('next',  	'user_log');
 
 				$response = $this->doExcelAction($users_email_log);
@@ -336,7 +336,7 @@ class ImportController extends Controller
 
 			foreach ($old_Coches as $old_Coche)
 			{
-				$newCar  = new lock_car();
+				$newCar  = new LockCar();
 				$gama   = $em_old->getRepository('ImportBundle:old_Gama'  )->find($old_Coche->getIdMMG());
 				$modelo = $em_old->getRepository('ImportBundle:old_Modelo')->find($gama     ->getModelo());
 				$marca  = $em_old->getRepository('ImportBundle:old_Marca' )->find($modelo   ->getMarca());
@@ -402,8 +402,8 @@ class ImportController extends Controller
 
 			foreach ($old_Incidences as $old_Incidence)
 			{
-				$newIncidence  = new lock_incidence();
-				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:lock_car')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
+				$newIncidence  = new LockIncidence();
+				$newIncidence->setCoche      ($em_lock->getRepository('LockBundle:LockCar')->findOneBy(array('oldId' => $old_Incidence->getCoche())));
 
 				$newIncidence->setAsesor     ($asesores [$old_Incidence->getAsesor()]);
 				$newIncidence->setOper       ($opers    [$old_Incidence->getOper()  ]);

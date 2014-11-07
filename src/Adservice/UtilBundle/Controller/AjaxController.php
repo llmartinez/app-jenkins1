@@ -240,17 +240,20 @@ class AjaxController extends Controller
 
     /**
      * Muestra los posts que pertenecen a un ticket
-     * @Route("/ticket/show_read/{id_ticket}")
-     * @ParamConverter("ticket", class="TicketBundle:Ticket", options={"id" = "id_ticket"})
+     * @Route("/ticket/show_read/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
     public function showTicketReadonlyAction($ticket) {
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
+        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
 
-        return $this->render('TicketBundle:Layout:show_ticket_readonly_layout.html.twig', array( 'ticket'    => $ticket,
-                                                                                                 'systems'   => $systems, ));
+        return $this->render('TicketBundle:Layout:show_ticket_readonly_layout.html.twig', array( 'ticket'  => $ticket,
+                                                                                                 'systems' => $systems,
+                                                                                                 'adsplus' => $adsplus, ));
     }
 
     /**

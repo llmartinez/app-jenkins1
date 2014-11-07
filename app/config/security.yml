@@ -38,7 +38,7 @@ security:
       - { path: ^/(es|en|fr)/user/list,                  roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr)/user,                       roles: [ROLE_USER, ROLE_AD]         }
       - { path: ^/(es|en|fr)/popup,                      roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/workshop,                   roles: [ROLE_ASSESSOR, ROLE_AD]        }
+      - { path: ^/(es|en|fr)/workshop,                   roles: [ROLE_ASSESSOR, ROLE_AD]     }
       - { path: ^/(es|en|fr)/ticket/workshopList,        roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
       - { path: ^/(es|en|fr)/ticket/close,               roles: [ROLE_ASSESSOR]              }

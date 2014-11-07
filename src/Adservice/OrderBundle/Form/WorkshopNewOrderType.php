@@ -12,7 +12,7 @@ class WorkshopNewOrderType extends AbstractType
         $builder
             ->add('name')
             ->add('cif','text', array('required' => false))
-            ->add('partner')
+            // ->add('partner', 'choice' , array('required' => true, 'empty_value' => 'Selecciona un socio'))
             ->add('shop')
             ->add('code_workshop')
             ->add('typology')

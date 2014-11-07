@@ -146,11 +146,11 @@ class TicketController extends Controller {
                 $result = $consulta2->getResult();
                 $last_post = end($result);
 
-        		if($last_post != null){
-        		   $last_post_role = $last_post->getCreatedBy();
-        		   $last_post_role = $last_post_role->getRoles();
-        		   $last_post_role = $last_post_role[0];
-        		}
+                if($last_post != null){
+                   $last_post_role = $last_post->getCreatedBy();
+                   $last_post_role = $last_post_role->getRoles();
+                   $last_post_role = $last_post_role[0];
+                }
 
                 if(count($result) != 0 and $last_post != null
                 and ($last_post_role == 'ROLE_ASSESSOR'
@@ -190,7 +190,9 @@ class TicketController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if (!isset($workshops[0])) $workshops  = array('0' => new Workshop());
+        if (!isset($workshops[0])) {
+            $workshops = array('0' => new Workshop());
+        }
 
         $size = sizeof($workshops);
         if( $size > 1 ) {
@@ -201,7 +203,9 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand')->findAll();
+
+        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
@@ -209,6 +213,7 @@ class TicketController extends Controller {
                                                                                        'option'     => $option,
                                                                                        'num_rows'   => $num_rows,
                                                                                        'brands'     => $brands,
+                                                                                       'adsplus'    => $adsplus,
                                                                               ));
     }
 
@@ -349,13 +354,16 @@ class TicketController extends Controller {
             // } else { $this->get('session')->setFlash('error_car', '¡Error! No has introducido el vehiculo correctamente'); }
         }
 
-        $brands  = $em->getRepository('CarBundle:Brand'    )->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
+
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
                     'formD' => $formD->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
+                    'adsplus' => $adsplus,
                     'workshop' => $workshop,
                     'form_name' => $form->getName(),));
     }
@@ -594,7 +602,7 @@ class TicketController extends Controller {
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
-                        'sentences'   => $sentences,
+                        'sentences' => $sentences,
                         'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
@@ -943,35 +951,40 @@ class TicketController extends Controller {
         $model   = $request->get('new_car_form_model'  );
         $version = $request->get('new_car_form_version');
 
-        $params  = array('brand'   => $brand,
-                         'model'   => $model
-                         );
-        if($version != '') $params[] = array('verion' => $version);
+        if($version == '') $params = array('brand'   => $brand,
+                                           'model'   => $model
+                                           );
+        else               $params = array('brand'   => $brand,
+                                           'model'   => $model,
+                                           'version' => $version
+                                           );
 
         $cars    = $em->getRepository('CarBundle:Car')->findBy($params);
         $tickets = array();
 
         $key = array_keys($cars);
         $size = sizeOf($key);
-
         if($size > 0){
 
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
-                $tickets[] = $ticket;
+
+                if (isset($ticket)) $tickets[] = $ticket;
             }
         }
 
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
-                                                                                       'brands'     => $brands,
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
+                                                                                       'brands'     => $brands,
+                                                                                       'adsplus'    => $adsplus,
                                                                                   ));
     }
 

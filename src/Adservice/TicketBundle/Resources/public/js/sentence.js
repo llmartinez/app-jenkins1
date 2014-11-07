@@ -23,5 +23,6 @@
         var sentence = $(this).val();
 
         $('#ticket_form_message').val(sentence);
+        $('#post_form_message').val(sentence);
 
     });
