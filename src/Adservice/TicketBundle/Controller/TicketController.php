@@ -602,7 +602,7 @@ class TicketController extends Controller {
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
-                        'sentences'   => $sentences,
+                        'sentences' => $sentences,
                         'form_name' => $formP->getName(), );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }

@@ -360,8 +360,8 @@ function fill_tbl_similar() {
             $.each(data, function(idx, elm) {
 
                 if (idx != "error") {
-                    var url = Routing.generate('showTicketReadonly', {_locale: locale, id_ticket: elm.id });
-                    $("#tbl_similar").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"Ticket #"+ elm.id +"\", \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
+                    var url = Routing.generate('showTicketReadonly', {_locale: locale, id: elm.id });
+                    $("#tbl_similar").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
                 }
                 else{
                     $( "#tbl_similar" ).empty();
