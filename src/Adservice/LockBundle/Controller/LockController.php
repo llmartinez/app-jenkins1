@@ -15,7 +15,7 @@ class LockController extends Controller
 
         $pagination = new Pagination($page);
         $bundle     = 'LockBundle';
-        $entity     = 'lock_incidence';
+        $entity     = 'LockIncidence';
         $params     = array();
 
         if( ! $security->isGranted('ROLE_ASSESSOR')){
@@ -69,7 +69,7 @@ class LockController extends Controller
     public function showIncidenceAction($page=1, $id_incidence=null)
     {
     	$em_lock   = $this->getDoctrine()->getEntityManager('em_lock');
-        $incidence = $em_lock->getRepository('LockBundle:lock_incidence')->find($id_incidence);
+        $incidence = $em_lock->getRepository('LockBundle:LockIncidence')->find($id_incidence);
 
         return $this->render('LockBundle:Lock:show_incidence.html.twig', array('incidence' => $incidence));
 
