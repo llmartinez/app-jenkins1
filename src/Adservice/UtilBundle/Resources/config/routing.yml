@@ -69,6 +69,8 @@ car_by_motor:
 showTicketReadonly:
     pattern:  /ticket/show_read/{id_ticket}
     defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }
+    options:
+        expose: true
 
 ticket_system:
     pattern: /ticketSystem

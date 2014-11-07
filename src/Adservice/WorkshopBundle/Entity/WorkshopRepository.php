@@ -63,4 +63,27 @@ class WorkshopRepository extends EntityRepository
         }else
             {   return array('error' => 'error'); }
     }
+
+    /**
+     * [isADSPlus description]
+     * @param  [type]  $id [description]
+     * @return boolean     [description]
+     */
+    public function hasADSPlus($workshops)
+    {
+        $em = $this->getEntityManager();
+        $in   = ' ( ';
+
+        foreach ($workshops as $workshop) {
+            $id  = $workshop->getId();
+            $in .= $id.', ';
+        }
+
+        $in = substr($in, 0, -1).' )';
+
+        $query = 'SELECT a FROM WorkshopBundle:ADSPlus a WHERE a.idTallerADS IN '.$in.' ';
+        $consulta = $em->createQuery($query.' ORDER BY a.idTallerADS ');
+
+        return $consulta->getResult();
+    }
 }

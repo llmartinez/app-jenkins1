@@ -7,9 +7,13 @@
 					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
 						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %}
 
-			{% if workshop.test        == 1 %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/asterisk.png') }}'
+			{% if workshop.test == 1 %}
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
 					 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
+
+			{% if adsplus.id is defined %}
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
+					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
 
 			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
 	</legend>

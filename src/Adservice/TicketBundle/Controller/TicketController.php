@@ -146,11 +146,11 @@ class TicketController extends Controller {
                 $result = $consulta2->getResult();
                 $last_post = end($result);
 
-        		if($last_post != null){
-        		   $last_post_role = $last_post->getCreatedBy();
-        		   $last_post_role = $last_post_role->getRoles();
-        		   $last_post_role = $last_post_role[0];
-        		}
+                if($last_post != null){
+                   $last_post_role = $last_post->getCreatedBy();
+                   $last_post_role = $last_post_role->getRoles();
+                   $last_post_role = $last_post_role[0];
+                }
 
                 if(count($result) != 0 and $last_post != null
                 and ($last_post_role == 'ROLE_ASSESSOR'
@@ -190,7 +190,9 @@ class TicketController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if (!isset($workshops[0])) $workshops  = array('0' => new Workshop());
+        if (!isset($workshops[0])) {
+            $workshops = array('0' => new Workshop());
+        }
 
         $size = sizeof($workshops);
         if( $size > 1 ) {
@@ -201,7 +203,9 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand')->findAll();
+
+        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
@@ -209,6 +213,7 @@ class TicketController extends Controller {
                                                                                        'option'     => $option,
                                                                                        'num_rows'   => $num_rows,
                                                                                        'brands'     => $brands,
+                                                                                       'adsplus'    => $adsplus,
                                                                               ));
     }
 
@@ -349,13 +354,16 @@ class TicketController extends Controller {
             // } else { $this->get('session')->setFlash('error_car', '¡Error! No has introducido el vehiculo correctamente'); }
         }
 
-        $brands  = $em->getRepository('CarBundle:Brand'    )->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
+
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
                     'formD' => $formD->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
+                    'adsplus' => $adsplus,
                     'workshop' => $workshop,
                     'form_name' => $form->getName(),));
     }
