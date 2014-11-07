@@ -951,35 +951,40 @@ class TicketController extends Controller {
         $model   = $request->get('new_car_form_model'  );
         $version = $request->get('new_car_form_version');
 
-        $params  = array('brand'   => $brand,
-                         'model'   => $model
-                         );
-        if($version != '') $params[] = array('verion' => $version);
+        if($version == '') $params = array('brand'   => $brand,
+                                           'model'   => $model
+                                           );
+        else               $params = array('brand'   => $brand,
+                                           'model'   => $model,
+                                           'version' => $version
+                                           );
 
         $cars    = $em->getRepository('CarBundle:Car')->findBy($params);
         $tickets = array();
 
         $key = array_keys($cars);
         $size = sizeOf($key);
-
         if($size > 0){
 
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
-                $tickets[] = $ticket;
+
+                if (isset($ticket)) $tickets[] = $ticket;
             }
         }
 
         $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
-                                                                                       'brands'     => $brands,
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
+                                                                                       'brands'     => $brands,
+                                                                                       'adsplus'    => $adsplus,
                                                                                   ));
     }
 
