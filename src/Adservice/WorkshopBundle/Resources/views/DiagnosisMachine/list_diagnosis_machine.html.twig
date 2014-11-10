@@ -18,7 +18,7 @@
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
-            <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
+            <select id="flt_country" class='form-control'>
                     <option value="none">{% trans %} all {% endtrans %}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
