@@ -121,12 +121,14 @@ function populate_shop(id_shop){
         dataType    : "json",
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
+            if (idx != "error") {
             $('form').find('select[id*=_shop]').empty();
-            $.each(data, function(idx, elm) {
+                $.each(data, function(idx, elm) {
 
-                if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
-                else                  $('form').find('select[id*=_shop]').append("<option value="+elm.id+">"+elm.shop+"</option>");
-            });
+                    if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
+                    else                  $('form').find('select[id*=_shop]').append("<option value="+elm.id+">"+elm.shop+"</option>");
+                });
+            }
         },
         error : function(){
             console.log("Error al cargar las tiendas...");

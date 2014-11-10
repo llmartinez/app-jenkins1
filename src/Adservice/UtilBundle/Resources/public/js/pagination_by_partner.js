@@ -48,11 +48,7 @@
 	    $('#btn_siguiente').click(function() {
 
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
-
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-    		var total  = data.total;
-            var url    = data.url;
+	    	var total = $('#total').val();
 
 	    	if (next_page <= total ) {
 
@@ -73,6 +69,7 @@
             var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
+	    	var total = $('#total').val();
 		    var route = $('#route').val();
 		    var locale = $(document).find("#data_locale").val();
 		    var url = Routing.generate(route, {_locale: locale, page: total, partner: partner });

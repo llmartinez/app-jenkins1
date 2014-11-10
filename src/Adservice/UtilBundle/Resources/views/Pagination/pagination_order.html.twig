@@ -6,11 +6,13 @@
     {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
-    <div id="pagination"  class="pagination_content" data-url="{{ path('list_orders', { 'page': 'plc_page', 'option': option }) }}" data-total="{{ totalpag }}">
+    <div id="pagination"  class="pagination_content">
+	    <input type="hidden" id="route" name="route" value="list_orders">
+	    <input type="hidden" id="total" name="total" value="{{ totalpag }}">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
-    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward" title="{% trans %} page.first {% endtrans %}"></span></button>
-    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="{% trans %} page.prev {% endtrans %}"></span></button>
+    	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward"     title="{% trans %} page.first {% endtrans %}"></span></button>
+    	<button id="btn_anterior" class="page_number"><span class="glyphicon glyphicon-chevron-left" title="{% trans %} page.prev  {% endtrans %}"></span></button>
 
 	    {# PAGINAS ANTERIORES #}
     	{% if prevpages > 0 %}
@@ -31,6 +33,6 @@
 
 	    {# FLECHAS PAGINAS SIGUIENTES #}
     	<button id="btn_siguiente" class="page_number"><span class="glyphicon glyphicon-chevron-right" title="{% trans %} page.next {% endtrans %}"></span></button>
-    	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
+    	<button id="totalpage"     class="page_number"><span class="glyphicon glyphicon-forward"       title="{% trans %} page.last {% endtrans %}({{ totalpag }})"></span></button>
 
     </div>
