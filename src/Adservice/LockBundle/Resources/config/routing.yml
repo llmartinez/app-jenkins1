@@ -5,3 +5,5 @@ list_incidences:
 show_incidence:
     pattern:  /lock/{id_incidence}
     defaults: { _controller: LockBundle:Lock:showIncidence, id_incidence: null }
+    options:
+        expose: true

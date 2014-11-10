@@ -52,10 +52,14 @@ user_select_new:
 generate_password:
     pattern: /user/changePassword/{id}
     defaults: { _controller: UserBundle:User:generatePassword }
+    options:
+        expose: true
 
 change_password:
     pattern: /user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}
     defaults: { _controller: UserBundle:User:changePassword, new_pass: 'none', rep_pass: 'none', old_pass: 'none' }
+    options:
+        expose: true
 
 ##############################
 #       RUTAS AJAX           #

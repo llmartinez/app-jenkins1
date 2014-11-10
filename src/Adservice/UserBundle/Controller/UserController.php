@@ -280,7 +280,7 @@ class UserController extends Controller {
         $this->saveUser($em, $user);
         /* MAILING */
         $mailerUser = $this->get('cms.mailer');
-        $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($user->getEmail1());*/
+        $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($user->getEmail1());*/
         $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
         $mailerUser->setFrom('noreply@grupeina.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));

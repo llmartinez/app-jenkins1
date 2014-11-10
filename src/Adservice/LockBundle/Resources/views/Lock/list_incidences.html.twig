@@ -21,11 +21,12 @@
     {% if is_granted('ROLE_ASSESSOR') %}
         <div class="col-xs-6 col-md-6 form-group">
             <div class="col-xs-2 col-md-2"><label> {% trans %} code {% endtrans %} </label></div>
+            <input type="hidden" id="code_partner" name="code_partner" value="{{ code.partner }}">
+            <input type="hidden" id="code_numeric" name="code_numeric" value="{{ code.numeric }}">
+          {# data-url="{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}" #}
+
             <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{% trans %} partner  {% endtrans %}"></div>
-            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{% trans %} workshop {% endtrans %}"
-                                                  data-partner="{% trans %} code.partner {% endtrans %}"
-                                                  data-num="{% trans %} code.numeric {% endtrans %}"
-                                                  data-url="{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}"></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{% trans %} workshop {% endtrans %}"></div>
             <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{% trans %} btn.search {% endtrans %}"></div>
         </div>
 
@@ -54,8 +55,9 @@
         </thead>
         <tbody>
                 {% for incidence in incidences %}
-            <tr class="incidenceRow" data-url="{{ path('show_incidence', {'id_incidence': 'PLACEHOLDER'}) }}">
-                <td id="id_incidence">{{ incidence.id }}</td>
+            <tr class="incidenceRow">
+                <input type="hidden" id="id_incidence" name="id_incidence" value="{{ incidence.id }}">
+                <td>{{ incidence.id     }}</td>
                 <td>{{ incidence.date|date("d/m/y")   }}</td>
                 <td>{{ incidence.oper   }}</td>
                 <td>{{ incidence.coche  }}</td>

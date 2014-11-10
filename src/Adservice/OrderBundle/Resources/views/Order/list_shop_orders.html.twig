@@ -133,11 +133,11 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td>
                                     <a title="{% trans %} accept {% endtrans %}" href="{{ path("shopOrder_accept", { 'id': shopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> </a>
-                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("shopOrder_reject", { 'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"> </a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("shopOrder_reject", { 'id': shopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> </a>
                                 </td>
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>
-                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('shopOrder_remove', {'id' : shopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"></a>
+                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('shopOrder_remove', {'id' : shopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></a>
                                 </td>
                             {% endif %}
                         </tr>
