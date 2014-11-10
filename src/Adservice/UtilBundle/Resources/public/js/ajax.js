@@ -22,13 +22,18 @@ function populate_region(route, region, city){
             var region_edit = '';
             $.each(data, function(idx, elm) {
 
-                if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region))) {  region_edit = elm.region; city_edit = city;
-                                            $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
+                if (idx != "error") {
+                    if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region))) {  region_edit = elm.region; city_edit = city;
+                                                $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
+                    else{
+                        if( region != 'no-region' ) { region_edit = region; city_edit = city;
+                            $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                        }
+                        else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                }
                 else{
-                    if( region != 'no-region' ) { region_edit = region; city_edit = city;
-                        $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
-                    }
-                    else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                    $( "#data_regions" ).empty();
+                    $( "#data_regions" ).append("<tr><td>" + elm + "</td></tr>");
                 }
             });
             $("#slct_region").html($('#data_regions').html());

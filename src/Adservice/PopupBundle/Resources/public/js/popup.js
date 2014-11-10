@@ -29,7 +29,7 @@ function confirm_delete_popup_modal(id){
 
             if(country == null) country = 'none';
 
-            var route = 'regions_from_country';
+            var route = 'popup_list';
             var locale = $(document).find("#data_locale").val();
             var url = Routing.generate(route, {_locale: locale, page: 1, country: country });
 

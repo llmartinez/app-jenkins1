@@ -80,11 +80,13 @@ post_edit:
     defaults: { _controller: TicketBundle:Ticket:editPost, id: null }
 
 ##############################
-#   APDO. RUTAS TYPOLOGY     #
+#   APDO. RUTAS SENTENCE     #
 ##############################
 sentence_list:
     pattern:  /sentence_list/{page}/{country}
     defaults: { _controller: TicketBundle:Sentence:listSentence, page: 1 , country: 'none'  }
+    options:
+        expose: true
 
 sentence_edit:
     pattern: /sentence_edit/{id}
