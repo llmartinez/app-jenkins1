@@ -8,18 +8,29 @@
         });
 
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_partner').click(function() {
+        $('#flt_partner_s').click(function() {
 
-            var partner = $('#flt_partner').val();
+            var partner = $('#flt_partner_s').val();
 
             if(partner == null) partner = 'none';
 
-            var select = document.querySelector('#flt_partner');
-            var data   = select.dataset;
-            var url    = data.url;
+            var route = 'shopOrder_listShops';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner });
 
-            url = url.replace("plc_page", 1);
-            url = url.replace("plc_partner", partner);
+            window.open(url, "_self");
+        });
+
+        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+        $('#flt_partner_w').click(function() {
+
+            var partner = $('#flt_partner_w').val();
+
+            if(partner == null) partner = 'none';
+
+            var route = 'workshopOrder_listWorkshops';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner });
 
             window.open(url, "_self");
         });
