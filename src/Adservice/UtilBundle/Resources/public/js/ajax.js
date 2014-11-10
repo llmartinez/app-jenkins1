@@ -23,13 +23,17 @@ function populate_region(route, region, city){
             $.each(data, function(idx, elm) {
 
                 if (idx != "error") {
-                    if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region))) {  region_edit = elm.region; city_edit = city;
-                                                $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");}
+                    if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region)))
+                    {
+                        region_edit = elm.region; city_edit = city;
+                        $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");
+                    }
                     else{
                         if( region != 'no-region' ) { region_edit = region; city_edit = city;
                             $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
                         }
                         else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
+                    }
                 }
                 else{
                     $( "#data_regions" ).empty();

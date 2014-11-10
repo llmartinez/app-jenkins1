@@ -24,7 +24,7 @@
             </div>
             <div class="col-xs-2 col-md-2">
 
-                <label>{% trans %} code.workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
             </div>
             {% if is_granted('ROLE_SUPER_AD') %}
                 <div class="col-xs-2 col-md-2 form-group">
