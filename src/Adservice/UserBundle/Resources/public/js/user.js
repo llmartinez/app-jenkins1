@@ -5,10 +5,9 @@
 
         $('#slct_role').change(function() {
             var role = $(this).val();
-            var select = document.querySelector('#slct_role');
-            var data   = select.dataset;
-            var url    = data.url;
-            url = url.replace('plc_role', role);
+            var route = 'user_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, option: role });
             window.open(url, "_self");
         });
     });
