@@ -26,6 +26,8 @@ partner_delete:
 shop_list:
     pattern:  /list/shop/{page}/{country}
     defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: 'none' }
+    options:
+        expose: true
 
 shop_new:
     pattern: /new/shop
