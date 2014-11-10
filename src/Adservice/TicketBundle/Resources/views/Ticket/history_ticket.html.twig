@@ -2,6 +2,7 @@
     <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
     <div class="col-xs-8 col-md-8 form-group">
 
+        <input type="hidden" id="route"    value= {{ route    }}>
         <input type="hidden" id="num_rows" value= {{ num_rows }}>
         <input type="hidden" id="option"   value= {{ option   }}>
         <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">

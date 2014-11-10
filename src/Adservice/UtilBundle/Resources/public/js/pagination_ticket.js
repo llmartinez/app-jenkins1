@@ -1,78 +1,81 @@
 
-    $(document).ready(function() {
-    	//REDIRIGE A LA PRIMERA PAGINA
-	    $('#firstpage').click(function() {
+    // $(document).ready(function() {
+    // 	//REDIRIGE A LA PRIMERA PAGINA
+	   //  $('#firstpage').click(function() {
 
-	        var select = document.querySelector('#pagination');
-	        var data   = select.dataset;
-	        var option = data.option;
-	        var url    = data.url;
-	    	url = url.replace("plc_page", 1);
-	    	url = url.replace("plc_option", option);
-	    	window.open(url, "_self");
-	    });
+	   //      var select = document.querySelector('#pagination');
+	   //      var data   = select.dataset;
+	   //      var option = data.option;
+	   //      var url    = data.url;
 
-	    //REDIRIGE A LA ANTERIOR PAGINA
-	    $('#btn_anterior').click(function() {
+		  //   var route = 'regions_from_country';
+		  //   var locale = $(document).find("#data_locale").val();
+		  //   var url = Routing.generate(route, {_locale: locale, page: 1, option: option });
 
-	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
+	   //  	window.open(url, "_self");
+	   //  });
 
-	    	if (prev_page > 0 ) {
+	   //  //REDIRIGE A LA ANTERIOR PAGINA
+	   //  $('#btn_anterior').click(function() {
 
-		        var select = document.querySelector('#pagination');
-		        var data   = select.dataset;
-		        var option = data.option;
-		        var url    = data.url;
-		    	url = url.replace("plc_page", prev_page);
-		    	url = url.replace("plc_option", option);
+	   //  	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
 
-		    	window.open(url, "_self");
-		    }
-	    });
+	   //  	if (prev_page > 0 ) {
 
-	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-	    $('.change_page').click(function() {
+		  //       var select = document.querySelector('#pagination');
+		  //       var data   = select.dataset;
+		  //       var option = data.option;
+		  //       var url    = data.url;
+		  //   	url = url.replace("plc_page", prev_page);
+		  //   	url = url.replace("plc_option", option);
 
-	        var select = document.querySelector('#pagination');
-	        var data   = select.dataset;
-	        var option = data.option;
-	        var url    = data.url;
-	    	url = url.replace("plc_page", $(this).text());
-	    	url = url.replace("plc_option", option);
+		  //   	window.open(url, "_self");
+		  //   }
+	   //  });
 
-	    	window.open(url, "_self");
-	    });
+	   //  //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+	   //  $('.change_page').click(function() {
 
-	    //REDIRIGE A LA SIGUIENTE PAGINA
-	    $('#btn_siguiente').click(function() {
+	   //      var select = document.querySelector('#pagination');
+	   //      var data   = select.dataset;
+	   //      var option = data.option;
+	   //      var url    = data.url;
+	   //  	url = url.replace("plc_page", $(this).text());
+	   //  	url = url.replace("plc_option", option);
 
-	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
-	        var select = document.querySelector('#pagination');
-	        var data   = select.dataset;
-	        var option = data.option;
-	        var total  = data.total;
-	        var url    = data.url;
+	   //  	window.open(url, "_self");
+	   //  });
 
-	    	if (next_page <= total ) {
+	   //  //REDIRIGE A LA SIGUIENTE PAGINA
+	   //  $('#btn_siguiente').click(function() {
 
-		    	url = url.replace("plc_page", next_page);
-	    		url = url.replace("plc_option", option);
+	   //  	var next_page = parseFloat($('#page').val()) + parseFloat(1);
+	   //      var select = document.querySelector('#pagination');
+	   //      var data   = select.dataset;
+	   //      var option = data.option;
+	   //      var total  = data.total;
+	   //      var url    = data.url;
 
-		    	window.open(url, "_self");
-		    }
-	    });
+	   //  	if (next_page <= total ) {
 
-	    //REDIRIGE A LA ULTIMA PAGINA
-	    $('#totalpage').click(function() {
+		  //   	url = url.replace("plc_page", next_page);
+	   //  		url = url.replace("plc_option", option);
 
-	        var select = document.querySelector('#pagination');
-	        var data   = select.dataset;
-	        var option = data.option;
-	        var total  = data.total;
-	        var url    = data.url;
-	    	url = url.replace("plc_page", total);
-	    	url = url.replace("plc_option", option);
+		  //   	window.open(url, "_self");
+		  //   }
+	   //  });
 
-	    	window.open(url, "_self");
-	    });
-    });
+	   //  //REDIRIGE A LA ULTIMA PAGINA
+	   //  $('#totalpage').click(function() {
+
+	   //      var select = document.querySelector('#pagination');
+	   //      var data   = select.dataset;
+	   //      var option = data.option;
+	   //      var total  = data.total;
+	   //      var url    = data.url;
+	   //  	url = url.replace("plc_page", total);
+	   //  	url = url.replace("plc_option", option);
+
+	   //  	window.open(url, "_self");
+	   //  });
+    // });
