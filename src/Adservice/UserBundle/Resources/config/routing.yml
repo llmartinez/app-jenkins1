@@ -32,6 +32,8 @@ user_profile:
 user_list:
     pattern: /user/list/{page}/{option}
     defaults: { _controller: UserBundle:User:userList, page:1 , option: null }
+    options:
+        expose: true
 
 user_edit:
     pattern: /user/edit/{id}
