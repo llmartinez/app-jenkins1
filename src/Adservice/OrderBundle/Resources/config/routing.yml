@@ -12,6 +12,8 @@ list_orders:
 shopOrder_listShops:
     pattern: /shop/listShops/{page}/{partner}
     defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none' }
+    options:
+        expose: true
 
 shopOrder_new:
     pattern: /shop/new
@@ -57,6 +59,8 @@ shopOrder_reject:
 workshopOrder_listWorkshops:
     pattern: /workshop/listWorkshops/{page}/{partner}
     defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , partner: 'none' }
+    options:
+        expose: true
 
 workshopOrder_new:
     pattern: /workshop/new

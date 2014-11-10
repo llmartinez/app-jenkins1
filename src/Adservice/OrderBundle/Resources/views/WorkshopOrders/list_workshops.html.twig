@@ -11,7 +11,7 @@
 
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
-        <select id="flt_partner" class='form-control' data-url="{{ path('workshopOrder_listWorkshops', { 'page': 'plc_page', 'partner': 'plc_partner'}) }}">
+        <select id="flt_partner_w" class='form-control'>
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>
