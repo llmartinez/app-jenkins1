@@ -54,9 +54,12 @@ function confirm_delete_user_modal(user_id) {
  */
 function find_popup() {
 
+    var route  = 'popup_get';
+    var locale = $(document).find("#data_locale").val();
+
     $.ajax({
         type: "POST",
-        url: Routing.generate('find_popup', {_locale: locale}),
+        url: Routing.generate(route, {_locale: locale}),
         dataType: "json",
         success: function(data) {
             //solo mostramos el modal, si tenemos un popup que mostrar

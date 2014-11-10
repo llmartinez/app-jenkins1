@@ -23,3 +23,5 @@ popup_new:
 popup_get:
     pattern:  /get
     defaults: { _controller: PopupBundle:Popup:getPopup }
+    options:
+        expose: true

@@ -2,10 +2,11 @@
     $(document).ready(function() {
         $(".incidenceRow").click(function() {
 
-            var select = document.querySelector('.incidenceRow');
-            var data   = select.dataset;
-            var url    = data.url;
-            url = url.replace("PLACEHOLDER", $(this).children('#id_incidence').text());
+    		var route = 'show_incidence';
+		    var locale = $(document).find("#data_locale").val();
+		    var id_incidence = $("#id_incidence").val();
+
+            var url    = Routing.generate(route, {_locale: locale, id_incidence: id_incidence });
 
             window.open(url, "_self");
 
@@ -15,9 +16,7 @@
 			if (!$.isNumeric($( "#flt_taller" ).val()) || !$.isNumeric($( "#flt_socio" ).val())) {
 				event.preventDefault();
 
-	            var select = document.querySelector('#flt_taller');
-	            var data   = select.dataset;
-	            var num    = data.num; //trans code.numeric
+		    	var num = $("#code_numeric").val();
 				alert(num);
 			}else{
 	            list_incidences();
@@ -31,13 +30,9 @@
 	        if( id_socio  == null ) id_socio  = 'none';
 	        if( id_taller == null ) id_taller = 'none';
 
-	        var select = document.querySelector('#flt_taller');
-	        var data   = select.dataset;
-	        var url    = data.url;
-
-	        url = url.replace("plc_page", 1);
-	        url = url.replace("plc_socio" , id_socio );
-	        url = url.replace("plc_taller", id_taller);
+		    var route = 'list_incidences';
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: 1, id_taller: id_taller, id_socio: id_socio });
 
 	        window.open(url, "_self");
 	    }
@@ -56,9 +51,7 @@
 		  		if ($( "#flt_socio" ).val() == "") {
 			  		event.preventDefault();
 					$( "#flt_socio" ).focus();
-	                var select = document.querySelector('#flt_taller');
-	                var data   = select.dataset;
-	                var partner= data.partner; //trans code.partner
+		    		var partner = $("#code_partner").val();
 					$( "#lbl_code" ).html(partner);
 				}else{
 		  			codeNumeric();
@@ -72,9 +65,7 @@
 	        if ($( "#flt_taller" ).val() == "" || $( "#flt_socio" ).val() == "") {
 	            event.preventDefault();
 	            $( "#flt_socio" ).focus();
-	                var select = document.querySelector('#flt_taller');
-	                var data   = select.dataset;
-	                var partner= data.partner; //trans code.partner
+	    		var partner = $("#code_partner").val();
 	            $( "#lbl_code" ).html(partner);
 	        }else{
 	            codeNumeric();

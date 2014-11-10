@@ -19,19 +19,16 @@ class PopupRepository extends EntityRepository{
         $role = $user->getRoles();
         $role = $role[0];
 
-        $query = "SELECT p FROM PopupBundle:Popup p
-                  WHERE p.startdate_at <= :start_date
-                  AND   p.enddate_at >= :end_date
-                  AND   p.role = :role
-                 ";
+        if($role == 'ROLE_SUPER_ADMIN' OR $role == 'ROLE_SUPER_AD') $country = "";
+        else $country = " AND p.country = '".$user->getCountry()->getId()."' ";
 
-        if($role == 'ROLE_SUPER_ADMIN') $country = "";
-        else $country = "AND p.country = ".$user->getCountry()->getId();
+        $query = "SELECT p FROM PopupBundle:Popup p WHERE p.startdate_at <= '".$date->format("Y-m-h")."' AND p.enddate_at >= '".$date->format("Y-m-h")."e' AND p.role = ".$role->getId()." ".$country;
 
-        $consulta = $em->createQuery($query.$country);
-        $consulta->setParameter('start_date', $date);
-        $consulta->setParameter('end_date', $date);
-        $consulta->setParameter('role', $role->getId());
+        $consulta = $em->createQuery($query);
+        // $consulta->setParameter('start_date', $date);
+        // $consulta->setParameter('end_date', $date);
+        // $consulta->setParameter('role', $role->getId());
+        // if($role != 'ROLE_SUPER_ADMIN' AND $role != 'ROLE_SUPER_AD') $consulta->setParameter('country', $user->getCountry()->getId());
 
         return $consulta->getResult();
     }
