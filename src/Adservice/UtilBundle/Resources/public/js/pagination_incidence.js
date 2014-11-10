@@ -3,10 +3,9 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-            var url    = data.url;
-	    	url = url.replace("plc_page", 1);
+		    var route = 'list_incidences';
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: 1 });
 	    	window.open(url, "_self");
 	    });
 
@@ -17,10 +16,10 @@
 
 	    	if (prev_page > 0 ) {
 
-		        var select = document.querySelector('#pagination');
-		        var data   = select.dataset;
-		        var url    = data.url;
-		    	url = url.replace("plc_page", prev_page);
+			    var route = 'list_incidences';
+			    var locale = $(document).find("#data_locale").val();
+			    var url = Routing.generate(route, {_locale: locale, page: prev_page });
+
 		    	window.open(url, "_self");
 		    }
 	    });
@@ -28,25 +27,25 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-            var url    = data.url;
-	    	url = url.replace("plc_page", $(this).text());
-	    	window.open(url, "_self");
+			    var route = 'list_incidences';
+			    var locale = $(document).find("#data_locale").val();
+			    var url = Routing.generate(route, {_locale: locale, page: $(this).text() });
+
+		    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
 	    $('#btn_siguiente').click(function() {
 
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
-
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-        	var total  = data.total;
-            var url    = data.url;
+	    	var total = $('#total').val();
 
 	    	if (next_page <= total ) {
-		    	url = url.replace("plc_page", next_page);
+
+			    var route = 'list_incidences';
+			    var locale = $(document).find("#data_locale").val();
+			    var url = Routing.generate(route, {_locale: locale, page: next_page });
+
 		    	window.open(url, "_self");
 		    }
 	    });
@@ -54,11 +53,11 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-        	var total  = data.total;
-            var url    = data.url;
-	    	url = url.replace("plc_page", total);
+	    	var total = $('#total').val();
+		    var route = 'list_incidences';
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: total });
+
 	    	window.open(url, "_self");
 	    });
     });

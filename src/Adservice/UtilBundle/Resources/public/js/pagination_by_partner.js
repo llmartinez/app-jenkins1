@@ -59,9 +59,9 @@
 	            var partner = $('#flt_partner').val();
 	            if(partner == null) partner = 'none';
 
-			    var route = $('#route').val();
-			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), partner: partner });
+		    var route = $('#route').val();
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), partner: partner });
 
 		    	window.open(url, "_self");
 		    }

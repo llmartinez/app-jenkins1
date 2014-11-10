@@ -21,8 +21,8 @@
     {% if is_granted('ROLE_ASSESSOR') %}
         <div class="col-xs-6 col-md-6 form-group">
             <div class="col-xs-2 col-md-2"><label> {% trans %} code {% endtrans %} </label></div>
-            <input type="hidden" id="code_partner" name="code_partner" value="{{ code.partner }}">
-            <input type="hidden" id="code_numeric" name="code_numeric" value="{{ code.numeric }}">
+            <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
+            <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
           {# data-url="{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}" #}
 
             <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{% trans %} partner  {% endtrans %}"></div>
