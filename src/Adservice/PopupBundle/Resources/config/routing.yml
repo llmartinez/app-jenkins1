@@ -4,6 +4,8 @@
 popup_list:
     pattern: /list/{page}/{country}
     defaults: { _controller: PopupBundle:Popup:popupList, page: 1 , country: 'none'  }
+    options:
+        expose: true
 
 popup_edit:
     pattern: /edit/{id}
