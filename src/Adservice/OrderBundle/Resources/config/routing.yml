@@ -5,6 +5,8 @@
 list_orders:
     pattern: /orders/list/{page}/{option}
     defaults: { _controller: OrderBundle:Order:listOrders, page: 1, option: 'workshop_pending' }
+    options:
+        expose: true
 
 ##############################
 #   APDO. RUTAS SHOP ORDER   #
