@@ -5,7 +5,13 @@
 
 		    var route = 'list_incidences';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: 1 });
+		    var id_socio  = $("#id_socio" ).val();
+		    var id_taller = $("#id_taller").val();
+
+	        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+	        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
+		    var url = Routing.generate(route, {_locale: locale, page: 1, id_socio: id_socio, id_taller: id_taller });
 	    	window.open(url, "_self");
 	    });
 
@@ -18,7 +24,13 @@
 
 			    var route = 'list_incidences';
 			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: prev_page });
+			    var id_socio  = $("#id_socio" ).val();
+			    var id_taller = $("#id_taller").val();
+
+		        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+		        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
+			    var url = Routing.generate(route, {_locale: locale, page: prev_page, id_socio: id_socio, id_taller: id_taller });
 
 		    	window.open(url, "_self");
 		    }
@@ -29,7 +41,13 @@
 
 			    var route = 'list_incidences';
 			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: $(this).text() });
+			    var id_socio  = $("#id_socio" ).val();
+			    var id_taller = $("#id_taller").val();
+
+		        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+		        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
+			    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), id_socio: id_socio, id_taller: id_taller });
 
 		    	window.open(url, "_self");
 	    });
@@ -44,7 +62,13 @@
 
 			    var route = 'list_incidences';
 			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: next_page });
+			    var id_socio  = $("#id_socio" ).val();
+			    var id_taller = $("#id_taller").val();
+
+		        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+		        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
+			    var url = Routing.generate(route, {_locale: locale, page: next_page, id_socio: id_socio, id_taller: id_taller });
 
 		    	window.open(url, "_self");
 		    }
@@ -56,7 +80,13 @@
 	    	var total = $('#total').val();
 		    var route = 'list_incidences';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: total });
+		    var id_socio  = $("#id_socio" ).val();
+		    var id_taller = $("#id_taller").val();
+
+	        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+	        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
+		    var url = Routing.generate(route, {_locale: locale, page: total, id_socio: id_socio, id_taller: id_taller });
 
 	    	window.open(url, "_self");
 	    });

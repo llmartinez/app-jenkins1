@@ -1,5 +1,12 @@
 
     $(document).ready(function() {
+
+        $( "#flt_socio" ).focus();
+	    var id_socio  = $("#id_socio" ).val();
+	    var id_taller = $("#id_taller").val();
+        if(id_socio  != 'none') $("#flt_socio" ).val( id_socio  );
+        if(id_taller != 'none') $("#flt_taller").val( id_taller );
+
         $(".incidenceRow").click(function() {
 
     		var route = 'show_incidence';

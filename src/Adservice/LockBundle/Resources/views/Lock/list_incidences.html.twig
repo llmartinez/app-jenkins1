@@ -30,15 +30,8 @@
             <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{% trans %} btn.search {% endtrans %}"></div>
         </div>
 
-        <script>
-            $(document).ready(function() {
-                $( "#flt_socio" ).focus();
-                {% if id_socio  != 'none' %} $("#flt_socio" ).val('{{ id_socio }}' );{% endif %}
-                {% if id_taller != 'none' %} $("#flt_taller").val('{{ id_taller }}');{% endif %}
-                //util.js
-                table_filter();
-            });
-        </script>
+        <input type="hidden" id="id_socio"  name="id_socio"  value="{{ id_socio  }}">
+        <input type="hidden" id="id_taller" name="id_taller" value="{{ id_taller }}">
 
     {% endif %}
 
