@@ -4,6 +4,8 @@
 partner_list:
     pattern:  /list/partner/{page}/{country}/{partner}
     defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: 'none', partner: 'none' }
+    options:
+        expose: true
 
 partner_new:
     pattern: /new/partner

@@ -4,15 +4,11 @@
         $('#flt_country').click(function() {
 
             var country = $('#flt_country').val();
-
             if(country == null) country = 'none';
 
-            var select = document.querySelector('#flt_country');
-            var data   = select.dataset;
-            var url    = data.url;
-
-            url = url.replace("plc_page", 1);
-            url = url.replace("plc_country", country);
+            var route = 'partner_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country });
 
             window.open(url, "_self");
         });

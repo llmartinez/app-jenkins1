@@ -29,12 +29,9 @@ function confirm_delete_popup_modal(id){
 
             if(country == null) country = 'none';
 
-            var select = document.querySelector('#flt_country');
-            var data   = select.dataset;
-            var url    = data.url;
-
-            url = url.replace("plc_page", 1);
-            url = url.replace("plc_country", country);
+            var route = 'regions_from_country';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country });
 
             window.open(url, "_self");
         });
