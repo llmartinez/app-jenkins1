@@ -1,6 +1,8 @@
 
 <legend> {% trans %} workshop.search {% endtrans %} </legend>
-<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data" data-numeric="{% trans %} code.numeric {% endtrans %}" data-check="{% trans %} code.partner {% endtrans %}">
+<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code.numeric {% endtrans %}">
+    <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code.partner {% endtrans %}">
     <div class="form-group">
 
     	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
