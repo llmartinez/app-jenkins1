@@ -6,11 +6,9 @@
             var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-            var url    = data.url;
-	    	url = url.replace("plc_page", 1);
-            url = url.replace("plc_partner", partner);
+		    var route = $('#route').val();
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner });
 
 	    	window.open(url, "_self");
 	    });
@@ -25,13 +23,11 @@
             var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
-	            var select = document.querySelector('#pagination');
-	            var data   = select.dataset;
-	            var url    = data.url;
-		    	url = url.replace("plc_page", prev_page);
-            	url = url.replace("plc_partner", partner);
+		    var route = $('#route').val();
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: prev_page, partner: partner });
 
-		    	window.open(url, "_self");
+	    	window.open(url, "_self");
 		    }
 	    });
 
@@ -41,11 +37,9 @@
             var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-            var url    = data.url;
-	    	url = url.replace("plc_page", $(this).text());
-            url = url.replace("plc_partner", partner);
+		    var route = $('#route').val();
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), partner: partner });
 
 	    	window.open(url, "_self");
 	    });
@@ -62,11 +56,12 @@
 
 	    	if (next_page <= total ) {
 
-            var partner = $('#flt_partner').val();
-            if(partner == null) partner = 'none';
+	            var partner = $('#flt_partner').val();
+	            if(partner == null) partner = 'none';
 
-		    	url = url.replace("plc_page", next_page);
-           		url = url.replace("plc_partner", partner);
+			    var route = $('#route').val();
+			    var locale = $(document).find("#data_locale").val();
+			    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), partner: partner });
 
 		    	window.open(url, "_self");
 		    }
@@ -78,12 +73,9 @@
             var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
-            var select = document.querySelector('#pagination');
-            var data   = select.dataset;
-        	var total  = data.total;
-            var url    = data.url;
-		    	url = url.replace("plc_page", total);
-            url = url.replace("plc_partner", partner);
+		    var route = $('#route').val();
+		    var locale = $(document).find("#data_locale").val();
+		    var url = Routing.generate(route, {_locale: locale, page: total, partner: partner });
 
 	    	window.open(url, "_self");
 	    });
