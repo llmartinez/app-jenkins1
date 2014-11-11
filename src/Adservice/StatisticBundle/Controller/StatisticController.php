@@ -3,10 +3,11 @@
 namespace Adservice\StatisticBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Adservice\StatisticBundle\Entity\Statistic;
 use Adservice\StatisticBundle\Form\DateType;
 use Adservice\UtilBundle\Entity\Pagination;
-use Symfony\Component\HttpFoundation\Response;
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
 
 class StatisticController extends Controller {
 

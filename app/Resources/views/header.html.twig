@@ -43,11 +43,13 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a class="btn pull-left" href="{{ path('user_index'  ) }}">   {% trans %} home         {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
 
-                                        <li><a class="btn pull-left"  href="{{ path("listTicket"                  ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
+                                        {% if not is_granted('ROLE_SUPER_AD') or is_granted('ROLE_USER') %}
+                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+                                        {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}
-                                            <li><a class="btn pull-left"  href="{{ path("newTicket") }}">{% trans %} new.ticket {% endtrans %}</a></li>
+                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{% trans %} new.ticket {% endtrans %}</a></li>
                                         {% endif %}
                                         <li><a href="#"></a></li>
                                         <li class="divider"></li>

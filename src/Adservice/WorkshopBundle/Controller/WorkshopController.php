@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
     public function listAction($page=1 , $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false and $this->get('security.context')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
