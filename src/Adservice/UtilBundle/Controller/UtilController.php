@@ -300,7 +300,7 @@ class UtilController extends Controller
           'Ä' => 'Ae', 'ä' => 'ae', 'Ü' => 'Ue', 'ü' => 'ue',
           'Ö' => 'Oe', 'ö' => 'oe', 'ß' => 'ss',
           // Norwegian characters
-          'Å'=>'Aa','Æ'=>'Ae','Ø'=>'O','æ'=>'a','ø'=>'o','å','aa'
+          'Å'=>'Aa','Æ'=>'Ae','Ø'=>'O','æ'=>'a','ø'=>'o'
           );
 
           $string = strtr($string, $chars);
