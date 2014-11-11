@@ -167,6 +167,7 @@ class StatisticController extends Controller {
                 $excel = $this->createExcelWorkshop($results);
             }
 
+            $excel = UtilController::sinAcentos($excel);
             $response->setContent($excel);
             return $response;
 
