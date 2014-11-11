@@ -4,9 +4,10 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-		    var route = $("#route" ).val();
+		    var route  = $("#route" ).val();
+		    var option = $("#option").val();
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: 1 });
+		    var url = Routing.generate(route, {_locale: locale, page: 1, option: option });
 
 	    	url = url.replace("plc_page", 1);
 	    	window.open(url, "_self");
@@ -19,9 +20,10 @@
 
 	    	if (prev_page > 0 ) {
 
-			    var route = $("#route" ).val();
+			    var route  = $("#route" ).val();
+			    var option = $("#option").val();
 			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: prev_page });
+			    var url = Routing.generate(route, {_locale: locale, page: prev_page, option: option });
 
 		    	window.open(url, "_self");
 		    }
@@ -30,9 +32,10 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-		    var route = $("#route" ).val();
+		    var route  = $("#route" ).val();
+		    var option = $("#option").val();
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: $(this).text() });
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), option: option });
 
 	    	window.open(url, "_self");
 	    });
@@ -45,9 +48,10 @@
 
 	    	if (next_page <= total ) {
 
-			    var route = $("#route" ).val();
+			    var route  = $("#route" ).val();
+			    var option = $("#option").val();
 			    var locale = $(document).find("#data_locale").val();
-			    var url = Routing.generate(route, {_locale: locale, page: next_page });
+			    var url = Routing.generate(route, {_locale: locale, page: next_page, option: option });
 
 		    	window.open(url, "_self");
 		    }
@@ -57,9 +61,10 @@
 	    $('#totalpage').click(function() {
 
 	    	var total = $('#total').val();
-		    var route = $("#route" ).val();
+		    var route  = $("#route" ).val();
+		    var option = $("#option").val();
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: total });
+		    var url = Routing.generate(route, {_locale: locale, page: total, option: option });
 
 	    	window.open(url, "_self");
 	    });
