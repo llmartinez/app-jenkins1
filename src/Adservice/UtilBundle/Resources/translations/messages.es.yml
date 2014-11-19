@@ -122,7 +122,7 @@ testing:				 "En fase de pruebas"
 adsplus:				 "Con ADService +"
 profile_of:				 "Perfil de"
 insert_gas_table:		 "Insertar tabla de gases"
-gas_table:				 "Valores de gases: \n   O2: \n   CO: \n   CO2: \n   HC:"
+gas_table:				 "Valores de gases: \n   O2: \n   CO: \n   CO2: \n   HC: \n   Lambda: "
 
 #STATUS
 actions: 				 "Acciones"
