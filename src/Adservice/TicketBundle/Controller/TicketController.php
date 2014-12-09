@@ -124,12 +124,13 @@ class TicketController extends Controller {
         }
 
         $pagination = new Pagination($page);
+        $ordered = null;
 
         if($pagination->getMaxRows() != $num_rows) $pagination = $pagination->changeMaxRows($page, $num_rows);
 
-        if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ($workshops[0]->getId() != null)){
-            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+        if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ($workshops[0]->getId() != null))){
+            $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
         }
         elseif(($option == 'assessor_pending') or ($option == 'assessor_answered') or ($option == 'other_pending') or ($option == 'other_answered')) {
 
@@ -172,19 +173,19 @@ class TicketController extends Controller {
             if($query_posts != '') $joins[] = array('e.status s', $query_posts);
             else $joins = array();
 
-            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+            $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+            $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
         }
         else{
-            if($workshops[0]->getId()){
+            if(isset($workshops[0]) and $workshops[0]->getId()){
                 $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
                 //$joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }else{
                 $joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
-                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, null, $joins);
-                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, null, $joins);
+                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }
         }
 
