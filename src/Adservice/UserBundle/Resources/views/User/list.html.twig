@@ -36,15 +36,14 @@
             </tr>
         </thead>
         <tbody>
-            {% if  users_role_super_admin is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_admin  , role:'super_admin'   } %} {% endif %}
-            {% if  users_role_admin       is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_admin        , role:'admin'   } %} {% endif %}
-            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'      } %} {% endif %}
-            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'      } %} {% endif %}
-            {% if  users_role_assessor    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_assessor     , role:'assessor'} %} {% endif %}
-            {% if  users_role_user        is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_user         , role:'user'    } %} {% endif %}
-
+            {% if  users_role_super_admin is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_admin  , role:'super_admin'} %}{% endif %}
+            {% if  users_role_admin       is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_admin        , role:'admin'      } %}{% endif %}
+            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
+            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
+            {% if  users_role_assessor    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_assessor     , role:'assessor'   } %}{% endif %}
+            {% if  users_role_user        is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_user         , role:'user'       } %}{% endif %}
             {# Cuando se inserta el listado en otro html, los usuarios son "users" #}
-            {% if  users                  is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users                   , role:'user'    } %} {% endif %}
+            {% if  users                  is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users                   , role:'user'       } %}{% endif %}
 
         </tbody>
     </table>

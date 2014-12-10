@@ -11,12 +11,6 @@ function confirm_delete_popup_modal(id){
 
 	$(document).ready(function() {
 
-	    $('#logout').click(function() {
-	        if ($.cookie('visited') == 1){
-	            $.cookie('visited', '0');
-	        }
-	    });
-
         $('#MainContent').find('.delete_popup').click(function() {
             var popup_id = $(this).data('id');
             confirm_delete_popup_modal(popup_id);

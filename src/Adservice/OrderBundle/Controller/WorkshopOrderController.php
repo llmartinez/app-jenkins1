@@ -94,13 +94,18 @@ class WorkshopOrderController extends Controller {
         else { $id_partner = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
                $partners   = '0';
         }
-        $request       = $this->getRequest();
-        $form          = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+        if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+        else                  $code = 0;
+
+        $request = $this->getRequest();
+        $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            $id_partner = $request->request->get('partner');
-            $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+            // $id_partner = $request->request->get('partner');
+            // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
@@ -158,7 +163,8 @@ class WorkshopOrderController extends Controller {
                                                                                      'form_name'        => $form->getName(),
                                                                                      'form'             => $form->createView(),
                                                                                      'partners'         => $partners,
-                                                                                     'id_partner'       => $id_partner));
+                                                                                     'id_partner'       => $id_partner,
+                                                                                     'code'             => $code));
     }
 
 //  _____ ____ ___ _____

@@ -13,6 +13,7 @@ use Adservice\TicketBundle\Entity\TicketRepository;
 use Adservice\TicketBundle\Form\NewTicketType;
 use Adservice\TicketBundle\Form\EditTicketType;
 use Adservice\TicketBundle\Form\CloseTicketType;
+use Adservice\TicketBundle\Form\CloseTicketWorkshopType;
 
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
@@ -664,7 +665,8 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $request  = $this->getRequest();
 
-        $form = $this->createForm(new CloseTicketType(), $ticket);
+        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+        else                                                                        $form = $this->createForm(new CloseTicketType()        , $ticket);
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
@@ -677,7 +679,14 @@ class TicketController extends Controller {
                 }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
+                if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
+                    if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
+                    elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
+                    elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
+                }
+
                 if($ticket->getSolution() != ""){
+
                     $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
                     $user   = $security->getToken()->getUser();
                     $ticket->setStatus($closed);
