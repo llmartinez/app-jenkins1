@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+
     $('select[id*=_at_date_').addClass('btn-date');
     $('select[id*=_at_time_').addClass('btn-date');
 

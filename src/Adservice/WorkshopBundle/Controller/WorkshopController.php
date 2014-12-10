@@ -48,9 +48,9 @@ class WorkshopController extends Controller {
         else $countries = array();
 
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'  => $workshops,
-                                                                            'pagination' => $pagination,
-                                                                            'countries'  => $countries,
-                                                                            'country'    => $country,));
+                                                                             'pagination' => $pagination,
+                                                                             'countries'  => $countries,
+                                                                             'country'    => $country,));
     }
 
     public function newWorkshopAction() {

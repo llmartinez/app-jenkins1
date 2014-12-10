@@ -35,3 +35,8 @@
     </div>
 
 {% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+  {% if is_granted('ROLE_ASSESSOR') == false %} <script src="{{ asset('bundles/ticket/js/ticket_close.js') }}"></script> {% endif %}
+{% endblock %}

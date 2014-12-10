@@ -49,7 +49,7 @@ class Workshop {
     /**
      * @var string $contact_name
      *
-     * @ORM\Column(name="contact_name", type="string", length=255)
+     * @ORM\Column(name="contact_name", type="string", length=255, nullable=true)
      */
     private $contact_name;
 

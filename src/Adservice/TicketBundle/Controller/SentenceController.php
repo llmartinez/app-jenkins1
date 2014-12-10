@@ -62,7 +62,7 @@ class SentenceController extends Controller
 
         $petition = $this->getRequest();
         if ($id != null) {
-                          $sentence = $em->getRepository("WorkshopBundle:Sentence")->find($id);
+                          $sentence = $em->getRepository("TicketBundle:Sentence")->find($id);
                           if (!$sentence) throw $this->createNotFoundException('Sentencia no encontrado en la BBDD');
         }
         $form = $this->createForm(new SentenceType(), $sentence);

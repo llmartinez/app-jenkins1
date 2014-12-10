@@ -48,11 +48,11 @@
             {{ form_rest(formP) }}
             {{ form_rest(formD) }}
 
-            {% if is_granted('ROLE_ASSESSOR') %}
 
-                <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id': ticket.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} ticket.close {% endtrans %}<a>
+            <a class="btn btn-primary pull-right btn100" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}">
+                {% trans %} ticket.close {% endtrans %}</a>
 
-            {% endif %}
         {% endif %}
 
     {% else %}
