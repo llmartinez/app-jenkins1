@@ -29,8 +29,8 @@
 
 			{% endif %}
 		{% else %}
-			{% if ticket.blockedBy == null %}
             	{% include 'TicketBundle:Post:show_posts.html.twig'      	%}
+			{% if ticket.blockedBy == null %}
 			 	{% include 'TicketBundle:Post:reply.html.twig'  			%}
 		 	{% endif %}
 		{% endif %}
