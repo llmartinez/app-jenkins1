@@ -41,9 +41,5 @@
 			{% if ticket.blockedBy == null %}
 			 	{% include 'TicketBundle:Post:reply.html.twig'  			%}
 		 	{% endif %}
-
-	    	{% if ticket.assignedTo != "" %}
-	    		 <div class="col-xs-12 col-md-12 form-group"><p class="error form-control">{% trans %} ticket.working_on {% endtrans %}</p></div>
-	    	{% endif %}
 		{% endif %}
 
