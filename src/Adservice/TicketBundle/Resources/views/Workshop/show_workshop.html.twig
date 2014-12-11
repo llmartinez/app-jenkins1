@@ -2,10 +2,10 @@
 {% if workshop.id         != "" %}
 	<legend>{% trans %} workshop {% endtrans %}
 
-			{% if is_granted('ROLE_ASSESSOR')%}
+			{# {% if is_granted('ROLE_ASSESSOR')%}
 				<a href="{{ path('workshop_edit', { 'id': workshop.id }) }}">
 					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
-						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %}
+						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %} #}
 
 			{% if workshop.test == 1 %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
@@ -71,22 +71,54 @@
 	{# OBERVATIONS #}
 	<div class="form-group">
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
+
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+
+		{% else %}
+
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
+
 		{% endif %}
+
 		{% if is_granted('ROLE_ADMIN') %}
+
 			{% if workshop.observationAdmin      != "" %}
+
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin    }} {% endif %}
+				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin    }} 
+
+			{% else %}
+
+				{% trans %} any_observation {% endtrans %}
+
+			{% endif %}
+
 		{% elseif is_granted('ROLE_ASSESSOR') %}
+
+				<b>{% trans %} observations {% endtrans %}</b>:
+
 			{% if workshop.observationAssessor   != "" %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				</b>: {{ workshop.observationAssessor }} {% endif %}
+
+				 {{ workshop.observationAssessor }}
+
+			{% else %}
+
+				{% trans %} any_observation {% endtrans %}
+
+			{% endif %}
+
 		{% elseif is_granted('ROLE_USER') %}
+
 			{% if workshop.observationWorkshop   != "" %}
+
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop }} {% endif %}
+				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop }}
+
+			{% else %}
+
+				{% trans %} any_observation {% endtrans %}
+
+			{% endif %}
 		{% endif %}
 	</div>
 {% endif %}
