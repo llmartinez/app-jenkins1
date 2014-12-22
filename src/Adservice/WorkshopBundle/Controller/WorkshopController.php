@@ -13,6 +13,7 @@ use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UserBundle\Entity\User;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Form\WorkshopType;
+use Adservice\WorkshopBundle\Form\WorkshopObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 
@@ -236,6 +237,36 @@ class WorkshopController extends Controller {
         $em->flush();
 
         return $this->redirect($this->generateUrl('workshop_list'));
+    }
+
+    /**
+     * Edita las observaciones para asesor del taller
+     * @Route("/workshop/observation/{id}/{id_ticket}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
+     * @return url
+     */
+    public function workshopObservationAction($workshop, $id_ticket) {
+
+        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false){
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $request  = $this->getRequest();
+        $form = $this->createForm(new WorkshopObservationType(), $workshop);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+
+                $em->persist($workshop);
+                $em->flush();
+                return $this->redirect($this->generateUrl('showTicket', array('id' => $id_ticket)));
+            }
+        }
+        return $this->render('WorkshopBundle:Workshop:workshop_observation.html.twig', array('workshop'  => $workshop,
+                                                                                             'id_ticket' => $id_ticket,
+                                                                                             'form_name' => $form->getName(),
+                                                                                             'form'      => $form->createView()));
     }
 
     /**

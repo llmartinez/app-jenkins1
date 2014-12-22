@@ -16,9 +16,9 @@
 
     $(document).on('change','#default_sentences',function(){
 
-        var sentence = $(this).val();
+        var sentence = $(this).val() + " \n";
 
-        $('#ticket_form_message').val(sentence);
-        $('#post_form_message').val(sentence);
+        $('#ticket_form_message').append(sentence);
+        $('#post_form_message'  ).append(sentence);
 
     });

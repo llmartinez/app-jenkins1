@@ -329,6 +329,7 @@ users_in_workshop:		 "Users from Workshop"
 workshop_inactive:		 "The workshop is disabled or not exist"
 workshop_confirm:		 "We found more than one workshop "
 workshop_name:		 	 "Workshop name"
+workshop_observation:	 "Workshop observations"
 
 #USER
 user.delete:			 "Delete User"

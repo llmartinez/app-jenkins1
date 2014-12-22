@@ -107,6 +107,11 @@
 
 			{% endif %}
 
+			{% if ticket is defined %}
+				<a href="{{ path('workshop_observation', { 'id': workshop.id, 'id_ticket': ticket.id }) }}">
+					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'></a>
+			{% endif %}
+
 		{% elseif is_granted('ROLE_USER') %}
 
 			{% if workshop.observationWorkshop   != "" %}

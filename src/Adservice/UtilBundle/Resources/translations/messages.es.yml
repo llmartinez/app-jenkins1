@@ -332,7 +332,7 @@ workshop_details:		 "Ver detalles del taller"
 workshop_inactive:		 "El taller esta dado de baja o no existe"
 workshop_confirm:		 "Tus datos coinciden con mas de un taller "
 workshop_name:		 	 "Nombre del taller"
-
+workshop_observation:	 "Observaciones del taller"
 
 #USER
 user.delete:			 "Borrar Usuario"
