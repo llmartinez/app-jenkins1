@@ -62,7 +62,9 @@
                 </thead>
                 <tbody id="ticketBody">
                     {% for ticket in tickets %}
-                        <tr id="ticketRow">
+                        {% set ticket_info = '' %}
+                        {% if ticket.assignedTo != null %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}
+                        <tr id="ticketRow" title="{{ticket_info}}">
                             <td id="id_ticket">{{ ticket.id        }}</td>
                             {% if ticket.status == 'open' %}
                                 {% if ticket.assignedTo == null %}
