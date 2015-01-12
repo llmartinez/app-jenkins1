@@ -243,7 +243,6 @@ class Workshop {
         $this->cif = $cif;
     }
 
-
     /**
      * Set contact
      *

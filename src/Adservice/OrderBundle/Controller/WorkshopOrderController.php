@@ -533,7 +533,6 @@ class WorkshopOrderController extends Controller {
             $newUser->setUsername      ($username);
             $newUser->setPassword      ($pass);
             $newUser->setName          ($workshop->getContactName());
-            $newUser->setSurname       ($workshop->getContactSurname());
             $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
             $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
             $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
@@ -605,7 +604,6 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setTypology      ($workshop->getTypology());
         $workshopOrder->setTest          ($workshop->getTest());
         $workshopOrder->setContactName   ($workshop->getContactName());
-        $workshopOrder->setContactSurname($workshop->getContactSurname());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());
         $workshopOrder->setPhoneNumber2  ($workshop->getPhoneNumber2());
         $workshopOrder->setMovileNumber1 ($workshop->getMovileNumber1());
@@ -653,7 +651,6 @@ class WorkshopOrderController extends Controller {
         $workshop->setTypology      ($workshopOrder->getTypology());
         $workshop->setTest          ($workshopOrder->getTest());
         $workshop->setContactName   ($workshopOrder->getContactName());
-        $workshop->setContactSurname($workshopOrder->getContactSurname());
         $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
         $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
         $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());

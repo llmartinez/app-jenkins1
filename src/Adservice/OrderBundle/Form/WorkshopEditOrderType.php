@@ -16,8 +16,10 @@ class WorkshopEditOrderType extends AbstractType
             ->add('shop')
             ->add('code_workshop')
             ->add('typology')
-            ->add('contact_name', 'text', array('required' => true))
-            ->add('contact_surname', 'text', array('required' => true))
+            ->add('contact', 'text', array('required' => true))
+            ->add('test', 'checkbox', array('required' => false))
+            ->add('internal_code', 'text', array('required' => false))
+            ->add('ad_service_plus', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country')
             ->add('region')

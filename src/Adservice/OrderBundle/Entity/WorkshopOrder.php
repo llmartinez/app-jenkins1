@@ -66,18 +66,25 @@ class WorkshopOrder {
     private $cif;
 
     /**
-     * @var string $contact_name
+     * @var string $contact
      *
-     * @ORM\Column(name="contact_name", type="string", length=255)
+     * @ORM\Column(name="contact", type="string", length=255)
      */
-    private $contact_name;
+    private $contact;
 
     /**
-     * @var string $contact_surname
+     * @var boolean $ad_service_plus
      *
-     * @ORM\Column(name="contact_surname", type="string", length=255)
+     * @ORM\Column(name="ad_service_plus", type="boolean")
      */
-    private $contact_surname;
+    private $ad_service_plus;
+
+    /**
+     * @var string $internal_code
+     *
+     * @ORM\Column(name="internal_code", type="string", length=255, nullable=true)
+     */
+    private $internal_code;
 
     /**
      *
@@ -248,39 +255,12 @@ class WorkshopOrder {
     }
 
     /**
-     * Set contact_name
+     * Set contact
      *
-     * @param string $contact_name
+     * @param string $contact
      */
-    public function setContactName($contact_name) {
-        $this->contact_name = $contact_name;
-    }
-
-    /**
-     * Get contact_name
-     *
-     * @return string
-     */
-    public function getContactName() {
-        return $this->contact_name;
-    }
-
-    /**
-     * Set contact_surname
-     *
-     * @param string $contact_surname
-     */
-    public function setContactSurname($contact_surname) {
-        $this->contact_surname = $contact_surname;
-    }
-
-    /**
-     * Get contact_surname
-     *
-     * @return string
-     */
-    public function getContactSurname() {
-        return $this->contact_surname;
+    public function setContactName($contact) {
+        $this->contact = $contact;
     }
 
     /**
@@ -288,9 +268,54 @@ class WorkshopOrder {
      *
      * @return string
      */
+    public function getContactName() {
+        return $this->contact;
+    }
+    /**
+     * Get contact
+     *
+     * @return string
+     */
     public function getContact() {
-        $contact = $this->contact_name.' '.$this->contact_surname;
+        if($this->contact    == 'sin-especificar') $contact    = '';
+        else $contact    = $this->contact;
         return $contact;
+    }
+
+    /**
+     * Set internal_code
+     *
+     * @param boolean $internal_code
+     */
+    public function setInternalCode($internal_code) {
+        $this->internal_code = $internal_code;
+    }
+
+    /**
+     * Get internal_code
+     *
+     * @return boolean
+     */
+    public function getInternalCode() {
+        return $this->internal_code;
+    }
+
+    /**
+     * Set ad_service_plus
+     *
+     * @param boolean $ad_service_plus
+     */
+    public function setAdServicePlus($ad_service_plus) {
+        $this->ad_service_plus = $ad_service_plus;
+    }
+
+    /**
+     * Get ad_service_plus
+     *
+     * @return boolean
+     */
+    public function getAdServicePlus() {
+        return $this->ad_service_plus;
     }
 
     /**
