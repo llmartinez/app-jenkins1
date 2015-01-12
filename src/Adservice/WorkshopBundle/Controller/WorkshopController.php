@@ -112,6 +112,8 @@ class WorkshopController extends Controller {
                     $newUser->addRole          ($role);
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
+                    //ad-service +
+
                     //password nuevo, se codifica con el nuevo salt
                     $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
                     $salt = md5(time());

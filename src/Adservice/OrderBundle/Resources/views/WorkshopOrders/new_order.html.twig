@@ -22,11 +22,6 @@
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control',
                                                      'placeholder': 'name' | trans } }) }}
             </div>
-            <div class="col-xs-2 col-md-2">
-
-                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
-                <input type="hidden" id="code" name="code" value="{{ code }}">
-            </div>
             {% if is_granted('ROLE_SUPER_AD') %}
                 <div class="col-xs-2 col-md-2 form-group">
                     <label for="workshopOrder_newOrder_partner">{% trans %} partner {% endtrans %} * </label>
@@ -50,6 +45,13 @@
             <div class="col-xs-2 col-md-2">
                 <label>{% trans %} typology {% endtrans %} </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
             </div>
+        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-2 col-md-2">
+
+                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                <input type="hidden" id="code" name="code" value="{{ code }}">
+            </div>
             <div class="col-xs-2 col-md-2">
                 <label>{% trans %} cif {% endtrans %} * </label>
                 {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
@@ -57,7 +59,20 @@
                                                      'required':'required' } }) }}
             </div>
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} test {% endtrans %} </label> {{ form_widget(form.test) }}
+                <label>{% trans %} internal_code {% endtrans %}</label>
+                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label>{% trans %} ad_service_plus {% endtrans %}</label>
+                    {{ form_widget(form.ad_service_plus) }}
+                </div>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label>{% trans %} test {% endtrans %}</label>
+                    {{ form_widget(form.test) }}
+                </div>
             </div>
         </div>
 
@@ -65,8 +80,7 @@
 
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} contact         {% endtrans %} </label> {{ form_widget(form.contact_name,    { 'attr': {'class': 'form-control'} }) }}
-                                                                             {{ form_widget(form.contact_surname, { 'attr': {'class': 'form-control'} }) }}
+                <label>{% trans %} contact {% endtrans %}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
             </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
