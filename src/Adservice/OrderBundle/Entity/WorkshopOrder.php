@@ -273,16 +273,6 @@ class WorkshopOrder {
         $this->contact = $contact;
     }
 
-
-    /**
-     * Set contact
-     *
-     * @param string $contact
-     */
-    public function setContact($contact) {
-        $this->contact = $contact;
-    }
-
     /**
      * Get contact
      *
