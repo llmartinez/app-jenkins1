@@ -5,7 +5,9 @@
 
         var code = $('form').find('#code').val();
 
-        if(code != 0){ $('form').find('select[name*=code_workshop]').val(code); }
+        if(code != 0){ $('form').find('select[name*=code_workshop]').val(code);
+                       $('#workshopOrder_newOrder_code_workshop').val(code);
+                     }
 
         var id_partner = $('form').find('#id_partner').val();
         var partners   = $('form').find('#select[id=partners]').val();
