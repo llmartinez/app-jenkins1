@@ -16,6 +16,7 @@ use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Form\WorkshopObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
+use Adservice\WorkshopBundle\Entity\ADSPlus;
 
 class WorkshopController extends Controller {
 
@@ -88,6 +89,22 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $this->saveWorkshop($em, $workshop);
 
+                    //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
+                    if ($workshop->getAdServicePlus()){
+                        $adsplus = new ADSPlus();
+                        $adsplus->setIdTallerADS($workshop->getID());
+                        $dateI = new \DateTime('now');
+                        $dateF = new \DateTime('+2 year');
+                        $adsplus->setAltaInicial($dateI->format('Y-m-d'));
+                        $adsplus->setUltAlta($dateI->format('Y-m-d'));
+                        $adsplus->setBaja($dateF->format('Y-m-d'));
+                        $adsplus->setContador(0);
+                        $adsplus->setActive(1);
+
+                        $em->persist($adsplus);
+                        $em->flush();
+                    }
+
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
                     $username = UtilController::getUsernameUnused($em, $workshop->getName());
 
@@ -100,8 +117,8 @@ class WorkshopController extends Controller {
                     $newUser = UtilController::newEntity(new User(), $this->get('security.context')->getToken()->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
-                    $newUser->setName          ($workshop->getContactName());
-                    $newUser->setSurname       ($workshop->getContactSurname());
+                    $newUser->setName          ($workshop->getContact());
+                    $newUser->setSurname       ($workshop->getName());
                     $newUser->setActive        ('1');
                     $newUser->setCreatedBy     ($workshop->getCreatedBy());
                     $newUser->setCreatedAt     (new \DateTime());

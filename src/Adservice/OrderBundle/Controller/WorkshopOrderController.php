@@ -520,6 +520,22 @@ class WorkshopOrderController extends Controller {
             UtilController::newEntity($workshop, $user);
             UtilController::saveEntity($em, $workshop, $user);
 
+            //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
+            if ($workshop->getAdServicePlus()){
+                $adsplus = new ADSPlus();
+                $adsplus->setIdTallerADS($workshop->getID());
+                $dateI = new \DateTime('now');
+                $dateF = new \DateTime('+2 year');
+                $adsplus->setAltaInicial($dateI->format('Y-m-d'));
+                $adsplus->setUltAlta($dateI->format('Y-m-d'));
+                $adsplus->setBaja($dateF->format('Y-m-d'));
+                $adsplus->setContador(0);
+                $adsplus->setActive(1);
+
+                $em->persist($adsplus);
+                $em->flush();
+            }
+
             /*CREAR USERNAME Y EVITAR REPETICIONES*/
             $username = UtilController::getUsernameUnused($em, $workshop->getName());
 
@@ -533,6 +549,7 @@ class WorkshopOrderController extends Controller {
             $newUser->setUsername      ($username);
             $newUser->setPassword      ($pass);
             $newUser->setName          ($workshop->getContactName());
+            $newUser->setSurname       ($workshop->getName());
             $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
             $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
             $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
@@ -650,7 +667,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setShop          ($workshopOrder->getShop());
         $workshop->setTypology      ($workshopOrder->getTypology());
         $workshop->setTest          ($workshopOrder->getTest());
-        $workshop->setContactName   ($workshopOrder->getContactName());
+        $workshop->setContactName   ($workshopOrder->getContact());
         $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
         $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
         $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());
@@ -663,6 +680,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setCity          ($workshopOrder->getCity());
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
+        $workshop->setAdServicePlus ($workshopOrder->getAdServicePlus());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshop->setCreatedBy($workshopOrder->getCreatedBy());
