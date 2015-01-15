@@ -23,25 +23,41 @@
                 <input id="tck_to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
         </table></div>
+
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
+            <select id="flt_tck_partner" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for partner in partners %}
+                    <option value="{{ partner.id }}">{{ partner }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} workshop {% endtrans %}</label>
+            <select id="flt_tck_workshop" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                 {% for workshop in workshops %}
+                    <option value="{{ workshop.id }}">{{ workshop }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label>
+            <select id="flt_tck_status" class='form-control'>
+                <option value="0"      >{% trans %} all    {% endtrans %}</option>
+                <option value="open"   >{% trans %} open   {% endtrans %}</option>
+                <option value="closed" >{% trans %} closed {% endtrans %}</option>
+             </select>
+         </div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_tck_country" class='form-control'>
-                                                                                    <option value="0">{% trans %} all {% endtrans %}</option>
-                                                                                {% for country in countries %}
-                                                                                    <option value="{{ country.id }}">{{ country | trans }}</option>
-                                                                                {% endfor %}
-                                                                          </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label>
+            <select id="flt_tck_country" class='form-control'>
+                <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country | trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_tck_partner" class='form-control'>
-                                                                                    <option value="0">{% trans %} all {% endtrans %}</option>
-                                                                                {% for partner in partners %}
-                                                                                    <option value="{{ partner.id }}">{{ partner }}</option>
-                                                                                {% endfor %}
-                                                                          </select></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label><select id="flt_tck_status" class='form-control'>
-                                                                                                <option value="0"    >{% trans %} all    {% endtrans %}</option>
-                                                                                                <option value="open"   >{% trans %} open   {% endtrans %}</option>
-                                                                                                <option value="closed" >{% trans %} closed {% endtrans %}</option>
-                                                                                             </select></div>
+
         <div class="col-xs-12 col-md-12 form-group">
             <button class="btn btn-primary btn100" id="btn_search_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} ticket.search {% endtrans %}</button>
@@ -52,37 +68,65 @@
 
         <div class="col-xs-12 col-md-12 form-group">
         <table>
-            <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
-                <input id="wks_from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            <tr><td>
+                {# <label> {% trans %} date.start {% endtrans %} </label></td><td> #}
+                <input id="wks_from_d" type="hidden" {% if from_d != '0' %} value="{{ from_d | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_m" type="hidden" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_y" type="hidden" {% if from_y != '0' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
-            <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
-                <input id="wks_to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+            <tr><td>
+                {# <label> {% trans %} date.end   {% endtrans %} </label></td><td> #}
+                <input id="wks_to_d"   type="hidden" {% if to_d   != '0' %} value="{{ to_d   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_m"   type="hidden" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_y"   type="hidden" {% if to_y   != '0' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
-        </table></div>
+        </table>
+    </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
+            <select id="flt_wks_partner" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for partner in partners %}
+                    <option value="{{ partner.id }}">{{ partner }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} shop {% endtrans %}</label>
+            <select id="flt_wks_shop" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for shop in shops %}
+                    <option value="{{ shop.id }}">{{ shop }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} typology {% endtrans %}</label>
+            <select id="flt_wks_typology" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for typology in typologies %}
+                    <option value="{{ typology.id }}">{{ typology }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label>
+            <select id="flt_wks_status" class='form-control'>
+                <option value="all"     >{% trans %} all      {% endtrans %}</option>
+                <option value="active"  >{% trans %} active   {% endtrans %}</option>
+                <option value="deactive">{% trans %} inactive {% endtrans %}</option>
+                <option value="test"    >{% trans %} testing  {% endtrans %}</option>
+                <option value="adsplus" >{% trans %} adsplus  {% endtrans %}</option>
+                {# <option value="noticket">Without Tickets</option> #}
+             </select>
+         </div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label><select id="flt_wks_country" class='form-control'>
-                                                                                        <option value="0">{% trans %} all {% endtrans %}</option>
-                                                                                    {% for country in countries %}
-                                                                                        <option value="{{ country.id }}">{{ country | trans }}</option>
-                                                                                {% endfor %}
-                                                                          </select></div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label>
+            <select id="flt_wks_country" class='form-control'>
+                <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for country in countries %}
+                <option value="{{ country.id }}">{{ country | trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label><select id="flt_wks_partner" class='form-control'>
-                                                                                        <option value="0">{% trans %} all {% endtrans %}</option>
-                                                                                    {% for partner in partners %}
-                                                                                        <option value="{{ partner.id }}">{{ partner }}</option>
-                                                                                {% endfor %}
-                                                                          </select></div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label><select id="flt_wks_status" class='form-control'>
-                                                                                            <option value="all"     >{% trans %} all      {% endtrans %}</option>
-                                                                                            <option value="active"  >{% trans %} active   {% endtrans %}</option>
-                                                                                            <option value="deactive">{% trans %} inactive {% endtrans %}</option>
-                                                                                            {# <option value="noticket">Without Tickets</option> #}
-                                                                                         </select></div>
+
         <div class="col-xs-12 col-md-12 form-group">
             <button class="btn btn-primary btn100" id="btn_search_workshop">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} workshop.search {% endtrans %}</button>
@@ -185,16 +229,19 @@
 
 </div>
     <input type="hidden" id="type" value="{{ type }}">
-        <input type="hidden" id="type_from_y"  value="{{ from_y  }}">
-        <input type="hidden" id="type_from_m"  value="{{ from_m  }}">
-        <input type="hidden" id="type_from_d"  value="{{ from_d  }}">
-        <input type="hidden" id="type_to_y"    value="{{ to_y    }}">
-        <input type="hidden" id="type_to_m"    value="{{ to_m    }}">
-        <input type="hidden" id="type_to_d"    value="{{ to_d    }}">
-        <input type="hidden" id="type_status"  value="{{ status  }}">
-        <input type="hidden" id="type_partner" value="{{ partner }}">
-        <input type="hidden" id="type_country" value="{{ country }}">
-        <input type="hidden" id="type_status"  value="{{ status  }}">
+    <input type="hidden" id="type_from_y"   value="{{ from_y  }}">
+    <input type="hidden" id="type_from_m"   value="{{ from_m  }}">
+    <input type="hidden" id="type_from_d"   value="{{ from_d  }}">
+    <input type="hidden" id="type_to_y"     value="{{ to_y    }}">
+    <input type="hidden" id="type_to_m"     value="{{ to_m    }}">
+    <input type="hidden" id="type_to_d"     value="{{ to_d    }}">
+    <input type="hidden" id="type_status"   value="{{ status  }}">
+    <input type="hidden" id="type_partner"  value="{{ partner }}">
+    <input type="hidden" id="type_shop"     value="{{ shop    }}">
+    <input type="hidden" id="type_workshop" value="{{ wks     }}">
+    <input type="hidden" id="type_typology" value="{{ typology}}">
+    <input type="hidden" id="type_country"  value="{{ country }}">
+    <input type="hidden" id="type_status"   value="{{ status  }}">
 
 {% endblock %}
 

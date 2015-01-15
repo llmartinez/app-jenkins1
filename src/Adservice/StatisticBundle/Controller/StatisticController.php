@@ -12,8 +12,9 @@ use Adservice\UtilBundle\Controller\UtilController as UtilController;
 class StatisticController extends Controller {
 
     public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
-                                                 $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                 $partner='0', $status='0', $country='0') {
+                                                   $to_y   ='0', $to_m  ='0', $to_d   ='0',
+                                                   $partner='0', $shop='0', $workshop='0', $typology='0',
+                                                   $status='0', $country='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $statistic = new Statistic();
@@ -42,6 +43,8 @@ class StatisticController extends Controller {
                                         if    ($partner != '0'     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
                                                                         $joins[]  = array('w.partner  p', 'p.id = '.$partner);
                                         }
+                                        if    ($workshop != '0'    ) {  $params[] = array('workshop', ' = '.$workshop);
+                                        }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
                                         }else{
@@ -51,9 +54,13 @@ class StatisticController extends Controller {
             elseif ($type == 'workshop'){
                                         $bundle = 'WorkshopBundle';
                                         $entity = 'Workshop';
-                                        if     ($partner!= '0'       ) { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($partner!= '0'  ) { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
+                                        if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
                                         if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
                                         elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+                                        elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
+                                        elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
                                         }else{
@@ -82,8 +89,14 @@ class StatisticController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $partners  = $em->getRepository('PartnerBundle:Partner')->findAll();
+            $shops     = $em->getRepository('PartnerBundle:Shop'     )->findAll();
+            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+            $typologies= $em->getRepository('WorkshopBundle:Typology')->findAll();
         }else{
-            $partners  = $em->getRepository('PartnerBundle:Partner')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $shops     = $em->getRepository('PartnerBundle:Shop'     )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $typologies= $em->getRepository('WorkshopBundle:Typology')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
         }
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
@@ -95,10 +108,16 @@ class StatisticController extends Controller {
                                                                                           'to_m'      => $to_m ,
                                                                                           'to_d'      => $to_d  ,
                                                                                           'partners'  => $partners,
+                                                                                          'shops'     => $shops,
+                                                                                          'workshops' => $workshops,
+                                                                                          'typologies'=> $typologies,
                                                                                           'countries' => $countries,
                                                                                           'pagination'=> $pagination,
                                                                                           'type'      => $type,
                                                                                           'partner'   => $partner,
+                                                                                          'shop'      => $shop,
+                                                                                          'wks'       => $workshop,
+                                                                                          'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
                                                                             ));

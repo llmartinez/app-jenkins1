@@ -19,6 +19,9 @@
 </div>
 
 <div class='colDer85'>
+
+    {% if app.session.hasFlash('error') %}<p class="error">{{ app.session.getFlash('error') }}</p>{% endif %}
+
     {% if     option == 'workshop_pending'  %} {% include 'OrderBundle:Order:list_workshop_orders.html.twig'          %}
     {% elseif option == 'workshop_rejected' %} {% include 'OrderBundle:Order:list_workshop_rejected_orders.html.twig' %}
     {% elseif option == 'shop_pending'      %} {% include 'OrderBundle:Order:list_shop_orders.html.twig'              %}
