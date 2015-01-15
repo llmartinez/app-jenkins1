@@ -2,16 +2,19 @@
 $(document).ready(function() {
 
     //Rellena los campos socio, pais y estado del filtro de ticket o taller con la busqueda realizada
-    var type    = $(document).find("#type").val();
-    var from_y  = $(document).find("#type_from_y" ).val();
-    var from_m  = $(document).find("#type_from_m" ).val();
-    var from_d  = $(document).find("#type_from_d" ).val();
-    var to_y    = $(document).find("#type_to_y"   ).val();
-    var to_m    = $(document).find("#type_to_m"   ).val();
-    var to_d    = $(document).find("#type_to_d"   ).val();
-    var partner = $(document).find("#type_partner").val();
-    var country = $(document).find("#type_country").val();
-    var status  = $(document).find("#type_status" ).val();
+    var type     = $(document).find("#type").val();
+    var from_y   = $(document).find("#type_from_y"  ).val();
+    var from_m   = $(document).find("#type_from_m"  ).val();
+    var from_d   = $(document).find("#type_from_d"  ).val();
+    var to_y     = $(document).find("#type_to_y"    ).val();
+    var to_m     = $(document).find("#type_to_m"    ).val();
+    var to_d     = $(document).find("#type_to_d"    ).val();
+    var partner  = $(document).find("#type_partner" ).val();
+    var shop     = $(document).find("#type_shop"    ).val();
+    var workshop = $(document).find("#type_workshop").val();
+    var typology = $(document).find("#type_typology").val();
+    var country  = $(document).find("#type_country" ).val();
+    var status   = $(document).find("#type_status"  ).val();
 
     if(type == 'all') $(document).find("#type").val(0);
 
@@ -29,6 +32,7 @@ $(document).ready(function() {
             $("#tck_to_d"   ).val(to_d   );
             $("#wks_to_d"   ).val('');
             $("#flt_tck_partner").val(partner);
+            $("#flt_tck_workshop").val(workshop);
             $("#flt_tck_country").val(country);
             $("#flt_tck_status" ).val(status );
     }else{
@@ -46,6 +50,8 @@ $(document).ready(function() {
             $("#tck_to_d"   ).val('');
             $("#wks_to_d"   ).val(to_d   );
             $("#flt_wks_partner").val(partner);
+            $("#flt_wks_shop").val(shop);
+            $("#flt_wks_typology").val(typology);
             $("#flt_wks_country").val(country);
             $("#flt_wks_status" ).val(status );
         }
@@ -73,6 +79,9 @@ $(document).ready(function() {
         var to_m    = $('#tck_to_m').val();
         var to_d    = $('#tck_to_d').val();
         var partner = $('#flt_tck_partner').val();
+        var shop    = '0';
+        var workshop= $("#flt_tck_workshop").val();
+        var typology= '0';
         var country = $('#flt_tck_country').val();
         var status  = $('#flt_tck_status').val();
 
@@ -85,7 +94,7 @@ $(document).ready(function() {
 
         var route  = 'listStatistics';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -100,6 +109,9 @@ $(document).ready(function() {
         var to_m    = $('#wks_to_m').val();
         var to_d    = $('#wks_to_d').val();
         var partner = $('#flt_wks_partner').val();
+        var shop    = $("#flt_wks_shop").val();
+        var workshop= '0';
+        var typology= $("#flt_wks_typology").val();
         var country = $('#flt_wks_country').val();
         var status  = $('#flt_wks_status').val();
 
@@ -112,7 +124,7 @@ $(document).ready(function() {
 
         var route  = 'listStatistics';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -138,7 +150,7 @@ $(document).ready(function() {
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
 
         window.open(url, "_self");
     });
@@ -152,6 +164,8 @@ $(document).ready(function() {
         var to_m    = $('#wks_to_m').val();
         var to_d    = $('#wks_to_d').val();
         var partner = $('#flt_wks_partner').val();
+        var shop    = $("#flt_wks_shop").val();
+        var typology= $("#flt_wks_typology").val();
         var country = $('#flt_wks_country').val();
         var status  = $('#flt_wks_status').val();
 
@@ -164,7 +178,7 @@ $(document).ready(function() {
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
 
         window.open(url, "_self");
     });
