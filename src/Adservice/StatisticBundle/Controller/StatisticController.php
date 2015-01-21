@@ -32,6 +32,7 @@ class StatisticController extends Controller {
             }
 
             if     ($type == 'ticket'  ){
+                                        //Estadísticas de tickets de Ad-service
                                         $bundle = 'TicketBundle';
                                         $entity = 'Ticket';
                                         if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
@@ -52,6 +53,7 @@ class StatisticController extends Controller {
                                         }
             }
             elseif ($type == 'workshop'){
+                                        //Estadísticas de talleres de Ad-service
                                         $bundle = 'WorkshopBundle';
                                         $entity = 'Workshop';
                                         if     ($partner!= '0'  ) { $params[] = array('partner', ' = '.$partner); }
@@ -68,16 +70,10 @@ class StatisticController extends Controller {
                                         }
             }
 
-            $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
-            $statistic->setResults($result);
-
-            $length = $pagination->getRowsLength($em, $bundle, $entity, $params, null, $joins);
-
-            $pagination->setTotalPagByLength($length);
-
         }else{
             $type = '0';
 
+            //Estadísticas generales de Ad-service
             $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
             $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
             $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
@@ -85,7 +81,35 @@ class StatisticController extends Controller {
             $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
             $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
             $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
+
+            //Últimos tickets de los talleres
+            $bundle = 'TicketBundle';
+            $entity = 'Ticket';
+            if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                            $params[] = array('status', ' = '.$open->getId());
+            }
+            elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                            $params[] = array('status', ' = '.$closed->getId());
+            }
+            if    ($partner != '0'     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
+                                            $joins[]  = array('w.partner  p', 'p.id = '.$partner);
+            }
+            if    ($workshop != '0'    ) {  $params[] = array('workshop', ' = '.$workshop);
+            }
+            if($security->isGranted('ROLE_SUPER_ADMIN')){
+                if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
+            }else{
+                $joins[] = array('e.workshop wks', ' wks.country = '.$security->getToken()->getUser()->getCountry()->getId());
+            }
         }
+
+        //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
+        $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
+        $statistic->setResults($result);
+
+        $length = $pagination->getRowsLength($em, $bundle, $entity, $params, null, $joins);
+
+        $pagination->setTotalPagByLength($length);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $partners  = $em->getRepository('PartnerBundle:Partner')->findAll();

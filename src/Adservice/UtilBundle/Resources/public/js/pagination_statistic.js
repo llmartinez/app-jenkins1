@@ -29,6 +29,18 @@
 		        	var country = $('#flt_wks_country').val();
 		        	var status  = $('#flt_wks_status').val();
 		        }
+		        else{
+		        	if(type == '0') {
+				    	var partner = '0';
+			        	var country = '0';
+						var from_y  = '0';
+						var from_m  = '0';
+						var from_d  = '0';
+						var to_y    = '0';
+						var to_m    = '0';
+						var to_d    = '0';
+			        }
+		        }
 	        }
 
 	        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
@@ -77,6 +89,18 @@
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
 			        }
+			        else{
+			        	if(type == '0') {
+					    	var partner = '0';
+				        	var country = '0';
+							var from_y  = '0';
+							var from_m  = '0';
+							var from_d  = '0';
+							var to_y    = '0';
+							var to_m    = '0';
+							var to_d    = '0';
+				        }
+			        }
 		        }
 
 		        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
@@ -99,9 +123,11 @@
 	    $('.change_page').click(function() {
 
 	    	var type        = $(document).find("#type").val();
-			if(type == 'all') $(document).find("#type").val(0);
 
-            if(type == 'ticket') {
+			if(type == 'all') { $(document).find("#type").val(0); }
+
+			if(type == 'ticket')
+    		{
 		        var from_y  = $('#tck_from_y').val();
 		        var from_m  = $('#tck_from_m').val();
 		        var from_d  = $('#tck_from_d').val();
@@ -111,7 +137,8 @@
 		    	var partner = $('#flt_tck_partner').val();
 	        	var country = $('#flt_tck_country').val();
 	        	var status  = $('#flt_tck_status').val();
-	        }else{
+	        }
+	        else{
         		if(type == 'workshop') {
 			        var from_y  = $('#wks_from_y').val();
 			        var from_m  = $('#wks_from_m').val();
@@ -122,6 +149,18 @@
 			    	var partner = $('#flt_wks_partner').val();
 		        	var country = $('#flt_wks_country').val();
 		        	var status  = $('#flt_wks_status').val();
+		        }
+		        else{
+		        	if(type == '0') {
+				    	var partner = '0';
+			        	var country = '0';
+						var from_y  = '0';
+						var from_m  = '0';
+						var from_d  = '0';
+						var to_y    = '0';
+						var to_m    = '0';
+						var to_d    = '0';
+			        }
 		        }
 	        }
 
@@ -173,6 +212,18 @@
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
 			        }
+			        else{
+			        	if(type == '0') {
+					    	var partner = '0';
+				        	var country = '0';
+							var from_y  = '0';
+							var from_m  = '0';
+							var from_d  = '0';
+							var to_y    = '0';
+							var to_m    = '0';
+							var to_d    = '0';
+				        }
+			        }
 		        }
 
 		        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
@@ -217,6 +268,18 @@
 				    	var partner = $('#flt_wks_partner').val();
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
+			        }
+			        else{
+			        	if(type == '0') {
+					    	var partner = '0';
+				        	var country = '0';
+							var from_y  = '0';
+							var from_m  = '0';
+							var from_d  = '0';
+							var to_y    = '0';
+							var to_m    = '0';
+							var to_d    = '0';
+				        }
 			        }
 		        }
 
