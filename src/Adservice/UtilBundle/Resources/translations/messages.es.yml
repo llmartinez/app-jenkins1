@@ -389,6 +389,7 @@ ticket.opt.other.answered:    "Otros tickets respondidos"
 ticket.opt.other.closed:      "Otros tickets cerrados"
 ticket.opt.owner:             "Mis tickets"
 ticket.opt.workshop:          "Tickets de tu taller"
+ticket.opt.inactive:		  "Tickets inactivos"
 
 ticket.title.from_workshop:   "Tickets del taller"
 ticket.assign:				  "Asignar ticket"

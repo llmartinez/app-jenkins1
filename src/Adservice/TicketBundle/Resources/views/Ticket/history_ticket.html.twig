@@ -17,6 +17,7 @@
                     <option value="free"                    >{% trans %} ticket.opt.free              {% endtrans %}</option>
                     <option value="pending"                 >{% trans %} ticket.opt.pending           {% endtrans %}</option>
                     <option value="answered"                >{% trans %} ticket.opt.answered          {% endtrans %}</option>
+                    <option value="inactive"                >{% trans %} ticket.opt.inactive          {% endtrans %}</option>
             {% else %}
                 {% if is_granted('ROLE_ASSESSOR') %}
                     <option value="free" selected="selected">{% trans %} ticket.opt.free              {% endtrans %}</option>

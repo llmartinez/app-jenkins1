@@ -52,6 +52,7 @@ class TicketController extends Controller {
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
         $workshops  = array('0' => new Workshop());
+        $params     = array();
         $joins      = array();
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
@@ -84,7 +85,6 @@ class TicketController extends Controller {
             }
             //$option = 'all';
         }
-
         elseif ($option == 'all'      ) { $params[] = array();  }
         elseif ($option == 'all_mine' ) { $params[] = array('assigned_to', '= '.$id_user); }
         elseif ($option == 'opened'   ) { $params[] = array('status', ' = '.$open  ->getId()); }
@@ -118,6 +118,28 @@ class TicketController extends Controller {
         {
             $params[] = array('status', ' = '.$closed->getId());
             $params[] = array('assigned_to'   , '!= '.$id_user);
+        }
+        elseif ($option == 'inactive' )
+        {
+            // Recupera la fecha del ultimo post de cada ticket
+            // SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
+
+            $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
+            $ids = '0';
+            foreach ($consulta->getResult()as $row)
+            {
+                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
+                $now = new \DateTime(\date("Y-m-d H:i:s"));
+                $time = new \DateTime(\date($row['time']));
+
+                $diff = $now->diff($time);
+                $hours = $diff->h + ($diff->days*24);
+
+                if ($hours >= 2) $ids = $ids.', '.$row['id'];
+            }
+
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('id', ' IN ('.$ids.')');
         }
         else{
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
