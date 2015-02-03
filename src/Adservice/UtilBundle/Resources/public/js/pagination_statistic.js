@@ -30,7 +30,7 @@
 		        	var status  = $('#flt_wks_status').val();
 		        }
 		        else{
-		        	if(type == '0') {
+		        	if(type == 'no-ticket') {
 				    	var partner = '0';
 			        	var country = '0';
 						var from_y  = '0';
@@ -40,6 +40,18 @@
 						var to_m    = '0';
 						var to_d    = '0';
 			        }
+			        else{
+			        	if(type == '0') {
+					    	var partner = '0';
+				        	var country = '0';
+							var from_y  = '0';
+							var from_m  = '0';
+							var from_d  = '0';
+							var to_y    = '0';
+							var to_m    = '0';
+							var to_d    = '0';
+				        }
+				    }
 		        }
 	        }
 
@@ -90,7 +102,7 @@
 			        	var status  = $('#flt_wks_status').val();
 			        }
 			        else{
-			        	if(type == '0') {
+			        	if(type == 'no-ticket') {
 					    	var partner = '0';
 				        	var country = '0';
 							var from_y  = '0';
@@ -100,6 +112,18 @@
 							var to_m    = '0';
 							var to_d    = '0';
 				        }
+				        else{
+				        	if(type == '0') {
+						    	var partner = '0';
+					        	var country = '0';
+								var from_y  = '0';
+								var from_m  = '0';
+								var from_d  = '0';
+								var to_y    = '0';
+								var to_m    = '0';
+								var to_d    = '0';
+					        }
+					    }
 			        }
 		        }
 
@@ -151,7 +175,7 @@
 		        	var status  = $('#flt_wks_status').val();
 		        }
 		        else{
-		        	if(type == '0') {
+		        	if(type == 'no-ticket') {
 				    	var partner = '0';
 			        	var country = '0';
 						var from_y  = '0';
@@ -161,6 +185,18 @@
 						var to_m    = '0';
 						var to_d    = '0';
 			        }
+			        else{
+			        	if(type == '0') {
+					    	var partner = '0';
+				        	var country = '0';
+							var from_y  = '0';
+							var from_m  = '0';
+							var from_d  = '0';
+							var to_y    = '0';
+							var to_m    = '0';
+							var to_d    = '0';
+				        }
+				    }
 		        }
 	        }
 
@@ -213,7 +249,7 @@
 			        	var status  = $('#flt_wks_status').val();
 			        }
 			        else{
-			        	if(type == '0') {
+			        	if(type == 'no-ticket') {
 					    	var partner = '0';
 				        	var country = '0';
 							var from_y  = '0';
@@ -223,6 +259,18 @@
 							var to_m    = '0';
 							var to_d    = '0';
 				        }
+				        else{
+				        	if(type == '0') {
+						    	var partner = '0';
+					        	var country = '0';
+								var from_y  = '0';
+								var from_m  = '0';
+								var from_d  = '0';
+								var to_y    = '0';
+								var to_m    = '0';
+								var to_d    = '0';
+					        }
+					    }
 			        }
 		        }
 
@@ -270,7 +318,7 @@
 			        	var status  = $('#flt_wks_status').val();
 			        }
 			        else{
-			        	if(type == '0') {
+			        	if(type == 'no-ticket') {
 					    	var partner = '0';
 				        	var country = '0';
 							var from_y  = '0';
@@ -280,6 +328,18 @@
 							var to_m    = '0';
 							var to_d    = '0';
 				        }
+				        else{
+				        	if(type == '0') {
+						    	var partner = '0';
+					        	var country = '0';
+								var from_y  = '0';
+								var from_m  = '0';
+								var from_d  = '0';
+								var to_y    = '0';
+								var to_m    = '0';
+								var to_d    = '0';
+					        }
+					    }
 			        }
 		        }
 

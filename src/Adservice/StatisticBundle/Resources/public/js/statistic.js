@@ -129,6 +129,64 @@ $(document).ready(function() {
         window.open(url, "_self");
     });
 
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_search_no_ticket').click(function() {
+
+        var from_y  = '0';
+        var from_m  = '0';
+        var from_d  = '0';
+        var to_y    = '0';
+        var to_m    = '0';
+        var to_d    = '0';
+        var partner = '0';
+        var shop    = '0';
+        var typology= '0';
+        var country = '0';
+        var status  = '0';
+
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
+
+        var route  = 'listStatistics';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'no-ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
+
+        window.open(url, "_self");
+    });
+
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_search_last_ticket').click(function() {
+
+        var from_y  = '0';
+        var from_m  = '0';
+        var from_d  = '0';
+        var to_y    = '0';
+        var to_m    = '0';
+        var to_d    = '0';
+        var partner = '0';
+        var shop    = '0';
+        var typology= '0';
+        var country = '0';
+        var status  = '0';
+
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
+
+        var route  = 'listStatistics';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: '0', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
+
+        window.open(url, "_self");
+    });
+
     $('#doExcel_ticket').click(function() {
 
         var from_y  = $('#tck_from_y').val();
@@ -185,21 +243,17 @@ $(document).ready(function() {
 
     $('#doExcel_last_ticket').click(function() {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////     PONER TODO A 00000000000000000000000
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        var from_y  = $('#wks_from_y').val();
-        var from_m  = $('#wks_from_m').val();
-        var from_d  = $('#wks_from_d').val();
-        var to_y    = $('#wks_to_y').val();
-        var to_m    = $('#wks_to_m').val();
-        var to_d    = $('#wks_to_d').val();
-        var partner = $('#flt_wks_partner').val();
-        var shop    = $("#flt_wks_shop").val();
-        var typology= $("#flt_wks_typology").val();
-        var country = $('#flt_wks_country').val();
-        var status  = $('#flt_wks_status').val();
+        var from_y  = '0';
+        var from_m  = '0';
+        var from_d  = '0';
+        var to_y    = '0';
+        var to_m    = '0';
+        var to_d    = '0';
+        var partner = '0';
+        var shop    = '0';
+        var typology= '0';
+        var country = '0';
+        var status  = '0';
 
         if(from_y  == "" || from_y  == 0 ) from_y  = '0';
         if(from_m  == "" || from_m  == 0 ) from_m  = '0';
@@ -210,9 +264,36 @@ $(document).ready(function() {
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
+        var url    = Routing.generate(route, {_locale: locale, type: '0', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
 
-        alert('EN CONSTRUCCIÓN');
-        // window.open(url, "_self");
+        window.open(url, "_self");
+    });
+
+    $('#doExcel_no_ticket').click(function() {
+
+        var from_y  = '0';
+        var from_m  = '0';
+        var from_d  = '0';
+        var to_y    = '0';
+        var to_m    = '0';
+        var to_d    = '0';
+        var partner = '0';
+        var shop    = '0';
+        var typology= '0';
+        var country = '0';
+        var status  = '0';
+
+        if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
+
+        var route  = 'doExcel';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'no-ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country });
+
+        window.open(url, "_self");
     });
 });

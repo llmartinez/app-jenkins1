@@ -184,32 +184,97 @@
            <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
+        <table class="table table-hover table-list-search">
+            <thead>
+                <tr>
+                    <th>{% trans %} code     {% endtrans %}</th>
+                    <th>{% trans %} workshop {% endtrans %}</th>
+                    <th>{% trans %} partner  {% endtrans %}</th>
+                    <th>{% trans %} email    {% endtrans %}</th>
+                    <th>{% trans %} tel      {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for workshop in statistic.results %}
+                <tr>
+                    <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                    <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                    <td>{{ workshop.partner}}</td>
+                    <td>{{ workshop.email1 }}</td>
+                    <td>{{ workshop.phoneNumber1 }}</td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
+
+        {% elseif type == 'no-ticket' %}
+
+            <legend> {% trans %} statistic.general {% endtrans %}
+
+            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
+            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            {% endif %} </legend>
+
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
+            </div>
+
+            <legend> {% trans %} statistic.no_ticket {% endtrans %}
+                -- <button class="btn btn-primary" id="btn_search_last_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.last_tickets {% endtrans %}</button></a>
+                <img id="doExcel_no_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            </legend>
+
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
-                        <th>{% trans %} code     {% endtrans %}</th>
-                        <th>{% trans %} workshop {% endtrans %}</th>
-                        <th>{% trans %} partner  {% endtrans %}</th>
-                        <th>{% trans %} email    {% endtrans %}</th>
-                        <th>{% trans %} tel      {% endtrans %}</th>
+                        <th>{% trans %} code       {% endtrans %}</th>
+                        <th>{% trans %} workshop   {% endtrans %}</th>
+                        <th>{% trans %} partner    {% endtrans %}</th>
+                        <th>{% trans %} created_at {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
                         {% for workshop in statistic.results %}
                     <tr>
                         <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
-                        <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                        <td>{{ workshop.partner}}</td>
-                        <td>{{ workshop.email1 }}</td>
-                        <td>{{ workshop.phoneNumber1 }}</td>
+                        <td>{{ workshop.name|length > 25 ? workshop.name|slice(0, 25) ~ '...' : workshop.name }}
+                            {% if workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
+                        </td>
+                        <td title="{{workshop.partner}}">
+                            {{ workshop.partner|length > 25 ? workshop.partner|slice(0, 25) ~ '...' : workshop.partner }}
+                        </td>
+                        <td>{{ workshop.createdAt | date("d/m/y") }}</td>
                     </tr>
                         {% endfor %}
                 </tbody>
             </table>
 
-        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
+            <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% else %}
+
         <legend> {% trans %} statistic.general {% endtrans %}
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
@@ -240,6 +305,8 @@
             </div>
 
             <legend> {% trans %} statistic.last_tickets {% endtrans %}
+                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
                 <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
 
