@@ -435,6 +435,8 @@ statistic.num_workshops:	  "Number of Workshops"
 statistic.num_tickets:		  "Number of Tickets"
 statistic.num_tickets.open:	  "Number of Open Tickets"
 statistic.num_tickets.closed: "Number of Closed Tickets"
+statistic.last_tickets:		  "Last workshop tickets"
+statistic.no_ticket:		  "Any tickets yet"
 
 #POPUP
 popup.delete:				  "Delete popup"

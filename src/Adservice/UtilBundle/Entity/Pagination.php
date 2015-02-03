@@ -211,56 +211,84 @@ class Pagination
      *
      * @return string
      */
-    public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null, $joins=null, $add='')
+    public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null, $joins=null, $add='', $group_by=null)
     {
         $query = 'SELECT e '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
         $where = 'WHERE e.id > 0 ';
 
         if($joins != null and $joins[0] != null) {
-            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
-                                        $where = $where.'AND '.$join[1].' '; }
+            foreach ($joins as $join) {
+                                        if(isset($join[2])){
+                                            $from  = $from.$join[2].' '.'JOIN '.$join[0].' ON '.$join[1].' ';
+                                        }
+                                        else{
+                                            $from  = $from.'JOIN '.$join[0].' ';
+                                            $where = $where.'AND '.$join[1].' ';
+                                        }
+                                    }
         }
         if($params != null and $params[0] != null) {
             foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
         }
 
-        ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
-        // ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
+        ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
+
+        if ($ordered != null) {
+            if (is_array($ordered)) $order = 'ORDER BY '.$ordered[0].' '.$ordered[1].' ';
+            else                    $order = 'ORDER BY e.modified_at '.$ordered.' ';
+        }
+        else{
+             $order = '';
+        }
 
         if($pagination != null){
-
-            $consulta = $em ->createQuery($query.$from.$where.$order)
+            $consulta = $em ->createQuery($query.$from.$where.$group_by.$order)
                             ->setMaxResults($pagination->getMaxRows())
                             ->setFirstResult($pagination->getFirstRow());
         }else{
-            $consulta = $em->createQuery($query.$from.$where.$order);
+            $consulta = $em->createQuery($query.$from.$where.$group_by.$order);
         }
 
         /* PRUEBAS */
-            // echo $query.$from.$where.$order.'<br>';
+            // echo $query.$from.$where.$group_by.$order.'<br>';
             // var_dump($consulta->getResult());
-            //die;
+            // die;
         return $consulta->getResult();
     }
 
-    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null, $add='')
+    public function getRowsLength($em, $bundle, $entity, $params=null, $ordered=null, $joins=null, $add='', $group_by=null)
     {
         $query = 'SELECT COUNT(e) '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
         $where = 'WHERE e.id > 0 ';
 
         if($joins != null and $joins[0] != null) {
-            foreach ($joins as $join) { $from  = $from.'JOIN '.$join[0].' ';
-                                        $where = $where.'AND '.$join[1].' '; }
+            foreach ($joins as $join) {
+                                        if(isset($join[2])){
+                                            $from  = $from.$join[2].' '.'JOIN '.$join[0].' ON '.$join[1].' ';
+                                        }
+                                        else{
+                                            $from  = $from.'JOIN '.$join[0].' ';
+                                            $where = $where.'AND '.$join[1].' ';
+                                        }
+                                    }
         }
         if($params != null and $params[0] != null) {
             foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
         }
 
-        ($ordered != null) ? $order = 'ORDER BY e.'.$ordered[0].' '.$ordered[1] : $order = '';
+        ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
 
-        $consulta = $em ->createQuery($query.$from.$where.$order);
+        if ($ordered != null) {
+            if (is_array($ordered)) $order = 'ORDER BY '.$ordered[0].' '.$ordered[1].' ';
+            else                    $order = 'ORDER BY e.modified_at '.$ordered.' ';
+        }
+        else{
+             $order = '';
+        }
+
+        $consulta = $em ->createQuery($query.$from.$where.$group_by.$order);
 
         $result = $consulta->getResult();
         $result = $result[0];
@@ -269,4 +297,28 @@ class Pagination
         return $result;
     }
 
+    // public function getRowsWithQuery($em, $query, $page, $pagination=null)
+    // {
+    //     if($pagination != null){
+
+    //         $consulta = $em ->createQuery($query)
+    //                         ->setMaxResults($pagination->getMaxRows())
+    //                         ->setFirstResult($pagination->getFirstRow());
+    //     }else{
+    //         $consulta = $em->createQuery($query);
+    //     }
+
+    //     return $consulta->getResult();
+    // }
+
+    // public function getRowsLengthWithQuery($em, $query)
+    // {
+    //     $consulta = $em ->createQuery($query);
+
+    //     $result = $consulta->getResult();
+    //     $result = $result[0];
+    //     $result = $result[1];
+
+    //     return $result;
+    // }
 }

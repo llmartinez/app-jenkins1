@@ -32,6 +32,7 @@ class StatisticController extends Controller {
             }
 
             if     ($type == 'ticket'  ){
+                                        //Estadísticas de tickets de Ad-service
                                         $bundle = 'TicketBundle';
                                         $entity = 'Ticket';
                                         if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
@@ -52,9 +53,10 @@ class StatisticController extends Controller {
                                         }
             }
             elseif ($type == 'workshop'){
+                                        //Estadísticas de talleres de Ad-service
                                         $bundle = 'WorkshopBundle';
                                         $entity = 'Workshop';
-                                        if     ($partner!= '0'  ) { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
                                         if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
                                         if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
                                         if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
@@ -67,7 +69,45 @@ class StatisticController extends Controller {
                                             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                                         }
             }
+            elseif ($type == 'no-ticket'){
 
+                //Estadísticas generales de Ad-service
+                $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
+                $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
+                $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
+                $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
+                $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
+                $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
+                $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
+
+                //listado de talleres sin tickets
+                // SELECT w.id FROM workshop w WHERE w.id NOT IN (SELECT t.workshop_id FROM ticket t GROUP BY t.workshop_id)
+
+                $consulta = $em ->createQuery('SELECT w.id FROM TicketBundle:Ticket t JOIN t.workshop w GROUP BY t.workshop');
+                $workshop_query = '0';
+
+                foreach ( $consulta->getResult() as $row) {
+                    $workshop_query = $workshop_query.', '.$row['id'];
+                }
+
+                $bundle = 'WorkshopBundle';
+                $entity = 'Workshop';
+                $params[] = array('id', ' NOT IN ('.$workshop_query.')');
+                if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
+                if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
+                if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
+                if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+                elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
+                elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
+                if($security->isGranted('ROLE_SUPER_ADMIN')){
+                    if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
+                }else{
+                    $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+                }
+            }
+
+            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
             $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
             $statistic->setResults($result);
 
@@ -78,6 +118,7 @@ class StatisticController extends Controller {
         }else{
             $type = '0';
 
+            //Estadísticas generales de Ad-service
             $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
             $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
             $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
@@ -85,6 +126,30 @@ class StatisticController extends Controller {
             $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
             $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
             $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
+
+            /*
+                SELECT w.id, t.id FROM ticket t JOIN  workshop w ON t.workshop_id = w.id GROUP BY w.id ORDER BY t.id DESC
+            */
+            $bundle = 'TicketBundle';
+            $entity = 'Ticket';
+            $joins[] = array('e.workshop w', ' e.workshop = w.id ');
+            $group_by = 'w.id';
+            $order = array('e.id', 'DESC');
+
+            if($security->isGranted('ROLE_SUPER_ADMIN')){
+                if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
+            }else{
+                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            }
+
+            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
+            $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, $order, $joins,'',$group_by);
+            $statistic->setResults($result);
+
+            $length = $pagination->getRowsLength($em, $bundle, $entity, $params, $order, $joins,'',$group_by);
+            $pagination->setTotalPagByLength($length);
+
+            $statistic->setResults($result);
         }
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
@@ -185,17 +250,72 @@ class StatisticController extends Controller {
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($results);
             }
+            elseif ($type == 'no-ticket'){
+                                        //listado de talleres sin tickets
+                                        // SELECT w.id FROM workshop w WHERE w.id NOT IN (SELECT t.workshop_id FROM ticket t GROUP BY t.workshop_id)
 
-            $excel = UtilController::sinAcentos($excel);
-            $response->setContent($excel);
-            return $response;
+                                        $consulta = $em ->createQuery('SELECT w.id FROM TicketBundle:Ticket t JOIN t.workshop w GROUP BY t.workshop');
+                                        $workshop_query = '0';
+
+                                        foreach ( $consulta->getResult() as $row) { $workshop_query = $workshop_query.', '.$row['id']; }
+
+                                        $bundle = 'WorkshopBundle';
+                                        $entity = 'Workshop';
+                                        $params[] = array('id', ' NOT IN ('.$workshop_query.')');
+                                        if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
+                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                                        elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+                                        elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
+                                        elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
+                                        if($security->isGranted('ROLE_SUPER_ADMIN')){
+                                            if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
+                                        }else{
+                                            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+                                        }
+
+                $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
+                $excel = $this->createExcelWorkshop($results);
+            }
+        }
+        else{
+            /*
+                SELECT w.id, t.id FROM ticket t JOIN  workshop w ON t.workshop_id = w.id GROUP BY w.id ORDER BY t.id DESC
+            */
+            $bundle = 'TicketBundle';
+            $entity = 'Ticket';
+            $joins[] = array('e.workshop w', ' e.workshop = w.id ');
+            $group_by = 'w.id';
+            $order = array('e.id', 'DESC');
+
+            if($security->isGranted('ROLE_SUPER_ADMIN')){
+                if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
+            }else{
+                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            }
+
+            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
+            $results = $pagination->getRows($em, $bundle, $entity, $params, $pagination, $order, $joins,'',$group_by);
+            $response->headers->set('Content-Disposition', 'attachment;filename="informeUltimosTickets_'.date("dmY").'.csv"');
+            $excel = $this->createExcelLastTickets($results);
 
         }
+
+        $excel = UtilController::sinAcentos($excel);
+        $response->setContent($excel);
+        return $response;
     }
 
     public function createExcelTicket($results){
         //Creación de cabecera
-        $excel ='ID;Date;Car;Assigned To;Description;Status;Solution;';
+        //'ID;Date;Car;Assigned To;Description;Status;Solution;';
+        $excel ='ID;'.
+                $this->get('translator')->trans('date').';'.
+                $this->get('translator')->trans('car').';'.
+                $this->get('translator')->trans('assigned_to').';'. //ID ticket
+                $this->get('translator')->trans('description').';'.
+                $this->get('translator')->trans('status').';'.
+                $this->get('translator')->trans('solution').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -216,7 +336,15 @@ class StatisticController extends Controller {
     }
     public function createExcelWorkshop($results){
         //Creación de cabecera
-        $excel ='Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
+        //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
+        $excel =$this->get('translator')->trans('code_partner').';'.
+                $this->get('translator')->trans('code_workshop').';'.
+                $this->get('translator')->trans('name').';'.
+                $this->get('translator')->trans('partner').';'. //ID ticket
+                $this->get('translator')->trans('shop').';'.
+                $this->get('translator')->trans('email').';'.
+                $this->get('translator')->trans('tel').';'.
+                $this->get('translator')->trans('active').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -229,9 +357,62 @@ class StatisticController extends Controller {
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
-            $excel.=$row->getActive().';';
+            if ($row->getActive() == 1) $active = $this->get('translator')->trans('yes');
+            else $active = $this->get('translator')->trans('no');
+            $excel.=$active.';';
             $excel.="\n";
         }
         return($excel);
+    }
+    public function createExcelLastTickets($results){
+        //Creación de cabecera
+        //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
+        $excel =$this->get('translator')->trans('code_partner').';'.
+                $this->get('translator')->trans('code_workshop').';'.
+                $this->get('translator')->trans('name').';'.
+                $this->get('translator')->trans('partner').';ID '. //ID ticket
+                $this->get('translator')->trans('ticket').';'.
+                $this->get('translator')->trans('ticket').';'.
+                $this->get('translator')->trans('status').';'.
+                $this->get('translator')->trans('date').';';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($results as $row) {
+
+            $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row->getWorkshop()->getCodeWorkshop().';';
+            $excel.=$row->getWorkshop()->getName().';';
+            $excel.=$row->getWorkshop()->getPartner().';';
+            $excel.=$row->getId().';';
+            $excel.=$row->getDescription().';';
+            $excel.=$row->getStatus().';';
+            $excel.=$row->getModifiedAt()->format('Y-m-d').';';
+            $excel.="\n";
+        }
+        return($excel);
+    }
+    public function createExcelNoTickets($results){
+        //Creación de cabecera
+        //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
+        // $excel ='Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
+        // $excel.="\n";
+
+        // $em = $this->getDoctrine()->getEntityManager();
+
+        // foreach ($results as $row) {
+
+        //     $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
+        //     $excel.=$row->getWorkshop()->getCodeWorkshop().';';
+        //     $excel.=$row->getWorkshop()->getName().';';
+        //     $excel.=$row->getWorkshop()->getPartner().';';
+        //     $excel.=$row->getId().';';
+        //     $excel.=$row->getDescription().';';
+        //     $excel.=$row->getStatus().';';
+        //     $excel.=$row->getModifiedAt()->format('Y-m-d').';';
+        //     $excel.="\n";
+        // }
+        // return($excel);
     }
 }
