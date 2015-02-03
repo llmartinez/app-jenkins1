@@ -383,6 +383,7 @@ ticket.opt.other.answered:    "Other Answered Tickets"
 ticket.opt.other.closed:      "Other Closed Tickets"
 ticket.opt.owner:             "Your tickets"
 ticket.opt.workshop:          "Tickets from your Workshop"
+ticket.opt.inactive:		  "Inactive Tickets"
 
 ticket.title.from_workshop:   "Tickets from Workshop"
 ticket.assign:				  "Assign ticket"
