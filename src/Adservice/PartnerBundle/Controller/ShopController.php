@@ -23,7 +23,7 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none') {
+    public function listAction($page=1, $country='none', $partner='none') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
@@ -35,8 +35,12 @@ class ShopController extends Controller {
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
+            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else {
+            $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+            $params[] = array('partner', ' = '.$this->get('security.context')->getToken()->getUser()->getId());
+        }
 
         $pagination = new Pagination($page);
 
@@ -49,10 +53,15 @@ class ShopController extends Controller {
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
+        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        else $partners = array();
+
         return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
                                                                                 'pagination'   => $pagination,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
+                                                                                'partners'     => $partners,
+                                                                                'partner'      => $partner,
                                                                                 ));
     }
 

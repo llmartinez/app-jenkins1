@@ -222,6 +222,7 @@ class UserController extends Controller {
 
         /*CREAR PASSWORD AUTOMATICAMENTE*/
         $password = substr( md5(microtime()), 1, 8);
+        //$password = 'grupeina';
         $this->savePassword($em, $user, $password);
 
         return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
