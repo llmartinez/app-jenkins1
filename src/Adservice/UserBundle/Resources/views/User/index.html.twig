@@ -17,7 +17,9 @@
                                                                                                             {% trans %} menu.list_statistics   {% endtrans %}</a>
             <a class="btn-menu" id="workshopOrdersList"     href="{{ path("list_orders"             ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
-                                                                                                            {% trans %} menu.list_orders       {% endtrans %}</a>
+                                                                                                            {% trans %} menu.list_orders       {% endtrans %}
+                                                                                                            {% if length is defined %} ({{ length }})
+                                                                                                            {% endif %}</a>
             <a class="btn-menu" id="popup_list"             href="{{ path("popup_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_popup.png') }}">
                                                                                                             {% trans %} menu.list_popups        {% endtrans %}</a>
@@ -86,7 +88,8 @@
                                                                                                 {% trans %} menu.profile              {% endtrans %}</a>
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
-                                                                                                {% trans %} menu.list_orders         {% endtrans %}</a>
+                                                                                                {% trans %} menu.list_orders         {% endtrans %}
+                                                                                                {% if length is defined %} ({{ length }}){% endif %}</a>
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                 {% trans %} menu.list_shops         {% endtrans %}</a>
