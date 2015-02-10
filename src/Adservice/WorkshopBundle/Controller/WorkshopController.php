@@ -25,18 +25,31 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page=1 , $country='none') {
+    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0') {
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
 
         if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false and $this->get('security.context')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
         if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+            if ($country != '0') $params[] = array('country', ' = '.$country);
         }
         else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+
+            if ($partner != '0') $params[] = array('partner', ' = '.$partner);
+
+            if ($w_idpartner != '0' and $w_id != '0')
+                $params[] = array('code_workshop', ' = '.$w_id.' AND e.partner = '.$w_idpartner.' ' );
+
+            if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+            elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+        }
+
+        if(!isset($params)) $params[] = array();
 
         $pagination = new Pagination($page);
 
@@ -46,13 +59,21 @@ class WorkshopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
-        else $countries = array();
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $countries = $em->getRepository('UtilBundle:Country'     )->findAll();
+            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findAll();
+        }else{
+            $countries = array();
+            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+        }
 
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'  => $workshops,
                                                                              'pagination' => $pagination,
                                                                              'countries'  => $countries,
-                                                                             'country'    => $country,));
+                                                                             'country'    => $country,
+                                                                             'partners'   => $partners,
+                                                                             'partner'    => $partner,
+                                                                             'status'     => $status,));
     }
 
     public function newWorkshopAction() {
