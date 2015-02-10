@@ -37,7 +37,9 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
-        return $this->render('UserBundle:User:index.html.twig');
+        $length = $this->getPendingOrders();
+
+        return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
     }
 
     /**
@@ -353,6 +355,67 @@ class UserController extends Controller {
                                                                            'user_type'  => $type,
                                                                            'form_name'  => $form->getName(),
                                                                            'form'       => $form->createView()));
+    }
+
+
+
+    /**
+     * Devuelve el numero de solicitudes pendientes
+     * @return integer
+     * @throws AccessDeniedException
+     */
+    public function getPendingOrders(){
+
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+            throw new AccessDeniedException();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $user->getRoles();
+        $role = $role[0];
+        $role = $role->getRole();
+
+        $pagination = new Pagination(1);
+        $workshop_pending = array();
+        $workshop_rejected = array();
+        $shop_pending = array();
+        $shop_rejected = array();
+
+        $rejected     = array('action' , " = 'rejected'");
+        $not_rejected = array('action' , " != 'rejected'");
+
+
+        if    ($role == "ROLE_SUPER_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+                                            $workshop_rejected[] = $by_country;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_rejected[]     = $by_country;
+                                            $shop_rejected[]     = $rejected;
+
+                                            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+                                            $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+
+                                            $length = $length_workshop_rejected + $length_shop_rejected;
+                                        }
+        elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
+                                            $workshop_rejected[] = $by_partner;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_rejected[]     = $by_partner;
+                                            $shop_rejected[]     = $rejected;
+
+                                            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+                                            $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+
+                                            $length = $length_workshop_rejected + $length_shop_rejected;
+                                        }
+        elseif($role == "ROLE_ADMIN" or $role == "ROLE_SUPER_ADMIN" )   {   $workshop_pending[]  = $not_rejected;
+                                                                            $shop_pending[]      = $not_rejected;
+
+                                                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+                                                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+
+                                                                            $length = $length_workshop_pending + $length_shop_pending;
+                                                                        }
+        return $length;
     }
 
     /**
