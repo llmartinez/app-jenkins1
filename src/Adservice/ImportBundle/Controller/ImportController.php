@@ -200,14 +200,16 @@ class ImportController extends Controller
     	{
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// WORKSHOP	//
 
-			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
-			$all_partners = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
-			$all_shops    = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
-			$typology     = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			$locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+			$all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+			$typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			$all_adsplus     = $em->getRepository('WorkshopBundle:ADSPlus' )->findAll();			//MAPPING AD-SERVICE PLUS
 			//find($old_Taller->getTipologia());
 
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
 			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getCodeShop()]    = $shop;	}
+			foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
 			//var_dump($all_shops);die;
 			foreach ($old_Talleres as $old_Taller)
 			{
@@ -236,6 +238,10 @@ class ImportController extends Controller
 						 $newWorkshop->setPartner ($partners['28']);	//Tiendas asociadas con VEMARE, S.L.
 					}
 				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
+
+				//setAdServicePlus
+				if(isset($partners[$old_Taller->getId()])) $newWorkshop->setAdServicePlus(1);
+
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 			}
 			$em->flush();
