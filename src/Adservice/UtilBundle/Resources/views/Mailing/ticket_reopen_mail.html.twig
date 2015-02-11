@@ -38,7 +38,12 @@
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ ticket.id }}</h2>
     </td></tr>
-
+    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+        <h2><a href="http://www.ad-service.es/es/ticket/show/{{ticket.id}}">
+            <img class="img_icon" src="http://ad-service.es/testproject/web/bundles/util/images/icon/ticket_show.png">
+            {% trans %} mail.goto_ticket {% endtrans %}</a>
+        </h2>
+    </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
             <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
