@@ -37,7 +37,8 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
-        $length = $this->getPendingOrders();
+        if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
+        else $length = 0;
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
     }

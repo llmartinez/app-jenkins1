@@ -40,7 +40,7 @@ class ImportController extends Controller
     	if( $bbdd == 'partner' )
     	{
     		$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
-			$locations  = $this->getLocations($em);																							 //MAPPING LOCATIONS
+			$locations  = $this->getLocations($em);																						 //MAPPING LOCATIONS
 
 			foreach ($old_Socios as $old_Socio)
 			{
@@ -56,8 +56,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop-default');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
     	}
 //  ____  _   _  ___  ____       ____  _____ _____ _   _   _ _   _____
 // / ___|| | | |/ _ \|  _ \     |  _ \| ____|  ___/ \ | | | | | |_   _|
@@ -77,7 +77,7 @@ class ImportController extends Controller
 			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
 				$newShop->setName('...');
-				$newShop->setCodeShop($old_Socio->getId());
+				//$newShop->setCodeShop($old_Socio->getId());
 				$newShop->setPartner($partners[$old_Socio->getId()]);
 				$newShop->setActive('1');
 				$newShop = $this->setContactFields($em, $old_Socio, $newShop, $locations);
@@ -88,8 +88,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
 			$session->set('next',  	'shop');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
     	}
 //  ____  _   _  ___  ____
 // / ___|| | | |/ _ \|  _ \
@@ -100,13 +100,13 @@ class ImportController extends Controller
     	elseif( $bbdd == 'shop' )
     	{
 			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
-			$locations   = $this->getLocations($em);																							 //MAPPING LOCATIONS
+			$locations   = $this->getLocations($em);																					 	 //MAPPING LOCATIONS
 			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
 			foreach ($old_Tiendas as $old_Tienda)
 			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
-				$newShop->setCodeShop($old_Tienda->getId());
+				//$newShop->setCodeShop($old_Tienda->getId());
 				$newShop->setName($old_Tienda->getNombre());
 				$newShop->setPartner($partner);
 				$newShop->setActive('1');
@@ -118,8 +118,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
     	}
 //  _   _ ____  _____ ____       _    ____
 // | | | / ___|| ____|  _ \     / \  |  _ \
@@ -153,8 +153,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
 			$session->set('next',  	'assessor');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
     	}
 //     _    ____ ____  _____ ____ ____   ___  ____
 //    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
@@ -187,8 +187,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando talleres (entidad Workshop)...');
 			$session->set('next',  	'workshop');
 
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
-        	//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig');
+			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
@@ -200,14 +200,16 @@ class ImportController extends Controller
     	{
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// WORKSHOP	//
 
-			$locations    = $this->getLocations($em);											//MAPPING LOCATIONS
-			$all_partners = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
-			$all_shops    = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
-			$typology     = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			$locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
+			$all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+			$all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+			$typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+			$all_adsplus     = $em->getRepository('WorkshopBundle:ADSPlus' )->findAll();			//MAPPING AD-SERVICE PLUS
 			//find($old_Taller->getTipologia());
 
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getCodeShop()]    = $shop;	}
+			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
+			foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
 			//var_dump($all_shops);die;
 			foreach ($old_Talleres as $old_Taller)
 			{
@@ -236,6 +238,10 @@ class ImportController extends Controller
 						 $newWorkshop->setPartner ($partners['28']);	//Tiendas asociadas con VEMARE, S.L.
 					}
 				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
+
+				//setAdServicePlus
+				if(isset($partners[$old_Taller->getId()])) $newWorkshop->setAdServicePlus(1);
+
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 			}
 			$em->flush();
@@ -243,8 +249,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
 //  _   _ ____  _____ ____
 // | | | / ___|| ____|  _ \

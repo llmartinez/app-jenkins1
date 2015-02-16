@@ -42,7 +42,7 @@ class TicketController extends Controller {
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page=1, $num_rows=10, $option=null)
+    public function listTicketAction($page=1, $country=0, $num_rows=10, $option=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request    = $this->getRequest();
@@ -146,6 +146,11 @@ class TicketController extends Controller {
             $params[] = array('workshop', ' = '.$option);
         }
 
+        if($country != 0) {
+            //$country = $em->getRepository('UtilBundle:Country')->find($country);
+            $joins[] = array('e.workshop w ', 'w.country = '.$country);
+        }
+
         $pagination = new Pagination($page);
         $ordered = null;
 
@@ -206,7 +211,7 @@ class TicketController extends Controller {
                 $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
                 $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }else{
-                $joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
+                //$joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
                 $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
                 $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }
@@ -227,16 +232,19 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands  = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
-                                                                                       'option'     => $option,
+                                                                                       'country'    => $country,
                                                                                        'num_rows'   => $num_rows,
+                                                                                       'option'     => $option,
                                                                                        'brands'     => $brands,
+                                                                                       'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
                                                                               ));
     }
@@ -358,7 +366,7 @@ class TicketController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+                        $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
