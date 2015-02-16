@@ -19,7 +19,7 @@ class DiagnosisMachineRepository extends EntityRepository
         if($country != null) $where = $where.' AND t.country = '.$country.' ';
 
         //Crea la consulta
-        // echo $query.$where.' ORDER BY w.id ';die;
+        // echo $query.$where.' ORDER BY t.name ';die;
         $consulta = $em->createQuery($query.$from.$where.' ORDER BY t.name ');
         $array = $consulta->getResult();
 
