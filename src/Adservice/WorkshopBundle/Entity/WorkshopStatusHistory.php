@@ -1,20 +1,20 @@
 <?php
 
-namespace Adservice\OrderBundle\Entity;
+namespace Adservice\WorkshopBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\PartnerBundle\Entity\Partner;
+use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
 
 /**
- * Adservice\OrderBundle\Entity\Workshop
- *
- * @ORM\Table(name="workshop_order")
+ * Adservice\WorkshopBundle\Entity\WorkshopStatusHistory
  * @ORM\Entity
+ * @ORM\Table(name="workshop_status_history")
  */
-class WorkshopOrder {
+class WorkshopStatusHistory {
 
     /**
      * @var integer $id
@@ -26,26 +26,6 @@ class WorkshopOrder {
     private $id;
 
     /**
-     * @var string $id_workshop
-     *
-     * @ORM\Column(name="id_workshop", type="integer", length=255, nullable=true )
-     */
-    private $id_workshop;
-
-    /**
-     * @var string $$wanted_action
-     * @ORM\Column(name="wanted_action", type="string", length=255)
-     */
-    private $wanted_action;
-
-    /**
-     * @var string $action
-     *
-     * @ORM\Column(name="action", type="string", length=255)
-     */
-    private $action;
-
-    /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -53,9 +33,9 @@ class WorkshopOrder {
     private $name;
 
     /**
-     * @var string $code_workshop
+     * @var integer $code_workshop
      *
-     * @ORM\Column(name="code_workshop", type="integer", length=255, nullable=true )
+     * @ORM\Column(name="code_workshop", type="integer")
      */
     private $code_workshop;
 
@@ -68,23 +48,9 @@ class WorkshopOrder {
     /**
      * @var string $contact
      *
-     * @ORM\Column(name="contact", type="string", length=255)
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
      */
     private $contact;
-
-    /**
-     * @var boolean $ad_service_plus
-     *
-     * @ORM\Column(name="ad_service_plus", type="boolean")
-     */
-    private $ad_service_plus;
-
-    /**
-     * @var string $internal_code
-     *
-     * @ORM\Column(name="internal_code", type="string", length=255, nullable=true)
-     */
-    private $internal_code;
 
     /**
      *
@@ -122,12 +88,11 @@ class WorkshopOrder {
     private $shop;
 
     /**
+     * @var string $internal_code
      *
-     * @var string $users
-     *
-     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="workshop")
+     * @ORM\Column(name="internal_code", type="string", length=255, nullable=true)
      */
-    private $users;
+    private $internal_code;
 
     /**
      * @var boolean $active
@@ -137,18 +102,18 @@ class WorkshopOrder {
     private $active;
 
     /**
+     * @var boolean $ad_service_plus
+     *
+     * @ORM\Column(name="ad_service_plus", type="boolean")
+     */
+    private $ad_service_plus;
+
+    /**
      * @var boolean $test
      *
      * @ORM\Column(name="test", type="boolean", nullable=true)
      */
     private $test;
-
-    /**
-     * @var string $typology
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Typology")
-     */
-    private $typology;
 
     /**
      * @var datetime $update_at
@@ -178,20 +143,18 @@ class WorkshopOrder {
      */
     private $conflictive;
 
-    /**
-     * @var string $rejection_reason 
-     * @ORM\Column(name="rejection_reason", type="string", length=255, nullable=true)
-     */
-    private $rejection_reason;
 
-    /**
-     * @var integer $tickets
-     *
-     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
-     */
-    private $tickets;
+//  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
+// / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
+// \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
+//  ___) | |___  | |   | | | |___|  _ < ___) / /| |_| | |___  | |   | | | |___ |  _ < ___) |
+// |____/|_____| |_|   |_| |_____|_| \_\____/_/  \____|_____| |_|   |_| |_____||_| \_\____/
 
-    /**
+    public function __toString() {
+        return $this->getName();
+    }
+
+   /**
      * Get id
      *
      * @return integer
@@ -221,7 +184,7 @@ class WorkshopOrder {
     /**
      * Set code_workshop
      *
-     * @param integer $code_workshop
+     * @param string $code_workshop
      */
     public function setCodeWorkshop($code_workshop) {
         $this->code_workshop = $code_workshop;
@@ -230,25 +193,25 @@ class WorkshopOrder {
     /**
      * Get code_workshop
      *
-     * @return integer
+     * @return string
      */
     public function getCodeWorkshop() {
         return $this->code_workshop;
     }
 
     /**
-     * Get cif
+     * get cif
      *
-     * @return string
+     * @return integer
      */
     public function getCif() {
         return $this->cif;
     }
 
     /**
-     * Set cif
+     * set cif
      *
-     * @param string $cif
+     * @return integer
      */
     public function setCif($cif) {
         $this->cif = $cif;
@@ -263,6 +226,14 @@ class WorkshopOrder {
         $this->contact = $contact;
     }
 
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContactName() {
+        return $this->contact;
+    }
 
     /**
      * Set contact
@@ -285,47 +256,11 @@ class WorkshopOrder {
     }
 
     /**
-     * Set internal_code
-     *
-     * @param boolean $internal_code
-     */
-    public function setInternalCode($internal_code) {
-        $this->internal_code = $internal_code;
-    }
-
-    /**
-     * Get internal_code
-     *
-     * @return boolean
-     */
-    public function getInternalCode() {
-        return $this->internal_code;
-    }
-
-    /**
-     * Set ad_service_plus
-     *
-     * @param boolean $ad_service_plus
-     */
-    public function setAdServicePlus($ad_service_plus) {
-        $this->ad_service_plus = $ad_service_plus;
-    }
-
-    /**
-     * Get ad_service_plus
-     *
-     * @return boolean
-     */
-    public function getAdServicePlus() {
-        return $this->ad_service_plus;
-    }
-
-    /**
      * Set partner
      *
      * @param string $partner
      */
-    public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
+    public function setPartner(Partner $partner) {
         $this->partner = $partner;
     }
 
@@ -341,9 +276,9 @@ class WorkshopOrder {
     /**
      * Set shop
      *
-     * @param  string $shop
+     * @param string $shop
      */
-    public function setShop(\Adservice\PartnerBundle\Entity\Shop $shop) {
+    public function setShop(Shop $shop) {
         $this->shop = $shop;
     }
 
@@ -354,6 +289,24 @@ class WorkshopOrder {
      */
     public function getShop() {
         return $this->shop;
+    }
+
+    /**
+     * Set internal_code
+     *
+     * @param boolean $internal_code
+     */
+    public function setInternalCode($internal_code) {
+        $this->internal_code = $internal_code;
+    }
+
+    /**
+     * Get internal_code
+     *
+     * @return boolean
+     */
+    public function getInternalCode() {
+        return $this->internal_code;
     }
 
     /**
@@ -375,6 +328,24 @@ class WorkshopOrder {
     }
 
     /**
+     * Set ad_service_plus
+     *
+     * @param boolean $ad_service_plus
+     */
+    public function setAdServicePlus($ad_service_plus) {
+        $this->ad_service_plus = $ad_service_plus;
+    }
+
+    /**
+     * Get ad_service_plus
+     *
+     * @return boolean
+     */
+    public function getAdServicePlus() {
+        return $this->ad_service_plus;
+    }
+
+    /**
      * Set test
      *
      * @param boolean $test
@@ -390,24 +361,6 @@ class WorkshopOrder {
      */
     public function getTest() {
         return $this->test;
-    }
-
-    /**
-     * Set typology
-     *
-     * @param string $typology
-     */
-    public function setTypology(\Adservice\WorkshopBundle\Entity\Typology $typology) {
-        $this->typology = $typology;
-    }
-
-    /**
-     * Get typology
-     *
-     * @return string
-     */
-    public function getTypology() {
-        return $this->typology;
     }
 
     /**
@@ -482,63 +435,6 @@ class WorkshopOrder {
         return $this->conflictive;
     }
 
-    public function __toString() {
-        return $this->getName();
-    }
-
-    public function __construct() {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->diagnosis_machines = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add users
-     *
-     * @param Adservice\UserBundle\Entity\User $users
-     */
-    public function addUser(\Adservice\UserBundle\Entity\User $users) {
-        $this->users[] = $users;
-    }
-
-    /**
-     * Get users
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getUsers() {
-        return $this->users;
-    }
-
-    /**
-     * Add tickets
-     *
-     * @param Adservice\TicketBundle\Entity\Ticket $tickets
-     */
-    public function addTicket(\Adservice\TicketBundle\Entity\Ticket $tickets) {
-        $this->tickets[] = $tickets;
-    }
-
-    /**
-     * Get tickets
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getTickets() {
-        return $this->tickets;
-    }
-
-    /**
-     * Add user_roles
-     *
-     * @param Role $userRoles
-     */
-    public function addDiagnosisMachine(DiagnosisMachine $diagnosis_machine) {
-        $this->diagnosis_machines[] = $diagnosis_machine;
-    }
-
-    public function setDiagnosisMachine($diagnosis_machines) {
-        $this->diagnosis_machines = $diagnosis_machines;
-    }
 
     public function getDiagnosisMachines() {
         return $this->diagnosis_machines;
@@ -568,37 +464,31 @@ class WorkshopOrder {
         $this->observation_admin = $observation_admin;
     }
 
-    public function getIdWorkshop() {
-        return $this->id_workshop;
-    }
+//    public function getRegisterPending() {
+//        return $this->register_pending;
+//    }
+//
+//    public function getActivatePending() {
+//        return $this->activate_pending;
+//    }
+//
+//    public function getDeactivatePending() {
+//        return $this->deactivate_pending;
+//    }
+//
+//    public function setRegisterPending($register_pending) {
+//        $this->register_pending = $register_pending;
+//    }
+//
+//    public function setActivatePending($activate_pending) {
+//        $this->activate_pending = $activate_pending;
+//    }
+//
+//    public function setDeactivatePending($deactivate_pending) {
+//        $this->deactivate_pending = $deactivate_pending;
+//    }
 
-    public function setIdWorkshop($id_workshop) {
-        $this->id_workshop = $id_workshop;
-    }
 
-    public function getAction() {
-        return $this->action;
-    }
-
-    public function setAction($action) {
-        $this->action = $action;
-    }
-
-    public function getRejectionReason() {
-        return $this->rejection_reason;
-    }
-
-    public function setRejectionReason($rejection_reason) {
-        $this->rejection_reason = $rejection_reason;
-    }
-
-    public function getWantedAction() {
-        return $this->wanted_action;
-    }
-
-    public function setWantedAction($wanted_action) {
-        $this->wanted_action = $wanted_action;
-    }
 
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|

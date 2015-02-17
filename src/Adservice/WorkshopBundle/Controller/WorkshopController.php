@@ -17,6 +17,7 @@ use Adservice\WorkshopBundle\Form\WorkshopObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
+use Adservice\WorkshopBundle\Entity\WorkshopStatusHistory;
 
 class WorkshopController extends Controller {
 
@@ -160,6 +161,8 @@ class WorkshopController extends Controller {
                     $newUser->setSalt($salt);
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
+                    $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
+
                     /* MAILING */
                     $mailerUser = $this->get('cms.mailer');
                     $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es'); /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
@@ -233,6 +236,9 @@ class WorkshopController extends Controller {
                 if($find == null or $workshop->getCodeWorkshop() == $last_code)
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+
+                    $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
+
                     $this->saveWorkshop($em, $workshop);
 
                     if    ($this->get('security.context')->isGranted('ROLE_ADMIN'   )) return $this->redirect($this->generateUrl('workshop_list'));
@@ -307,6 +313,40 @@ class WorkshopController extends Controller {
                                                                                              'id_ticket' => $id_ticket,
                                                                                              'form_name' => $form->getName(),
                                                                                              'form'      => $form->createView()));
+    }
+
+     /**
+     * Genera un historial de cambios del taller
+     * @return WorkshopHistory
+     */
+    public function createHistoric($em, $workshop) {
+
+        $history = new WorkshopStatusHistory();
+
+        $history->setCodeWorkshop($workshop->getCodeWorkshop());
+        $history->setName($workshop->getName());
+        $history->setCif($workshop->getCif());
+        $history->setContact($workshop->getContact());
+        $history->setPartner($workshop->getPartner());
+        $history->setShop($workshop->getShop());
+        $history->setInternalCode($workshop->getInternalCode());
+        $history->setActive($workshop->getActive());
+        $history->setAdServicePlus($workshop->getAdServicePlus());
+        $history->setTest($workshop->getTest());
+        $history->setUpdateAt($workshop->getUpdateAt());
+        $history->setLowdateAt($workshop->getLowdateAt());
+        $history->setEndtestAt($workshop->getEndtestAt());
+        $history->setConflictive($workshop->getConflictive());
+        $history->setObservationWorkshop($workshop->getObservationWorkshop());
+        $history->setObservationAssessor($workshop->getObservationAssessor());
+        $history->setObservationAdmin($workshop->getObservationAdmin());
+        $history->setModifiedAt($workshop->getModifiedAt());
+        $history->setModifiedBy($workshop->getModifiedBy());
+        $history->setCreatedAt($workshop->getCreatedAt());
+        $history->setCreatedBy($workshop->getCreatedBy());
+
+        $em->persist($history);
+        $em->flush();
     }
 
     /**
