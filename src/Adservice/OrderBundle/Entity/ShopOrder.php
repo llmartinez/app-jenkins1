@@ -11,7 +11,7 @@ use Adservice\UtilBundle\Entity\Region;
 /**
  * Adservice\OrderBundle\Entity\ShopOrder
  *
- * @ORM\Table(name="shopOrder")
+ * @ORM\Table(name="shop_order")
  * @ORM\Entity
  */
 class ShopOrder {

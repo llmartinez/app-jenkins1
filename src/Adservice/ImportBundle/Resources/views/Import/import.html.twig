@@ -72,7 +72,7 @@
 		{% set next = app.session.get('next') %}
 		<h3> {{ msg  }} </h3>
 		<p>  {{ info }} </p>
-		{# <button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': next }) }}', '_self')"> IMPORTAR {{ next }} </button> #}
+		<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': next }) }}', '_self')"> IMPORTAR {{ next }} </button>
 
 		<script> $(document).ready(function() { window.open('{{ path("import", { "bbdd": next }) }}', '_self') }); </script>
 

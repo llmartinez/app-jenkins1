@@ -56,8 +56,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop-default');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
     	}
 //  ____  _   _  ___  ____       ____  _____ _____ _   _   _ _   _____
 // / ___|| | | |/ _ \|  _ \     |  _ \| ____|  ___/ \ | | | | | |_   _|
@@ -88,8 +88,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
 			$session->set('next',  	'shop');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
     	}
 //  ____  _   _  ___  ____
 // / ___|| | | |/ _ \|  _ \
@@ -118,8 +118,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
     	}
 //  _   _ ____  _____ ____       _    ____
 // | | | / ___|| ____|  _ \     / \  |  _ \
@@ -153,8 +153,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
 			$session->set('next',  	'assessor');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
     	}
 //     _    ____ ____  _____ ____ ____   ___  ____
 //    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
@@ -187,8 +187,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando talleres (entidad Workshop)...');
 			$session->set('next',  	'workshop');
 
-        	return $this->render('ImportBundle:Import:import.html.twig');
-			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
+        	//return $this->render('ImportBundle:Import:import.html.twig');
+			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
