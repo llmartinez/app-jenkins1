@@ -1,6 +1,21 @@
 
 $(document).ready(function() {
 
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_name').click(function() {
+
+            var route   = $('#route').val();
+            var name = $('#flt_name').val();
+            if(name == null) name = '0';
+            var country = $('#flt_country').val();
+            if(country == null) country = '0';
+
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: '0', w_id: '0', country: country, partner: '0', status: '0', name: name });
+
+            window.open(url, "_self");
+    });
+
 	$( "#w_id" ).on( "keydown", function( event ) {
 
 	  	if (event.which == 13) {

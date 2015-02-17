@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0') {
+    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $name='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
@@ -34,20 +34,24 @@ class WorkshopController extends Controller {
             throw new AccessDeniedException();
         }
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != '0') $params[] = array('country', ' = '.$country);
-        }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        if ($name != '0'){
+            $params[] = array('name', " LIKE '%".$name."%'");
+        }else{
+            if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != '0') $params[] = array('country', ' = '.$country);
+            }
+            else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
 
-        if($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if($this->get('security.context')->isGranted('ROLE_ADMIN')) {
 
-            if ($partner != '0') $params[] = array('partner', ' = '.$partner);
+                if ($partner != '0') $params[] = array('partner', ' = '.$partner);
 
-            if ($w_idpartner != '0' and $w_id != '0')
-                $params[] = array('code_workshop', ' = '.$w_id.' AND e.partner = '.$w_idpartner.' ' );
+                if ($w_idpartner != '0' and $w_id != '0')
+                    $params[] = array('code_workshop', ' = '.$w_id.' AND e.partner = '.$w_idpartner.' ' );
 
-            if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-            elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+                if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+            }
         }
 
         if(!isset($params)) $params[] = array();
@@ -74,7 +78,8 @@ class WorkshopController extends Controller {
                                                                              'country'    => $country,
                                                                              'partners'   => $partners,
                                                                              'partner'    => $partner,
-                                                                             'status'     => $status,));
+                                                                             'status'     => $status,
+                                                                             'name'       => $name));
     }
 
     public function newWorkshopAction() {

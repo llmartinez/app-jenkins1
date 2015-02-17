@@ -2,8 +2,8 @@
 #   APDO. RUTAS WORKSHOP     #
 ##############################
 workshop_list:
-    pattern:  /list/{page}/{w_idpartner}/{w_id}/{country}/{partner}/{status}
-    defaults: { _controller: WorkshopBundle:Workshop:list, page: 1 , w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0'  }
+    pattern:  /list/{page}/{w_idpartner}/{w_id}/{country}/{partner}/{status}/{name}
+    defaults: { _controller: WorkshopBundle:Workshop:list, page: 1 , w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0', name: '0'  }
     options:
         expose: true
 
