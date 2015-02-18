@@ -249,8 +249,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
 //  _   _ ____  _____ ____
 // | | | / ___|| ____|  _ \

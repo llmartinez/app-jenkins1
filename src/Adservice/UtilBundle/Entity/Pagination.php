@@ -290,6 +290,8 @@ class Pagination
 
         $consulta = $em ->createQuery($query.$from.$where.$group_by.$order);
 
+        //echo $query.$from.$where.$group_by.$order.'<br>';
+
         $result = $consulta->getResult();
         $result = $result[0];
         $result = $result[1];

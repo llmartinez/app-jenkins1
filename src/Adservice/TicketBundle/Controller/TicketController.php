@@ -121,25 +121,51 @@ class TicketController extends Controller {
         }
         elseif ($option == 'inactive' )
         {
+            // Recupera la fecha del ultimo post de cada ticket del asesor
+
+            if ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN')){
+
+                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
+                $ids = '0';
+                $ids_not = '0';
+                foreach ($consulta->getResult() as $row)
+                {
+                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
+                    $now = new \DateTime(\date("Y-m-d H:i:s"));
+                    $time = new \DateTime(\date($row['time']));
+
+                    $diff = $now->diff($time);
+                    $hours = $diff->h + ($diff->days*24);
+
+                    if ($hours >= 2 and $diff->invert == 1) $ids = $ids.', '.$row['id'];
+                    else             $ids_not = $ids_not.', '.$row['id'];
+                }
+
+                $params[] = array('status', ' = '.$open->getId());
+                $params[] = array('id', ' IN ('.$ids.') AND e.id NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
+            }
             // Recupera la fecha del ultimo post de cada ticket
             // SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
+            else{
+                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
+                $ids = '0';
+                $ids_not = '0';
+                foreach ($consulta->getResult() as $row)
+                {
+                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
+                    $now = new \DateTime(\date("Y-m-d H:i:s"));
+                    $time = new \DateTime(\date($row['time']));
 
-            $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
-            $ids = '0';
-            foreach ($consulta->getResult()as $row)
-            {
-                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                $now = new \DateTime(\date("Y-m-d H:i:s"));
-                $time = new \DateTime(\date($row['time']));
+                    $diff = $now->diff($time);
+                    $hours = $diff->h + ($diff->days*24);
 
-                $diff = $now->diff($time);
-                $hours = $diff->h + ($diff->days*24);
+                    if ($hours >= 2 and $diff->invert == 1) $ids = $ids.', '.$row['id'];
+                    else             $ids_not = $ids_not.', '.$row['id'];
+                }
 
-                if ($hours >= 2) $ids = $ids.', '.$row['id'];
+                $params[] = array('status', ' = '.$open->getId());
+                $params[] = array('id', ' IN ('.$ids.') OR (e.id NOT IN ('.$ids_not.') AND e.assigned_to IS NOT NULL)');
             }
-
-            $params[] = array('status', ' = '.$open->getId());
-            $params[] = array('id', ' IN ('.$ids.')');
         }
         else{
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
@@ -237,6 +263,51 @@ class TicketController extends Controller {
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
 
+        if ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN')){
+
+            $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.assigned_to = '.$security->getToken()->getUser()->getId().' GROUP BY t');
+            $ids = '0';
+            foreach ($consulta->getResult() as $row)
+            {
+                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
+                $now = new \DateTime(\date("Y-m-d H:i:s"));
+                $time = new \DateTime(\date($row['time']));
+
+                $diff = $now->diff($time);
+                $hours = $diff->h + ($diff->days*24);
+
+                if ($hours >= 2 and $diff->invert == 1) $ids = $ids.', '.$row['id'];
+            }
+
+            $params_inactive[] = array('assigned_to', ' = '.$security->getToken()->getUser()->getId());
+            $params_inactive[] = array('status', ' = '.$open->getId());
+            $params_inactive[] = array('id', ' IN ('.$ids.')');
+
+
+            $pagination_inactive = new Pagination(1);
+            $inactive  = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
+
+            // Cuenta los tickets creados sin ningun post sobre ellos en 2 horas
+            $consulta_no_posts = $em->createQuery('SELECT t.id as id, t.modified_at as time FROM TicketBundle:Ticket t WHERE t.assigned_to = '.$security->getToken()->getUser()->getId().' AND t.id NOT IN ('.$ids.')');
+            $ids_no_posts = '0';
+
+            foreach ($consulta_no_posts->getResult() as $row)
+            {
+                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
+                $now = new \DateTime(\date("Y-m-d H:i:s"));
+                $time = new \DateTime(\date($row['time']));
+
+                $diff = $now->diff($time);
+                $hours = $diff->h + ($diff->days*24);
+
+                if ($hours >= 2) $inactive++;
+            }
+
+        }else{
+            $inactive = 0;
+        }
+
+
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
                                                                                        'tickets'    => $tickets,
@@ -246,6 +317,7 @@ class TicketController extends Controller {
                                                                                        'brands'     => $brands,
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
+                                                                                       'inactive'   => $inactive,
                                                                               ));
     }
 
@@ -880,7 +952,15 @@ class TicketController extends Controller {
         if ($user != null and $id_user != 0) {
 
             $ticket->setBlockedBy($user);
+
             UtilController::saveEntity($em, $ticket, $user);
+
+            if ($ticket->getAssignedTo() == null) {
+                $this->assignTicket($ticket, $user);
+            }else {
+                $em->persist($ticket);
+                $em->flush();
+            }
         }else{
             $ticket->setBlockedBy(null);
             $em->persist($ticket);
