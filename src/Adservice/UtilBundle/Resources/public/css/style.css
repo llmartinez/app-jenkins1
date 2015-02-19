@@ -601,3 +601,24 @@ textarea.form-control_ged {
 .prl0 {
     padding-right: 0px !important;
 }
+.pending_application {
+    background: none repeat scroll 0 0 #f00;
+    float: left;
+    line-height: 15px;
+    margin-left: -14px;
+    margin-top: -35px;
+    padding: 5px;
+    position: absolute;
+    z-index: 999;
+    color: #FFFFFF !important;
+}
+.pending_application:hover {
+    color: #FFFFFF !important;
+}
+.pending_application2 {
+    background: none repeat scroll 0 0 #f00;
+    float: right;
+    line-height: 15px;
+    padding: 5px;
+    color: #FFFFFF !important;
+}

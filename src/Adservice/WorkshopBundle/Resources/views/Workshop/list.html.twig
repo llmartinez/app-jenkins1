@@ -53,10 +53,11 @@
              </select>
         </div>
 
-        <div class="col-xs-4 col-md-4 form-group"> <label> {% trans %} name {% endtrans %} </label>
-            <div class="col-xs-10 col-md-10 form-group"> <input type="text" id="flt_name" name="flt_name" class='form-control' placeholder="{% if name != 0 %}{{ name }}{% else %}{% trans %} name {% endtrans %}{% endif %}"></div>
-            <div class="col-xs-2 col-md-2 form-group"><a type="button" id="btn_name" name="btn_name" class='btn btn-primary'><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a></div>
+        <div class="col-xs-3 col-md-3 form-group">
+            <label> {% trans %} name {% endtrans %} </label>
+            <input type="text" id="flt_name" name="flt_name" class='form-control' placeholder="{% trans %} name {% endtrans %}" value="{% if name != '0' %}{{ name }}{% endif %}">
         </div>
+        <div class="col-xs-1 col-md-1 form-group"><a type="button" id="btn_name" name="btn_name" class='btn btn-primary' style="margin-top:20px;margin-left:-77px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a></div>
 
         {% endif %}
     </div>

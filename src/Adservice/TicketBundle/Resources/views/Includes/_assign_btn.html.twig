@@ -47,10 +47,13 @@
     {% else %}
 
         {# Ticket asignado a otro assessor #}
+        {% if ticket.status == 'open' and ticket.blockedBy is not null %}
+
             <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
 
             <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{% trans %} assessor {% endtrans %} </strong>
                                                     {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+        {% endif %}
     {% endif %}
 
     {# se borran los tickets solo si no tienen respuesta (1 post) #}

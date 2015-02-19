@@ -27,6 +27,7 @@ class WorkshopController extends Controller {
      * @throws AccessDeniedException
      */
     public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $name='0') {
+
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
@@ -75,8 +76,10 @@ class WorkshopController extends Controller {
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'  => $workshops,
                                                                              'pagination' => $pagination,
                                                                              'countries'  => $countries,
-                                                                             'country'    => $country,
                                                                              'partners'   => $partners,
+                                                                             'w_idpartner'=> $w_idpartner,
+                                                                             'w_id'       => $w_id,
+                                                                             'country'    => $country,
                                                                              'partner'    => $partner,
                                                                              'status'     => $status,
                                                                              'name'       => $name));

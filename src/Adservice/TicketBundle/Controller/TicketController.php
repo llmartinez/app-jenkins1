@@ -142,7 +142,7 @@ class TicketController extends Controller {
                 }
 
                 $params[] = array('status', ' = '.$open->getId());
-                $params[] = array('id', ' IN ('.$ids.') AND e.id NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
+                $params[] = array('id', ' NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
             }
             // Recupera la fecha del ultimo post de cada ticket
             // SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
@@ -267,6 +267,7 @@ class TicketController extends Controller {
 
             $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.assigned_to = '.$security->getToken()->getUser()->getId().' GROUP BY t');
             $ids = '0';
+            $ids_not = '0';
             foreach ($consulta->getResult() as $row)
             {
                 // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
@@ -277,31 +278,16 @@ class TicketController extends Controller {
                 $hours = $diff->h + ($diff->days*24);
 
                 if ($hours >= 2 and $diff->invert == 1) $ids = $ids.', '.$row['id'];
+                else $ids_not = $ids_not.', '.$row['id'];
             }
 
             $params_inactive[] = array('assigned_to', ' = '.$security->getToken()->getUser()->getId());
             $params_inactive[] = array('status', ' = '.$open->getId());
-            $params_inactive[] = array('id', ' IN ('.$ids.')');
+            $params_inactive[] = array('id', ' NOT IN ('.$ids_not.')');
 
 
             $pagination_inactive = new Pagination(1);
             $inactive  = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
-
-            // Cuenta los tickets creados sin ningun post sobre ellos en 2 horas
-            $consulta_no_posts = $em->createQuery('SELECT t.id as id, t.modified_at as time FROM TicketBundle:Ticket t WHERE t.assigned_to = '.$security->getToken()->getUser()->getId().' AND t.id NOT IN ('.$ids.')');
-            $ids_no_posts = '0';
-
-            foreach ($consulta_no_posts->getResult() as $row)
-            {
-                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                $now = new \DateTime(\date("Y-m-d H:i:s"));
-                $time = new \DateTime(\date($row['time']));
-
-                $diff = $now->diff($time);
-                $hours = $diff->h + ($diff->days*24);
-
-                if ($hours >= 2) $inactive++;
-            }
 
         }else{
             $inactive = 0;
@@ -1047,14 +1033,18 @@ class TicketController extends Controller {
         if($ticket) $tickets = array($ticket);
         else        $tickets = array();
 
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
                                                                                        'brands'     => $brands,
+                                                                                       'countries'  => $countries,
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
+                                                                                       'country'    => 0,
+                                                                                       'inactive'   => 0
                                                                                   ));
     }
 
@@ -1095,8 +1085,9 @@ class TicketController extends Controller {
             }
         }
 
-        $brands = $em->getRepository('CarBundle:Brand')->findAll();
-        $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
+        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $adsplus    = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
@@ -1104,7 +1095,10 @@ class TicketController extends Controller {
                                                                                        'option'     => 'all',
                                                                                        'num_rows'   => 10,
                                                                                        'brands'     => $brands,
+                                                                                       'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
+                                                                                       'country'    => 0,
+                                                                                       'inactive'   => 0
                                                                                   ));
     }
 
