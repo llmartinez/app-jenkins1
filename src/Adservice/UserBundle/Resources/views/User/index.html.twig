@@ -18,7 +18,7 @@
             <a class="btn-menu" id="workshopOrdersList"     href="{{ path("list_orders"             ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                             {% trans %} menu.list_orders       {% endtrans %}
-                                                                                                            {% if length is defined %} ({{ length }})
+                                                                                                            {% if length is defined and length > 0 %}  <div class="pending_application">{{ length }}</div>
                                                                                                             {% endif %}</a>
             <a class="btn-menu" id="popup_list"             href="{{ path("popup_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_popup.png') }}">
@@ -89,7 +89,7 @@
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
-                                                                                                {% if length is defined %} ({{ length }}){% endif %}</a>
+                                                                                                {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                 {% trans %} menu.list_shops         {% endtrans %}</a>

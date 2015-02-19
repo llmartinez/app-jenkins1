@@ -221,8 +221,7 @@ class ImportController extends Controller
 				$newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
 				$newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
 				$newWorkshop->setActive	 				($old_Taller->getActive());
-				$newWorkshop->setContactName 			($old_Taller->getContacto());
-				$newWorkshop->setContactSurname 		('sin-especificar');
+				$newWorkshop->setContact 				($old_Taller->getContacto());
 				$newWorkshop->setTypology 				($typology);
 				$newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
 
@@ -241,6 +240,7 @@ class ImportController extends Controller
 
 				//setAdServicePlus
 				if(isset($partners[$old_Taller->getId()])) $newWorkshop->setAdServicePlus(1);
+				else $newWorkshop->setAdServicePlus(0);
 
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);
 			}
@@ -249,8 +249,8 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
 			$session->set('next',  	'user');
 
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+			//return $this->render('ImportBundle:Import:import.html.twig');
+        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
 //  _   _ ____  _____ ____
 // | | | / ___|| ____|  _ \
