@@ -77,7 +77,7 @@
                             <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"></a>
                         {% endif %}
                         {% if shop.workshops|length == 0 %}
-                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
+                            {# <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin_empty.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a> #}
                         {% else %}
                             <a  title="{% trans %} shop.is_assigned {% endtrans %}"
                                 onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"

@@ -81,9 +81,31 @@ class ShopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         $shopOrder = new ShopOrder();
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $id_partner = '0';
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+               $partners   = '0';
+        }
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -146,6 +168,7 @@ class ShopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
@@ -160,6 +183,30 @@ class ShopOrderController extends Controller {
 
             //si no existe una shopOrder previa la creamos por primera vez a partir del shop original
              $shopOrder = $this->shop_to_shopOrder($shop);
+        }
+        $security = $this->get('security.context');
+        $request = $this->getRequest();
+
+        $shopOrder = new ShopOrder();
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $id_partner = '0';
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+               $partners   = '0';
+        }
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
         $form = $this->createForm(new ShopEditOrderType(), $shopOrder);

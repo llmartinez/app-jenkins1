@@ -352,7 +352,11 @@ kw:						 "kW"
 displacement:			 "Displacement"
 vin:					 "Vin"
 plate_number:			 "Plate Number"
-
+app:					 "Aplications"
+dis:					 "DIS-NET"
+dis-url:				 "http://dis-net.com/home"
+vts:					 "EinaVTS"
+vts-url:				 "http://einavts.com/en/app"
 
 #TICKET
 tickets:					  "Tickets"

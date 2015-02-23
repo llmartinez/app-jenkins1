@@ -102,11 +102,12 @@ class UserController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
-            if ( ! isset($role) and ($option == null or $option == 'all' or $option == 'none') ){
+            if ($option == null or $option == 'all' or $option == 'none') {
                 $role     = $user->getRoles();
                 $role     = $role[0];
                 $role     = $role->getName();
             }
+
             if     ($role == "ROLE_SUPER_ADMIN")  $users_role_super_admin[] = $user;
             elseif ($role == "ROLE_ADMIN")        $users_role_admin[]       = $user;
             elseif ($role == "ROLE_USER")         $users_role_user[]        = $user;
