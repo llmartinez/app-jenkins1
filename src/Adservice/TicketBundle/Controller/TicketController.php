@@ -416,7 +416,6 @@ class TicketController extends Controller {
                             UtilController::saveEntity($em, $post, $user, false);
 
                             $document->setPost($post);
-                            var_dump($document->getUploadRootDir());
                             mkdir($document->getUploadRootDir(), 0775);
 
                             $em->persist($document);
