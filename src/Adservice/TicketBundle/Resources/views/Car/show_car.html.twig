@@ -27,6 +27,7 @@
 	{% if idTecDoc is defined != "" %}
 		<div{% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}>
 			<br>
+			{{ idTecDoc }}
 			<legend>{% trans %} app {% endtrans %}</legend>
 
 			<a href="{% trans %}dis-url{% endtrans %}/{{idTecDoc}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>

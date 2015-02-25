@@ -115,7 +115,7 @@ class Document {
         return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
-    protected function getUploadRootDir() {
+    public function getUploadRootDir() {
         // la ruta absoluta del directorio donde se deben
         // guardar los archivos cargados
         return __DIR__ . '/../../../../' . $this->getUploadDir();

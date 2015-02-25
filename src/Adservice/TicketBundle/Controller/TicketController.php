@@ -416,6 +416,9 @@ class TicketController extends Controller {
                             UtilController::saveEntity($em, $post, $user, false);
 
                             $document->setPost($post);
+                            var_dump($document->getUploadRootDir());
+                            mkdir($document->getUploadRootDir(), 0775);
+
                             $em->persist($document);
                             $em->flush();
                         }
@@ -563,7 +566,9 @@ class TicketController extends Controller {
         $user     = $security->getToken()->getUser();
         $car      = $ticket->getCar();
         $version  = $car->getVersion();
-        $idTecDoc = $version->getIdTecDoc();
+        $model    = $car->getModel();
+        if (isset($version)) $idTecDoc = $version->getIdTecDoc();
+        else $idTecDoc = $model->getIdTecDoc();
 
         $post     = new Post();
         $document = new Document();
@@ -629,7 +634,7 @@ class TicketController extends Controller {
                 and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                     $str_len = strlen($post->getMessage());
-                    if ($security->isGranted('ROLE_ASSESSOR') or $str_len >= 250 ) {
+                    if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
                         //Define Post
                         $post = UtilController::newEntity($post, $user);
                         $post->setTicket($ticket);
