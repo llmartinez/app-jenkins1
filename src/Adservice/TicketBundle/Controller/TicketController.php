@@ -564,10 +564,11 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
         $car      = $ticket->getCar();
-        $version  = $car->getVersion();
-        $model    = $car->getModel();
-        if (isset($version)) $idTecDoc = $version->getIdTecDoc();
-        else $idTecDoc = $model->getIdTecDoc();
+        $version  = $car->getVersion()->getId();
+        $model    = $car->getModel()->getId();
+        $brand    = $car->getBrand()->getid();
+        if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
+        else $idTecDoc = "";
 
         $post     = new Post();
         $document = new Document();
@@ -689,6 +690,9 @@ class TicketController extends Controller {
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems,
                                                                             'form_name' => $formP->getName(),
+                                                                            'brand'     => $brand,
+                                                                            'model'     => $model,
+                                                                            'version'   => $version,
                                                                             'idTecDoc'  => $idTecDoc )));
         }
 
@@ -702,6 +706,9 @@ class TicketController extends Controller {
                         'systems'   => $systems,
                         'sentences' => $sentences,
                         'form_name' => $formP->getName(),
+                        'brand'     => $brand,
+                        'model'     => $model,
+                        'version'   => $version,
                         'idTecDoc'  => $idTecDoc );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
