@@ -354,6 +354,12 @@ displacement:			 "Cilindrada"
 vin:					 "Número de Bastidor"
 plate_number:			 "Matrícula"
 
+#APP
+app:					 "Aplicaciones"
+dis:					 "DIS-NET"
+dis-url:				 "http://dis-net.com/home"
+vts:					 "EinaVTS"
+vts-url:				 "http://einavts.com/es/app"
 
 #TICKET
 tickets:					  "Tickets"

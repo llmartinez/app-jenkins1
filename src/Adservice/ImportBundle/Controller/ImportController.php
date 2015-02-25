@@ -67,23 +67,18 @@ class ImportController extends Controller
 
 		elseif( $bbdd == 'shop-default' )
 		{
-			$old_Socios   = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); 	// PARTNERS //
-			$locations    = $this->getLocations($em);																						//MAPPING LOCATIONS
-			$all_partners = $em->getRepository('PartnerBundle:Partner')->findAll();															//MAPPING PARTNERS
+			$old_partner_default = $em_old->getRepository('ImportBundle:old_Socio')->find(9999);   							// OLD PARTNER
+			$partner_default     = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => 9999));   // PARTNER
+			$locations           = $this->getLocations($em);								       							// MAPPING LOCATIONS
 
-			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;		}
+			$newShop = UtilController::newEntity(new Shop(), $sa);
+			$newShop->setName('...');
+			//$newShop->setCodeShop($old_Socio->getId());
+			$newShop->setPartner($partner_default);
+			$newShop->setActive('1');
+			$newShop = $this->setContactFields($em, $old_partner_default, $newShop, $locations);
+			UtilController::saveEntity($em, $newShop, $sa, true);
 
-			foreach ($old_Socios as $old_Socio)
-			{
-				$newShop = UtilController::newEntity(new Shop(), $sa);
-				$newShop->setName('...');
-				//$newShop->setCodeShop($old_Socio->getId());
-				$newShop->setPartner($partners[$old_Socio->getId()]);
-				$newShop->setActive('1');
-				$newShop = $this->setContactFields($em, $old_Socio, $newShop, $locations);
-				UtilController::saveEntity($em, $newShop, $sa,false);
-			}
-			$em->flush();
 			$session->set('msg' ,	'Tiendas por defecto importadas correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
 			$session->set('next',  	'shop');
@@ -203,6 +198,7 @@ class ImportController extends Controller
 			$locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
 			$all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
 			$all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+			$shop_default 	 = $em->getRepository('PartnerBundle:Shop'     )->findOneByName('...');	//MAPPING SHOPS
 			$typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
 			$all_adsplus     = $em->getRepository('WorkshopBundle:ADSPlus' )->findAll();			//MAPPING AD-SERVICE PLUS
 			//find($old_Taller->getTipologia());
@@ -233,10 +229,14 @@ class ImportController extends Controller
 					$newWorkshop->setPartner ($partners[$idSocio]);
 				}
 				elseif($idSocio >= 60 AND $idSocio <= 78){
-						 $newWorkshop->setShop    ($shops[$idSocio]);
-						 $newWorkshop->setPartner ($partners['28']);	//Tiendas asociadas con VEMARE, S.L.
-					}
-				else 	 $newWorkshop->setPartner ($partners[9999]); //SIN SOCIO
+						 $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
+
+						 if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
+						 else                         $newWorkshop->setShop($shop_default);   //Tienda por defecto => '...'
+				}else{
+						 $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
+						 $newWorkshop->setShop   ($shop_default);   //Tienda por defecto => '...'
+				}
 
 				//setAdServicePlus
 				if(isset($partners[$old_Taller->getId()])) $newWorkshop->setAdServicePlus(1);
@@ -288,6 +288,7 @@ class ImportController extends Controller
 				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
  			}
+			$em->flush();
  			if(isset($users_email_log)) {
 				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
 				$session->set('info',  	'Generarando excel con los ususarios erroneos...

@@ -84,14 +84,16 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
         if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->get('security.context')->getToken()->getUser()->getCountry()->getId()));
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
         }
-        else { $id_partner = $this->get('security.context')->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
                $partners   = '0';
         }
 
@@ -100,6 +102,21 @@ class WorkshopOrderController extends Controller {
         else                  $code = 0;
 
         $request = $this->getRequest();
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+
         $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -163,6 +180,7 @@ class WorkshopOrderController extends Controller {
                                                                                      'form_name'        => $form->getName(),
                                                                                      'form'             => $form->createView(),
                                                                                      'partners'         => $partners,
+                                                                                     //'shops'            => $shops,
                                                                                      'id_partner'       => $id_partner,
                                                                                      'code'             => $code));
     }
@@ -185,6 +203,7 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
         $request = $this->getRequest();
 
 
@@ -201,6 +220,30 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+            $id_partner = '0';
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+               $partners   = '0';
+        }
+
+        $partner = $workshop->getPartner();
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -211,7 +254,7 @@ class WorkshopOrderController extends Controller {
 	    if(isset($form_errors[0])) {
                 $form_errors = $form_errors[0];
                 $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
+            }else{
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
@@ -585,7 +628,7 @@ class WorkshopOrderController extends Controller {
 
                 /* MAILING */
                 $mailerUser = $this->get('cms.mailer');
-                $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
+                $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
                 $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
                 $mailerUser->setFrom('noreply@grupeina.com');
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
@@ -596,7 +639,7 @@ class WorkshopOrderController extends Controller {
 
             /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshop->getCreatedBy()->getEmail1());*/
+            $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshop->getCreatedBy()->getEmail1());*/
             $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,

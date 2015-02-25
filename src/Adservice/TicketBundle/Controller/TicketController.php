@@ -125,7 +125,7 @@ class TicketController extends Controller {
 
             if ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN')){
 
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
+                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t.id');
                 $ids = '0';
                 $ids_not = '0';
                 foreach ($consulta->getResult() as $row)
@@ -140,7 +140,6 @@ class TicketController extends Controller {
                     if ($hours >= 2 and $diff->invert == 1) $ids = $ids.', '.$row['id'];
                     else             $ids_not = $ids_not.', '.$row['id'];
                 }
-
                 $params[] = array('status', ' = '.$open->getId());
                 $params[] = array('id', ' NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
             }
@@ -292,7 +291,6 @@ class TicketController extends Controller {
         }else{
             $inactive = 0;
         }
-
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
                                                                                        'pagination' => $pagination,
@@ -563,6 +561,9 @@ class TicketController extends Controller {
         $request  = $this->getRequest();
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
+        $car      = $ticket->getCar();
+        $version  = $car->getVersion();
+        $idTecDoc = $version->getIdTecDoc();
 
         $post     = new Post();
         $document = new Document();
@@ -628,7 +629,7 @@ class TicketController extends Controller {
                 and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
                     $str_len = strlen($post->getMessage());
-                    if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 150 ) {
+                    if ($security->isGranted('ROLE_ASSESSOR') or $str_len >= 250 ) {
                         //Define Post
                         $post = UtilController::newEntity($post, $user);
                         $post->setTicket($ticket);
@@ -683,17 +684,21 @@ class TicketController extends Controller {
                                                                             'form_name' => $formP->getName(),
                                                                             'ticket'    => $ticket,
                                                                             'systems'   => $systems,
-                                                                            'form_name' => $formP->getName(), )));
+                                                                            'form_name' => $formP->getName(),
+                                                                            'idTecDoc'  => $idTecDoc )));
         }
 
-        $sentences = $em->getRepository('TicketBundle:Sentence')->findAll();
+        if ($security->isGranted('ROLE_ADMIN'))
+             $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
+        else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
 
         $array = array( 'formP'     => $formP->createView(),
                         'formD'     => $formD->createView(),
                         'ticket'    => $ticket,
                         'systems'   => $systems,
                         'sentences' => $sentences,
-                        'form_name' => $formP->getName(), );
+                        'form_name' => $formP->getName(),
+                        'idTecDoc'  => $idTecDoc );
 
         if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
