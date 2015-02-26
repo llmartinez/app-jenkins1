@@ -40,7 +40,7 @@ class ImportController extends Controller
     	if( $bbdd == 'partner' )
     	{
     		$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
-			$locations  = $this->getLocations($em);																						 //MAPPING LOCATIONS
+			$locations  = $this->getLocations($em);																						 // MAPPING LOCATIONS
 
 			foreach ($old_Socios as $old_Socio)
 			{
