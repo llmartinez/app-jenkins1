@@ -27,11 +27,12 @@
 	{% if idTecDoc is defined != "" %}
 		<div{% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}>
 			<br>
+			{{brand}}/{{model}}/{{idTecDoc}}
 			<legend>{% trans %} app {% endtrans %}</legend>
 
 			<a href="{% trans %}dis-url{% endtrans %}/{{idTecDoc}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
 
-			<a href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{version}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+			<a href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{idTecDoc}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
 		</div>
 
 	{% elseif model is defined %}

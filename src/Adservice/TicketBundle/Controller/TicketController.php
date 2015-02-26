@@ -566,7 +566,7 @@ class TicketController extends Controller {
         $car      = $ticket->getCar();
         $version  = $car->getVersion()->getId();
         $model    = $car->getModel()->getId();
-        $brand    = $car->getBrand()->getid();
+        $brand    = $car->getBrand()->getId();
         if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
         else $idTecDoc = "";
 

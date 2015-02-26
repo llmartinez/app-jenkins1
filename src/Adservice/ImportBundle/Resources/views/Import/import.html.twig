@@ -13,7 +13,7 @@
 			<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': 'partner'         }) }}', '_self')"> COMENZAR IMPORTACIÓN     </button>
 		</div>
 		<div align="center">
-			<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': 'shop-default'    }) }}', '_self')"> IMPORTAR SHOP-DEF        	  </button>
+			<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': 'shop-default'    }) }}', '_self')"> IMPORTAR SHOP-DEF        </button>
 			<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': 'shop'            }) }}', '_self')"> IMPORTAR TIENDAS         </button>
 			<button class="btn-menu" onclick="window.open('{{ path('import', { 'bbdd': 'ad'              }) }}', '_self')"> IMPORTAR AD              </button>
 
@@ -24,7 +24,7 @@
 		<div align="center">
 			<button class="btn-menu" onclick="window.open('{{ path('lock_cars',  { 'bbdd': 'old_cars',   }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
 			<button class="btn-menu" onclick="window.open('{{ path('incidences', { 'bbdd': 'incidences', }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>
-			<button class="btn-menu" onclick="window.open('{{ path('test_mail'                            ) }}', '_self')"> TEST MAILING         </button>
+			<button class="btn-menu" onclick="window.open('{{ path('test_mail'                            ) }}', '_self')"> TEST MAILING         	 </button>
 		</div>
 
 	{% elseif bbdd == 'complete' %}
@@ -47,8 +47,7 @@
 
 		{% if num is defined %}
 			<h3> Importando incidencias... <span class="glyphicon glyphicon-arrow-right">{{ num }}</h3>
-			<script> alert('ok'); </script>
-			{#<script> window.open('{{ path("incidences", { "bbdd": "incidences", "num": num }) }}', '_self'); </script>#}
+			<script>window.open('{{ path("incidences", { "bbdd": "incidences", "num": num }) }}', '_self'); </script>
 		{% endif %}
 
 	{% elseif bbdd == 'imported' %}
