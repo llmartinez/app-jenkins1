@@ -29,6 +29,8 @@ workshop_observation:
 diagnosis_machine_list:
     pattern:  /diag_list/{page}/{country}
     defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none'  }
+    options:
+        expose: true
 
 diagnosis_machine_edit:
     pattern: /diag_edit/{id}
@@ -44,6 +46,8 @@ diagnosis_machine_edit:
 typology_list:
     pattern:  /typo_list/{page}/{country}
     defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1 , country: 'none'  }
+    options:
+        expose: true
 
 typology_edit:
     pattern: /typo_edit/{id}

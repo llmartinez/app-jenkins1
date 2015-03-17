@@ -8,6 +8,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\WorkshopBundle\Entity\Workshop;
+use Adservice\WorkshopBundle\Entity\ADSPlus;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\TicketBundle\Entity\System;
 use Adservice\TicketBundle\Entity\Subsystem;
@@ -193,19 +194,19 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'workshop' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();	// WORKSHOP	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findAll();	    // WORKSHOP	//
+			$all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
 
 			$locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
 			$all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
 			$all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
 			$shop_default 	 = $em->getRepository('PartnerBundle:Shop'     )->findOneByName('...');	//MAPPING SHOPS
 			$typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
-			$all_adsplus     = $em->getRepository('WorkshopBundle:ADSPlus' )->findAll();			//MAPPING AD-SERVICE PLUS
 			//find($old_Taller->getTipologia());
 
+			foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
 			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
 			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
-			foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
 			//var_dump($all_shops);die;
 			foreach ($old_Talleres as $old_Taller)
 			{
@@ -239,7 +240,20 @@ class ImportController extends Controller
 				}
 
 				//setAdServicePlus
-				if(isset($partners[$old_Taller->getId()])) $newWorkshop->setAdServicePlus(1);
+				if(isset($adsplus[$old_Taller->getId()])) {
+					$newWorkshop->setAdServicePlus(1);
+
+					$adsp = $adsplus[$old_Taller->getId()];
+					$newADSPlus = new ADSPlus();
+					$newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
+					$newADSPlus->setAltaInicial($adsp->getAltaInicial());
+					$newADSPlus->setUltAlta($adsp->getUltAlta());
+					$newADSPlus->setBaja($adsp->getBaja());
+					$newADSPlus->setContador($adsp->getContador());
+					$newADSPlus->setActive($adsp->getActive());
+
+        			$em->persist($newADSPlus);
+				}
 				else $newWorkshop->setAdServicePlus(0);
 
 				UtilController::saveEntity($em, $newWorkshop, $sa, false);

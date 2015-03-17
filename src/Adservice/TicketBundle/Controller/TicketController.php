@@ -564,9 +564,9 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
         $car      = $ticket->getCar();
-        $version  = $car->getVersion()->getId();
-        $model    = $car->getModel()->getId();
-        $brand    = $car->getBrand()->getId();
+        $version  = $car->getVersion();
+        $model    = $car->getModel()->getIdTecDoc();
+        $brand    = $car->getBrand()->getIdTecDoc();
         if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
         else $idTecDoc = "";
 
@@ -1103,7 +1103,8 @@ class TicketController extends Controller {
 
         $brands     = $em->getRepository('CarBundle:Brand')->findAll();
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
-        $adsplus    = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
+        if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
+        else $adsplus = null;
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
