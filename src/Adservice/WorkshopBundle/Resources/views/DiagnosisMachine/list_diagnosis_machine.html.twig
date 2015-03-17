@@ -39,9 +39,8 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/diagnosis_machine.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
-        });
-    </script>
+
+    {% if country != 'none' %}
+        <script> $(document).ready(function() { $("#flt_country").val('{{ country }}');});</script>
+    {% endif %}
 {% endblock %}

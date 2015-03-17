@@ -293,8 +293,13 @@ class Pagination
         //echo $query.$from.$where.$group_by.$order.'<br>';
 
         $result = $consulta->getResult();
-        $result = $result[0];
-        $result = $result[1];
+
+        if(isset($result[0])) {
+            $result = $result[0];
+            $result = $result[1];
+        }else{
+            $result = 0;
+        }
 
         return $result;
     }
