@@ -35,6 +35,13 @@ class Country
      */
     private $lang;
 
+    /**
+     * @var string $short_name
+     *
+     * @ORM\Column(name="short_name", type="string", length=255)
+     */
+    private $short_name;
+
 
     /**
      * Get id
@@ -84,6 +91,26 @@ class Country
     public function getLang()
     {
         return $this->lang;
+    }
+
+    /**
+     * Set short_name
+     *
+     * @param string $short_name
+     */
+    public function setShortName($short_name)
+    {
+        $this->short_name = $short_name;
+    }
+
+    /**
+     * Get short_name
+     *
+     * @return string
+     */
+    public function getShortName()
+    {
+        return $this->short_name;
     }
 
     public function __toString() {
