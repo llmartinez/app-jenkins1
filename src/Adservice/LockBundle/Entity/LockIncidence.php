@@ -38,7 +38,7 @@ class LockIncidence {
     /**
      * @var string $asesor
      *
-     * @ORM\Column(name="asesor", type="string", length=255, nullable="true")
+     * @ORM\Column(name="asesor", type="string", length=255, nullable=true)
      */
     private $asesor;
 
