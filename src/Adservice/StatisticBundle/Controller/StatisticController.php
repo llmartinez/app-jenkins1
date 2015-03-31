@@ -139,7 +139,7 @@ class StatisticController extends Controller {
             if($security->isGranted('ROLE_SUPER_ADMIN')){
                 if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
             }else{
-                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+                $params[] = array('id != 0 AND w.country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
             }
 
             //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
@@ -151,17 +151,29 @@ class StatisticController extends Controller {
 
             $statistic->setResults($result);
         }
+        //select partial u.{id,name} from MyApp\Domain\User u
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
-            $partners  = $em->getRepository('PartnerBundle:Partner')->findAll();
-            $shops     = $em->getRepository('PartnerBundle:Shop'     )->findAll();
-            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
-            $typologies= $em->getRepository('WorkshopBundle:Typology')->findAll();
+
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t");
+            $partners   = $qp->getResult();
+            $shops      = $qs->getResult();
+            $workshops  = $qw->getResult();
+            $typologies = $qt->getResult();
         }else{
-            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
-            $shops     = $em->getRepository('PartnerBundle:Shop'     )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
-            $workshops = $em->getRepository('WorkshopBundle:Workshop')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
-            $typologies= $em->getRepository('WorkshopBundle:Typology')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $country = $security->getToken()->getUser()->getCountry()->getId();
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p where p.country = ".$country." ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s where s.country = ".$country." ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w where w.country = ".$country." ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t where t.country = ".$country." ");
+            $partners   = $qp->getResult();
+            $shops      = $qs->getResult();
+            $workshops  = $qw->getResult();
+            $typologies = $qt->getResult();
+
         }
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 

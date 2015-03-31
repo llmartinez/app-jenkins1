@@ -16,15 +16,7 @@
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
         {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.editTicket.createdby {% endtrans %}
-                                                                   <h3>
-                                                                        {% trans %} admin {% endtrans %}
-                                                                        {{ ticket.modifiedBy.name }}
-                                                                    </h3>
         {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} mail.editTicket.createdby {% endtrans %}
-                                                                   <h3>
-                                                                        {% trans %} assessor {% endtrans %}
-                                                                        {{ ticket.modifiedBy.name }}
-                                                                    </h3>
         {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.editTicket.createdby.user  {% endtrans %}
         {% endif %}
     </td></tr>

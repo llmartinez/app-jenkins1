@@ -1,17 +1,21 @@
 # -- Symfony2 -----------------------------------------
 # -- app/bootstrap.php.cache
 # -- app/bootstrap_cache.php.cache
-app/build/*
-app/config/parameters.ini
+/app/build/*
+/app/config/parameters.ini
 # -- app/config/parameters_test.ini.dist
-app/config/parameters.yml
-app/cache/*
-app/logs/*
+/app/config/parameters.yml
+/app/cache/*
+/app/logs/*
 vendor/*
-web/bundles/*
-web/css/*
-web/js/*
-web/uploads/*
+/web/bundles/*
+/web/css/*
+/web/js/*
+/web/uploads/*
+
+# -- Capifony ---
+/app/config/*.rb
+/Capfile
 
 # -- Scripts para la carga de schema y fixtures -------
 # -- data/scripts
