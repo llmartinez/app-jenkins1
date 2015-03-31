@@ -14,10 +14,12 @@
             <legend>{% trans %} solution {% endtrans %}</legend>
             {{ form_widget(form.solution, { 'attr': {'class': 'form-control'} }) }}
 
+        {% if not is_granted('ROLE_ASSESSOR') %}
             <div id="sol_other">
                 <label> {% trans %} description {% endtrans %} </label>
                 <input type="text" id="sol_other_txt" name="sol_other_txt" class="form-control">
             </div>
+        {% endif %}
         </div>
 
         {{ form_rest(form) }}

@@ -80,6 +80,7 @@ class DiagnosisMachineController extends Controller {
                     }
                 if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
+                    //$diagnosis_machine->setName($diagnosis_machine->getName().' ('.$diagnosis_machine->getCountry()->getShortName().')');
                     $this->saveDiagnosisMachine($em, $diagnosis_machine);
                     return $this->redirect($this->generateUrl('diagnosis_machine_list'));
                 }

@@ -21,10 +21,6 @@
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
         {% if     workshopOrder.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.removeOrder.createdby {% endtrans %}
-                                                                   <h3>
-                                                                        {% trans %} admin {% endtrans %}
-                                                                        {{ workshopOrder.modifiedBy.name }}
-                                                                    </h3>
         {% elseif workshopOrder.modifiedBy.roles[0] == 'ROLE_AD'     %} {% trans %} mail.removeOrder.createdby.user  {% endtrans %}
         {% endif %}
     </td></tr>

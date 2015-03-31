@@ -273,7 +273,7 @@
 
             <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
-        {% else %}
+        {% elseif type == 'last-tickets' %}
 
         <legend> {% trans %} statistic.general {% endtrans %}
 
@@ -343,6 +343,75 @@
 
             <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
+        {% else %}
+            <legend> {% trans %} statistic.general {% endtrans %}
+
+            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
+            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            {% endif %} </legend>
+
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
+            </div>
+            <div class="col-xs-86 col-md-6 form-group">
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
+            </div>
+
+            <legend> <button class="btn btn-primary" id="btn_search_last_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.last_tickets {% endtrans %}</button>
+                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
+                <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            </legend>
+
+            <table class="table table-hover table-list-search">
+                <thead>
+                    <tr>
+                        <th>{% trans %} code     {% endtrans %}</th>
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                        <th>{% trans %} partner  {% endtrans %}</th>
+                        <th>{% trans %} ticket   {% endtrans %}</th>
+                        <th>{% trans %} status   {% endtrans %}</th>
+                        <th>                                   </th>
+                        <th>{% trans %} date     {% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for ticket in statistic.results %}
+                    <tr>
+                        <td>{{ ticket.workshop.partner.codePartner }}, {{ ticket.workshop.codeWorkshop }}</td>
+                        <td>{{ ticket.workshop.name|length > 25 ? ticket.workshop.name|slice(0, 25) ~ '...' : ticket.workshop.name }}
+                            {% if ticket.workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
+                        </td>
+                        <td title="{{ticket.workshop.partner}}">
+                            {{ ticket.workshop.partner|length > 25 ? ticket.workshop.partner|slice(0, 25) ~ '...' : ticket.workshop.partner }}
+                        </td>
+                        <td title="{{ticket.description}}">   {{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description }}</td>
+                        <td>{{ ticket.status | trans            }}</td>
+                        <td><a href="{{ path('showTicket', {'id': ticket.id}) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                        <td>{{ ticket.createdAt | date("d/m/y") }}</td>
+                    </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
         {% endif %}
     {% endif %}
 
