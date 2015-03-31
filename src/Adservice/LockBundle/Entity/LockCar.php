@@ -24,7 +24,7 @@ class LockCar {
     /**
      * @var string $oldId
      *
-     * @ORM\Column(name="old_id", type="string", length=255, nullable="true")
+     * @ORM\Column(name="old_id", type="string", length=255, nullable=true)
      */
     private $oldId;
 
@@ -52,21 +52,21 @@ class LockCar {
     /**
      * @var string $year
      *
-     * @ORM\Column(name="year", type="string", length=255, nullable="true")
+     * @ORM\Column(name="year", type="string", length=255, nullable=true)
      */
     private $year;
 
     /**
      * @var string $vin
      *
-     * @ORM\Column(name="vin", type="string", length=255, nullable="true")
+     * @ORM\Column(name="vin", type="string", length=255, nullable=true)
      */
     private $vin;
 
     /**
      * @var string $motor
      *
-     * @ORM\Column(name="motor", type="string", length=255, nullable="true")
+     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
      */
     private $motor;
 

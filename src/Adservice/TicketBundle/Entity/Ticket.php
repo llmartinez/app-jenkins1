@@ -39,8 +39,7 @@ class Ticket {
     /**
      * @var string $blocked_by
      *
-     * @ORM\Column(nullable="true")
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User", nullable=true)
      */
     private $blocked_by;
 
@@ -89,7 +88,7 @@ class Ticket {
     /**
      * @var string $solution
      *
-     * @ORM\Column(name="solution", type="string", length=255, nullable="true")
+     * @ORM\Column(name="solution", type="string", length=255, nullable=true)
      */
     private $solution;
 

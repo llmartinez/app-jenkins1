@@ -44,42 +44,42 @@ class Car
     /**
      * @var integer $year
      *
-     * @ORM\Column(name="year", type="string", length=255, nullable="true")
+     * @ORM\Column(name="year", type="string", length=255, nullable=true)
      */
     private $year;
 
     /**
      * @var integer $motor
      *
-     * @ORM\Column(name="motor", type="string", length=255, nullable="true")
+     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
      */
     private $motor;
 
     /**
      * @var integer $kW
      *
-     * @ORM\Column(name="kW", type="decimal", nullable="true")
+     * @ORM\Column(name="kW", type="decimal", nullable=true)
      */
     private $kW;
 
     /**
      * @var integer $displacement
      *
-     * @ORM\Column(name="displacement", type="decimal", nullable="true")
+     * @ORM\Column(name="displacement", type="decimal", nullable=true)
      */
     private $displacement;
 
     /**
      * @var string $vin
      *
-     * @ORM\Column(name="vin", type="string", length=255, nullable="true")
+     * @ORM\Column(name="vin", type="string", length=255, nullable=true)
      */
     private $vin;
 
     /**
      * @var string $plateNumber
      *
-     * @ORM\Column(name="plateNumber", type="string", length=255, nullable="true")
+     * @ORM\Column(name="plateNumber", type="string", length=255, nullable=true)
      */
     private $plateNumber;
 
