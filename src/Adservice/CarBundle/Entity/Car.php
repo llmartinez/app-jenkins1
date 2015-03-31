@@ -131,7 +131,6 @@ class Car
     /**
      * Set brand
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      */
     public function setBrand($brand)
     {
@@ -151,7 +150,6 @@ class Car
     /**
      * Set model
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
      */
     public function setModel($model)
     {
@@ -171,7 +169,6 @@ class Car
     /**
      * Set version
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
      */
     public function setVersion($version)
     {

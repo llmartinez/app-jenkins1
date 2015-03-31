@@ -39,7 +39,8 @@ class Ticket {
     /**
      * @var string $blocked_by
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User", nullable=true)
+     * @ORM\Column(nullable=true)
+     * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
     private $blocked_by;
 

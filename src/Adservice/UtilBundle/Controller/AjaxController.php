@@ -172,7 +172,7 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_version = $petition->request->get('id_version');
-        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+        $version = $em->getRepository('CarBundle:Version')->find($id_version[0]);
 
         if(isset($version)) $json[] = $version->to_json();
         else                $json   = array( 'error' => 'No hay coincidencias');
@@ -265,19 +265,24 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_system = $petition->request->get('id_system');
-        $system = $em->getRepository('TicketBundle:System')->find($id_system);
-        $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
+        if (sizeOf($id_system) == 1 and $id_system != "") {
+        
+            $system = $em->getRepository('TicketBundle:System')->find($id_system[0]);
+            $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
 
-        $size = sizeOf($subsystems);
-        if($size > 0) {
-            $j = 0;
-            foreach ($subsystems as $subsystem) {
-                $json[] = $subsystem->to_json();
-                $json[$j]['name'] = $this->get('translator')->trans($json[$j]['name']);
-                $j++;
+            $size = sizeOf($subsystems);
+            if($size > 0) {
+                $j = 0;
+                foreach ($subsystems as $subsystem) {
+                    $json[] = $subsystem->to_json();
+                    $json[$j]['name'] = $this->get('translator')->trans($json[$j]['name']);
+                    $j++;
+                }
+            }else{
+                    $json = array( 'error' => 'No hay coincidencias');
             }
         }else{
-                $json = array( 'error' => 'No hay coincidencias');
+            $json = array( 'error' => 'No hay coincidencias');
         }
         //var_dump($json);
         return new Response(json_encode($json), $status = 200);
