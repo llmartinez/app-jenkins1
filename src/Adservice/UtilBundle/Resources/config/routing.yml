@@ -38,7 +38,7 @@ shops_from_partner:
 
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}
-    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''} }
+    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}
     options:
         expose: true
 
