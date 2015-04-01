@@ -73,4 +73,5 @@
 [FOSJsRoutingBundle]
     git=git://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git
     target=/bundles/FOS/JsRoutingBundle
+    version=1.2.0
     
