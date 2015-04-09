@@ -23,7 +23,7 @@ class LoginController extends Controller {
             $ub = "MSIE";
         }
 
-        if(!$this->get('cms.isMSIE')->isMSIE($request)){
+        if(!$this->get('isMSIE')->isMSIE($request)){
             // obtiene el error de inicio de sesión si lo hay
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
