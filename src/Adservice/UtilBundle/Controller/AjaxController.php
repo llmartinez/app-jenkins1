@@ -267,7 +267,7 @@ class AjaxController extends Controller
         $id_system = $petition->request->get('id_system');
 
         if (sizeOf($id_system) == 1 and $id_system != "") {
-        
+
             $system = $em->getRepository('TicketBundle:System')->find($id_system[0]);
             $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
 

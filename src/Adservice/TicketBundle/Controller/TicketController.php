@@ -483,7 +483,7 @@ class TicketController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+                $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                 $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
@@ -541,7 +541,7 @@ class TicketController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+        $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
@@ -670,14 +670,14 @@ class TicketController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+                        $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                         $mailer->sendMailToSpool();
 
                         if (!$security->isGranted('ROLE_ASSESSOR')) {
-                            $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getAssignedTo()->getEmail1());*/
+                            $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getAssignedTo()->getEmail1());*/
                             $mailer->sendMailToSpool();
                         }
                         //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
@@ -800,7 +800,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+                        $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
                         $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
@@ -843,7 +843,7 @@ class TicketController extends Controller {
         UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+            $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
