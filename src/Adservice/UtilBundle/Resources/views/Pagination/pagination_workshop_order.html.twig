@@ -6,7 +6,8 @@
     {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
-    <div id="pagination"  class="pagination_content" data-total="{{ totalpag }}">
+    <div id="pagination"  class="pagination_content">
+        <input type="hidden" id="total" value="{{ totalpag }}">
     	<input type="hidden" id="route" name="route" value="workshopOrder_listWorkshops">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
