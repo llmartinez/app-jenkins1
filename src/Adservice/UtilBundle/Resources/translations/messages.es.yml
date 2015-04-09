@@ -56,6 +56,8 @@ error.same_password:	 "Las contraseñas no coinciden"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
+error.access.IE:		 "Es imposible acceder desde Internet Explorer."
+error.access.IE2:		 "Por la compleja funcionalidad se requiere el acceso desde navegadores standards como Mozilla Firefox, Google Chrome o Apple Safari."
 
 #ENTITY
 role:					 "Rol"
