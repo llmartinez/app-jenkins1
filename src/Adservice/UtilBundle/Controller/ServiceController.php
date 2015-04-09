@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Container;
 class ServiceController {
     protected $container;
 
-    public function __construct(Container $container){
+    public function __construct(Container $container=null){
         $this->container = $container;
     }
 
@@ -34,4 +34,16 @@ class ServiceController {
 //        var_dump($user_locale);
 //        die;
     }
+
+    public function isMSIE($request){
+
+        $u_agent = $request->headers->get('user-agent');
+        if((preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) || (preg_match("/(Trident\/(\d{2,}|7|8|9)(.*)rv:(\d{2,}))|(MSIE\ (\d{2,}|8|9)(.*)Tablet\ PC)|(Trident\/(\d{2,}|7|8|9))/", $u_agent))) {
+        //if(preg_match('/(?i)msie [1-9]/',$request->headers->get('user-agent'))){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
+

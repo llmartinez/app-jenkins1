@@ -55,6 +55,9 @@ change_password.error:   "Incorrect Password. Enter the current password correct
 error.same_password:	 "The passwords don't match"
 error.length_password:	 "The password must have 8 characters at least"
 error.old_password:	 	 "The password inserted don't match with the actual password"
+error.access.IE:		 "Browser not compatible"
+error.access.IE2:		 "Unable to access with the Internet Explorer browser."
+error.access.IE3:		 "For the complex functionality requires access to standards-compliant browsers such as Mozilla Firefox, Google Chrome or Apple Safari."
 
 #ENTITY
 role:					 "Role"

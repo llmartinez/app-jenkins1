@@ -8,6 +8,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: setDefaultLanguage }
 
+    isMSIE:
+        class: Adservice\UtilBundle\Controller\ServiceController
+
 #    my.listener:
 #        class: Adservice\UtilBundle\Listener\EntityUtilListener
 #        arguments: ['@service_container']
