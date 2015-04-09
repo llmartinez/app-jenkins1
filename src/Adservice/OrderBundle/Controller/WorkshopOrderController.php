@@ -338,7 +338,7 @@ class WorkshopOrderController extends Controller {
             $workshopOrder->setAction('deactivate');
             $workshopOrder->setWantedAction('deactivate');
         }
-
+        $workshopOrder->setAction('deactivate');
         UtilController::saveEntity($em, $workshopOrder, $user);
 
         /* MAILING */
@@ -688,6 +688,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setCity          ($workshop->getCity());
         $workshopOrder->setAddress       ($workshop->getAddress());
         $workshopOrder->setPostalCode    ($workshop->getPostalCode());
+        $workshopOrder->setAdServicePlus ($workshop->getAdServicePlus());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshopOrder->setCreatedBy($workshopOrder->getCreatedBy());
