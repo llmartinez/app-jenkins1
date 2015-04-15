@@ -15,10 +15,17 @@
     });
 
     $(document).on('change','#default_sentences',function(){
-
-        var sentence = $(this).val() + " \n";
-
-        $('#ticket_form_message').append(sentence);
-        $('#post_form_message'  ).append(sentence);
-
+        // Recojo el texto actual
+        if ($('#ticket_form_message').val() != undefined )  var actual_txt = $('#ticket_form_message').val();
+        else                                                var actual_txt = $('#post_form_message').val();
+        // Recojo la sentencia
+        var sentence = $(this).val();
+        // Si la sentencia no es "default"
+        if (sentence != '0') {
+            // Si el texto no esta vacio añadir un salto de linea
+            if (actual_txt != '') actual_txt = actual_txt +"\n";
+            // Inserta el texto en el textbox
+            $('#ticket_form_message').val(actual_txt + sentence);
+            $('#post_form_message'  ).val(actual_txt + sentence);
+        }
     });

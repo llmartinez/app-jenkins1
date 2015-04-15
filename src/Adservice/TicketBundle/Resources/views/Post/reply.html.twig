@@ -25,7 +25,7 @@
             {% if is_granted('ROLE_ASSESSOR') %}
                 <div class="col-xs-4 col-md-4 form-group pull-right prl0">
                     <select class="form-control pull-right" id="default_sentences">
-                        <option>{% trans %} sentence.default {% endtrans %}</option>
+                        <option value="0">{% trans %} sentence.default {% endtrans %}</option>
                         <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
 
                         {% for sentence in sentences %}
