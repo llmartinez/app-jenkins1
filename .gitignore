@@ -12,6 +12,8 @@ vendor/*
 /web/css/*
 /web/js/*
 /web/uploads/*
+/web/app.php
+/web/app_dev.php
 
 # -- Capifony ---
 /app/config/*.rb
