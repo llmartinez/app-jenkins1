@@ -7,11 +7,13 @@
 /app/config/parameters.yml
 /app/cache/*
 /app/logs/*
+/app/bootstrap*
 vendor/*
 /web/bundles/*
 /web/css/*
 /web/js/*
 /web/uploads/*
+/data/*
 
 # -- Capifony ---
 /app/config/*.rb
