@@ -163,6 +163,7 @@ function fill_model() {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_model').empty();
+            $('#new_car_form_version').empty();
             //Primer campo vacío
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
@@ -200,6 +201,7 @@ function fill_version() {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
+            $('#ticket_form_subsystem').empty();
             //Primer campo vacío
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");

@@ -29,7 +29,7 @@
                         <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
 
                         {% for sentence in sentences %}
-                            <option>{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
+                            <option value="{{sentence.name}}">{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
