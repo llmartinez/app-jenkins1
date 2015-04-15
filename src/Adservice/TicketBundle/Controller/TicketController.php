@@ -541,7 +541,7 @@ class TicketController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());*/
+        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
