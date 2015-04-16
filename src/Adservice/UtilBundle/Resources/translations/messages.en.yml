@@ -618,6 +618,9 @@ _mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is 
 #HISTORICO
 lock.list_incidences: 	"Incidences History"
 
+error: An error has occurred
+back:  Back to the application
+    
 termsConditions: 	" "
 _termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Center of Innovation and Resources

@@ -1,0 +1,16 @@
+{% extends 'TwigBundle::layout.html.twig' %}
+
+{% block title %}
+    Se ha producido un error ({{ status_code }} {{ status_text }})
+{% endblock %}
+
+{% block titleException %}        
+    <div id="title_error"><h1>{% trans %}error{% endtrans %}</h1></div>
+{% endblock %}
+    
+{% block exception %}    
+    <div id="content_error">
+            <h3>{{ status_code }} {{ status_text }}</h3>
+    </div>
+    <a href="#" onclick="javascript:history.back()" title="{% trans %}back{% endtrans %}" target="_self">{% filter upper %}{% trans %}back{% endtrans %}{% endfilter %}</a>
+{% endblock %}
