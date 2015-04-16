@@ -12,5 +12,5 @@
     <div id="content_error">
             <h3>{{ status_code }} {{ status_text }}</h3>
     </div>
-    <a href="#" onclick="javascript:history.back()" title="{% trans %}back{% endtrans %}" target="_self">{% filter upper %}{% trans %}back{% endtrans %}{% endfilter %}</a>
+    <a onclick="javascript:history.back()" title="{% trans %}back{% endtrans %}" target="_self">{% filter upper %}{% trans %}back{% endtrans %}{% endfilter %}</a>
 {% endblock %}
