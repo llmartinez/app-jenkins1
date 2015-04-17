@@ -138,6 +138,11 @@ legend {
     width: 30%;
 }
 
+.col100 {
+    padding: 10px;
+    float: left;
+    width: 100%;
+}
 .colDer {
     padding: 10px;
     float: left;
