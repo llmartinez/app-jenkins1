@@ -164,7 +164,12 @@ class UserController extends Controller {
         else $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_partner'] = ' != 0 ';
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -341,7 +346,12 @@ class UserController extends Controller {
         else $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_partner'] = ' != 0 ';
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
