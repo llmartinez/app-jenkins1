@@ -538,8 +538,11 @@ class WorkshopOrderController extends Controller {
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
                                                                                'code_workshop' => $workshopOrder->getCodeWorkshop()));
 
+        if(isset($find))$codeWorkshop = $find->getCodeWorkshop(); 
+        else            $codeWorkshop = " ";
+        
         $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
-        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$find->getCodeWorkshop().').';
+        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$codeWorkshop.').';
 //        else $this->get('session')->setFlash('error', $flash);
 
             if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
@@ -575,6 +578,7 @@ class WorkshopOrderController extends Controller {
                     if ($workshopOrder->getTest() != null) {
                         $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                     }
+                    
                     $action = $workshopOrder->getWantedAction();
                     $em->remove($workshopOrder);
                     UtilController::newEntity($workshop, $user);
@@ -591,7 +595,6 @@ class WorkshopOrderController extends Controller {
                         $adsplus->setBaja($dateF->format('Y-m-d'));
                         $adsplus->setContador(0);
                         $adsplus->setActive(1);
-
                         $em->persist($adsplus);
                         $em->flush();
                     }
