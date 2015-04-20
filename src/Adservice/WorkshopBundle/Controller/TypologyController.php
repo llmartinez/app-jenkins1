@@ -69,7 +69,11 @@ class TypologyController extends Controller {
         }
         
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
             $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
