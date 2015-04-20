@@ -80,16 +80,15 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException.
      */
     public function newAction(){
-
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_AD')) {
             
             if($request->request->get('partner') != null)
                 $id_partner = $request->request->get('partner');
@@ -110,13 +109,13 @@ class WorkshopOrderController extends Controller {
         $request = $this->getRequest();
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
@@ -146,7 +145,7 @@ class WorkshopOrderController extends Controller {
                                                                                         'code_workshop' => $workshopOrder->getCodeWorkshop()));
                 if($find == null)
                 {
-                    $user = $this->get('security.context')->getToken()->getUser();
+                    $user = $security->getToken()->getUser();
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setPartner($partner);
                     $workshopOrder->setCountry($user->getCountry());
@@ -205,11 +204,11 @@ class WorkshopOrderController extends Controller {
      * @throws type
      */
     public function editAction($id) {
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
         $request = $this->getRequest();
 
 
@@ -226,7 +225,7 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
@@ -238,13 +237,13 @@ class WorkshopOrderController extends Controller {
         $partner = $workshop->getPartner();
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
@@ -264,7 +263,7 @@ class WorkshopOrderController extends Controller {
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $security->getToken()->getUser();
 
                 $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
@@ -318,7 +317,8 @@ class WorkshopOrderController extends Controller {
      */
     public function changeStatusAction($id, $status, $workshop){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -331,7 +331,7 @@ class WorkshopOrderController extends Controller {
             $em->flush();
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
         $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
@@ -522,7 +522,8 @@ class WorkshopOrderController extends Controller {
      */
     public function acceptAction($workshopOrder, $status){
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -532,7 +533,7 @@ class WorkshopOrderController extends Controller {
         // modify     + accepted = se hacen los cambios en workshop and delete del workshopOrder
         // create     + accepted = new workshop and delete workshopOrder
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
 
         /*CHECK CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),

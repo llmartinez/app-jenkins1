@@ -17,11 +17,12 @@ class OrderController extends Controller
      */
     public function listOrdersAction($page=1, $option='workshop_pending'){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
         $role = $user->getRoles();
         $role = $role[0];
         $role = $role->getRole();
@@ -101,7 +102,7 @@ class OrderController extends Controller
         return $this->render('OrderBundle:Order:list_orders.html.twig', array(  'pagination'   => $pagination,
                                                                                 'option'       => $option,
                                                                                 'orders'       => $orders,
-	                                                                            'ordersBefore' => $ordersBefore,
+	                                                                        'ordersBefore' => $ordersBefore,
                                                                                 'length_workshop_pending'  => $length_workshop_pending,
                                                                                 'length_workshop_rejected' => $length_workshop_rejected,
                                                                                 'length_shop_pending'      => $length_shop_pending,

@@ -411,12 +411,13 @@ class UserController extends Controller {
      * @throws AccessDeniedException
      */
     public function getPendingOrders(){
-
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
         $role = $user->getRoles();
         $role = $role[0];
         $role = $role->getRole();

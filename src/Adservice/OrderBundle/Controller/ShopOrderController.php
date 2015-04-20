@@ -83,11 +83,11 @@ class ShopOrderController extends Controller {
      */
     public function newAction(){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         $shopOrder = new ShopOrder();
@@ -127,10 +127,10 @@ class ShopOrderController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $security->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
-                if ($this->get('security.context')->isGranted('ROLE_AD_COUNTRY') === false)
+                if ($security->isGranted('ROLE_AD_COUNTRY') === false)
                 $shopOrder->setPartner($user->getPartner());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
@@ -169,11 +169,11 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException
      */
     public function editAction($id) {
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
@@ -189,7 +189,6 @@ class ShopOrderController extends Controller {
             //si no existe una shopOrder previa la creamos por primera vez a partir del shop original
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
-        $security = $this->get('security.context');
         $request = $this->getRequest();
 
         $shopOrder = new ShopOrder();
@@ -229,7 +228,7 @@ class ShopOrderController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $security->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
 
@@ -282,8 +281,8 @@ class ShopOrderController extends Controller {
      * @throws type
      */
     public function changeStatusAction($id, $status, $shop){
-
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -296,7 +295,7 @@ class ShopOrderController extends Controller {
             $em->flush();
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
         $shopOrder = $this->shop_to_shopOrder($shop);
         $shopOrder = UtilController::newEntity($shopOrder, $user);
 
@@ -484,8 +483,8 @@ class ShopOrderController extends Controller {
      * @throws type
      */
     public function deleteAction($shop){
-
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -493,7 +492,7 @@ class ShopOrderController extends Controller {
         $action = $shopOrder->setWantedAction('delete');
         $action = $shopOrder->setAction('delete');
 
-        UtilController::saveEntity($em, $shopOrder, $this->get('security.context')->getToken()->getUser());
+        UtilController::saveEntity($em, $shopOrder, $security->getToken()->getUser());
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
@@ -526,7 +525,8 @@ class ShopOrderController extends Controller {
      */
     public function acceptAction($shopOrder, $status){
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -536,7 +536,7 @@ class ShopOrderController extends Controller {
         // modify     + accepted = se hacen los cambios en shop and delete del shopOrder
         // create     + accepted = new workshop and delete shopOrder
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
 
         if (( $shopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
             $shop = $em->getRepository('PartnerBundle:Shop')->findOneBy(array('id' => $shopOrder->getIdShop()));
@@ -589,7 +589,7 @@ class ShopOrderController extends Controller {
         // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
         //                                                                                     'action'   => $action));die;
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $security->getToken()->getUser();
         $shopOrders = $em->getRepository("OrderBundle:ShopOrder")->findAll();
         $ordersBefore = $this->getShopOrdersBefore($em, $shopOrders);
 
