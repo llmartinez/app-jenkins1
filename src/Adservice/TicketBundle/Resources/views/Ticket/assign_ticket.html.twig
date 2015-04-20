@@ -31,10 +31,12 @@
                         <select class="combobox btn-date" id="id_user" name="id_user">
                             <option value="null">{% trans %} assign_not {% endtrans %}</option>
                             {% for user in users %}
-                                {% if ticket.assignedTo == user %}
-                                    <option selected="selected" value={{ user.id }} >{{ user }}</option>
-                                {% else %}
-                                    <option value={{ user.id }}>{{ user }}</option>
+                                {% if user.country == app.security.getToken().getUser().getCountry() %} 
+                                    {% if ticket.assignedTo == user %}
+                                        <option selected="selected" value={{ user.id }} >{{ user }}</option>
+                                    {% else %}
+                                        <option value={{ user.id }}>{{ user }}</option>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </select>

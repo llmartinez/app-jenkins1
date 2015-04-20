@@ -94,7 +94,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% include 'UtilBundle:Pagination:tickets_history_pagination.html.twig' %}
+            {% if disablePag is not defined %}
+                {% include 'UtilBundle:Pagination:tickets_history_pagination.html.twig' %}
+            {% endif %}
 
         {% else %}
             <legend class="padded" align="center">{% trans %} No hay tickets de este tipo {% endtrans %}</legend>

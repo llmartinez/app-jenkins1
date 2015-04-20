@@ -1069,16 +1069,18 @@ class TicketController extends Controller {
 
         $brands     = $em->getRepository('CarBundle:Brand')->findAll();
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
-                                                                                       'pagination' => new Pagination(0),
+                                                                                       'pagination' => new Pagination(),
                                                                                        'tickets'    => $tickets,
                                                                                        'brands'     => $brands,
                                                                                        'countries'  => $countries,
                                                                                        'option'     => 'all',
+                                                                                       'page'       => 0,
                                                                                        'num_rows'   => 10,
                                                                                        'country'    => 0,
-                                                                                       'inactive'   => 0
+                                                                                       'inactive'   => 0,
+                                                                                       'disablePag' => 0
                                                                                   ));
     }
 
@@ -1124,17 +1126,19 @@ class TicketController extends Controller {
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
-                                                                                       'option'     => 'all',
-                                                                                       'num_rows'   => 10,
                                                                                        'brands'     => $brands,
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
+                                                                                       'option'     => 'all',
+                                                                                       'page'       => 0,
+                                                                                       'num_rows'   => 10,
                                                                                        'country'    => 0,
-                                                                                       'inactive'   => 0
+                                                                                       'inactive'   => 0,
+                                                                                       'disablePag' => 0
                                                                                   ));
     }
 
