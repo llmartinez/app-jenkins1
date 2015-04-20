@@ -31,19 +31,19 @@ class WorkshopController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
-        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false and $this->get('security.context')->isGranted('ROLE_AD') === false) {
+        if ($security->isGranted('ROLE_ASSESSOR') === false and $security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
         if ($name != '0'){
             $params[] = array('name', " LIKE '%".$name."%'");
         }else{
-            if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            if($security->isGranted('ROLE_SUPER_ADMIN')) {
                 if ($country != '0') $params[] = array('country', ' = '.$country);
             }
-            else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+            else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-            if($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if($security->isGranted('ROLE_ADMIN')) {
 
                 if ($partner != '0') $params[] = array('partner', ' = '.$partner);
 

@@ -173,11 +173,22 @@ class TicketController extends Controller {
 
         if($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
             $country = $security->getToken()->getUser()->getCountry()->getId();
-            $joins[] = array('e.workshop w ', 'w.country = '.$country);
+            if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+            {
+                $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+            }
+            else{
+                $joins[] = array('e.workshop w ', 'w.country = '.$country);
+            }
         }else{
             if($country != 0) {
-                //$country = $em->getRepository('UtilBundle:Country')->find($country);
-                $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                {
+                    $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                }
+                else{
+                    $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                }
             }
         }
 
@@ -237,7 +248,7 @@ class TicketController extends Controller {
         else{
             if(isset($workshops[0]) and $workshops[0]->getId()){
                 $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
-                //$joins[] = array('e.workshop w', ' w.country = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+                //$joins[] = array('e.workshop w', ' w.country = '.$security->getToken()->getUser()->getCountry()->getId());
                 $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
                 $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }else{
@@ -336,9 +347,9 @@ class TicketController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             //campos comunes
-            $user     = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
-            $status   = $em->getRepository('TicketBundle:Status')->findOneByName('open');
             $security = $this->get('security.context');
+            $user     = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
+            $status   = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
             $form ->bindRequest($request);
             $formC->bindRequest($request);
@@ -426,10 +437,10 @@ class TicketController extends Controller {
                             $em->persist($document);
                             $em->flush();
                         }
-
+                        
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo($ticket->getWorkshop()->getEmail1());
                         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
@@ -488,7 +499,7 @@ class TicketController extends Controller {
 
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                $mailer->setTo($ticket->getWorkshop()->getEmail1());
                 $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
                 $mailer->setFrom('noreply@grupeina.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
@@ -519,7 +530,8 @@ class TicketController extends Controller {
      */
     public function deleteTicketAction($id, $ticket){
 
-        if ($this->get('security.context')->isGranted('ROLE_USER') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_USER') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
@@ -529,7 +541,7 @@ class TicketController extends Controller {
         // if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
 
         //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
-        if ((!$this->get('security.context')->isGranted('ROLE_ASSESSOR') and ($ticket->getAssignedTo() != null))){
+        if ((!$security->isGranted('ROLE_ASSESSOR') and ($ticket->getAssignedTo() != null))){
             throw $this->createNotFoundException('Este ticket solo puede ser borrado por un asesor');
         }
 
@@ -546,7 +558,7 @@ class TicketController extends Controller {
 
         /* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+        $mailer->setTo($ticket->getWorkshop()->getEmail1());
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
         $mailer->setFrom('noreply@grupeina.com');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
@@ -675,7 +687,7 @@ class TicketController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo($ticket->getWorkshop()->getEmail1());
                         $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
@@ -701,7 +713,7 @@ class TicketController extends Controller {
                                                                             'idTecDoc'  => $idTecDoc )));
         }
 
-        if ($security->isGranted('ROLE_ADMIN'))
+        if ($security->isGranted('ROLE_SUPER_ADMIN'))
              $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
         else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
 
@@ -774,7 +786,7 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $request  = $this->getRequest();
 
-        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+        if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
         else                                                                        $form = $this->createForm(new CloseTicketType()        , $ticket);
 
         if ($request->getMethod() == 'POST') {
@@ -788,7 +800,7 @@ class TicketController extends Controller {
                 }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-                if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
+                if ($security->isGranted('ROLE_ASSESSOR') === false) {
                     if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
                     elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
                     elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
@@ -805,7 +817,7 @@ class TicketController extends Controller {
 
                     /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+                        $mailer->setTo($ticket->getWorkshop()->getEmail1());
                         $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
                         $mailer->setFrom('noreply@grupeina.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
@@ -848,7 +860,7 @@ class TicketController extends Controller {
         UtilController::saveEntity($em, $ticket, $user);
          /* MAILING */
             $mailer = $this->get('cms.mailer');
-            $mailer->setTo($ticket->getWorkshop()->getUsers()[0]->getEmail1());
+            $mailer->setTo($ticket->getWorkshop()->getEmail1());
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
             $mailer->setFrom('noreply@grupeina.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
@@ -1045,27 +1057,30 @@ class TicketController extends Controller {
     public function findTicketByIdAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
+        $security   = $this->get('security.context');
         $request  = $this->getRequest();
         $id       = $request->get('flt_id');
 
         $ticket   = $em->getRepository('TicketBundle:Ticket')->find($id);
-
-        if($ticket) $tickets = array($ticket);
-        else        $tickets = array();
+        
+        if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())) 
+             $tickets = array($ticket);
+        else $tickets = array();
 
         $brands     = $em->getRepository('CarBundle:Brand')->findAll();
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
-                                                                                       'pagination' => new Pagination(0),
+                                                                                       'pagination' => new Pagination(),
                                                                                        'tickets'    => $tickets,
                                                                                        'brands'     => $brands,
                                                                                        'countries'  => $countries,
                                                                                        'option'     => 'all',
+                                                                                       'page'       => 0,
                                                                                        'num_rows'   => 10,
                                                                                        'country'    => 0,
-                                                                                       'inactive'   => 0
+                                                                                       'inactive'   => 0,
+                                                                                       'disablePag' => 0
                                                                                   ));
     }
 
@@ -1076,7 +1091,7 @@ class TicketController extends Controller {
     public function findTicketByBMVAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
+        $security   = $this->get('security.context');
         $request = $this->getRequest();
         $brand   = $request->get('new_car_form_brand'  );
         $model   = $request->get('new_car_form_model'  );
@@ -1102,7 +1117,8 @@ class TicketController extends Controller {
                 $id     = $cars[$key[$i]]->getId();
                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
 
-                if (isset($ticket)) $tickets[] = $ticket;
+                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())) 
+                    $tickets[] = $ticket;
             }
         }
 
@@ -1110,17 +1126,19 @@ class TicketController extends Controller {
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
-                                                                                       'option'     => 'all',
-                                                                                       'num_rows'   => 10,
                                                                                        'brands'     => $brands,
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
+                                                                                       'option'     => 'all',
+                                                                                       'page'       => 0,
+                                                                                       'num_rows'   => 10,
                                                                                        'country'    => 0,
-                                                                                       'inactive'   => 0
+                                                                                       'inactive'   => 0,
+                                                                                       'disablePag' => 0
                                                                                   ));
     }
 
