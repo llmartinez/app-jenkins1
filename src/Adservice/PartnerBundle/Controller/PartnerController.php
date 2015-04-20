@@ -65,6 +65,15 @@ class PartnerController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $partner = new Partner();
         $request = $this->getRequest();
+       
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {
@@ -133,13 +142,21 @@ class PartnerController extends Controller {
      * @return type
      */
     public function editPartnerAction($partner){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
 
         $petition = $this->getRequest();
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form = $this->createForm(new PartnerType(), $partner);
 
         $actual_city   = $partner->getRegion();

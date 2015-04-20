@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\WorkshopBundle\Entity\ADSPlus;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\OrderBundle\Entity\WorkshopOrder;
 use Adservice\OrderBundle\Form\WorkshopOrderType;
@@ -89,7 +90,12 @@ class WorkshopOrderController extends Controller {
 
         $workshopOrder = new WorkshopOrder();
         if ($this->get('security.context')->isGranted('ROLE_SUPER_AD')) {
-            $id_partner = '0';
+            
+            if($request->request->get('partner') != null)
+                $id_partner = $request->request->get('partner');
+            else
+                $id_partner = '0';
+            
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -531,8 +537,10 @@ class WorkshopOrderController extends Controller {
         /*CHECK CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
                                                                                'code_workshop' => $workshopOrder->getCodeWorkshop()));
-        if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
-        {
+
+        $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$find->getCodeWorkshop().').';
+//        else $this->get('session')->setFlash('error', $flash);
 
             if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
@@ -559,103 +567,103 @@ class WorkshopOrderController extends Controller {
                 UtilController::saveEntity($em, $workshop, $user);
 
             }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
-                $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
+                
+                if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+                {
+                    $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
 
-                if ($workshopOrder->getTest() != null) {
-                    $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
+                    if ($workshopOrder->getTest() != null) {
+                        $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
+                    }
+                    $action = $workshopOrder->getWantedAction();
+                    $em->remove($workshopOrder);
+                    UtilController::newEntity($workshop, $user);
+                    UtilController::saveEntity($em, $workshop, $user);
+
+                    //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
+                    if ($workshop->getAdServicePlus()){
+                        $adsplus = new ADSPlus();
+                        $adsplus->setIdTallerADS($workshop->getID());
+                        $dateI = new \DateTime('now');
+                        $dateF = new \DateTime('+2 year');
+                        $adsplus->setAltaInicial($dateI->format('Y-m-d'));
+                        $adsplus->setUltAlta($dateI->format('Y-m-d'));
+                        $adsplus->setBaja($dateF->format('Y-m-d'));
+                        $adsplus->setContador(0);
+                        $adsplus->setActive(1);
+
+                        $em->persist($adsplus);
+                        $em->flush();
+                    }
+
+                    /*CREAR USERNAME Y EVITAR REPETICIONES*/
+                    $username = UtilController::getUsernameUnused($em, $workshop->getName());
+
+                    /*CREAR PASSWORD AUTOMATICAMENTE*/
+                    $pass = substr( md5(microtime()), 1, 8);
+
+                    $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
+                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+
+                    $newUser = UtilController::newEntity(new User(), $user);
+                    $newUser->setUsername      ($username);
+                    $newUser->setPassword      ($pass);
+                    $newUser->setName          ($workshop->getContactName());
+                    $newUser->setSurname       ($workshop->getName());
+                    $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
+                    $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
+                    $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
+                    $newUser->setMovileNumber2 ($workshop->getMovileNumber2());
+                    $newUser->setFax           ($workshop->getFax());
+                    $newUser->setEmail1        ($workshop->getEmail1());
+                    $newUser->setEmail2        ($workshop->getEmail2());
+                    $newUser->setActive        ('1');
+                    $newUser->setCountry       ($workshop->getCountry());
+                    $newUser->setRegion        ($workshop->getRegion());
+                    $newUser->setCity          ($workshop->getCity());
+                    $newUser->setCreatedBy     ($workshop->getCreatedBy());
+                    $newUser->setCreatedAt     (new \DateTime());
+                    $newUser->setModifiedBy    ($workshop->getCreatedBy());
+                    $newUser->setModifiedAt    (new \DateTime());
+                    $newUser->setLanguage      ($lang);
+                    $newUser->setWorkshop      ($workshop);
+                    $newUser->addRole          ($role);
+
+                    //password nuevo, se codifica con el nuevo salt
+                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
+                    $salt = md5(time());
+                    $password = $encoder->encodePassword($newUser->getPassword(), $salt);
+                    $newUser->setPassword($password);
+                    $newUser->setSalt($salt);
+                    UtilController::saveEntity($em, $newUser, $user);
+
+                    /* MAILING */
+                    $mailerUser = $this->get('cms.mailer');
+                    $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
+                    $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
+                    $mailerUser->setFrom('noreply@grupeina.com');
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
+                    $mailerUser->sendMailToSpool();
+                    // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
                 }
-                $action = $workshopOrder->getWantedAction();
-                $em->remove($workshopOrder);
-                UtilController::newEntity($workshop, $user);
-                UtilController::saveEntity($em, $workshop, $user);
-
-                //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
-                if ($workshop->getAdServicePlus()){
-                    $adsplus = new ADSPlus();
-                    $adsplus->setIdTallerADS($workshop->getID());
-                    $dateI = new \DateTime('now');
-                    $dateF = new \DateTime('+2 year');
-                    $adsplus->setAltaInicial($dateI->format('Y-m-d'));
-                    $adsplus->setUltAlta($dateI->format('Y-m-d'));
-                    $adsplus->setBaja($dateF->format('Y-m-d'));
-                    $adsplus->setContador(0);
-                    $adsplus->setActive(1);
-
-                    $em->persist($adsplus);
-                    $em->flush();
-                }
-
-                /*CREAR USERNAME Y EVITAR REPETICIONES*/
-                $username = UtilController::getUsernameUnused($em, $workshop->getName());
-
-                /*CREAR PASSWORD AUTOMATICAMENTE*/
-                $pass = substr( md5(microtime()), 1, 8);
-
-                $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
-                $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
-
-                $newUser = UtilController::newEntity(new User(), $user);
-                $newUser->setUsername      ($username);
-                $newUser->setPassword      ($pass);
-                $newUser->setName          ($workshop->getContactName());
-                $newUser->setSurname       ($workshop->getName());
-                $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
-                $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
-                $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
-                $newUser->setMovileNumber2 ($workshop->getMovileNumber2());
-                $newUser->setFax           ($workshop->getFax());
-                $newUser->setEmail1        ($workshop->getEmail1());
-                $newUser->setEmail2        ($workshop->getEmail2());
-                $newUser->setActive        ('1');
-                $newUser->setCountry       ($workshop->getCountry());
-                $newUser->setRegion        ($workshop->getRegion());
-                $newUser->setCity          ($workshop->getCity());
-                $newUser->setCreatedBy     ($workshop->getCreatedBy());
-                $newUser->setCreatedAt     (new \DateTime());
-                $newUser->setModifiedBy    ($workshop->getCreatedBy());
-                $newUser->setModifiedAt    (new \DateTime());
-                $newUser->setLanguage      ($lang);
-                $newUser->setWorkshop      ($workshop);
-                $newUser->addRole          ($role);
-
-                //password nuevo, se codifica con el nuevo salt
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
-                $salt = md5(time());
-                $password = $encoder->encodePassword($newUser->getPassword(), $salt);
-                $newUser->setPassword($password);
-                $newUser->setSalt($salt);
-                UtilController::saveEntity($em, $newUser, $user);
-
+                else $this->get('session')->setFlash('error', $flash);
+            }
+                
+            if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+            {
                 /* MAILING */
-                $mailerUser = $this->get('cms.mailer');
-                $mailerUser->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1());*/
-                $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
-                $mailerUser->setFrom('noreply@grupeina.com');
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
-                $mailerUser->sendMailToSpool();
-                // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
-
+                $mailer = $this->get('cms.mailer');
+                $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshop->getCreatedBy()->getEmail1());*/
+                $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
+                $mailer->setFrom('noreply@grupeina.com');
+                $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
+                                                                                                           'action'   => $action)));
+                $mailer->sendMailToSpool();
+                // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
+                //                                                                                'action'   => $action));die;
             }
 
-            /* MAILING */
-            $mailer = $this->get('cms.mailer');
-            $mailer->setTo('dmaya@grupeina.com'); //('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailer->setTo($workshop->getCreatedBy()->getEmail1());*/
-            $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
-            $mailer->setFrom('noreply@grupeina.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
-                                                                                                       'action'   => $action)));
-            $mailer->sendMailToSpool();
-            // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
-            //                                                                                'action'   => $action));die;
-        }
-        else{
-            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
-            $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$find->getCodeWorkshop().').';
-            $this->get('session')->setFlash('error', $flash);
-        }
-
         return $this->redirect($this->generateUrl('list_orders'));
-
     }
 
     /**

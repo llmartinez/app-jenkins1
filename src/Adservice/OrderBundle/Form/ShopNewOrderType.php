@@ -25,7 +25,14 @@ class ShopNewOrderType extends AbstractType
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
-            ->add('country')
+            ->add('country', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'property' => 'country',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country); }))
             ->add('region')
             ->add('city')
             ->add('address')

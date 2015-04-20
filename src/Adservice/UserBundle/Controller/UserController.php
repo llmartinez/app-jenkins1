@@ -144,7 +144,8 @@ class UserController extends Controller {
      */
     public function editUserAction($user) {
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
 
@@ -155,6 +156,27 @@ class UserController extends Controller {
 
         $petition = $this->getRequest();
 
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        
         //que tipo de usuario estamos editando (los formtype varian...)
     	$role = $user->getRoles();
     	$role = $role[0];
@@ -303,13 +325,35 @@ class UserController extends Controller {
      */
     public function newUserAction($type) {
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
+        
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
 
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
@@ -345,7 +389,7 @@ class UserController extends Controller {
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $user->setCreatedBy($this->get('security.context')->getToken()->getUser());
+            $user->setCreatedBy($security->getToken()->getUser());
 //            $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
@@ -409,14 +453,27 @@ class UserController extends Controller {
 
                                             $length = $length_workshop_rejected + $length_shop_rejected;
                                         }
-        elseif($role == "ROLE_ADMIN" or $role == "ROLE_SUPER_ADMIN" )   {   $workshop_pending[]  = $not_rejected;
-                                                                            $shop_pending[]      = $not_rejected;
+        elseif($role == "ROLE_ADMIN")   {
+                                            $by_country          = array('country', ' = '.$user->getCountry()->getId());
+                                            $workshop_pending[]  = $by_country;
+                                            $workshop_pending[]  = $not_rejected;
+                                            $shop_pending[]      = $by_country;
+                                            $shop_pending[]      = $not_rejected;
 
-                                                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
-                                                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
 
-                                                                            $length = $length_workshop_pending + $length_shop_pending;
-                                                                        }
+                                            $length = $length_workshop_pending + $length_shop_pending;
+                                        }
+        elseif($role == "ROLE_SUPER_ADMIN"){
+                                            $workshop_pending[]  = $not_rejected;
+                                            $shop_pending[]      = $not_rejected;
+
+                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+
+                                            $length = $length_workshop_pending + $length_shop_pending;
+                                        }
         return $length;
     }
 

@@ -53,7 +53,8 @@ class SentenceController extends Controller
      * Si la petición es POST --> save del formulario
      */
     public function editSentenceAction($id) {
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')){
+        $security = $this->get('security.context');
+        if (! $security->isGranted('ROLE_ADMIN')){
             throw new AccessDeniedException();
         }
 
@@ -64,6 +65,13 @@ class SentenceController extends Controller
         if ($id != null) {
                           $sentence = $em->getRepository("TicketBundle:Sentence")->find($id);
                           if (!$sentence) throw $this->createNotFoundException('Sentencia no encontrado en la BBDD');
+        }
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
         $form = $this->createForm(new SentenceType(), $sentence);
 

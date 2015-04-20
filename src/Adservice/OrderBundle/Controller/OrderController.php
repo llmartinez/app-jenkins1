@@ -54,11 +54,21 @@ class OrderController extends Controller
                                             $shop_rejected[]     = $by_partner;
                                             $shop_rejected[]     = $rejected;
                                         }
-        elseif($role == "ROLE_ADMIN" or $role == "ROLE_SUPER_ADMIN" )   {   $workshop_pending[]  = $not_rejected;
-                                                                            $workshop_rejected[] = $rejected;
-                                                                            $shop_pending[]      = $not_rejected;
-                                                                            $shop_rejected[]     = $rejected;
-                                                                        }
+        elseif($role == "ROLE_ADMIN" )  {   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+                                            $workshop_pending[]  = $by_country;
+                                            $workshop_pending[]  = $not_rejected;
+                                            $workshop_rejected[] = $by_country;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_pending[]      = $by_country;
+                                            $shop_pending[]      = $not_rejected;
+                                            $shop_rejected[]     = $by_country;
+                                            $shop_rejected[]     = $rejected;
+                                        }
+        elseif($role == "ROLE_SUPER_ADMIN"){$workshop_pending[]  = $not_rejected;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_pending[]      = $not_rejected;
+                                            $shop_rejected[]     = $rejected;
+                                        }
 
         $pagination = new Pagination($page);
         $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);

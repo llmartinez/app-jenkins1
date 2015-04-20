@@ -86,11 +86,33 @@ class WorkshopController extends Controller {
     }
 
     public function newWorkshopAction() {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $workshop = new Workshop();
+        
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
 
         $form     = $this->createForm(new WorkshopType(), $workshop);
 
@@ -115,7 +137,7 @@ class WorkshopController extends Controller {
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
                 if($find == null)
                 {
-                    $workshop = UtilController::newEntity($workshop, $this->get('security.context')->getToken()->getUser());
+                    $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $this->saveWorkshop($em, $workshop);
 
@@ -144,7 +166,7 @@ class WorkshopController extends Controller {
                     $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
                     $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
 
-                    $newUser = UtilController::newEntity(new User(), $this->get('security.context')->getToken()->getUser());
+                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
                     $newUser->setName          ($workshop->getContact());
@@ -189,7 +211,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId(); 
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId(); 
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
@@ -211,7 +233,8 @@ class WorkshopController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editWorkshopAction($workshop) {
-        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ASSESSOR') === false){
             throw new AccessDeniedException();
         }
 
@@ -219,6 +242,26 @@ class WorkshopController extends Controller {
         $partner = $workshop->getPartner();
 
         $petition   = $this->getRequest();
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form       = $this->createForm(new WorkshopType(), $workshop);
 
         $actual_city   = $workshop->getRegion();
@@ -249,8 +292,8 @@ class WorkshopController extends Controller {
 
                     $this->saveWorkshop($em, $workshop);
 
-                    if    ($this->get('security.context')->isGranted('ROLE_ADMIN'   )) return $this->redirect($this->generateUrl('workshop_list'));
-                    elseif($this->get('security.context')->isGranted('ROLE_ASSESSOR')) return $this->redirect($this->generateUrl('listTicket'));
+                    if    ($security->isGranted('ROLE_ADMIN'   )) return $this->redirect($this->generateUrl('workshop_list'));
+                    elseif($security->isGranted('ROLE_ASSESSOR')) return $this->redirect($this->generateUrl('listTicket'));
                 }
                 else{
                     $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
@@ -260,7 +303,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);

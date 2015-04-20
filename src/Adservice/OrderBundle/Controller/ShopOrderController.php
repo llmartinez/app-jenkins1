@@ -39,7 +39,10 @@ class ShopOrderController extends Controller {
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
+        
         if($security->isGranted('ROLE_SUPER_AD')) {
+            $country = $security->getToken()->getUser()->getCountry();
+            $params[] = array('country', ' = '.$country->getId());
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
         else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
@@ -54,7 +57,10 @@ class ShopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        if($security->isGranted('ROLE_AD')) {
+            $country = $security->getToken()->getUser()->getCountry();
+            $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country);
+        }
         else $partners = array();
 
         return $this->render('OrderBundle:ShopOrders:list_shops.html.twig', array( 'shops'      => $shops,
@@ -93,7 +99,6 @@ class ShopOrderController extends Controller {
         else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
                $partners   = '0';
         }
-
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
         // Creamos variables de sesion para fitlrar los resultados del formulario

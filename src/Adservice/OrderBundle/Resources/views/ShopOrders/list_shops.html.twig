@@ -1,6 +1,9 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'shopOrder_listShops' %}
+    <input type="hidden" id="route" value="{{ route }}">
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -11,7 +14,7 @@
 
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
-        <select id="flt_partner_s" class='form-control'>
+        <select id="flt_partner" class='form-control'>
                 <option value="none">{% trans %} all {% endtrans %}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>

@@ -24,7 +24,14 @@ class ShopEditOrderType extends AbstractType
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
              //CONTACT
-            ->add('country')
+            ->add('country', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'property' => 'country',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country); }))
             ->add('region')
             ->add('city')
             ->add('address')
