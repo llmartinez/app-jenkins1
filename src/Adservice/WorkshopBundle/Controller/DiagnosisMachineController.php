@@ -19,12 +19,12 @@ class DiagnosisMachineController extends Controller {
      */
     public function listDiagnosisMachineAction($page=1, $country='none') {
         $em = $this->getDoctrine()->getEntityManager();
-
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        $security = $this->get('security.context');
+        if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }
@@ -38,7 +38,7 @@ class DiagnosisMachineController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
         return $this->render('WorkshopBundle:DiagnosisMachine:list_diagnosis_machine.html.twig', array('diagnosis_machines' => $diagnosis_machines,

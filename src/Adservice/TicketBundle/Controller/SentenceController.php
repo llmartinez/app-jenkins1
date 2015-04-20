@@ -20,7 +20,7 @@ class SentenceController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
 
@@ -28,7 +28,7 @@ class SentenceController extends Controller
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
