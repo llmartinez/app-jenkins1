@@ -171,7 +171,16 @@ class TicketController extends Controller {
             $params[] = array('workshop', ' = '.$option);
         }
 
-        if($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            $country = 0;
+            if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+            {
+                $joins[0][1] = $joins[0][1].' AND w.country != '.$country;
+            }
+            else{
+                $joins[] = array('e.workshop w ', 'w.country != '.$country);
+            }
+        }elseif($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
             $country = $security->getToken()->getUser()->getCountry()->getId();
             if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
             {
@@ -191,7 +200,13 @@ class TicketController extends Controller {
                 }
             }else{
                 $country = $security->getToken()->getUser()->getCountry()->getId();
-                $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                 if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                {
+                    $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                }
+                else{
+                    $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                }
             }
         }
 
