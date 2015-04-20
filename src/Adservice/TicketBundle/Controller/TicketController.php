@@ -190,7 +190,8 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.country = '.$country);
                 }
             }else{
-                $joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
+                $country = $security->getToken()->getUser()->getCountry()->getId();
+                $joins[] = array('e.workshop w ', 'w.country = '.$country);
             }
         }
 
