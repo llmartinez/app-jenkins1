@@ -40,11 +40,11 @@ class PopupController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -54,7 +54,7 @@ class PopupController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
         return $this->render('PopupBundle:Popup:list_popups.html.twig', array(  'all_popups'   => $popups,
@@ -65,12 +65,23 @@ class PopupController extends Controller {
     }
 
     public function newPopupAction(){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $popup = new Popup();
         $request = $this->getRequest();
+        
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form = $this->createForm(new PopupType(), $popup);
+        
         $form->bindRequest($request);
 
         //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
@@ -85,7 +96,7 @@ class PopupController extends Controller {
 
             $em = $this->getDoctrine()->getEntityManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $popup->setCreatedBy($this->get('security.context')->getToken()->getUser());
+            $popup->setCreatedBy($security->getToken()->getUser());
             $this->savePopup($em, $popup);
 
             return $this->redirect($this->generateUrl('popup_list'));
@@ -103,13 +114,22 @@ class PopupController extends Controller {
      * @ParamConverter("popup", class="PopupBundle:Popup")
      */
     public function editPopupAction($popup){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
 
         $petition = $this->getRequest();
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form = $this->createForm(new PopupType(), $popup);
 
         if ($petition->getMethod() == 'POST') {

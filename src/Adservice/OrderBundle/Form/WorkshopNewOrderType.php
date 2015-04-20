@@ -43,7 +43,14 @@ class WorkshopNewOrderType extends AbstractType
             ->add('internal_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
              //CONTACT
-            ->add('country')
+            ->add('country', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'property' => 'country',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country); }))
             ->add('region')
             ->add('city')
             ->add('address')

@@ -43,7 +43,7 @@
         </select>
     </div>
     <div class="col-xs-3 col-md-3 form-group">
-        <select id="flt_country" class='form-control'>
+        <select id="flt_country" class='form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
                 <option value="none">{% trans %} country {% endtrans %}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %}>{{ _country | trans }}</option>

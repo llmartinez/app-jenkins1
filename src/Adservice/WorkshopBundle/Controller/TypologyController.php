@@ -21,15 +21,15 @@ class TypologyController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -54,7 +54,8 @@ class TypologyController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editTypologyAction($id) {
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')){
+        $security = $this->get('security.context');
+        if (! $security->isGranted('ROLE_ADMIN')){
             throw new AccessDeniedException();
         }
 
@@ -66,6 +67,15 @@ class TypologyController extends Controller {
                           $typology = $em->getRepository("WorkshopBundle:Typology")->find($id);
                           if (!$typology) throw $this->createNotFoundException('Tipologia no encontrado en la BBDD');
         }
+        
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        
         $form = $this->createForm(new TypologyType(), $typology);
 
         if ($petition->getMethod() == 'POST') {

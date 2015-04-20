@@ -48,7 +48,7 @@ class TicketController extends Controller {
         $request    = $this->getRequest();
         $security   = $this->get('security.context');
 
-        $id_user    = $this->get('security.context')->getToken()->getUser()->getId();
+        $id_user    = $security->getToken()->getUser()->getId();
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
         $workshops  = array('0' => new Workshop());
@@ -171,9 +171,14 @@ class TicketController extends Controller {
             $params[] = array('workshop', ' = '.$option);
         }
 
-        if($country != 0) {
-            //$country = $em->getRepository('UtilBundle:Country')->find($country);
+        if($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
+            $country = $security->getToken()->getUser()->getCountry()->getId();
             $joins[] = array('e.workshop w ', 'w.country = '.$country);
+        }else{
+            if($country != 0) {
+                //$country = $em->getRepository('UtilBundle:Country')->find($country);
+                $joins[] = array('e.workshop w ', 'w.country = '.$country);
+            }
         }
 
         $pagination = new Pagination($page);
@@ -181,7 +186,7 @@ class TicketController extends Controller {
 
         if($pagination->getMaxRows() != $num_rows) $pagination = $pagination->changeMaxRows($page, $num_rows);
 
-        if(($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ($workshops[0]->getId() != null))){
+        if(($security->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ($workshops[0]->getId() != null))){
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
         }

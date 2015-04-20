@@ -53,7 +53,8 @@ class DiagnosisMachineController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editDiagnosisMachineAction($id) {
-        if (! $this->get('security.context')->isGranted('ROLE_ADMIN')){
+        $security = $this->get('security.context');
+        if (! $security->isGranted('ROLE_ADMIN')){
             throw new AccessDeniedException();
         }
 
@@ -65,6 +66,15 @@ class DiagnosisMachineController extends Controller {
                           $diagnosis_machine = $em->getRepository("WorkshopBundle:DiagnosisMachine")->find($id);
                           if (!$diagnosis_machine) throw $this->createNotFoundException('Maquina no encontrado en la BBDD');
         }
+        
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+
         $form = $this->createForm(new DiagnosisMachineType(), $diagnosis_machine);
 
         if ($petition->getMethod() == 'POST') {

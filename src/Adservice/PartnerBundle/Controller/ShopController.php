@@ -33,13 +33,11 @@ class ShopController extends Controller {
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
-            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
         else {
-            $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-            $params[] = array('partner', ' = '.$this->get('security.context')->getToken()->getUser()->getId());
+            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
         }
 
         $pagination = new Pagination($page);
@@ -50,10 +48,10 @@ class ShopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         else $partners = array();
 
         return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
@@ -70,12 +68,34 @@ class ShopController extends Controller {
      * @throws AccessDeniedException
      */
     public function newShopAction() {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $em      = $this->getDoctrine()->getEntityManager();
         $shop    = new Shop();
-        $request = $this->getRequest();
+        $request = $this->getRequest();   
+        
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form    = $this->createForm(new ShopType(), $shop);
 
         if ($request->getMethod() == 'POST') {
@@ -92,7 +112,7 @@ class ShopController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $security->getToken()->getUser();
                 $shop = UtilController::newEntity($shop, $user );
                 $shop = UtilController::settersContact($shop, $shop);
                 UtilController::saveEntity($em, $shop, $user);
@@ -113,12 +133,33 @@ class ShopController extends Controller {
      * Si la petición es POST --> save del formulario
      */
     public function editShopAction($shop){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+            
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
         $form = $this->createForm(new ShopType(), $shop);
 
         $actual_city   = $shop->getRegion();
@@ -138,7 +179,7 @@ class ShopController extends Controller {
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $shop = UtilController::settersContact($shop, $shop, $actual_region, $actual_city);
-                UtilController::saveEntity($em, $shop, $this->get('security.context')->getToken()->getUser());
+                UtilController::saveEntity($em, $shop, $security->getToken()->getUser());
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }
