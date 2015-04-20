@@ -343,6 +343,8 @@ class StatisticController extends Controller {
             $excel.=$row->getSolution().';';
             $excel.="\n";
         }
+        $excel = nl2br($excel);
+        $excel = str_replace('<br />', '.', $excel);
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
@@ -374,6 +376,10 @@ class StatisticController extends Controller {
             $excel.=$active.';';
             $excel.="\n";
         }
+        
+        $excel = nl2br($excel);
+        $excel = str_replace('<br />', '.', $excel);
+        $excel = str_replace(',', '.', $excel);
         return($excel);
     }
     public function createExcelLastTickets($results){
@@ -403,6 +409,10 @@ class StatisticController extends Controller {
             $excel.=$row->getModifiedAt()->format('Y-m-d').';';
             $excel.="\n";
         }
+        
+        $excel = nl2br($excel);
+        $excel = str_replace('<br />', '.', $excel);
+        $excel = str_replace(',', '.', $excel);
         return($excel);
     }
     public function createExcelNoTickets($results){
