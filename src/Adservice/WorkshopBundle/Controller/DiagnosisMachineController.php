@@ -100,7 +100,7 @@ class DiagnosisMachineController extends Controller {
                 }
             }else
             {
-                $flash = 'No puedes insertar el nombre "..."';
+                $flash = $this->get('translator')->trans('error.bad_introduction.name');
                 $this->get('session')->setFlash('error', $flash);
             }
         }

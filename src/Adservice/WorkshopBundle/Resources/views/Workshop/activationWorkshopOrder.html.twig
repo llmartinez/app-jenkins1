@@ -60,17 +60,17 @@
                                 <td>
                                     {% if workshop.activatePending == true %}       <span class="label label-warning">Pendiente activación</span>
                                     {% elseif workshop.deactivatePending == true%}  <span class="label label-warning">Pendiente desactivación</span>
-                                    {% elseif workshop.active == true %}            <a title="Pedir la desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">Desactivar</a>
-                                    {% elseif workshop.active == false %}           <a title="Pedir la desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">Activar</a>
+                                    {% elseif workshop.active == true %}            <a title="{% trans %} reactivation-request {% endtrans %}" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">{% trans %} action.inactive {% endtrans %}</a>
+                                    {% elseif workshop.active == false %}           <a title="{% trans %} reactivation-request {% endtrans %}" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">{% trans %} action.active {% endtrans %}</a>
                                     {% endif %}
                                 </td>
                             {% elseif user_role == 'admin' %}
                                 {% if workshop.activatePending == true %}
                                     <td><span class="label label-warning">Pendiente activación</span></td>
-                                    <td><a title="Activaciar del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">Activar</a></td>
+                                    <td><a title="{% trans %} action.active {% endtrans %}" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'activate' }) }}">{% trans %} action.active {% endtrans %}</a></td>
                                 {% elseif workshop.deactivatePending == true %}
                                     <td><span class="label label-warning">Pendiente desactivación</span></td>
-                                    <td><a title="Desactivación del taller" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">Desactivar</a></td>
+                                    <td><a title="{% trans %} action.inactive {% endtrans %}" href="{{ path("change_status_workshop", { 'id': workshop.id, 'action': 'deactivate' }) }}">{% trans %} action.inactive {% endtrans %}</a></td>
                                 {% endif %}
                             {% endif %}
                         </tr>

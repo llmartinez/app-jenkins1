@@ -173,7 +173,7 @@ class WorkshopOrderController extends Controller {
                     return $this->redirect($this->generateUrl('list_orders'));
 
                 }else{
-                        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code;
+                        $flash = $this->get('translator')->trans('error.code_partner.used').$code;
                         $this->get('session')->setFlash('error', $flash);
                         $this->get('session')->setFlash('code' , $code);
                 }
@@ -543,7 +543,7 @@ class WorkshopOrderController extends Controller {
         else            $codeWorkshop = " ";
         
         $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
-        $flash = 'El codigo de Taller ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$codeWorkshop.').';
+        $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
 //        else $this->get('session')->setFlash('error', $flash);
 
             if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){

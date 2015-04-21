@@ -471,11 +471,9 @@ class TicketController extends Controller {
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
-                    } else { $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
+                    } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
 
-                } else { $this->get('session')->setFlash('error_ticket', '¡Error! No has introducido los campos de ticket correctamente'); }
-
-            // } else { $this->get('session')->setFlash('error_car', '¡Error! No has introducido el vehiculo correctamente'); }
+                } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
 
         $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
@@ -526,7 +524,7 @@ class TicketController extends Controller {
 
                 return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
-            }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
+            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
         $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
@@ -717,7 +715,7 @@ class TicketController extends Controller {
                         }
                         //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
                     }
-                    else{ $this->get('session')->setFlash('error', '¡Error! El mensaje no puede ser mayor de 150 caracteres ('.$str_len.').'); }
+                    else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
                 }
             }
             return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
@@ -845,10 +843,10 @@ class TicketController extends Controller {
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
                 }
                 else{
-                    $this->get('session')->setFlash('error', '¡Error! Debes introducir una solucion');
+                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
                 }
             }else{
-                $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente');
+                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
             }
         }
 
