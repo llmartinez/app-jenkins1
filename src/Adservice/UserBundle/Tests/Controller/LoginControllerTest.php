@@ -23,7 +23,7 @@ class LoginControllerTest extends WebTestCase {
         //$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/" (status 200)');
 
 
-        $url = $client->getContainer()->get('router')->generate('_login');
+        $url = $client->getContainer()->get('router')->generate('user_login', array('_locale' => 'es'));
         $crawler = $client->request('GET', $url);
         //$this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Se muestra la pantalla de login "/es/login" (status 200)');
 
@@ -118,8 +118,8 @@ class LoginControllerTest extends WebTestCase {
 
         return array(
             array(
-                array(array('field' => 'admin_assessor_type[username]', 'value' => 'admin'),
-                      array('field' => 'admin_assessor_type[password]', 'value' => 'admin'))//,
+                array(array('field' => 'login_form[username]', 'value' => 'admin'),
+                      array('field' => 'login_form[password]', 'value' => 'admin'))//,
                 // array(array('field' => 'admin_assessor_type[username]', 'value' => 'assessor1'),
                 //       array('field' => 'admin_assessor_type[password]', 'value' => 'assessor')),
                 // array(array('field' => 'adservice_userbundle_usertype[username]', 'value' => 'user1'),

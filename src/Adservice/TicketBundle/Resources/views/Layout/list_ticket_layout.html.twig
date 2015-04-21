@@ -11,7 +11,7 @@
 
 {% block info %}
 
-	{% if is_granted('ROLE_ASSESSOR') %}
+    {% if is_granted('ROLE_ASSESSOR') %}
 
         {% if workshop.id != "" %}  {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
         {% else %}                  {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}  {% endif %}
