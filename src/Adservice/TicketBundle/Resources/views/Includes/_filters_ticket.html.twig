@@ -3,7 +3,13 @@
 
         {# New Ticket #}
         {% if workshop.active == 1 %}
-            <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            
+            {% if is_granted('ROLE_SUPER_ADMIN')%}
+                <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            {% elseif not is_granted('ROLE_SUPER_ADMIN') and workshop.country == app.security.getToken().getUser().getCountry().getId() %}
+                <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            {% endif %}
+            
         {% else %}
             {# <a class="btn" id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
         {% endif %}
