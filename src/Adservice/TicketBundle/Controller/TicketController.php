@@ -1167,7 +1167,7 @@ class TicketController extends Controller {
     private function getUsersToAssingFromTicket() {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $query    = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ADMIN' OR r.name = 'ROLE_ASSESSOR'";
+        $query    = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ASSESSOR' AND u.active = 1";
         $consulta = $em->createQuery($query);
         return $consulta->getResult();
     }

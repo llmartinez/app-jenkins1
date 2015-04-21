@@ -44,12 +44,7 @@
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_typology">{% trans %} typology {% endtrans %}</label>
-                    <div hidden='hidden'> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }} </div>
-                    <select id="slct_typology" class="form-control">
-                        {% for typology in typologies %}
-                            <option value='{{ typology.id }}'>{{ typology.name }}</option>
-                        {% endfor %}
-                    </select>
+                    {{ form_widget(form.typology, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">{% trans %} diagnosis_machines {% endtrans %}</label>
