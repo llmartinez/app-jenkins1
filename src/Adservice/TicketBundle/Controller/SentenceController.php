@@ -24,7 +24,7 @@ class SentenceController extends Controller
              throw new AccessDeniedException();
         }
 
-        if($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }

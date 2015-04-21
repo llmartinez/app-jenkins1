@@ -58,6 +58,15 @@ error.old_password:	 	 "The password inserted don't match with the actual passwo
 error.access.IE:		 "Browser not compatible"
 error.access.IE2:		 "Unable to access with the Internet Explorer browser."
 error.access.IE3:		 "For the complex functionality requires access to standards-compliant browsers such as Mozilla Firefox, Google Chrome or Apple Safari."
+error.first_number:             "The first available number is: "
+error.code_partner.used:        "The Partner Code is already in use, the first available number is: "
+error.bad_introduction:         "Error! You have not entered the values correctly"                       
+error.msg_length:               "Error! The message can not exceed 150 characters"
+error.msg_solution:             "Error! You must enter a solution"
+error404.ticket:                "Tickets of this type not founded"
+error.bad_introduction.name:    "I cannot insert the name '...'"
+
+reactivation-request:           "Pedir la desactivación del taller"
 
 #ENTITY
 role:					 "Role"
@@ -338,6 +347,7 @@ workshop_inactive:		 "The workshop is disabled or not exist"
 workshop_confirm:		 "We found more than one workshop "
 workshop_name:		 	 "Workshop name"
 workshop_observation:	 "Workshop observations"
+workshop.show_details:          "Show workshop details"
 
 #USER
 user.delete:			 "Delete User"
@@ -451,7 +461,7 @@ statistic.num_tickets:		  "Number of Tickets"
 statistic.num_tickets.open:	  "Number of Open Tickets"
 statistic.num_tickets.closed: "Number of Closed Tickets"
 statistic.last_tickets:		  "Last workshop tickets"
-statistic.no_ticket:		  "Any tickets yet"
+statistic.no_ticket:		  "Workshop without tickets"
 
 #POPUP
 popup.delete:				  "Delete popup"

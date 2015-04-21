@@ -115,14 +115,14 @@ class PartnerController extends Controller {
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
                 else{
-                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code;
+                    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
                     $this->get('session')->setFlash('error', $flash);
                 }
             }
         }
         else{
             $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
-            $flash = 'El primer numero disponible es: '.$partner->getCodePartner();
+            $flash = $this->get('translator')->trans('error.first_number').$partner->getCodePartner();
             $this->get('session')->setFlash('info', $flash);
         }
 
@@ -189,7 +189,7 @@ class PartnerController extends Controller {
                 $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
                 if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())
                 {
-                    $flash = 'El codigo de Socio ya esta en uso, el primer numero disponible es: '.$code.' (valor actual '.$last_code.').';
+                    $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$last_code.').';
                     $this->get('session')->setFlash('error', $flash);
                 }
                 else{

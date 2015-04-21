@@ -59,7 +59,17 @@ error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 error.access.IE:		 "Navegador no compatible"
 error.access.IE2:		 "Es imposible acceder desde Internet Explorer."
 error.access.IE3:		 "Por la compleja funcionalidad se requiere el acceso desde navegadores standards como Mozilla Firefox, Google Chrome o Apple Safari."
+error.first_number:             "El primer numero disponible es: "
+error.code_partner.used:        "El codigo de Socio ya esta en uso, el primer numero disponible es: "
+error.bad_introduction:         "¡Error! No has introducido los valores correctamente"
+error.bad_introduction.ticket:  "¡Error! No has introducido los campos de ticket correctamente"                        
+error.msg_length:               "¡Error! El mensaje no puede ser mayor de 150 caracteres"  
+error.msg_solution:             "¡Error! Debes introducir una solucion"
+error404.ticket:                "No hay tickets de este tipo"
+error.bad_introduction.name:    "No puedes insertar el nombre '...'"
 
+reactivation-request:           "Request Workshop reactivation"
+                                
 #ENTITY
 role:					 "Rol"
 ROLE_SUPER_ADMIN: 		 "Super Admin"
@@ -339,6 +349,7 @@ workshop_inactive:		 "El taller esta dado de baja o no existe"
 workshop_confirm:		 "Tus datos coinciden con mas de un taller "
 workshop_name:		 	 "Nombre del taller"
 workshop_observation:	 "Observaciones del taller"
+workshop.show_details:          "Ver detalles del taller"
 
 #USER
 user.delete:			 "Borrar Usuario"

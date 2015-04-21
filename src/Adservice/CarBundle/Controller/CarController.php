@@ -60,7 +60,7 @@ class CarController extends Controller {
 
                 // } else { $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente'); }
 
-            }else{ $this->get('session')->setFlash('error', '¡Error! No has introducido los valores correctamente'); }
+            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
 
         $brands      = $em->getRepository('CarBundle:Brand'        )->findAll();
