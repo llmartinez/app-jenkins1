@@ -242,7 +242,7 @@ class WorkshopController extends Controller {
         
         if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
-            throw new AccessDeniedException();
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         $em = $this->getDoctrine()->getEntityManager();
