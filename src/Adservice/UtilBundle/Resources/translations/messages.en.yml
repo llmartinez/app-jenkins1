@@ -52,6 +52,7 @@ change_password: 		 "Change Password"
 change_password.confirm: "Do you want to generate a new password for this user?"
 change_password.correct: "Password changed successfully. An email will be sent to the user with their new credentials."
 change_password.error:   "Incorrect Password. Enter the current password correctly."
+error:                   "An error has occurred"
 error.same_password:	 "The passwords don't match"
 error.length_password:	 "The password must have 8 characters at least"
 error.old_password:	 	 "The password inserted don't match with the actual password"
@@ -65,8 +66,7 @@ error.msg_length:               "Error! The message can not exceed 150 character
 error.msg_solution:             "Error! You must enter a solution"
 error404.ticket:                "Tickets of this type not founded"
 error.bad_introduction.name:    "I cannot insert the name '...'"
-
-reactivation-request:           "Pedir la desactivación del taller"
+error.access:                   "You not have access to this section"
 
 #ENTITY
 role:					 "Role"
@@ -348,6 +348,7 @@ workshop_confirm:		 "We found more than one workshop "
 workshop_name:		 	 "Workshop name"
 workshop_observation:	 "Workshop observations"
 workshop.show_details:          "Show workshop details"
+reactivation-request:           "Pedir la desactivación del taller"
 
 #USER
 user.delete:			 "Delete User"

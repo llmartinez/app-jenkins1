@@ -12,7 +12,7 @@
 
 {% block info %}
 
-	{% if is_granted('ROLE_ASSESSOR') %}
+    {% if is_granted('ROLE_ASSESSOR') %}
 
         {% set workshop = ticket.workshop %}
         {% include 'TicketBundle:Workshop:show_workshop.html.twig'  %}

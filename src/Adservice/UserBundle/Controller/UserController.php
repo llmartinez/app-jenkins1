@@ -145,7 +145,8 @@ class UserController extends Controller {
     public function editUserAction($user) {
 
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false) {
+        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $user->getCountry()->getId()) === false)
+        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             throw new AccessDeniedException();
         }
 
