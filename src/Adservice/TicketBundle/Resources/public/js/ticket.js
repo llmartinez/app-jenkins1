@@ -9,7 +9,8 @@ $(document).ready(function() {
 
     //vacia tbl_similar
     $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); });
-    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); });
+    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); update_ged_btns('model'); });
+    $(document).on('change','#new_car_form_version' ,function(){ update_ged_btns('version'); });
     $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); });
     //llena tbl_similar
     $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
@@ -73,135 +74,24 @@ function confirm_delete_ticket_modal(id_ticket) {
     $('.modal-footer').find('a').attr('href', custom_href);
 }
 
-// /**
-//  * Rellena (fill) el combo de los tickets segun la opcion seleccionada por el usuario
-//  * @param {url de tipo {{ path('mi_path') }}} url_ajax
-//  */
-// function fill_tickets(url_ajax, url_show) {
-
-//     var option   = $('select[id=slct_historyTickets]').val();
-//     var new_page = $('#page').val();
-
-//     var filter_id   = setCheckId();
-//     var status      = setCheckStatus();
-
-//     $.ajax({
-//         type: "POST",
-//         url: url_ajax,
-//         data: { option: option, filter_id: filter_id, status: status, url_show: url_show },
-//         dataType: "json",
-//         success: function(data) {
-//             // Limpiamos y llenamos el combo con las opciones del json
-//             $('#ticketBody').empty();
-
-//             $.each(data, function(idx, elm) {
-
-//                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
-//                 else{
-
-//                     var lim_actual = limit*page;
-//                     var num_actual = lim_actual-limit;
-
-//                     if (cont > num_actual && cont <= lim_actual ) {
-
-//                         url = url_show.replace("PLACEHOLDER", elm.id);
-
-//                         if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
-//                         else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
-
-//                         $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
-//                                                    + "<td>" + created +" "+ elm.id + "</td>"
-//                                                    + "<td>" + elm.date             + "</td>"
-//                                                    + "<td>" + elm.workshop         + "</td>"
-//                                                    + "<td>" + elm.car              + "</td>"
-//                                                    + "<td>" + elm.description      + "</td>"
-//                                                 );
-//                     }
-//                     cont++;
-//                 }
-
-//                 if (!elm.error){ paginator(num_pag); }
-//             });
-
-//         },
-//         error: function() {
-//             console.log("Error al cargar tickets...");
-//         }
-//     });
-// }
-
-// /**
-//  * Rellena (fill) el combo de los tickets segun el workshop seleccionado por el usuario
-//  * @param {url de tipo {{ path('mi_path') }}} url_ajax
-//  */
-// function fill_tickets_from_workshop(url_ajax, url_show, user) {
-
-//     var id_workshop = $('#id_workshop').val();
-//     var new_page = $('#page').val();
-
-//     if(new_page == "" || new_page == null){ new_page = 1 };
-
-//     var filter_id = setCheckId();
-//     var status    = setCheckStatus();
-
-//     $.ajax({
-//         type: "POST",
-//         url: url_ajax,
-//         data: { id_workshop: id_workshop, filter_id: filter_id, status: status, url_show: url_show, user: user },
-//         dataType: "json",
-//         success: function(data) {
-//             // Limpiamos y llenamos el combo con las opciones del json
-//             $('#ticketBody').empty();
-
-//             //PAGINACION
-//             var total = data.length;
-//             var cont  = 1;
-//             var limit = max_rows_page;
-//             var num_pag = Math.ceil(total/limit);
-//             var page = new_page;
-
-//             $.each(data, function(idx, elm) {
-
-//                 if (elm.error) {  $('#ticketBody').append("<tr><td>" + elm.error + "</td><td></td><td></td><td></td><td></td></tr>"); }
-//                 else{
-
-//                     var lim_actual = limit*page;
-//                     var num_actual = lim_actual-limit;
-
-//                     if (cont > num_actual && cont <= lim_actual ) {
-
-//                         url = url_show.replace("PLACEHOLDER", elm.id);
-
-//                         if( elm.created == 'workshop'){ var created = '<span class="glyphicon glyphicon-user" title="Created by workshop" ></span>';     }
-//                         else {                          var created = '<span class="glyphicon glyphicon-earphone" title="Created by assessor" ></span>'; }
-
-//                         if (elm.status instanceof Object) {
-//                             if (elm.status['blocked_id'] == user) {
-//                                     status = '<a id="locked_ticket" style="color:red"  title="you have this ticket blocked for an answer" >Pending</a>'; }
-//                             else {
-//                                     status = '<a id="locked_ticket" style="color:gray" title="this ticket is blocked by '+ elm.status['blocked_by'] +'" >Blocked</a>'; }
-//                         }
-//                         else{ status = elm.status; }
-
-
-//                         $('#ticketBody').append("<tr onclick='window.open(\""+ url +"\",\"_self\")'>"
-//                                                    + "<td>" + created +" "+ elm.id + "</td>"
-//                                                    + "<td>" + elm.date             + "</td>"
-//                                                    + "<td>" + elm.car              + "</td>"
-//                                                    + "<td>" + elm.assignedTo       + "</td>"
-//                                                    + "<td>" + elm.description      + "</td>"
-//                                                    + "<td>" + status               + "</td>"
-//                                                 );
-//                     }
-//                     cont++;
-//                 }
-
-//                 if (!elm.error){ paginator(num_pag); }
-//             });
-
-//         },
-//         error: function() {
-//             console.log("Error al cargar tickets...");
-//         }
-//     });
-// }
+/**
+ * Actualiza la url de los botones de otras plataformas con los datos del vehiculo
+ */
+function update_ged_btns(type) {
+    
+    var brand = $( "#new_car_form_brand" ).val();
+    var model = $( "#new_car_form_model" ).val();
+    var dis_url = $( "#dis-url" ).val();
+    var vts_url = $( "#vts-url" ).val();
+    
+    if (type == 'model') {
+        $( "#dis" ).attr("href", dis_url+'/model-'+model);
+        $( "#vts" ).attr("href", vts_url+'/'+brand+'/'+model);
+    }
+    else{
+        var version = $( "#new_car_form_version" ).val();
+        
+        $( "#dis" ).attr("href", dis_url+'/'+version);
+        $( "#vts" ).attr("href", vts_url+'/'+brand+'/'+model+'/'+version);
+    }
+}

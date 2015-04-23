@@ -148,7 +148,7 @@ class AjaxController extends Controller
             $versions   = $consulta->getResult();
         }
         else{
-            $model = $em->getRepository('CarBundle:Model')->find($id_model);
+            $model = $em->getRepository('CarBundle:Model')->findOneByIdTecDoc($id_model);
             $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
         }
 
