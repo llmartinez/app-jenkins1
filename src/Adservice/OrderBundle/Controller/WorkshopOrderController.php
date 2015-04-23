@@ -224,7 +224,7 @@ class WorkshopOrderController extends Controller {
         
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
-            throw new AccessDeniedException();
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         if ($security->isGranted('ROLE_SUPER_AD')) {

@@ -55,7 +55,7 @@ class DiagnosisMachineController extends Controller {
     public function editDiagnosisMachineAction($id) {
         $security = $this->get('security.context');
         if (! $security->isGranted('ROLE_ADMIN')){
-            throw new AccessDeniedException();
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         $em = $this->getDoctrine()->getEntityManager();
