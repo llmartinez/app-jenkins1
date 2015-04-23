@@ -170,16 +170,12 @@ class ShopOrderController extends Controller {
      */
     public function editAction($id) {
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
-            throw new AccessDeniedException();
-
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
         $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->findOneBy(array('id'     => $id,
                                                                                   'action' => 'rejected'));
-
         if ($shopOrder) $shop = $em->getRepository("PartnerBundle:Shop")->find($shopOrder->getIdShop());
         else {
             $shop = $em->getRepository("PartnerBundle:Shop")->find($id);
@@ -189,7 +185,11 @@ class ShopOrderController extends Controller {
             //si no existe una shopOrder previa la creamos por primera vez a partir del shop original
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
-        $request = $this->getRequest();
+        
+        if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
+        and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
+            throw new AccessDeniedException();
+        }
 
         $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {

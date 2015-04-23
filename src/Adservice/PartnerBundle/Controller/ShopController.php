@@ -138,7 +138,8 @@ class ShopController extends Controller {
      */
     public function editShopAction($shop){
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false){
+        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $shop->getCountry()->getId()) === false)
+        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             throw new AccessDeniedException();
         }
 
