@@ -67,7 +67,7 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $option=null) {
+    public function userListAction($page=1, $country=0, $option=null) {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -85,9 +85,15 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if($country != 0){
+                $params[] = array('country', ' = '.$country);
+            }else{
+                $params[] = array();
+            }
+        }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
         if($option == null or $option == 'all' or $option == 'none'){
-                if($security->isGranted('ROLE_SUPER_ADMIN')) $params[] = array();
-                else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
                 $role_id  = 'none';
@@ -95,10 +101,10 @@ class UserController extends Controller {
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
                 $role     = $role->getName();
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $role, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $role);
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $role, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $role);
         }
-
+        
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
@@ -121,6 +127,7 @@ class UserController extends Controller {
         $length = $pagination->setTotalPagByLength($length);
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
+        $countries = $em->getRepository("UtilBundle:Country")->findAll();
 
         return $this->render('UserBundle:User:list.html.twig', array(   'users_role_super_admin' => $users_role_super_admin,
                                                                         'users_role_admin'       => $users_role_admin,
@@ -130,6 +137,8 @@ class UserController extends Controller {
                                                                         'users_role_ad'          => $users_role_ad,
                                                                         'pagination'             => $pagination,
                                                                         'roles'                  => $roles,
+                                                                        'countries'              => $countries,
+                                                                        'country'                => $country,
                                                                         'option'                 => $role_id,
                                                                        ));
     }
