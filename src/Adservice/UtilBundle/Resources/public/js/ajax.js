@@ -166,7 +166,7 @@ function fill_model() {
             $('#new_car_form_version').empty();
             //Primer campo vacío
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.idTecDoc + ">" + elm.name + "</option>");
             });
         },
         error: function() {
@@ -204,7 +204,7 @@ function fill_version() {
             $('#ticket_form_subsystem').empty();
             //Primer campo vacío
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.idTecDoc + ">" + elm.name + "</option>");
             });
         },
         error: function() {
