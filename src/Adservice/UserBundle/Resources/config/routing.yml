@@ -30,8 +30,8 @@ user_profile:
     defaults: { _controller: UserBundle:User:profile }
 
 user_list:
-    pattern: /user/list/{page}/{option}
-    defaults: { _controller: UserBundle:User:userList, page: 1, option: null  }
+    pattern: /user/list/{page}/{country}/{option}
+    defaults: { _controller: UserBundle:User:userList, page: 1, country: 0, option: null  }
     options:
         expose: true
 

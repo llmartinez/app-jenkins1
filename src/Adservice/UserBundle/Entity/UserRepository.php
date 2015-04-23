@@ -42,12 +42,17 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findByOption($em, $security, $option, $pagination)
+    public function findByOption($em, $security, $country, $option, $pagination)
     {
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
         if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
             $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        else{
+            if ($country != 0 ) {
+                $query = $query.' AND u.country = '.$country;
+            }
         }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option)
@@ -61,12 +66,17 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findLengthOption($em, $security, $option)
+    public function findLengthOption($em, $security, $country, $option)
     {
         $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
         if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
             $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        else{
+            if ($country != 0 ) {
+                $query = $query.' AND u.country = '.$country;
+            }
         }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option);

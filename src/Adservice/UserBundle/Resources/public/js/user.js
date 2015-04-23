@@ -5,9 +5,18 @@
 
         $('#slct_role').change(function() {
             var role = $(this).val();
+            var country = $('#slct_country').val();
             var route = 'user_list';
             var locale = $(document).find("#data_locale").val();
-            var url = Routing.generate(route, {_locale: locale, page: 1, option: role });
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#slct_country').change(function() {
+            var country = $(this).val();
+            var role = $('#slct_role').val()
+            var route = 'user_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
             window.open(url, "_self");
         });
     });
