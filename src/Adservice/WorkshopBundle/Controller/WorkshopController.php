@@ -240,7 +240,7 @@ class WorkshopController extends Controller {
     public function editWorkshopAction($workshop) {
         $security = $this->get('security.context');
         
-        if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
+        if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
