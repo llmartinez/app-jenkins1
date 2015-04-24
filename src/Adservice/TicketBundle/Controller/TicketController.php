@@ -212,7 +212,7 @@ class TicketController extends Controller {
         }
 
         $pagination = new Pagination($page);
-        $ordered = null;
+        $ordered = array('e.created_at', 'DESC');
 
         if($pagination->getMaxRows() != $num_rows) $pagination = $pagination->changeMaxRows($page, $num_rows);
 
