@@ -63,8 +63,8 @@ reopenTicket:
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 listTicket:
-    pattern:  /ticket/{page}/{num_rows}/{order}/{option}/{country}
-    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , country: 0 , num_rows: 10 , order: 0 , option: null  }
+    pattern:  /ticket/{page}/{num_rows}/{country}/{option}
+    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , num_rows: 10 , country: 0, option: null  }
 
 
 ################################

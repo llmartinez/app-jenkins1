@@ -42,7 +42,7 @@ class TicketController extends Controller {
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page=1, $country=0, $num_rows=10, $option=null)
+    public function listTicketAction($page=1, $num_rows=10, $country=0, $option=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request    = $this->getRequest();
@@ -172,13 +172,14 @@ class TicketController extends Controller {
         }
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            $country = 0;
             if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
             {
-                $joins[0][1] = $joins[0][1].' AND w.country != '.$country;
+                if ($country != 0) $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                else               $joins[0][1] = $joins[0][1].' AND w.country != 0';
             }
             else{
-                $joins[] = array('e.workshop w ', 'w.country != '.$country);
+                if ($country != 0) $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                else               $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }elseif($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
             $country = $security->getToken()->getUser()->getCountry()->getId();
