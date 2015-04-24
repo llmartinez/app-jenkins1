@@ -35,6 +35,7 @@ class ShopController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
+            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
         else {
             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());

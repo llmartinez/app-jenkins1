@@ -1,12 +1,11 @@
 
-	{# DECLARACION DE VARIABLES PARA LA PAGINACION #}
-	{% set page      = pagination.page      %}
-	{% set prevpages = pagination.prevpages %}
+    {# DECLARACION DE VARIABLES PARA LA PAGINACION #}
+    {% set page      = pagination.page      %}
+    {% set prevpages = pagination.prevpages %}
     {% set nextpages = pagination.nextpages %}
     {% set totalpag  = pagination.totalpag  %}
 
     {# PAGINACION #}
-
     <div id="pagination"  class="pagination_content">
 	    <input type="hidden" id="route" name="route" value="list_orders">
 	    <input type="hidden" id="total" name="total" value="{{ totalpag }}">

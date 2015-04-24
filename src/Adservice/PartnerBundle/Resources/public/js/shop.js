@@ -10,24 +10,26 @@
             $('#flt_country').click(function() {
 
                 var country = $('#flt_country').val();
+                var partner = $('#flt_partner').val();
                 if(country == null) var country = 'none';
-                var partner = 'none';
+                if(partner == null) var partner = 'none';
 
                 var route = 'shop_list';
                 var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, partner: 'none' });
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, partner: partner });
 
                 window.open(url, "_self");
             });
             $('#flt_partner').click(function() {
 
                 var partner = $('#flt_partner').val();
+                var country = $('#flt_country').val();
                 if(partner == null) var partner = 'none';
-                var country = 'none';
+                if(country == null) var country = 'none';
 
                 var route = 'shop_list';
                 var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: 1, country: 'none', partner: partner });
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, partner: partner });
 
                 window.open(url, "_self");
             });
