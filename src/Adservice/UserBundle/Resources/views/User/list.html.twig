@@ -12,7 +12,7 @@
     <legend>{% trans %} menu.list_users {% endtrans %}
         <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
     </legend>
-
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group">
         <select id="slct_country" class="form-control"> <option value="0">...</option>
             {% for country_ in countries %} <option value="{{ country_.id }}"
@@ -20,6 +20,7 @@
                                     >{{ country_.country | trans }}</option> {% endfor %}
         </select>
     </div>
+    {% endif %}
     <div class="col-xs-3 col-md-3 form-group">
         <select id="slct_role" class="form-control"> <option value="all">...</option>
             {% for role in roles %} <option value="{{ role.id }}"
