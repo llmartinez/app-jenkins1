@@ -27,12 +27,12 @@
 
                         {% if ticket.status == 'open' %}
                                 {% if ticket.assignedTo == null %}
-                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_green.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
                                 {% else %}
-                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_blue.png') }}" title="{{'ticket_assigned'|trans}}" alt="{{ ticket.status | trans }}"></td>
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket_assigned'|trans}}" alt="{{ ticket.status | trans }}"></td>
                                 {% endif %}
                             {% elseif ticket.status == 'closed' %}
-                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/flag_red.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}"></td>
+                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}"></td>
                             {% endif %}
 
                         {% if is_granted('ROLE_ASSESSOR') %}
