@@ -49,10 +49,11 @@ class WorkshopController extends Controller {
                 if ($partner != '0') $params[] = array('partner', ' = '.$partner);
 
                 if ($w_idpartner != '0' and $w_id != '0')
+                {
                     $params[] = array('code_workshop', ' = '.$w_id);
                     $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
                     $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = '.$w_idpartner.' ');
-                    
+                }
 
                 if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
                 elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
