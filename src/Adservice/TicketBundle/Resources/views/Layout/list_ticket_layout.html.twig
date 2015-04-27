@@ -14,15 +14,10 @@
     {% if is_granted('ROLE_ASSESSOR') %}
 
         {% if workshop.id != "" %}  
-
-            {% if is_granted('ROLE_SUPER_ADMIN') 
-               or not is_granted('ROLE_ASSESSOR') and workshop.country.id == app.security.getToken().getUser().getCountry().getId() 
-               or is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}
-                {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
-            {% else %}
-                {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}
-            {% endif %}
-        {% else %}                  {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}  {% endif %}
+            {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+        {% else %}
+            {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}
+        {% endif %}
 
     {% else %}
         {% set workshop = app.security.getToken().getUser().getWorkshop() %}
