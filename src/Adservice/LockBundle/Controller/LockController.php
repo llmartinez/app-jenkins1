@@ -18,7 +18,7 @@ class LockController extends Controller
         $entity     = 'LockIncidence';
         $params     = array();
 
-        if( ! $security->isGranted('ROLE_ASSESSOR')){
+        if( ! $security->isGranted('ROLE_ADMIN')){
                                                       $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
                                                       $id_socio  = $security->getToken()->getUser()->getWorkshop()->getIdSocio();
         }
