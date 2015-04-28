@@ -52,7 +52,7 @@ user_select_new:
     defaults: { _controller: UserBundle:User:selectNewUser }
 
 generate_password:
-    pattern: /user/changePassword/{id}
+    pattern: /user/generatePassword/{id}
     defaults: { _controller: UserBundle:User:generatePassword }
     options:
         expose: true
