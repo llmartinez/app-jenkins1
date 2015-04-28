@@ -250,7 +250,7 @@ class UserController extends Controller {
 
     /**
      * Genera el password para un usuario
-     * @Route("/user/changePassword/{id}")
+     * @Route("/user/generatePassword/{id}")
      * @ParamConverter("user", class="UserBundle:User")
      * @return type
      */
