@@ -166,7 +166,7 @@ function fill_model() {
             $('#new_car_form_version').empty();
             //Primer campo vacío
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.idTecDoc + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {
@@ -202,10 +202,15 @@ function fill_version() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
-            //Primer campo vacío
+            
+            var dis_url = $( "#dis-url" ).val();
+            var vts_url = $( "#vts-url" ).val();
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.idTecDoc + ">" + elm.name + "</option>");
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
+                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
             });
+
         },
         error: function() {
             console.log("Error al cargar versiones...");
@@ -235,6 +240,11 @@ function fill_car_data() {
                 $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor       );
                 $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw          );
                 $('form[id=contact]').find('#new_car_form_displacement').val(elm.displacement);
+                var dis_url = $( "#dis-url" ).val();
+                var vts_url = $( "#vts-url" ).val();
+        
+                $( "#dis" ).attr("href", dis_url+'/'+elm.idTecDoc);
+                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.idTecDoc);
             });
         },
         error: function() {
