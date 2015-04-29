@@ -15,7 +15,7 @@ class OrderController extends Controller
      * @return type
      * @throws AccessDeniedException
      */
-    public function listOrdersAction($page=1, $option='workshop_pending'){
+    public function listOrdersAction($page=1, $option='workshop_pending', $country='none'){
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
@@ -71,6 +71,13 @@ class OrderController extends Controller
                                             $shop_rejected[]     = $rejected;
                                         }
 
+        if ($country != 'none') {
+            $workshop_pending[] = array('country' , " = ".$country);
+            $workshop_rejected[] = array('country' , " = ".$country);
+            $shop_pending[] = array('country' , " = ".$country);
+            $shop_rejected[] = array('country' , " = ".$country);
+        }
+                                        
         $pagination = new Pagination($page);
         $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
         $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
@@ -99,8 +106,12 @@ class OrderController extends Controller
         if    (($option == 'workshop_pending') or ($option == 'workshop_rejected')) $ordersBefore = WorkshopOrderController::getWorkshopOrdersBefore($em, $orders);
         elseif(($option == 'shop_pending')     or ($option == 'shop_rejected'))     $ordersBefore = ShopOrderController::getShopOrdersBefore($em, $orders);
 
+        $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        
         return $this->render('OrderBundle:Order:list_orders.html.twig', array(  'pagination'   => $pagination,
                                                                                 'option'       => $option,
+                                                                                'countries'    => $countries,
+                                                                                'country'      => $country,
                                                                                 'orders'       => $orders,
 	                                                                        'ordersBefore' => $ordersBefore,
                                                                                 'length_workshop_pending'  => $length_workshop_pending,

@@ -34,4 +34,21 @@
 
             window.open(url, "_self");
         });
+
+        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+        $('#flt_country').click(function() {
+
+            var country = $('#flt_country').val();
+            var option = $('#option').val();
+
+            if(country == null) country = 'none';
+            if(option == null) option = 'workshop_pending';
+
+            var route = $('#route').val();
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country});
+
+            window.open(url, "_self");
+        });
+
     });
