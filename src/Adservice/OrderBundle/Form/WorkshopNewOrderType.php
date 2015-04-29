@@ -21,6 +21,7 @@ class WorkshopNewOrderType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -32,6 +33,7 @@ class WorkshopNewOrderType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -47,6 +49,7 @@ class WorkshopNewOrderType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
