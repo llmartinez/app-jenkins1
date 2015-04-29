@@ -121,7 +121,7 @@ function populate_shop(id_shop){
         dataType    : "json",
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
-            if (idx != "error") {
+            if (data['error'] != "No hay coincidencias") {
             $('form').find('select[id*=_shop]').empty();
                 $.each(data, function(idx, elm) {
 
