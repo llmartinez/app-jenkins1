@@ -508,16 +508,13 @@ class UserController extends Controller {
      */
     private function saveUser($em, $user, $original_password = null) {
 
-        if ($user->getPassword() != null) {
+        if ($user->getPassword() != null and $original_password == null) {
             //password nuevo, se codifica con el nuevo salt
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
             $salt = md5(time());
             $password = $encoder->encodePassword($user->getPassword(), $salt);
             $user->setPassword($password);
             $user->setSalt($salt);
-        } else {
-            //el password no se modifica
-            $user->setPassword($original_password);
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $user->setModifiedBy($this->get('security.context')->getToken()->getUser());

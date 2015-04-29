@@ -197,7 +197,7 @@
             <tbody>
                     {% for workshop in statistic.results %}
                 <tr>
-                    <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                    <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
                     <td>{{ workshop.name }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                     <td>{{ workshop.partner}}</td>
                     <td>{{ workshop.email1 }}</td>
@@ -258,7 +258,7 @@
                 <tbody>
                         {% for workshop in statistic.results %}
                     <tr>
-                        <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                        <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
                         <td>{{ workshop.name|length > 25 ? workshop.name|slice(0, 25) ~ '...' : workshop.name }}
                             {% if workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
                         </td>
@@ -325,7 +325,7 @@
                 <tbody>
                         {% for ticket in statistic.results %}
                     <tr>
-                        <td>{{ ticket.workshop.partner.codePartner }}, {{ ticket.workshop.codeWorkshop }}</td>
+                        <td>{{ ticket.workshop.partner.codePartner }} - {{ ticket.workshop.codeWorkshop }}</td>
                         <td>{{ ticket.workshop.name|length > 25 ? ticket.workshop.name|slice(0, 25) ~ '...' : ticket.workshop.name }}
                             {% if ticket.workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
                         </td>
@@ -394,7 +394,7 @@
                 <tbody>
                         {% for ticket in statistic.results %}
                     <tr>
-                        <td>{{ ticket.workshop.partner.codePartner }}, {{ ticket.workshop.codeWorkshop }}</td>
+                        <td>{{ ticket.workshop.partner.codePartner }} - {{ ticket.workshop.codeWorkshop }}</td>
                         <td>{{ ticket.workshop.name|length > 25 ? ticket.workshop.name|slice(0, 25) ~ '...' : ticket.workshop.name }}
                             {% if ticket.workshop.active == 1 %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
                         </td>
