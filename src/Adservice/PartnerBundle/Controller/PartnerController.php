@@ -103,15 +103,6 @@ class PartnerController extends Controller {
                     $partner = UtilController::settersContact($partner, $partner);
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
 
-                    /* SHOP 'SIN TIENDA' PARA EL PARTNER*/
-                    $newShop = UtilController::newEntity(new Shop(), $security->getToken()->getUser());
-                    $newShop->setName('...');
-                    $newShop->setPartner($partner);
-                    $newShop->setActive('1');
-                    $newShop = UtilController::settersContact($newShop, $partner);
-
-                    UtilController::saveEntity($em, $newShop, $security->getToken()->getUser());
-
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
                 else{

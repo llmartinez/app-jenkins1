@@ -30,7 +30,7 @@
                 <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} language {% endtrans %}</label>
+                <label>{% trans %} language {% endtrans %} *</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
             </div>
         </div>
@@ -40,7 +40,7 @@
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                    <label> {% trans %} contact         {% endtrans %} *</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
                                                                                 {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}

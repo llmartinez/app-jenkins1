@@ -22,6 +22,7 @@ class WorkshopType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -31,6 +32,7 @@ class WorkshopType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -38,19 +40,21 @@ class WorkshopType extends AbstractType
                                                           ->andWhere('s.country'.$id_country)
                                                           ->andWhere('s.partner'.$id_partner); }))
             ->add('typology', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('diagnosis_machines', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'multiple' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -71,6 +75,7 @@ class WorkshopType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
