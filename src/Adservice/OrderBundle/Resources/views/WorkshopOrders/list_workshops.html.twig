@@ -7,7 +7,10 @@
       <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
     </ol>
 
-<legend> {% trans %} menu.list_workshops {% endtrans %} </legend>
+<legend> {% trans %} menu.list_workshops {% endtrans %} 
+  <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
+    <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
+    {% trans %} menu.new_workshop_order {% endtrans %}</a></legend>
 
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
