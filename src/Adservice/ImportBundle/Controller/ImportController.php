@@ -60,33 +60,6 @@ class ImportController extends Controller
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
     	}
-//  ____  _   _  ___  ____       ____  _____ _____ _   _   _ _   _____
-// / ___|| | | |/ _ \|  _ \     |  _ \| ____|  ___/ \ | | | | | |_   _|
-// \___ \| |_| | | | | |_) |____| | | |  _| | |_ / _ \| | | | |   | |
-//  ___) |  _  | |_| |  __/_____| |_| | |___|  _/ ___ \ |_| | |___| |
-// |____/|_| |_|\___/|_|        |____/|_____|_|/_/   \_\___/|_____|_|
-
-		elseif( $bbdd == 'shop-default' )
-		{
-			$old_partner_default = $em_old->getRepository('ImportBundle:old_Socio')->find(9999);   							// OLD PARTNER
-			$partner_default     = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => 9999));   // PARTNER
-			$locations           = $this->getLocations($em);								       							// MAPPING LOCATIONS
-
-			$newShop = UtilController::newEntity(new Shop(), $sa);
-			$newShop->setName('...');
-			//$newShop->setCodeShop($old_Socio->getId());
-			$newShop->setPartner($partner_default);
-			$newShop->setActive('1');
-			$newShop = $this->setContactFields($em, $old_partner_default, $newShop, $locations);
-			UtilController::saveEntity($em, $newShop, $sa, true);
-
-			$session->set('msg' ,	'Tiendas por defecto importadas correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando Tiendas asociadas (entidad Shop)...');
-			$session->set('next',  	'shop');
-
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop-default'));
-    	}
 //  ____  _   _  ___  ____
 // / ___|| | | |/ _ \|  _ \
 // \___ \| |_| | | | | |_) |
@@ -195,75 +168,72 @@ class ImportController extends Controller
     	elseif( $bbdd == 'workshop' )
     	{
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findAll();	    // WORKSHOP	//
-			$all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
+                $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
 
-			$locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
-			$all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
-			$all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
-			$shop_default 	 = $em->getRepository('PartnerBundle:Shop'     )->findOneByName('...');	//MAPPING SHOPS
-			$typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
-			//find($old_Taller->getTipologia());
+                $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
+                $all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+                $all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+                $typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+                //find($old_Taller->getTipologia());
 
-			foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
-			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-			foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
-			//var_dump($all_shops);die;
-			foreach ($old_Talleres as $old_Taller)
-			{
-				$newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-				$newWorkshop->setName 					($old_Taller->getNombre());
-				$newWorkshop->setCodeWorkshop 			($old_Taller->getId());
-				$newWorkshop->setAddress 				($old_Taller->getDireccion());
-				$newWorkshop->setConflictive     		($old_Taller->getConflictivo());
-				$newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
-				$newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
-				$newWorkshop->setActive	 				($old_Taller->getActive());
-				$newWorkshop->setContact 				($old_Taller->getContacto());
-				$newWorkshop->setTypology 				($typology);
-				$newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
+                foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
+                foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
+                foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
+                //var_dump($all_shops);die;
+                foreach ($old_Talleres as $old_Taller)
+                {
+                        $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
+                        $newWorkshop->setName 					($old_Taller->getNombre());
+                        $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
+                        $newWorkshop->setAddress 				($old_Taller->getDireccion());
+                        $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
+                        $newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
+                        $newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
+                        $newWorkshop->setActive	 				($old_Taller->getActive());
+                        $newWorkshop->setContact 				($old_Taller->getContacto());
+                        $newWorkshop->setTypology 				($typology);
+                        $newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
 
-				//COMPROVACION SI EXISTE EL SOCIO
-				$idSocio    = $old_Taller->getIdSocio();
+                        //COMPROVACION SI EXISTE EL SOCIO
+                        $idSocio    = $old_Taller->getIdSocio();
 
-				if(isset($partners[$idSocio]))
-				{
-					$newWorkshop->setPartner ($partners[$idSocio]);
-				}
-				elseif($idSocio >= 60 AND $idSocio <= 78){
-						 $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
+                        if(isset($partners[$idSocio]))
+                        {
+                                $newWorkshop->setPartner ($partners[$idSocio]);
+                        }
+                        elseif($idSocio >= 60 AND $idSocio <= 78){
+                                         $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
 
-						 if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
-						 else                         $newWorkshop->setShop($shop_default);   //Tienda por defecto => '...'
-				}else{
-						 $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
-						 $newWorkshop->setShop   ($shop_default);   //Tienda por defecto => '...'
-				}
+                                         if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
+                        }else{
+                                         $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
+                        }
 
-				//setAdServicePlus
-				if(isset($adsplus[$old_Taller->getId()])) {
-					$newWorkshop->setAdServicePlus(1);
+                        //setAdServicePlus
+                        if(isset($adsplus[$old_Taller->getId()])) {
+                                $newWorkshop->setAdServicePlus(1);
 
-					$adsp = $adsplus[$old_Taller->getId()];
-					$newADSPlus = new ADSPlus();
-					$newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
-					$newADSPlus->setAltaInicial($adsp->getAltaInicial());
-					$newADSPlus->setUltAlta($adsp->getUltAlta());
-					$newADSPlus->setBaja($adsp->getBaja());
-					$newADSPlus->setContador($adsp->getContador());
-					$newADSPlus->setActive($adsp->getActive());
+                                $adsp = $adsplus[$old_Taller->getId()];
+                                $newADSPlus = new ADSPlus();
+                                $newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
+                                $newADSPlus->setAltaInicial($adsp->getAltaInicial());
+                                $newADSPlus->setUltAlta($adsp->getUltAlta());
+                                $newADSPlus->setBaja($adsp->getBaja());
+                                $newADSPlus->setContador($adsp->getContador());
+                                $newADSPlus->setActive($adsp->getActive());
 
-        			$em->persist($newADSPlus);
-				}
-				else $newWorkshop->setAdServicePlus(0);
+                        $em->persist($newADSPlus);
+                        }
+                        else $newWorkshop->setAdServicePlus(0);
 
-				UtilController::saveEntity($em, $newWorkshop, $sa, false);
-			}
-			$em->flush();
-			$session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
-			$session->set('next',  	'user');
+                        UtilController::saveEntity($em, $newWorkshop, $sa, false);
+                }
+                $em->flush();
+                $session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
+                $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
+                $session->set('next',  	'user');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
+                //return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
 //  _   _ ____  _____ ____
