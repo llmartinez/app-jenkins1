@@ -10,15 +10,9 @@ class PopupType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        if (isset($_SESSION['role'])) 
-        { 
-            $role = " = '".$_SESSION['role']."' ";
-            unset($_SESSION['role']);
-            
-            if ($role != 'ROLE_SUPER_ADMIN') { 
-                $role = " != 'ROLE_SUPER_ADMIN'"; 
-            }
-        } else { $role = ' != 0';}
+        $role = " != 'ROLE_SUPER_ADMIN'";
+        if (isset($_SESSION['role']) and ($_SESSION['role'] == 'ROLE_SUPER_ADMIN')){ $role = " != '0'"; }
+        unset($_SESSION['role']);
         
         $builder
                 ->add('name')
@@ -29,8 +23,8 @@ class PopupType extends AbstractType {
                   'property' => 'name',
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($role) {
-                                                return $er->createQueryBuilder('c')
-                                                          ->where('c.name'.$role); }))
+                                                return $er->createQueryBuilder('r')
+                                                          ->where('r.name'.$role); }))
                 ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',

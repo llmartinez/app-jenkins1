@@ -44,7 +44,11 @@ class PopupController extends Controller {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
             else                    $params[] = array();
         }
-        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        else {
+            $id_superadmin = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_SUPER_ADMIN')->getId();
+            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            $params[] = array('role', ' != '.$id_superadmin);
+        }
 
         $pagination = new Pagination($page);
 
@@ -132,7 +136,7 @@ class PopupController extends Controller {
         // Creamos variables de sesion para fitlrar los resultados del formulario
         $role = $security->getToken()->getUser()->getRoles();
         $role = $role[0]->getName();
-        $_SESSION['role'] = ' = '.$role;
+        $_SESSION['role'] = $role;
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_country'] = ' != 0 ';
