@@ -3,8 +3,8 @@
 ##############################
 
 list_orders:
-    pattern: /orders/list/{page}/{option}
-    defaults: { _controller: OrderBundle:Order:listOrders, page: 1, option: 'workshop_pending' }
+    pattern: /orders/list/{page}/{option}/{country}
+    defaults: { _controller: OrderBundle:Order:listOrders, page: 1, option: 'workshop_pending', country: none }
     options:
         expose: true
 

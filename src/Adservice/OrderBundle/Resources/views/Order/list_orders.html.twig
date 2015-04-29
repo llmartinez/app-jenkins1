@@ -1,29 +1,42 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'list_orders' %}
+    <input type="hidden" id="route" value="{{ route }}">
+    <input type="hidden" id="option" value="{{ option }}">
+        
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
         <li class="active">{% trans %} menu.list_orders {% endtrans %}</li>
     </ol>
 
 <div class='colIzq15'>
-    <button onclick="window.open('{{ path('list_orders', { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'option': option, 'country': 'plc_country'}) }}">
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for _country in countries %}
+                <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
+    <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br>
         {% if length_workshop_pending > 0 %} <div class="pending_application3">{{ length_workshop_pending }}</div>{% endif %}
     </button>
-    <button onclick="window.open('{{ path('list_orders', { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
+    <button onclick="window.open('{{ path(route, { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br>
         {% if length_workshop_rejected > 0 %} <div class="pending_application3">{{ length_workshop_rejected }}</div>{% endif %}
     </button>
-    <button onclick="window.open('{{ path('list_orders', { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
+    <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br>
         {% if length_shop_pending > 0 %} <div class="pending_application3">{{ length_shop_pending }}</div>{% endif %}
     </button>
-    <button onclick="window.open('{{ path('list_orders', { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
+    <button onclick="window.open('{{ path(route, { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br>
         {% if length_shop_rejected > 0 %} <div class="pending_application3">{{ length_shop_rejected }}</div>{% endif %}
