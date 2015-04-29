@@ -130,6 +130,9 @@ class PopupController extends Controller {
 
         $petition = $this->getRequest();
         // Creamos variables de sesion para fitlrar los resultados del formulario
+        $role = $security->getToken()->getUser()->getRoles();
+        $role = $role[0]->getName();
+        $_SESSION['role'] = ' = '.$role;
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_country'] = ' != 0 ';
