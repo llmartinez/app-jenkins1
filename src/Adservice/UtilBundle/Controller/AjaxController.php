@@ -148,7 +148,7 @@ class AjaxController extends Controller
             $versions   = $consulta->getResult();
         }
         else{
-            $model = $em->getRepository('CarBundle:Model')->findOneByIdTecDoc($id_model);
+            $model = $em->getRepository('CarBundle:Model')->find($id_model);
             $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
         }
 
@@ -172,10 +172,14 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_version = $petition->request->get('id_version');
-        $version = $em->getRepository('CarBundle:Version')->find($id_version[0]);
+        $id_version = $id_version[0];
+        $version = $em->getRepository('CarBundle:Version')->find($id_version);
 
-        if(isset($version)) $json[] = $version->to_json();
-        else                $json   = array( 'error' => 'No hay coincidencias');
+        if(isset($version)) {
+            $json[] = $version->to_json();
+            
+        }
+        else                {$json   = array( 'error' => 'No hay coincidencias');}
 
         return new Response(json_encode($json), $status = 200);
     }

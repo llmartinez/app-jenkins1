@@ -133,7 +133,8 @@ class Model {
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'name'    => $this->getName(),
-                      'idTecDoc'=> $this->getIdTecDoc());
+                      'idTecDoc'=> $this->getIdTecDoc(),
+                      'brand'   => $this->getBrand()->getIdTecDoc());
         return $json;
     }
 

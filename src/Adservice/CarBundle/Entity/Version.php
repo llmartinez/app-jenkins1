@@ -239,7 +239,9 @@ class Version {
                       'motor'        => $this->getMotor(),
                       'kw'           => $this->getKw(),
                       'displacement' => $this->getDisplacement(),
-                      'idTecDoc'     => $this->getIdTecDoc());
+                      'idTecDoc'     => $this->getIdTecDoc(),
+                      'model'        => $this->getModel()->getIdTecDoc(),
+                      'brand'        => $this->getModel()->getBrand()->getIdTecDoc());
         return $json;
     }
 }
