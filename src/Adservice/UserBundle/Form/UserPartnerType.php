@@ -21,8 +21,8 @@ class UserPartnerType extends AbstractType {
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',
                                                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                                                'first_name'      => 'Contraseña',
-                                                'second_name'     => 'Repite Contraseña',
+                                                'first_name'      => 'Contraseña *',
+                                                'second_name'     => 'Repite Contraseña *',
                                                 'required'        => 'required' ))
             ->add('name')
             ->add('surname')
@@ -31,6 +31,7 @@ class UserPartnerType extends AbstractType {
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -43,6 +44,7 @@ class UserPartnerType extends AbstractType {
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -58,7 +60,11 @@ class UserPartnerType extends AbstractType {
             ->add('fax'            , 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
-            ->add('language')
+            ->add('language','entity', array(
+                  'class' => 'Adservice\UtilBundle\Entity\Language',
+                  'property' => 'language',
+                  'required' => true,
+                  'empty_value' => ''))
         ;
         return $builder;
     }

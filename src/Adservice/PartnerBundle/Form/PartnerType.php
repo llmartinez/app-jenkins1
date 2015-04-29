@@ -22,6 +22,7 @@ class PartnerType extends AbstractType {
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')

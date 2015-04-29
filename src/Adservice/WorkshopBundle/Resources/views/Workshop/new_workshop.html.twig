@@ -21,11 +21,11 @@
 
             <div class="col-xs-8 col-md-8 form-group">
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %}</label>
+                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} name {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
-                    <label for="new_car_form_vin">{% trans %} code_workshop {% endtrans %}</label>
+                    <label for="new_car_form_vin">{% trans %} code_workshop {% endtrans %} *</label>
                     {{ form_widget(form.code_workshop, {'attr': { 'class': 'form-control',
                                                                   'placeholder': 'code_workshop' | trans,
                                                                   'min': 1 } }) }}
@@ -35,20 +35,20 @@
                     {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %}</label>
+                    <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %} *</label>
                     {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
-                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+                    <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %} *</label>
+                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_typology">{% trans %} typology {% endtrans %}</label>
-                    {{ form_widget(form.typology, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+                    {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">{% trans %} diagnosis_machines {% endtrans %}</label>
-                    <div> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control', 'multiple':'multiple' } }) }} </div>
+                    <div> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control'} }) }} </div>
                 </div>
             </div>
             <div class="col-xs-4 col-md-4 form-group">
@@ -80,7 +80,8 @@
         <div class="col-xs-12 col-md-12 form-group">
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} contact {% endtrans %}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                <label>{% trans %} contact {% endtrans %} *</label> 
+                {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
             </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
         </div>

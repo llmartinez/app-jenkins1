@@ -22,7 +22,7 @@
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_workshopbundle_typologytype_name">{% trans %} name {% endtrans %}</label>
+                    <label for="adservice_workshopbundle_typologytype_name">{% trans %} name {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
@@ -32,7 +32,7 @@
             </div>
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_workshopbundle_typologytype_country">{% trans %} country {% endtrans %}</label>
+                    <label for="adservice_workshopbundle_typologytype_country">{% trans %} country {% endtrans %} *</label>
                     {{ form_widget(form.country, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>

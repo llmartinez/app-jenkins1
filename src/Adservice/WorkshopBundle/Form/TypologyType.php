@@ -18,11 +18,15 @@ class TypologyType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
                                                           ->where('c.id'.$id_country); }))
-            ->add('active', 'checkbox', array('required' => false))
+            ->add('active', 'checkbox', array(
+                  'required' => false,
+                  'attr'     => array('checked'   => 'checked')
+                ))
         ;
     }
 
