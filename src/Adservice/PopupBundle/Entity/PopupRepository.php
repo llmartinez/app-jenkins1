@@ -25,11 +25,21 @@ class PopupRepository extends EntityRepository{
         $query = "SELECT p FROM PopupBundle:Popup p WHERE p.startdate_at <= '".$date->format("Y-m-h")."' AND p.enddate_at >= '".$date->format("Y-m-h")."e' AND p.role = ".$role->getId()." ".$country;
 
         $consulta = $em->createQuery($query);
-        // $consulta->setParameter('start_date', $date);
-        // $consulta->setParameter('end_date', $date);
-        // $consulta->setParameter('role', $role->getId());
-        // if($role != 'ROLE_SUPER_ADMIN' AND $role != 'ROLE_SUPER_AD') $consulta->setParameter('country', $user->getCountry()->getId());
-
-        return $consulta->getResult();
+        $results = $consulta->getResult();
+        
+        $size = sizeOf($results);
+        if($size > 1) {
+            $popup = new Popup();
+            $popup->setName('POPUP');
+            $desc = '';
+            foreach ($results as $result){
+                $desc = $desc.$result->getDescription().'<br>';
+            }
+            $popup->setDescription($desc);
+            return array('0' => $popup);
+        }
+        else{
+            return $results;
+        }
     }
 }
