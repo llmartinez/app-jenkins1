@@ -62,7 +62,8 @@ error.access.IE2:		 "Unable to access with the Internet Explorer browser."
 error.access.IE3:		 "For the complex functionality requires access to standards-compliant browsers such as Mozilla Firefox, Google Chrome or Apple Safari."
 error.first_number:             "The first available number is: "
 error.code_partner.used:        "The Partner Code is already in use, the first available number is: "
-error.bad_introduction:         "Error! You have not entered the values correctly"                       
+error.bad_introduction:         "Error! You have not entered the values correctly"
+error.bad_introduction.ticket:  "Error! You have not entered the ticket values correctly"
 error.msg_length:               "Error! The message can not exceed 150 characters"
 error.msg_solution:             "Error! You must enter a solution"
 error404.ticket:                "Tickets of this type not founded"
@@ -367,6 +368,8 @@ kw:						 "kW"
 displacement:			 "Displacement"
 vin:					 "Vin"
 plate_number:			 "Plate Number"
+
+#APP
 app:					 "Aplications"
 dis:					 "DIS-NET"
 dis-url:				 "http://dis-net.com/home"
@@ -632,7 +635,7 @@ lock.list_incidences: 	"Incidences History"
 
 error: An error has occurred
 back:  Back to the application
-    
+
 termsConditions: 	" "
 _termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Center of Innovation and Resources
