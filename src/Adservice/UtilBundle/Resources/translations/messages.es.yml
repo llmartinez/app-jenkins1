@@ -2,27 +2,27 @@ header.welcome: "ADService España"
 
 www.ad-service.es: "www.ad-service.es"
 
-login:			"Iniciar Sesión"
-login.welcome:	"Acceso usuarios AD Service"
+login: 			"Iniciar Sesión"
+login.welcome: 	"Acceso usuarios AD Service"
 login.remember:	"Recuerdame"
 
-menu.title_admin:                    "MENU Administrador"
-menu.title_assessor:                 "MENU Asesor"
-menu.title_user:                     "MENU Usuario"
-menu.title_ad:                       "MENU Socio"
+menu.title_admin: 	 "MENU Administrador"
+menu.title_assessor: "MENU Asesor"
+menu.title_user: 	 "MENU Usuario"
+menu.title_ad: 	 	 "MENU Socio"
 
-menu.profile:                        "Mi Perfil"
-menu.list_statistics:                "Consultar Estadísticas"
-menu.list_users:                     "Usuarios"
-menu.list_partners:                  "Socios"
-menu.list_shops:                     "Tiendas"
-menu.list_workshops:                 "Talleres"
-menu.list_typologies:				 "Tipologias"
-menu.list_diagnosis_machines:		 "Máquinas de Diagnosis"
-menu.list_tickets:                   "Tickets"
-menu.list_popups:                    "Popups"
-menu.list_orders: 			 	     "Solicitudes pendientes"
-menu.list_sentences:				 "Sentencias"
+menu.profile: 				  "Mi Perfil"
+menu.list_statistics: 		  "Consultar Estadísticas"
+menu.list_users:			  "Usuarios"
+menu.list_partners: 		  "Socios"
+menu.list_shops:              "Tiendas"
+menu.list_workshops:          "Talleres"
+menu.list_typologies:		  "Tipologias"
+menu.list_diagnosis_machines: "Máquinas de Diagnosis"
+menu.list_tickets:            "Tickets"
+menu.list_popups:             "Popups"
+menu.list_orders: 			  "Solicitudes pendientes"
+menu.list_sentences:		  "Sentencias"
 
 menu.asign_user_to_ticket:           "Asignar Tickets a Usuarios"
 menu.asign_shop_to_workshop:		 "Asignar Talleres a Tiendas"
@@ -57,20 +57,19 @@ error:                          "Se ha producido un error"
 error.same_password:	 "Las contraseñas no coinciden"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
-error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 error.access.IE:		 "Navegador no compatible"
 error.access.IE2:		 "Es imposible acceder desde Internet Explorer."
 error.access.IE3:		 "Por la compleja funcionalidad se requiere el acceso desde navegadores standards como Mozilla Firefox, Google Chrome o Apple Safari."
 error.first_number:             "El primer numero disponible es: "
 error.code_partner.used:        "El codigo de Socio ya esta en uso, el primer numero disponible es: "
 error.bad_introduction:         "¡Error! No has introducido los valores correctamente"
-error.bad_introduction.ticket:  "¡Error! No has introducido los campos de ticket correctamente"                        
-error.msg_length:               "¡Error! El mensaje no puede ser mayor de 150 caracteres"  
+error.bad_introduction.ticket:  "¡Error! No has introducido los campos de ticket correctamente"
+error.msg_length:               "¡Error! El mensaje no puede ser mayor de 150 caracteres"
 error.msg_solution:             "¡Error! Debes introducir una solucion"
 error404.ticket:                "No hay tickets de este tipo"
 error.bad_introduction.name:    "No puedes insertar el nombre '...'"
 error.access:                   "No tienes accesso a esta sección"
-                                
+
 #ENTITY
 role:					 "Rol"
 ROLE_SUPER_ADMIN: 		 "Super Admin"
@@ -636,7 +635,7 @@ lock.list_incidences: 	"Historico de Incidencias"
 
 error: Se ha producido un error
 back:  Volver a la aplicación
-    
+
 termsConditions:	" "
 _termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
 footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos

@@ -1140,24 +1140,31 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction()
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, $num_rows=10)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security   = $this->get('security.context');
-        $request = $this->getRequest();
-        $brand   = $request->get('new_car_form_brand'  );
-        $model   = $request->get('new_car_form_model'  );
-        $version = $request->get('new_car_form_version');
 
-        if($version == '') $params = array('brand'   => $brand,
-                                           'model'   => $model
-                                           );
-        else               $params = array('brand'   => $brand,
-                                           'model'   => $model,
-                                           'version' => $version
-                                           );
+        if($version == '0'){ $params[] = array('brand',' = '.$brand);
+                             $params[] = array('model',' = '.$model);
+        }
+        else               { $params[] = array('brand',' = '.$brand);
+                             $params[] = array('model',' = '.$model);
+                             $params[] = array('version',' = '.$version);
+        }
 
-        $cars    = $em->getRepository('CarBundle:Car')->findBy($params);
+        $pagination = new Pagination($page);
+        
+//      if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
+//      Seteamos el numero de resultados que se mostraran
+        $pagination->setMaxRows(50);
+
+        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        $pagination->setTotalPagByLength($length);
+        
         $tickets = array();
 
         $key = array_keys($cars);
@@ -1186,8 +1193,8 @@ class TicketController extends Controller {
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
                                                                                        'option'     => 'all',
-                                                                                       'page'       => 0,
-                                                                                       'num_rows'   => 10,
+                                                                                       'page'       => $page,
+                                                                                       'num_rows'   => $num_rows,
                                                                                        'country'    => 0,
                                                                                        'inactive'   => 0,
                                                                                        'disablePag' => 0

@@ -13,6 +13,7 @@ $(document).ready(function() {
     $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); });
     //llena tbl_similar
     $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
+    $('#btn_search_by_bmv').click(function() { search_by_bmv(); });
 
 /**
  * vacia tbl_similar
@@ -61,6 +62,35 @@ function setCheckId(){
     else{ var filter_id = 'all'; }
 
     return filter_id;
+}
+
+/**
+ * Busca un coche por Marca Modelo y Gama
+ */
+function search_by_bmv() {
+    var brand    = $('#new_car_form_brand').val();
+    var model    = $('#new_car_form_model').val();
+    var version  = $('#new_car_form_version').val();
+    var num_rows = $('#slct_numRows').val();
+    
+    if(brand == null) {
+        alert('brand '+brand);
+        event.preventDefault();
+    }
+    if(model == null) {
+        alert('model '+model);
+        event.preventDefault();
+    }
+    if(version == null) {
+        alert('version '+version);
+        event.preventDefault();
+    }
+    if(num_rows == null) { num_rows = 10; }
+    
+    var route = 'findTicketByBMV';
+    var locale = $(document).find("#data_locale").val();
+    var url = Routing.generate(route, {_locale: locale, page: 1, brand: brand, model: model, version: version, num_rows: num_rows });
+    window.open(url, "_self");
 }
 
 /**
