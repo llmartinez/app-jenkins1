@@ -342,8 +342,7 @@ class Popup {
 //    }
     
     public function to_json(){
-        $json = array('id'          => $this->getId(),
-                      'name'        => $this->getName(),
+        $json = array('name'        => $this->getName(),
                       'description' => $this->getDescription());
         return $json;
     }
