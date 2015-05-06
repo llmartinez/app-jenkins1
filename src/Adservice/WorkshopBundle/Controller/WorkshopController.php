@@ -97,9 +97,9 @@ class WorkshopController extends Controller {
         $em       = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $workshop = new Workshop();
-        
+
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -189,6 +189,12 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage      ($lang);
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
+
+                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                    $name = $user->getUsername();
+                    $username = UtilController::getUsernameUnused($em, $name);
+                    $user->setUsername($username);
+
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
                     //ad-service +
@@ -221,7 +227,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId(); 
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
@@ -244,7 +250,7 @@ class WorkshopController extends Controller {
      */
     public function editWorkshopAction($workshop) {
         $security = $this->get('security.context');
-        
+
         if ((!$security->isGranted('ROLE_SUPER_ADMIN')) and ($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -255,7 +261,7 @@ class WorkshopController extends Controller {
 
         $petition   = $this->getRequest();
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
