@@ -325,6 +325,13 @@ class UserController extends Controller {
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
+
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_u = $user->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setTo($user->getEmail1());
@@ -333,6 +340,9 @@ class UserController extends Controller {
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
         $mailerUser->sendMailToSpool();
         //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         $flash =  $this->get('translator')->trans('change_password.correct');
         $this->get('session')->setFlash('password', $flash);
