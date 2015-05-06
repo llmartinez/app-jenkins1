@@ -408,7 +408,7 @@ class TicketController extends Controller {
                         }else{
                             $formD_errors = 'none';
                         }
-echo 'valid<br>';
+
                         if ((($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
                          &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
                          &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
@@ -418,7 +418,6 @@ echo 'valid<br>';
                         $extension = $file->getMimeType();
                         $size = $file->getSize();
 
-echo 'extension<br>';
                         if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
                          or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
 
@@ -513,7 +512,7 @@ echo 'extension<br>';
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
-                    } else { $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction')); }
+                    } else { $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction').'<br>FORM:<br>'.$form_errors.'<br>FORM_C:<br>'.$formC_errors.'<br>FORM_D:<br>'.$formD_errors); }
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
