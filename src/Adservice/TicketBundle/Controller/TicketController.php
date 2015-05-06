@@ -512,7 +512,7 @@ class TicketController extends Controller {
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
-                    } else { /*********************/var_dump($formD->getErrors());die; /*********************/ $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction')); }
+                    } else { $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction')); }
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
