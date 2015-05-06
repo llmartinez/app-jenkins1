@@ -415,8 +415,8 @@ class TicketController extends Controller {
 
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
-                        if(isset($file)     ) { $extension = $file->getMimeType(); } else { $extension = 'none';    }
-                        if(isset($extension)) { $size      = $file->getSize();     } else { $size      = '4096001'; }
+                        if(isset($file)) { $extension = $file->getMimeType(); } else { $extension = 'none';    }
+                        if(isset($file)) { $size      = $file->getSize();     } else { $size      = '4096001'; }
 
                         if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
                          or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
