@@ -89,12 +89,12 @@ class WorkshopOrderController extends Controller {
 
         $workshopOrder = new WorkshopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             if($request->request->get('partner') != null)
                 $id_partner = $request->request->get('partner');
             else
                 $id_partner = '0';
-            
+
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -221,7 +221,7 @@ class WorkshopOrderController extends Controller {
             //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
-        
+
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -541,9 +541,9 @@ class WorkshopOrderController extends Controller {
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
                                                                                'code_workshop' => $workshopOrder->getCodeWorkshop()));
 
-        if(isset($find))$codeWorkshop = $find->getCodeWorkshop(); 
+        if(isset($find))$codeWorkshop = $find->getCodeWorkshop();
         else            $codeWorkshop = " ";
-        
+
         $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
         $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
 //        else $this->get('session')->setFlash('error', $flash);
@@ -573,7 +573,7 @@ class WorkshopOrderController extends Controller {
                 UtilController::saveEntity($em, $workshop, $user);
 
             }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
-                
+
                 if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
                 {
                     $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
@@ -581,7 +581,7 @@ class WorkshopOrderController extends Controller {
                     if ($workshopOrder->getTest() != null) {
                         $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                     }
-                    
+
                     $action = $workshopOrder->getWantedAction();
                     $em->remove($workshopOrder);
                     UtilController::newEntity($workshop, $user);
@@ -635,6 +635,11 @@ class WorkshopOrderController extends Controller {
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
 
+                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                    $name = $user->getUsername();
+                    $username = UtilController::getUsernameUnused($em, $name);
+                    $user->setUsername($username);
+
                     //password nuevo, se codifica con el nuevo salt
                     $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
                     $salt = md5(time());
@@ -654,7 +659,7 @@ class WorkshopOrderController extends Controller {
                 }
                 else $this->get('session')->setFlash('error', $flash);
             }
-                
+
             if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
             {
                 /* MAILING */

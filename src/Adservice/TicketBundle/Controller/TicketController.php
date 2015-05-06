@@ -512,7 +512,7 @@ class TicketController extends Controller {
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
-                    } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+                    } else { $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction')); }
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
@@ -569,7 +569,7 @@ class TicketController extends Controller {
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
-                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+                }else{ $this->get('session')->setFlash('error', 'T572: '.$this->get('translator')->trans('error.bad_introduction')); }
             }
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
@@ -744,7 +744,7 @@ class TicketController extends Controller {
 
                                 //Define Document
                                 $document->setPost($post);
-                                
+
                                 if ($file != "") {
                                         $em->persist($document);
                                 }
@@ -809,7 +809,7 @@ class TicketController extends Controller {
                                                                                 'version'   => $version,
                                                                                 'idTecDoc'  => $idTecDoc )));
             }
-            
+
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
@@ -921,7 +921,7 @@ class TicketController extends Controller {
                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
                     }
                 }else{
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                    $this->get('session')->setFlash('error', 'T924: '.$this->get('translator')->trans('error.bad_introduction'));
                 }
             }
 

@@ -46,13 +46,14 @@ class WorkshopRepository extends EntityRepository
             if ($w_name        != "") {  $where .= "AND w.name like '%".$w_name."%' "; }
             if ($w_cif         != "") {  $where .= "AND w.cif like '%".$w_cif."%' "; }
             if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' "; }
-            if ($w_tel         != "") {  $where .= "AND w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
-                                                    OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%'"; }
+            if ($w_tel         != "") {  $where .= "AND (w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
+                                                    OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%')"; }
             if ($w_region      != "") {  $where .= "AND w.region like '%".$w_region."%' "; }
 
             //Crea la consulta
             // echo $query.$from.$where.' ORDER BY w.id ';
-            $consulta = $em->createQuery($query.$from.$where.' ORDER BY w.id ');
+            $sql = $query.$from.$where.' ORDER BY w.id ';
+            $consulta = $em->createQuery($sql);
             $array = $consulta->getResult();
 
             //Si la consulta da resultado y hay algun campo de los filtros introducido se devuelve el resultado, sino se devuelve un array vacio
