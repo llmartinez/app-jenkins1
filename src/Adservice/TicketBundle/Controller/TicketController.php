@@ -409,9 +409,14 @@ class TicketController extends Controller {
                             $formD_errors = 'none';
                         }
 
-                        if ((($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
-                         &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
-                         &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                        if  
+                                (
+                                    ($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
+                                        &&
+                                    ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file')
+                                        &&
+                                    ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')
+                                ) {
 
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
