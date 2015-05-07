@@ -342,6 +342,7 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -477,6 +478,7 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -531,6 +533,7 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
         $action = $workshopOrder->getWantedAction();
 
@@ -583,6 +586,7 @@ class WorkshopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
         // activate   + accepted = setActive a TRUE  and delete workshopOrder
         // deactivate + accepted = setActive a FALSE and delete workshopOrder

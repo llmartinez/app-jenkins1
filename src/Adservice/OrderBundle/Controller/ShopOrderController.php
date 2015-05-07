@@ -81,6 +81,7 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException.
      */
     public function newAction(){
+        $request = $this->getRequest();
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
@@ -299,6 +300,7 @@ class ShopOrderController extends Controller {
      */
     public function changeStatusAction($id, $status, $shop){
         $security = $this->get('security.context');
+        $request = $this->getRequest();
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
@@ -437,6 +439,7 @@ class ShopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -491,6 +494,7 @@ class ShopOrderController extends Controller {
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
         $action = $shopOrder->getWantedAction();
 
         // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -537,6 +541,7 @@ class ShopOrderController extends Controller {
      */
     public function deleteAction($shop){
         $security = $this->get('security.context');
+        $request = $this->getRequest();
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
@@ -588,6 +593,7 @@ class ShopOrderController extends Controller {
     public function acceptAction($shopOrder, $status){
 
         $security = $this->get('security.context');
+        $request = $this->getRequest();
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
