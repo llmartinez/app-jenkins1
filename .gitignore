@@ -13,6 +13,7 @@ vendor/*
 /web/css/*
 /web/js/*
 /web/uploads/*
+/data
 
 # -- Capifony ---
 /app/config/*.rb

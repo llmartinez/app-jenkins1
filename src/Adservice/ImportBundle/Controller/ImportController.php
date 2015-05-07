@@ -47,7 +47,7 @@ class ImportController extends Controller
 			{
 				$newPartner = UtilController::newEntity(new Partner(), $sa);
 				$name = $old_Socio->getNombre();
-				$name = preg_replace('/[0-9]{2}-/', '', $name, 1);
+				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
 				$newPartner->setName($name);
 				$newPartner->setCodePartner($old_Socio->getId());
 				$newPartner->setActive('1');
@@ -55,6 +55,9 @@ class ImportController extends Controller
 				UtilController::saveEntity($em, $newPartner, $sa,false);
 			}
 			$em->flush();
+/******************************************************************************************************************/
+echo 'partner';die;
+/******************************************************************************************************************/
 			$session->set('msg' ,	'Socios importados correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop-default');
