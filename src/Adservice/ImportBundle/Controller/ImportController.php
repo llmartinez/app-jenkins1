@@ -46,7 +46,9 @@ class ImportController extends Controller
 			foreach ($old_Socios as $old_Socio)
 			{
 				$newPartner = UtilController::newEntity(new Partner(), $sa);
-				$newPartner->setName($old_Socio->getNombre());
+				$name = $old_Socio->getNombre();
+				$name = preg_replace('/[0-9]{2}-/', '', $name, 1);
+				$newPartner->setName($name);
 				$newPartner->setCodePartner($old_Socio->getId());
 				$newPartner->setActive('1');
 				$newPartner = $this->setContactFields($em, $old_Socio, $newPartner, $locations);
