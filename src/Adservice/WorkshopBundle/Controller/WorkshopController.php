@@ -205,7 +205,7 @@ class WorkshopController extends Controller {
 
                     // Cambiamos el locale para enviar el mail en el idioma del taller
                     $locale = $request->getLocale();
-                    $lang_u = $user->getCountry()->getLang();
+                    $lang_u = $newUser->getCountry()->getLang();
                     $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
                     $request->setLocale($lang->getShortName());
 
