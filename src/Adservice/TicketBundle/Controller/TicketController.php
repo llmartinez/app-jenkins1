@@ -719,7 +719,8 @@ class TicketController extends Controller {
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
 
-            $array = array( 'formP'     => $formP->createView(),
+            $array = array( 'form'      => $form->createView(),
+                            'formP'     => $formP->createView(),
                             'formD'     => $formD->createView(),
                             'ticket'    => $ticket,
                             'systems'   => $systems,
