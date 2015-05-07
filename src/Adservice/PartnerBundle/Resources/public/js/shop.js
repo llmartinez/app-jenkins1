@@ -7,7 +7,7 @@
             });
 
             //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-            $('#flt_country').change(function() {
+            $('#flt_country').click(function() {
 
                 var country = $('#flt_country').val();
                 var partner = $('#flt_partner').val();
@@ -20,7 +20,7 @@
 
                 window.open(url, "_self");
             });
-            $('#flt_partner').change(function() {
+            $('#flt_partner').click(function() {
 
                 var partner = $('#flt_partner').val();
                 var country = $('#flt_country').val();

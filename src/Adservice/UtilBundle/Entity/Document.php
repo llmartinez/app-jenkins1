@@ -35,10 +35,7 @@ class Document {
     public $path;
 
     /**
-     * @Assert\File(
-     *     maxSize="4k",
-     *     mimeTypes = {"application/pdf", "application/x-pdf", "image/bmp", "image/jpeg", "image/png", "image/gif", "application/mspowerpoint"}
-     * )
+     * @Assert\File(maxSize="6000000")
      */
     private $file;
 

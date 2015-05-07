@@ -39,7 +39,7 @@ class ShopOrderController extends Controller {
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-
+        
         if($security->isGranted('ROLE_SUPER_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
             $params[] = array('country', ' = '.$country->getId());
@@ -185,7 +185,7 @@ class ShopOrderController extends Controller {
             //si no existe una shopOrder previa la creamos por primera vez a partir del shop original
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
-
+        
         if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

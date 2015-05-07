@@ -32,10 +32,10 @@ class UserController extends Controller {
      */
     public function indexAction() {
 
-    //        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-    //
-    //        $session = $this->getRequest()->getSession();
-    //        $session->set('id_logged_user', $id_logged_user);
+//        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
+//
+//        $session = $this->getRequest()->getSession();
+//        $session->set('id_logged_user', $id_logged_user);
 
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
@@ -104,7 +104,7 @@ class UserController extends Controller {
                 $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $role, $pagination);
                 $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $role);
         }
-
+        
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
@@ -167,7 +167,7 @@ class UserController extends Controller {
         $petition = $this->getRequest();
 
         if ($security->isGranted('ROLE_SUPER_AD')) {
-
+            
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -191,7 +191,7 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-
+        
         //que tipo de usuario estamos editando (los formtype varian...)
     	$role = $user->getRoles();
     	$role = $role[0];
@@ -217,11 +217,6 @@ class UserController extends Controller {
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
-
-                // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                $name = $user->getUsername();
-                $username = UtilController::getUsernameUnused($em, $name);
-                $user->setUsername($username);
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
@@ -352,9 +347,9 @@ class UserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
-
+        
         if ($security->isGranted('ROLE_SUPER_AD')) {
-
+            
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -378,7 +373,7 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-
+        
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
@@ -413,11 +408,6 @@ class UserController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-            // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-            $name = $user->getUsername();
-            $username = UtilController::getUsernameUnused($em, $name);
-            $user->setUsername($username);
-
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
 //            $partner = $form->getData('partner');
@@ -441,7 +431,7 @@ class UserController extends Controller {
      * @throws AccessDeniedException
      */
     public function getPendingOrders(){
-
+        
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();

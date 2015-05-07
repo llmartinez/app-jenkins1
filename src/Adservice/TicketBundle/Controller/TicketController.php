@@ -358,9 +358,6 @@ class TicketController extends Controller {
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
 
-        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
-        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
-
         //Define Forms
         $form  = $this->createForm(new NewTicketType(), $ticket);
         $formC = $this->createForm(new CarType(), $car);
@@ -413,90 +410,53 @@ class TicketController extends Controller {
                          &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
                          &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
-                        // Controla si se ha subido un fichero erroneo
-                        $file = $document->getFile();
-                        if(isset($file)) { $extension = $file->getMimeType(); } else { $extension = 'none'; }
-                        if(isset($file)) { $size      = $file->getSize();     } else { $size      = '0'; }
+                        //Define CAR
+                        $car = UtilController::newEntity($car, $user);
 
-                        if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "none") {
+                        $id_brand   = $request->request->get('new_car_form_brand'  );
+                        $id_model   = $request->request->get('new_car_form_model'  );
+                        $id_version = $request->request->get('new_car_form_version');
+                        
+                        $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
+                        $model   = $em->getRepository('CarBundle:Model'  )->findOneByIdTecDoc($id_model  );
+                        $version = $em->getRepository('CarBundle:Version')->findOneByIdTecDoc($id_version);
 
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                                //Define CAR
-                                $car = UtilController::newEntity($car, $user);
+                        $car->setBrand($brand);
+                        $car->setModel($model);
+                        $car->setVersion($version);
+                        $car = UtilController::newEntity($car, $user);
+                        UtilController::saveEntity($em, $car, $user, false);
 
-                                $id_brand   = $request->request->get('new_car_form_brand'  );
-                                $id_model   = $request->request->get('new_car_form_model'  );
-                                $id_version = $request->request->get('new_car_form_version');
-
-                                $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                                $model   = $em->getRepository('CarBundle:Model'  )->findOneByIdTecDoc($id_model  );
-                                $version = $em->getRepository('CarBundle:Version')->findOneByIdTecDoc($id_version);
-
-                                $car->setBrand($brand);
-                                $car->setModel($model);
-                                $car->setVersion($version);
-                                $car = UtilController::newEntity($car, $user);
-                                UtilController::saveEntity($em, $car, $user, false);
-
-                                //Define TICKET
-                                $ticket = UtilController::newEntity($ticket, $user);
-                                if ($security->isGranted('ROLE_ASSESSOR'))
-                                {
-                                    $ticket->setWorkshop($workshop);
-                                    $ticket->setAssignedTo($user);
-                                }else{
-                                    $ticket->setWorkshop($user->getWorkshop());
-                                }
-                                $ticket->setStatus($status);
-                                $ticket->setCar($car);
-                                UtilController::saveEntity($em, $ticket, $user);
-
-                                //Define Document
-                                if ($file != "") {
-
-                                    //Define Post
-                                    $post = new Post();
-                                    $post = UtilController::newEntity($post, $user);
-                                    $post->setTicket($ticket);
-                                    $post->setMessage(" ");
-                                    UtilController::saveEntity($em, $post, $user, false);
-
-                                    $document->setPost($post);
-                                    mkdir($document->getUploadRootDir(), 0775);
-
-                                    $em->persist($document);
-                                    $em->flush();
-                                }
-                            } else {
-                                // ERROR tamaño
-                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
-
-                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                            'form' => $form->createView(),
-                                            'formC' => $formC->createView(),
-                                            'formD' => $formD->createView(),
-                                            'brands' => $brands,
-                                            'systems' => $systems,
-                                            'adsplus' => $adsplus,
-                                            'workshop' => $workshop,
-                                            'form_name' => $form->getName(),));
-                            }
-                        } else {
-                            // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
-
-                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                        'form' => $form->createView(),
-                                        'formC' => $formC->createView(),
-                                        'formD' => $formD->createView(),
-                                        'brands' => $brands,
-                                        'systems' => $systems,
-                                        'adsplus' => $adsplus,
-                                        'workshop' => $workshop,
-                                        'form_name' => $form->getName(),));
+                        //Define TICKET
+                        $ticket = UtilController::newEntity($ticket, $user);
+                        if ($security->isGranted('ROLE_ASSESSOR'))
+                        {
+                            $ticket->setWorkshop($workshop);
+                            $ticket->setAssignedTo($user);
+                        }else{
+                            $ticket->setWorkshop($user->getWorkshop());
                         }
+                        $ticket->setStatus($status);
+                        $ticket->setCar($car);
+                        UtilController::saveEntity($em, $ticket, $user);
 
+                        //Define Document
+                        if ($document->getFile() != "") {
+
+                            //Define Post
+                            $post = new Post();
+                            $post = UtilController::newEntity($post, $user);
+                            $post->setTicket($ticket);
+                            $post->setMessage(" ");
+                            UtilController::saveEntity($em, $post, $user, false);
+
+                            $document->setPost($post);
+                            mkdir($document->getUploadRootDir(), 0775);
+
+                            $em->persist($document);
+                            $em->flush();
+                        }
+                        
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo($ticket->getWorkshop()->getEmail1());
@@ -512,10 +472,13 @@ class TicketController extends Controller {
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                         }
 
-                    } else { $this->get('session')->setFlash('error', 'T515: '.$this->get('translator')->trans('error.bad_introduction')); }
+                    } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
+
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
@@ -535,13 +498,13 @@ class TicketController extends Controller {
      * @return url
      */
     public function editTicketAction($id, $ticket) {
-
+        
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
         or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
         ){
-
+               
             $em = $this->getDoctrine()->getEntityManager();
             $request = $this->getRequest();
 
@@ -569,7 +532,7 @@ class TicketController extends Controller {
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
-                }else{ $this->get('session')->setFlash('error', 'T572: '.$this->get('translator')->trans('error.bad_introduction')); }
+                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
             }
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
@@ -648,7 +611,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function showTicketAction($ticket) {
-
+        
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
@@ -664,31 +627,32 @@ class TicketController extends Controller {
             if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
             else $idTecDoc = "";
 
-            if ($security->isGranted('ROLE_SUPER_ADMIN'))
-                 $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
-            else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
-
-
             $post     = new Post();
             $document = new Document();
             $systems  = $em->getRepository('TicketBundle:System')->findAll();
             $block    = null;
+
+            // if ($ticket->getBlockedBy() != null and $ticket->getBlockedBy() != $user) {
+
+            //     //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
+            //     $now = new \DateTime(\date("Y-m-d H:i:s"));
+            //     $last_modified = $ticket->getModifiedAt();
+
+            //     $interval = $last_modified->diff($now);
+
+            //     $block = $interval->h.'h '.$interval->m.'m ';
+            //     echo $block;die;
+            //     if($interval->h > 1) {
+            //         $ticket->setBlockedBy(null);
+            //     }
+
+            // }
 
             //Define Forms
             if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
 
-            $array = array( 'formP'     => $formP->createView(),
-                            'formD'     => $formD->createView(),
-                            'ticket'    => $ticket,
-                            'systems'   => $systems,
-                            'sentences' => $sentences,
-                            'form_name' => $formP->getName(),
-                            'brand'     => $brand,
-                            'model'     => $model,
-                            'version'   => $version,
-                            'idTecDoc'  => $idTecDoc );
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
@@ -726,77 +690,56 @@ class TicketController extends Controller {
                     if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
                     and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
-                    // Controla si se ha subido un fichero erroneo
-                    $file = $document->getFile();
-                    $extension = $file->getMimeType();
-                    $size = $file->getSize();
+                        $str_len = strlen($post->getMessage());
+                        if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
+                            //Define Post
+                            $post = UtilController::newEntity($post, $user);
+                            $post->setTicket($ticket);
+                            UtilController::saveEntity($em, $post, $user, false);
 
-                    if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                     or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
+                            //Define Document
+                            $document->setPost($post);
 
-                        if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                            $str_len = strlen($post->getMessage());
-                            if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
-                                //Define Post
-                                $post = UtilController::newEntity($post, $user);
-                                $post->setTicket($ticket);
-                                UtilController::saveEntity($em, $post, $user, false);
-
-                                //Define Document
-                                $document->setPost($post);
-
-                                if ($file != "") {
-                                        $em->persist($document);
-                                }
-
-                                //Se desbloquea el ticket una vez respondido
-                                if ($ticket->getBlockedBy() != null) {
-                                    $ticket->setBlockedBy(null);
-
-                                    /*si es el primer assessor que responde se le asigna*/
-                                    $posts = $ticket->getPosts();
-                                    $primer_assessor = 0;
-                                    foreach ($posts as $post) {
-                                                    $post_role = $post->getCreatedBy();
-                                                    $post_role = $post_role->getRoles();
-                                                    $post_role = $post_role[0];
-                                                    $post_role = $post_role->getName();
-                                        if ($post_role == 'ROLE_ASSESSOR') {
-                                            $primer_assessor = 1;
-                                        }
-                                    }
-                                    if($primer_assessor == 0) $ticket->setAssignedTo($user);
-                                }
-
-                                UtilController::saveEntity($em, $ticket, $user);
-
-                                /* MAILING */
-                                $mailer = $this->get('cms.mailer');
-                                $mailer->setTo($ticket->getWorkshop()->getEmail1());
-                                $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
-                                $mailer->setFrom('noreply@grupeina.com');
-                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
-                                $mailer->sendMailToSpool();
-
-                                if (!$security->isGranted('ROLE_ASSESSOR')) {
-                                    $mailer->setTo($ticket->getAssignedTo()->getEmail1());
-                                    $mailer->sendMailToSpool();
-                                }
-                                //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
+                            if ($document->getFile() != "") {
+                                $em->persist($document);
                             }
-                            else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
-                        } else {
-                            // ERROR tamaño
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
 
-                            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+                            //Se desbloquea el ticket una vez respondido
+                            if ($ticket->getBlockedBy() != null) {
+                                $ticket->setBlockedBy(null);
+
+                                /*si es el primer assessor que responde se le asigna*/
+                                $posts = $ticket->getPosts();
+                                $primer_assessor = 0;
+                                foreach ($posts as $post) {
+                                                $post_role = $post->getCreatedBy();
+                                                $post_role = $post_role->getRoles();
+                                                $post_role = $post_role[0];
+                                                $post_role = $post_role->getName();
+                                    if ($post_role == 'ROLE_ASSESSOR') {
+                                        $primer_assessor = 1;
+                                    }
+                                }
+                                if($primer_assessor == 0) $ticket->setAssignedTo($user);
+                            }
+
+                            UtilController::saveEntity($em, $ticket, $user);
+
+                            /* MAILING */
+                            $mailer = $this->get('cms.mailer');
+                            $mailer->setTo($ticket->getWorkshop()->getEmail1());
+                            $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                            $mailer->setFrom('noreply@grupeina.com');
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->sendMailToSpool();
+
+                            if (!$security->isGranted('ROLE_ASSESSOR')) {
+                                $mailer->setTo($ticket->getAssignedTo()->getEmail1());
+                                $mailer->sendMailToSpool();
+                            }
+                            //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
                         }
-                    } else {
-                        // ERROR tipo de fichero
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
-
-                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
-                    }
+                        else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
                     }
                 }
                 return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
@@ -810,6 +753,20 @@ class TicketController extends Controller {
                                                                                 'idTecDoc'  => $idTecDoc )));
             }
 
+            if ($security->isGranted('ROLE_SUPER_ADMIN'))
+                 $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
+            else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
+
+            $array = array( 'formP'     => $formP->createView(),
+                            'formD'     => $formD->createView(),
+                            'ticket'    => $ticket,
+                            'systems'   => $systems,
+                            'sentences' => $sentences,
+                            'form_name' => $formP->getName(),
+                            'brand'     => $brand,
+                            'model'     => $model,
+                            'version'   => $version,
+                            'idTecDoc'  => $idTecDoc );
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
@@ -868,7 +825,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function closeTicketAction($id, $ticket)
-    {
+    {        
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
@@ -921,7 +878,7 @@ class TicketController extends Controller {
                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
                     }
                 }else{
-                    $this->get('session')->setFlash('error', 'T924: '.$this->get('translator')->trans('error.bad_introduction'));
+                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                 }
             }
 
@@ -1157,14 +1114,14 @@ class TicketController extends Controller {
         $id       = $request->get('flt_id');
 
         $ticket   = $em->getRepository('TicketBundle:Ticket')->find($id);
-
-        if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+        
+        if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())) 
              $tickets = array($ticket);
         else $tickets = array();
 
         $brands     = $em->getRepository('CarBundle:Brand')->findAll();
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(),
                                                                                        'tickets'    => $tickets,
@@ -1197,7 +1154,7 @@ class TicketController extends Controller {
         }
 
         $pagination = new Pagination($page);
-
+        
 //      if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
 //      Seteamos el numero de resultados que se mostraran
         $pagination->setMaxRows(50);
@@ -1207,7 +1164,7 @@ class TicketController extends Controller {
         $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params);
 
         $pagination->setTotalPagByLength($length);
-
+        
         $tickets = array();
 
         $key = array_keys($cars);
@@ -1219,7 +1176,7 @@ class TicketController extends Controller {
                 $id     = $cars[$key[$i]]->getId();
                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
 
-                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())) 
                     $tickets[] = $ticket;
             }
         }
@@ -1228,7 +1185,7 @@ class TicketController extends Controller {
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
-
+        
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
