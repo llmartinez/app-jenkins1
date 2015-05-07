@@ -218,6 +218,11 @@ class UserController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
+                // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                $name = $user->getUsername();
+                $username = UtilController::getUsernameUnused($em, $name);
+                $user->setUsername($username);
+
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
             }
@@ -418,6 +423,11 @@ class UserController extends Controller {
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+            // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+            $name = $user->getUsername();
+            $username = UtilController::getUsernameUnused($em, $name);
+            $user->setUsername($username);
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());

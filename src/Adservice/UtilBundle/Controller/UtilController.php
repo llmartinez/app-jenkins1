@@ -87,13 +87,14 @@ class UtilController extends Controller
      */
     public static function getUsernameUnused($em, $name)
     {
-        $slug = UtilController::getSlug($name);
+        $slug = UtilController::getSlug($name, $separador);
+        $separador = '';
         $unused = 1;
         while($unused != 'unused') {
             $find = $em->getRepository('UserBundle:User')->findOneByUsername($slug);
             if( $find == null) { $unused = 'unused'; }
             else{
-                $slug = UtilController::getSlug($name).'-'.$unused;
+                $slug = UtilController::getSlug($name, $separador).$unused;
                 $unused++;
             }
         }
