@@ -414,11 +414,11 @@ class TicketController extends Controller {
 
                          // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
-                        $extension = $file->getMimeType();
-                        $size = $file->getSize();
+                        if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                        if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
 
                         if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
+                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
 
                             if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                                 //Define CAR
@@ -715,12 +715,10 @@ class TicketController extends Controller {
             // }
 
             //Define Forms
-            if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
 
-            $array = array( 'form'      => $form->createView(),
-                            'formP'     => $formP->createView(),
+            $array = array( 'formP'     => $formP->createView(),
                             'formD'     => $formD->createView(),
                             'ticket'    => $ticket,
                             'systems'   => $systems,
@@ -730,6 +728,11 @@ class TicketController extends Controller {
                             'model'     => $model,
                             'version'   => $version,
                             'idTecDoc'  => $idTecDoc );
+
+            if ($security->isGranted('ROLE_ASSESSOR')) {
+                $form = $this->createForm(new EditTicketType(), $ticket);
+                $array['form'] = $form->createView();
+            }
 
             if ($request->getMethod() == 'POST') {
 
@@ -826,7 +829,7 @@ class TicketController extends Controller {
                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                             $mailer->sendMailToSpool();
 
-                            if (!$security->isGranted('ROLE_ASSESSOR')) {
+                            if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
                                 $mailer->setTo($ticket->getAssignedTo()->getEmail1());
                                 $mailer->sendMailToSpool();
                             }
