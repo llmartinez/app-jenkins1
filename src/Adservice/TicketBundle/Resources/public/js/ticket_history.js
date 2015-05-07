@@ -33,7 +33,7 @@
 
         });
 
-        $('#flt_country').change(function() {
+        $('#flt_country').click(function() {
 
             var str      = $('#href_tickets').val();
             var country  = $(this).val();

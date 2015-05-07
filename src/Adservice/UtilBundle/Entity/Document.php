@@ -35,7 +35,7 @@ class Document {
     public $path;
 
     /**
-     * @Assert\File(maxSize="4k")
+     * @Assert\File(maxSize="6000000")
      */
     private $file;
 
