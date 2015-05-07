@@ -320,6 +320,7 @@ class UserController extends Controller {
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
+        $request = $this->getRequest();
 
         // Cambiamos el locale para enviar el mail en el idioma del taller
         $locale = $request->getLocale();
