@@ -769,11 +769,11 @@ class TicketController extends Controller {
 
                     // Controla si se ha subido un fichero erroneo
                     $file = $document->getFile();
-                    $extension = $file->getMimeType();
-                    $size = $file->getSize();
+                    if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                    if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
 
                     if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                     or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
+                     or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
 
                         if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                             $str_len = strlen($post->getMessage());
