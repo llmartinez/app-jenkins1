@@ -357,6 +357,8 @@ class TicketController extends Controller {
         else{ $workshop =  new Workshop(); }
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         //Define Forms
         $form  = $this->createForm(new NewTicketType(), $ticket);
@@ -410,52 +412,89 @@ class TicketController extends Controller {
                          &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
                          &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
-                        //Define CAR
-                        $car = UtilController::newEntity($car, $user);
+                         // Controla si se ha subido un fichero erroneo
+                        $file = $document->getFile();
+                        $extension = $file->getMimeType();
+                        $size = $file->getSize();
 
-                        $id_brand   = $request->request->get('new_car_form_brand'  );
-                        $id_model   = $request->request->get('new_car_form_model'  );
-                        $id_version = $request->request->get('new_car_form_version');
+                        if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
 
-                        $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                        $model   = $em->getRepository('CarBundle:Model'  )->findOneByIdTecDoc($id_model  );
-                        $version = $em->getRepository('CarBundle:Version')->findOneByIdTecDoc($id_version);
+                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                                //Define CAR
+                                $car = UtilController::newEntity($car, $user);
 
-                        $car->setBrand($brand);
-                        $car->setModel($model);
-                        $car->setVersion($version);
-                        $car = UtilController::newEntity($car, $user);
-                        UtilController::saveEntity($em, $car, $user, false);
+                                $id_brand   = $request->request->get('new_car_form_brand'  );
+                                $id_model   = $request->request->get('new_car_form_model'  );
+                                $id_version = $request->request->get('new_car_form_version');
 
-                        //Define TICKET
-                        $ticket = UtilController::newEntity($ticket, $user);
-                        if ($security->isGranted('ROLE_ASSESSOR'))
-                        {
-                            $ticket->setWorkshop($workshop);
-                            $ticket->setAssignedTo($user);
-                        }else{
-                            $ticket->setWorkshop($user->getWorkshop());
-                        }
-                        $ticket->setStatus($status);
-                        $ticket->setCar($car);
-                        UtilController::saveEntity($em, $ticket, $user);
+                                $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
+                                $model   = $em->getRepository('CarBundle:Model'  )->findOneByIdTecDoc($id_model  );
+                                $version = $em->getRepository('CarBundle:Version')->findOneByIdTecDoc($id_version);
 
-                        //Define Document
-                        if ($document->getFile() != "") {
+                                $car->setBrand($brand);
+                                $car->setModel($model);
+                                $car->setVersion($version);
+                                $car = UtilController::newEntity($car, $user);
+                                UtilController::saveEntity($em, $car, $user, false);
 
-                            //Define Post
-                            $post = new Post();
-                            $post = UtilController::newEntity($post, $user);
-                            $post->setTicket($ticket);
-                            $post->setMessage(" ");
-                            UtilController::saveEntity($em, $post, $user, false);
+                                //Define TICKET
+                                $ticket = UtilController::newEntity($ticket, $user);
+                                if ($security->isGranted('ROLE_ASSESSOR'))
+                                {
+                                    $ticket->setWorkshop($workshop);
+                                    $ticket->setAssignedTo($user);
+                                }else{
+                                    $ticket->setWorkshop($user->getWorkshop());
+                                }
+                                $ticket->setStatus($status);
+                                $ticket->setCar($car);
+                                UtilController::saveEntity($em, $ticket, $user);
 
-                            $document->setPost($post);
-                            mkdir($document->getUploadRootDir(), 0775);
+                                //Define Document
+                                if ($file != "") {
 
-                            $em->persist($document);
-                            $em->flush();
-                        }
+                                    //Define Post
+                                    $post = new Post();
+                                    $post = UtilController::newEntity($post, $user);
+                                    $post->setTicket($ticket);
+                                    $post->setMessage(" ");
+                                    UtilController::saveEntity($em, $post, $user, false);
+
+                                    $document->setPost($post);
+                                    mkdir($document->getUploadRootDir(), 0775);
+
+                                    $em->persist($document);
+                                    $em->flush();
+                                }
+                            } else {
+                                // ERROR tamaño
+                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+
+                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                            'form' => $form->createView(),
+                                            'formC' => $formC->createView(),
+                                            'formD' => $formD->createView(),
+                                            'brands' => $brands,
+                                            'systems' => $systems,
+                                            'adsplus' => $adsplus,
+                                            'workshop' => $workshop,
+                                            'form_name' => $form->getName(),));
+                            }
+                        } else {
+                            // ERROR tipo de fichero
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
+
+                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                        'form' => $form->createView(),
+                                        'formC' => $formC->createView(),
+                                        'formD' => $formD->createView(),
+                                        'brands' => $brands,
+                                        'systems' => $systems,
+                                        'adsplus' => $adsplus,
+                                        'workshop' => $workshop,
+                                        'form_name' => $form->getName(),));
+                         }
 
                         // Cambiamos el locale para enviar el mail en el idioma del taller
                         $locale = $request->getLocale();
@@ -485,9 +524,6 @@ class TicketController extends Controller {
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
         }
-
-        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
-        $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                     'form' => $form->createView(),
