@@ -690,6 +690,9 @@ class TicketController extends Controller {
             if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
             else $idTecDoc = "";
 
+            if ($security->isGranted('ROLE_SUPER_ADMIN')) $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
+            else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
+
             $post     = new Post();
             $document = new Document();
             $systems  = $em->getRepository('TicketBundle:System')->findAll();
@@ -715,6 +718,17 @@ class TicketController extends Controller {
             if ($security->isGranted('ROLE_ASSESSOR')) { $form = $this->createForm(new EditTicketType(), $ticket); }
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
+
+            $array = array( 'formP'     => $formP->createView(),
+                            'formD'     => $formD->createView(),
+                            'ticket'    => $ticket,
+                            'systems'   => $systems,
+                            'sentences' => $sentences,
+                            'form_name' => $formP->getName(),
+                            'brand'     => $brand,
+                            'model'     => $model,
+                            'version'   => $version,
+                            'idTecDoc'  => $idTecDoc );
 
             if ($request->getMethod() == 'POST') {
 
@@ -753,38 +767,47 @@ class TicketController extends Controller {
                     if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
                     and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
 
-                        $str_len = strlen($post->getMessage());
-                        if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
-                            //Define Post
-                            $post = UtilController::newEntity($post, $user);
-                            $post->setTicket($ticket);
-                            UtilController::saveEntity($em, $post, $user, false);
+                    // Controla si se ha subido un fichero erroneo
+                    $file = $document->getFile();
+                    $extension = $file->getMimeType();
+                    $size = $file->getSize();
 
-                            //Define Document
-                            $document->setPost($post);
+                    if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                     or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint") {
 
-                            if ($document->getFile() != "") {
-                                $em->persist($document);
-                            }
+                        if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                            $str_len = strlen($post->getMessage());
+                            if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
+                                //Define Post
+                                $post = UtilController::newEntity($post, $user);
+                                $post->setTicket($ticket);
+                                UtilController::saveEntity($em, $post, $user, false);
 
-                            //Se desbloquea el ticket una vez respondido
-                            if ($ticket->getBlockedBy() != null) {
-                                $ticket->setBlockedBy(null);
+                                //Define Document
+                                $document->setPost($post);
 
-                                /*si es el primer assessor que responde se le asigna*/
-                                $posts = $ticket->getPosts();
-                                $primer_assessor = 0;
-                                foreach ($posts as $post) {
-                                                $post_role = $post->getCreatedBy();
-                                                $post_role = $post_role->getRoles();
-                                                $post_role = $post_role[0];
-                                                $post_role = $post_role->getName();
-                                    if ($post_role == 'ROLE_ASSESSOR') {
-                                        $primer_assessor = 1;
-                                    }
+                                if ($file != "") {
+                                        $em->persist($document);
                                 }
-                                if($primer_assessor == 0) $ticket->setAssignedTo($user);
-                            }
+
+                                //Se desbloquea el ticket una vez respondido
+                                if ($ticket->getBlockedBy() != null) {
+                                    $ticket->setBlockedBy(null);
+
+                                    /*si es el primer assessor que responde se le asigna*/
+                                    $posts = $ticket->getPosts();
+                                    $primer_assessor = 0;
+                                    foreach ($posts as $post) {
+                                                    $post_role = $post->getCreatedBy();
+                                                    $post_role = $post_role->getRoles();
+                                                    $post_role = $post_role[0];
+                                                    $post_role = $post_role->getName();
+                                        if ($post_role == 'ROLE_ASSESSOR') {
+                                            $primer_assessor = 1;
+                                        }
+                                    }
+                                    if($primer_assessor == 0) $ticket->setAssignedTo($user);
+                                }
 
                             UtilController::saveEntity($em, $ticket, $user);
 
@@ -812,6 +835,18 @@ class TicketController extends Controller {
                             $request->setLocale($locale);
                         }
                         else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
+                        } else {
+                            // ERROR tamaño
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+
+                            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+                         }
+                    } else {
+                        // ERROR tipo de fichero
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
+
+                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+                    }
                     }
                 }
                 return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
@@ -824,21 +859,6 @@ class TicketController extends Controller {
                                                                                 'version'   => $version,
                                                                                 'idTecDoc'  => $idTecDoc )));
             }
-
-            if ($security->isGranted('ROLE_SUPER_ADMIN'))
-                 $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
-            else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
-
-            $array = array( 'formP'     => $formP->createView(),
-                            'formD'     => $formD->createView(),
-                            'ticket'    => $ticket,
-                            'systems'   => $systems,
-                            'sentences' => $sentences,
-                            'form_name' => $formP->getName(),
-                            'brand'     => $brand,
-                            'model'     => $model,
-                            'version'   => $version,
-                            'idTecDoc'  => $idTecDoc );
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
