@@ -39,7 +39,6 @@ class ShopOrderController extends Controller {
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-        
         if($security->isGranted('ROLE_SUPER_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
             $params[] = array('country', ' = '.$country->getId());
@@ -137,6 +136,12 @@ class ShopOrderController extends Controller {
                 $shopOrder->setWantedAction('create');
                 UtilController::saveEntity($em, $shopOrder, $user);
 
+                // Cambiamos el locale para enviar el mail en el idioma del taller
+                $locale = $request->getLocale();
+                $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+                $request->setLocale($lang->getShortName());
+
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -145,6 +150,9 @@ class ShopOrderController extends Controller {
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
                 $mailer->sendMailToSpool();
                 //echo $this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+                // Dejamos el locale tal y como estaba
+                $request->setLocale($locale);
 
                 return $this->redirect($this->generateUrl('list_orders'));
             }
@@ -185,7 +193,7 @@ class ShopOrderController extends Controller {
             //si no existe una shopOrder previa la creamos por primera vez a partir del shop original
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
-        
+
         if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -243,6 +251,12 @@ class ShopOrderController extends Controller {
                 }
                 UtilController::saveEntity($em, $shopOrder, $user);
 
+                // Cambiamos el locale para enviar el mail en el idioma del taller
+                $locale = $request->getLocale();
+                $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+                $request->setLocale($lang->getShortName());
+
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -253,6 +267,9 @@ class ShopOrderController extends Controller {
                 $mailer->sendMailToSpool();
                 // echo $this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
                 //                                                                                   'shop'      => $shop));die;
+
+                // Dejamos el locale tal y como estaba
+                $request->setLocale($locale);
 
                 return $this->redirect($this->generateUrl('list_orders'));
 
@@ -311,6 +328,12 @@ class ShopOrderController extends Controller {
 
         UtilController::saveEntity($em, $shopOrder, $user);
 
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -319,6 +342,9 @@ class ShopOrderController extends Controller {
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
         //echo $this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         return $this->redirect($this->generateUrl('list_orders'));
 
@@ -365,6 +391,12 @@ class ShopOrderController extends Controller {
                 $em->persist($shopOrder);
                 $em->flush();
 
+                // Cambiamos el locale para enviar el mail en el idioma del taller
+                $locale = $request->getLocale();
+                $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+                $request->setLocale($lang->getShortName());
+
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -373,6 +405,9 @@ class ShopOrderController extends Controller {
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
                 $mailer->sendMailToSpool();
                 //echo $this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+                // Dejamos el locale tal y como estaba
+                $request->setLocale($locale);
 
                 return $this->redirect($this->generateUrl('list_orders'));
             }
@@ -411,6 +446,12 @@ class ShopOrderController extends Controller {
 
             $action = $shopOrder->getWantedAction();
 
+            // Cambiamos el locale para enviar el mail en el idioma del taller
+            $locale = $request->getLocale();
+            $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+            $request->setLocale($lang->getShortName());
+
             /* MAILING */
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -421,6 +462,9 @@ class ShopOrderController extends Controller {
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                'action'   => $action));die;
+
+            // Dejamos el locale tal y como estaba
+            $request->setLocale($locale);
 
             $em->flush();
         }
@@ -449,6 +493,12 @@ class ShopOrderController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $action = $shopOrder->getWantedAction();
 
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -459,6 +509,9 @@ class ShopOrderController extends Controller {
         $mailer->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
         //                                                                                'action'   => $action));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         $em->remove($shopOrder);
         $em->flush();
@@ -494,6 +547,12 @@ class ShopOrderController extends Controller {
 
         UtilController::saveEntity($em, $shopOrder, $security->getToken()->getUser());
 
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo($shopOrder->getCreatedBy()->getEmail1());
@@ -504,6 +563,9 @@ class ShopOrderController extends Controller {
         $mailer->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
         //                                                                                     'action'   => $action));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         return $this->redirect($this->generateUrl('list_orders'));
 
@@ -578,6 +640,12 @@ class ShopOrderController extends Controller {
 
         }
 
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_p = $shopOrder->getPartner()->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_p);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo($shop->getCreatedBy()->getEmail1());
@@ -588,6 +656,9 @@ class ShopOrderController extends Controller {
         $mailer->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
         //                                                                                     'action'   => $action));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         $user = $security->getToken()->getUser();
         $shopOrders = $em->getRepository("OrderBundle:ShopOrder")->findAll();
