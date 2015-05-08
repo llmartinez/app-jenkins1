@@ -693,11 +693,6 @@ class WorkshopOrderController extends Controller {
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
 
-                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                    $name = $user->getUsername();
-                    $username = UtilController::getUsernameUnused($em, $name);
-                    $user->setUsername($username);
-
                     //password nuevo, se codifica con el nuevo salt
                     $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
                     $salt = md5(time());
