@@ -756,7 +756,8 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setCif           ($workshop->getCif());
         $workshopOrder->setPartner       ($workshop->getPartner());
-        $workshopOrder->setShop          ($workshop->getShop());
+        $shop = $workshop->getShop();
+        if(isset($shop)) { $workshopOrder->setShop($shop); }
         $workshopOrder->setTypology      ($workshop->getTypology());
         $workshopOrder->setTest          ($workshop->getTest());
         $workshopOrder->setContactName   ($workshop->getContactName());
@@ -804,7 +805,8 @@ class WorkshopOrderController extends Controller {
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
         $workshop->setCif           ($workshopOrder->getCif());
         $workshop->setPartner       ($workshopOrder->getPartner());
-        $workshop->setShop          ($workshopOrder->getShop());
+        $shop = $workshopOrder->getShop();
+        if(isset($shop)) { $workshop->setShop($shop); }
         $workshop->setTypology      ($workshopOrder->getTypology());
         $workshop->setTest          ($workshopOrder->getTest());
         $workshop->setContactName   ($workshopOrder->getContact());

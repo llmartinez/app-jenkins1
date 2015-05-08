@@ -29,7 +29,7 @@ class WorkshopType extends AbstractType
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('shop', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
                   'empty_value' => '',
