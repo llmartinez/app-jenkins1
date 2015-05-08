@@ -105,7 +105,7 @@ function populate_city(){
 }
 
 /**
- * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
+ * Funcion que rellena (populate) el combo de las tiendas segun el socio seleccionado por el usuario
  */
 function populate_shop(id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
@@ -123,6 +123,7 @@ function populate_shop(id_shop){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
             $('form').find('select[id*=_shop]').empty();
+                $('form').find('select[id*=_shop]').append("<option value></option>");
                 $.each(data, function(idx, elm) {
 
                     if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
@@ -202,7 +203,7 @@ function fill_version() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
-            
+
             var dis_url = $( "#dis-url" ).val();
             var vts_url = $( "#vts-url" ).val();
             $.each(data, function(idx, elm) {
