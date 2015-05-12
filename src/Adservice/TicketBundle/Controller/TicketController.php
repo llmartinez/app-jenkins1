@@ -496,23 +496,28 @@ class TicketController extends Controller {
                                         'form_name' => $form->getName(),));
                          }
 
-                        // Cambiamos el locale para enviar el mail en el idioma del taller
-                        $locale = $request->getLocale();
-                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                        $request->setLocale($lang->getShortName());
+                        $mail = $ticket->getWorkshop()->getEmail1();
+                        $pos = strpos($mail, '@');
+                        if ($pos === true) {
 
-                        /* MAILING */
-                        $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getEmail1());
-                        $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
-                        $mailer->setFrom('noreply@grupeina.com');
-                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
-                        $mailer->sendMailToSpool();
-                        //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                            $locale = $request->getLocale();
+                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                            $request->setLocale($lang->getShortName());
 
-                        // Dejamos el locale tal y como estaba
-                        $request->setLocale($locale);
+                            /* MAILING */
+                            $mailer = $this->get('cms.mailer');
+                            $mailer->setTo($mail);
+                            $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
+                            $mailer->setFrom('noreply@grupeina.com');
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->sendMailToSpool();
+                            //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+
+                            // Dejamos el locale tal y como estaba
+                            $request->setLocale($locale);
+                        }
 
                         if (isset($_POST['save&close'])){
                             return $this->redirect($this->generateUrl('closeTicket', array( 'id' => $ticket->getId())));
@@ -566,23 +571,28 @@ class TicketController extends Controller {
 
                     UtilController::saveEntity($em, $ticket, $user);
 
+                    $mail = $ticket->getWorkshop()->getEmail1();
+                    $pos = strpos($mail, '@');
+                    if ($pos === true) {
+
                     // Cambiamos el locale para enviar el mail en el idioma del taller
-                    $locale = $request->getLocale();
-                    $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                    $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                    $request->setLocale($lang->getShortName());
+                        $locale = $request->getLocale();
+                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                        $request->setLocale($lang->getShortName());
 
-                    /* MAILING */
-                    $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($ticket->getWorkshop()->getEmail1());
-                    $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
-                    $mailer->setFrom('noreply@grupeina.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
-                    $mailer->sendMailToSpool();
-                    //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+                        /* MAILING */
+                        $mailer = $this->get('cms.mailer');
+                        $mailer->setTo($mail);
+                        $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
+                        $mailer->setFrom('noreply@grupeina.com');
+                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
+                        $mailer->sendMailToSpool();
+                        //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                    // Dejamos el locale tal y como estaba
-                    $request->setLocale($locale);
+                        // Dejamos el locale tal y como estaba
+                        $request->setLocale($locale);
+                    }
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
@@ -641,23 +651,28 @@ class TicketController extends Controller {
             //borra el ticket
             $em->remove($ticket);
 
-            // Cambiamos el locale para enviar el mail en el idioma del taller
-            $locale = $request->getLocale();
-            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-            $request->setLocale($lang->getShortName());
+            $mail = $ticket->getWorkshop()->getEmail1();
+            $pos = strpos($mail, '@');
+            if ($pos === true) {
 
-            /* MAILING */
-            $mailer = $this->get('cms.mailer');
-            $mailer->setTo($ticket->getWorkshop()->getEmail1());
-            $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
-            $mailer->setFrom('noreply@grupeina.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
-            $mailer->sendMailToSpool();
-            //echo $this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket));die;
+                // Cambiamos el locale para enviar el mail en el idioma del taller
+                $locale = $request->getLocale();
+                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                $request->setLocale($lang->getShortName());
 
-            // Dejamos el locale tal y como estaba
-            $request->setLocale($locale);
+                /* MAILING */
+                $mailer = $this->get('cms.mailer');
+                $mailer->setTo($mail);
+                $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
+                $mailer->setFrom('noreply@grupeina.com');
+                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
+                $mailer->sendMailToSpool();
+                //echo $this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket));die;
+
+                // Dejamos el locale tal y como estaba
+                $request->setLocale($locale);
+            }
 
             $em->flush();
             return $this->redirect($this->generateUrl('listTicket'));
@@ -815,28 +830,33 @@ class TicketController extends Controller {
 
                             UtilController::saveEntity($em, $ticket, $user);
 
-                            // Cambiamos el locale para enviar el mail en el idioma del taller
-                            $locale = $request->getLocale();
-                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                            $request->setLocale($lang->getShortName());
+                            $mail = $ticket->getWorkshop()->getEmail1();
+                            $pos = strpos($mail, '@');
+                            if ($pos === true) {
 
-                            /* MAILING */
-                            $mailer = $this->get('cms.mailer');
-                            $mailer->setTo($ticket->getWorkshop()->getEmail1());
-                            $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
-                            $mailer->setFrom('noreply@grupeina.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
-                            $mailer->sendMailToSpool();
+                                // Cambiamos el locale para enviar el mail en el idioma del taller
+                                $locale = $request->getLocale();
+                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                $request->setLocale($lang->getShortName());
 
-                            if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
-                                $mailer->setTo($ticket->getAssignedTo()->getEmail1());
+                                /* MAILING */
+                                $mailer = $this->get('cms.mailer');
+                                $mailer->setTo($mail);
+                                $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                                $mailer->setFrom('noreply@grupeina.com');
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                                 $mailer->sendMailToSpool();
-                            }
-                            //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
 
-                            // Dejamos el locale tal y como estaba
-                            $request->setLocale($locale);
+                                if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
+                                    $mailer->setTo($ticket->getAssignedTo()->getEmail1());
+                                    $mailer->sendMailToSpool();
+                                }
+                                //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
+
+                                // Dejamos el locale tal y como estaba
+                                $request->setLocale($locale);
+                            }
                         }
                         else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
                         } else {
@@ -959,23 +979,28 @@ class TicketController extends Controller {
 
                         UtilController::saveEntity($em, $ticket, $user);
 
-                        // Cambiamos el locale para enviar el mail en el idioma del taller
-                        $locale = $request->getLocale();
-                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                        $request->setLocale($lang->getShortName());
+                        $mail = $ticket->getWorkshop()->getEmail1();
+                        $pos = strpos($mail, '@');
+                        if ($pos === true) {
 
-                        /* MAILING */
-                        $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($ticket->getWorkshop()->getEmail1());
-                        $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-                        $mailer->setFrom('noreply@grupeina.com');
-                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
-                        $mailer->sendMailToSpool();
-                        //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                            $locale = $request->getLocale();
+                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                            $request->setLocale($lang->getShortName());
 
-                        // Dejamos el locale tal y como estaba
-                        $request->setLocale($locale);
+                            /* MAILING */
+                            $mailer = $this->get('cms.mailer');
+                            $mailer->setTo($mail);
+                            $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                            $mailer->setFrom('noreply@grupeina.com');
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->sendMailToSpool();
+                            //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+
+                            // Dejamos el locale tal y como estaba
+                            $request->setLocale($locale);
+                        }
 
                         return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
                     }
@@ -1016,23 +1041,28 @@ class TicketController extends Controller {
         $ticket->setStatus($status);
         UtilController::saveEntity($em, $ticket, $user);
 
-        // Cambiamos el locale para enviar el mail en el idioma del taller
-        $locale = $request->getLocale();
-        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-        $request->setLocale($lang->getShortName());
+        $mail = $ticket->getWorkshop()->getEmail1();
+        $pos = strpos($mail, '@');
+        if ($pos === true) {
 
-         /* MAILING */
-        $mailer = $this->get('cms.mailer');
-        $mailer->setTo($ticket->getWorkshop()->getEmail1());
-        $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
-        $mailer->setFrom('noreply@grupeina.com');
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
-        $mailer->sendMailToSpool();
-        //echo $this->renderView('UtilBundle:Mailing:ticket_reopen_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
+            // Cambiamos el locale para enviar el mail en el idioma del taller
+            $locale = $request->getLocale();
+            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+            $request->setLocale($lang->getShortName());
 
-        // Dejamos el locale tal y como estaba
-        $request->setLocale($locale);
+             /* MAILING */
+            $mailer = $this->get('cms.mailer');
+            $mailer->setTo($mail);
+            $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
+            $mailer->setFrom('noreply@grupeina.com');
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
+            $mailer->sendMailToSpool();
+            //echo $this->renderView('UtilBundle:Mailing:ticket_reopen_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
+
+            // Dejamos el locale tal y como estaba
+            $request->setLocale($locale);
+        }
 
         return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
     }

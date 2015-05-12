@@ -327,23 +327,28 @@ class UserController extends Controller {
         $this->saveUser($em, $user);
         $request = $this->getRequest();
 
-        // Cambiamos el locale para enviar el mail en el idioma del taller
-        $locale = $request->getLocale();
-        $lang_u = $user->getCountry()->getLang();
-        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
-        $request->setLocale($lang->getShortName());
+        $mail = $user->getEmail1();
+        $pos = strpos($mail, '@');
+        if ($pos === true) {
 
-        /* MAILING */
-        $mailerUser = $this->get('cms.mailer');
-        $mailerUser->setTo($user->getEmail1());
-        $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
-        $mailerUser->setFrom('noreply@grupeina.com');
-        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
-        $mailerUser->sendMailToSpool();
-        //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+            // Cambiamos el locale para enviar el mail en el idioma del taller
+            $locale = $request->getLocale();
+            $lang_u = $user->getCountry()->getLang();
+            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+            $request->setLocale($lang->getShortName());
 
-        // Dejamos el locale tal y como estaba
-        $request->setLocale($locale);
+            /* MAILING */
+            $mailerUser = $this->get('cms.mailer');
+            $mailerUser->setTo($mail);
+            $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
+            $mailerUser->setFrom('noreply@grupeina.com');
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
+            $mailerUser->sendMailToSpool();
+            //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
+            // Dejamos el locale tal y como estaba
+            $request->setLocale($locale);
+        }
 
         $flash =  $this->get('translator')->trans('change_password.correct');
         $this->get('session')->setFlash('password', $flash);
