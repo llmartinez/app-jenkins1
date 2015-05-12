@@ -16,13 +16,10 @@
                 <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
-            {% if is_granted('ROLE_SUPER_AD') %}
-                <div class="col-xs-2 col-md-2 form-group">
-                    <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
-                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
-                </div>
-            {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
-            {% endif %}
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
             <div class="col-xs-4 col-md-4 form-group">
                 {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
                 {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}

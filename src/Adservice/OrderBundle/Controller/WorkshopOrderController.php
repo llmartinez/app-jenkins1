@@ -159,6 +159,11 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder->setActive(false);
                     $workshopOrder->setAction('create');
                     $workshopOrder->setWantedAction('create');
+
+                    // Set default shop to NULL
+                    $shop = $form['shop']->getClientData();
+                    if($shop == 0) { $workshopOrder->setShop(null); }
+
                     UtilController::saveEntity($em, $workshopOrder, $user);
 
                     // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -287,6 +292,11 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder->setAction('modify');
                     $workshopOrder->setWantedAction('modify');
                 }
+
+                // Set default shop to NULL
+                $shop = $form['shop']->getClientData();
+                if($shop == 0) { $workshopOrder->setShop(null); }
+
                 UtilController::saveEntity($em, $workshopOrder, $user);
 
                 // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -314,7 +324,8 @@ class WorkshopOrderController extends Controller {
             }
         }
         return $this->render('OrderBundle:WorkshopOrders:edit_order.html.twig', array( 'workshopOrder' => $workshopOrder,
-                                                                                       'workshop'      => $workshop,                //old values
+                                                                                       'workshop'      => $workshop,
+                                                                                       'id_partner'    => $id_partner,              //old values
                                                                                        'form_name'     => $form->getName(),         //new values
                                                                                        'form'          => $form->createView()));
 

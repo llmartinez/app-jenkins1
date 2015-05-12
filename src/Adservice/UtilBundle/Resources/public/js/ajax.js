@@ -41,26 +41,6 @@ function populate_region(route, region, city){
                 }
             });
             $("#slct_region").html($('#data_regions').html());
-            $("#slct_region").select2({
-                placeholder: "Select a State",
-                allowClear: true
-            });
-
-            if($(':text[id*=region]').val() != ''){
-                if(region_edit != '') {
-                                        $("#s2id_slct_region .select2-chosen").text(region_edit);
-                                        $("#s2id_slct_city .select2-chosen"  ).text(city_edit);
-                }
-                else                  {
-                                        $("#s2id_slct_region .select2-chosen").text($('#no-region').val());
-                                        $("#s2id_slct_city .select2-chosen"  ).text($('#no-city'  ).val());
-                }
-            }
-            else{
-                $("#s2id_slct_region .select2-chosen").text($('#no-region').val());
-
-                $(':text[id*=region]').val($('#no-region').val());
-            }
         },
         error : function(){
             console.log("Error al cargar las regiones...");
@@ -72,8 +52,6 @@ function populate_region(route, region, city){
  * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
  */
 function populate_city(){
-    var id_region = $('#s2id_slct_region .select2-chosen').text();
-    var city      = $('#s2id_slct_city .select2-chosen').text();
     var route     = 'cities_from_region';
     var locale    = $(document).find("#data_locale").val();
 
@@ -92,10 +70,6 @@ function populate_city(){
                 else                 $('#data_cities').append("<option value="+elm.id+">"+elm.city+"</option>");
             });
             $("#slct_city").html($('#data_cities').html());
-            $("#slct_city").select2({
-                placeholder: "Select a State",
-                allowClear: true
-            });
             $('div#div_regions span.select2-chosen').text(id_region);
         },
         error : function(){
@@ -109,6 +83,7 @@ function populate_city(){
  */
 function populate_shop(id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
+    if (id_partner == undefined) { id_partner = $('#id_partner').val(); }
     if(id_shop == undefined){ id_shop = ''; }
 
     var route  = 'shops_from_partner';
@@ -122,8 +97,8 @@ function populate_shop(id_shop){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-            $('form').find('select[id*=_shop]').empty();
-                $('form').find('select[id*=_shop]').append("<option value></option>");
+                $('form').find('select[id*=_shop]').empty();
+                $('form').find('select[id*=_shop]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
                     if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
