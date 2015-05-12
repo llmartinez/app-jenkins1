@@ -140,10 +140,13 @@ function fill_model() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_model').empty();
             $('#new_car_form_version').empty();
-            //Primer campo vacío
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
+
+            if (data['error'] != "No hay coincidencias") {
+                //Primer campo vacío
+                $.each(data, function(idx, elm) {
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                });
+            }
         },
         error: function() {
             console.log("Error al cargar modelos...");
@@ -179,13 +182,17 @@ function fill_version() {
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
 
+            if (data['error'] != "No hay coincidencias") {
+
             var dis_url = $( "#dis-url" ).val();
             var vts_url = $( "#vts-url" ).val();
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
-                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
-            });
+
+                $.each(data, function(idx, elm) {
+                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
+                    $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
+                });
+            }
 
         },
         error: function() {

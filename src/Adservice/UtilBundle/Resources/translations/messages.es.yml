@@ -446,6 +446,9 @@ ticket_at:					  "a fecha "
 ticket_reassign:			  "Desbloquea y reassigna"
 filter_by_year: 			  "Filtrar por año"
 filter_by_motor: 			  "Filtrar por motor"
+filter_by_type:				  "Tipo de ticket"
+filter_by_rows:				  "Filas a mostrar"
+filter_by_country:			  "Filtrar por País"
 
 sentence.default:			  "Sentencias por defecto.."
 
@@ -643,4 +646,4 @@ back:  Volver a la aplicación
 
 termsConditions:	" "
 _termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
-footerText: 	 	2014 © Grup Eina Digital · Centro de Innovación y Recursos
+footerText: 	 	© Grup Eina Digital · Centro de Innovación y Recursos
