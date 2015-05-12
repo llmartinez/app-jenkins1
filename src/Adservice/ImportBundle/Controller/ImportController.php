@@ -48,6 +48,7 @@ class ImportController extends Controller
 				$newPartner = UtilController::newEntity(new Partner(), $sa);
 				$name = $old_Socio->getNombre();
 				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
 				$newPartner->setName($name);
 				$newPartner->setCodePartner($old_Socio->getId());
 				$newPartner->setActive('1');
@@ -55,9 +56,7 @@ class ImportController extends Controller
 				UtilController::saveEntity($em, $newPartner, $sa,false);
 			}
 			$em->flush();
-/******************************************************************************************************************/
-echo 'partner';die;
-/******************************************************************************************************************/
+
 			$session->set('msg' ,	'Socios importados correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop-default');
@@ -173,72 +172,72 @@ echo 'partner';die;
     	elseif( $bbdd == 'workshop' )
     	{
     		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findAll();	    // WORKSHOP	//
-                $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
+            $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
 
-                $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
-                $all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
-                $all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
-                $typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
-                //find($old_Taller->getTipologia());
+            $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
+            $all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+            $all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+            $typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+            //find($old_Taller->getTipologia());
 
-                foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
-                foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-                foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
-                //var_dump($all_shops);die;
-                foreach ($old_Talleres as $old_Taller)
-                {
-                        $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-                        $newWorkshop->setName 					($old_Taller->getNombre());
-                        $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
-                        $newWorkshop->setAddress 				($old_Taller->getDireccion());
-                        $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
-                        $newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
-                        $newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
-                        $newWorkshop->setActive	 				($old_Taller->getActive());
-                        $newWorkshop->setContact 				($old_Taller->getContacto());
-                        $newWorkshop->setTypology 				($typology);
-                        $newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
+            foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
+            foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
+            foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
+            //var_dump($all_shops);die;
+            foreach ($old_Talleres as $old_Taller)
+            {
+                    $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
+                    $newWorkshop->setName 					($old_Taller->getNombre());
+                    $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
+                    $newWorkshop->setAddress 				($old_Taller->getDireccion());
+                    $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
+                    $newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
+                    $newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
+                    $newWorkshop->setActive	 				($old_Taller->getActive());
+                    $newWorkshop->setContact 				($old_Taller->getContacto());
+                    $newWorkshop->setTypology 				($typology);
+                    $newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
 
-                        //COMPROVACION SI EXISTE EL SOCIO
-                        $idSocio    = $old_Taller->getIdSocio();
+                    //COMPROVACION SI EXISTE EL SOCIO
+                    $idSocio    = $old_Taller->getIdSocio();
 
-                        if(isset($partners[$idSocio]))
-                        {
-                                $newWorkshop->setPartner ($partners[$idSocio]);
-                        }
-                        elseif($idSocio >= 60 AND $idSocio <= 78){
-                                         $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
+                    if(isset($partners[$idSocio]))
+                    {
+                            $newWorkshop->setPartner ($partners[$idSocio]);
+                    }
+                    elseif($idSocio >= 60 AND $idSocio <= 78){
+                                     $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
 
-                                         if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
-                        }else{
-                                         $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
-                        }
+                                     if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
+                    }else{
+                                     $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
+                    }
 
-                        //setAdServicePlus
-                        if(isset($adsplus[$old_Taller->getId()])) {
-                                $newWorkshop->setAdServicePlus(1);
+                    //setAdServicePlus
+                    if(isset($adsplus[$old_Taller->getId()])) {
+                            $newWorkshop->setAdServicePlus(1);
 
-                                $adsp = $adsplus[$old_Taller->getId()];
-                                $newADSPlus = new ADSPlus();
-                                $newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
-                                $newADSPlus->setAltaInicial($adsp->getAltaInicial());
-                                $newADSPlus->setUltAlta($adsp->getUltAlta());
-                                $newADSPlus->setBaja($adsp->getBaja());
-                                $newADSPlus->setContador($adsp->getContador());
-                                $newADSPlus->setActive($adsp->getActive());
+                            $adsp = $adsplus[$old_Taller->getId()];
+                            $newADSPlus = new ADSPlus();
+                            $newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
+                            $newADSPlus->setAltaInicial($adsp->getAltaInicial());
+                            $newADSPlus->setUltAlta($adsp->getUltAlta());
+                            $newADSPlus->setBaja($adsp->getBaja());
+                            $newADSPlus->setContador($adsp->getContador());
+                            $newADSPlus->setActive($adsp->getActive());
 
-                        $em->persist($newADSPlus);
-                        }
-                        else $newWorkshop->setAdServicePlus(0);
+                    $em->persist($newADSPlus);
+                    }
+                    else $newWorkshop->setAdServicePlus(0);
 
-                        UtilController::saveEntity($em, $newWorkshop, $sa, false);
-                }
-                $em->flush();
-                $session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
-                $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
-                $session->set('next',  	'user');
+                    UtilController::saveEntity($em, $newWorkshop, $sa, false);
+            }
+            $em->flush();
+            $session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
+            $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
+            $session->set('next',  	'user');
 
-                //return $this->render('ImportBundle:Import:import.html.twig');
+            //return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
     	}
 //  _   _ ____  _____ ____
@@ -262,25 +261,34 @@ echo 'partner';die;
 			foreach ($old_Talleres  as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
-				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getContacto());
+				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getName());
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
 				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
 				$newUser->setActive   ($old_Taller->getActive());
 				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
 
+				$password = substr( md5(microtime()), 1, 8);
+				$newUser->setPassword($password);
+
 				if( $newUser->getName() == 'sin-especificar' and $newUser->getSurname() == 'sin-especificar') {
 					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
 					$newUser->setName($workshops[$old_Taller->getId()]->getName());
+					$newUser->setSurname($workshops[$old_Taller->getId()]->getName());
 				}
-				if($newUser->getEmail1() == '' or $newUser->getEmail1() == '0'){
-					$users_email_log[] = $newUser;
+
+				// GUARDANDO USUARIOS EN EXCEL
+				$users_email_log[] = array($newUser, $password);
+				$email = $newUser->getEmail1();
+				$pos = strpos($email, '@');
+				if ($pos === false) {
+					$newUser->setEmail1('0');
 				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
  			}
 			$em->flush();
  			if(isset($users_email_log)) {
 				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
-				$session->set('info',  	'Generarando excel con los ususarios erroneos...
+				$session->set('info',  	'Generarando excel con los ususarios...
 										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
 				$session->set('next',  	'user_log');
 
@@ -439,9 +447,9 @@ echo 'partner';die;
 		}
 	}
 
-    private function setUserFields($em, $entity, $role, $nombre)
+    private function setUserFields($em, $entity, $role, $name)
     {
-		$entity->setUsername   (UtilController::getUsernameUnused($em, $nombre));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
+		$entity->setUsername   (UtilController::getUsernameUnused($em, $name));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
         $entity->setPassword   ('grupeina'); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
 
         //password nuevo, se codifica con el nuevo salt
@@ -451,13 +459,12 @@ echo 'partner';die;
         $entity->setPassword($password);
         $entity->setSalt($salt);
 
-        //Se separa de la BBDD antigua el nombre y los apellidos
-        $nombre_completo = explode (' ', $nombre);
-        $name 	 = $nombre_completo[0];
-        $surname = "";
-        for($i=1; $i< count($nombre_completo);$i++){ $surname = $surname.' '.$nombre_completo[$i]; }
+		// TRATAMIENTO DE ERRORES CON MAIL ERRONEO
+        $surname = '';
+		if ($name == '') {
         	if($name == '')    $name 	= 'sin-especificar';
         	if($surname == '') $surname = 'sin-especificar';
+		}
 
         $entity->setName          ($name);
         $entity->setSurname       ($surname);
@@ -473,7 +480,11 @@ echo 'partner';die;
         $entity->setMovileNumber1 ($old_entity->getMovil());
         $entity->setMovileNumber2 ($old_entity->getMovil2());
         $entity->setFax           ($old_entity->getFax());
-        $entity->setEmail1        ($old_entity->getEmail());
+
+        $email = $old_entity->getEmail();
+        $pos = strpos($email, '@');
+        if($pos === false) { $entity->setEmail1('0'); }
+        else 			   { $entity->setEmail1($email); }
         $entity->setEmail2        ($old_entity->getEmail2());
 
         $slug_city   = UtilController::getSlug($old_entity->getPoblacion());
@@ -542,7 +553,7 @@ echo 'partner';die;
         $date    = new \DateTime();
         $response->setLastModified($date);
 
-        $response->headers->set('Content-Disposition', 'attachment;filename="usuarios_sin_mail_('.date("d-m-Y").').csv"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="usuarios('.date("d-m-Y").').csv"');
         $excel   = $this->createExcelTicket($users_email_log);
 
         $response->setContent($excel);
@@ -551,32 +562,41 @@ echo 'partner';die;
 
     public function createExcelTicket($users_email_log){
         //Creación de cabecera
-        $excel ='id;Código Socio;Código Taller;Taller;Contacto;Fijo 1;Fijo 2;Movil 1;Movil 2;Población;Provincia;Dirección;error;';
+        $excel ='id;Código Socio;Código Taller;Taller;Usuario;Contraseña;Contacto;Email 1; Email 2;Fijo 1;Fijo 2;Movil 1;Movil 2;Población;Provincia;Dirección;error;';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($users_email_log as $row) {
-            $excel.=$row->getId().';';
-            $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
-            $excel.=$row->getWorkshop()->getCodeWorkshop().';';
-            $excel.=$row->getWorkshop()->getName().';';
-            $excel.=$row->getName().';';
-            $excel.=$row->getPhoneNumber1().';';
-            $excel.=$row->getPhoneNumber2().';';
-            $excel.=$row->getMovileNumber1().';';
-            $excel.=$row->getMovileNumber2().';';
-            $excel.=$row->getRegion().';';
-            $excel.=$row->getCity().';';
-            $excel.=$row->getAddress().';';
-            $error = 'Este taller no tiene email. Contacta con el taller para solucionarlo.';
+            $excel.=$row[0]->getId().';';
+            $excel.=$row[0]->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row[0]->getWorkshop()->getCodeWorkshop().';';
+            $excel.=$row[0]->getWorkshop()->getName().';';
+            $excel.=$row[0]->getUsername().';';
+            $excel.=$row[1].';'; // password
+            $excel.=$row[0]->getName().';';
+            $excel.=$row[0]->getEmail1().';';
+            $excel.=$row[0]->getEmail2().';';
+            $excel.=$row[0]->getPhoneNumber1().';';
+            $excel.=$row[0]->getPhoneNumber2().';';
+            $excel.=$row[0]->getMovileNumber1().';';
+            $excel.=$row[0]->getMovileNumber2().';';
+            $excel.=$row[0]->getRegion().';';
+            $excel.=$row[0]->getCity().';';
+            $excel.=$row[0]->getAddress().';';
+
+            // Columna para errores de talleres sin mail
+            $error = '';
+            $pos = strpos($row[0]->getEmail1(), '@');
+			if ($pos === false) {
+            	$error = 'Este taller no tiene email. Contacta con el taller para solucionarlo.';
+			}
             $excel.=$error.';';
             $excel.="\n";
         }
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
-// 
 
     public function testMailingAction()
     {
