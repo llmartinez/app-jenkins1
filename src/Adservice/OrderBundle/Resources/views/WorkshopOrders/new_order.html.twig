@@ -40,11 +40,12 @@
             {% endif %}
 
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} shop {% endtrans %} </label> {{ form_widget(form.shop,            { 'attr': {'class': 'form-control'} }) }}
+                <input type="hidden" id="id_partner" value="{{ id_partner }}">
+                <label>{% trans %} shop {% endtrans %} </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
             </div>
 
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} typology {% endtrans %} </label> {{ form_widget(form.typology,        { 'attr': {'class': 'form-control'} }) }}
+                <label>{% trans %} typology {% endtrans %} *</label> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">

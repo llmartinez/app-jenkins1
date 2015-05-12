@@ -259,6 +259,7 @@ class WorkshopController extends Controller {
      */
     public function editWorkshopAction($workshop) {
         $security = $this->get('security.context');
+        $request = $this->getRequest();
 
         if ((!$security->isGranted('ROLE_SUPER_ADMIN')) and ($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
         and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
@@ -319,6 +320,10 @@ class WorkshopController extends Controller {
                 if($find == null or $workshop->getCodeWorkshop() == $last_code)
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+
+                    // Set default shop to NULL
+                    $shop = $form['shop']->getClientData();
+                    if($shop == 0) { $workshop->setShop(null); }
 
                     $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
 

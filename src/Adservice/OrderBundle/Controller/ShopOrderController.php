@@ -106,8 +106,10 @@ class ShopOrderController extends Controller {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
         }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 

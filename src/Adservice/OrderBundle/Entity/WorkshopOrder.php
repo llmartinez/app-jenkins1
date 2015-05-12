@@ -118,6 +118,7 @@ class WorkshopOrder {
      * @var string $shop
      *
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Shop", inversedBy="workshops")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=true)
      */
     private $shop;
 
@@ -343,7 +344,7 @@ class WorkshopOrder {
      *
      * @param  string $shop
      */
-    public function setShop(\Adservice\PartnerBundle\Entity\Shop $shop) {
+    public function setShop(\Adservice\PartnerBundle\Entity\Shop $shop=null) {
         $this->shop = $shop;
     }
 
