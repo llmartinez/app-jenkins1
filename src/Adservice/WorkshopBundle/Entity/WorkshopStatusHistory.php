@@ -278,7 +278,7 @@ class WorkshopStatusHistory {
      *
      * @param string $shop
      */
-    public function setShop(Shop $shop) {
+    public function setShop(Shop $shop=null) {
         $this->shop = $shop;
     }
 

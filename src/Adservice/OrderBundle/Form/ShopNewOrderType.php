@@ -10,6 +10,7 @@ class ShopNewOrderType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
+        if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
 
         $builder
@@ -19,11 +20,12 @@ class ShopNewOrderType extends AbstractType
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.country'.$id_country)
+                                                          ->andWhere('s.id'.$id_partner); }))
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(

@@ -33,7 +33,7 @@
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
-                                    <a title="{% trans %} workshop.show_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
+                                    <a title="{% trans %} order_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
                                     {% if workshopOrder.rejectionReason is not null %}
                                         {# <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bund les/util/images/icon/tag_red.png') }}"></a> #}
                                          <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"> {% trans %} reject.reason {% endtrans %}</span></a>

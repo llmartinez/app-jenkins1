@@ -29,7 +29,7 @@ class WorkshopType extends AbstractType
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('shop', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
                   'empty_value' => '',
@@ -38,7 +38,7 @@ class WorkshopType extends AbstractType
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('s.partner'.$id_partner); }))
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 0'); }))
             ->add('typology', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',

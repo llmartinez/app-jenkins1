@@ -104,7 +104,7 @@ class UserController extends Controller {
                 $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $role, $pagination);
                 $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $role);
         }
-        
+
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
@@ -167,7 +167,7 @@ class UserController extends Controller {
         $petition = $this->getRequest();
 
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -191,7 +191,7 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         //que tipo de usuario estamos editando (los formtype varian...)
     	$role = $user->getRoles();
     	$role = $role[0];
@@ -217,6 +217,11 @@ class UserController extends Controller {
                 $form_errors = 'none';
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                $name = $user->getUsername();
+                $username = UtilController::getUsernameUnused($em, $name);
+                $user->setUsername($username);
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
@@ -320,6 +325,14 @@ class UserController extends Controller {
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
+        $request = $this->getRequest();
+
+        // Cambiamos el locale para enviar el mail en el idioma del taller
+        $locale = $request->getLocale();
+        $lang_u = $user->getCountry()->getLang();
+        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+        $request->setLocale($lang->getShortName());
+
         /* MAILING */
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setTo($user->getEmail1());
@@ -328,6 +341,9 @@ class UserController extends Controller {
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
         $mailerUser->sendMailToSpool();
         //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
+        // Dejamos el locale tal y como estaba
+        $request->setLocale($locale);
 
         $flash =  $this->get('translator')->trans('change_password.correct');
         $this->get('session')->setFlash('password', $flash);
@@ -347,9 +363,9 @@ class UserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
-        
+
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -373,7 +389,7 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
@@ -408,6 +424,11 @@ class UserController extends Controller {
             }
             if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
+            // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+            $name = $user->getUsername();
+            $username = UtilController::getUsernameUnused($em, $name);
+            $user->setUsername($username);
+
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
 //            $partner = $form->getData('partner');
@@ -431,7 +452,7 @@ class UserController extends Controller {
      * @throws AccessDeniedException
      */
     public function getPendingOrders(){
-        
+
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();

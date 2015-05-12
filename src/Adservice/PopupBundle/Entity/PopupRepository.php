@@ -22,11 +22,11 @@ class PopupRepository extends EntityRepository{
         if($role == 'ROLE_SUPER_ADMIN' OR $role == 'ROLE_SUPER_AD') $country = "";
         else $country = " AND p.country = '".$user->getCountry()->getId()."' ";
 
-        $query = "SELECT p FROM PopupBundle:Popup p WHERE p.startdate_at <= '".$date->format("Y-m-h")."' AND p.enddate_at >= '".$date->format("Y-m-h")."e' AND p.role = ".$role->getId()." ".$country;
+        $query = "SELECT p FROM PopupBundle:Popup p WHERE p.startdate_at <= '".$date->format("Y-m-d")."' AND p.enddate_at >= '".$date->format("Y-m-d")."' AND p.role = ".$role->getId()." AND p.active = '1' ".$country;
 
         $consulta = $em->createQuery($query);
         $results = $consulta->getResult();
-        
+
         $size = sizeOf($results);
         if($size > 1) {
             $popup = new Popup();
