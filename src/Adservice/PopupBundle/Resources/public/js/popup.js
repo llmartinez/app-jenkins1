@@ -11,6 +11,17 @@ function confirm_delete_popup_modal(id){
 
 	$(document).ready(function() {
 
+        $('select[id*=_at_date_').addClass('btn-date');
+        $('select[id*=_at_time_').addClass('btn-date');
+
+        // SET DE FECHA INICIAL
+        var d = new Date();
+        if ($('select[id*=_at_date_year').val() < d.getFullYear() ) {
+            $('select[id*=_at_date_day'  ).val(d.getDate());
+            $('select[id*=_at_date_month').val(d.getMonth());
+            $('select[id*=_at_date_year' ).val(d.getFullYear());
+        };
+
         $('#MainContent').find('.delete_popup').click(function() {
             var popup_id = $(this).data('id');
             confirm_delete_popup_modal(popup_id);
