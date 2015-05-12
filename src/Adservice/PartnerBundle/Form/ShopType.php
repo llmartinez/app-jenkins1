@@ -7,12 +7,12 @@ use Symfony\Component\Form\FormBuilder;
 
 class ShopType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) 
+    public function buildForm(FormBuilder $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('name')
             ->add('partner', 'entity', array(
