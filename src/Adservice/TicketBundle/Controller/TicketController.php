@@ -1321,7 +1321,7 @@ class TicketController extends Controller {
                 $id     = $cars[$key[$i]]->getId();
                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
 
-                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN')))
                     $tickets[] = $ticket;
             }
         }
