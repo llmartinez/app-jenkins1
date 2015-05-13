@@ -254,7 +254,7 @@ class Pagination
              echo $query.$from.$where.$group_by.$order.'<br>';
              var_dump($consulta->getResult());
              echo 'ok';
-            // die;
+            die;
         return $consulta->getResult();
     }
 
