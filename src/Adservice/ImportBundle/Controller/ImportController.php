@@ -261,7 +261,7 @@ class ImportController extends Controller
 			foreach ($old_Talleres  as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
-				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getName());
+				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getNombre());
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
 				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
 				$newUser->setActive   ($old_Taller->getActive());
