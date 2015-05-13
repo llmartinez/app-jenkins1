@@ -42,7 +42,7 @@
                 <tr>
                     <td>{{ popup.id }}</td>
                     <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                    <td>{{ popup.description }} </td>
+                    <td>{{ popup.description|length > 60 ? popup.description|slice(0, 60) ~ '...' : popup.description  }}</td>
                     <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.country|trans }} </td>
