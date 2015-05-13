@@ -16,7 +16,7 @@ security:
             security: true
             remember_me:
                 key:      "%secret%"
-                lifetime: 604800
+                lifetime: 86400
                 path:     ^/
                 domain:   ~
 
