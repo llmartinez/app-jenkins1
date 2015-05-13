@@ -18,8 +18,12 @@ function confirm_delete_popup_modal(id){
         var d = new Date();
         if ($('select[id*=_at_date_year').val() < d.getFullYear() ) {
             $('select[id*=_at_date_day'  ).val(d.getDate());
-            $('select[id*=_at_date_month').val(d.getMonth());
+            $('select[id*=_at_date_month').val(d.getMonth()+1);
             $('select[id*=_at_date_year' ).val(d.getFullYear());
+            $('select[id*=_startdate_at_time_hour' ).val(d.getHours());
+            $('select[id*=_startdate_at_time_minute' ).val(d.getMinutes());
+            $('select[id*=_enddate_at_time_hour' ).val(23);
+            $('select[id*=_enddate_at_time_minute' ).val(59);
         };
 
         $('#MainContent').find('.delete_popup').click(function() {
