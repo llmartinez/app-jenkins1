@@ -251,10 +251,9 @@ class Pagination
         }
 
         /* PRUEBAS */
-             echo $query.$from.$where.$group_by.$order.'<br>';
-             var_dump($consulta->getResult());
-             echo 'ok';
-            die;
+            // echo $query.$from.$where.$group_by.$order.'<br>';
+            // var_dump($consulta->getResult());
+            // die;
         return $consulta->getResult();
     }
 
