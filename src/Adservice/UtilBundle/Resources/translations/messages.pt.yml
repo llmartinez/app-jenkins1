@@ -44,7 +44,7 @@ datauser:    			 "Dados do Utilizador"
 dataworkshop:			 "Dados da Oficina"
 datashop:				 "Dados da Loja"
 username:				 "Utilizador"
-password:				 "Password"
+password:				 "Palavra-passe"
 old_password:		     "Palavra-passe atual"
 new_password:		     "Nova palavra-passe"
 repeat_password:		 "Repetir palavra-passe"
@@ -444,7 +444,7 @@ ticket_reassign:			  "Desbloqueia e volta a atribuir"
 filter_by_year: 			  "Filtrar por ano"
 filter_by_motor: 			  "Filtrar por motor"
 
-sentence.default:			  "Frases predefinidas."
+sentence.default:			  "Frases predefinidas..."
 
 #POST
 reply:						  "Responder"

@@ -444,7 +444,7 @@ ticket_reassign:			  "Débloquez et réassignez"
 filter_by_year: 			  "Filtrer par année"
 filter_by_motor: 			  "Filtrer par moteur"
 
-sentence.default:			  "Décisions par défaut.."
+sentence.default:			  "Décisions par défaut..."
 
 #POST
 reply:						  "Répondre"
