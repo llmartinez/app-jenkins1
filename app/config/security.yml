@@ -31,24 +31,24 @@ security:
         ROLE_SUPER_AD: ROLE_AD
 
     access_control:
-      - { path: ^/(es|en|fr)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr)/partner/shop,               roles: [ROLE_AD]                    }
-      - { path: ^/(es|en|fr)/partner,                    roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr)/user/list,                  roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr)/user,                       roles: [ROLE_USER, ROLE_AD]         }
-      - { path: ^/(es|en|fr)/popup,                      roles: [ROLE_USER, ROLE_AD]         }
-      - { path: ^/(es|en|fr)/workshop/observation,       roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr)/ticket/workshopList,        roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr)/ticket/close,               roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/ticket,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/car,                        roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/statistic,                  roles: [ROLE_ADMIN]                 }
-      # - { path: ^/(es|en|fr)/lock,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr)/import,                     roles: [ROLE_SUPER_ADMIN]           }
-      # - { path: ^/(es|en|fr)/,                           roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
+      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD]         }
+      - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD]         }
+      - { path: ^/(es|en|fr|pt)/workshop/observation,       roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/ticket/workshopList,        roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_ADMIN]                 }
+      # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN]           }
+      # - { path: ^/(es|en|fr|pt)/,                           roles: [ROLE_USER]                  }
 
     encoders:
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
