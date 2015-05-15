@@ -320,6 +320,7 @@ class StatisticController extends Controller {
     }
 
     public function createExcelTicket($results){
+        echo 'ok'; die;
         //Creación de cabecera
         //'ID;Date;Car;Assigned To;Description;Status;Solution;';
         $excel ='ID;'.
