@@ -203,7 +203,6 @@ class StatisticController extends Controller {
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                       $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                       $partner='0', $status='0', $country='0'){
-
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -320,7 +319,6 @@ class StatisticController extends Controller {
     }
 
     public function createExcelTicket($results){
-        echo 'ok'; die;
         //Creación de cabecera
         //'ID;Date;Car;Assigned To;Description;Status;Solution;';
         $excel ='ID;'.
@@ -333,23 +331,17 @@ class StatisticController extends Controller {
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
-        try
-        {
-            foreach ($results as $row) {
-                $excel.=$row->getId().';';
-                $created = $row->getCreatedAt();
-                $excel.=$created->format("d/m/Y").';';
-                $excel.=$row->getCar().';';
-                $excel.=$row->getAssignedTo().';';
-                $excel.=$row->getDescription().';';
-                $excel.=$row->getStatus().';';
-                $excel.=$row->getSolution().';';
-                $excel.="\n";
-            }
-        }
-        catch(\Exception $exception)
-        {
-            echo 'Caught in try/catch';die;
+
+        foreach ($results as $row) {
+            $excel.=$row->getId().';';
+            $created = $row->getCreatedAt();
+            $excel.=$created->format("d/m/Y").';';
+            $excel.=$row->getCar().';';
+            $excel.=$row->getAssignedTo().';';
+            $excel.=$row->getDescription().';';
+            $excel.=$row->getStatus().';';
+            $excel.=$row->getSolution().';';
+            $excel.="\n";
         }
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
