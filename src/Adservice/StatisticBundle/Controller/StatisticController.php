@@ -338,17 +338,23 @@ class StatisticController extends Controller {
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
-
-        foreach ($results as $row) {
-            $excel.=$row->getId().';';
-            $created = $row->getCreatedAt();
-            $excel.=$created->format("d/m/Y").';';
-            $excel.=$row->getCar().';';
-            $excel.=$row->getAssignedTo().';';
-            $excel.=$row->getDescription().';';
-            $excel.=$row->getStatus().';';
-            $excel.=$row->getSolution().';';
-            $excel.="\n";
+        try
+        {
+            foreach ($results as $row) {
+                $excel.=$row->getId().';';
+                $created = $row->getCreatedAt();
+                $excel.=$created->format("d/m/Y").';';
+                $excel.=$row->getCar().';';
+                $excel.=$row->getAssignedTo().';';
+                $excel.=$row->getDescription().';';
+                $excel.=$row->getStatus().';';
+                $excel.=$row->getSolution().';';
+                $excel.="\n";
+            }
+        }
+        catch(\Exception $exception)
+        {
+            echo 'Caught in try/catch';die;
         }
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
