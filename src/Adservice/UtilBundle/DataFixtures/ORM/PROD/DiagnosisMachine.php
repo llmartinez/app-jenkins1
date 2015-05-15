@@ -17,6 +17,11 @@ class DiagnosisMachines extends AbstractFixture implements OrderedFixtureInterfa
             array( 'name' => '...'     , 'country' => 'france'  , 'ref' => 'none_fr'),
             array( 'name' => '...'     , 'country' => 'portugal', 'ref' => 'none_pt'),
 
+            array( 'name' => 'Actia (ES)'   , 'country' => 'spain'   , 'ref' => 'Actia_es'),
+            array( 'name' => 'Actia (AN)'   , 'country' => 'andorra' , 'ref' => 'Actia_an'),
+            array( 'name' => 'Actia (FR)'   , 'country' => 'france'  , 'ref' => 'Actia_fr'),
+            array( 'name' => 'Actia (PT)'   , 'country' => 'portugal', 'ref' => 'Actia_pt'),
+
             array( 'name' => 'Autel (ES)'   , 'country' => 'spain'   , 'ref' => 'Autel_es'),
             array( 'name' => 'Autel (AN)'   , 'country' => 'andorra' , 'ref' => 'Autel_an'),
             array( 'name' => 'Autel (FR)'   , 'country' => 'france'  , 'ref' => 'Autel_fr'),

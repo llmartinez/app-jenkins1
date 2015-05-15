@@ -23,10 +23,11 @@ class Typologies extends AbstractFixture implements OrderedFixtureInterface {
             array( 'name' => 'Staff Auto'       , 'country' => 'france'),
             array( 'name' => 'Autres'           , 'country' => 'france'),
 
-            array( 'name' => 'Rodi'                      , 'country' => 'spain'),
+            array( 'name' => 'Auto Equip'                , 'country' => 'spain'),
             array( 'name' => 'FirstStop Centro Asosciado', 'country' => 'spain'),
             array( 'name' => 'FirstStop Centro Propio'   , 'country' => 'spain'),
-            array( 'name' => 'Auto Equip'                , 'country' => 'spain'),
+            array( 'name' => 'Red Via Lider'             , 'country' => 'spain'),
+            array( 'name' => 'Rodi'                      , 'country' => 'spain'),
             array( 'name' => 'Otros'                     , 'country' => 'spain'),
         );
         foreach ($typologies as $typology) {

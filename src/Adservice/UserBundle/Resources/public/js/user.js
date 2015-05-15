@@ -1,7 +1,9 @@
 
     $(document).ready(function() {
-        $( "input[id*='_password_Contraseña']" ).addClass( "form-control" );
-        $( "input[id*='_password_Repite Contraseña']" ).addClass( "form-control" );
+        $( "input[id*='_password_password1']" ).addClass( "form-control" );
+        $( "input[id*='_password_password2']" ).addClass( "form-control" );
+        $( "label[for*='_password_password1']" ).text($('#pass_field1').val()+' *');
+        $( "label[for*='_password_password2']" ).text($('#pass_field2').val()+' *');
 
         $('#slct_role').change(function() {
             var role = $(this).val();

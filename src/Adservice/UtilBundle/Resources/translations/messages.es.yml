@@ -450,7 +450,7 @@ filter_by_type:				  "Tipo de ticket"
 filter_by_rows:				  "Filas a mostrar"
 filter_by_country:			  "Filtrar por País"
 
-sentence.default:			  "Sentencias por defecto.."
+sentence.default:			  "Sentencias por defecto..."
 
 #POST
 reply:						  "Responder"
