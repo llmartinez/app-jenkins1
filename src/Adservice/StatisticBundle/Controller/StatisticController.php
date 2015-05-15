@@ -203,8 +203,7 @@ class StatisticController extends Controller {
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                       $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                       $partner='0', $status='0', $country='0'){
-        try
-        {
+
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -318,11 +317,6 @@ class StatisticController extends Controller {
         $excel = UtilController::sinAcentos($excel);
         $response->setContent($excel);
         return $response;
-        }
-        catch(\Exception $exception)
-        {
-            echo 'Caught in try/catch';die;
-        }
     }
 
     public function createExcelTicket($results){
