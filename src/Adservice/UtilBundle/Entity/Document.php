@@ -98,7 +98,15 @@ class Document {
      * @return UploadedFile
      */
     public function getFile() {
-        return $this->file;
+        try
+        {
+            $file = $this->file;
+        }
+        catch(\Exception $exception)
+        {
+            echo 'Caught in try/catch';die;
+        }
+        return $file;
     }
 
     public function getMymeType() {
