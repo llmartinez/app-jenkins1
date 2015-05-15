@@ -261,14 +261,12 @@ class ImportController extends Controller
 			foreach ($old_Talleres  as $old_Taller)
 			{
 				$newUser = UtilController::newEntity(new User(), $sa);
-				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getNombre());
+				$password = substr( md5(microtime()), 1, 8);
+				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getNombre(), $password);
 				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
 				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
 				$newUser->setActive   ($old_Taller->getActive());
 				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
-
-				$password = substr( md5(microtime()), 1, 8);
-				$newUser->setPassword($password);
 
 				if( $newUser->getName() == 'sin-especificar' and $newUser->getSurname() == 'sin-especificar') {
 					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
@@ -278,11 +276,6 @@ class ImportController extends Controller
 
 				// GUARDANDO USUARIOS EN EXCEL
 				$users_email_log[] = array($newUser, $password);
-				$email = $newUser->getEmail1();
-				$pos = strpos($email, '@');
-				if ($pos === false) {
-					$newUser->setEmail1('0');
-				}
 				UtilController::saveEntity($em, $newUser, $sa, false);
  			}
 			$em->flush();
@@ -292,6 +285,7 @@ class ImportController extends Controller
 										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
 				$session->set('next',  	'user_log');
 
+				// Generarando excel ususarios
 				$response = $this->doExcelAction($users_email_log);
 				$session->set('response' ,	$response);
  			}
@@ -447,10 +441,10 @@ class ImportController extends Controller
 		}
 	}
 
-    private function setUserFields($em, $entity, $role, $name)
+    private function setUserFields($em, $entity, $role, $name, $password='grupeina')
     {
 		$entity->setUsername   (UtilController::getUsernameUnused($em, $name));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
-        $entity->setPassword   ('grupeina'); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
+        $entity->setPassword   ($password); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
 
         //password nuevo, se codifica con el nuevo salt
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
