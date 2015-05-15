@@ -19,8 +19,8 @@ class UserWorkshopType extends AbstractType {
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',
                                                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                                                'first_name'      => 'Contraseña *',
-                                                'second_name'     => 'Repite Contraseña *',
+                                                'first_name'      => 'password1',
+                                                'second_name'     => 'password2',
                                                 'required'        => 'required'
             ))
             ->add('name')

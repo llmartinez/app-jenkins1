@@ -13,13 +13,13 @@ class UserAdminAssessorType extends AbstractType {
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',
                                                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                                                'first_name'      => 'Contraseña *',
-                                                'second_name'     => 'Repite Contraseña *',
+                                                'first_name'      => 'password1',
+                                                'second_name'     => 'password2',
                                                 'required'        => 'required',
             ))
             ->add('name')
