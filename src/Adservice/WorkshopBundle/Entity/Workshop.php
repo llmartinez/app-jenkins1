@@ -34,6 +34,13 @@ class Workshop {
     private $name;
 
     /**
+     * @var integer $code_partner
+     *
+     * @ORM\Column(name="code_partner", type="integer")
+     */
+    private $code_partner;
+
+    /**
      * @var integer $code_workshop
      *
      * @ORM\Column(name="code_workshop", type="integer")
@@ -198,6 +205,24 @@ class Workshop {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * Set code_partner
+     *
+     * @param integer $code_partner
+     */
+    public function setCodePartner($code_partner) {
+        $this->code_partner = $code_partner;
+    }
+
+    /**
+     * Get code_partner
+     *
+     * @return integer
+     */
+    public function getCodePartner() {
+        return $this->code_partner;
     }
 
     /**

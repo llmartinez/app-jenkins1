@@ -204,6 +204,7 @@ class ImportController extends Controller
                     if(isset($partners[$idSocio]))
                     {
                             $newWorkshop->setPartner ($partners[$idSocio]);
+                            $newWorkshop->setCodePartner ($idSocio);
                     }
                     elseif($idSocio >= 60 AND $idSocio <= 78){
                                      $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
@@ -211,6 +212,7 @@ class ImportController extends Controller
                                      if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
                     }else{
                                      $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
+                                     $newWorkshop->setCodePartner(9999);
                     }
 
                     //setAdServicePlus
