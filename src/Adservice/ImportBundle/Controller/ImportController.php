@@ -59,7 +59,7 @@ class ImportController extends Controller
 
 			$session->set('msg' ,	'Socios importados correctamente! ('.date("H:i:s").')');
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
-			$session->set('next',  	'shop-default');
+			$session->set('next',  	'shop');
 
 			//return $this->render('ImportBundle:Import:import.html.twig');
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
