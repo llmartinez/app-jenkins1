@@ -418,7 +418,7 @@ class StatisticController extends Controller {
 
         foreach ($results as $row) {
 
-            $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row->getWorkshop()->getCodePartner().';';
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
             $excel.=$row->getWorkshop()->getName().';';
             $excel.=$row->getWorkshop()->getPartner().';';
