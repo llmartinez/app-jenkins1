@@ -149,7 +149,7 @@ class WorkshopController extends Controller {
                 {
                     $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
                     $workshop = UtilController::settersContact($workshop, $workshop);
-                    $workshop->setCodePartner($workshop->getPartner()->getCodePartner());
+                    $workshop->setCodePartner($workshop->getCodePartner());
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente

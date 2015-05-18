@@ -565,7 +565,7 @@ class ImportController extends Controller
 
         foreach ($users_email_log as $row) {
             $excel.=$row[0]->getId().';';
-            $excel.=$row[0]->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row[0]->getWorkshop()->getCodePartner().';';
             $excel.=$row[0]->getWorkshop()->getCodeWorkshop().';';
             $excel.=$row[0]->getWorkshop()->getName().';';
             $excel.=$row[0]->getUsername().';';
