@@ -207,7 +207,7 @@ class StatisticController extends Controller {
         $statistic = new Statistic();
         $security = $this->get('security.context');
         $pagination = new Pagination($page);
-        $params = array();
+        $where = 'e.id != 0 ';
         $joins  = array();
 
         $response = new Response();
@@ -221,8 +221,8 @@ class StatisticController extends Controller {
         $response->setLastModified($date);
 
         if($type != '0'){
-            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $params[] = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"); }
-            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $params[] = array('created_at', " <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"); }
+            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"; }
+            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $where .= "AND e.created_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"; }
 
             if     ($type == 'ticket'  ){
                                         $bundle = 'TicketBundle';
@@ -247,20 +247,30 @@ class StatisticController extends Controller {
                 $excel = $this->createExcelTicket($results);
             }
             elseif ($type == 'workshop'){
-                                        $bundle = 'WorkshopBundle';
-                                        $entity = 'Workshop';
-                                        if     ($partner!= "0"       ) { $params[] = array('partner', ' = '.$partner); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-                                        elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                                            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }else{
-                                            if    ($country != "0"  ) { $params[] = array('country', ' = '.$country); }
-                                        }
 
-                $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+                if     ($partner!= "0"       ) { $where .= 'AND e.partner = '.$partner.' '; }
+                if     ($status == "active"  ) { $where .= 'AND e.active = 1 ' ; }
+                elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
+                }
+
+                $qw = $em->createQuery("select partial e.{id, code_partner, code_workshop, name, region, city, address, phone_number_1, movile_number_1, email_1, active, ad_service_plus, test } from WorkshopBundle:Workshop e WHERE ".$where);
+                $results   = $qw->getResult();
+
+                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $res_partners   = $qp->getResult();
+
+                foreach ($res_partners as $partner) {
+                     $partners[$partner->getCodePartner()] = $partner->getName();
+                 }
+                 unset($res_partners);
+                 unset($partner);
+
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results);
+                $excel = $this->createExcelWorkshop($results, $partners);
             }
             elseif ($type == 'no-ticket'){
                                         //listado de talleres sin tickets
@@ -286,8 +296,19 @@ class StatisticController extends Controller {
                                         }
 
                 $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+
+
+                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $res_partners   = $qp->getResult();
+
+                foreach ($res_partners as $partner) {
+                     $partners[$partner->getCodePartner()] = $partner->getName();
+                 }
+                 unset($res_partners);
+                 unset($partner);
+
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results);
+                $excel = $this->createExcelWorkshop($results, $partners);
             }
         }
         else{
@@ -348,7 +369,7 @@ class StatisticController extends Controller {
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
-    public function createExcelWorkshop($results){
+    public function createExcelWorkshop($results, $partners){
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
         $excel =$this->get('translator')->trans('code_partner').';'.
@@ -364,10 +385,10 @@ class StatisticController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($results as $row) {
-            $excel.=$row->getPartner()->getCodePartner().';';
+            $excel.=$row->getCodePartner().';';
             $excel.=$row->getCodeWorkshop().';';
             $excel.=$row->getName().';';
-            $excel.=$row->getPartner().';';
+            $excel.=$partners[$row->getCodePartner()].';';
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
@@ -376,7 +397,7 @@ class StatisticController extends Controller {
             $excel.=$active.';';
             $excel.="\n";
         }
-        
+
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
         $excel = str_replace(',', '.', $excel);
