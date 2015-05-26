@@ -12,6 +12,9 @@
     <legend>{% trans %} menu.list_users {% endtrans %}
         <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
     </legend>
+
+    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group">
         <select id="slct_country" class="form-control"> <option value="0">...</option>

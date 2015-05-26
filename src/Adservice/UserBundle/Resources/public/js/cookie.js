@@ -7,10 +7,10 @@
             //if ($.cookie('visited') == null){
 
             //mostrar si ya tiene una coockie creada
-            if ($.cookie('visited') != 1){
-                $.cookie('visited', '1');
+            //if ($.cookie('visited') != 1){
+            //    $.cookie('visited', '1');
                 find_popup();
-            }
+            //}
             // else{
             //     //mostrar si ya tiene una cookie creada
             //     if ($.cookie('visited') != 1){
