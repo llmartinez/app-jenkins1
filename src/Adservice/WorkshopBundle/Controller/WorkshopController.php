@@ -149,7 +149,8 @@ class WorkshopController extends Controller {
                 {
                     $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
                     $workshop = UtilController::settersContact($workshop, $workshop);
-                    $workshop->setCodePartner($workshop->getCodePartner());
+                    $workshop->setCodePartner($partner->getCodePartner());
+                    $workshop->setCodeWorkshop($code);
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -192,8 +193,7 @@ class WorkshopController extends Controller {
                     $newUser->addRole          ($role);
 
                     // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                    $name = $newUser->getUsername();
-                    $username = UtilController::getUsernameUnused($em, $name);
+                    $username = UtilController::getUsernameUnused($em, $username);
                     $newUser->setUsername($username);
 
                     $newUser = UtilController::settersContact($newUser, $workshop);

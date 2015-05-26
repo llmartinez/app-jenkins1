@@ -29,7 +29,7 @@
 
 	{% elseif bbdd == 'complete' %}
 		<h1> BBDD IMPORTADA CORRECTAMENTE! </h1>
-		{{ "now"|date("H:m:s") }}
+		{{ "now"|date("d-m-Y, H:m:s") }}
 	{% elseif bbdd == 'old_cars'  %}
 
 		{% if num is defined %}
@@ -55,7 +55,7 @@
 		{% set info = app.session.get('info') %}
 		{% set next = app.session.get('next') %}
 		<h3> {{ msg  }} </h3>
-		{{ "now"|date("H:m:s") }}
+		{{ "now"|date("d-m-Y H:m:s") }}
 		<p>  {{ info }} </p>
 		<script> window.open('{{ path("import", { "bbdd": next }) }}', '_self'); </script>
 

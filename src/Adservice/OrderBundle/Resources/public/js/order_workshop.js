@@ -20,7 +20,6 @@
         }else{
             $('form').find('select[name*=partner]').val(id_partner);
         }
-        populate_shop();
 
         //si clickamos el combobox de los socios rellenamos el de tiendas
         $('form').find('select[name*=partner]').change(function() {

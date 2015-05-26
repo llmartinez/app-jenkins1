@@ -29,13 +29,12 @@ class WorkshopEditOrderType extends AbstractType
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('s.partner'.$id_partner); }))
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 0'); }))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                               'required' => true,

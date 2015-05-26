@@ -14,7 +14,7 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
 
     public function load(ObjectManager $manager) {
 
-        $type = 'admin';
+        $type = 'superadmin';
         $pass = 'mcobJtS8ExG2JAUrEg3VzeLlgyxyyviEr5/uO+vel5stbf3TeHTJxZoHUZqfVHOqON1QNKcm5PXemcz9rW4BZg==';
         $salt = '79bc6981377363689c90b9c7d6962da9';
         $entidad = new User();
@@ -22,8 +22,8 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setUsername   ($type);
             $entidad->setPassword   ($pass);
             $entidad->setSalt       ($salt);
-            $entidad->setName       ('super');
-            $entidad->setSurname    ($type);
+            $entidad->setName       ($type);
+            $entidad->setSurname    ('super_admin');
             $entidad->setActive     ('1');
 
             //CONTACT
@@ -31,8 +31,8 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCountry($this->getReference('spain'));
             $entidad->setRegion('Barcelona');
             $entidad->setCity('Badalona');
-            $entidad->setAddress('Address SA');
-            $entidad->setPostalCode(Data::getPostalCode());
+            $entidad->setAddress('Avinguda  Llenguadoc, 29 – POL. IND. BONAVISTA');
+            $entidad->setPostalCode(08916);
             $entidad->setPhoneNumber1(Data::getPhone());
             $entidad->setPhoneNumber2(Data::getPhone());
             $entidad->setMovileNumber1(Data::getPhone());

@@ -225,7 +225,7 @@ function fill_car_data() {
                 $('form[id=contact]').find('#new_car_form_displacement').val(elm.displacement);
                 var dis_url = $( "#dis-url" ).val();
                 var vts_url = $( "#vts-url" ).val();
-        
+
                 $( "#dis" ).attr("href", dis_url+'/'+elm.idTecDoc);
                 $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.idTecDoc);
             });

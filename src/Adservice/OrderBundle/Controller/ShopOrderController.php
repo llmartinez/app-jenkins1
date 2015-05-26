@@ -207,7 +207,7 @@ class ShopOrderController extends Controller {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $shopOrder = new ShopOrder();
+        if (!$shopOrder) $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),

@@ -73,14 +73,26 @@ class ImportController extends Controller
     	elseif( $bbdd == 'shop' )
     	{
 			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
-			$locations   = $this->getLocations($em);																					 	 //MAPPING LOCATIONS
+			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
+
+			// TIENDA POR DEFECTO
+			$partner = $em->getRepository('PartnerBundle:Partner')->find('9999'); //SOCIO POR DEFECTO
+			$newShop = UtilController::newEntity(new Shop(), $sa);
+			$newShop->setName('...');
+			$newShop->setPartner($partner);
+			$newShop->setActive('1');
+			$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+			UtilController::saveEntity($em, $newShop, $sa,false);
+
 			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
 			foreach ($old_Tiendas as $old_Tienda)
 			{
 				$newShop = UtilController::newEntity(new Shop(), $sa);
-				//$newShop->setCodeShop($old_Tienda->getId());
-				$newShop->setName($old_Tienda->getNombre());
+				$name = $old_Tienda->getNombre();
+				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+				$newShop->setName($name);
 				$newShop->setPartner($partner);
 				$newShop->setActive('1');
 				$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
@@ -114,7 +126,11 @@ class ImportController extends Controller
 			foreach ($old_Socios as $old_Socio)
 			{
 				$newAD = UtilController::newEntity(new User(), $sa);
-				$newAD = $this->setUserFields   ($em, $newAD, $role, $old_Socio->getNombre());
+				$name = $old_Socio->getNombre();
+				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+				$newPartner->setName($name);
+				$newAD = $this->setUserFields   ($em, $newAD, $role, $name);
 				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
 				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
 				$newAD->setActive('1');
@@ -160,7 +176,7 @@ class ImportController extends Controller
 			$session->set('info',  	'Importando talleres (entidad Workshop)...');
 			$session->set('next',  	'workshop');
 
-        	//return $this->render('ImportBundle:Import:import.html.twig');
+            //return $this->render('ImportBundle:Import:import.html.twig');
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
@@ -186,6 +202,7 @@ class ImportController extends Controller
             //var_dump($all_shops);die;
             foreach ($old_Talleres as $old_Taller)
             {
+
                     $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
                     $newWorkshop->setName 					($old_Taller->getNombre());
                     $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
@@ -208,6 +225,7 @@ class ImportController extends Controller
                     }
                     elseif($idSocio >= 60 AND $idSocio <= 78){
                                      $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
+                                     $newWorkshop->setCodePartner(28);
 
                                      if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
                     }else{
