@@ -229,7 +229,7 @@ class UserController extends Controller {
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
 
-                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': <b>'.$username.'</b>';
+                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$username;
                 $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
@@ -449,7 +449,7 @@ class UserController extends Controller {
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
-            $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': <b>'.$username.'</b>';
+            $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
             $this->get('session')->setFlash('alert', $flash);
 
             return $this->redirect($this->generateUrl('user_list'));
