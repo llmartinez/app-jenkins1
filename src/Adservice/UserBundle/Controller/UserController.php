@@ -202,6 +202,7 @@ class UserController extends Controller {
         elseif ($role == "ROLE_AD")                                                               $form = $this->createForm(new EditUserPartnerType()      , $user);
         elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
+        $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
 
@@ -220,8 +221,10 @@ class UserController extends Controller {
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
-                $username = UtilController::getUsernameUnused($em, $name);
-                $user->setUsername($username);
+                if ($name != $actual_username) {
+                    $username = UtilController::getUsernameUnused($em, $name);
+                    $user->setUsername($username);
+                }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
@@ -415,6 +418,7 @@ class UserController extends Controller {
         }
 
         $request = $this->getRequest();
+        $actual_username = $user->getUsername();
 
         $form->bindRequest($request);
 
@@ -431,8 +435,10 @@ class UserController extends Controller {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
-            $username = UtilController::getUsernameUnused($em, $name);
-            $user->setUsername($username);
+            if ($name != $actual_username) {
+                $username = UtilController::getUsernameUnused($em, $name);
+                $user->setUsername($username);
+            }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
