@@ -95,7 +95,9 @@ legend {
 .btn-blue {
     color: #428bca;
 }
-
+.btn-change-pass {
+    margin-top: 20px
+}
 
 /*
     HEADER
