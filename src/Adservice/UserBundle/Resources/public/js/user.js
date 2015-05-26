@@ -21,6 +21,14 @@
             var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
             window.open(url, "_self");
         });
+
+        $('#btn_create').click(function() {
+            if ( isNaN($("input[id*='number_']").val())) {
+                $("input[id*='number_']").css('border-color','#FF0000');
+                alert($("#isNaN").val());
+                return false;
+            }
+        });
     });
 
 /**

@@ -19,7 +19,7 @@ class LockController extends Controller
         $params     = array();
 
         if( ! $security->isGranted('ROLE_ADMIN')){
-                                                      $id_taller = $security->getToken()->getUser()->getWorkshop()->getCodeWorkshop();
+                                                      $id_taller = $security->getToken()->getUser()->getWorkshop()->getPartner()->getCodeWorkshop();
                                                       $id_socio  = $security->getToken()->getUser()->getWorkshop()->getIdSocio();
         }
         if( $id_taller != null and $id_taller != 'none' ){
