@@ -232,6 +232,8 @@ class WorkshopController extends Controller {
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
                     }
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': <b>'.$username.'</b>';
+                    $this->get('session')->setFlash('alert', $flash);
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }

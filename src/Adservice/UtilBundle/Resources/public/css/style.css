@@ -122,6 +122,15 @@ legend {
     float: left;
 }
 
+.alert {
+  float: left;
+  background-color: #428bca;
+  color: #FFF;
+  font-size: 19px;
+  width: 100%;
+  text-align: center;
+}
+
 .content {
     width: 70%;
     padding: 10px;
