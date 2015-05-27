@@ -429,8 +429,8 @@ class TicketController extends Controller {
                                 $id_version = $request->request->get('new_car_form_version');
 
                                 $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                                $model   = $em->getRepository('CarBundle:Model'  )->findOneByIdTecDoc($id_model  );
-                                $version = $em->getRepository('CarBundle:Version')->findOneByIdTecDoc($id_version);
+                                $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
+                                $version = $em->getRepository('CarBundle:Version')->find($id_version);
 
                                 $car->setBrand($brand);
                                 $car->setModel($model);
