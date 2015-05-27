@@ -74,7 +74,7 @@ error.file:             		"Error! Only supported files with extension.jpeg, .gif
 error.file_size:             	"Error! The file must be no larger than 4Mb"
 isNaN:							"Phone fields must contain only numbers"
 Bad credentials: 				"Bad credentials"
-The presented password is invalid. : "The presented password is invalid"
+The presented password is invalid.: "The presented password is invalid"
 
 #ENTITY
 role:					 "Role"
