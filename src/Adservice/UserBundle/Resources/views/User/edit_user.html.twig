@@ -8,6 +8,8 @@
       <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user }}) </li>
     </ol>
 
+    {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
+
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
             {{ form_errors(form) }}

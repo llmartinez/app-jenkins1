@@ -75,6 +75,7 @@ error.file_size:             	"Error! The file must be no larger than 4Mb"
 isNaN:							"Phone fields must contain only numbers"
 Bad credentials: 				"Bad credentials"
 The presented password is invalid.: "The presented password is invalid"
+username_used:					"The name entered already exists, try: "
 
 #ENTITY
 role:					 "Role"

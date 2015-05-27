@@ -192,10 +192,6 @@ class WorkshopController extends Controller {
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
 
-                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                    $username = UtilController::getUsernameUnused($em, $username);
-                    $newUser->setUsername($username);
-
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
                     //ad-service +
