@@ -212,7 +212,7 @@ class WorkshopController extends Controller {
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
-                    if ($pos === true) {
+                    if ($pos != 0) {
 
                         // Cambiamos el locale para enviar el mail en el idioma del taller
                         $locale = $request->getLocale();
