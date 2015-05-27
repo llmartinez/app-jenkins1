@@ -21,7 +21,7 @@
     #}
 </h1>
 
-{% if app.session.hasFlash('password' ) %} <p class="error pull-right">{{ app.session.getFlash('password') }}</p> {% endif %}
+{% if app.session.hasFlash('password' ) %} <p class="alert label-danger">{{ app.session.getFlash('password') }}</p> {% endif %}
 
 <table class="table" style="width: 90%; margin-left: 5%;">
     <tbody>
