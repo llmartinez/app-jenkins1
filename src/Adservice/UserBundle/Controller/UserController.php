@@ -224,12 +224,19 @@ class UserController extends Controller {
                 if ($name != $actual_username) {
                     $username = UtilController::getUsernameUnused($em, $name);
                     $user->setUsername($username);
+
+                    $error_username = $this->get('translator')->trans('username_used').$username;
+
+                    return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                          'form_name' => $form->getName(),
+                                                                          'form'      => $form->createView(),
+                                                                          'error_username' => $error_username));
                 }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
 
-                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$username;
+                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
@@ -441,6 +448,14 @@ class UserController extends Controller {
             if ($name != $actual_username) {
                 $username = UtilController::getUsernameUnused($em, $name);
                 $user->setUsername($username);
+
+                $error_username = $this->get('translator')->trans('username_used').$username;
+
+                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
+                                                                                   'user_type'  => $type,
+                                                                                   'form_name'  => $form->getName(),
+                                                                                   'form'       => $form->createView(),
+                                                                                    'error_username' => $error_username));
             }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));

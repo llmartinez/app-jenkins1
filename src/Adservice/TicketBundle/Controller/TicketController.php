@@ -713,21 +713,21 @@ class TicketController extends Controller {
             $systems  = $em->getRepository('TicketBundle:System')->findAll();
             $block    = null;
 
-            // if ($ticket->getBlockedBy() != null and $ticket->getBlockedBy() != $user) {
+            if ($ticket->getBlockedBy() != null and $ticket->getBlockedBy() != $user) {
 
-            //     //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
-            //     $now = new \DateTime(\date("Y-m-d H:i:s"));
-            //     $last_modified = $ticket->getModifiedAt();
+                //Si ha pasado mas de una hora desde la ultima modificación y esta bloqueado.. lo desbloqueamos
+                $now = new \DateTime(\date("Y-m-d H:i:s"));
+                $last_modified = $ticket->getModifiedAt();
 
-            //     $interval = $last_modified->diff($now);
+                $interval = $last_modified->diff($now);
 
-            //     $block = $interval->h.'h '.$interval->m.'m ';
-            //     echo $block;die;
-            //     if($interval->h > 1) {
-            //         $ticket->setBlockedBy(null);
-            //     }
+                $block = $interval->h.'h '.$interval->m.'m ';
+                //echo $block;die;
+                if($interval->h > 1) {
+                    $ticket->setBlockedBy(null);
+                }
 
-            // }
+            }
 
             //Define Forms
             $formP = $this->createForm(new PostType(), $post);
