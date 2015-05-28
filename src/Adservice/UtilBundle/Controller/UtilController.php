@@ -95,7 +95,7 @@ class UtilController extends Controller
             if( $find == null) { $unused = 'unused'; }
             else{
                 $slug = UtilController::getSlug($name, $separador).$unused;
-                $unused++;
+                $unused = $unused+1;
             }
         }
         return $slug;

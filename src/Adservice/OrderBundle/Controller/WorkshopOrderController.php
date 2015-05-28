@@ -168,7 +168,7 @@ class WorkshopOrderController extends Controller {
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
                     $pos = strpos($mail, '@');
-                    if ($pos === true) {
+                    if ($pos != 0) {
 
                         // Cambiamos el locale para enviar el mail en el idioma del taller
                         $locale = $request->getLocale();
@@ -306,7 +306,7 @@ class WorkshopOrderController extends Controller {
 
                 $mail = $workshopOrder->getCreatedBy()->getEmail1();
                 $pos = strpos($mail, '@');
-                if ($pos === true) {
+                if ($pos != 0) {
 
                     // Cambiamos el locale para enviar el mail en el idioma del taller
                     $locale = $request->getLocale();
@@ -391,7 +391,7 @@ class WorkshopOrderController extends Controller {
 
         $mail = $workshopOrder->getCreatedBy()->getEmail1();
         $pos = strpos($mail, '@');
-        if ($pos === true) {
+        if ($pos != 0) {
 
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
@@ -460,7 +460,7 @@ class WorkshopOrderController extends Controller {
 
                 $mail = $workshopOrder->getCreatedBy()->getEmail1();
                 $pos = strpos($mail, '@');
-                if ($pos === true) {
+                if ($pos != 0) {
 
                     // Cambiamos el locale para enviar el mail en el idioma del taller
                     $locale = $request->getLocale();
@@ -521,7 +521,7 @@ class WorkshopOrderController extends Controller {
 
             $mail = $workshopOrder->getCreatedBy()->getEmail1();
             $pos = strpos($mail, '@');
-            if ($pos === true) {
+            if ($pos != 0) {
 
                 // Cambiamos el locale para enviar el mail en el idioma del taller
                 $locale = $request->getLocale();
@@ -575,7 +575,7 @@ class WorkshopOrderController extends Controller {
 
         $mail = $workshopOrder->getCreatedBy()->getEmail1();
         $pos = strpos($mail, '@');
-        if ($pos === true) {
+        if ($pos != 0) {
 
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
@@ -744,7 +744,7 @@ class WorkshopOrderController extends Controller {
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
-                    if ($pos === true) {
+                    if ($pos != 0) {
 
                         // Cambiamos el locale para enviar el mail en el idioma del taller
                         $locale = $request->getLocale();
@@ -772,7 +772,7 @@ class WorkshopOrderController extends Controller {
             {
                 $mail = $workshop->getCreatedBy()->getEmail1();
                 $pos = strpos($mail, '@');
-                if ($pos === true) {
+                if ($pos != 0) {
 
                     /* MAILING */
                     $mailer = $this->get('cms.mailer');
@@ -855,6 +855,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setName          ($workshopOrder->getName());
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
         $workshop->setCif           ($workshopOrder->getCif());
+        $workshop->setCodePartner   ($workshopOrder->getPartner()->getCodePartner());
         $workshop->setPartner       ($workshopOrder->getPartner());
         $shop = $workshopOrder->getShop();
         if(isset($shop)) { $workshop->setShop($shop); }

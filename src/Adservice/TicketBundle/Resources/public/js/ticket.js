@@ -15,6 +15,26 @@ $(document).ready(function() {
     $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
     $('#btn_search_by_bmv').click(function() { search_by_bmv(); });
 
+
+$('#new_file_form_file').bind('change', function() {
+
+    var size = this.files[0].size;
+
+    if(size > 4000000) {
+
+        $('#alertFileSize').show();
+
+        $('.sendTicket' ).attr("disabled", true );
+        $('.closeTicket').attr("disabled", true );
+    }
+    else{
+        $('#alertFileSize').hide();
+
+        $('.sendTicket' ).attr("disabled", false);
+        $('.closeTicket').attr("disabled", false);
+    }
+});
+
 /**
  * vacia tbl_similar
  * @return AjaxFunction

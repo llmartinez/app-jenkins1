@@ -8,6 +8,8 @@
       <li class="active">{% trans %} new.user {% endtrans %}</li>
     </ol>
 
+    {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
+
     <form action="{{ path('user_new',{ 'type':user_type}) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="col-xs-12 col-md-12 form-group">

@@ -202,6 +202,7 @@ class UserController extends Controller {
         elseif ($role == "ROLE_AD")                                                               $form = $this->createForm(new EditUserPartnerType()      , $user);
         elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
+        $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
 
@@ -220,11 +221,23 @@ class UserController extends Controller {
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
-                $username = UtilController::getUsernameUnused($em, $name);
-                $user->setUsername($username);
+                if ($name != $actual_username) {
+                    $username = UtilController::getUsernameUnused($em, $name);
+                    $user->setUsername($username);
+
+                    $error_username = $this->get('translator')->trans('username_used').$username;
+
+                    return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                          'form_name' => $form->getName(),
+                                                                          'form'      => $form->createView(),
+                                                                          'error_username' => $error_username));
+                }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
+
+                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
         }
@@ -329,7 +342,7 @@ class UserController extends Controller {
 
         $mail = $user->getEmail1();
         $pos = strpos($mail, '@');
-        if ($pos === true) {
+        if ($pos != 0) {
 
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
@@ -415,6 +428,7 @@ class UserController extends Controller {
         }
 
         $request = $this->getRequest();
+        $actual_username = $user->getUsername();
 
         $form->bindRequest($request);
 
@@ -431,14 +445,27 @@ class UserController extends Controller {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
-            $username = UtilController::getUsernameUnused($em, $name);
-            $user->setUsername($username);
+            if ($name != $actual_username) {
+                $username = UtilController::getUsernameUnused($em, $name);
+                $user->setUsername($username);
+
+                $error_username = $this->get('translator')->trans('username_used').$username;
+
+                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
+                                                                                   'user_type'  => $type,
+                                                                                   'form_name'  => $form->getName(),
+                                                                                   'form'       => $form->createView(),
+                                                                                    'error_username' => $error_username));
+            }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
 //            $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
+
+            $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
+            $this->get('session')->setFlash('alert', $flash);
 
             return $this->redirect($this->generateUrl('user_list'));
         }

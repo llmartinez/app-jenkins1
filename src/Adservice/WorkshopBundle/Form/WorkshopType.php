@@ -32,7 +32,6 @@ class WorkshopType extends AbstractType
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')

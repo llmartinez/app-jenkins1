@@ -32,6 +32,9 @@
         </div>
 
         {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+
+        <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}</label>
+
         {{ form_rest(formD) }}
 
     {{ form_widget(form._token) }}

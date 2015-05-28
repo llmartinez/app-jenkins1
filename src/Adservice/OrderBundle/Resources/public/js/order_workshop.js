@@ -20,10 +20,32 @@
         }else{
             $('form').find('select[name*=partner]').val(id_partner);
         }
-        populate_shop();
 
         //si clickamos el combobox de los socios rellenamos el de tiendas
         $('form').find('select[name*=partner]').change(function() {
             populate_shop();
+        });
+
+        $('#btn_create').click(function() {
+            $("input[id*='number_']").each(function() {
+                if ( isNaN($(this).val())) {
+                    $(this).css('border-color','#FF0000');
+                    alert($("#isNaN").val());
+                    event.preventDefault();
+                }else{
+                    $(this).css('border-color','#ccc');
+                }
+            });
+        });
+        $('#btn_edit').click(function() {
+            $("input[id*='number_']").each(function() {
+                if ( isNaN($(this).val())) {
+                    $(this).css('border-color','#FF0000');
+                    alert($("#isNaN").val());
+                    event.preventDefault();
+                }else{
+                    $(this).css('border-color','#ccc');
+                }
+            });
         });
     });

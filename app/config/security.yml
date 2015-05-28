@@ -16,9 +16,9 @@ security:
             security: true
             remember_me:
                 key:      "%secret%"
-                lifetime: 86400
-                path:     ^/
-                domain:   ~
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~ # Defaults to the current domain from $_SERVER
 
     providers:
         usuarios:

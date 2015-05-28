@@ -207,8 +207,8 @@ class StatisticController extends Controller {
         $statistic = new Statistic();
         $security = $this->get('security.context');
         $pagination = new Pagination($page);
-        $params = array();
-        $joins  = array();
+        $where = 'e.id != 0 ';
+        $join  = '';
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
@@ -221,96 +221,114 @@ class StatisticController extends Controller {
         $response->setLastModified($date);
 
         if($type != '0'){
-            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $params[] = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"); }
-            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $params[] = array('created_at', " <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"); }
+            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"; }
+            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $where .= "AND e.created_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"; }
 
             if     ($type == 'ticket'  ){
-                                        $bundle = 'TicketBundle';
-                                        $entity = 'Ticket';
-                                        if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-                                                                        $params[] = array('status', ' = '.$open->getId());
-                                        }
-                                        elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                                                                        $params[] = array('status', ' = '.$closed->getId());
-                                        }
-                                        if    ($partner != "0"     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
-                                                                        $joins[]  = array('w.partner  p', 'p.id = '.$partner);
-                                        }
-                                        if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                                            $joins[] = array('e.workshop wks', ' wks.country = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }else{
-                                            if    ($country != "0"  ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
-                                        }
 
-                $results = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
+                                                $where .= 'AND p.id = '.$partner.' ';
+                                                $join  = ', w.partner p ';
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                $qt = $em->createQuery("select partial e.{id, created_at, description, solution } from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
+                $results   = $qt->getResult();
+
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelTicket($results);
             }
             elseif ($type == 'workshop'){
-                                        $bundle = 'WorkshopBundle';
-                                        $entity = 'Workshop';
-                                        if     ($partner!= "0"       ) { $params[] = array('partner', ' = '.$partner); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-                                        elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                                            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }else{
-                                            if    ($country != "0"  ) { $params[] = array('country', ' = '.$country); }
-                                        }
 
-                $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+                if     ($partner!= "0"       ) { $where .= 'AND e.partner = '.$partner.' '; }
+                if     ($status == "active"  ) { $where .= 'AND e.active = 1 ' ; }
+                elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
+                }
+
+                $qw = $em->createQuery("select partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } from WorkshopBundle:Workshop e WHERE ".$where);
+                $results   = $qw->getResult();
+
+                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $res_partners   = $qp->getResult();
+
+                foreach ($res_partners as $partner) {
+                     $partners[$partner->getCodePartner()] = $partner->getName();
+                 }
+                 unset($res_partners);
+                 unset($partner);
+
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results);
+                $excel = $this->createExcelWorkshop($results, $partners);
             }
             elseif ($type == 'no-ticket'){
-                                        //listado de talleres sin tickets
-                                        // SELECT w.id FROM workshop w WHERE w.id NOT IN (SELECT t.workshop_id FROM ticket t GROUP BY t.workshop_id)
 
-                                        $consulta = $em ->createQuery('SELECT w.id FROM TicketBundle:Ticket t JOIN t.workshop w GROUP BY t.workshop');
-                                        $workshop_query = '0';
+                //listado de talleres sin tickets
+                $consulta = $em ->createQuery('SELECT w.id FROM TicketBundle:Ticket t JOIN t.workshop w GROUP BY t.workshop');
 
-                                        foreach ( $consulta->getResult() as $row) { $workshop_query = $workshop_query.', '.$row['id']; }
+                $workshop_query = '0';
+                foreach ( $consulta->getResult() as $row) { $workshop_query = $workshop_query.', '.$row['id']; }
 
-                                        $bundle = 'WorkshopBundle';
-                                        $entity = 'Workshop';
-                                        $params[] = array('id', ' NOT IN ('.$workshop_query.')');
-                                        if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-                                        elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
-                                        elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
-                                        if($security->isGranted('ROLE_SUPER_ADMIN')){
-                                            if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
-                                        }else{
-                                            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }
+                $where .= 'e.id NOT IN ('.$workshop_query.') ';
+                if     ($partner  != '0') { $where .= 'AND e.partner = '.$partner.' '; }
+                if     ($status == "active"  ) { $where .= 'AND e.active = 1 '; }
+                elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
+                elseif ($status == "test"    ) { $where .= 'AND e.test = 1 '; }
+                elseif ($status == "adsplus" ) { $where .= 'AND e.ad_service_plus = 1 '; }
+                if($security->isGranted('ROLE_SUPER_ADMIN')){
+                    if    ($country != '0'     ) { $where .= 'AND e.country = '.$country.' '; }
+                }else{
+                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }
 
-                $results = $pagination->getRows($em, $bundle, $entity, $params, null, null, $joins);
+                $qw = $em->createQuery("select partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } from WorkshopBundle:Workshop e WHERE ".$where);
+                $results   = $qw->getResult();
+
+                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $res_partners   = $qp->getResult();
+
+                foreach ($res_partners as $partner) {
+                     $partners[$partner->getCodePartner()] = $partner->getName();
+                 }
+                 unset($res_partners);
+                 unset($partner);
+
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results);
+                $excel = $this->createExcelWorkshop($results, $partners);
             }
         }
         else{
             /*
                 SELECT w.id, t.id FROM ticket t JOIN  workshop w ON t.workshop_id = w.id GROUP BY w.id ORDER BY t.id DESC
             */
-            $bundle = 'TicketBundle';
-            $entity = 'Ticket';
-            $joins[] = array('e.workshop w', ' e.workshop = w.id ');
-            $group_by = 'w.id';
-            $order = array('e.id', 'DESC');
+            $where .= 'AND e.workshop = w.id ';
 
             if($security->isGranted('ROLE_SUPER_ADMIN')){
-                if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
+                if    ($country != '0'     ) { $$where .= 'AND e.country = '.$country.' '; }
             }else{
-                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+                $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
             }
 
-            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
-            $results = $pagination->getRows($em, $bundle, $entity, $params, $pagination, $order, $joins,'',$group_by);
+            $where .= 'GROUP BY w.id ';
+            $where .= 'ORDER BY e.id DESC ';
+            $qt = $em->createQuery("select partial e.{ id, description, solution, modified_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w WHERE ".$where);
+            $results   = $qt->getResult();
+
             $response->headers->set('Content-Disposition', 'attachment;filename="informeUltimosTickets_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
-
         }
 
         $excel = UtilController::sinAcentos($excel);
@@ -348,7 +366,7 @@ class StatisticController extends Controller {
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
-    public function createExcelWorkshop($results){
+    public function createExcelWorkshop($results, $partners){
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
         $excel =$this->get('translator')->trans('code_partner').';'.
@@ -364,10 +382,10 @@ class StatisticController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($results as $row) {
-            $excel.=$row->getPartner()->getCodePartner().';';
+            $excel.=$row->getCodePartner().';';
             $excel.=$row->getCodeWorkshop().';';
             $excel.=$row->getName().';';
-            $excel.=$row->getPartner().';';
+            $excel.=$partners[$row->getCodePartner()].';';
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
@@ -376,7 +394,7 @@ class StatisticController extends Controller {
             $excel.=$active.';';
             $excel.="\n";
         }
-        
+
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
         $excel = str_replace(',', '.', $excel);
@@ -392,6 +410,7 @@ class StatisticController extends Controller {
                 $this->get('translator')->trans('ticket').';'.
                 $this->get('translator')->trans('ticket').';'.
                 $this->get('translator')->trans('status').';'.
+                $this->get('translator')->trans('solution').';'.
                 $this->get('translator')->trans('date').';';
         $excel.="\n";
 
@@ -399,17 +418,18 @@ class StatisticController extends Controller {
 
         foreach ($results as $row) {
 
-            $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
+            $excel.=$row->getWorkshop()->getCodePartner().';';
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
             $excel.=$row->getWorkshop()->getName().';';
             $excel.=$row->getWorkshop()->getPartner().';';
             $excel.=$row->getId().';';
             $excel.=$row->getDescription().';';
             $excel.=$row->getStatus().';';
+            $excel.=$row->getSolution().';';
             $excel.=$row->getModifiedAt()->format('Y-m-d').';';
             $excel.="\n";
         }
-        
+
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
         $excel = str_replace(',', '.', $excel);

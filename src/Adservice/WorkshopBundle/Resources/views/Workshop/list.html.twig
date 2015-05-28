@@ -18,6 +18,8 @@
             {% endif %}
         </legend>
 
+        {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+
         <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
         <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
         <div class="col-xs-2 col-md-2 form-group">

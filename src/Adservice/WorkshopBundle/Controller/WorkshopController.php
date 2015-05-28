@@ -149,6 +149,8 @@ class WorkshopController extends Controller {
                 {
                     $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
                     $workshop = UtilController::settersContact($workshop, $workshop);
+                    $workshop->setCodePartner($partner->getCodePartner());
+                    $workshop->setCodeWorkshop($code);
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -190,11 +192,6 @@ class WorkshopController extends Controller {
                     $newUser->setWorkshop      ($workshop);
                     $newUser->addRole          ($role);
 
-                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                    $name = $newUser->getUsername();
-                    $username = UtilController::getUsernameUnused($em, $name);
-                    $newUser->setUsername($username);
-
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
                     //ad-service +
@@ -211,7 +208,7 @@ class WorkshopController extends Controller {
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
-                    if ($pos === true) {
+                    if ($pos != 0) {
 
                         // Cambiamos el locale para enviar el mail en el idioma del taller
                         $locale = $request->getLocale();
@@ -231,6 +228,8 @@ class WorkshopController extends Controller {
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
                     }
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username;
+                    $this->get('session')->setFlash('alert', $flash);
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }

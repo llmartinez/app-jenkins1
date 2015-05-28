@@ -95,7 +95,9 @@ legend {
 .btn-blue {
     color: #428bca;
 }
-
+.btn-change-pass {
+    margin-top: 20px
+}
 
 /*
     HEADER
@@ -120,6 +122,15 @@ legend {
     width: 30%;
     padding: 10px;
     float: left;
+}
+
+.alert {
+  float: left;
+  background-color: #428bca;
+  color: #FFF;
+  font-size: 19px;
+  width: 100%;
+  text-align: center;
 }
 
 .content {

@@ -26,15 +26,18 @@ class PopupRepository extends EntityRepository{
 
         $consulta = $em->createQuery($query);
         $results = $consulta->getResult();
-
         $size = sizeOf($results);
+
         if($size > 1) {
             $popup = new Popup();
             $popup->setName('POPUP');
+            $id = '';
             $desc = '';
             foreach ($results as $result){
-                $desc = $desc.$result->getDescription().'<br>';
+                $id = $id.$result->getId();
+                $desc = $desc.'- '.$result->getDescription().'<br><br>';
             }
+            $popup->setId($id);
             $popup->setDescription($desc);
             return array('0' => $popup);
         }
