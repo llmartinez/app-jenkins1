@@ -35,7 +35,7 @@ class PopupRepository extends EntityRepository{
             $desc = '';
             foreach ($results as $result){
                 $id = $id.$result->getId();
-                $desc = $desc.$result->getDescription().'<br>';
+                $desc = $desc.'- '.$result->getDescription().'<br><br>';
             }
             $popup->setId($id);
             $popup->setDescription($desc);
