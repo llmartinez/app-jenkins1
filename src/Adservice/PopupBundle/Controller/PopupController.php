@@ -26,9 +26,15 @@ class PopupController extends Controller {
         $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, $user);
 
         $json = array();
-        foreach ($popups as $popup) {
-          $json[] = $popup->to_json();
+        $popup = $popups[0];
+        $popup_id = $popup->getId();
+
+        if (!isset($_SESSION['popup_id']) or $_SESSION['popup_id'] != $popup_id)
+        {
+            $json[] = $popup->to_json();
+            $_SESSION['popup_id'] = $popup_id;
         }
+
         return new Response(json_encode($json), $status = 200);
     }
 
