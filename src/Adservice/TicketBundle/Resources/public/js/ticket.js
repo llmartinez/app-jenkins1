@@ -92,21 +92,21 @@ function search_by_bmv() {
     var model    = $('#new_car_form_model').val();
     var version  = $('#new_car_form_version').val();
     var num_rows = $('#slct_numRows').val();
-    
+    var alert_intro = $('#alert').val();
+
     if(brand == null) {
-        alert('brand '+brand);
+        alert(alert_intro);
         event.preventDefault();
     }
     if(model == null) {
-        alert('model '+model);
+        alert(alert_intro);
         event.preventDefault();
     }
     if(version == null) {
-        alert('version '+version);
-        event.preventDefault();
+        version = 0;
     }
     if(num_rows == null) { num_rows = 10; }
-    
+
     var route = 'findTicketByBMV';
     var locale = $(document).find("#data_locale").val();
     var url = Routing.generate(route, {_locale: locale, page: 1, brand: brand, model: model, version: version, num_rows: num_rows });
