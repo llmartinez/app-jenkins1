@@ -75,7 +75,7 @@ error.file_size:             	"¡Error! El fichero debe tener un tamaño inferio
 isNaN:							"Los campos de telefono deben contener solo numeros"
 Bad credentials: 				"Credenciales incorrectas"
 The presented password is invalid.: "La contraseña introducida no es correcta"
-username_used:					"El nombre introducido ya existe, prueba con: "
+username_used:					"El nombre introducido ya existe o no es correcto, prueba con: "
 
 #ENTITY
 role:					 "Rol"
