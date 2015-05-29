@@ -234,20 +234,7 @@ class UserController extends Controller {
                                                                               'error_username' => $error_username));
                     }
                 }
-////////////////////////////////////////////////////////////////////////////////////
-///
-            // Si el username ya exite, mostramos un error
-            if ($username != $name) {
 
-                $error_username = $this->get('translator')->trans('username_used').$username;
-
-                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                                   'user_type'  => $type,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView(),
-                                                                                    'error_username' => $error_username));
-            }
-            ////////////////////////////////////////////////////////////////////////
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
 
