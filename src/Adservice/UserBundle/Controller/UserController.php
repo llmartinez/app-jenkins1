@@ -428,7 +428,6 @@ class UserController extends Controller {
         }
 
         $request = $this->getRequest();
-        $actual_username = $user->getUsername();
 
         $form->bindRequest($request);
 
@@ -445,9 +444,12 @@ class UserController extends Controller {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
-            if ($name != $actual_username) {
-                $username = UtilController::getUsernameUnused($em, $name);
-                $user->setUsername($username);
+
+            $username = UtilController::getUsernameUnused($em, $name);
+            $user->setUsername($username);
+
+            // Si el username ya exite, mostramos un error
+            if ($username != $name) {
 
                 $error_username = $this->get('translator')->trans('username_used').$username;
 
