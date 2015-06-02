@@ -33,7 +33,7 @@
 
         {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
-        <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}</label>
+        <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
 
         {{ form_rest(formD) }}
 

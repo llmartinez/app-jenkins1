@@ -71,10 +71,11 @@ error404.ticket:                "Tickets of this type not founded"
 error.bad_introduction.name:    "I cannot insert the name '...'"
 error.access:                   "You not have access to this section"
 error.file:             		"Error! Only supported files with extension.jpeg, .gif, .png, .pdf, .bmp, or .ppt"
-error.file_size:             	"Error! The file must be no larger than 4Mb"
+error.file_size:             	"Error! The file must be no larger than "
 isNaN:							"Phone fields must contain only numbers"
 Bad credentials: 				"Bad credentials"
 The presented password is invalid.: "The presented password is invalid"
+The presented password cannot be empty.: "The presented password cannot be empty"
 username_used:					"The name entered already exists or is incorrect, try: "
 
 #ENTITY
