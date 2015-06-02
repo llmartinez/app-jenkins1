@@ -33,14 +33,12 @@
 
         {% else %}
 
-            {% if ticket.status == 'open' and ticket.blockedBy is not null %}
                 {# Ticket cerrado #}
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
 
                 {# reabrir Ticket #}
                 <a href="{{ path('reopenTicket', { 'id': ticket.id }) }}" >
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
-            {% endif %}
 
         {% endif %}
 

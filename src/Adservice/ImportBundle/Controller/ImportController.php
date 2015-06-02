@@ -78,6 +78,7 @@ class ImportController extends Controller
 			// TIENDA POR DEFECTO
 			$partner = $em->getRepository('PartnerBundle:Partner')->find('9999'); //SOCIO POR DEFECTO
 			$newShop = UtilController::newEntity(new Shop(), $sa);
+			$newShop->setId(0);
 			$newShop->setName('...');
 			$newShop->setPartner($partner);
 			$newShop->setActive('1');
