@@ -29,14 +29,14 @@
 
 	{# CIF #}
 	<div class="form-group">
-		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif      }} {% endif %}
+		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
 	</div>
 	<div class="form-group">
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
 	{# PARTNER #}
 	<div class="form-group">
-		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner      }} {% endif %}
+		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
 	</div>
 
 	{# LOCATION #}
@@ -44,7 +44,7 @@
 		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
 		{% if workshop.city         != "" %}  {{ workshop.city|length > 15 ? workshop.city|slice(0, 15) ~ '...' : workshop.city  }}{% endif %}
 		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
-		{% if workshop.region       != "" %}, {{ workshop.region     }}{% endif %}
+		{% if workshop.region       != "" %}, {{ workshop.region|length > 15 ? workshop.region|slice(0, 15) ~ '...' : workshop.region  }}{% endif %}
 	</div>
 
 	{# TEL #}
