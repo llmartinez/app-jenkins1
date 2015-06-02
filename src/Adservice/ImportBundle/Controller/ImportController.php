@@ -78,6 +78,7 @@ class ImportController extends Controller
 			// TIENDA POR DEFECTO
 			$partner = $em->getRepository('PartnerBundle:Partner')->find('9999'); //SOCIO POR DEFECTO
 			$newShop = UtilController::newEntity(new Shop(), $sa);
+			$newShop->setId(0);
 			$newShop->setName('...');
 			$newShop->setPartner($partner);
 			$newShop->setActive('1');
@@ -129,13 +130,16 @@ class ImportController extends Controller
 				$name = $old_Socio->getNombre();
 				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
 				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+				$password = substr( md5(microtime()), 1, 8);
 				$newPartner->setName($name);
-				$newAD = $this->setUserFields   ($em, $newAD, $role, $name);
+				$newAD = $this->setUserFields   ($em, $newAD, $role, $name, $password);
 				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
 				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
 				$newAD->setActive('1');
 				$newAD->setPartner($partners[$old_Socio->getId()]);
 				UtilController::saveEntity($em, $newAD, $sa,false);
+
+				$partner_users[] =  array($newAD, $password);
 			}
 			$em->flush();
 			$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("H:i:s").')');
@@ -170,6 +174,8 @@ class ImportController extends Controller
 				$newAssessor->setActive($old_Asesor->getActive());
 
 				UtilController::saveEntity($em, $newAssessor, $sa, false);
+
+				$assessor_users[] =  array($newAssessor, $password);
 			}
 			$em->flush();
 			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
@@ -574,6 +580,48 @@ class ImportController extends Controller
         return $response;
     }
 
+    private function doExcelPartnerAction($partner_users){
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+        $response->headers->set('Pragma', 'public');
+        $date    = new \DateTime();
+        $response->setLastModified($date);
+
+        $response->headers->set('Content-Disposition', 'attachment;filename="usuarios_socios_('.date("d-m-Y").').csv"');
+        $excel   = $this->createExcelPartner($partner_users);
+
+        $response->setContent($excel);
+        return $response;
+    }
+
+    private function doExcelAssessorAction($assessor_users){
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+        $response->headers->set('Pragma', 'public');
+        $date    = new \DateTime();
+        $response->setLastModified($date);
+
+        $response->headers->set('Content-Disposition', 'attachment;filename="usuarios_asesores_('.date("d-m-Y").').csv"');
+        $excel   = $this->createExcelAssessor($assessor_users);
+
+        $response->setContent($excel);
+        return $response;
+    }
+
     public function createExcelTicket($users_email_log){
         //Creación de cabecera
         $excel ='id;Código Socio;Código Taller;Taller;Usuario;Contraseña;Contacto;Email 1; Email 2;Fijo 1;Fijo 2;Movil 1;Movil 2;Población;Provincia;Dirección;error;';
@@ -604,6 +652,64 @@ class ImportController extends Controller
             $pos = strpos($row[0]->getEmail1(), '@');
 			if ($pos === false) {
             	$error = 'Este taller no tiene email. Contacta con el taller para solucionarlo.';
+			}
+            $excel.=$error.';';
+            $excel.="\n";
+        }
+        $excel = str_replace(',', '.', $excel);
+        return($excel);
+    }
+
+    public function createExcelPartner($partner_users){
+        //Creación de cabecera
+        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Error;';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($partner_users as $row) {
+            $excel.=$row[0]->getId().';';
+            $excel.=$row[0]->getUsername().';';
+            $excel.=$row[1].';'; // password
+            $excel.=$row[0]->getName().';';
+            $excel.=$row[0]->getEmail1().';';
+            $excel.=$row[0]->getPassword().';';
+            $excel.=$row[0]->getSalt().';';
+
+            // Columna para errores de talleres sin mail
+            $error = '';
+            $pos = strpos($row[0]->getEmail1(), '@');
+			if ($pos === false) {
+            	$error = 'MAIL ERRONEO!!';
+			}
+            $excel.=$error.';';
+            $excel.="\n";
+        }
+        $excel = str_replace(',', '.', $excel);
+        return($excel);
+    }
+
+    public function createExcelAssessor($assessor_users){
+        //Creación de cabecera
+        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Error;';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($assessor_users as $row) {
+            $excel.=$row[0]->getId().';';
+            $excel.=$row[0]->getUsername().';';
+            $excel.=$row[1].';'; // password
+            $excel.=$row[0]->getName().';';
+            $excel.=$row[0]->getEmail1().';';
+            $excel.=$row[0]->getPassword().';';
+            $excel.=$row[0]->getSalt().';';
+
+            // Columna para errores de talleres sin mail
+            $error = '';
+            $pos = strpos($row[0]->getEmail1(), '@');
+			if ($pos === false) {
+            	$error = 'MAIL ERRONEO!!';
 			}
             $excel.=$error.';';
             $excel.="\n";

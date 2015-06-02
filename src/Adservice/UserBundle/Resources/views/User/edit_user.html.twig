@@ -12,7 +12,7 @@
 
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
-            {{ form_errors(form) }}
+
              <div class="col-xs-4 col-md-4 form-group">
                 <label>{% trans %} username {% endtrans %} *</label>
                 {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}

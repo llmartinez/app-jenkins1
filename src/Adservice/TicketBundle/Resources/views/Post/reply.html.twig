@@ -40,7 +40,7 @@
             <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
-            <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}</label>
+            <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
 
             <button class="btn btn-primary pull-right btn100 sendTicket" type="submit">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>

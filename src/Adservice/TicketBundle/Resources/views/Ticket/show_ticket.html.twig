@@ -25,6 +25,8 @@
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}
 
+    		<input type="hidden" id="role" value="ROLE_ASSESSOR">
+
     		{% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %}
 
             	{% include 'TicketBundle:Post:show_posts.html.twig'     	%}
@@ -36,6 +38,7 @@
 
 			{% endif %}
 		{% else %}
+    			<input type="hidden" id="role" value="ROLE_USER">
             	{% include 'TicketBundle:Post:show_posts.html.twig'      	%}
 
 			{% if ticket.blockedBy == null %}

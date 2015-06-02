@@ -78,6 +78,16 @@ class Shop {
                       'partner' => $this->getPartner()->getName());
         return $json;
     }
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *

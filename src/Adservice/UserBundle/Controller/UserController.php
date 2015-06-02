@@ -143,6 +143,118 @@ class UserController extends Controller {
                                                                        ));
     }
 
+
+    /**
+     * Crea un nuevo usuario en la bbdd
+     * @return type
+     * @throws AccessDeniedException
+     */
+    public function newUserAction($type) {
+
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false) {
+            throw new AccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = new User();
+
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_partner'] = ' != 0 ';
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+
+        //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
+        if ($type == 'admin') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserAdminAssessorType(), $user);
+        }elseif ($type == 'super_ad') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_SUPER_AD');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserSuperPartnerType(), $user);
+        }elseif ($type == 'ad') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserPartnerType(), $user);
+        } elseif ($type == 'assessor') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserAdminAssessorType(), $user);
+        }
+
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            $form_errors = $form->getErrors();
+
+            if(isset($form_errors[0])) {
+                $form_errors = $form_errors[0];
+                $form_errors = $form_errors->getMessageTemplate();
+            }else{
+                $form_errors = 'none';
+            }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+            // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+            $name = $user->getUsername();
+
+            $username = UtilController::getUsernameUnused($em, $name);
+            $user->setUsername($username);
+
+            // Si el username ya exite, mostramos un error
+            if ($username != $name) {
+
+                $error_username = $this->get('translator')->trans('username_used').$username;
+
+                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
+                                                                                   'user_type'  => $type,
+                                                                                   'form_name'  => $form->getName(),
+                                                                                   'form'       => $form->createView(),
+                                                                                    'error_username' => $error_username));
+            }
+
+            $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $user->setCreatedBy($security->getToken()->getUser());
+//            $partner = $form->getData('partner');
+            $user = UtilController::settersContact($user, $user);
+            $this->saveUser($em, $user);
+
+            $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
+            $this->get('session')->setFlash('alert', $flash);
+
+            return $this->redirect($this->generateUrl('user_list'));
+        }
+
+        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
+                                                                           'user_type'  => $type,
+                                                                           'form_name'  => $form->getName(),
+                                                                           'form'       => $form->createView()));
+    }
+
     /**
      * Obtener los datos del usuario a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
      * El ROLE_USER debe usar el profileAction (solo se puede editar a si mismo)
@@ -225,12 +337,14 @@ class UserController extends Controller {
                     $username = UtilController::getUsernameUnused($em, $name);
                     $user->setUsername($username);
 
-                    $error_username = $this->get('translator')->trans('username_used').$username;
+                    if ($username != $name) {
+                        $error_username = $this->get('translator')->trans('username_used').$username;
 
-                    return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                          'form_name' => $form->getName(),
-                                                                          'form'      => $form->createView(),
-                                                                          'error_username' => $error_username));
+                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                              'form_name' => $form->getName(),
+                                                                              'form'      => $form->createView(),
+                                                                              'error_username' => $error_username));
+                    }
                 }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
@@ -366,117 +480,6 @@ class UserController extends Controller {
         $flash =  $this->get('translator')->trans('change_password.correct');
         $this->get('session')->setFlash('password', $flash);
     }
-
-    /**
-     * Crea un nuevo usuario en la bbdd
-     * @return type
-     * @throws AccessDeniedException
-     */
-    public function newUserAction($type) {
-
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false) {
-            throw new AccessDeniedException();
-        }
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = new User();
-
-        if ($security->isGranted('ROLE_SUPER_AD')) {
-
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
-        }
-        else $partners = '0';
-
-        // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-
-            $_SESSION['id_partner'] = ' != 0 ';
-            $_SESSION['id_country'] = ' != 0 ';
-
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-
-            $partner_ids = '0';
-            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
-
-            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
-
-        }else {
-            $_SESSION['id_partner'] = ' = '.$partner->getId();
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
-        }
-
-        //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
-        if ($type == 'admin') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
-            $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
-        }elseif ($type == 'super_ad') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_SUPER_AD');
-            $user->setUserRoles($rol);
-            $form = $this->createForm(new UserSuperPartnerType(), $user);
-        }elseif ($type == 'ad') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
-            $user->setUserRoles($rol);
-            $form = $this->createForm(new UserPartnerType(), $user);
-        } elseif ($type == 'assessor') {
-            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
-            $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
-        }
-
-        $request = $this->getRequest();
-        $actual_username = $user->getUsername();
-
-        $form->bindRequest($request);
-
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-
-            if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
-
-            // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-            $name = $user->getUsername();
-            if ($name != $actual_username) {
-                $username = UtilController::getUsernameUnused($em, $name);
-                $user->setUsername($username);
-
-                $error_username = $this->get('translator')->trans('username_used').$username;
-
-                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                                   'user_type'  => $type,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView(),
-                                                                                    'error_username' => $error_username));
-            }
-
-            $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $user->setCreatedBy($security->getToken()->getUser());
-//            $partner = $form->getData('partner');
-            $user = UtilController::settersContact($user, $user);
-            $this->saveUser($em, $user);
-
-            $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
-            $this->get('session')->setFlash('alert', $flash);
-
-            return $this->redirect($this->generateUrl('user_list'));
-        }
-
-        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                           'user_type'  => $type,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()));
-    }
-
-
 
     /**
      * Devuelve el numero de solicitudes pendientes
