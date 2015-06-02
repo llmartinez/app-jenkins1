@@ -54,10 +54,10 @@
                 <td>{{ shop.id           }}</td>
                 <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
                 <td>{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                <td>{{ shop.partner.codePartner }} - {{ shop.partner }}</td>
+                <td>{{ shop.partner.codePartner }} - {{ shop.partner.name|length > 15 ? shop.partner.name|slice(0, 15) ~ '...' : shop.partner.name  }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
                 <td>{{ shop.email1       }}</td>
-                <td>{{ shop.region       }}</td>
+                <td>{{ shop.region|length > 15 ? shop.region|slice(0, 15) ~ '...' : shop.region  }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
