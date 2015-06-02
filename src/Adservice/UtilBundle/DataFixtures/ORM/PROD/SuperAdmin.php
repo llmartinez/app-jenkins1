@@ -15,15 +15,21 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
 
         $type = 'superadmin';
+        /* password: 8d32ab2e */
+        $pass = 'xIZniQZGeZWb2stbebivTJrLN47+bWwJI4CUCm4zjFbiEUnaQPx9x8gCB4LEAoaIx3p2dX+Q1V/b428UswPKxQ==';
+        $salt = '297520b4fe92e51de2b96b7311777ba1';
+
+        /* password: admin
         $pass = 'mcobJtS8ExG2JAUrEg3VzeLlgyxyyviEr5/uO+vel5stbf3TeHTJxZoHUZqfVHOqON1QNKcm5PXemcz9rW4BZg==';
-        $salt = '79bc6981377363689c90b9c7d6962da9';
+        $salt = '79bc6981377363689c90b9c7d6962da9';*/
+
         $entidad = new User();
 
             $entidad->setUsername   ($type);
             $entidad->setPassword   ($pass);
             $entidad->setSalt       ($salt);
-            $entidad->setName       ($type);
-            $entidad->setSurname    ('super_admin');
+            $entidad->setName       ('GED');
+            $entidad->setSurname    ($type);
             $entidad->setActive     ('1');
 
             //CONTACT
@@ -32,14 +38,10 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setRegion('Barcelona');
             $entidad->setCity('Badalona');
             $entidad->setAddress('Avinguda  Llenguadoc, 29 – POL. IND. BONAVISTA');
-            $entidad->setPostalCode(08916);
-            $entidad->setPhoneNumber1(Data::getPhone());
-            $entidad->setPhoneNumber2(Data::getPhone());
-            $entidad->setMovileNumber1(Data::getPhone());
-            $entidad->setPhoneNumber2(Data::getPhone());
-            $entidad->setFax(Data::getPhone());
+            $entidad->setPostalCode(08915);
+            $entidad->setPhoneNumber1('93 395 23 08');
             $entidad->setEmail1('test@ad-service.es');
-            $entidad->setEmail2('mail@mail.com');
+            $entidad->setEmail2('test@ad-service.es');
             //CREATE/MODIFY
             $entidad->setCreatedAt(new \DateTime());
             $entidad->setModifiedAt(new \DateTime());
