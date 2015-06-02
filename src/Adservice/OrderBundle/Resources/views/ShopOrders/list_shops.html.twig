@@ -42,7 +42,7 @@
                 {% for shop in shops %}
             <tr>
                 <td>{{ shop.id       }}</td>
-                <td>{{ shop.name     }}{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ shop.partner  }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
                 <td>{{ shop.email1       }}</td>

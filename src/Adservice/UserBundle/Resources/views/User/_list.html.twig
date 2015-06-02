@@ -15,10 +15,10 @@
          {% for user in users %}
             <tr>
                 <td>{{ user.id           }}</td>
-                <td>{{ user.username     }}</td>
+                <td>{{ user.username|length > 15 ? user.username|slice(0, 15) ~ '...' : user.username  }}</td>
                 <td>{% if user.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                <td>{{ user.name         }}</td>
-                <td>{{ user.surname      }}</td>
+                <td>{{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}</td>
+                <td>{{ user.surname|length > 15 ? user.surname|slice(0, 15) ~ '...' : user.surname  }}</td>
                 <td>{{ user.email1       }}</td>
                 <td>{{ user.phoneNumber1 }}</td>
                 <td>

@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li><a href="{{ path('shop_list') }}">{% trans %} menu.list_shops {% endtrans %}</a></li>
-      <li class="active">{% trans %} edit.shop {% endtrans %} ({{ shop }})</li>
+      <li class="active">{% trans %} edit.shop {% endtrans %} ({{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }})</li>
     </ol>
 
     <legend>{% trans %} edit.shop {% endtrans %}</legend>

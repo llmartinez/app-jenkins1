@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li><a href="{{ path('popup_list') }}">{% trans %} menu.list_popups {% endtrans %}</a></li>
-      <li class="active">{% trans %} edit.popup {% endtrans %} ({{ popup }})</li>
+      <li class="active">{% trans %} edit.popup {% endtrans %} ({{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }})</li>
     </ol>
 
     <legend>{% trans %} edit.popup {% endtrans %}</legend>
