@@ -35,6 +35,7 @@ security:
       - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
       - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_AD]        }
       - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD]         }
       - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD]         }
