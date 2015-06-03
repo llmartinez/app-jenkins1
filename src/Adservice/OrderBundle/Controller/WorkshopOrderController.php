@@ -809,7 +809,8 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setPartner       ($workshop->getPartner());
         $shop = $workshop->getShop();
         if(isset($shop)) { $workshopOrder->setShop($shop); }
-        $workshopOrder->setTypology      ($workshop->getTypology());
+        $tipology = $workshop->getTypology();
+        if(isset($tipology)) { $workshopOrder->setTypology($tipology); }
         $workshopOrder->setTest          ($workshop->getTest());
         $workshopOrder->setContactName   ($workshop->getContactName());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());
