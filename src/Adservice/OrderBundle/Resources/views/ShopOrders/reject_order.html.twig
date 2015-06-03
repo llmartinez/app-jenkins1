@@ -6,13 +6,13 @@
      <form action="{{ path('shopOrder_reject', { 'id': shopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <label for="rejection_reason">{# {% trans %} reject.reason {% endtrans %} #}</label>
-        {{ form_widget(form.rejection_reason) }}<br/>
-
+        <div class="col-xs-12 col-md-12 margined">
+            {{ form_widget(form.rejection_reason, { 'attr': {'class': 'form-control', 'rows': '4', 'required': 'required' } }) }}
+        </div>
         {{ form_rest(form) }}
-        <p>
-            <button type="submit" class="btn btn-default">{% trans %} btn.send {% endtrans %}</button>
-        </p>
-
+        <div class="col-xs-12 col-md-12 margined">
+            <button type="submit" class="btn btn-primary ">{% trans %} btn.send {% endtrans %}</button>
+        </div>
      </form>
 {% endblock %}
 
