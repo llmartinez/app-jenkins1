@@ -1,0 +1,54 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('listTicket') }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.ticket {% endtrans %}</li>
+    </ol>
+
+{% endblock  %}
+
+{% block info %}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+
+        {% if workshop.id != "" %}  {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+                                    {% include 'TicketBundle:Includes:_tbl_similar.html.twig'    %}
+        {% else %}                  {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}  {% endif %}
+
+    {% else %}
+
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% include 'TicketBundle:Workshop:show_workshop.html.twig' %}
+
+    {% endif %}
+
+    {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}
+
+{% endblock  %}
+
+{% block content %}
+
+    {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
+
+    {% if workshop.id != "" %}
+        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+
+          {% include 'TicketBundle:Car:new_car.html.twig'        %}
+
+          {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
+
+          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+        </form>
+
+    {% endif %}
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket_workshop.js') }}"></script>
+  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+{% endblock %}

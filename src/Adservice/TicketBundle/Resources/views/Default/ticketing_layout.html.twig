@@ -1,0 +1,27 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+
+    {% block breadcrumb %}{% endblock  %}
+
+<div class="info">
+	{% block info %}{% endblock  %}
+</div>
+
+<!-- CONTENIDO PAGINA TICKETS -->
+
+<div class="content">
+    {% block content %}{% endblock  %}
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket.js') }}"></script>
+    <script src="{{ asset('bundles/ticket/js/car.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    {% block additionalJavascripts %}{% endblock %}
+
+{% endblock %}

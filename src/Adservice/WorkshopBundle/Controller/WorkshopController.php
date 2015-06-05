@@ -1,0 +1,456 @@
+<?php
+namespace Adservice\WorkshopBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\UtilBundle\Entity\Pagination;
+use Adservice\UserBundle\Entity\User;
+use Adservice\WorkshopBundle\Entity\Workshop;
+use Adservice\WorkshopBundle\Form\WorkshopType;
+use Adservice\WorkshopBundle\Form\WorkshopObservationType;
+use Adservice\WorkshopBundle\Entity\TypologyRepository;
+use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
+use Adservice\WorkshopBundle\Entity\ADSPlus;
+use Adservice\WorkshopBundle\Entity\WorkshopStatusHistory;
+
+class WorkshopController extends Controller {
+
+    /**
+     * Devuelve todos los talleres segun el usuario logeado
+     * @return type
+     * @throws AccessDeniedException
+     */
+    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $name='0') {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+        $joins = array();
+
+        if ($security->isGranted('ROLE_ASSESSOR') === false and $security->isGranted('ROLE_AD') === false) {
+            throw new AccessDeniedException();
+        }
+
+        if ($name != '0'){
+            $params[] = array('name', " LIKE '%".$name."%'");
+        }else{
+            if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != '0') $params[] = array('country', ' = '.$country);
+            }
+            else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
+            if($security->isGranted('ROLE_ADMIN')) {
+
+                if ($partner != '0') $params[] = array('partner', ' = '.$partner);
+
+                if ($w_idpartner != '0' and $w_id != '0')
+                {
+                    $params[] = array('code_workshop', ' = '.$w_id);
+                    $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
+                    $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = '.$w_idpartner.' ');
+                }
+
+                if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
+            }
+        }
+
+        if(!isset($params)) $params[] = array();
+
+        $pagination = new Pagination($page);
+
+        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination, null, $joins);
+
+        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params, null, $joins);
+
+        $pagination->setTotalPagByLength($length);
+
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $countries = $em->getRepository('UtilBundle:Country'     )->findAll();
+            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findAll();
+        }else{
+            $countries = array();
+            $partners  = $em->getRepository('PartnerBundle:Partner'  )->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+        }
+
+        return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops'  => $workshops,
+                                                                             'pagination' => $pagination,
+                                                                             'countries'  => $countries,
+                                                                             'partners'   => $partners,
+                                                                             'w_idpartner'=> $w_idpartner,
+                                                                             'w_id'       => $w_id,
+                                                                             'country'    => $country,
+                                                                             'partner'    => $partner,
+                                                                             'status'     => $status,
+                                                                             'name'       => $name));
+    }
+
+    public function newWorkshopAction() {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN') === false)
+            throw new AccessDeniedException();
+        $em       = $this->getDoctrine()->getEntityManager();
+        $request  = $this->getRequest();
+        $workshop = new Workshop();
+
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_partner'] = ' != 0 ';
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+
+        $form     = $this->createForm(new WorkshopType(), $workshop);
+
+        if ($request->getMethod() == 'POST') {
+
+            $form->bindRequest($request);
+            $partner = $workshop->getPartner();
+            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                /*CHECK CODE WORKSHOP NO SE REPITA*/
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
+                                                                                       'code_workshop' => $workshop->getCodeWorkshop()));
+                if($find == null)
+                {
+                    $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
+                    $workshop = UtilController::settersContact($workshop, $workshop);
+                    $workshop->setCodePartner($partner->getCodePartner());
+                    $workshop->setCodeWorkshop($code);
+                    $this->saveWorkshop($em, $workshop);
+
+                    //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
+                    if ($workshop->getAdServicePlus()){
+                        $adsplus = new ADSPlus();
+                        $adsplus->setIdTallerADS($workshop->getID());
+                        $dateI = new \DateTime('now');
+                        $dateF = new \DateTime('+2 year');
+                        $adsplus->setAltaInicial($dateI->format('Y-m-d'));
+                        $adsplus->setUltAlta($dateI->format('Y-m-d'));
+                        $adsplus->setBaja($dateF->format('Y-m-d'));
+                        $adsplus->setContador(0);
+                        $adsplus->setActive(1);
+
+                        $em->persist($adsplus);
+                        $em->flush();
+                    }
+
+                    /*CREAR USERNAME Y EVITAR REPETICIONES*/
+                    $username = UtilController::getUsernameUnused($em, $workshop->getName());
+
+                    /*CREAR PASSWORD AUTOMATICAMENTE*/
+                    $pass = substr( md5(microtime()), 1, 8);
+
+                    $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
+                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+
+                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                    $newUser->setUsername      ($username);
+                    $newUser->setPassword      ($pass);
+                    $newUser->setName          ($workshop->getContact());
+                    $newUser->setSurname       ($workshop->getName());
+                    $newUser->setActive        ('1');
+                    $newUser->setCreatedBy     ($workshop->getCreatedBy());
+                    $newUser->setCreatedAt     (new \DateTime());
+                    $newUser->setModifiedBy    ($workshop->getCreatedBy());
+                    $newUser->setModifiedAt    (new \DateTime());
+                    $newUser->setLanguage      ($lang);
+                    $newUser->setWorkshop      ($workshop);
+                    $newUser->addRole          ($role);
+
+                    $newUser = UtilController::settersContact($newUser, $workshop);
+
+                    //ad-service +
+
+                    //password nuevo, se codifica con el nuevo salt
+                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
+                    $salt = md5(time());
+                    $password = $encoder->encodePassword($newUser->getPassword(), $salt);
+                    $newUser->setPassword($password);
+                    $newUser->setSalt($salt);
+                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+
+                    $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
+
+                    $mail = $newUser->getEmail1();
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
+
+                        // Cambiamos el locale para enviar el mail en el idioma del taller
+                        $locale = $request->getLocale();
+                        $lang_u = $newUser->getCountry()->getLang();
+                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+                        $request->setLocale($lang->getShortName());
+
+                        /* MAILING */
+                        $mailerUser = $this->get('cms.mailer');
+                        $mailerUser->setTo($mail);
+                        $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
+                        $mailerUser->setFrom('noreply@grupeina.com');
+                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
+                        $mailerUser->sendMailToSpool();
+                        // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
+
+                        // Dejamos el locale tal y como estaba
+                        $request->setLocale($locale);
+                    }
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username;
+                    $this->get('session')->setFlash('alert', $flash);
+
+                    return $this->redirect($this->generateUrl('workshop_list'));
+                }
+                else{
+                    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
+                    $this->get('session')->setFlash('error', $flash);
+                }
+            }
+        }
+
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
+        else $country = null;
+        $typologies = TypologyRepository::findTypologiesList($em, $country);
+        $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+
+        return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop'           => $workshop,
+                                                                                     'typologies'         => $typologies,
+                                                                                     'diagnosis_machines' => $diagnosis_machines,
+                                                                                     'form_name'          => $form->getName(),
+                                                                                     'form'               => $form->createView(),
+                                                                                     // 'locations'          => UtilController::getLocations($em),
+                                                                                    ));
+    }
+
+    /**
+     * Obtener los datos del workshop a partir de us ID para poder editarlo (solo lo puede hacer el ROLE_ADMIN)
+     * @Route("/edit/{id}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
+     * Si la petición es GET  --> mostrar el formulario
+     * Si la petición es POST --> save del formulario
+     */
+    public function editWorkshopAction($workshop) {
+        $security = $this->get('security.context');
+        $request = $this->getRequest();
+
+        if ((!$security->isGranted('ROLE_SUPER_ADMIN')) and ($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
+        and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $partner = $workshop->getPartner();
+
+        $petition   = $this->getRequest();
+        if ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+                                                                                    'active' => '1'));
+        }
+        else $partners = '0';
+
+        // Creamos variables de sesion para fitlrar los resultados del formulario
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $_SESSION['id_partner'] = ' != 0 ';
+            $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+
+        }else {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        $form       = $this->createForm(new WorkshopType(), $workshop);
+
+        $actual_city   = $workshop->getRegion();
+        $actual_region = $workshop->getCity();
+
+        if ($petition->getMethod() == 'POST') {
+            $last_code = $workshop->getCodeWorkshop();
+            $form->bindRequest($petition);
+
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+                /*CHECK CODE WORKSHOP NO SE REPITA*/
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $partner->getId(),
+                                                                                       'code_workshop' => $workshop->getCodeWorkshop()));
+                if($find == null or $workshop->getCodeWorkshop() == $last_code)
+                {
+                    $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+
+                    // Set default shop to NULL
+                    $shop = $form['shop']->getClientData();
+                    if($shop == 0) { $workshop->setShop(null); }
+
+                    $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
+
+                    $this->saveWorkshop($em, $workshop);
+
+                    if    ($security->isGranted('ROLE_ADMIN'   )) return $this->redirect($this->generateUrl('workshop_list'));
+                    elseif($security->isGranted('ROLE_ASSESSOR')) return $this->redirect($this->generateUrl('listTicket'));
+                }
+                else{
+                    $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+                    $flash = $this->get('translator')->trans('error.code_partner.used').$code.' (valor actual '.$last_code.').';
+                    $this->get('session')->setFlash('error', $flash);
+                }
+            }
+        }
+
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
+        else $country = null;
+        $typologies = TypologyRepository::findTypologiesList($em, $country);
+        $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+        $workshop_machines  = $workshop->getDiagnosisMachines();
+        // if($workshop_machines[0] and !isset($id_machine)){
+        //     $id_machine = $workshop_machines[0];
+        //     $id_machine = $id_machine->getId();
+        // }
+
+        return $this->render('WorkshopBundle:Workshop:edit_workshop.html.twig', array(  'workshop'           => $workshop,
+                                                                                        'typologies'         => $typologies,
+                                                                                        // 'id_machine'         => $id_machine,
+                                                                                        'diagnosis_machines' => $diagnosis_machines,
+                                                                                        'form_name'          => $form->getName(),
+                                                                                        'form'               => $form->createView()));
+    }
+
+    public function deleteWorkshopAction($id) {
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
+        if (!$workshop) throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
+
+        $em->remove($workshop);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('workshop_list'));
+    }
+
+    /**
+     * Edita las observaciones para asesor del taller
+     * @Route("/workshop/observation/{id}/{id_ticket}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
+     * @return url
+     */
+    public function workshopObservationAction($workshop, $id_ticket) {
+
+        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false){
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $request  = $this->getRequest();
+        $form = $this->createForm(new WorkshopObservationType(), $workshop);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+
+                $em->persist($workshop);
+                $em->flush();
+                return $this->redirect($this->generateUrl('showTicket', array('id' => $id_ticket)));
+            }
+        }
+        return $this->render('WorkshopBundle:Workshop:workshop_observation.html.twig', array('workshop'  => $workshop,
+                                                                                             'id_ticket' => $id_ticket,
+                                                                                             'form_name' => $form->getName(),
+                                                                                             'form'      => $form->createView()));
+    }
+
+     /**
+     * Genera un historial de cambios del taller
+     * @return WorkshopHistory
+     */
+    public function createHistoric($em, $workshop) {
+
+        $history = new WorkshopStatusHistory();
+
+        $history->setCodeWorkshop($workshop->getCodeWorkshop());
+        $history->setName($workshop->getName());
+        $history->setCif($workshop->getCif());
+        $history->setContact($workshop->getContact());
+        $history->setPartner($workshop->getPartner());
+        $history->setShop($workshop->getShop());
+        $history->setInternalCode($workshop->getInternalCode());
+        $history->setActive($workshop->getActive());
+        $history->setAdServicePlus($workshop->getAdServicePlus());
+        $history->setTest($workshop->getTest());
+        $history->setUpdateAt($workshop->getUpdateAt());
+        $history->setLowdateAt($workshop->getLowdateAt());
+        $history->setEndtestAt($workshop->getEndtestAt());
+        $history->setConflictive($workshop->getConflictive());
+        $history->setObservationWorkshop($workshop->getObservationWorkshop());
+        $history->setObservationAssessor($workshop->getObservationAssessor());
+        $history->setObservationAdmin($workshop->getObservationAdmin());
+        $history->setModifiedAt($workshop->getModifiedAt());
+        $history->setModifiedBy($workshop->getModifiedBy());
+        $history->setCreatedAt($workshop->getCreatedAt());
+        $history->setCreatedBy($workshop->getCreatedBy());
+
+        $em->persist($history);
+        $em->flush();
+    }
+
+    /**
+     * Hace el save de un workshop
+     * @param EntityManager $em
+     * @param Workshop $workshop
+     */
+    private function saveWorkshop($em, $workshop){
+        $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+        $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
+        $em->persist($workshop);
+        $em->flush();
+    }
+
+}

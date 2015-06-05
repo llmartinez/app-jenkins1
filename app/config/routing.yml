@@ -1,15 +1,28 @@
+
+############################################################################
+# LINEA PARA IMPORTAR DATOS DE LA BBDD ANTIGUA: COMENTAR UNA VEZ EJECUTADO #
+############################################################################
+ImportBundle:
+    resource: "@ImportBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/import/
+############################################################################
+
+LockBundle:
+    resource: "@LockBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/lock/
+
+OrderBundle:
+    resource: "@OrderBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/order
+
 StatisticBundle:
     resource: "@StatisticBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/statistic
 
-SystemBundle:
-    resource: "@SystemBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-    
+
 PopupBundle:
     resource: "@PopupBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/popup
@@ -29,18 +42,21 @@ TicketBundle:
 UserBundle:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-            
+
 UtilBundle:
     resource: "@UtilBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
-    
+
 _login:
     pattern:  /
-    defaults: { _controller: UserBundle:Login:login }
+    defaults: { _controller: UserBundle:Login:goToLogin }
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 #redirect:
 #    pattern: /{_locale}/{_location}/
-#    defaults: 
-#         _controller: FrameworkBundle:Redirect:urlRedirect 
+#    defaults:
+#         _controller: FrameworkBundle:Redirect:urlRedirect
 #         path: /{_locale}/{_location}/
-#         permanent: true 
+#         permanent: true

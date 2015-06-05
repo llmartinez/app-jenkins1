@@ -1,0 +1,65 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'list_orders' %}
+    <input type="hidden" id="route" value="{{ route }}">
+    <input type="hidden" id="option" value="{{ option }}">
+        
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active">{% trans %} menu.list_orders {% endtrans %}</li>
+    </ol>
+
+<div class='colIzq15'>
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'option': option, 'country': 'plc_country'}) }}">
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for _country in countries %}
+                <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
+    <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br>
+        {% if length_workshop_pending > 0 %} <div class="pending_application3">{{ length_workshop_pending }}</div>{% endif %}
+    </button>
+    <button onclick="window.open('{{ path(route, { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br>
+        {% if length_workshop_rejected > 0 %} <div class="pending_application3">{{ length_workshop_rejected }}</div>{% endif %}
+    </button>
+    <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br>
+        {% if length_shop_pending > 0 %} <div class="pending_application3">{{ length_shop_pending }}</div>{% endif %}
+    </button>
+    <button onclick="window.open('{{ path(route, { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br>
+        {% if length_shop_rejected > 0 %} <div class="pending_application3">{{ length_shop_rejected }}</div>{% endif %}
+    </button>
+</div>
+
+<div class='colDer85'>
+
+    {% if app.session.hasFlash('error') %}<p class="error">{{ app.session.getFlash('error') }}</p>{% endif %}
+
+    {% if     option == 'workshop_pending'  %} {% include 'OrderBundle:Order:list_workshop_orders.html.twig'          %}
+    {% elseif option == 'workshop_rejected' %} {% include 'OrderBundle:Order:list_workshop_rejected_orders.html.twig' %}
+    {% elseif option == 'shop_pending'      %} {% include 'OrderBundle:Order:list_shop_orders.html.twig'              %}
+    {% elseif option == 'shop_rejected'     %} {% include 'OrderBundle:Order:list_shop_rejected_orders.html.twig'     %}
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination_order.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+    <script> $(document).ready(function() { table_filter(); }); //util.js </script>
+{% endblock %}

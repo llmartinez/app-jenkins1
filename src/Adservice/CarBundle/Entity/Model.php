@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="model")
  * @ORM\Entity
  */
-class Model implements \JsonSerializable
-{
+class Model {
     /**
      * @var integer $id
      *
@@ -34,7 +33,7 @@ class Model implements \JsonSerializable
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      */
     private $brand;
-    
+
     /**
      * @var string $version
      *
@@ -53,7 +52,7 @@ class Model implements \JsonSerializable
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -73,7 +72,7 @@ class Model implements \JsonSerializable
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -93,7 +92,7 @@ class Model implements \JsonSerializable
     /**
      * Get brand
      *
-     * @return integer 
+     * @return integer
      */
     public function getBrand()
     {
@@ -113,28 +112,37 @@ class Model implements \JsonSerializable
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
+
     public function __toString() {
         return $this->name;
     }
-    
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName()
-        ];
+
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'name' => $this->getName()
+//        ];
+//    }
+
+    public function to_json(){
+        $json = array('id'      => $this->getId(),
+                      'name'    => $this->getName(),
+                      'idTecDoc'=> $this->getIdTecDoc(),
+                      'brand'   => $this->getBrand()->getIdTecDoc());
+        return $json;
     }
+
     public function __construct()
     {
         $this->version = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add version
      *
@@ -148,7 +156,7 @@ class Model implements \JsonSerializable
     /**
      * Get version
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getVersion()
     {

@@ -2,24 +2,41 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /list
-    defaults: { _controller: PartnerBundle:Default:list }
-    
-partner_edit:
-    pattern: /edit/{id}
-    defaults: { _controller: PartnerBundle:Default:editPartner }
-
-partner_delete:
-    pattern: /delete/{id}
-    defaults: { _controller: PartnerBundle:Default:deletePartner }
+    pattern:  /list/partner/{page}/{country}/{partner}
+    defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: 'none', partner: 'none' }
+    options:
+        expose: true
 
 partner_new:
-    pattern: /new
-    defaults: { _controller: PartnerBundle:Default:newPartner }
-    
+    pattern: /new/partner
+    defaults: { _controller: PartnerBundle:Partner:newPartner }
+
+partner_edit:
+    pattern: /edit/partner/{id}
+    defaults: { _controller: PartnerBundle:Partner:editPartner }
+
+partner_delete:
+    pattern: /delete/partner/{id}
+    defaults: { _controller: PartnerBundle:Partner:deletePartner }
+
+
 ##############################
-#       RUTAS AJAX           #
+#   APDO. RUTAS SHOP         #
 ##############################
-user_provinces: 
-    pattern: /provincesFromRegion
-    defaults: { _controller: UtilBundle:Default:provincesFromRegion }    
+shop_list:
+    pattern:  /list/shop/{page}/{country}/{partner}
+    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: 'none', partner: 'none' }
+    options:
+        expose: true
+
+shop_new:
+    pattern: /new/shop
+    defaults: { _controller: PartnerBundle:Shop:newShop }
+
+shop_edit:
+    pattern: /edit/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:editShop }
+
+shop_delete:
+    pattern: /delete/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:deleteShop }

@@ -1,0 +1,87 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}"> {% trans %} home {% endtrans %} </a></li>
+      <li><a href="{{ path('user_list' ) }}"> {% trans %} menu.list_users {% endtrans %} </a></li>
+      <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user }}) </li>
+    </ol>
+
+    {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
+
+    <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        <div class="col-xs-12 col-md-12 form-group">
+
+             <div class="col-xs-4 col-md-4 form-group">
+                <label>{% trans %} username {% endtrans %} *</label>
+                {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
+            </div>
+            {% if form.partner is defined %}
+             <div class="col-xs-4 col-md-4 form-group">
+                <label>{% trans %} partner {% endtrans %} *</label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            {% endif %}
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active) }}
+            </div>
+
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} language {% endtrans %}</label>
+                {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+
+             <div class="col-xs-4 col-md-4 form-group">
+                {% if user.roles[0] != 'ROLE_SUPER_ADMIN' %}
+                   <button class="btn btn-primary pull-left btn-change-pass" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            {% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+        </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} contact         {% endtrans %}*</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                                                                                {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+        </div>
+
+        {{ form_rest(form) }}
+
+            <button class="btn btn-primary pull-right" id="btn_save" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                   <p> {% trans %} change_password.confirm {% endtrans %} </p>
+                </div>
+                <div class="modal-footer">
+                    <input id="user_id" type="hidden" value="{{ user.id }}">
+                    <button id="generate_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+{% endblock %}

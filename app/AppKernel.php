@@ -24,9 +24,12 @@ class AppKernel extends Kernel
             new Adservice\WorkshopBundle\WorkshopBundle(),
             new Adservice\CarBundle\CarBundle(),
             new Adservice\PopupBundle\PopupBundle(),
-            new Adservice\SystemBundle\SystemBundle(),
             new Adservice\StatisticBundle\StatisticBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
+            new Adservice\OrderBundle\OrderBundle(),
+            new Adservice\ImportBundle\ImportBundle(),
+            new Adservice\LockBundle\LockBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

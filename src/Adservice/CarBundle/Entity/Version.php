@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="version")
  * @ORM\Entity
  */
-class Version implements \JsonSerializable
-{
+class Version {
     /**
      * @var integer $id
      *
@@ -42,11 +41,39 @@ class Version implements \JsonSerializable
      */
     private $idTecDoc;
 
+    /**
+     * @var string $year
+     *
+     * @ORM\Column(name="year", type="string", length=255)
+     */
+    private $year;
+
+    /**
+     * @var string $motor
+     *
+     * @ORM\Column(name="motor", type="string", length=255)
+     */
+    private $motor;
+
+    /**
+     * @var string $kw
+     *
+     * @ORM\Column(name="kw", type="string", length=255)
+     */
+    private $kw;
+
+    /**
+     * @var string $displacement
+     *
+     * @ORM\Column(name="displacement", type="string", length=255)
+     */
+    private $displacement;
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,7 +93,7 @@ class Version implements \JsonSerializable
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -86,7 +113,7 @@ class Version implements \JsonSerializable
     /**
      * Get model
      *
-     * @return integer 
+     * @return integer
      */
     public function getModel()
     {
@@ -106,21 +133,115 @@ class Version implements \JsonSerializable
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
+
+    /**
+     * Set year
+     *
+     * @param string $year
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+    }
+
+    /**
+     * Get year
+     *
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * Set motor
+     *
+     * @param string $motor
+     */
+    public function setMotor($motor)
+    {
+        $this->motor = $motor;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return string
+     */
+    public function getMotor()
+    {
+        return $this->motor;
+    }
+
+    /**
+     * Set kw
+     *
+     * @param string $kw
+     */
+    public function setKw($kw)
+    {
+        $this->kw = $kw;
+    }
+
+    /**
+     * Get kw
+     *
+     * @return string
+     */
+    public function getKw()
+    {
+        return $this->kw;
+    }
+
+    /**
+     * Set displacement
+     *
+     * @param string $displacement
+     */
+    public function setDisplacement($displacement)
+    {
+        $this->displacement = $displacement;
+    }
+
+    /**
+     * Get displacement
+     *
+     * @return string
+     */
+    public function getDisplacement()
+    {
+        return $this->displacement;
+    }
+
+
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'name' => $this->getName()
+//        ];
+//    }
+
     public function __toString() {
         return $this->name;
     }
-    
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName()
-        ];
+
+    public function to_json(){
+        $json = array('id'           => $this->getId(),
+                      'name'         => $this->getName(),
+                      'year'         => $this->getYear(),
+                      'motor'        => $this->getMotor(),
+                      'kw'           => $this->getKw(),
+                      'displacement' => $this->getDisplacement(),
+                      'idTecDoc'     => $this->getIdTecDoc(),
+                      'model'        => $this->getModel()->getIdTecDoc(),
+                      'brand'        => $this->getModel()->getBrand()->getIdTecDoc());
+        return $json;
     }
 }

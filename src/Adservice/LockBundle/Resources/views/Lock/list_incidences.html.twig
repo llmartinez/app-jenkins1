@@ -1,0 +1,77 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+      <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
+    </ol>
+
+<legend>{% trans %} lock.list_incidences {% endtrans %}
+        {% if id_socio != 'none' %} {% trans %} workshop {% endtrans %} <a>#{{ id_socio }},{{ id_taller }}{% endif %}</a></legend>
+
+   {#  {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="flt_country" class='form-control'>
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for country in countries %}
+                <option value="{{ country }}">{{ country }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %} #}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <div class="col-xs-6 col-md-6 form-group">
+            <div class="col-xs-2 col-md-2"><label> {% trans %} code {% endtrans %} </label></div>
+            <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
+            <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
+          {# data-url="{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}" #}
+
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{% trans %} partner  {% endtrans %}"></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{% trans %} workshop {% endtrans %}"></div>
+            <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{% trans %} btn.search {% endtrans %}"></div>
+        </div>
+
+        <input type="hidden" id="id_socio"  name="id_socio"  value="{{ id_socio  }}">
+        <input type="hidden" id="id_taller" name="id_taller" value="{{ id_taller }}">
+
+    {% endif %}
+
+    {% if incidences|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans %} date        {% endtrans %}</th>
+                <th>{% trans %} system      {% endtrans %}</th>
+                <th>{% trans %} car         {% endtrans %}</th>
+                <th>{% trans %} assigned_to {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for incidence in incidences %}
+            <tr class="incidenceRow">
+                <input type="hidden" id="id_incidence" name="id_incidence" value="{{ incidence.id }}">
+                <td>{{ incidence.id     }}</td>
+                <td>{{ incidence.date|date("d/m/y")   }}</td>
+                <td>{{ incidence.oper   }}</td>
+                <td>{{ incidence.coche  }}</td>
+                <td>{{ incidence.asesor }}</td>
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
+
+    {% else %}
+        {% trans %} any.incidence {% endtrans %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/lock/js/incidence.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_incidence.js') }}"></script>
+
+{% endblock %}

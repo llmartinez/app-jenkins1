@@ -1,0 +1,37 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} workshop_observation {% endtrans %}</li>
+    </ol>
+{% endblock  %}
+
+{% block info %}
+
+    {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+
+{% endblock %}
+
+{% block content %}
+
+    <form action="{{ path("workshop_observation", { 'id':workshop.id, 'id_ticket':id_ticket }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <div class="container">
+
+        <legend>{% trans %} workshop_observation {% endtrans %}</legend>
+            <div class="col-xs-8 col-md-8 form-group">
+                {% if app.session.hasFlash('error') %}
+                    <p class="error">{{ app.session.getFlash('error') }}</p>
+                {% endif %}
+
+                {{ form_widget(form.observationAssessor, { 'attr': {'class': 'form-control'} }) }}
+
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+
+                {{ form_rest(form) }}
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

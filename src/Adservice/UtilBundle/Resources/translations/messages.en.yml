@@ -1,100 +1,656 @@
-header.welcome: ADService England
+header.welcome: "ADService England"
 
-user.index.menu.admin_title:            ADMIN MENU
-user.index.menu.assessor_title:         ASSESSOR MENU
-user.index.menu.user_title:             USER MENU
-user.index.menu.my_profile:             My Profile
-user.index.menu.list_partners:          List of partners AdService
-user.index.menu.list_users:             List of users AdService
-user.index.menu.list_popups:            List of popups AdService
-user.index.menu.list_workshops:         List of workshops AdService
-user.index.menu.list_incidences:        List of incidences AdService
-user.index.menu.list_statistics:        List of statistics AdService
-user.index.menu.create_incidence_admin: Create incidence as Admin
-user.index.menu.my_tickets:             My Tickets
-user.index.menu.my_incidences:          My Incidences
+www.ad-service.es: "www.ad-service.es"
 
-# COMUNES
-home:      Home 
-admin:     Admin
-assessor:  Assessor
-user:      User
-date:      Date
-workshop:  Workshop
-ticket:    Ticket
-car:       Car
-post:      Post
-incidence: Incidence
+login:			"Login"
+login.welcome:	"Access to AD Service users"
+login.remember:	"Remember me"
+logout:			"Logout"
+
+menu.title_admin:                    "Admin MENU"
+menu.title_assessor:                 "Assessor MENU"
+menu.title_user:                     "User MENU"
+menu.title_ad:                       "Partner MENU"
+
+menu.profile:                        "My Profile"
+menu.list_statistics:                "See Statistics"
+menu.list_users:                     "Users"
+menu.list_partners:                  "Partners"
+menu.list_shops:                     "Shops"
+menu.list_workshops:                 "Workshops"
+menu.list_typologies:				 "Typologies"
+menu.list_diagnosis_machines:		 "Diagnosis Machines"
+menu.list_tickets:                   "Tickets"
+menu.list_popups:                    "Popups"
+menu.list_orders: 			 	     "Pending Orders"
+menu.list_sentences:				 "Sentences"
+
+menu.asign_user_to_ticket:           "Assign Tickets to Users"
+menu.asign_shop_to_workshop:		 "Assign Workshops to Shops"
+menu.new_ticket:                     "Create a new ticket"
+menu.new_shop_order: 				 "Order a new Shop"
+menu.new_workshop_order:             "Order a new Workshop"
+order_edit: 						 "Order a data modification"
+
+#COMUNES
+id: 					 "id"
+you: 					 "You"
+yes: 					 "yes"
+no:  					 "no"
+all:  					 "All"
+home: 					 "Home"
+contact:				 "Contact"
+language:				 "Language"
+datauser:    			 "User info"
+dataworkshop:			 "Workshop info"
+datashop:				 "Shop info"
+username:				 "Username"
+password:				 "Password"
+old_password:		     "Current Password"
+new_password:		     "New Password"
+repeat_password:		 "Repeat password"
+generate_password: 		 "Generate Password"
+change_password: 		 "Change Password"
+change_password.confirm: "Do you want to generate a new password for this user?"
+change_password.correct: "Password changed successfully. An email will be sent to the user with their new credentials."
+change_password.error:   "Incorrect Password. Enter the current password correctly."
+error:                   "An error has occurred"
+error.same_password:	 "The passwords don't match"
+error.length_password:	 "The password must have 8 characters at least"
+error.old_password:	 	 "The password inserted don't match with the actual password"
+error.access.IE:		 "Browser not compatible"
+error.access.IE2:		 "Unable to access with the Internet Explorer browser."
+error.access.IE3:		 "For the complex functionality requires access to standards-compliant browsers such as Mozilla Firefox, Google Chrome or Apple Safari."
+error.first_number:             "The first available number is: "
+error.code_partner.used:        "The Partner Code is already in use, the first available number is: "
+error.bad_introduction:         "Error! You have not entered the values correctly"
+error.bad_introduction.ticket:  "Error! You have not entered the ticket values correctly"
+error.msg_length:               "Error! The message can not exceed 150 characters"
+error.msg_solution:             "Error! You must enter a solution"
+error404.ticket:                "Tickets of this type not founded"
+error.bad_introduction.name:    "I cannot insert the name '...'"
+error.access:                   "You not have access to this section"
+error.file:             		"Error! Only supported files with extension.jpeg, .gif, .png, .pdf, .bmp, or .ppt"
+error.file_size:             	"Error! The file must be no larger than "
+isNaN:							"Phone fields must contain only numbers"
+Bad credentials: 				"Bad credentials"
+The presented password is invalid.: "The presented password is invalid"
+The presented password cannot be empty.: "The presented password cannot be empty"
+username_used:					"The name entered already exists or is incorrect, try: "
+
+#ENTITY
+role:					 "Role"
+ROLE_SUPER_ADMIN: 		 "Super Admin"
+ROLE_ADMIN: 			 "Admin"
+ROLE_ASSESSOR: 			 "Assessor"
+ROLE_USER: 				 "User"
+ROLE_SUPER_AD:  		 "Super Partner"
+ROLE_AD:  				 "Partner"
+super_admin: 			 "Super Admin"
+admin: 					 "Admin"
+assessor: 				 "Assessor"
+user: 					 "User"
+super_ad:  				 "Super Partner"
+ad:  					 "Partner"
+partner:				 "Partner"
+shop:	 				 "Shop"
+workshop: 				 "Workshop"
+typology:		 		 "Typology"
+diagnosis_machine:		 "Diagnosis Machine"
+diagnosis_machines:		 "Diagnosis Machines"
+ticket: 				 "Ticket"
+sentence:		 		 "Sentence"
+car: 					 "Car"
+post: 					 "Messages"
+order:					 "Order"
+incidence:				 "Incidence"
+info:				 	 "Information"
+
+#CONTACT
+name:					 "Name"
+surname:				 "Surname"
+tel:					 "Phone"
+mobile:					 "Movile"
+phone_number_1:			 "Phone Number 1"
+phone_number_2:			 "Phone Number 2"
+movile_number_1:		 "Movile Number 1"
+movile_number_2:		 "Movile Number 2"
+fax:					 "Fax"
+email:					 "Email"
+email_1:				 "Email 1"
+email_2:				 "Email 2"
+country:				 "Country"
+region:					 "Region"
+city:					 "City"
+address:				 "Address"
+postal_code:			 "Postal Code"
+
+created_by:				 "Created By"
+created_at:				 "Created At"
+modified_by:			 "Modified By"
+modified_at:			 "Modified At"
+
+#FIELDS
+date: 					 "Date"
+date.start: 			 "Start Date"
+date.end: 				 "End Date"
+code:					 "Code"
+code_partner:			 "Partner Code"
+code_workshop:			 "Workshop Code"
+code_numeric:			 "The code is not a number"
+code_error:				 "The code is not correct"
+status:					 "Status"
+testing:				 "Testing"
+adsplus:				 "With ADService +"
+profile_of:				 "Profile of"
+insert_gas_table:		 "Insert gas table"
+gas_table:				 "Gases values: \n   O2: \n   CO: \n   CO2: \n   HC: \n   Lambda: "
+
+#STATUS
+actions: 				 "Actions"
+open: 					 "Open"
+closed: 				 "Closed"
+active: 				 "Active"
+inactive: 				 "Inactive"
+create:					 "Created"
+edited: 				 ·Edited"
+rejected:				 "Rejected"
+cancel:					 "Canceled"
+action: 				 "Action"
+reason: 				 "Reason"
+resend: 				 "Resend"
+reject:		 			 "Reject"
+accept:		 			 "Accept"
+action.create:	 		 "Create"
+action.active: 			 "Activate"
+action.inactive:		 "Deactivate"
+action.modify:	    	 "Modify"
+action.reject:	    	 "Reject"
+action.rejected:		 "Rejected"
+action.accepted:		 "Accepted"
+action.cancel:			 "Cancelled"
+action.resend:			 "Resended"
+change:					 "Change"
+of:						 "of"
+to:						 "to"
+back:					 "Back"
+before:					 "Before"
+after:					 "After"
+
+#NEW
+new.partner:			 "New Partner"
+new.shop:				 "New Shop"
+new.workshop:			 "New Workshop"
+new.user:				 "New User"
+new.ticket:				 "New Ticket"
+new.typology:			 "New Typology"
+new.diagnosis_machine:   "New Diagnosis Machine"
+new.popup:				 "New Popup"
+new.order.shop:			 "New Shop Order"
+new.order.workshop:		 "New Workshop Order"
+new.sentence:			 "New Sentence"
+
+#EDIT
+edit.partner:			 "Edit Partner"
+edit.shop:				 "Edit Shop"
+edit.workshop:			 "Edit Workshop"
+edit.user:			 	 "Edit User"
+edit.car:				 "Edit Car"
+edit.ticket:			 "Edit Ticket"
+edit.ticket.info:		 "Edit Ticket Info"
+edit.typology:			 "Edit Typology"
+edit.diagnosis_machine:  "Edit Diagnosis Machine"
+edit.popup:				 "Edit Popup"
+edit.order.shop:		 "Edit Shop Order"
+edit.order.workshop:	 "Edit Workshop Order"
+edit.sentence:			 "Edit Sentence"
+
+#ANY
+any.partner:			 "No partners!!"
+any.shop:				 "No shops!!"
+any.workshop:			 "No workshops!!"
+any.ticket:				 "No tickets!!"
+any.typology:			 "There are no typologies!!"
+any.diagnosis_machine:   "There are no Diagnosis Machines!!"
+any.popup:				 "No popups!!"
+any.response:			 "There are no answers"
+any.order.pending: 		 "There are no pending orders!!"
+any.order.rejected: 	 "There are no rejected orders!!"
+any.incidence: 			 "There are no incidences!!"
+any.sentence:			 "There are no sentences!!"
+
+#BOTONES
+btn.send:			 	 "Send"
+btn.create:			 	 "Create"
+btn.create_close:	 	 "Create and Close"
+btn.edit:			 	 "Edit"
+btn.search:			 	 "Search"
+btn.open:			 	 "Open"
+btn.close:			 	 "Close"
+
+#PLACEHOLDERS
+placeholder.ticket.id:	 "Insert ticket ID"
+
+#COUNTRY
+spain: 					 "Spain"
+andorra:				 "Andorra"
+france:					 "France"
+portugal:				 "Portugal"
+
+#LANGUAGE
+english:				 "English"
+en:						 "English"
+spanish:				 "Spanish"
+es: 					 "Spanish"
+french:				     "French"
+fr:						 "French"
+portuguese:				 "Portuguese"
+pt:						 "Portuguese"
+
+#IMPORTANCE
+information:			 "Information"
+specific_information:	 "Specific Information"
+diagnosis_and_repair:	 "Diagnosis and Repair"
+advanced_diagnostics:	 "Advanced Diagnostics"
+
+#SYSTEM
+CARROCERÍA:						"Body"
+CONFORT: 						"Comfort"
+DIRECCION: 						"Steering"
+ELECTRICIDAD:					"Electricity"
+FRENOS:							"Brakes"
+MOTOR DIESEL:					"Diesel Engine"
+MOTOR GASOLINA:		 		 	"Gasoline Engine"
+PROGRAMACION Y CODIFICACION: 	"Programming and Coding"
+SEGURIDAD:					 	"Safety"
+SUSPENSION:				 	 	"Suspension"
+TRANSMISION:			 	 	"Transmission"
+VARIOS:				 			"Various"
+
+#SUBSYSTEM
+AIRBAG:							"Airbag"
+ALARMAS:						"Alarms"
+ALIMENT. / INYECCION:			"Power / Inyection"
+ALIMENTACION / INYECCION:		"Power / Inyection"
+ANTICONTAMINACION:				"Anti-pollution"
+"ANTICONTAMINACION ":			"Anti-pollution"
+ASIENTOS CALEFACTADOS:			"Heated Seats"
+ASIENTOS MEMORIZADOS:			"Seats Stored"
+AUDIO:							"Audio"
+AYUDA AL APARCAMIENTO:			"Parking AID"
+CAJA DE CAMBIOS:				"Transmission"
+CAPOTA:							"Hood"
+CIERRE CENTRALIZADO:			"Central Locking"
+CINTURONES:						"Belt"
+CLIMATIZACION:					"Air conditioning"
+CONTROL DE PRESION DE RUEDAS:	"Wheels Pressure Control"
+COTAS DE CARROCERIA:			"Body Dimensions"
+ELECTRIC / ELECTRONICA:			"Electric / Electronic"
+ELECTRICIDAD / ELECTRONICA:		"Electric / Electronic"
+ELEMENTOS EXTERIORES:			"Foreign Elements"
+ELEMENTOS INTERIORES:			"Interior Elements"
+ELEVALUNAS:						"Electric Window"
+EMBRAGUE:						"Clutch"
+GEST. ELECTRONICA:				"Electronic Management"
+GESTI. ELECTRONICA:				"Electronic Management"
+GESTION ELECTRONICA:			"Electronic Management"
+ILUMINACION:					"Lighting"
+INSTALACION:					"Installation"
+INSTRUMENTACION:				"Instrumentation"
+JUNTAS HOMOCINETICAS:			"CV joints"
+LIMPIA / LAVAPARABRISAS:		"Window Clean/Whasher"
+LUNAS:							"Windscreen"
+MECANICA:						"Mechanics"
+MECANICA DE FRENOS:				"Mechanical Brakes"
+MECANICA DE LA DIRECCION:		"Mechanical Steering"
+MECANICA DE SUSPENSION:			"Mechanical Suspension"
+MECANICA DIESEL:				"Diesel Mechanics"
+MULTIPLEXADO:					"Multiplex"
+NAVEGACION:						"Navigation"
+PROG. DE UNIDADES:				"Prog. Units"
+REFRIGERACION:					"Refrigeration"
+REFRIGERACION DIESEL:			"Cooling Diesel"
+RESET DE SERVICIO:				"Reset Service"
+RESTO DE LA TRANSMISION:		"Rest of Transmission"
+SINCR. MANDOS DISTANCIA:		"Remote Control Sync."
+SISTEMA DE ARRANQUE:			"Starting System"
+SISTEMA DE CARGA:				"Charging System"
+TECHO SOLAR:					"Sunroof"
+TRANSPONDER:					"Transponder"
+VARIOS:							"Various"
+"VARIOS ":						"Various"
+VARIOS CARROCERIA:				"Various Body"
+
+
+#PARTNER
+partner.delete:			 "Delete Partner"
+partner.delete.confirm:	 "Are you sure you want to delete this Partner?"
+
+#SHOP
+shop.is_assigned:		 "This shop has workshops assigned. Reassign to delete"
+shop.activate:			 "Active Shop"
+shop.deactivate:		 "Deactive Shop"
+shop.delete:			 "Delete Shop"
+shop.delete.confirm:	 "Are you sure you want to delete this Shop?"
+
+#WORKSHOP
+workshops:				 "Workshops"
+code_workshop:			 "Workshop Code"
+typology:				 "Typology"
+cif:					 "Cif"
+internal_code:			 "Internal Code"
+ad_service_plus:		 "AD Service +"
+test:					 "Test"
+endtest:				 "In tests to"
+diagnosis_machines:		 "Diagnosis Machines"
+conflictive:			 "Conflictive"
+observations:			 "Observations"
+any_observation:		 "No comments"
+observations_workshop:	 "Workshop Observations"
+observations_assessor:	 "Assessor Observations"
+observations_admin:		 "Admin Observations"
+workshop.delete:		 "Delete Workshop"
+workshop.delete.confirm: "Are you sure you want to delete this Workshop?"
+workshop.activate:		 "Active Workshop"
+workshop.deactivate:	 "Deactive Workshop"
+workshop.search:		 "Search Workshop"
+users_in_workshop:		 "Users from Workshop"
+order_details:		 	 "Show order details"
+workshop_details:		 "Show workshop details"
+workshop_inactive:		 "The workshop is disabled or not exist"
+workshop_confirm:		 "We found more than one workshop "
+workshop_name:		 	 "Workshop name"
+workshop_observation:	 "Workshop observations"
+workshop.show_details:          "Show workshop details"
+reactivation-request:           "Pedir la desactivación del taller"
+
+#USER
+user.delete:			 "Delete User"
+user.delete.confirm:	 "Are you sure you want to delete this User?"
+select_user_type:		 "Select the type of the new user"
+anonimo:				 "Anonymous"
+
+#CAR
+brand:					 "Brand"
+model:					 "Model"
+version:				 "Version"
+year:					 "Year"
+motor:					 "Motor"
+kw:						 "kW"
+displacement:			 "Displacement"
+vin:					 "Vin"
+plate_number:			 "Plate Number"
+
+#APP
+app:					 "Aplications"
+dis:					 "DIS-NET"
+dis-url:				 "http://dis-net.com/home"
+vts:					 "EinaVTS"
+vts-url:				 "http://einavts.com/en/app"
 
 #TICKET
-ticket.history.title:     Tickets History  
-ticket.opt.assigned :     Show assigned tickets 
-ticket.opt.not_assigned : Show not assigned tickets          
-ticket.opt.all:           Show all tickets                   
-ticket.opt.all_open:      Show all tickets opened                  
-ticket.opt.all_closed:    Show all tickets closed             
-ticket.opt.owner:         Show your tickets             
-ticket.opt.workshop:      Show tickets in your workshop
+tickets:					  "Tickets"
+answer: 					  "Answer"
+description: 				  "Description"
+solution:					  "Solution"
+assigned:					  "Assigned"
+assigned_to:			      "Assigned to"
+assign_to:					  "Assign"
+assign_not:					  "Not assigned"
+importance:					  "Importance"
+system:					 	  "System"
+subsystem:					  "Subsystem"
+sentence:				 	  "Sentence"
 
-#INCIDENCE
-incidence.history.title:  Incidence History         
-incidence.opt.all:        Show all incidences          
-incidence.opt.owner:      Show your incidences             
-incidence.opt.workshop:   Show incidences in your workshop     
-incidence.list:           List of Incidences
+ticket_assigned:			  "Assigned ticket"
+ticket_assign_not:			  "Not assigned ticket"
+ticket_closed:				  "Ticket cerrado"
+ticket_info:				  "Ticket info"
+ticket.history.title:         "Tickets Hystory"
+ticket.history.check:         "Check ticket history"
+ticket.inactive:			  "Inactive tickets"
+ticket.opt.all:               "All Tickets"
+ticket.opt.open:              "Opened Tickets"
+ticket.opt.closed:            "Closed Tickets"
+ticket.opt.free :             "Free Tickets"
+ticket.opt.pending:  		  "Pending Tickets"
+ticket.opt.answered: 		  "Answered Tickets"
+ticket.opt.all_mine: 		  "All my tickets"
+ticket.opt.assessor.pending:  "Your Pending Tickets"
+ticket.opt.assessor.answered: "Your Answered Tickets"
+ticket.opt.assessor.closed:   "Your Closed Tickets"
+ticket.opt.other.pending:     "Other Pending Tickets"
+ticket.opt.other.answered:    "Other Answered Tickets"
+ticket.opt.other.closed:      "Other Closed Tickets"
+ticket.opt.owner:             "Your tickets"
+ticket.opt.workshop:          "Tickets from your Workshop"
+ticket.opt.inactive:		  "Inactive Tickets"
+
+ticket.title.from_workshop:   "Tickets from Workshop"
+ticket.assign:				  "Assign ticket"
+ticket.assigned_to:			  "Assigned to"
+ticket.working_on:			  "Ours assessors are working on this ticket right now. You will receive a reply soon. Thank you."
+ticket.show:				  "Show ticket"
+ticket.flt.searchBy.id:		  "Search ticket by ID"
+ticket.flt.searchBy.car:	  "Search ticket by car"
+ticket.search:				  "Search ticket"
+ticket.block:				  "Block ticket to answer"
+ticket.blocked:				  "Ticket blocked"
+ticket.unlock:				  "Unlock ticket"
+ticket.close:				  "Close Ticket"
+ticket.close_as_instructions: "Followed advisor instructions"
+ticket.close_irreparable car: "The car is irreparable"
+ticket.close_other:			  "Other"
+ticket.closed:				  "Ticket closed"
+ticket.reopen:				  "Reopen ticket"
+ticket.delete:				  "Delete Ticket"
+ticket.delete.confirm:		  "Are you sure you want to delete this ticket?"
+ticket.from_workshop:		  "Tickets from Workshop"
+ticket.similar:				  "Similar Tickets"
+ticket.similar.matching:	  "Select Model and Subsystem for matching similar tickets"
+ticket_blocked_by:			  "Ticket blocked by "
+ticket_at:					  "at date "
+ticket_reassign:			  "Unlock and reassign"
+filter_by_year: 			  "Filter by year"
+filter_by_motor: 			  "Filter by motor"
+filter_by_type:				  "Ticket type"
+filter_by_rows:				  "Number of rows"
+filter_by_country:			  "Filter by country"
+
+sentence.default:			  "Default sentences..."
+
+#POST
+reply:						  "Answer"
+tracing:					  "Tracing"
+
+#FILE
+file.download:				  "Download file"
+statistics.download:		  "Download statistics"
+
+#STATISTIC
+statistic.general:			  "General Statistics"
+statistic.tickets:			  "Ticket Statistics"
+statistic.workshops:		  "Workshop Statistics"
+statistic.from_adservice:	  "from Ad-service"
+statistic.from_country:		  "from your country"
+statistic.num_users:		  "Number of Users"
+statistic.num_partners:		  "Number of Partners"
+statistic.num_shops:		  "Number of Shops"
+statistic.num_workshops:	  "Number of Workshops"
+statistic.num_tickets:		  "Number of Tickets"
+statistic.num_tickets.open:	  "Number of Open Tickets"
+statistic.num_tickets.closed: "Number of Closed Tickets"
+statistic.last_tickets:		  "Last workshop tickets"
+statistic.no_ticket:		  "Workshop without tickets"
+
+#POPUP
+popup.delete:				  "Delete popup"
+popup.delete.confirm:		  "Are you sure you want to delete this popup?"
+
+#ORDERS
+values:							"Values"
+workshop_pending:			  	"Pending Workshop Orders"
+workshop_rejected:				"Rejected Workshop Orders"
+shop_pending:					"Pending Shop Orders"
+shop_rejected:					"Rejected Shop Orders"
+
+order.details:					"Order Details"
+order.cancel:					"Cancel Order"
+order.resend:					"Resend Order"
+order.recreate:					"Recreate the order after revise errors"
+list.shop.pending:				"Pending Shop Orders"
+list.shop.rejected:				"Rejected Shop Orders"
+list.workshop.pending:			"Pending Workshop Orders"
+list.workshop.rejected:			"Rejected Workshop Orders"
+reject.reason:					"Reject reason"
+
+#PAGINATION
+page.first:						"First page"
+page.prev:						"Previous page"
+page.goto:						"Go to page"
+page.next:						"Next page"
+page.last:						"Last page"
+
+#MAIL
+mail.image:								"http://ad-service.es/testproject/web/logo_adservice.png"
+mail.info.tel:							"610 40 09 16"
+mail.info.more:							"More info:"
+mail.testing:		                	"In tests to "
+mail.goto_ticket:						"Go to ticket"
+
+mail.newTicket.subject:					"ADService | Ticket created with id #"
+mail.newTicket.title:					"A ticket has been created"
+mail.newTicket.createdby:				"This ticket has been created by phone with:"
+mail.newTicket.createdby.user:			"This ticket has been created through AD-Service Platform."
+mail.newTicket.info:					"To access to this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.newTicket.info.id:					"The reference number of the Ticket is:"
+
+mail.editTicket.subject:				"ADService | Ticket edited with id #"
+mail.editTicket.title:					"A ticket has been edited"
+mail.editTicket.createdby:				"This ticket has been edited by phone with:"
+mail.editTicket.createdby.user:			"This ticket has been edited through AD-Service Platform."
+mail.editTicket.info:					"To check or change this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.editTicket.info.id:				"The reference number of the Ticket is:"
+
+mail.deleteTicket.subject:				"ADService | Ticket deleted with id #"
+mail.deleteTicket.title:				"A ticket has been deleted"
+mail.deleteTicket.createdby:			"This ticket has been deleted by:"
+mail.deleteTicket.createdby.user:		"This ticket has been deleted through AD-Service Platform."
+mail.deleteTicket.info:					"To check your tickets enter in  <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.deleteTicket.info.id:				"The reference number of the deleted Ticket was:"
+
+mail.closeTicket.subject:				"ADService | Ticket closed with id #"
+mail.closeTicket.title:					"A ticket has been closed"
+mail.closeTicket.createdby:				"This ticket has been closed by:"
+mail.closeTicket.createdby.user:		"This ticket has been closed through AD-Service Platform."
+mail.closeTicket.info:					"To access to this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.closeTicket.info.id:				"The reference number of the closed Ticket is:"
+
+mail.reopenTicket.subject:				"ADService | Ticket reopened with id #"
+mail.reopenTicket.title:				"A ticket has been reopened"
+mail.reopenTicket.createdby:			"This ticket has been reopened by:"
+mail.reopenTicket.createdby.user:		"This ticket has been reopened through AD-Service Platform."
+mail.reopenTicket.info:					"To access to this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.reopenTicket.info.id:				"The reference number of the reopened Ticket is:"
+
+mail.answerTicket.subject:				"ADService | Ticket answered with id #"
+mail.answerTicket.title:				"A ticket has been answered"
+mail.answerTicket.createdby:			"This ticket has been answered by:"
+mail.answerTicket.createdby.user:		"This ticket has been answered through AD-Service Platform."
+mail.answerTicket.info:					"To access to this ticket enter the ticket reference code in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.answerTicket.info.id:				"The reference number of the answered Ticket is:"
+
+mail.newOrder.subject:					"ADService | New Order with id #"
+mail.newOrder.title:					"A new Workshop Order has been created"
+mail.newOrder.shop.title:				"A new Shop Order has been created"
+mail.newOrder.createdby:				"This Order has been created by:"
+mail.newOrder.createdby.user:			"This Order has been created through AD-Service Platform."
+mail.newOrder.info:						"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.newOrder.info.id:					"The reference number of the order is:"
+
+mail.editOrder.subject:					"ADService | Edit Order with id #"
+mail.editOrder.shop.title:				"An edit Shop Order has been created"
+mail.editOrder.shop.createdby:			"This Shop has been edited by:"
+mail.editOrder.shop.createdby.user:		"This Shop has been edited through AD-Service Platform."
+mail.editOrder.title:					"An edit Workshop Order has been created"
+mail.editOrder.createdby:				"This Workshop has been edited by:"
+mail.editOrder.createdby.user:			"This Workshop has been edited through AD-Service Platform."
+mail.editOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.editOrder.info.id:					"The reference number of the order is:"
+
+mail.changeOrder.subject:				"ADService | Activation/deactivation Order with id #"
+mail.changeOrder.shop.title:			"A modify Shop Order has been created"
+mail.changeOrder.shop.createdby:		"This Shop has been edited by:"
+mail.changeOrder.shop.createdby.user:	"This Shop has been edited through AD-Service Platform."
+mail.changeOrder.title:					"A modify Workshop Order has been created"
+mail.changeOrder.createdby:				"This Workshop has been edited by:"
+mail.changeOrder.createdby.user:		"This Workshop has been edited through AD-Service Platform."
+mail.changeOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.changeOrder.info.id:				"The reference number of the order is:"
+
+mail.rejectOrder.subject:				"ADService | Rejected Order with id #"
+mail.rejectOrder.title:					"The rejected Order is of "
+mail.rejectOrder.createdby:				"This Order has been edited by:"
+mail.rejectOrder.createdby.user:		"This Order has been edited through AD-Service Platform."
+mail.rejectOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.rejectOrder.info.id:				"The reference number of the order is:"
+
+mail.acceptOrder.subject:				"ADService | Order accepted for the Workshop with id #"
+mail.acceptOrder.shop.subject:			"ADService | Order accepted for the Shop with id #"
+mail.acceptOrder.title:					"The accepted Order is of "
+mail.acceptOrder.createdby:				"This Order has been accepted by:"
+mail.acceptOrder.createdby.user:		"This Order has been accepted through AD-Service Platform."
+mail.acceptOrder.info:					"To access to this Workshop enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.acceptOrder.shop.info:				"To access to this Shop enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.acceptOrder.info.id:				"The reference number of the Workshop is:"
+mail.acceptOrder.shop.info.id:			"The reference number of the Shop is:"
+
+mail.removeOrder.subject:				"ADService | Order cancelled with id #"
+mail.removeOrder.title:					"The Order cancelled was of "
+mail.removeOrder.createdby:				"This Order has been cancelled by:"
+mail.removeOrder.createdby.user:		"This Order has been cancelled through AD-Service Platform."
+mail.removeOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.removeOrder.info.id:				"The reference number of the Workshop is:"
+mail.removeOrder.shop.info.id:			"The reference number of the Shop is:"
+
+mail.resendOrder.subject:				"ADService | Order resended with id #"
+mail.resendOrder.title:					"The resended Order is of "
+mail.resendOrder.createdby:				"This Order has been resended by:"
+mail.resendOrder.createdby.user:		"This Order has been resended through AD-Service Platform."
+mail.resendOrder.info:					"To access to this Order enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+mail.resendOrder.info.id:				"The reference number of the order is:"
+
+mail.newUser.subject:					"ADService | New User for the Workshop "
+mail.newUser.title:						"A new User for AD-Service Platform has been created"
+mail.newUser.createdby:					"This User has been created through AD-Service Platform."
+mail.newUser.info:						"For more information go to <a href='http://www.ad-service.es'>www.ad-service.es</a> "
+mail.newUser.info.tel:					"or call by Phone "
+mail.newUser.info.id:					"Your Workshop Code is:"
+mail.newUser.user:						"Your User Name is:"
+mail.newUser.password:					"Your Password is:"
+mail.newUser.info.password:				"For modify your Password enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+
+mail.changePassword.subject:			"ADService | New Password for User "
+mail.changePassword.title:				"The Password for User has been changed through AD-Service Platform."
+mail.changePassword.createdby:			"This modification has been executed by:"
+mail.changePassword.createdby.user:		"This modification has been executed through AD-Service Platform."
+mail.changePassword.info:				"For more information go to <a href='http://www.ad-service.es'>www.ad-service.es</a> "
+mail.changePassword.info.tel:			"or call by Phone "
+mail.changePassword.info.id:			"Your Workshop Code is:"
+mail.changePassword.user:				"Your User Name is:"
+mail.changePassword.password:			"Your New Password is:"
+mail.changePassword.info.password:		"For modify your Password enter in <a href='http://www.ad-service.es'>www.ad-service.es</a> section "
+
+mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be in the nature of reserved. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized, may be illegal. If you are not the addressee, please proceed to remove its contents."
+_mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be in the nature of reserved. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized, may be illegal. If you are not the addressee, please proceed to remove its contents. <b>soporte@ad-service.com</b>"
 
 
-############################
-########### OLD ############
-############################
+#HISTORICO
+lock.list_incidences: 	"Incidences History"
 
+error: An error has occurred
+back:  Back to the application
 
-
-# Pantalla principal
-New ticket: New ticket
-My tickets: My tickets
-Technical information: Technical information
-Select language: Select language
-Logout: Logout
-Not logged in: Not logged in
-Welcome: Welcome
-
-# Titulos
-Login: Login
-
-# Login
-Username: Username
-Password: Password
-
-# Index
-Start menu: Start page
-New ticket: New ticket
-Ticket list: Ticket list
-User configuration: User configuration
-
-# Formulario de ticket
-Brand: Brand
-Model: Model
-Version: Version
-System: System
-Subsystem: Subsystem
-Description: Description
-Photo attachment: Photo attachment
-I want a technical expert to call me back: I want a technical expert to call me back
-Upload: Upload
-Send ticket: Send ticket
-Fill the following fields before sending the ticket: Fill the following fields before sending the ticket
-
-Select brand first: Select brand first
-Select model first: Select model first
-Select system first: Select system first
-
-Brand not specified: Brand not specified
-Model not specified: Model not specified
-Version not specified: Version not specified
-System not specified: System not specified
-Subsystem not specified: Subsystem not specified
-
-Loading models from: Loading models from
-Loading versions from: Loading versions from
-Loading subsystems from: Loading subsystems from
+termsConditions: 	" "
+_termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
+footerText: 	 	© Grup Eina Digital · Center of Innovation and Resources

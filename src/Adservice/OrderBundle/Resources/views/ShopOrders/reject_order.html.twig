@@ -1,0 +1,22 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    <h1>{% trans %} reject.reason {% endtrans %}</h1>
+
+     <form action="{{ path('shopOrder_reject', { 'id': shopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <label for="rejection_reason">{# {% trans %} reject.reason {% endtrans %} #}</label>
+        {{ form_widget(form.rejection_reason) }}<br/>
+
+        {{ form_rest(form) }}
+        <p>
+            <button type="submit" class="btn btn-default">{% trans %} btn.send {% endtrans %}</button>
+        </p>
+
+     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+{% endblock %}

@@ -38,7 +38,7 @@ class Language {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -81,7 +81,7 @@ class Language {
     }
 
     public function __toString() {
-        return $this->getShortName();
+        return $this->getLanguage();
     }
 
 }

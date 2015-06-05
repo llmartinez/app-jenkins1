@@ -1,0 +1,27 @@
+
+    <legend>{% trans %} ticket_info {% endtrans %}</legend>
+
+    <legend>{% trans %} description {% endtrans %}</legend>
+        <p> {{ ticket.description }} </p>
+
+        {% if ticket.assignedTo != "" %}    <p><b>{% trans %} assigned_to {% endtrans %}: </b> {{ ticket.assignedTo }} </p>{% endif %}
+
+        {% if is_granted('ROLE_ASSESSOR') %}
+            {% include 'TicketBundle:Ticket:edit_ticket_info.html.twig' %}
+
+            <div class="col-xs-12 col-md-12 margined"> {% else %} <div> {% endif %}
+
+            <legend>{% trans %} solution {% endtrans %}</legend>
+            {{ form_widget(form.solution, { 'attr': {'class': 'form-control'} }) }}
+
+        {% if not is_granted('ROLE_ASSESSOR') %}
+            <div id="sol_other">
+                <label> {% trans %} description {% endtrans %} </label>
+                <input type="text" id="sol_other_txt" name="sol_other_txt" class="form-control">
+            </div>
+        {% endif %}
+        </div>
+
+        {{ form_rest(form) }}
+
+        <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.close {% endtrans %} </button>

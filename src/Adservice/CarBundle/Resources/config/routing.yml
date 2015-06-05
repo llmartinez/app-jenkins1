@@ -1,10 +1,7 @@
 ###########################
 #   APDO. AJAX   #
 ###########################
-car_model: 
-    pattern: /carModel
-    defaults: { _controller: CarBundle:Default:carModel }
-    
-car_version: 
-    pattern: /carVersion
-    defaults: { _controller: CarBundle:Default:carVersion }
+
+editCar:
+    pattern:  /car/edit/{id}
+    defaults: { _controller: CarBundle:Car:editCar }

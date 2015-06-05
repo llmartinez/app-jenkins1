@@ -1,5 +1,5 @@
 security:
-    
+
     firewalls:
         main:
             pattern: /.*
@@ -16,27 +16,40 @@ security:
             security: true
             remember_me:
                 key:      "%secret%"
-                lifetime: 604800
-                path:     ^/
-                domain:   ~ 
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~ # Defaults to the current domain from $_SERVER
 
     providers:
         usuarios:
             entity: { class: Adservice\UserBundle\Entity\User, property: username }
-    
+
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
+        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_SUPER_AD]
         ROLE_ASSESSOR: ROLE_USER
-#        ROLE_ADMIN: ROLE_USER
-#        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
+        ROLE_SUPER_AD: ROLE_AD
 
     access_control:
-      - { path: ^/(es|en|fr)/user/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/ticket/edit, roles: [ROLE_ASSESSOR] }
-      - { path: ^/incidence/new, roles: [ROLE_ASSESSOR] }
-      - { path: ^/incidence/create, roles: [ROLE_ASSESSOR] }
-      - { path: ^/incidence/edit, roles: [ROLE_ASSESSOR] }
-      - { path: ^/(es|en|fr)/user/, roles: [ROLE_USER, ROLE_ASSESSOR, ROLE_ADMIN] }
+      - { path: ^/(es|en|fr|pt)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
+      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD]         }
+      - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD]         }
+      - { path: ^/(es|en|fr|pt)/workshop/observation,       roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/ticket/workshopList,        roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
+      - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_ADMIN]                 }
+      # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN]           }
+      # - { path: ^/(es|en|fr|pt)/,                           roles: [ROLE_USER]                  }
 
-    encoders: 
+    encoders:
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }

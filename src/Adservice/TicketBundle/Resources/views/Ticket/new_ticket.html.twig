@@ -1,0 +1,40 @@
+
+    {% if (is_granted('ROLE_ASSESSOR')) %}
+    <legend>{% trans %} ticket_info {% endtrans %}</legend>
+
+    {% if app.session.hasFlash('error_ticket') %}
+        <p class="error">{{ app.session.getFlash('error_ticket') }}</p>
+    {% endif %}
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
+            {{ form_widget(form.importance, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="id_system">{% trans %} system {% endtrans %} *</label>
+            <select class="form-control" id="id_system" multiple="multiple", required>
+                {% for system in systems %}
+                    <option value="{{ system.id }}"> {{ system.name | trans }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-xs-4 col-md-4 form-group">
+            <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %} *</label>
+            {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control', 'multiple': 'multiple', 'required': 'required' } }) }}
+        </div>
+
+    {% endif %}
+        <div class="form-group">
+            <label for="new_ticket_form_description">{% trans %} description {% endtrans %} *</label>
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5', 'placeholder': "description" | trans  } }) }}
+        </div>
+
+        {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+
+        <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
+
+        {{ form_rest(formD) }}
+
+    {{ form_widget(form._token) }}

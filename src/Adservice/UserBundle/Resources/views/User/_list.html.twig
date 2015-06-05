@@ -1,0 +1,50 @@
+<table class="table table-hover" style="width: 90%; margin-left: 5%;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans %} username {% endtrans %}</th>
+            <th>{% trans %}          {% endtrans %}</th>
+            <th>{% trans %} name     {% endtrans %}</th>
+            <th>{% trans %} surname  {% endtrans %}</th>
+            <th>{% trans %} email    {% endtrans %}</th>
+            <th>{% trans %} tel      {% endtrans %}</th>
+            <th>{% trans %} actions  {% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+         {% for user in users %}
+            <tr>
+                <td>{{ user.id           }}</td>
+                <td>{{ user.username     }}</td>
+                <td>{% if user.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ user.name         }}</td>
+                <td>{{ user.surname      }}</td>
+                <td>{{ user.email1       }}</td>
+                <td>{{ user.phoneNumber1 }}</td>
+                <td>
+                    <a href="{{ path("user_edit", { 'id':user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                    <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{% trans %} delete.user {% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                {% trans %} delete.user.confirm {% endtrans %}
+            </div>
+            <div class="modal-footer">
+                <a href="{{ path('user_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

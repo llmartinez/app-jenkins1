@@ -1,9 +1,42 @@
+
+    $(document).ready(function() {
+        $( "input[id*='_password_password1']" ).addClass( "form-control" );
+        $( "input[id*='_password_password2']" ).addClass( "form-control" );
+        $( "label[for*='_password_password1']" ).text($('#pass_field1').val()+' *');
+        $( "label[for*='_password_password2']" ).text($('#pass_field2').val()+' *');
+
+        $('#slct_role').change(function() {
+            var role = $(this).val();
+            var country = $('#slct_country').val();
+            var route = 'user_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#slct_country').change(function() {
+            var country = $(this).val();
+            var role = $('#slct_role').val()
+            var route = 'user_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+
+        $('#btn_create').click(function() {
+            if ( isNaN($("input[id*='number_']").val())) {
+                $("input[id*='number_']").css('border-color','#FF0000');
+                alert($("#isNaN").val());
+                return false;
+            }
+        });
+    });
+
 /**
  * Rellena (populate) el combo de las provincias segun la comunidad autonoma seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax
  */
-function populate_province(url_ajax) {
-    var id_region = $('form[name=adservice_userbundle_usertype]').find('select[name*=region]').val();
+function populate_province(url_ajax, form_type) {
+    var id_region = $('form[name='+form_type+']').find('select[name*=region]').val();
 
     $.ajax({
         type: "POST",
@@ -12,9 +45,9 @@ function populate_province(url_ajax) {
         dataType: "json",
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
-            $('form[name=adservice_userbundle_usertype]').find('select[name*=province]').empty();
+            $('form[name='+form_type+']').find('select[name*=province]').empty();
             $.each(data, function(idx, elm) {
-                $('form[name=adservice_userbundle_usertype]').find('select[name*=province]').append("<option value=" + elm.id + ">" + elm.province + "</option>");
+                $('form[name='+form_type+']').find('select[name*=province]').append("<option value=" + elm.id + ">" + elm.province + "</option>");
             });
         },
         error: function() {
@@ -37,11 +70,14 @@ function confirm_delete_user_modal(user_id) {
  * Busca si se tiene que mostrar un POP UP nada mas entrar en la aplicación
  * Si es asi, lanza un modal con la informacion del popup
  */
-function find_popup(url_ajax) {
-    
+function find_popup() {
+
+    var route  = 'popup_get';
+    var locale = $(document).find("#data_locale").val();
+
     $.ajax({
         type: "POST",
-        url: url_ajax,
+        url: Routing.generate(route, {_locale: locale}),
         dataType: "json",
         success: function(data) {
             //solo mostramos el modal, si tenemos un popup que mostrar

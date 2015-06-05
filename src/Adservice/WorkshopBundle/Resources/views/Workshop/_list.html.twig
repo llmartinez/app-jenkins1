@@ -1,0 +1,45 @@
+{% if workshops|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>{% trans %} code     {% endtrans %}</th>
+                <th>{% trans %} workshop {% endtrans %}</th>
+                <th>{% trans %}          {% endtrans %}</th>
+                <th>{% trans %} partner  {% endtrans %}</th>
+                <th>{% trans %} shop     {% endtrans %}</th>
+                <th>{% trans %} email    {% endtrans %}</th>
+                <th>{% trans %} tel      {% endtrans %}</th>
+                <th>{% trans %} actions  {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for workshop in workshops %}
+            <tr>
+                <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
+                <td>{{ workshop.name }}</td>
+                <td>{% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ workshop.partner      }}</td>
+                <td>{{ workshop.shop         }}</td>
+                <td>{{ workshop.email1       }}</td>
+                <td>{{ workshop.phoneNumber1 }}</td>
+                {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}
+                    <td>
+                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                    </td>
+                {% endif %}
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+        {% include 'UtilBundle:Pagination:pagination_workshop.html.twig' %}
+{% else %}
+    {% trans %} any.workshop {% endtrans %}
+{% endif %}
+
+
+{% block javascripts %}
+
+    <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+
+{% endblock %}

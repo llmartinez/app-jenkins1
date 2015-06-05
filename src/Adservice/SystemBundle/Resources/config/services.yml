@@ -1,7 +1,0 @@
-parameters:
-#    system.example.class: Adservice\SystemBundle\Example
-
-services:
-#    system.example:
-#        class: %system.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

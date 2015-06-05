@@ -1,0 +1,160 @@
+
+    <legend>{% trans %} list.workshop.pending {% endtrans %}</legend>
+
+    {% if orders is defined %}
+        {% if orders|length > 0  %}
+            <table class="table table-hover" style="width: 95%; margin-left: 5%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                        <th>{% trans %} partner  {% endtrans %}</th>
+                        <th>{% trans %} shop     {% endtrans %}</th>
+                        <th>{% trans %} tel      {% endtrans %}</th>
+                        <th>{% trans %} region   {% endtrans %}</th>
+                        <th>{% trans %} test     {% endtrans %}</th>
+                        <th>{% trans %} order    {% endtrans %}</th>
+                        <th>{% trans %} actions  {% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for workshopOrder in orders %}
+
+                    {% if ordersBefore[workshopOrder.id] is defined %}
+                        {% set orderBefore = ordersBefore[workshopOrder.id] %}
+                    {% endif %}
+                        <tr>{# {% if orderBefore is defined and orderBefore.name         != workshopOrder.name         %} *{% endif %} #}
+                            <td> {{ workshopOrder.id           }} </td>
+                            <td> {{ workshopOrder.name         }} </td>
+                            <td> {{ workshopOrder.partner      }} </td>
+                            <td> {{ workshopOrder.shop         }} </td>
+                            <td> {{ workshopOrder.phoneNumber1 }} </td>
+                            <td> {{ workshopOrder.region       }} </td>
+                            <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
+                                 {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
+                            <td>
+                                    <a title="{% trans %} order_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_edit_{{ workshopOrder.id }}" ></a>
+                                    {% if workshopOrder.rejectionReason is not null %}
+                                        {# <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bund les/util/images/icon/tag_red.png') }}"></a> #}
+                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"> {% trans %} reject.reason {% endtrans %}</span></a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal_rejected_reason{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">{% trans %} reject.reason {% endtrans %}</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ workshopOrder.rejectionReason|nl2br }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                    {% endif %}
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal_edit_{{workshopOrder.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel">{% trans %} order.details {% endtrans %}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table table-hover">
+                                                    {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
+                                                        <tr><th>                                          </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ orderBefore.name            }}</td><td>{{ workshopOrder.name            }}</td></tr>
+                                                        <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ orderBefore.codeWorkshop    }}</td><td>{{ workshopOrder.codeWorkshop   }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner         }}</td><td>{{ workshopOrder.partner         }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif             }}</td><td>{{ workshopOrder.cif             }}</td></tr>
+                                                        <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ orderBefore.typology        }}</td><td>{{ workshopOrder.typology        }}</td></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ orderBefore.contact         }}</td><td>{{ workshopOrder.contact        }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ orderBefore.phoneNumber1    }}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ orderBefore.phoneNumber2    }}</td><td>{{ workshopOrder.phoneNumber2    }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ orderBefore.movileNumber1   }}</td><td>{{ workshopOrder.movileNumber1   }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ orderBefore.movileNumber2   }}</td><td>{{ workshopOrder.movileNumber2   }}</td></tr>
+                                                        <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ orderBefore.fax             }}</td><td>{{ workshopOrder.fax             }}</td></tr>
+                                                        <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ orderBefore.email1          }}</td><td>{{ workshopOrder.email1          }}</td></tr>
+                                                        <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ orderBefore.email2          }}</td><td>{{ workshopOrder.email2          }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country|trans   }}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
+                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ orderBefore.region          }}</td><td>{{ workshopOrder.region          }}</td></tr>
+                                                        <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ orderBefore.city            }}</td><td>{{ workshopOrder.city            }}</td></tr>
+                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ orderBefore.address         }}</td><td>{{ workshopOrder.address         }}</td></tr>
+                                                        <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ orderBefore.postalCode      }}</td><td>{{ workshopOrder.postalCode      }}</td></tr>
+                                                    {% else %}
+                                                        <tr><th>                                          </th><th>{% trans %}values{% endtrans %}</th></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.name            }}</td></tr>
+                                                        <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ workshopOrder.partner         }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ workshopOrder.cif             }}</td></tr>
+                                                        <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ workshopOrder.typology        }}</td></tr>
+                                                        <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.contact         }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
+                                                        <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber2    }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ workshopOrder.movileNumber1   }}</td></tr>
+                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ workshopOrder.movileNumber2   }}</td></tr>
+                                                        <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ workshopOrder.fax             }}</td></tr>
+                                                        <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
+                                                        <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
+                                                        <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
+                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
+                                                        <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
+                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>
+                                                        <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ workshopOrder.postalCode      }}</td></tr>
+                                                    {% endif %}
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+
+                                {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
+                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'activate' %}
+                                    <span class="label label-danger">  {% trans %} inactive      {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-success"> {% trans %} active        {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'deactivate' %}
+                                    <span class="label label-success"> {% trans %} active        {% endtrans %}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-danger">  {% trans %} inactive      {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'create' %}
+                                    <span class="label label-info">    {% trans %} action.create {% endtrans %}</span>
+                                {% elseif workshopOrder.action == 'rejected' %}
+                                    <span class="label label-danger">  {% trans %} rejected      {% endtrans %}</span>
+
+                                {% elseif workshopOrder.action == 'resend' and workshopOrder.rejectionReason is not null %}
+                                    <span class="label label-warning"> {% trans %} resend {% endtrans %} {{ workshopOrder.wantedaction }} </span>
+                                        <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
+                                {% endif %}
+                            </td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>
+                                    <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> </a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> </a>
+                                </td>
+                            {% elseif is_granted('ROLE_AD') %}
+                                <td>
+                                    <a title="{% trans %} cancel {% endtrans %}" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"></a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
+
+        {% else %}
+            {% trans %} any.order.pending {% endtrans %}
+        {% endif %}
+    {% else %}
+        {% trans %} any.order.pending {% endtrans %}
+{% endif %}

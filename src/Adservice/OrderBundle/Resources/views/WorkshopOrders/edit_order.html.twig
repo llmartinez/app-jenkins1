@@ -1,0 +1,90 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active">{% trans %} edit.order.workshop {% endtrans %}</li>
+    </ol>
+
+    <h1>{% trans %} edit.order.workshop {% endtrans %} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b></h1>
+
+    <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-4 col-md-4">
+                <label>{% trans %} name {% endtrans %}</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'name' | trans } }) }}
+            </div>
+            {% if is_granted('ROLE_SUPER_AD') %}
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                </div>
+            {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }}
+            {% endif %}
+
+            <div class="col-xs-2 col-md-2">
+                <input type="hidden" id="id_partner" value="{{ id_partner }}">
+                <label>{% trans %} shop {% endtrans %} </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+            </div>
+
+            <div class="col-xs-2 col-md-2">
+                <label>{% trans %} typology {% endtrans %} *</label> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-2 col-md-2">
+                <label>{% trans %} cif {% endtrans %} * </label>
+                {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
+                                                     'placeholder': 'cif' | trans,
+                                                     'required':'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label>{% trans %} internal_code {% endtrans %}</label>
+                    {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+                </div>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label>{% trans %} ad_service_plus {% endtrans %}</label>
+                    {{ form_widget(form.ad_service_plus) }}
+                </div>
+                <div class="col-xs-6 col-md-6 form-group">
+                    <label>{% trans %} test {% endtrans %}</label>
+                    {{ form_widget(form.test) }}
+                </div>
+                <div class="col-xs-12 col-md-12 form-group">
+                    {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                    {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+                </div>
+            </div>
+        </div>
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+        <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} contact {% endtrans %}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+        </div>
+        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+
+        {{ form_rest(form) }}
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <button class="btn btn-primary pull-right" id="btn_save" type="submit">{% trans %} btn.edit {% endtrans %}</button>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/order/js/order_workshop.js') }}"></script>
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+{% endblock %}

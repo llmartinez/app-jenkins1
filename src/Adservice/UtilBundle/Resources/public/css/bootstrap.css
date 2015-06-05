@@ -305,9 +305,6 @@ html {
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.428571429;
-  color: #333333;
-  background-color: #ffffff;
 }
 
 input,
@@ -2248,7 +2245,7 @@ textarea.input-lg {
     text-align: right;
   }
 }
-
+/**BTN**/
 .btn {
   display: inline-block;
   padding: 6px 12px;
@@ -4925,6 +4922,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 
 .breadcrumb > .active {
   color: #999999;
+  font-weight: bold;
 }
 
 .pagination {

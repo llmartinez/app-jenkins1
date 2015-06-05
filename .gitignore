@@ -1,24 +1,32 @@
 # -- Symfony2 -----------------------------------------
 # -- app/bootstrap.php.cache
 # -- app/bootstrap_cache.php.cache
-app/config/parameters.ini
-app/config/parameters.yml
-app/cache/*
-app/logs/*
+/app/build/*
+/app/config/parameters.ini
+# -- app/config/parameters_test.ini.dist
+/app/config/parameters.yml
+/app/cache/*
+/app/logs/*
+/app/bootstrap*
 vendor/*
-web/bundles/*
-web/css/*
-web/js/*
-web/uploads/*
+/web/bundles/*
+/web/css/*
+/web/js/*
+/web/uploads/*
+/data
+
+# -- Capifony ---
+/app/config/*.rb
+/Capfile
 
 # -- Scripts para la carga de schema y fixtures -------
-data/scripts*
+# -- data/scripts
 
 # -- Composer -----------------------------------------
 composer.phar
 
 # -- PHPUnit ------------------------------------------
-app/phpunit.xml  
+# -- app/phpunit.xml
 
 # -- Editores -----------------------------------------
 # vim
@@ -59,7 +67,7 @@ tmtags
 
 # netbeans
 nbproject/
-build/
+# -- build/
 nbbuild/
 dist/
 nbdist/

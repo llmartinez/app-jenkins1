@@ -1,0 +1,94 @@
+{# muestra los botones de editar y bloquear/desbloquear del asesor #}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="pull-right" href="{{ path('assignTicket', {'id':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket.assign {% endtrans %}"></span></a>
+    {% endif %}
+    {% if is_granted('ROLE_ASSESSOR') %}
+        {% if ticket.status == 'open' %}
+            {% if ticket.blockedBy is not null %}
+
+                {% if ticket.blockedBy == app.security.getToken().getUser() %}
+
+                    {# desbloquear Ticket #}
+                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': 0 }) }}">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></a>
+                {% else %}
+
+                    {# Ticket asignado a otro assessor #}
+                    <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+
+                    <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{{ ticket.blockedBy }}</strong> {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+
+                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket_reassign {% endtrans %}"></a>
+
+                {% endif %}
+
+            {% else %}
+
+                {# bloquear Ticket #}
+                <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
+            {% endif %}
+
+        {% else %}
+
+                {# Ticket cerrado #}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
+
+                {# reabrir Ticket #}
+                <a href="{{ path('reopenTicket', { 'id': ticket.id }) }}" >
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
+
+        {% endif %}
+
+    {% else %}
+
+        {# Ticket asignado a otro assessor #}
+        {% if ticket.status == 'open' and ticket.blockedBy is not null %}
+
+            <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+
+            <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{% trans %} assessor {% endtrans %} </strong>
+                                                    {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+        {% endif %}
+    {% endif %}
+
+    {# se borran los tickets solo si no tienen respuesta (1 post) #}
+    {% if ticket.posts | length <= 1 %}
+        {# puede borrarlo el usuario si el ticket no esta assignado aun #}
+        {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{% trans %} ticket.delete {% endtrans %}"></span></a>
+        {% endif %}
+    {% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{% trans %} ticket.delete {% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                {% trans %} ticket.delete.confirm {% endtrans %}
+            </div>
+            <div class="modal-footer">
+                <a href="{{ path('deleteTicket', {'id': ticket.id}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    <script>
+        $(document).ready(function() {
+            $('#MainContent').find('.glyphicon-trash').click(function() {
+                var id = {{ ticket.id }};
+                confirm_delete_ticket_modal(id);
+            })
+
+            //util.js
+            //table_filter();
+        });
+    </script>

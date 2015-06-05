@@ -1,0 +1,52 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+        <li class="active">{% trans %} new.shop {% endtrans %}</li>
+    </ol>
+
+    <h1>{% trans %} new.order.shop {% endtrans %}</h1>
+
+    <form action="{{ path('shopOrder_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
+            <div class="col-xs-4 col-md-4 form-group">
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active, { 'attr': {'checked': 'checked' } }) }}
+            </div>
+        </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+        {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+
+        {{ form_rest(form) }}
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit">{% trans %} btn.create {% endtrans %}</button>
+        </div>
+    </form>
+
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+{% endblock %}

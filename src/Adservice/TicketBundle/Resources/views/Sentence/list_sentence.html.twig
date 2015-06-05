@@ -1,0 +1,40 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'sentence_list' %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_sentences {% endtrans %}</li>
+    </ol>
+
+    <div style="width: 90%; margin-left: 5%;">
+
+        <legend>{% trans %} menu.list_sentences {% endtrans %}
+            <a id="newSentence" href="{{ path('sentence_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.sentence {% endtrans %}</a></td>
+        </legend>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+            <select id="flt_country" class='form-control'>
+                    <option value="none">{% trans %} all {% endtrans %}</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country | trans }}</option>
+                {% endfor %}
+        </select></div>
+        {% endif %}
+    </div>
+    {% include 'TicketBundle:Sentence:_list.html.twig'  %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/sentence.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+        });
+    </script>
+{% endblock %}

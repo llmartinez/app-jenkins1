@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="brand")
  * @ORM\Entity
  */
-class Brand
-{
+class Brand {
     /**
      * @var integer $id
      *
@@ -34,7 +33,7 @@ class Brand
      * @ORM\Column(name="idTecDoc", type="integer")
      */
     private $idTecDoc;
-    
+
     /**
      * @var string $models
      *
@@ -46,7 +45,7 @@ class Brand
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,7 +65,7 @@ class Brand
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -86,21 +85,17 @@ class Brand
     /**
      * Get idTecDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdTecDoc()
     {
         return $this->idTecDoc;
     }
-    
-    public function __toString() {
-        return $this->name;
-    }
     public function __construct()
     {
         $this->models = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add models
      *
@@ -114,10 +109,20 @@ class Brand
     /**
      * Get models
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getModels()
     {
         return $this->models;
+    }
+
+    public function to_json(){
+        $json = array('id'  => $this->getId(),
+                      'name'=> $this->getName());
+        return $json;
+    }
+
+    public function __toString() {
+        return $this->name;
     }
 }

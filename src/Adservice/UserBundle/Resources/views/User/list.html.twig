@@ -1,0 +1,71 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'user_list' %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_users {% endtrans %}</li>
+    </ol>
+
+    <legend>{% trans %} menu.list_users {% endtrans %}
+        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
+    </legend>
+
+    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-3 col-md-3 form-group">
+        <select id="slct_country" class="form-control"> <option value="0">...</option>
+            {% for country_ in countries %} <option value="{{ country_.id }}"
+                                        {% if country is defined and country == country_.id %} selected {% endif %}
+                                    >{{ country_.country | trans }}</option> {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+    <div class="col-xs-3 col-md-3 form-group">
+        <select id="slct_role" class="form-control"> <option value="all">...</option>
+            {% for role in roles %} <option value="{{ role.id }}"
+                                        {% if option is defined and option == role.id %} selected {% endif %}
+                                    >{{ role.name | trans }}</option> {% endfor %}
+        </select>
+    </div>
+
+    <table id="tbl_usuarios" class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans %} username {% endtrans %}</th>
+                <th>{% trans %}          {% endtrans %}</th>
+                <th>{% trans %} name     {% endtrans %}</th>
+                <th>{% trans %} surname  {% endtrans %}</th>
+                <th>{% trans %} email    {% endtrans %}</th>
+                <th>{% trans %} tel      {% endtrans %}</th>
+                <th>{% trans %} region   {% endtrans %}</th>
+                <th>{% trans %} actions  {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if  users_role_super_admin is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_admin  , role:'super_admin'} %}{% endif %}
+            {% if  users_role_admin       is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_admin        , role:'admin'      } %}{% endif %}
+            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
+            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
+            {% if  users_role_assessor    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_assessor     , role:'assessor'   } %}{% endif %}
+            {% if  users_role_user        is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_user         , role:'user'       } %}{% endif %}
+            {# Cuando se inserta el listado en otro html, los usuarios son "users" #}
+            {% if  users                  is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users                   , role:'user'       } %}{% endif %}
+
+        </tbody>
+    </table>
+
+    {% include 'UtilBundle:Pagination:pagination_user.html.twig' %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+{% endblock %}
+

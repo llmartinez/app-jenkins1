@@ -1,5 +1,5 @@
-/* 
-    Document   : header
+/*
+    Document   : style.css
     Created on : 21-ene-2014, 10:11:21
     Author     : dani
     Description:
@@ -10,29 +10,93 @@
     BODY
 */
 
-html {
-    background-color:  #285e8e;
+html, body { 
+    background: url(../images/icon/background.jpg) repeat;
 }
+
+legend {
+    clear: both;
+}
+
 #MainBody {
     background-color: transparent;
     margin: 20px;
 }
 
-#MainHeader {
+.MainHeader {
     background-color:  transparent;
+    min-width: 800px;
 }
 
 #MainContent {
     background-color:  white;
-    padding: 20px;
-    color: #000;
-    overflow: auto;
+    padding: 20px 20px 100px 20px;
+    overflow: hidden;
+    min-width: 800px;
 }
 
 #MainFooter {
-    background-color: darkgray;
+    background-color: #428BCA;
     color: #fff;
+    padding: 10px 0;
+    font-size: smaller;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+#MainFooter p {
+    margin: 0 !important;
+}
+
+#profile {background: #004493;}
+
+#profile:hover {color: #428BCA;}
+
+.img_icon {
+    max-height: 20px;
+}
+.margined {
+    margin-right: 40px;
+}
+.floating {
+    float:left;
+}
+.mb3 {
+    margin-bottom: 3px;
+}
+.btn-menu {
+    display: inline-block;
+    color: #ffffff;
+    background-color: #428bca;
+    /*
+    background-image: url(http://www.librosweb.es/website/css/images/logo.gif);
+    */
+    border-color: #357ebd;
+    border: 1px solid transparent;
+    border-radius: 4px;
     padding: 20px;
+    margin: 10px;
+    width: 280px;
+}
+.btn-menu:hover {
+    text-decoration: none;
+}
+/*.btn-footer {
+    display: inline-block;
+    color: #428bca;
+    margin-right: 10px;
+}*/
+.btn-date {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 5px;
+}
+.btn-blue {
+    color: #428bca;
+}
+.btn-change-pass {
+    margin-top: 20px
 }
 
 /*
@@ -43,20 +107,60 @@ html {
 }
 
 .navbar {
-    background-color: azure;
+    background-color: #428bca;
+    height: 124px;
+    padding: 0 37px;
 }
 
+.btn-header{
+    height: 30px;
+}
 /*
     Plantillas
 */
-.colIzq {
+.info {
     width: 30%;
     padding: 10px;
     float: left;
 }
 
-.colDer {
+.alert {
+  float: left;
+  background-color: #428bca;
+  color: #FFF;
+  font-size: 19px;
+  width: 100%;
+  text-align: center;
+}
+
+.content {
     width: 70%;
+    padding: 10px;
+    float: left;
+}
+.colIzq15 {
+    width: 150px;
+    padding: 10px;
+    float: left;
+}
+.colIzq {
+    padding: 10px;
+    float: left;
+    width: 30%;
+}
+
+.col100 {
+    padding: 10px;
+    float: left;
+    width: 100%;
+}
+.colDer {
+    padding: 10px;
+    float: left;
+    width: 60%;
+}
+.colDer85 {
+    width: 85%;
     padding: 10px;
     float: left;
 }
@@ -64,6 +168,16 @@ html {
 .tblContainer {
     width: 100%;
     padding-left: 20px;
+}
+
+.padded {
+    padding: 5px;
+}
+.pad-left {
+    padding-left: 20px;
+}
+.txtComment {
+    color: #a3a3a3;
 }
 
 .txtContainer {
@@ -77,6 +191,37 @@ html {
     padding-left: 20px;
     padding-bottom: 10px;
 }
+
+/*
+    BOTONERA
+ */
+#btnfilters {
+    width: 30%;
+    float: left;
+}
+
+/*
+    PAGINACION
+ */
+.pagination_content {
+    text-align: center;
+    margin: auto;
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+    background-color: #fff;
+}
+.page_number {
+    width: 40px;
+    text-align: center;
+    border: 1px solid #cccccc;
+    border-top: none;
+    border-bottom: none;
+    background-color: #fff;
+}
+.page_selected {
+    background-color: #aaa;
+}
+
 /*
     TABLA INCIDENCIAS
 */
@@ -137,28 +282,38 @@ html {
 }
 
 .error {
-  color: white;
-  background: none repeat scroll 0 0 #F00;
-  clear: both;
-  font-size: 140%;
+  color: red;
   font-weight: bold;
-  width: 630px;
-  margin: 0 0 1em 6px;
-  padding: 5px;
-  padding-left: 0.4em;
 }
 
  /*
-    LISTADO TICKETS 
+    LISTADO TICKETS
  */
 .colList {
     float: left;
     width: 50%;
 }
-
+.colFilter {
+    float: left;
+    width: 20%;
+}
+.colTickets {
+    float: left;
+    width: 80%;
+}
 /*
     LISTA MENSAJES
 */
+.legend {
+    background-color: gainsboro;
+    padding-left: 20px;
+}
+
+.message {
+    background-color: ghostwhite;
+    min-height: 100px;
+}
+
 .ac-container{
     width: 40%;
     margin-left: 30px;
@@ -177,9 +332,9 @@ html {
     line-height: 33px;
     font-size: 19px;
     background: linear-gradient(top, #ffffff 1%,#eaeaea 100%);
-    box-shadow: 
-        0px 0px 0px 1px rgba(155,155,155,0.3), 
-        1px 0px 0px 0px rgba(255,255,255,0.9) inset, 
+    box-shadow:
+        0px 0px 0px 1px rgba(155,155,155,0.3),
+        1px 0px 0px 0px rgba(255,255,255,0.9) inset,
         0px 2px 2px rgba(0,0,0,0.1);
 }
 .ac-container label:hover{
@@ -190,8 +345,8 @@ html {
     background: #c6e1ec;
     color: #3d7489;
     text-shadow: 0px 1px 1px rgba(255,255,255, 0.6);
-    box-shadow: 
-        0px 0px 0px 1px rgba(155,155,155,0.3), 
+    box-shadow:
+        0px 0px 0px 1px rgba(155,155,155,0.3),
         0px 2px 2px rgba(0,0,0,0.1);
 }
 .ac-container label:hover:after,
@@ -202,7 +357,7 @@ html {
     height: 24px;
     right: 13px;
     top: 7px;
-    background: transparent url(../images/arrow_down.png) no-repeat center center;  
+    background: transparent url(../images/arrow_down.png) no-repeat center center;
 }
 .ac-container input:checked + label:hover:after{
     background-image: url(../images/arrow_up.png);
@@ -217,13 +372,13 @@ html {
     height: 0px;
     position: relative;
     z-index: 10;
-    transition: 
-        height 0.3s ease-in-out, 
+    transition:
+        height 0.3s ease-in-out,
         box-shadow 0.6s linear;
 }
 .ac-container input:checked ~ article{
-    transition: 
-        height 0.5s ease-in-out, 
+    transition:
+        height 0.5s ease-in-out,
         box-shadow 0.1s linear;
     box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
 }
@@ -254,6 +409,9 @@ html {
     width: 100%;
     margin-top: 15px;
 }
+.btn50 {
+    width: 50%;
+}
 
 /*
     HISTORIAL MENSAJES
@@ -272,15 +430,12 @@ html {
     FOTOS MENSAJES
 */
 .imgPost {
-    width:100%;
-    height: 100%;
+    width:50%;
 }
 
 /***************************************************************************/
 
 /*@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
-
-html, body { background: #285e8e }
 
 .slides {
     padding: 0;
@@ -391,4 +546,106 @@ input#img-4:checked ~ .nav-dots label#img-dot-4,
 input#img-5:checked ~ .nav-dots label#img-dot-5,
 input#img-6:checked ~ .nav-dots label#img-dot-6 {
 	background: rgba(0, 0, 0, 0.8);
+}
+
+.form-control_ged {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+}
+.form-control_ged:focus {
+    border-color: #66AFE9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+.form-control_ged:-moz-placeholder {
+    color: #999999;
+}
+.form-control_ged::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+.form-control_ged[disabled], .form-control_ged[readonly], fieldset[disabled] .form-control_ged {
+    background-color: #EEEEEE;
+    cursor: not-allowed;
+}
+textarea.form-control_ged {
+    height: auto;
+}
+.language {
+    margin-top: 18px;
+}
+
+.user {
+    margin-top: 15px;
+}
+
+.img_logo {margin-top: 30px;}
+
+.h65 {
+    height: 65px !important;
+}
+.mb15 {
+    margin-bottom: 15px !important;
+}
+.mr15 {
+    margin-right: 15px;
+}
+.ml15 {
+    margin-left: 15px;
+}
+.fr{
+    float: right;
+}
+.change_page {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.pdl0 {
+    padding-left: 0px !important;
+}
+.prl0 {
+    padding-right: 0px !important;
+}
+.pending_application {
+    background: none repeat scroll 0 0 #f00;
+    float: left;
+    line-height: 15px;
+    margin-left: -14px;
+    margin-top: -35px;
+    padding: 5px;
+    position: absolute;
+    z-index: 999;
+    color: #FFFFFF !important;
+}
+.pending_application:hover {
+    color: #FFFFFF !important;
+}
+.pending_application2 {
+    background: none repeat scroll 0 0 #f00;
+    float: right;
+    line-height: 15px;
+    padding: 5px;
+    color: #FFFFFF !important;
+}
+.pending_application3 {
+    background: none repeat scroll 0 0 #f00;
+    float: left;
+    line-height: 15px;
+    margin-left: 99px;
+    margin-top: -28px;
+    padding: 5px;
+    position: absolute;
+    z-index: 999;
+    color: #FFFFFF !important;
 }

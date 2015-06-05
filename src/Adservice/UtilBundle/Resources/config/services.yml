@@ -7,3 +7,14 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: setDefaultLanguage }
+
+    isMSIE:
+        class: Adservice\UtilBundle\Controller\ServiceController
+
+#    my.listener:
+#        class: Adservice\UtilBundle\Listener\EntityUtilListener
+#        arguments: ['@service_container']
+##        arguments: ["@security.context"]
+#        tags:
+#            - { name: doctrine.event_listener, event: prePersist }
+#            - { name: doctrine.event_listener, event: preUpdate }

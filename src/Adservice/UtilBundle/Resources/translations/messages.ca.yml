@@ -9,14 +9,13 @@ logout: Tancar la sessió
 index: Índex usuari
 newTicket : Nou ticket
 ticket: Tickets
-incidence: Incidències
 
 #TICKET
 ticket.history.title: Historial Tickets
 ticket.history.date: Data
 ticket.history.workshop: Taller
 ticket.history.ticket: Ticket
-ticket.history.any: No tiens cap ticket obert
+ticket.history.any: No tens cap ticket obert
 
 ###############
 #     OLD     #

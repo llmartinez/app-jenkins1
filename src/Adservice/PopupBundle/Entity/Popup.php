@@ -4,7 +4,6 @@ namespace Adservice\PopupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\UserBundle\Entity\User;
-//use Adservice\PopupBundle\Entity\Popup;
 use Adservice\PopupBundle\Entity\PopupRepository;
 
 /**
@@ -14,7 +13,7 @@ use Adservice\PopupBundle\Entity\PopupRepository;
  * @ORM\Entity(repositoryClass="Adservice\PopupBundle\Entity\PopupRepository")
  */
 //class Popup implements \Serializable{
-class Popup implements \JsonSerializable {
+class Popup {
     /**
      * @var integer $id
      *
@@ -39,6 +38,20 @@ class Popup implements \JsonSerializable {
     private $description;
 
     /**
+     * @var string $role
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\Role")
+     */
+    private $role;
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
      * @var datetime $startdate_at
      *
      * @ORM\Column(name="startdate_at", type="datetime")
@@ -51,7 +64,7 @@ class Popup implements \JsonSerializable {
      * @ORM\Column(name="enddate_at", type="datetime")
      */
     private $enddate_at;
-    
+
     /**
      * @var boolean $active
      *
@@ -67,6 +80,13 @@ class Popup implements \JsonSerializable {
     private $created_at;
 
     /**
+     * @var integer $created_by
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
+     */
+    private $created_by;
+
+    /**
      * @var datetime $modified_at
      *
      * @ORM\Column(name="modified_at", type="datetime")
@@ -74,17 +94,27 @@ class Popup implements \JsonSerializable {
     private $modified_at;
 
     /**
-     * @var string $modify_by
+     * @var string $modified_by
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\User")
      */
-    private $modify_by;
+    private $modified_by;
 
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +134,7 @@ class Popup implements \JsonSerializable {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -124,13 +154,54 @@ class Popup implements \JsonSerializable {
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
     }
-    
+
+    /**
+     * Set role
+     *
+     * @param user $role
+     */
+    public function setRole(\Adservice\UserBundle\Entity\Role $role)
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+
+    /**
+     * Set country
+     *
+     * @param user $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
     /**
      * Get active
      * @return type
@@ -138,7 +209,7 @@ class Popup implements \JsonSerializable {
     public function getActive(){
         return $this->active;
     }
-    
+
     /**
      * Set active
      * @param boolean $active
@@ -160,7 +231,7 @@ class Popup implements \JsonSerializable {
     /**
      * Get startdate_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getStartdateAt()
     {
@@ -180,7 +251,7 @@ class Popup implements \JsonSerializable {
     /**
      * Get enddate_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getEnddateAt()
     {
@@ -200,11 +271,29 @@ class Popup implements \JsonSerializable {
     /**
      * Get createt_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+
+    /**
+     * Set created_by
+     *
+     * @param user $created_by
+     */
+    public function setCreatedBy(\Adservice\UserBundle\Entity\User $user) {
+        $this->created_by = $user;
+    }
+
+    /**
+     * Get created_by
+     *
+     * @return integer
+     */
+    public function getCreatedBy() {
+        return $this->created_by;
     }
 
     /**
@@ -220,7 +309,7 @@ class Popup implements \JsonSerializable {
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -228,37 +317,43 @@ class Popup implements \JsonSerializable {
     }
 
     /**
-     * Set modify_by
+     * Set modified_by
      *
-     * @param user $modify_by
+     * @param user $modified_by
      */
-    public function setModifyBy(\Adservice\UserBundle\Entity\User $user)
+    public function setModifiedBy(\Adservice\UserBundle\Entity\User $user)
     {
-        $this->modify_by = $user;
+        $this->modified_by = $user;
     }
 
     /**
-     * Get modify_by
+     * Get modified_by
      *
-     * @return string 
+     * @return string
      */
-    public function getModifyBy()
+    public function getModifiedBy()
     {
-        return $this->modify_by;
+        return $this->modified_by;
     }
-    
+
     public function __toString() {
         return $this->getName();
     }
-        
+
     /**
      * Campos que apareceran al hacer un json de esta clase
      */
-    public function jsonSerialize() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription()
-        ];
+//    public function jsonSerialize() {
+//        return [
+//            'id' => $this->getId(),
+//            'name' => $this->getName(),
+//            'description' => $this->getDescription()
+//        ];
+//    }
+    
+    public function to_json(){
+        $json = array('name'        => $this->getName(),
+                      'description' => $this->getDescription());
+        return $json;
     }
 }

@@ -5,11 +5,15 @@
     <property name="sourcedir" value="${basedir}/src" />
     <property name="builddir"  value="${workspace}/app/build" />
 
-<!--    <target name="build" 
-                depends="prepare, parameters, vendors, lint, phploc, pdepend, phpmd, phpmd-ci, phpcs, phpcs-ci, phpcpd, phpunit, phpdoc, phpcb"/>-->
-    
-     <target name="build"            depends="prepare,vendors,parameters,lint,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdoc,phpunit,phpcb"/>
-     <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+<!-- <target name="build"            depends="prepare, vendors, parameters, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
+<!-- <target name="build"            depends="prepare, parameters, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/> -->
+     <target name="build"            depends="parameters, lint, phploc, pdepend, phpcpd, phpmd-ci, phpcs-ci, phpdoc, phpunit, phpcb"/>
+<!-- <target name="build"            depends="prepare, parameters, phpunit, phpcb"/> -->
+
+    <!-- <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/> -->
+    <target name="build-parallel"   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+
+    <!--<target name="build"            depends="parameters, prepare, lint, phploc"/>-->
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -31,9 +35,9 @@
         <delete dir="${builddir}/coverage"/>
         <delete dir="${builddir}/logs"/>
         <delete dir="${builddir}/pdepend"/>
-        <delete dir="${builddir}/docs/*"/>
+        <delete dir="${builddir}/docs"/>
     </target>
-    
+
     <!--CREAMOS LAS CARPETAS QUE NECESITA JENKINS-->
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${builddir}/api"/>
@@ -42,25 +46,65 @@
         <mkdir dir="${builddir}/logs"/>
         <mkdir dir="${builddir}/pdepend"/>
         <mkdir dir="${builddir}/docs/"/>
+
+        <exec executable="php" failonerror="true">
+            <arg line="app/console cache:clear"/>
+            <arg value="--env=test" />
+        </exec>
+
+        <!--DROP DATABASE -->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:schema:drop --force"/>
+            <arg value="--env=test" />
+        </exec>
+
+        <!--SCHEMA CREATE -->
+        <exec executable="php" failonerror="true">
+            <arg line="app/console doctrine:schema:create"/>
+            <arg value="--env=test" />
+        </exec>
+
+        <!-- LOAD FIXTURES -->
+        <exec executable="app/console" failonerror="true">
+            <arg value="doctrine:fixtures:load" />
+            <arg value="--env=test" />
+            <arg value='-n' />
+        </exec>
+
+        <exec executable="app/console">
+            <arg value="assetic:dump" />
+            <arg value="-n" />
+            <arg value="--env=test" />
+            <arg value="--no-debug" />
+        </exec>
+
+        <exec executable="app/console">
+            <arg value="assets:install" />
+            <arg value="-n" />
+            <arg value="--env=test" />
+            <arg value="--no-debug" />
+            <arg value="web" />
+        </exec>
+
     </target>
 
     <!--PARAMETROS DE CONFIGURACION DE LA APPLICACIONS ADSERVICE-->
     <target name="parameters" description="Copy parameters">
         <exec executable="cp" failonerror="true">
-            <arg path="app/config/parameters.ini.dist" />
+            <arg path="app/config/parameters_test.ini.dist" />
             <arg path="app/config/parameters.ini" />
         </exec>
     </target>
-    
-    <!--INSTALAMOS LOS VENDORS DE SYMFONY2-->    
+
+    <!--INSTALAMOS LOS VENDORS DE SYMFONY2-->
     <target name="vendors"
             description="Update vendors">
         <exec executable="bin/vendors" failonerror="true">
             <arg value="update" />
         </exec>
     </target>
-    
-    
+
+
     <target name="lint" description="Perform syntax check of sourcecode files">
         <apply executable="php" failonerror="true">
             <arg value="-l" />
@@ -97,7 +141,7 @@
         <exec executable="phpmd">
             <arg path="${basedir}/src" />
             <arg value="text" />
-            <arg value="${builddir}/phpmd.xml" />
+            <arg value="${basedir}/app/phpmd.xml" />
         </exec>
     </target>
     
@@ -105,7 +149,7 @@
         <exec executable="phpmd">
             <arg path="${sourcedir}" />
             <arg value="xml" />
-            <arg value="${builddir}/phpmd.xml" />
+            <arg value="${basedir}/app/phpmd.xml" />
             <arg value="--reportfile" />
             <arg value="${builddir}/logs/pmd.xml" />
         </exec>
@@ -127,6 +171,7 @@
         </exec>
     </target>
     
+    <!-- ENCUENTRA CODIGO DUPLICADO -->
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <exec executable="phpcpd">
             <arg value="--log-pmd" />
@@ -134,14 +179,16 @@
             <arg path="${sourcedir}" />
         </exec>
     </target>
-    
+
+    <!-- EJECUTA LOS TEST -->
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="phpunit" failonerror="true">
             <arg value="-c" />
             <arg path="${basedir}/app/phpunit.xml" />
         </exec>
     </target>
-    
+
+    <!-- GENERA LA DOCUMENTACION -->
     <target name="phpdoc" description="Generate API documentation using phpDox">
         <exec executable="phpdoc">
             <arg line="-d '${sourcedir}' -t '${builddir}/docs' --title='Tempo' " />
