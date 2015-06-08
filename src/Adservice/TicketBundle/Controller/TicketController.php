@@ -292,7 +292,7 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
@@ -357,7 +357,7 @@ class TicketController extends Controller {
         else{ $workshop =  new Workshop(); }
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findBy(array(), array('name' => 'ASC'));
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         //Define Forms
@@ -1265,7 +1265,7 @@ class TicketController extends Controller {
              $tickets = array($ticket);
         else $tickets = array();
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
@@ -1327,7 +1327,7 @@ class TicketController extends Controller {
             }
         }
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
