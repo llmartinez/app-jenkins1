@@ -26,7 +26,7 @@
                             <td> {{ shopOrder.name|length > 15 ? shopOrder.name|slice(0, 15) ~ '...' : shopOrder.name  }} </td>
                             <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.phoneNumber1 }} </td>
-                            <td> {{ shopOrder.region       }} </td>
+                            <td> {{ shopOrder.region|length > 15 ? shopOrder.region|slice(0, 15) ~ '...' : shopOrder.region  }} </td>
                             <td> {{ shopOrder.address      }} </td>
                             <td>
                                     <a title="{% trans %} order_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{shopOrder.id}}"></a>
