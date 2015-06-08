@@ -57,7 +57,7 @@ class ImportController extends Controller
 			}
 			$em->flush();
 
-			$session->set('msg' ,	'Socios importados correctamente! ('.date("H:i:s").')');
+			$session->set('msg' ,	'Socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
 			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
 			$session->set('next',  	'shop');
 
@@ -76,13 +76,26 @@ class ImportController extends Controller
 			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
 
 			// TIENDA POR DEFECTO
-			$partner = $em->getRepository('PartnerBundle:Partner')->find('9999'); //SOCIO POR DEFECTO
+			$partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => '9999')); //SOCIO POR DEFECTO
+			$shop    = $em->getRepository('PartnerBundle:Shop')->find(0); //TIENDA POR DEFECTO
 			$newShop = UtilController::newEntity(new Shop(), $sa);
 			$newShop->setId(0);
 			$newShop->setName('...');
 			$newShop->setPartner($partner);
 			$newShop->setActive('1');
-			$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+			$newShop->setPhoneNumber1  ('0');
+	        $newShop->setPhoneNumber2  ('0');
+	        $newShop->setMovileNumber1 ('0');
+	        $newShop->setMovileNumber2 ('0');
+	        $newShop->setFax           ('0');
+
+	        $newShop->setEmail1('test@ad-service.es');
+	        $newShop->setEmail2('test@ad-service.es');
+
+	        $newShop->setCity  ('...');
+	        $newShop->setRegion('...');
+
+	        $newShop->setCountry($locations['countries']['spain']);
 			UtilController::saveEntity($em, $newShop, $sa,false);
 
 			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
@@ -100,12 +113,12 @@ class ImportController extends Controller
 				UtilController::saveEntity($em, $newShop, $sa,false);
 			}
 			$em->flush();
-			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("H:i:s").')');
+			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	// return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
     	}
 //  _   _ ____  _____ ____       _    ____
 // | | | / ___|| ____|  _ \     / \  |  _ \
@@ -131,7 +144,7 @@ class ImportController extends Controller
 				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
 				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
 				$password = substr( md5(microtime()), 1, 8);
-				$newPartner->setName($name);
+				$newAD->setName($name);
 				$newAD = $this->setUserFields   ($em, $newAD, $role, $name, $password);
 				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
 				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
@@ -142,12 +155,22 @@ class ImportController extends Controller
 				$partner_users[] =  array($newAD, $password);
 			}
 			$em->flush();
-			$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
-			$session->set('next',  	'assessor');
+ 			if(isset($partner_users)) {
+				$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
+				$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
+				$session->set('next',  	'assessor');
 
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+				// Generarando excel ususarios
+				$response = $this->doExcelPartnerAction($partner_users);
+				$session->set('response' ,	$response);
+
+	 			if(isset($response)) {
+	 				return $response;
+	 			}
+ 			}
+
+			return $this->render('ImportBundle:Import:import.html.twig');
+        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
     	}
 //     _    ____ ____  _____ ____ ____   ___  ____
 //    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
@@ -167,8 +190,9 @@ class ImportController extends Controller
 
 			foreach ($old_Asesores as $old_Asesor)
 			{
+				$password = substr( md5(microtime()), 1, 8);
 				$newAssessor = UtilController::newEntity(new User(), $sa);
-				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre());
+				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre(), $password);
 				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
 				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
 				$newAssessor->setActive($old_Asesor->getActive());
@@ -178,12 +202,21 @@ class ImportController extends Controller
 				$assessor_users[] =  array($newAssessor, $password);
 			}
 			$em->flush();
-			$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("H:i:s").')');
-			$session->set('info',  	'Importando talleres (entidad Workshop)...');
-			$session->set('next',  	'workshop');
+ 			if(isset($assessor_users)) {
+				$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("d-m-Y, H:i:s").')');
+				$session->set('info',  	'Importando talleres (entidad Workshop)...');
+				$session->set('next',  	'workshop');
 
-            //return $this->render('ImportBundle:Import:import.html.twig');
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
+				// Generarando excel ususarios
+				$response = $this->doExcelAssessorAction($assessor_users);
+				$session->set('response' ,	$response);
+
+	 			if(isset($response)) {
+	 				return $response;
+	 			}
+ 			}
+            return $this->render('ImportBundle:Import:import.html.twig');
+			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
     	}
 // __        _____  ____  _  ______  _   _  ___  ____
 // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
@@ -259,7 +292,7 @@ class ImportController extends Controller
                     UtilController::saveEntity($em, $newWorkshop, $sa, false);
             }
             $em->flush();
-            $session->set('msg' ,	'Talleres importados correctamente! ('.date("H:i:s").')');
+            $session->set('msg' ,	'Talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
             $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
             $session->set('next',  	'user');
 
@@ -306,7 +339,7 @@ class ImportController extends Controller
  			}
 			$em->flush();
  			if(isset($users_email_log)) {
-				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("H:i:s").')');
+				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
 				$session->set('info',  	'Generarando excel con los ususarios...
 										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
 				$session->set('next',  	'user_log');
@@ -662,7 +695,7 @@ class ImportController extends Controller
 
     public function createExcelPartner($partner_users){
         //Creación de cabecera
-        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Error;';
+        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Activo;Error;';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -675,6 +708,7 @@ class ImportController extends Controller
             $excel.=$row[0]->getEmail1().';';
             $excel.=$row[0]->getPassword().';';
             $excel.=$row[0]->getSalt().';';
+            $excel.=$row[0]->getActive().';';
 
             // Columna para errores de talleres sin mail
             $error = '';
@@ -691,7 +725,7 @@ class ImportController extends Controller
 
     public function createExcelAssessor($assessor_users){
         //Creación de cabecera
-        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Error;';
+        $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Activo;Error;';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -704,6 +738,7 @@ class ImportController extends Controller
             $excel.=$row[0]->getEmail1().';';
             $excel.=$row[0]->getPassword().';';
             $excel.=$row[0]->getSalt().';';
+            $excel.=$row[0]->getActive().';';
 
             // Columna para errores de talleres sin mail
             $error = '';
@@ -860,46 +895,46 @@ class ImportController extends Controller
         $mailer = $this->get('cms.mailer');
         $mailer->setTo('test@ad-service.es');
         $mailer->setFrom('noreply@grupeina.com');
-         
+
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
         $mailer->sendMailToSpool();
-         
+
         $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').' OrderTM');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'shop'  => $shop )));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
         $mailer->sendMailToSpool();
-        
-        
+
+
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
         $mailer->sendMailToSpool();
-        
-        
+
+
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop, 'action' => 'action')));
         $mailer->sendMailToSpool();
-        
-        
+
+
         $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
@@ -907,47 +942,47 @@ class ImportController extends Controller
         $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder, 'workshop' => $workshop )));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder, 'action'=> 'action')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_mail.html.twig', array('workshopOrder' => $workshopOrder,'action'=> 'action')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').$user->getWorkshop());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,'action'=> 'action')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
@@ -955,15 +990,15 @@ class ImportController extends Controller
         $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').'0');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
         $mailer->sendMailToSpool();
-        
+
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').$user->getWorkshop());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
         $mailer->sendMailToSpool();
-        
+
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 

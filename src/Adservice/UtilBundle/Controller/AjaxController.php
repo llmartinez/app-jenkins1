@@ -177,7 +177,6 @@ class AjaxController extends Controller
 
         if(isset($version)) {
             $json[] = $version->to_json();
-            
         }
         else                {$json   = array( 'error' => 'No hay coincidencias');}
 

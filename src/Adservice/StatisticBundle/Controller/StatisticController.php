@@ -356,9 +356,19 @@ class StatisticController extends Controller {
             $excel.=$created->format("d/m/Y").';';
             $excel.=$row->getCar().';';
             $excel.=$row->getAssignedTo().';';
-            $excel.=$row->getDescription().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
+            $excel.=$description.';';
+
             $excel.=$row->getStatus().';';
-            $excel.=$row->getSolution().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
+            $excel.=$solution.';';
+
             $excel.="\n";
         }
         $excel = nl2br($excel);
