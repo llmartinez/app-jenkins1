@@ -557,7 +557,7 @@ class ImportController extends Controller
         // $mailerUser = $this->get('cms.mailer');
         // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
-        // $mailerUser->setFrom('noreply@grupeina.com');
+        // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
         // $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
@@ -894,7 +894,7 @@ class ImportController extends Controller
     	/* MAILING */
         $mailer = $this->get('cms.mailer');
         $mailer->setTo('test@ad-service.es');
-        $mailer->setFrom('noreply@grupeina.com');
+        $mailer->setFrom('noreply@adserviceticketing.com');
 
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
