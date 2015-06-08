@@ -63,7 +63,7 @@ class CarController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
 
-        $brands      = $em->getRepository('CarBundle:Brand'        )->findAll();
+        $brands      = $em->getRepository('CarBundle:Brand'        )->findBy(array(), array('name' => 'ASC'));
         $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getBrand()->getId());
         $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getModel()->getId());
 

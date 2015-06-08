@@ -292,7 +292,7 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
@@ -357,7 +357,7 @@ class TicketController extends Controller {
         else{ $workshop =  new Workshop(); }
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        $brands  = $em->getRepository('CarBundle:Brand'         )->findAll();
+        $brands  = $em->getRepository('CarBundle:Brand'         )->findBy(array(), array('name' => 'ASC'));
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         //Define Forms
@@ -510,7 +510,7 @@ class TicketController extends Controller {
                             $mailer = $this->get('cms.mailer');
                             $mailer->setTo($mail);
                             $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
-                            $mailer->setFrom('noreply@grupeina.com');
+                            $mailer->setFrom('noreply@adserviceticketing.com');
                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
@@ -585,7 +585,7 @@ class TicketController extends Controller {
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo($mail);
                         $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
-                        $mailer->setFrom('noreply@grupeina.com');
+                        $mailer->setFrom('noreply@adserviceticketing.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
                         $mailer->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
@@ -665,7 +665,7 @@ class TicketController extends Controller {
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($mail);
                 $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
-                $mailer->setFrom('noreply@grupeina.com');
+                $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
                 $mailer->sendMailToSpool();
                 //echo $this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket));die;
@@ -844,7 +844,7 @@ class TicketController extends Controller {
                                 $mailer = $this->get('cms.mailer');
                                 $mailer->setTo($mail);
                                 $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
-                                $mailer->setFrom('noreply@grupeina.com');
+                                $mailer->setFrom('noreply@adserviceticketing.com');
                                 $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
                                 $mailer->sendMailToSpool();
 
@@ -993,7 +993,7 @@ class TicketController extends Controller {
                             $mailer = $this->get('cms.mailer');
                             $mailer->setTo($mail);
                             $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-                            $mailer->setFrom('noreply@grupeina.com');
+                            $mailer->setFrom('noreply@adserviceticketing.com');
                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
@@ -1056,7 +1056,7 @@ class TicketController extends Controller {
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
-            $mailer->setFrom('noreply@grupeina.com');
+            $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:ticket_reopen_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
@@ -1265,7 +1265,7 @@ class TicketController extends Controller {
              $tickets = array($ticket);
         else $tickets = array();
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
@@ -1327,7 +1327,7 @@ class TicketController extends Controller {
             }
         }
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findAll();
+        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
