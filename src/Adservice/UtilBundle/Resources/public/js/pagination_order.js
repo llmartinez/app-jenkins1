@@ -7,6 +7,7 @@
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
 		    var country = $("#flt_country").val();
+		    if(country == undefined || country == '') country = 'none';
 		    var locale = $(document).find("#data_locale").val();
 		    var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country });
 
@@ -18,6 +19,7 @@
 	    $('#btn_anterior').click(function() {
 
 	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
+	    	var country = 'none';
 
 	    	if (prev_page > 0 ) {
 
@@ -37,6 +39,7 @@
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
 		    var country = $("#flt_country").val();
+		    if(country == undefined || country == '') country = 'none';
 		    var locale = $(document).find("#data_locale").val();
 		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), option: option, country: country });
 
@@ -48,12 +51,13 @@
 
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
 	    	var total = $('#total').val();
-
+	    	var country = 'none';
 	    	if (next_page <= total ) {
 
                         var route  = $("#route" ).val();
                         var option = $("#option").val();
-                         var country = $("#flt_country").val();
+                        var country = $("#flt_country").val();
+		    			if(country == undefined || country == '') country = 'none';
                         var locale = $(document).find("#data_locale").val();
                         var url = Routing.generate(route, {_locale: locale, page: next_page, option: option, country: country });
 
@@ -68,6 +72,7 @@
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
 		    var country = $("#flt_country").val();
+		    if(country == undefined || country == '') country = 'none';
 		    var locale = $(document).find("#data_locale").val();
 		    var url = Routing.generate(route, {_locale: locale, page: total, option: option, country: country });
 
