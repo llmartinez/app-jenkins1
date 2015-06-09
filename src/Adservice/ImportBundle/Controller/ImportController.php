@@ -798,9 +798,10 @@ class ImportController extends Controller
         $user->setModifiedBy($admin);
 
         $shopOrder = new ShopOrder();
+        $shopOrder->setId(99);
         $shopOrder->setAction('action');
-        $shopOrder->setRejectionReason('rejection_reason');
-        $shopOrder->setWantedAction('action');
+        $shopOrder->setRejectionReason('Este es el motivo del rechazo de la tienda');
+        $shopOrder->setWantedAction('activate');
         $shopOrder->setPartner($partner);
         $shopOrder->setName($name);
         $shopOrder->setActive('1');
@@ -824,8 +825,10 @@ class ImportController extends Controller
         $shop           = $em->getRepository('PartnerBundle:Shop'           )->find(1);
 
         $workshopOrder = new WorkshopOrder();
+        $workshopOrder->setId(88);
 		$workshopOrder->setName($name);
-		$workshopOrder->setCodeWorkshop(0);
+		$workshopOrder->setCodePartner(80);
+		$workshopOrder->setCodeWorkshop(81);
 		$workshopOrder->setCif(0);
 		$workshopOrder->setContactName('contact_name');
 		$workshopOrder->setPartner($partner);
@@ -833,19 +836,18 @@ class ImportController extends Controller
 		$workshopOrder->setActive('1');
 		$workshopOrder->setTest('0');
 		$workshopOrder->setTypology($em->getRepository('WorkshopBundle:Typology')->find(1));
-		$workshopOrder->setObservationWorkshop('observation_workshop');
 		$workshopOrder->setUpdateAt(new \DateTime('today'));
 		$workshopOrder->setLowdateAt(new \DateTime('today'));
 		$workshopOrder->setEndtestAt(new \DateTime('today'));
 		$workshopOrder->setConflictive('1');
 		$workshopOrder->setDiagnosisMachine($em->getRepository('WorkshopBundle:DiagnosisMachine')->find(1));
-		$workshopOrder->setObservationWorkshop('observation_workshop');
-		$workshopOrder->setObservationAssessor('observation_assessor');
-		$workshopOrder->setObservationAdmin('observation_admin');
+		$workshopOrder->setObservationWorkshop('observacion para el workshop');
+		$workshopOrder->setObservationAssessor('observacion para el assessor');
+		$workshopOrder->setObservationAdmin('observacion para el admin');
 		$workshopOrder->setIdWorkshop('1');
 		$workshopOrder->setAction('action');
-		$workshopOrder->setRejectionReason('rejection_reason');
-		$workshopOrder->setWantedAction('wanted_action');
+		$workshopOrder->setRejectionReason('Este es el motivo del rechazo del taller');
+		$workshopOrder->setWantedAction('activate');
 		$workshopOrder->setCountry($country);
 		$workshopOrder->setRegion($region);
 		$workshopOrder->setCity($city);
@@ -876,6 +878,7 @@ class ImportController extends Controller
 		$car->setModifiedBy($admin);
 
         $ticket = new Ticket();
+		$ticket->setId('77');
 		$ticket->setCreatedBy($admin);
 		$ticket->setAssignedTo(null);
 		$ticket->setBlockedBy(null);
@@ -884,8 +887,8 @@ class ImportController extends Controller
 		$ticket->setImportance('1');
 		$ticket->setSubsystem($subsystem);
 		$ticket->setCar($car);
-		$ticket->setDescription('description');
-		$ticket->setSolution('solution');
+		$ticket->setDescription('Esta es la descripcion del ticket');
+		$ticket->setSolution('Esta es la solucion del ticket');
 		$ticket->setCreatedAt(new \DateTime('today'));
 		$ticket->setModifiedAt(new \DateTime('today'));
 		$ticket->setModifiedBy($admin);
@@ -895,67 +898,69 @@ class ImportController extends Controller
         $mailer->setTo('dmaya@grupeina.com');
         $mailer->setFrom('noreply@adserviceticketing.com');
 
-        $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');
+        $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' 55');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user, 'password' => 'grupeina')));
         $mailer->sendMailToSpool();
 
-        $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').' OrderTM');
+		$shopOrder->setAction('create');
+        $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').' 66');
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
 
+		$shopOrder->setAction('modify');
         $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'shop'  => $shop )));
         $mailer->sendMailToSpool();
 
+		$shopOrder->setAction('activate');
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
 
+		$shopOrder->setAction('deactivate');
         $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'deactivate')));
         $mailer->sendMailToSpool();
 
-
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
-        $mailer->sendMailToSpool();
-
-
-        $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder, 'action' => 'deactivate')));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop, 'action' => 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop, 'action' => 'deactivate')));
         $mailer->sendMailToSpool();
 
 
+		$workshopOrder->setAction('create');
         $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
 
+		$workshopOrder->setAction('modify');
         $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder, 'workshop' => $workshop )));
         $mailer->sendMailToSpool();
 
+		$workshopOrder->setAction('activate');
         $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
 
+		$workshopOrder->setAction('deactivate');
         $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$workshopOrder->getId());
         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_mail.html.twig', array('workshopOrder' => $workshopOrder)));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$workshopOrder->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder, 'action'=> 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder, 'action'=> 'deactivate')));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$workshopOrder->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_mail.html.twig', array('workshopOrder' => $workshopOrder,'action'=> 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_mail.html.twig', array('workshopOrder' => $workshopOrder,'action'=> 'deactivate')));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').$user->getWorkshop());
@@ -963,7 +968,7 @@ class ImportController extends Controller
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
-        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,'action'=> 'action')));
+        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,'action'=> 'deactivate')));
         $mailer->sendMailToSpool();
 
         $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').'0');
