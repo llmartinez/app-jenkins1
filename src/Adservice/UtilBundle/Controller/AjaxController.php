@@ -193,7 +193,7 @@ class AjaxController extends Controller
 
         $year = $petition->request->get('year');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.year like '%".$year."%'";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.year like '%".$year."%' ORDER BY b.name ASC";
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -219,7 +219,7 @@ class AjaxController extends Controller
 
         $motor = $petition->request->get('motor');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.motor like '%".$motor."%'";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.motor like '%".$motor."%' ORDER BY b.name ASC";
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 

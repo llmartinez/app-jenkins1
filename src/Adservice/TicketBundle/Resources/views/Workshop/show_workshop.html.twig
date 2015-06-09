@@ -99,8 +99,7 @@
 
 			{% if workshop.observationAssessor   != "" %}
 
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAssessor|length > 15 ? workshop.observationAssessor|slice(0, 15) ~ '...' : workshop.observationAssessor  }}
+				{{ workshop.observationAssessor|length > 15 ? workshop.observationAssessor|slice(0, 15) ~ '...' : workshop.observationAssessor  }}
 
 			{% else %}
 

@@ -137,6 +137,10 @@ class Ticket {
         return $this->id;
     }
 
+    public function setId($id) {
+        $this->id = $id;
+    }
+
     /**
      * Set created_by
      *
