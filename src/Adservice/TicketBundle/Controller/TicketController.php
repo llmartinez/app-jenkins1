@@ -825,7 +825,7 @@ class TicketController extends Controller {
 
                         if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                             $str_len = strlen($post->getMessage());
-                            if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 250 ) {
+                            if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 500 ) {
                                 //Define Post
                                 $post = UtilController::newEntity($post, $user);
                                 $post->setTicket($ticket);
