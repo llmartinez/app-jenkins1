@@ -720,7 +720,8 @@ class TicketController extends Controller {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
-        or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
+        or (!$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
+        or (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $security->getToken()->getUser()->getWorkshop())
         or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
         ){
             $em       = $this->getDoctrine()->getEntityManager();
