@@ -77,7 +77,7 @@ class OrderController extends Controller
             $shop_pending[] = array('country' , " = ".$country);
             $shop_rejected[] = array('country' , " = ".$country);
         }
-                                        
+
         $pagination = new Pagination($page);
         $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
         $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
@@ -107,13 +107,13 @@ class OrderController extends Controller
         elseif(($option == 'shop_pending')     or ($option == 'shop_rejected'))     $ordersBefore = ShopOrderController::getShopOrdersBefore($em, $orders);
 
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
-        
+
         return $this->render('OrderBundle:Order:list_orders.html.twig', array(  'pagination'   => $pagination,
                                                                                 'option'       => $option,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
                                                                                 'orders'       => $orders,
-	                                                                        'ordersBefore' => $ordersBefore,
+	                                                                            'ordersBefore' => $ordersBefore,
                                                                                 'length_workshop_pending'  => $length_workshop_pending,
                                                                                 'length_workshop_rejected' => $length_workshop_rejected,
                                                                                 'length_shop_pending'      => $length_shop_pending,
