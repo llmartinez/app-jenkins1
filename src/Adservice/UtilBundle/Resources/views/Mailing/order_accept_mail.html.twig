@@ -18,12 +18,12 @@
         <img src="{% trans %} mail.image {% endtrans %}" alt="AD-Service" title="AD-Service" width="416" height="58" />
     </td></tr>
 
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    {# <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
         {% if     workshop.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.acceptOrder.createdby {% endtrans %}
         {% elseif workshop.modifiedBy.roles[0] == 'ROLE_AD'       %} {% trans %} mail.acceptOrder.createdby.user  {% endtrans %}
         {% endif %}
-    </td></tr>
+    </td></tr> #}
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         {% trans %} mail.acceptOrder.info {% endtrans %}"<b>{% trans %} menu.list_workshops {% endtrans %}</b>".

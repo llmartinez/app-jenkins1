@@ -181,6 +181,12 @@ function fill_version() {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
+            $('#new_car_form_year').val('');
+            $('#new_car_form_motor').val('');
+            $('#new_car_form_kW').val('');
+            $('#new_car_form_displacement').val('');
+            $('#new_car_form_vin').val('');
+            $('#new_car_form_plateNumber').val('');
 
             if (data['error'] != "No hay coincidencias") {
 
