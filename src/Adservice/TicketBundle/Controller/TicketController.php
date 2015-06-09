@@ -270,6 +270,21 @@ class TicketController extends Controller {
                 //$joins[] = array('e.workshop w', ' w.country = '.$security->getToken()->getUser()->getCountry()->getId());
                 $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
                 $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
+            }
+            elseif($security->isGranted('ROLE_USER') and !$security->isGranted('ROLE_ASSESSOR')) {
+                $user = $em->getRepository('UserBundle:User')->findOneBy(array('id' => $id_user));
+                $workshop = $user->getWorkshop();
+                
+                if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                {
+                    $joins[0][1] = $joins[0][1].' AND w.code_workshop = '.$workshop->getCodeWorkshop()." AND w.partner = ".$workshop->getPartner()->getid()." ";
+                }
+                else{
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshop->getCodeWorkshop()." AND w.partner = ".$workshop->getPartner()->getid()." ");
+                }
+                //$joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
+                $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+                $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
             }else{
                 //$joins[] = array('e.workshop w ', 'w.country = '.$security->getToken()->getUser()->getCountry()->getId());
                 $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);

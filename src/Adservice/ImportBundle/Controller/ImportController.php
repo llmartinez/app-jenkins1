@@ -828,7 +828,6 @@ class ImportController extends Controller
 		$workshopOrder->setCodeWorkshop(0);
 		$workshopOrder->setCif(0);
 		$workshopOrder->setContactName('contact_name');
-		$workshopOrder->setContactSurname('contact_surname');
 		$workshopOrder->setPartner($partner);
 		$workshopOrder->setShop($shop);
 		$workshopOrder->setActive('1');
@@ -893,7 +892,7 @@ class ImportController extends Controller
 
     	/* MAILING */
         $mailer = $this->get('cms.mailer');
-        $mailer->setTo('test@ad-service.es');
+        $mailer->setTo('dmaya@grupeina.com');
         $mailer->setFrom('noreply@adserviceticketing.com');
 
         $mailer->setSubject($this->get('translator')->trans('mail.newUser.subject').' TallerTM');
