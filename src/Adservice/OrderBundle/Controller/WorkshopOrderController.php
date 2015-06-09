@@ -804,6 +804,7 @@ class WorkshopOrderController extends Controller {
 
         $workshopOrder->setIdWorkshop    ($workshop->getId());
         $workshopOrder->setName          ($workshop->getName());
+        $workshopOrder->setCodePartner   ($workshop->getCodePartner());
         $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setCif           ($workshop->getCif());
         $workshopOrder->setPartner       ($workshop->getPartner());
@@ -854,6 +855,7 @@ class WorkshopOrderController extends Controller {
     private function workshopOrder_to_workshop($workshop, $workshopOrder){
 
         $workshop->setName          ($workshopOrder->getName());
+        $workshop->setCodePartner   ($workshopOrder->getCodePartner());
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
         $workshop->setCif           ($workshopOrder->getCif());
         $workshop->setCodePartner   ($workshopOrder->getPartner()->getCodePartner());
