@@ -650,6 +650,7 @@ class TicketController extends Controller {
     public function deleteTicketAction($id, $ticket){
 
         $security = $this->get('security.context');
+        $request  = $this->getRequest();
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
         or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
