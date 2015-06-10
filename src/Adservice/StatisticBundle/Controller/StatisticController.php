@@ -433,9 +433,18 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getName().';';
             $excel.=$row->getWorkshop()->getPartner().';';
             $excel.=$row->getId().';';
-            $excel.=$row->getDescription().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
+            $excel.=$description.';';
+
             $excel.=$row->getStatus().';';
-            $excel.=$row->getSolution().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
+            $excel.=$solution.';';
             $excel.=$row->getModifiedAt()->format('Y-m-d').';';
             $excel.="\n";
         }
