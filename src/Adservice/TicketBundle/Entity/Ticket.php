@@ -82,14 +82,14 @@ class Ticket {
     /**
      * @var string $description
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
 
     /**
      * @var string $solution
      *
-     * @ORM\Column(name="solution", type="string", length=255, nullable=true)
+     * @ORM\Column(name="solution", type="text", nullable=true)
      */
     private $solution;
 
