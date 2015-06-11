@@ -826,7 +826,9 @@ class TicketController extends Controller {
 
                         if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                             $str_len = strlen($post->getMessage());
-                            if ($security->isGranted('ROLE_ASSESSOR') or $str_len <= 500 ) {
+                            if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                            else { $max_len = 500; }
+                            if ($str_len <= $max_len ) {
                                 //Define Post
                                 $post = UtilController::newEntity($post, $user);
                                 $post->setTicket($ticket);
@@ -888,7 +890,7 @@ class TicketController extends Controller {
                                 $request->setLocale($locale);
                             }
                         }
-                        else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$str_len.').'); }
+                        else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$max_len.').'); }
                         } else {
                             // ERROR tamaño
                             $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));

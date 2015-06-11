@@ -84,7 +84,6 @@
 
 			{% if workshop.observationAdmin      != "" %}
 
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
 				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin|length > 15 ? workshop.observationAdmin|slice(0, 15) ~ '...' : workshop.observationAdmin  }}
 
 			{% else %}
@@ -116,7 +115,6 @@
 
 			{% if workshop.observationWorkshop   != "" %}
 
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
 				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop|length > 15 ? workshop.observationWorkshop|slice(0, 15) ~ '...' : workshop.observationWorkshop  }}
 
 			{% else %}

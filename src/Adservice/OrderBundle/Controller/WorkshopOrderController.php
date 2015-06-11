@@ -148,6 +148,7 @@ class WorkshopOrderController extends Controller {
                     $user = $security->getToken()->getUser();
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setPartner($partner);
+                    $workshopOrder->setCodePartner($partner->getCodePartner());
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
 		            $roles = $roles[0];
