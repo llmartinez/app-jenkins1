@@ -69,59 +69,34 @@
 	</div>
 
 	{# OBERVATIONS #}
-	<div class="form-group">
+	{% if is_granted('ROLE_ADMIN') %}
+		{% set observation = workshop.observationAdmin %}
+	{% elseif is_granted('ROLE_ASSESSOR') %}
+		{% set observation = workshop.observationAssessor %}
+	{% elseif is_granted('ROLE_USER') %}
+		{% set observation = workshop.observationWorkshop %}
+	{% endif %}
+
+	<div class="form-group" title="{{observation}}">
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
 
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
 
 		{% else %}
 
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{% trans %} observations {% endtrans %}" alt="{% trans %} observations {% endtrans %}">
 
 		{% endif %}
 
-		{% if is_granted('ROLE_ADMIN') %}
+		{% if observation != "" %}
+			<b>{% trans %} observations {% endtrans %}</b>: {{ observation|length > 15 ? observation|slice(0, 15) ~ '...' : observation  }}
+		{% else %}
+			{% trans %} any_observation {% endtrans %}
+		{% endif %}
 
-			{% if workshop.observationAdmin      != "" %}
-
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin|length > 15 ? workshop.observationAdmin|slice(0, 15) ~ '...' : workshop.observationAdmin  }}
-
-			{% else %}
-
-				{% trans %} any_observation {% endtrans %}
-
-			{% endif %}
-
-		{% elseif is_granted('ROLE_ASSESSOR') %}
-
-				<b>{% trans %} observations {% endtrans %}</b>:
-
-			{% if workshop.observationAssessor   != "" %}
-
-				{{ workshop.observationAssessor|length > 15 ? workshop.observationAssessor|slice(0, 15) ~ '...' : workshop.observationAssessor  }}
-
-			{% else %}
-
-				{% trans %} any_observation {% endtrans %}
-
-			{% endif %}
-
-			{% if ticket is defined %}
-				<a href="{{ path('workshop_observation', { 'id': workshop.id, 'id_ticket': ticket.id }) }}">
-					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'></a>
-			{% endif %}
-
-		{% elseif is_granted('ROLE_USER') %}
-
-			{% if workshop.observationWorkshop   != "" %}
-
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop|length > 15 ? workshop.observationWorkshop|slice(0, 15) ~ '...' : workshop.observationWorkshop  }}
-
-			{% else %}
-
-				{% trans %} any_observation {% endtrans %}
-
-			{% endif %}
+		{% if is_granted('ROLE_ASSESSOR') and ticket is defined %}
+			<a href="{{ path('workshop_observation', { 'id': workshop.id, 'id_ticket': ticket.id }) }}">
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'></a>
 		{% endif %}
 	</div>
 {% endif %}
