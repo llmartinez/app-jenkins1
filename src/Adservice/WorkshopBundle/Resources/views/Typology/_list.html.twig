@@ -14,7 +14,7 @@
             {% for typology in typologies %}
             <tr>
                 <td>{{ typology.id       }}</td>
-                <td>{{ typology.name }}</td>
+                <td>{{ typology.name|length > 15 ? typology.name|slice(0, 15) ~ '...' : typology.name  }}</td>
                 <td>{% if typology.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 {% if country == 'none' %}<td>{{ typology.country | trans }}</td>{% endif %}
                 {% if is_granted('ROLE_ADMIN') %}

@@ -113,6 +113,9 @@ class ShopOrder {
     public function getId() {
         return $this->id;
     }
+    public function setId($id) {
+        $this->id = $id;
+    }
 
     public function getIdShop() {
         return $this->id_shop;

@@ -282,7 +282,7 @@ class StatisticController extends Controller {
                 $workshop_query = '0';
                 foreach ( $consulta->getResult() as $row) { $workshop_query = $workshop_query.', '.$row['id']; }
 
-                $where .= 'e.id NOT IN ('.$workshop_query.') ';
+                $where = 'e.id NOT IN ('.$workshop_query.') ';
                 if     ($partner  != '0') { $where .= 'AND e.partner = '.$partner.' '; }
                 if     ($status == "active"  ) { $where .= 'AND e.active = 1 '; }
                 elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
@@ -319,7 +319,7 @@ class StatisticController extends Controller {
             if($security->isGranted('ROLE_SUPER_ADMIN')){
                 if    ($country != '0'     ) { $$where .= 'AND e.country = '.$country.' '; }
             }else{
-                $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
             }
 
             $where .= 'GROUP BY w.id ';
@@ -356,9 +356,19 @@ class StatisticController extends Controller {
             $excel.=$created->format("d/m/Y").';';
             $excel.=$row->getCar().';';
             $excel.=$row->getAssignedTo().';';
-            $excel.=$row->getDescription().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
+            $excel.=$description.';';
+
             $excel.=$row->getStatus().';';
-            $excel.=$row->getSolution().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
+            $excel.=$solution.';';
+
             $excel.="\n";
         }
         $excel = nl2br($excel);
@@ -423,9 +433,18 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getName().';';
             $excel.=$row->getWorkshop()->getPartner().';';
             $excel.=$row->getId().';';
-            $excel.=$row->getDescription().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
+            $excel.=$description.';';
+
             $excel.=$row->getStatus().';';
-            $excel.=$row->getSolution().';';
+
+            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
+            $excel.=$solution.';';
             $excel.=$row->getModifiedAt()->format('Y-m-d').';';
             $excel.="\n";
         }

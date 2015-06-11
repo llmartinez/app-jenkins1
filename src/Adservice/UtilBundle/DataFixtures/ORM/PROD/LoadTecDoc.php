@@ -115,7 +115,7 @@ class LoadTecDoc extends AbstractFixture implements FixtureInterface, OrderedFix
 
             $year         = $fechaI.' - '.$fechaF;
             $kw           = utf8_encode($row[8]);
-            $displacement = utf8_encode($row[9]);
+            $displacement = utf8_encode($row[10]);
 
             $version = new Version();
             $version->setIdTecDoc($idTecDoc);

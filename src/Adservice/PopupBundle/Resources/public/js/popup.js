@@ -3,11 +3,11 @@
  * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar
  * @param int user_id
  */
-function confirm_delete_popup_modal(id){
-    var custom_href = $('.modal-footer').find('a').attr('href');
-    custom_href = custom_href.replace('foo', id);
-    $('.modal-footer').find('a').attr('href',custom_href);
-}
+// function confirm_delete_popup_modal(id){
+//     var custom_href = $('.modal-footer').find('a').attr('href');
+//     custom_href = custom_href.replace('foo', id);
+//     $('.modal-footer').find('a').attr('href',custom_href);
+// }
 
 	$(document).ready(function() {
 
@@ -26,10 +26,10 @@ function confirm_delete_popup_modal(id){
             $('select[id*=_enddate_at_time_minute' ).val(59);
         };
 
-        $('#MainContent').find('.delete_popup').click(function() {
-            var popup_id = $(this).data('id');
-            confirm_delete_popup_modal(popup_id);
-        });
+        // $('#MainContent').find('.delete_popup').click(function() {
+        //     var popup_id = $(this).data('id');
+        //     confirm_delete_popup_modal(popup_id);
+        // });
 
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
         $('#flt_country').change(function() {

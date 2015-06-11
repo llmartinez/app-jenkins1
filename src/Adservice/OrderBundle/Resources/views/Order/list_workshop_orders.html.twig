@@ -25,7 +25,7 @@
                     {% endif %}
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != workshopOrder.name         %} *{% endif %} #}
                             <td> {{ workshopOrder.id           }} </td>
-                            <td> {{ workshopOrder.name         }} </td>
+                            <td> {{ workshopOrder.name|length > 15 ? workshopOrder.name|slice(0, 15) ~ '...' : workshopOrder.name  }} </td>
                             <td> {{ workshopOrder.partner      }} </td>
                             <td> {{ workshopOrder.shop         }} </td>
                             <td> {{ workshopOrder.phoneNumber1 }} </td>

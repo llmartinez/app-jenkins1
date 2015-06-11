@@ -15,7 +15,7 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name }}</b>
+		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>
 	</div>
 
 	{# CIF #}
@@ -23,7 +23,7 @@
 		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif      }} {% endif %}
 	</div>
 	<div class="form-group">
-		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact      }}  {% endif %}
+		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
 	{# PARTNER #}
 	<div class="form-group">
@@ -33,7 +33,7 @@
 	{# LOCATION #}
 	<div class="form-group">
 		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
-		{% if workshop.city         != "" %}  {{ workshop.city       }}{% endif %}
+		{% if workshop.city         != "" %}  {{ workshop.city|length > 15 ? workshop.city|slice(0, 15) ~ '...' : workshop.city  }}{% endif %}
 		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
 		{% if workshop.region       != "" %}, {{ workshop.region     }}{% endif %}
 	</div>
@@ -67,16 +67,16 @@
 		{% if is_granted('ROLE_ADMIN') %}
 			{% if workshop.observationAdmin      != "" %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin    }} {% endif %}
+				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin|length > 15 ? workshop.observationAdmin|slice(0, 15) ~ '...' : workshop.observationAdmin  }} {% endif %}
 		{% elseif is_granted('ROLE_ASSESSOR') %}
 			{% if workshop.observationAssessor   != "" %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
 				<b>{% trans %} observations {% endtrans %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				</b>: {{ workshop.observationAssessor }} {% endif %}
+				</b>: {{ workshop.observationAssessor|length > 15 ? workshop.observationAssessor|slice(0, 15) ~ '...' : workshop.observationAssessor  }} {% endif %}
 		{% elseif is_granted('ROLE_USER') %}
 			{% if workshop.observationWorkshop   != "" %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop }} {% endif %}
+				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop|length > 15 ? workshop.observationWorkshop|slice(0, 15) ~ '...' : workshop.observationWorkshop  }} {% endif %}
 		{% endif %}
 	</div>

@@ -31,29 +31,47 @@
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
-            <h3>{% trans %} dataWorkshop {% endtrans %}:</h3>
+            <h3>{% trans %} dataworkshop {% endtrans %}:</h3>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} workshop {% endtrans %}:</b></td>
-                {% if workshop.name != workshopOrder.name %} <td> {{ workshop.name }} <a style="color: #285e8e">{% trans %} to {% endtrans %}</a> {{ workshopOrder.name }}</td>
-                {% else %}                                    <td> {{ workshopOrder.name }}</td> {% endif %}
-            </tr>
-            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} code {% endtrans %}:</b></td><td> {{ workshopOrder.codeworkshop }}
+                <b>{% trans %} code {% endtrans %}:</b></td><td> {{ workshopOrder.codepartner }} - {{ workshopOrder.codeworkshop }}
             </td></tr>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} workshop {% endtrans %}:</b></td>
+                {% if workshop.name != workshopOrder.name %}<td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ workshop.name }}"
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.name }}"
+                </td>
+                {% else %} <td> {{ workshopOrder.name }}</td> {% endif %}
+            </tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} contact {% endtrans %}:</b></td>
-                {% if workshop.contact != workshopOrder.contact %} <td> {{ workshop.contact }} {% trans %} to {% endtrans %} {{ workshopOrder.contact }}</td>
-                {% else %}                                    <td> {{ workshopOrder.contact }}</td> {% endif %}
+                {% if workshop.contact != workshopOrder.contact %}<td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ workshop.contact }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.contact }}"
+                </td>
+                {% else %} <td> {{ workshopOrder.contact }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} tel {% endtrans %}:</b></td>
-                {% if workshop.phoneNumber1 != workshopOrder.phoneNumber1 %} <td> {{ workshop.phoneNumber1 }} {% trans %} change.to {% endtrans %} {{ workshopOrder.phoneNumber1 }}</td>
-                {% else %}                                    <td> {{ workshopOrder.phoneNumber1 }}</td> {% endif %}
+                {% if workshop.phoneNumber1 != workshopOrder.phoneNumber1 %}<td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ workshop.phoneNumber1 }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.phoneNumber1 }}"
+                </td>
+                {% else %} <td> {{ workshopOrder.phoneNumber1 }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} mail {% endtrans %}:</b></td>
-                {% if workshop.Email1 != workshopOrder.Email1 %} <td> {{ workshop.Email1 }} {% trans %} change.to {% endtrans %} {{ workshopOrder.Email1 }}</td>
-                {% else %}                                    <td> {{ workshopOrder.Email1 }}</td> {% endif %}
+                {% if workshop.Email1 != workshopOrder.Email1 %}<td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ workshop.Email1 }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.Email1 }}"
+                </td>
+                {% else %} <td> {{ workshopOrder.Email1 }}</td> {% endif %}
 
             </tr>
         </table>
@@ -64,7 +82,7 @@
             </td></tr>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %} <a href="http://www.ad-service.es">{% trans %} www.ad-service.es {% endtrans %}</a>
+        {% trans %} mail.info.more {% endtrans %} <a href="http://adserviceticketing.com">{% trans %} adserviceticketing.com {% endtrans %}</a>
     </td></tr>
 </table>
 
