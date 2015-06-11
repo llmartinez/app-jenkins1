@@ -3,7 +3,8 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-            var partner = $('#flt_partner').val();
+            var partner = $('#flt_partner_w').val();
+            if(partner == null) $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -20,7 +21,8 @@
 
 	    	if (prev_page > 0 ) {
 
-            var partner = $('#flt_partner').val();
+            var partner = $('#flt_partner_w').val();
+            if(partner == null) $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -34,7 +36,8 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-            var partner = $('#flt_partner').val();
+            var partner = $('#flt_partner_w').val();
+            if(partner == null) $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -52,12 +55,13 @@
 
 	    	if (next_page <= total ) {
 
-	            var partner = $('#flt_partner').val();
+	            var partner = $('#flt_partner_w').val();
+	            if(partner == null) $('#flt_partner_s').val();
 	            if(partner == null) partner = 'none';
 
-		    var route = $('#route').val();
-		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), partner: partner });
+			    var route = $('#route').val();
+			    var locale = $(document).find("#data_locale").val();
+			    var url = Routing.generate(route, {_locale: locale, page: next_page, partner: partner });
 
 		    	window.open(url, "_self");
 		    }
@@ -66,7 +70,8 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-            var partner = $('#flt_partner').val();
+            var partner = $('#flt_partner_w').val();
+            if(partner == null) $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 	    	var total = $('#total').val();
