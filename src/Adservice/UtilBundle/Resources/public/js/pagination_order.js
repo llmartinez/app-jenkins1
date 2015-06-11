@@ -26,6 +26,7 @@
                         var route  = $("#route" ).val();
                         var option = $("#option").val();
                         var country = $("#flt_country").val();
+		    			if(country == undefined || country == '') country = 'none';
                         var locale = $(document).find("#data_locale").val();
                         var url = Routing.generate(route, {_locale: locale, page: prev_page, option: option, country: country });
 
