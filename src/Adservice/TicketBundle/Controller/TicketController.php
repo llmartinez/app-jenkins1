@@ -274,7 +274,7 @@ class TicketController extends Controller {
             elseif($security->isGranted('ROLE_USER') and !$security->isGranted('ROLE_ASSESSOR')) {
                 $user = $em->getRepository('UserBundle:User')->findOneBy(array('id' => $id_user));
                 $workshop = $user->getWorkshop();
-                
+
                 if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
                 {
                     $joins[0][1] = $joins[0][1].' AND w.code_workshop = '.$workshop->getCodeWorkshop()." AND w.partner = ".$workshop->getPartner()->getid()." ";
@@ -391,10 +391,13 @@ class TicketController extends Controller {
             $formC->bindRequest($request);
             $formD->bindRequest($request);
 
-            /*Validacion Car*/
-            // if (($car->getModel()[0] != "") && ($car->getBrand()[0] != "")) {
+            /*Validacion Ticket*/
+            $str_len = strlen($ticket->getDescription());
+            if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+            else { $max_len = 500; }
 
-                /*Validacion Ticket*/
+            if ($str_len <= $max_len ) {
+
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
                     /*Validacion Formularios*/
@@ -556,6 +559,8 @@ class TicketController extends Controller {
                     } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
 
                 } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
+
+            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
@@ -594,37 +599,45 @@ class TicketController extends Controller {
 
                 $form->bindRequest($request);
 
-                //Define CAR
-                if ($form->isValid()) {
+                /*Validacion Ticket*/
+                $str_len = strlen($ticket->getDescription());
+                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                else { $max_len = 500; }
 
-                    UtilController::saveEntity($em, $ticket, $user);
+                if ($str_len <= $max_len ) {
+                    //Define CAR
+                    if ($form->isValid()) {
 
-                    $mail = $ticket->getWorkshop()->getEmail1();
-                    $pos = strpos($mail, '@');
-                    if ($pos != 0) {
+                        UtilController::saveEntity($em, $ticket, $user);
 
-                    // Cambiamos el locale para enviar el mail en el idioma del taller
-                        $locale = $request->getLocale();
-                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                        $request->setLocale($lang->getShortName());
+                        $mail = $ticket->getWorkshop()->getEmail1();
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
 
-                        /* MAILING */
-                        $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($mail);
-                        $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
-                        $mailer->setFrom('noreply@adserviceticketing.com');
-                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
-                        $mailer->sendMailToSpool();
-                        //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+                        // Cambiamos el locale para enviar el mail en el idioma del taller
+                            $locale = $request->getLocale();
+                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                            $request->setLocale($lang->getShortName());
 
-                        // Dejamos el locale tal y como estaba
-                        $request->setLocale($locale);
-                    }
+                            /* MAILING */
+                            $mailer = $this->get('cms.mailer');
+                            $mailer->setTo($mail);
+                            $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
+                            $mailer->setFrom('noreply@adserviceticketing.com');
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->sendMailToSpool();
+                            //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                            // Dejamos el locale tal y como estaba
+                            $request->setLocale($locale);
+                        }
 
-                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+                        return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+
+                    }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+
+            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
             }
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
@@ -889,8 +902,7 @@ class TicketController extends Controller {
                                 // Dejamos el locale tal y como estaba
                                 $request->setLocale($locale);
                             }
-                        }
-                        else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_length').'('.$max_len.').'); }
+                        }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
                         } else {
                             // ERROR tamaño
                             $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
@@ -987,6 +999,14 @@ class TicketController extends Controller {
 
             if ($request->getMethod() == 'POST') {
                 $form->bindRequest($request);
+
+                /*Validacion Ticket*/
+                $str_len = strlen($ticket->getSolution());
+                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                else { $max_len = 500; }
+
+                if ($str_len <= $max_len ) {
+
                     $form_errors = $form->getErrors();
                     if(isset($form_errors[0])) {
                         $form_errors = $form_errors[0];
@@ -994,54 +1014,55 @@ class TicketController extends Controller {
                     }else{
                         $form_errors = 'none';
                     }
-                if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+                    if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
-                    if ($security->isGranted('ROLE_ASSESSOR') === false) {
-                        if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
-                        elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
-                        elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
-                    }
-
-                    if($ticket->getSolution() != ""){
-
-                        $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                        $user   = $security->getToken()->getUser();
-                        $ticket->setStatus($closed);
-                        $ticket->setBlockedBy(null);
-
-                        UtilController::saveEntity($em, $ticket, $user);
-
-                        $mail = $ticket->getWorkshop()->getEmail1();
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-
-                            // Cambiamos el locale para enviar el mail en el idioma del taller
-                            $locale = $request->getLocale();
-                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                            $request->setLocale($lang->getShortName());
-
-                            /* MAILING */
-                            $mailer = $this->get('cms.mailer');
-                            $mailer->setTo($mail);
-                            $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-                            $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
-                            $mailer->sendMailToSpool();
-                            //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
-
-                            // Dejamos el locale tal y como estaba
-                            $request->setLocale($locale);
+                        if ($security->isGranted('ROLE_ASSESSOR') === false) {
+                            if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
+                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
+                            elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
                         }
 
-                        return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+                        if($ticket->getSolution() != ""){
+
+                            $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                            $user   = $security->getToken()->getUser();
+                            $ticket->setStatus($closed);
+                            $ticket->setBlockedBy(null);
+
+                            UtilController::saveEntity($em, $ticket, $user);
+
+                            $mail = $ticket->getWorkshop()->getEmail1();
+                            $pos = strpos($mail, '@');
+                            if ($pos != 0) {
+
+                                // Cambiamos el locale para enviar el mail en el idioma del taller
+                                $locale = $request->getLocale();
+                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                $request->setLocale($lang->getShortName());
+
+                                /* MAILING */
+                                $mailer = $this->get('cms.mailer');
+                                $mailer->setTo($mail);
+                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                                $mailer->setFrom('noreply@adserviceticketing.com');
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                                $mailer->sendMailToSpool();
+                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+
+                                // Dejamos el locale tal y como estaba
+                                $request->setLocale($locale);
+                            }
+
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+                        }
+                        else{
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                        }
+                    }else{
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
-                    else{
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
-                    }
-                }else{
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
-                }
+                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
             }
 
             $systems = $em->getRepository('TicketBundle:System')->findAll();
