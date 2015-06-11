@@ -6,11 +6,11 @@
 <table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #285e8e; text-align: center;">
     <tr><td width="100%" height="50" valign="middle">
         {% trans %} mail.removeOrder.title {% endtrans %}
-        {% if action == 'create'     %}{% trans %} action.create   {% endtrans %}{% endif %}
-        {% if action == 'activate'   %}{% trans %} action.active   {% endtrans %}{% endif %}
-        {% if action == 'deactivate' %}{% trans %} action.inactive {% endtrans %}{% endif %}
-        {% if action == 'modify'     %}{% trans %} action.modify   {% endtrans %}{% endif %}
-        {% trans %} shop {% endtrans %}
+        {% if action == 'create'     %} {{'action.create'|trans|lower}}     {% endif %}
+        {% if action == 'activate'   %} {{'action.active'|trans|lower}}     {% endif %}
+        {% if action == 'deactivate' %} {{'action.inactive'|trans|lower}}   {% endif %}
+        {% if action == 'modify'     %} {{'action.modify'|trans|lower}}     {% endif %}
+        {{'shop'|trans|lower}}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
@@ -41,11 +41,11 @@
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>
-        {% if action == 'create'     %}{% trans %} action.create   {% endtrans %}{% endif %}
-        {% if action == 'activate'   %}{% trans %} action.active   {% endtrans %}{% endif %}
-        {% if action == 'deactivate' %}{% trans %} action.inactive {% endtrans %}{% endif %}
-        {% if action == 'modify'     %}{% trans %} action.modify   {% endtrans %}{% endif %}
-        {% trans %} workshop {% endtrans %}
+        {% if action == 'create'     %} {{'action.create'|trans|lower}}     {% endif %}
+        {% if action == 'activate'   %} {{'action.active'|trans|lower}}     {% endif %}
+        {% if action == 'deactivate' %} {{'action.inactive'|trans|lower}}   {% endif %}
+        {% if action == 'modify'     %} {{'action.modify'|trans|lower}}     {% endif %}
+        {{'shop'|trans|lower}}
         </h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
@@ -67,7 +67,7 @@
         </table>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %} <a href="http://www.ad-service.es">{% trans %} www.ad-service.es {% endtrans %}</a>
+        {% trans %} mail.info.more {% endtrans %} <a href="http://adserviceticketing.com">{% trans %} adserviceticketing.com {% endtrans %}</a>
     </td></tr>
 </table>
 

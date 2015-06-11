@@ -25,11 +25,11 @@
                     {% endif %}
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
                             <td> {{ shopOrder.id           }} </td>
-                            <td> {{ shopOrder.name         }} </td>
+                            <td> {{ shopOrder.name|length > 15 ? shopOrder.name|slice(0, 15) ~ '...' : shopOrder.name  }} </td>
                             <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.phoneNumber1 }} </td>
-                            <td> {{ shopOrder.region       }} </td>
-                            <td> {{ shopOrder.address      }} </td>
+                            <td> {{ shopOrder.region|length > 15 ? shopOrder.region|slice(0, 15) ~ '...' : shopOrder.region  }} </td>
+                            <td> {{ shopOrder.address|length > 15 ? shopOrder.address|slice(0, 15) ~ '...' : shopOrder.address  }} </td>
                             <td> {% if shopOrder.active == 0 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
                             <td>

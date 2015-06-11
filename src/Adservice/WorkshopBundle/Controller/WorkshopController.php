@@ -220,7 +220,7 @@ class WorkshopController extends Controller {
                         $mailerUser = $this->get('cms.mailer');
                         $mailerUser->setTo($mail);
                         $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
-                        $mailerUser->setFrom('noreply@grupeina.com');
+                        $mailerUser->setFrom('noreply@adserviceticketing.com');
                         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
                         $mailerUser->sendMailToSpool();
                         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
@@ -394,7 +394,15 @@ class WorkshopController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            if ($form->isValid()) {
+            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
+            $form_errors = $form->getErrors();
+                if(isset($form_errors[0])) {
+                    $form_errors = $form_errors[0];
+                    $form_errors = $form_errors->getMessageTemplate();
+                }else{
+                    $form_errors = 'none';
+                }
+            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
 
                 $em->persist($workshop);
                 $em->flush();

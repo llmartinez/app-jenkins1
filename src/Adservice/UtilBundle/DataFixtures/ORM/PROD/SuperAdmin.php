@@ -39,7 +39,7 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
             $entidad->setCity('Badalona');
             $entidad->setAddress('Avinguda  Llenguadoc, 29 – POL. IND. BONAVISTA');
             $entidad->setPostalCode(08915);
-            $entidad->setPhoneNumber1('93 395 23 08');
+            $entidad->setPhoneNumber1('97 267 77 70');
             $entidad->setEmail1('test@ad-service.es');
             $entidad->setEmail2('test@ad-service.es');
             //CREATE/MODIFY

@@ -33,28 +33,43 @@
         <table>
             <h3>{% trans %} datashop {% endtrans %}:</h3>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} shop {% endtrans %}:</b></td>
-                {% if shop.name != shopOrder.name %} <td> {{ shop.name }} <a style="color: #285e8e">{% trans %} to {% endtrans %}</a> {{ shopOrder.name }}</td>
-                {% else %}                                    <td> {{ shopOrder.name }}</td> {% endif %}
-            </tr>
-            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} partner {% endtrans %}:</b></td><td> {{ shopOrder.partner }}
             </td></tr>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+                <b>{% trans %} shop {% endtrans %}:</b></td>
+                {% if shop.name != shopOrder.name %} <td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ shop.name }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ shopOrder.name }}"
+                </td>
+                {% else %} <td> {{ shopOrder.name }}</td> {% endif %}
+            </tr>
+            <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} tel {% endtrans %}:</b></td>
-                {% if shop.phoneNumber1 != shopOrder.phoneNumber1 %} <td> {{ shop.phoneNumber1 }} {% trans %} change.to {% endtrans %} {{ shopOrder.phoneNumber1 }}</td>
-                {% else %}                                    <td> {{ shopOrder.phoneNumber1 }}</td> {% endif %}
+                {% if shop.phoneNumber1 != shopOrder.phoneNumber1 %} <td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ shop.phoneNumber1 }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a> "{{ shopOrder.phoneNumber1 }}"
+                </td>
+                {% else %} <td> {{ shopOrder.phoneNumber1 }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} mail {% endtrans %}:</b></td>
-                {% if shop.Email1 != shopOrder.Email1 %} <td> {{ shop.Email1 }} {% trans %} change.to {% endtrans %} {{ shopOrder.Email1 }}</td>
-                {% else %}                                    <td> {{ shopOrder.Email1 }}</td> {% endif %}
+                {% if shop.Email1 != shopOrder.Email1 %} <td>
+                    <a style="color: #285e8e">{% trans %} from {% endtrans %}</a> "{{ shop.Email1 }}"
+                </td>
+                <td>
+                    <a style="color: #285e8e">{% trans %} to   {% endtrans %}</a>"{{ shopOrder.Email1 }}"
+                </td>
+                {% else %} <td> {{ shopOrder.Email1 }}</td> {% endif %}
 
             </tr>
         </table>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %} <a href="http://www.ad-service.es">{% trans %} www.ad-service.es {% endtrans %}</a>
+        {% trans %} mail.info.more {% endtrans %} <a href="http://adserviceticketing.com">{% trans %} adserviceticketing.com {% endtrans %}</a>
     </td></tr>
 </table>
 

@@ -7,6 +7,7 @@
 /app/config/parameters.yml
 /app/cache/*
 /app/logs/*
+/app/spool/*
 /app/bootstrap*
 vendor/*
 /web/bundles/*

@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}"> {% trans %} home {% endtrans %} </a></li>
       <li><a href="{{ path('user_list' ) }}"> {% trans %} menu.list_users {% endtrans %} </a></li>
-      <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user }}) </li>
+      <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}) </li>
     </ol>
 
     {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}

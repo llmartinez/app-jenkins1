@@ -41,14 +41,16 @@
             {% for popup in all_popups %}
                 <tr>
                     <td>{{ popup.id }}</td>
-                    <td>{{ popup.name }} {% if popup.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                    <td>{{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }}{% if popup.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                     <td>{{ popup.description|length > 60 ? popup.description|slice(0, 60) ~ '...' : popup.description  }}</td>
                     <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.country|trans }} </td>
                     <td>
                         <a href="{{ path("popup_edit", { 'id':popup.id }) }}" title="{% trans %} edit.popup {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                        <a href="#" title="{% trans %} popup.delete {% endtrans %}"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ popup.id }}"></a>
+
+                        <a href="{{ path('popup_delete', {'id': popup.id}) }}" onClick="return confirm('{% trans %}popup.delete.confirm{% endtrans %}');" target="_self" class="btn_remove" title="{% trans %}delete{% endtrans %}" alt="{% trans %}delete{% endtrans %}"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+
                     </td>
                 </tr>
             {% endfor %}
@@ -60,25 +62,6 @@
 {% else %}
     {% trans %} any.popup {% endtrans %}
 {% endif %}
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">{% trans %} popup.delete {% endtrans %}</h4>
-                </div>
-                <div class="modal-body">
-                    {% trans %} popup.delete.confirm {% endtrans %}
-                </div>
-                <div class="modal-footer">
-                    <a href="{{ path('popup_delete', {'id': 'foo'}) }}" class="btn btn-default btn_delete_popup" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 {% endblock %}
 
