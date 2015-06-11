@@ -4,7 +4,7 @@
 	    $('#firstpage').click(function() {
 
             var partner = $('#flt_partner_w').val();
-            if(partner == null) $('#flt_partner_s').val();
+            if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -22,7 +22,7 @@
 	    	if (prev_page > 0 ) {
 
             var partner = $('#flt_partner_w').val();
-            if(partner == null) $('#flt_partner_s').val();
+            if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -37,7 +37,7 @@
 	    $('.change_page').click(function() {
 
             var partner = $('#flt_partner_w').val();
-            if(partner == null) $('#flt_partner_s').val();
+            if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 		    var route = $('#route').val();
@@ -56,7 +56,7 @@
 	    	if (next_page <= total ) {
 
 	            var partner = $('#flt_partner_w').val();
-	            if(partner == null) $('#flt_partner_s').val();
+	            if(partner == null) var partner = $('#flt_partner_s').val();
 	            if(partner == null) partner = 'none';
 
 			    var route = $('#route').val();
@@ -71,7 +71,7 @@
 	    $('#totalpage').click(function() {
 
             var partner = $('#flt_partner_w').val();
-            if(partner == null) $('#flt_partner_s').val();
+            if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
 	    	var total = $('#total').val();
