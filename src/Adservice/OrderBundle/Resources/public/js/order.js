@@ -2,13 +2,9 @@
 //Funciones para el autorellenado de los combos de campos de coches de los formularios
 
     $(document).ready(function() {
-        $('#MainContent').find('.glyphicon-trash').click(function() {
-            var partner_id = $(this).data('id');
-            confirm_delete_partner_modal(partner_id);
-        });
 
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_partner_s').click(function() {
+        $('#flt_partner_s').change(function() {
 
             var partner = $('#flt_partner_s').val();
 
