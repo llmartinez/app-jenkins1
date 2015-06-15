@@ -17,6 +17,7 @@ class StatisticController extends Controller {
                                                    $status='0', $country='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
+        $request  = $this->getRequest();
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $params = array();
