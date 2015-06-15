@@ -77,7 +77,7 @@ error.txt_chars:                "caracteres"
 isNaN:							"Los campos de telefono deben contener solo numeros"
 Bad credentials: 				"Credenciales incorrectas"
 The presented password is invalid.: "La contraseña introducida no es correcta"
-The presented password cannot be empty.: "Introduce una contraseña"
+The presented password cannot be empty.: "La contraseña no puede estar vacía."
 username_used:					"El nombre introducido ya existe o no es correcto, prueba con: "
 
 #ENTITY
