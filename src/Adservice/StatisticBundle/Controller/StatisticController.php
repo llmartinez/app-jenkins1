@@ -235,7 +235,7 @@ class StatisticController extends Controller {
                 }
                 if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
                                                 $where .= 'AND p.id = '.$partner.' ';
-                                                $join  = ', w.partner p ';
+                                                $join  = ' JOIN w.partner p ';
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
