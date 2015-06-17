@@ -113,6 +113,34 @@ function populate_shop(id_shop){
 }
 
 /**
+ * Funcion que rellena (populate) el combo de las tiendas segun el socio seleccionado por el usuario
+ */
+function fill_code_partner(id_partner){
+    var route  = 'get_code_partner';
+    var locale = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_partner : id_partner},
+        dataType    : "json",
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                $('#code_partner').empty();
+                $.each(data, function(idx, elm) {
+
+                    $('#code_partner').val(elm.code_partner);
+                });
+            }
+        },
+        error : function(){
+            console.log("Error al cargar el codigo de socio...");
+        }
+    });
+}
+
+/**
  * Rellena el combo de los modelos segun la marca seleccionada por el usuario
  */
 

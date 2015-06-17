@@ -218,27 +218,29 @@
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
             {% endif %} </legend>
 
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumUsers         }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumShops         }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
-            </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_tel {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsTel }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_app {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsApp }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
             <legend> {% trans %} statistic.no_ticket {% endtrans %}
@@ -282,27 +284,29 @@
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
             {% endif %} </legend>
 
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumUsers         }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumShops         }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
-            </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_tel {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsTel }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_app {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsApp }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
             <legend> {% trans %} statistic.last_tickets {% endtrans %}
@@ -351,27 +355,29 @@
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
             {% endif %} </legend>
 
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumUsers         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumUsers         }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumShops         }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumPartners      }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumShops         }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
             </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumTickets       }}            </div>
-            </div>
-            <div class="col-xs-86 col-md-6 form-group">
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
-                <div class="col-xs-8 col-md-8 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
-                <div class="col-xs-4 col-md-4 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_tel {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsTel }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets_app {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsApp }}            </div>
+                <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
             <legend>{% trans %} statistic.last_tickets {% endtrans %}

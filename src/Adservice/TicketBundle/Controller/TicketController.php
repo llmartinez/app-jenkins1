@@ -359,8 +359,8 @@ class TicketController extends Controller {
      * Crea un ticket abierto con sus respectivos post y car
      * @return url
      */
-    public function newTicketAction($id_workshop=null) {
-
+    public function newTicketAction($id_workshop=null)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $request  = $this->getRequest();
         $ticket   = new Ticket();
@@ -580,7 +580,8 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function editTicketAction($id, $ticket) {
+    public function editTicketAction($id, $ticket)
+    {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -660,8 +661,8 @@ class TicketController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteTicketAction($id, $ticket){
-
+    public function deleteTicketAction($id, $ticket)
+    {
         $security = $this->get('security.context');
         $request  = $this->getRequest();
         if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -730,8 +731,8 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketAction($ticket) {
-
+    public function showTicketAction($ticket)
+    {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
@@ -941,7 +942,8 @@ class TicketController extends Controller {
      * @Route("/post_edit/{id}")
      * @ParamConverter("post", class="TicketBundle:Post")
      */
-    public function editPostAction($post) {
+    public function editPostAction($post)
+    {
         if (! $this->get('security.context')->isGranted('ROLE_USER')){
             throw new AccessDeniedException();
         }
@@ -1124,7 +1126,8 @@ class TicketController extends Controller {
     /**
      * Obtiene todos los talleres del usuario logeado
      */
-    public function workshopListAction($page=1 , $option=null) {
+    public function workshopListAction($page=1 , $option=null)
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
         $params[] = array();
@@ -1146,7 +1149,8 @@ class TicketController extends Controller {
      * @param Int $id_workshop
      * @return type
      */
-    public function getTicketsFromWorkshopAction($id_workshop, $page=1) {
+    public function getTicketsFromWorkshopAction($id_workshop, $page=1)
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
         $params = array();
@@ -1170,7 +1174,8 @@ class TicketController extends Controller {
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function assignUserToTicketAction($ticket, $id_user = null) {
+    public function assignUserToTicketAction($ticket, $id_user = null)
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
         //id_user puede venir por parametro o por post
@@ -1198,7 +1203,8 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return type
      */
-    public function assignTicketSelectUserAction($ticket) {
+    public function assignTicketSelectUserAction($ticket)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $users = $this->getUsersToAssingFromTicket();
 
@@ -1214,7 +1220,8 @@ class TicketController extends Controller {
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function blockTicketAction($ticket, $id_user = null) {
+    public function blockTicketAction($ticket, $id_user = null)
+    {
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $em->getRepository('UserBundle:User')->find($id_user);
@@ -1222,6 +1229,7 @@ class TicketController extends Controller {
         if ($user != null and $id_user != 0) {
 
             $ticket->setBlockedBy($user);
+            $this->assignTicket($ticket, $user);
 
             UtilController::saveEntity($em, $ticket, $user);
 
@@ -1244,7 +1252,8 @@ class TicketController extends Controller {
      * Funcion que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
      * @return array
      */
-    public function getTicketsByOption($option) {
+    public function getTicketsByOption($option)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $security = $this->get('security.context');
@@ -1354,8 +1363,8 @@ class TicketController extends Controller {
 
         $pagination = new Pagination($page);
 
-//      if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
-//      Seteamos el numero de resultados que se mostraran
+        // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
+        // Seteamos el numero de resultados que se mostraran
         $pagination->setMaxRows(50);
 
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
@@ -1404,7 +1413,8 @@ class TicketController extends Controller {
      * Devuelve todos los usuarios que podran ser asignados a un ticket (admins i asesores has nuevo aviso)
      * @param type $id_ticket
      */
-    private function getUsersToAssingFromTicket() {
+    private function getUsersToAssingFromTicket()
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
         $query    = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ASSESSOR' AND u.active = 1 ORDER BY u.name ASC";
@@ -1418,7 +1428,8 @@ class TicketController extends Controller {
      * @param Ticket $ticket
      * @param User $user
      */
-    private function assignTicket($ticket, $user=null) {
+    private function assignTicket($ticket, $user=null)
+    {
         $em = $this->getDoctrine()->getEntityManager();
 
         ($user != null) ? $ticket->setAssignedTo($user) : $ticket->setAssignedTo(null);
@@ -1433,7 +1444,8 @@ class TicketController extends Controller {
      * @param  Integer $check_id
      * @return Array
      */
-    private function filterTickets($tickets,$check_id){
+    private function filterTickets($tickets,$check_id)
+    {
         $tickets_filtered = array();
 
         foreach ($tickets as $ticket) {
@@ -1480,6 +1492,4 @@ class TicketController extends Controller {
     //                                                                                    'option'     => $option,
     //                                                                           ));
     // }
-
-
 }

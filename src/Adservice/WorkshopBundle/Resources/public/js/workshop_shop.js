@@ -7,5 +7,6 @@ $(document).ready(function() {
     //si clickamos el combobox de los socios rellenamos el de tiendas
     $('form').find('select[name*=partner]').change(function() {
         populate_shop();
+        fill_code_partner($(this).val());
     });
 });

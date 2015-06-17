@@ -78,6 +78,8 @@ class StatisticController extends Controller {
                 $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
                 $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
                 $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
+                $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
+                $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
                 $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
                 $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
 
@@ -125,6 +127,8 @@ class StatisticController extends Controller {
             $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
             $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
             $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
+            $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
+            $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
             $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
             $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
 
