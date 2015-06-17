@@ -39,7 +39,7 @@ class LoginController extends Controller {
     }
 
     public function goToLoginAction() {
-        return $this->redirect($this->generateUrl('user_login'));
+        return $this->redirect($this->generateUrl('user_index'));
     }
 }
 

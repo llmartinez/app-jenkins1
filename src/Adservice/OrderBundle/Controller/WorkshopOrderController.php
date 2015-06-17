@@ -148,6 +148,7 @@ class WorkshopOrderController extends Controller {
                     $user = $security->getToken()->getUser();
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setPartner($partner);
+                    $workshopOrder->setCodePartner($partner->getCodePartner());
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
 		            $roles = $roles[0];
@@ -180,7 +181,7 @@ class WorkshopOrderController extends Controller {
                         $mailer = $this->get('cms.mailer');
                         $mailer->setTo($mail);
                         $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
-                        $mailer->setFrom('noreply@grupeina.com');
+                        $mailer->setFrom('noreply@adserviceticketing.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder)));
                         $mailer->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
@@ -318,7 +319,7 @@ class WorkshopOrderController extends Controller {
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
-                    $mailer->setFrom('noreply@grupeina.com');
+                    $mailer->setFrom('noreply@adserviceticketing.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
                                                                                                              'workshop'      => $workshop )));
                     $mailer->sendMailToSpool();
@@ -403,7 +404,7 @@ class WorkshopOrderController extends Controller {
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$workshopOrder->getId());
-            $mailer->setFrom('noreply@grupeina.com');
+            $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_mail.html.twig', array('workshopOrder' => $workshopOrder)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:order_change_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
@@ -472,7 +473,7 @@ class WorkshopOrderController extends Controller {
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$workshopOrder->getId());
-                    $mailer->setFrom('noreply@grupeina.com');
+                    $mailer->setFrom('noreply@adserviceticketing.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_mail.html.twig', array('workshopOrder' => $workshopOrder)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_reject_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
@@ -533,7 +534,7 @@ class WorkshopOrderController extends Controller {
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($mail);
                 $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$workshopOrder->getId());
-                $mailer->setFrom('noreply@grupeina.com');
+                $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('workshopOrder' => $workshopOrder,
                                                                                                            'action'        => $action)));
                 $mailer->sendMailToSpool();
@@ -587,7 +588,7 @@ class WorkshopOrderController extends Controller {
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$workshopOrder->getId());
-            $mailer->setFrom('noreply@grupeina.com');
+            $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_mail.html.twig', array('workshopOrder' => $workshopOrder,
                                                                                                        'action'        => $action)));
             $mailer->sendMailToSpool();
@@ -756,7 +757,7 @@ class WorkshopOrderController extends Controller {
                         $mailerUser = $this->get('cms.mailer');
                         $mailerUser->setTo($mail);
                         $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
-                        $mailerUser->setFrom('noreply@grupeina.com');
+                        $mailerUser->setFrom('noreply@adserviceticketing.com');
                         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
                         $mailerUser->sendMailToSpool();
                         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
@@ -778,7 +779,7 @@ class WorkshopOrderController extends Controller {
                     $mailer = $this->get('cms.mailer');
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
-                    $mailer->setFrom('noreply@grupeina.com');
+                    $mailer->setFrom('noreply@adserviceticketing.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
                                                                                                                'action'   => $action)));
                     $mailer->sendMailToSpool();
@@ -804,12 +805,14 @@ class WorkshopOrderController extends Controller {
 
         $workshopOrder->setIdWorkshop    ($workshop->getId());
         $workshopOrder->setName          ($workshop->getName());
+        $workshopOrder->setCodePartner   ($workshop->getCodePartner());
         $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setCif           ($workshop->getCif());
         $workshopOrder->setPartner       ($workshop->getPartner());
         $shop = $workshop->getShop();
         if(isset($shop)) { $workshopOrder->setShop($shop); }
-        $workshopOrder->setTypology      ($workshop->getTypology());
+        $tipology = $workshop->getTypology();
+        if(isset($tipology)) { $workshopOrder->setTypology($tipology); }
         $workshopOrder->setTest          ($workshop->getTest());
         $workshopOrder->setContactName   ($workshop->getContactName());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());
@@ -853,6 +856,7 @@ class WorkshopOrderController extends Controller {
     private function workshopOrder_to_workshop($workshop, $workshopOrder){
 
         $workshop->setName          ($workshopOrder->getName());
+        $workshop->setCodePartner   ($workshopOrder->getCodePartner());
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
         $workshop->setCif           ($workshopOrder->getCif());
         $workshop->setCodePartner   ($workshopOrder->getPartner()->getCodePartner());

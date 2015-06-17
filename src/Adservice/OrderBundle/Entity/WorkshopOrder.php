@@ -53,6 +53,13 @@ class WorkshopOrder {
     private $name;
 
     /**
+     * @var integer $code_partner
+     *
+     * @ORM\Column(name="code_partner", type="integer")
+     */
+    private $code_partner;
+
+    /**
      * @var string $code_workshop
      *
      * @ORM\Column(name="code_workshop", type="integer", length=255, nullable=true )
@@ -180,7 +187,7 @@ class WorkshopOrder {
     private $conflictive;
 
     /**
-     * @var string $rejection_reason 
+     * @var string $rejection_reason
      * @ORM\Column(name="rejection_reason", type="string", length=255, nullable=true)
      */
     private $rejection_reason;
@@ -200,6 +207,9 @@ class WorkshopOrder {
     public function getId() {
         return $this->id;
     }
+    public function setId($id) {
+        $this->id = $id;
+    }
 
     /**
      * Set name
@@ -217,6 +227,24 @@ class WorkshopOrder {
      */
     public function getName() {
         return $this->name;
+    }
+
+    /**
+     * Set code_partner
+     *
+     * @param integer $code_partner
+     */
+    public function setCodePartner($code_partner) {
+        $this->code_partner = $code_partner;
+    }
+
+    /**
+     * Get code_partner
+     *
+     * @return integer
+     */
+    public function getCodePartner() {
+        return $this->code_partner;
     }
 
     /**

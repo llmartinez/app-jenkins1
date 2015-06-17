@@ -4,10 +4,10 @@
 	    {% if ticket.assignedTo != "" %}<p><b>{% trans %} assigned_to {% endtrans %}:</b>{{ ticket.assignedTo }} </p>{% endif %}
 
 	    <legend>{% trans %} description {% endtrans %}</legend>
-	    <p> {{ ticket.description }} </p>
+	    <p> {{ ticket.description|nl2br }} </p>
 
 	    <legend>{% trans %} solution {% endtrans %}</legend>
-	    <p> {{ ticket.solution }} </p>
+	    <p> {{ ticket.solution|nl2br }} </p>
 
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}

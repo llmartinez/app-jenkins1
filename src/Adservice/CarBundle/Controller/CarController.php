@@ -48,12 +48,24 @@ class CarController extends Controller {
                     $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
                     $id_model = $request->request->get('new_car_form_model');
                     $model = $em->getRepository('CarBundle:Model')->find($id_model);
-                    $id_version = $request->request->get('new_car_form_version');
-                    $version = $em->getRepository('CarBundle:Version')->find($id_version);
 
                     $car->setBrand($brand);
                     $car->setModel($model);
-                    $car->setVersion($version);
+
+                    //SI NO HA ESCOGIDO VERSION DE DEJA NULL
+                    $id_version = $request->request->get('new_car_form_version');
+                    if (isset($id_version)){
+                        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                    }
+                    else{
+                        $id_version = null;
+                    }
+                    if (isset($version)){
+                        $car->setVersion($version);
+                    }
+                    else{
+                        $car->setVersion(null);
+                    }
                     UtilController::saveEntity($em, $car, $user);
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
@@ -63,7 +75,7 @@ class CarController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
 
-        $brands      = $em->getRepository('CarBundle:Brand'        )->findAll();
+        $brands      = $em->getRepository('CarBundle:Brand'        )->findBy(array(), array('name' => 'ASC'));
         $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getBrand()->getId());
         $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getModel()->getId());
 

@@ -18,7 +18,7 @@
 
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2">
-                <label>{% trans %} workshop {% endtrans %}</label>
+                <label>{% trans %} workshop {% endtrans %} *</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control',
                                                      'placeholder': 'name' | trans } }) }}
             </div>
@@ -41,7 +41,7 @@
 
             <div class="col-xs-2 col-md-2">
                 <input type="hidden" id="id_partner" value="{{ id_partner }}">
-                <label>{% trans %} shop {% endtrans %} </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+                <label>{% trans %} shop {% endtrans %} * </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
             </div>
 
             <div class="col-xs-2 col-md-2">
@@ -51,7 +51,7 @@
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2">
 
-                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                <label>{% trans %} code_workshop {% endtrans %} *</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
                 <input type="hidden" id="code" name="code" value="{{ code }}">
             </div>
             <div class="col-xs-2 col-md-2">
@@ -82,7 +82,7 @@
 
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} contact {% endtrans %}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                <label>{% trans %} contact {% endtrans %} *</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
             </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 

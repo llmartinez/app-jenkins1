@@ -42,12 +42,12 @@
                 {% for partner in all_partners %}
             <tr>
                 <td>{{ partner.codePartner }}</td>
-                <td>{{ partner.name        }}</td>
+                <td>{{ partner.name|length > 15 ? partner.name|slice(0, 15) ~ '...' : partner.name  }}</td>
                 <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
-                <td>{{ partner.region  }}</td>
-                <td>{{ partner.city    }}</td>
+                <td>{{ partner.region|length > 15 ? partner.region|slice(0, 15) ~ '...' : partner.region  }}</td>
+                <td>{{ partner.city|length > 15 ? partner.city|slice(0, 15) ~ '...' : partner.city  }}</td>
                 <td>
                     <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                 </td>
