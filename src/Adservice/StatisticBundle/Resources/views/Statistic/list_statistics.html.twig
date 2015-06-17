@@ -57,6 +57,14 @@
             </select>
         </div>
         {% endif %}
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} assessor {% endtrans %}</label>
+            <select id="flt_tck_assessor" class='form-control'>
+                <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for assessor in assessors %}
+                    <option value="{{ assessor.id }}">{{ assessor.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
         <div class="col-xs-12 col-md-12 form-group">
             <button class="btn btn-primary btn100" id="btn_search_ticket" >
@@ -433,6 +441,7 @@
     <input type="hidden" id="type_partner"  value="{{ partner }}">
     <input type="hidden" id="type_shop"     value="{{ shop    }}">
     <input type="hidden" id="type_workshop" value="{{ wks     }}">
+    <input type="hidden" id="type_assessor" value="{{ assessor}}">
     <input type="hidden" id="type_typology" value="{{ typology}}">
     <input type="hidden" id="type_country"  value="{{ country }}">
     <input type="hidden" id="type_status"   value="{{ status  }}">

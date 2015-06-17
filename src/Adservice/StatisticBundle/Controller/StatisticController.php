@@ -14,7 +14,7 @@ class StatisticController extends Controller {
     public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                    $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                    $partner='0', $shop='0', $workshop='0', $typology='0',
-                                                   $status='0', $country='0') {
+                                                   $status='0', $country='0', $assessor='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
@@ -46,6 +46,8 @@ class StatisticController extends Controller {
                                                                         $joins[]  = array('w.partner  p', 'p.id = '.$partner);
                                         }
                                         if    ($workshop != '0'    ) {  $params[] = array('workshop', ' = '.$workshop);
+                                        }
+                                        if    ($assessor != '0'    ) {  $params[] = array('assigned_to', ' = '.$assessor);
                                         }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
@@ -163,20 +165,24 @@ class StatisticController extends Controller {
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s");
             $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3");
             $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
+            $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
             $country = $security->getToken()->getUser()->getCountry()->getId();
-            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p where p.country = ".$country." ");
-            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s where s.country = ".$country." ");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w where w.country = ".$country." ");
-            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t where t.country = ".$country." ");
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." ");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
+            $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
 
         }
@@ -192,6 +198,7 @@ class StatisticController extends Controller {
                                                                                           'partners'  => $partners,
                                                                                           'shops'     => $shops,
                                                                                           'workshops' => $workshops,
+                                                                                          'assessors' => $assessors,
                                                                                           'typologies'=> $typologies,
                                                                                           'countries' => $countries,
                                                                                           'pagination'=> $pagination,
@@ -199,6 +206,7 @@ class StatisticController extends Controller {
                                                                                           'partner'   => $partner,
                                                                                           'shop'      => $shop,
                                                                                           'wks'       => $workshop,
+                                                                                          'assessor'  => $assessor,
                                                                                           'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
@@ -207,7 +215,7 @@ class StatisticController extends Controller {
 
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                       $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                      $partner='0', $status='0', $country='0'){
+                                                      $partner='0', $status='0', $country='0', $assessor='0'){
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -240,6 +248,8 @@ class StatisticController extends Controller {
                 if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
                                                 $where .= 'AND p.id = '.$partner.' ';
                                                 $join  = ' JOIN w.partner p ';
+                }
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
