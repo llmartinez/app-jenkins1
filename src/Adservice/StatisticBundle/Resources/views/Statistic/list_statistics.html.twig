@@ -65,6 +65,13 @@
                 {% endfor %}
             </select>
         </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} created_by {% endtrans %}</label>
+            <select id="flt_tck_created_by" class='form-control'>
+                <option value="0">{% trans %} anyone {% endtrans %}</option>
+                <option value="tel">{% trans %} assessor {% endtrans %}</option>
+                <option value="app">{% trans %} workshop {% endtrans %}</option>
+            </select>
+        </div>
 
         <div class="col-xs-12 col-md-12 form-group">
             <button class="btn btn-primary btn100" id="btn_search_ticket" >
@@ -441,6 +448,7 @@
     <input type="hidden" id="type_shop"     value="{{ shop    }}">
     <input type="hidden" id="type_workshop" value="{{ wks     }}">
     <input type="hidden" id="type_assessor" value="{{ assessor}}">
+    <input type="hidden" id="type_created_by" value="{{ created_by}}">
     <input type="hidden" id="type_typology" value="{{ typology}}">
     <input type="hidden" id="type_country"  value="{{ country }}">
     <input type="hidden" id="type_status"   value="{{ status  }}">

@@ -5,6 +5,8 @@
 	    $('#firstpage').click(function() {
 	        var workshop = '0';
 	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
 	        var shop = '0';
 
             var type        = $(document).find("#type").val();
@@ -21,6 +23,7 @@
 	        	var country = $('#flt_tck_country').val();
 	        	var status  = $('#flt_tck_status').val();
 	        	var workshop  = $('#flt_tck_workshop').val();
+	        	var created_by  = $('#flt_tck_created_by').val();
 	        }else{
         		if(type == 'workshop') {
 			        var from_y  = $('#wks_from_y').val();
@@ -74,7 +77,7 @@
 
             var route  = 'listStatistics';
 	        var locale = $(document).find("#data_locale").val();
-	        var url    = Routing.generate(route, {_locale: locale, type: type, page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country});
+	        var url    = Routing.generate(route, {_locale: locale, type: type, page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 	    	window.open(url, "_self");
 	    });
@@ -83,6 +86,8 @@
 	    $('#btn_anterior').click(function() {
 	        var workshop = '0';
 	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
 	        var shop = '0';
 
 	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
@@ -103,6 +108,7 @@
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
 	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -157,7 +163,7 @@
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 	        	var page   = 1;
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country});
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 		    	window.open(url, "_self");
 		    }
@@ -167,6 +173,8 @@
 	    $('.change_page').click(function() {
 	        var workshop = '0';
 	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
 	        var shop = '0';
 
 	    	var type        = $(document).find("#type").val();
@@ -184,6 +192,7 @@
 	        	var country = $('#flt_tck_country').val();
 	        	var status  = $('#flt_tck_status').val();
 	        	var workshop  = $('#flt_tck_workshop').val();
+	        	var created_by  = $('#flt_tck_created_by').val();
 	        }
 	        else{
         		if(type == 'workshop') {
@@ -239,7 +248,7 @@
             var route  = 'listStatistics';
 	        var locale = $(document).find("#data_locale").val();
 	        var page   = $(this).text();
-	        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country});
+	        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 	    	window.open(url, "_self");
 	    });
@@ -248,6 +257,8 @@
 	    $('#btn_siguiente').click(function() {
 	        var workshop = '0';
 	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
 	        var shop = '0';
 
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
@@ -269,6 +280,7 @@
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
 	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -323,7 +335,7 @@
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 		        var page   = next_page;
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country});
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 		    	window.open(url, "_self");
 		    }
@@ -333,6 +345,8 @@
 	    $('#totalpage').click(function() {
 	        	var workshop = '0';
 		        var typology = '0';
+	        	var assessor = '0';
+	        	var created_by = '0';
 		        var shop = '0';
 
 				var type        = $(document).find("#type").val();
@@ -349,6 +363,7 @@
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
 	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -403,7 +418,7 @@
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 		        var page   = $('#total').val();
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country});
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 
 	    	window.open(url, "_self");
