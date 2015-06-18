@@ -141,6 +141,27 @@ class UtilController extends Controller
         return $code;
     }
 
+    /**
+     * Comprueba si el telefono existe en la tabla de talleres
+     * @param  entityManager $em
+     * @param  integer       $tel
+     * @return bool
+     */
+    public static function isTelUsed($em, $tel)
+    {
+
+        $code   = 1; //Si no hay codigo por parametro se asigna 1
+        $unused = 1;
+
+        while($unused != 'unused') {
+            $find = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+
+            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
+            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+        }
+        return $code;
+    }
+
 
     /**
      * compara el slug de una cadena ($string_slug) con un array de variables ($array),

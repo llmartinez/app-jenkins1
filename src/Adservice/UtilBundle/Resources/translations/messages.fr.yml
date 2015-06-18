@@ -109,6 +109,7 @@ post: 					 "Messages"
 order:					 "Demande"
 incidence:				 "Incidence"
 info:				 	 "Information"
+charge:					 "Charge"
 
 #CONTACT
 name:					 "Nom"
