@@ -211,23 +211,25 @@ class TicketController extends Controller {
             else{
                 $joins[] = array('e.workshop w ', 'w.country = '.$country);
             }
-        }else{
-            if($country != 0) {
-                if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
-                {
-                    $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
-                }
-                else{
-                    $joins[] = array('e.workshop w ', 'w.country = '.$country);
-                }
-            }else{
-                $country = $security->getToken()->getUser()->getCountry()->getId();
-                 if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
-                {
-                    $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
-                }
-                else{
-                    $joins[] = array('e.workshop w ', 'w.country = '.$country);
+      }else{
+            if($country != 'none'){
+                if($country != 0) {
+                    if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                    {
+                        $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                    }
+                    else{
+                        $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                    }
+                }else{
+                    $country = $security->getToken()->getUser()->getCountry()->getId();
+                     if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                    {
+                        $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                    }
+                    else{
+                        $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                    }
                 }
             }
         }
@@ -332,6 +334,7 @@ class TicketController extends Controller {
         if ($option == null) $option = 'all';
 
         $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
+        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
@@ -373,6 +376,7 @@ class TicketController extends Controller {
                                                                                        'num_rows'   => $num_rows,
                                                                                        'option'     => $option,
                                                                                        'brands'     => $brands,
+                                                                                       'systems'    => $systems,
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
                                                                                        'inactive'   => $inactive,
@@ -1349,12 +1353,14 @@ class TicketController extends Controller {
         else $tickets = array();
 
         $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
+        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
                                                                                        'pagination' => new Pagination(),
                                                                                        'tickets'    => $tickets,
                                                                                        'brands'     => $brands,
+                                                                                       'systems'    => $systems,
                                                                                        'countries'  => $countries,
                                                                                        'option'     => 'all',
                                                                                        'page'       => 0,
@@ -1369,7 +1375,7 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, $num_rows=10)
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, $system=0, $subsystem=0, $num_rows=10)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security   = $this->get('security.context');
@@ -1403,14 +1409,23 @@ class TicketController extends Controller {
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
-                $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
-
-                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN')))
-                    $tickets[] = $ticket;
+               if( $subsystem == 0) {
+                    $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                }
+                else {
+                    $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
+                }
+                
             }
         }
-
+        else {
+            $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
+        }      
+        if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+            $tickets[] = $ticket;
+        }
         $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
+        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
@@ -1419,6 +1434,7 @@ class TicketController extends Controller {
                                                                                        'pagination' => new Pagination(0),
                                                                                        'tickets'    => $tickets,
                                                                                        'brands'     => $brands,
+                                                                                       'systems'    => $systems,
                                                                                        'countries'  => $countries,
                                                                                        'adsplus'    => $adsplus,
                                                                                        'option'     => 'all',
