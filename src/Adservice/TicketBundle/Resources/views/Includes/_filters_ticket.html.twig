@@ -52,6 +52,21 @@
                 </select>
             </div>
 
+            <div class="col-xs-8 col-md-8 form-group pdl0">
+                <label for="id_system">{% trans %} system {% endtrans %}</label>
+                <select id="id_system" name="id_system" class="form-control h65" multiple="multiple" >
+                    {% for system in systems %}
+                        <option value={{ system.id }}>{{ system.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>         
+                
+            <div class="col-xs-8 col-md-8 form-group pdl0">
+                <label for="new_car_form_subsystem">{% trans %} subsystem {% endtrans %}</label>                
+                <select id="new_car_form_subsystem" name="new_car_form_subsystem" class="form-control h65" multiple="multiple" >
+                </select>
+            </div>
+                
             <div class="col-xs-12 col-md-12 form-group pdl0">
                 <div class="col-xs-8 col-md-8 form-group pdl0"></div>
                 <div class="col-xs-3 col-md-3 form-group pdl0">
