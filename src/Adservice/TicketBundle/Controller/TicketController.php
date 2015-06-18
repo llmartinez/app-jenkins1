@@ -94,20 +94,41 @@ class TicketController extends Controller {
             $params[] = array('status'        , ' = '.$open  ->getId());
             $params[] = array('assigned_to '  , 'IS NULL');
         }
-        elseif ($option == 'pending'          or  $option == 'answered')
+        elseif ($option == 'pending')
         {
             $params[] = array('status', ' = '.$open->getId());
             $params[] = array('assigned_to'   , 'IS NOT NULL');
+            $params[] = array('pending'   , '= 1');
         }
-        elseif ($option == 'assessor_pending' or  $option == 'assessor_answered')
+        elseif ($option == 'answered')
+        {
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , 'IS NOT NULL');
+            $params[] = array('pending'   , '= 0');
+        }
+        elseif ($option == 'assessor_pending')
         {
             $params[] = array('status', ' = '.$open->getId());
             $params[] = array('assigned_to'   , '= '.$id_user);
+            $params[] = array('pending'   , '= 1');
         }
-        elseif ($option == 'other_pending'    or  $option == 'other_answered')
+        elseif ($option == 'assessor_answered')
+        {
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '= '.$id_user);
+            $params[] = array('pending'   , '= 0');
+        }
+        elseif ($option == 'other_pending')
         {
             $params[] = array('status', ' = '.$open->getId());
             $params[] = array('assigned_to'   , '!= '.$id_user);
+            $params[] = array('pending'   , '= 1');
+        }
+        elseif ($option == 'other_answered')
+        {
+            $params[] = array('status', ' = '.$open->getId());
+            $params[] = array('assigned_to'   , '!= '.$id_user);
+            $params[] = array('pending'   , '= 0');
         }
         elseif ($option == 'assessor_closed')
         {
@@ -225,6 +246,9 @@ class TicketController extends Controller {
             $query = 'SELECT t FROM TicketBundle:Ticket t';
             if     (($option == 'assessor_pending') or ($option == 'assessor_answered')) $query = $query.' WHERE t.assigned_to = '.$id_user;
             elseif (($option == 'other_pending'   ) or ($option == 'other_answered'   )) $query = $query.' WHERE t.assigned_to != '.$id_user;
+
+            if     (($option == 'assessor_pending') or ($option == 'other_pending')) $query = $query.' AND t.pending = 1';
+            elseif (($option == 'assessor_answered') or ($option == 'other_answered')) $query = $query.' AND t.pending != 1';
 
             $consulta = $em->createQuery($query);
             $query_posts = '';
@@ -479,6 +503,7 @@ class TicketController extends Controller {
                                     $ticket->setWorkshop($user->getWorkshop());
                                 }
                                 $ticket->setStatus($status);
+                                $ticket->setPending(1);
                                 $ticket->setCar($car);
                                 UtilController::saveEntity($em, $ticket, $user);
 
@@ -859,19 +884,13 @@ class TicketController extends Controller {
                                 if ($ticket->getBlockedBy() != null) {
                                     $ticket->setBlockedBy(null);
 
-                                    /*si es el primer assessor que responde se le asigna*/
-                                    $posts = $ticket->getPosts();
-                                    $primer_assessor = 0;
-                                    foreach ($posts as $post) {
-                                                    $post_role = $post->getCreatedBy();
-                                                    $post_role = $post_role->getRoles();
-                                                    $post_role = $post_role[0];
-                                                    $post_role = $post_role->getName();
-                                        if ($post_role == 'ROLE_ASSESSOR') {
-                                            $primer_assessor = 1;
-                                        }
+                                    /*si assessor responde se le asigna y se amrca como respondido, si es el taller se marca como pendiente */
+                                    if ($security->isGranted('ROLE_ASSESSOR')) {
+                                        $ticket->setAssignedTo($user);
+                                        $ticket->setPending(0);
+                                    }else{
+                                        $ticket->setPending(1);
                                     }
-                                    if($primer_assessor == 0) $ticket->setAssignedTo($user);
                                 }
 
                             UtilController::saveEntity($em, $ticket, $user);
@@ -1029,6 +1048,7 @@ class TicketController extends Controller {
                             $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
                             $user   = $security->getToken()->getUser();
                             $ticket->setStatus($closed);
+                            $ticket->setPending(0);
                             $ticket->setBlockedBy(null);
 
                             UtilController::saveEntity($em, $ticket, $user);
@@ -1095,6 +1115,7 @@ class TicketController extends Controller {
         $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
         $ticket->setStatus($status);
+        $ticket->setPending($status);
         UtilController::saveEntity($em, $ticket, $user);
 
         $mail = $ticket->getWorkshop()->getEmail1();
