@@ -298,6 +298,13 @@ function fill_car_by_year() {
             $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
             $('#filter_motor').empty();
             $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+
+            $('#filter_year').empty();
+            if(year != ''){
+                $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+            }else{
+                $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+            }
         },
         error: function() {
             console.log("Error al filtrar por año...");
@@ -316,29 +323,34 @@ function fill_car_by_motor() {
     var route  = 'car_by_motor';
     var locale = $(document).find("#data_locale").val();
 
-    $.ajax({
-        type: "POST",
-        url: Routing.generate(route, {_locale: locale, motor: motor}),
-        data: {motor: motor},
-        dataType: "json",
-        success: function(data) {
-            // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-            $('#new_car_form_brand').empty();
-            $('#new_car_form_model').empty();
-            $('#new_car_form_version').empty();
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-            //Cambiamos el icono para indicar que se esta filtrando por motor
-            $('#filter_year').empty();
-            $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
-            $('#filter_motor').empty();
-            $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-        },
-        error: function() {
-            console.log("Error al filtrar por motor...");
-        }
-    });
+        $.ajax({
+            type: "POST",
+            url: Routing.generate(route, {_locale: locale, motor: motor}),
+            data: {motor: motor},
+            dataType: "json",
+            success: function(data) {
+                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+                $('#new_car_form_brand').empty();
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
+                $.each(data, function(idx, elm) {
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                });
+                //Cambiamos el icono para indicar que se esta filtrando por motor
+                $('#filter_year').empty();
+                $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+
+                $('#filter_motor').empty();
+                if(motor != ''){
+                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                }else{
+                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                }
+            },
+            error: function() {
+                console.log("Error al filtrar por motor...");
+            }
+        });
 }
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
