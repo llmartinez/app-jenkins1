@@ -150,7 +150,8 @@
         <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets  {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-        {% endif %}
+            {% endif %}
+            ({{ length }})
             <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
@@ -188,7 +189,8 @@
         <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-        {% endif %}
+            {% endif %}
+            ({{ length }})
            <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
@@ -224,7 +226,8 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}
+            ({{ length }}) </legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -290,7 +293,8 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}
+            ({{ length }}) </legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -361,7 +365,8 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}
+            ({{ length }}) </legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>

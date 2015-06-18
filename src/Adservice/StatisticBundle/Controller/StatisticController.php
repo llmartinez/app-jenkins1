@@ -62,9 +62,9 @@ class StatisticController extends Controller {
                                         if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
                                         if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
                                         if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1 AND e.endtest_at IS NULL' ); }
                                         elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
+                                        elseif ($status == "test"    ) { $params[] = array('test', " = 1 AND e.endtest_at >= '".date("Y-m-d H:i:s")."'"); }
                                         elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
@@ -210,6 +210,7 @@ class StatisticController extends Controller {
                                                                                           'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
+                                                                                          'length'    => $length,
                                                                             ));
     }
 
