@@ -193,7 +193,7 @@ class WorkshopOrderController extends Controller {
                     return $this->redirect($this->generateUrl('list_orders'));
 
                 }else{
-                        $flash = $this->get('translator')->trans('error.code_partner.used').$code;
+                        $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
                         $this->get('session')->setFlash('error', $flash);
                         $this->get('session')->setFlash('code' , $code);
                 }

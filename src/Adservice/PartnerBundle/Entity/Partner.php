@@ -186,6 +186,11 @@ class Partner {//implements EventSubscriber{
     }
 
 
+    public function to_json(){
+        $json = array('id'           => $this->getId(),
+                      'code_partner' => $this->getCodePartner());
+        return $json;
+    }
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
 // | |  | | | |  \| | | | / _ \| |     | |

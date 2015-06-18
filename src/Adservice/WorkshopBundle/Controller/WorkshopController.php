@@ -234,7 +234,7 @@ class WorkshopController extends Controller {
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
                 else{
-                    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
+                    $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
                     $this->get('session')->setFlash('error', $flash);
                 }
             }
@@ -338,7 +338,7 @@ class WorkshopController extends Controller {
                 }
                 else{
                     $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
-                    $flash = $this->get('translator')->trans('error.code_partner.used').$code.' (valor actual '.$last_code.').';
+                    $flash = $this->get('translator')->trans('error.code_workshop.used').$code.' (valor actual '.$last_code.').';
                     $this->get('session')->setFlash('error', $flash);
                 }
             }
