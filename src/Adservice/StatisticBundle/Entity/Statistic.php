@@ -12,6 +12,8 @@ class Statistic {
     private $num_shops;
     private $num_workshops;
     private $num_tickets;
+    private $num_tickets_tel;
+    private $num_tickets_app;
     private $num_open_tickets;
     private $num_closed_tickets;
     private $user_with_max_post;
@@ -34,6 +36,14 @@ class Statistic {
 
     public function getNumTickets() {
         return $this->num_tickets;
+    }
+
+    public function getNumTicketsTel() {
+        return $this->num_tickets_tel;
+    }
+
+    public function getNumTicketsApp() {
+        return $this->num_tickets_app;
     }
 
     public function getNumOpenTickets() {
@@ -65,6 +75,14 @@ class Statistic {
         $this->num_tickets = $num_tickets;
     }
 
+    public function setNumTicketsTel($num_tickets_tel) {
+        $this->num_tickets_tel = $num_tickets_tel;
+    }
+
+    public function setNumTicketsApp($num_tickets_app) {
+        $this->num_tickets_app = $num_tickets_app;
+    }
+
     public function setNumOpenTickets($num_open_tickets) {
         $this->num_open_tickets = $num_open_tickets;
     }
@@ -92,9 +110,9 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'WHERE u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u ".$filter_country);
+        $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u WHERE u.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -107,9 +125,9 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'WHERE p.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND p.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p ".$filter_country);
+        $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p WHERE p.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
     }
     /**
@@ -121,9 +139,9 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'WHERE s.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND s.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s ".$filter_country);
+        $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s WHERE s.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -136,9 +154,9 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w ".$filter_country);
+        $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w WHERE w.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
     }
 
@@ -154,6 +172,44 @@ class Statistic {
             $filter_country = 'JOIN t.workshop w WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$filter_country);
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Devuelve el número de tickets creados por telefono (Asesor) dentro de ADService
+     * @param EntityManager $em
+     * @return Integer
+     */
+    public function getNumTicketsByTel($em, $security) {
+        $join = 'JOIN t.created_by u JOIN u.user_role ur';
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'JOIN t.workshop w AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $where = ' WHERE t.id != 0 ';
+        $and   = ' AND ur.id != 4'; //ROL 4 = ROLE_USER
+
+        $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Devuelve el número de tickets creados por la aplicacion (taller) dentro de ADService
+     * @param EntityManager $em
+     * @return Integer
+     */
+    public function getNumTicketsByApp($em, $security) {
+        $join = 'JOIN t.created_by u JOIN u.user_role ur';
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $filter_country = '';
+        }else{
+            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        }
+        $where = ' WHERE t.id != 0 ';
+        $and   = ' AND ur.id = 4'; //ROL 4 = ROLE_USER
+
+        $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
         return $query->getSingleScalarResult();
     }
 
