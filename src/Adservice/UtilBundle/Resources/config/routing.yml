@@ -36,6 +36,12 @@ shops_from_partner:
     options:
         expose: true
 
+get_code_partner:
+    pattern: /codePartnerFromPartner
+    defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
+    options:
+        expose: true
+
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}
     defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}

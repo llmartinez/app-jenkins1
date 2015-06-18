@@ -59,6 +59,13 @@ class Ticket {
     private $status;
 
     /**
+     * @var integer $pending
+     *
+     * @ORM\Column(name="pending", type="integer")
+     */
+    private $pending;
+
+    /**
      * @var integer $importance
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
@@ -229,6 +236,24 @@ class Ticket {
      */
     public function getStatus() {
         return $this->status;
+    }
+
+    /**
+     * Set pending
+     *
+     * @param integer $pending
+     */
+    public function setPending($pending) {
+        $this->pending = $pending;
+    }
+
+    /**
+     * Get pending
+     *
+     * @return integer
+     */
+    public function getPending() {
+        return $this->pending;
     }
 
     /**

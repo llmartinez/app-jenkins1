@@ -72,6 +72,31 @@ class AjaxController extends Controller
        return new Response(json_encode($json), $status = 200);
     }
 
+    //  ____
+    // |  _ \
+    // | |_) |
+    // |  __/
+    // |_|artner
+
+    /**
+     * Funcion Ajax para obtener las tiendas de un socio
+     * @return json
+     */
+    public function codePartnerFromPartnerAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $id_partner = $petition->request->get('id_partner');
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+        $size = sizeOf($partner);
+        if($size > 0) {
+            $json[] = $partner->to_json();
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \
     // \___ \| |_| | | | | |_) |
@@ -321,7 +346,7 @@ class AjaxController extends Controller
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
-            
+
         return new Response(json_encode($json), $status = 200);
     }
 
