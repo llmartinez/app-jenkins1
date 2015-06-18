@@ -226,8 +226,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %}
-            ({{ length }}) </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -254,8 +253,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend> {% trans %} statistic.no_ticket {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_last_ticket" >
+            <legend> {% trans %} statistic.no_ticket {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_last_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.last_tickets {% endtrans %}</button></a>
                 <img id="doExcel_no_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
@@ -293,8 +291,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %}
-            ({{ length }}) </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -321,8 +318,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend> {% trans %} statistic.last_tickets {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+            <legend> {% trans %} statistic.last_tickets {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
                 <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
@@ -365,8 +361,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %}
-            ({{ length }}) </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -393,8 +388,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend>{% trans %} statistic.last_tickets {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+            <legend>{% trans %} statistic.last_tickets {% endtrans %} ({{ length - 1 }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
                 <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
