@@ -64,6 +64,7 @@ error.access.IE3:		 "Devido à complexa funcionalidade é necessário aceder a p
 error.first_number:             "O primeiro número disponível é: "
 error.code_partner.used:        "O código de Sócio já está a ser utilizado; o primeiro número disponível é: "
 error.code_workshop.used:       "O código de Oficina já está a ser utilizado; o primeiro número disponível é: "
+error.code_phone.used:          "O número de telefone já está em uso : "
 error.bad_introduction:         "Erro! Os valores não foram corretamente introduzidos"
 error.bad_introduction.ticket:  "Erro! Os campos de talão não foram corretamente introduzidos"
 error.msg_length:               "Erro! A mensagem não pode exceder os 500 carateres"

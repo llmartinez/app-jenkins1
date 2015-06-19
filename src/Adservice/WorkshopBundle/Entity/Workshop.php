@@ -652,28 +652,28 @@ class Workshop {
     /**
      * @var integer $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="integer")
+     * @ORM\Column(name="phone_number_1", type="string", length=15)
      */
     private $phone_number_1;
 
     /**
      * @var integer $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="phone_number_2", type="string", nullable=true, length=15)
      */
     private $phone_number_2;
 
     /**
      * @var integer $movile_number_1
      *
-     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="movile_number_1", type="string", nullable=true, length=15)
      */
     private $movile_number_1;
 
     /**
      * @var integer $movile_number_2
      *
-     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="movile_number_2", type="string", nullable=true, length=15)
      */
     private $movile_number_2;
 
