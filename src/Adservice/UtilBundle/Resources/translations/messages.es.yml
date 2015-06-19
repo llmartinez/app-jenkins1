@@ -406,6 +406,7 @@ importance:					  "Importancia"
 system:					 	  "Sistema"
 subsystem:					  "Subsistema"
 sentence:					  "Sentencia"
+image:                                            "Añadir una imagen o nota técnica (Opcional)"
 
 ticket_assigned:			  "Ticket asignado"
 ticket_assign_not:			  "Ticket sin asignar"
