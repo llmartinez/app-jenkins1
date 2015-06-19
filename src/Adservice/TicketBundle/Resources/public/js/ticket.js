@@ -47,15 +47,15 @@ function clear_tbl_similar(parent) {
 
     $( "#tbl_similar" ).empty();
 
-    if (parent == 'brand' )                 { var son = 'Model';     }
-    else {
-            if (parent == 'model' )         { var son = 'System';    }
-            else {
-                    if (parent == 'system') { var son = 'Subsystem'; }
-            }
-    }
+    // if (parent == 'brand' )                 { var son = 'Model';     }
+    // else {
+    //         if (parent == 'model' )         { var son = 'System';    }
+    //         else {
+    //                 if (parent == 'system') { var son = 'Subsystem'; }
+    //         }
+    // }
 
-    $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
+    // $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
 }
 
 /**

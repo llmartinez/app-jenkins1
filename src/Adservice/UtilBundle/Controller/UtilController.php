@@ -141,7 +141,6 @@ class UtilController extends Controller
         return $code;
     }
 
-
     /**
      * compara el slug de una cadena ($string_slug) con un array de variables ($array),
      * si coincide devuelve $var, sino devuelve $string_slug

@@ -226,7 +226,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'workshop' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findAll();	    // WORKSHOP	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findBy(array('active' => 1)); // WORKSHOP	//
             $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
 
             $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
@@ -307,7 +307,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'user' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();		// USER 	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findBy(array('active' => 1)); // USER 	//
 
 			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
 			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
