@@ -13,6 +13,7 @@ $(document).ready(function() {
     var shop     = $(document).find("#type_shop"    ).val();
     var workshop = $(document).find("#type_workshop").val();
     var assessor = $(document).find("#type_assessor").val();
+    var created_by = $(document).find("#type_created_by").val();
     var typology = $(document).find("#type_typology").val();
     var country  = $(document).find("#type_country" ).val();
     var status   = $(document).find("#type_status"  ).val();
@@ -35,6 +36,7 @@ $(document).ready(function() {
             $("#flt_tck_partner").val(partner);
             $("#flt_tck_workshop").val(workshop);
             $("#flt_tck_assessor").val(assessor);
+            $("#flt_tck_created_by").val(created_by);
             $("#flt_tck_country").val(country);
             $("#flt_tck_status" ).val(status );
     }else{
@@ -84,6 +86,7 @@ $(document).ready(function() {
         var shop    = '0';
         var workshop= $("#flt_tck_workshop").val();
         var assessor= $("#flt_tck_assessor").val();
+        var created_by= $("#flt_tck_created_by").val();
         var typology= '0';
         var country = $('#flt_tck_country').val();
         var status  = $('#flt_tck_status').val();
@@ -97,7 +100,7 @@ $(document).ready(function() {
 
         var route  = 'listStatistics';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor });
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by });
 
         window.open(url, "_self");
     });
@@ -115,6 +118,7 @@ $(document).ready(function() {
         var shop    = $("#flt_wks_shop").val();
         var workshop= '0';
         var assessor= '0';
+        var created_by= '0';
         var typology= $("#flt_wks_typology").val();
         var country = $('#flt_wks_country').val();
         var status  = $('#flt_wks_status').val();
@@ -128,7 +132,7 @@ $(document).ready(function() {
 
         var route  = 'listStatistics';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor });
+        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by });
 
         window.open(url, "_self");
     });
@@ -201,6 +205,7 @@ $(document).ready(function() {
         var to_d    = $('#tck_to_d').val();
         var partner = $('#flt_tck_partner').val();
         var assessor= $('#flt_tck_assessor').val();
+        var created_by= $('#flt_tck_created_by').val();
         var country = $('#flt_tck_country').val();
         var status  = $('#flt_tck_status').val();
 
@@ -213,7 +218,7 @@ $(document).ready(function() {
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor });
+        var url    = Routing.generate(route, {_locale: locale, type: 'ticket', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by });
 
         window.open(url, "_self");
     });

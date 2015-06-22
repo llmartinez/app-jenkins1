@@ -11,10 +11,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\UserBundle\Form\UserAdminAssessorType;
+use Adservice\UserBundle\Form\UserAssessorType;
 use Adservice\UserBundle\Form\UserSuperPartnerType;
 use Adservice\UserBundle\Form\UserPartnerType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 use Adservice\UserBundle\Form\EditUserAdminAssessorType;
+use Adservice\UserBundle\Form\EditUserAssessorType;
 use Adservice\UserBundle\Form\EditUserSuperPartnerType;
 use Adservice\UserBundle\Form\EditUserPartnerType;
 use Adservice\UserBundle\Form\EditUserWorkshopType;
@@ -201,7 +203,7 @@ class UserController extends Controller {
         } elseif ($type == 'assessor') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
+            $form = $this->createForm(new UserAssessorType(), $user);
         }
 
         $request = $this->getRequest();
@@ -309,10 +311,11 @@ class UserController extends Controller {
     	$role = $role[0];
     	$role = $role->getRole();
 
-        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_SUPER_AD")                                                         $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")                                                               $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
+        elseif ($role == "ROLE_ASSESSOR")                             $form = $this->createForm(new EditUserAssessorType()     , $user);
+        elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")                                 $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();

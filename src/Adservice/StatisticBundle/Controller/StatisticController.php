@@ -14,7 +14,7 @@ class StatisticController extends Controller {
     public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                    $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                    $partner='0', $shop='0', $workshop='0', $typology='0',
-                                                   $status='0', $country='0', $assessor='0') {
+                                                   $status='0', $country='0', $assessor='0', $created_by='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
@@ -49,6 +49,14 @@ class StatisticController extends Controller {
                                         }
                                         if    ($assessor != '0'    ) {  $params[] = array('assigned_to', ' = '.$assessor);
                                         }
+                                        if    ($created_by != '0'  ) {
+                                                                        if ($created_by == 'tel'){
+                                                                            $joins[]  = array('e.created_by u JOIN u.user_role ur', 'ur.id != 4');
+                                                                        }
+                                                                        elseif($created_by == 'app'){
+                                                                            $joins[]  = array('e.created_by u JOIN u.user_role ur', 'ur.id = 4');
+                                                                        }
+                                        }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
                                         }else{
@@ -62,9 +70,9 @@ class StatisticController extends Controller {
                                         if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
                                         if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
                                         if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1 AND e.endtest_at IS NULL' ); }
                                         elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
+                                        elseif ($status == "test"    ) { $params[] = array('test', " = 1 AND e.endtest_at >= '".date("Y-m-d H:i:s")."'"); }
                                         elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
                                         if($security->isGranted('ROLE_SUPER_ADMIN')){
                                             if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
@@ -207,15 +215,17 @@ class StatisticController extends Controller {
                                                                                           'shop'      => $shop,
                                                                                           'wks'       => $workshop,
                                                                                           'assessor'  => $assessor,
+                                                                                          'created_by'  => $created_by,
                                                                                           'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
+                                                                                          'length'    => $length,
                                                                             ));
     }
 
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                       $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                      $partner='0', $status='0', $country='0', $assessor='0'){
+                                                      $partner='0', $status='0', $country='0', $assessor='0', $created_by='0'){
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -250,6 +260,16 @@ class StatisticController extends Controller {
                                                 $join  = ' JOIN w.partner p ';
                 }
                 if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';

@@ -65,6 +65,13 @@
                 {% endfor %}
             </select>
         </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} created_by {% endtrans %}</label>
+            <select id="flt_tck_created_by" class='form-control'>
+                <option value="0">{% trans %} anyone {% endtrans %}</option>
+                <option value="tel">{% trans %} assessor {% endtrans %}</option>
+                <option value="app">{% trans %} workshop {% endtrans %}</option>
+            </select>
+        </div>
 
         <div class="col-xs-12 col-md-12 form-group">
             <button class="btn btn-primary btn100" id="btn_search_ticket" >
@@ -77,16 +84,16 @@
         <div class="col-xs-12 col-md-12 form-group">
         <table>
             <tr><td>
-                {# <label> {% trans %} date.start {% endtrans %} </label></td><td> #}
-                <input id="wks_from_d" type="hidden" {% if from_d != '0' %} value="{{ from_d | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_m" type="hidden" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_from_y" type="hidden" {% if from_y != '0' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <label> {% trans %} date.start {% endtrans %} </label></td><td>
+                <input id="wks_from_d" {% if from_d != '0' %} value="{{ from_d | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_m" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_from_y" {% if from_y != '0' %} value="{{ from_y | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
             <tr><td>
-                {# <label> {% trans %} date.end   {% endtrans %} </label></td><td> #}
-                <input id="wks_to_d"   type="hidden" {% if to_d   != '0' %} value="{{ to_d   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_m"   type="hidden" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-                <input id="wks_to_y"   type="hidden" {% if to_y   != '0' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
+                <label> {% trans %} date.end   {% endtrans %} </label></td><td>
+                <input id="wks_to_d"   {% if to_d   != '0' %} value="{{ to_d   | date ('Y')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_m"   {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
+                <input id="wks_to_y"   {% if to_y   != '0' %} value="{{ to_y   | date ('d')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
             </td></tr>
         </table>
     </div>
@@ -150,7 +157,8 @@
         <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets  {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-        {% endif %}
+            {% endif %}
+            ({{ length }})
             <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
@@ -188,7 +196,8 @@
         <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-        {% endif %}
+            {% endif %}
+            ({{ length }})
            <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
         </legend>
 
@@ -224,7 +233,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -251,8 +260,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend> {% trans %} statistic.no_ticket {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_last_ticket" >
+            <legend> {% trans %} statistic.no_ticket {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_last_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.last_tickets {% endtrans %}</button></a>
                 <img id="doExcel_no_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
@@ -290,7 +298,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -317,8 +325,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend> {% trans %} statistic.last_tickets {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+            <legend> {% trans %} statistic.last_tickets {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
                 <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
@@ -361,7 +368,7 @@
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %} </legend>
+            {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-5 col-md-5 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
@@ -388,8 +395,7 @@
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
             </div>
 
-            <legend>{% trans %} statistic.last_tickets {% endtrans %}
-                -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+            <legend>{% trans %} statistic.last_tickets {% endtrans %} ({{ length - 1 }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
                 <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
             </legend>
@@ -442,6 +448,7 @@
     <input type="hidden" id="type_shop"     value="{{ shop    }}">
     <input type="hidden" id="type_workshop" value="{{ wks     }}">
     <input type="hidden" id="type_assessor" value="{{ assessor}}">
+    <input type="hidden" id="type_created_by" value="{{ created_by}}">
     <input type="hidden" id="type_typology" value="{{ typology}}">
     <input type="hidden" id="type_country"  value="{{ country }}">
     <input type="hidden" id="type_status"   value="{{ status  }}">

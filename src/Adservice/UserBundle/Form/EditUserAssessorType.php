@@ -4,35 +4,22 @@ namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Security\Core\SecurityContext;
 
-class EditUserPartnerType extends AbstractType {
+class EditUserAssessorType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) {
-        $builder = $this->getbasicUserType($builder);
-    }
 
-    public static function getbasicUserType($builder)
+    public function buildForm(FormBuilder $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
-        if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
 
         $builder
             ->add('username')
             ->add('name')
             ->add('surname')
-            ->add('active' , 'checkbox', array('required' => false))
-            ->add('partner', 'entity', array(
-                  'required' => true,
-                  'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
-            ->add('language')
-
+            ->add('active', 'checkbox', array('required' => false))
+            ->add('charge')
             //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
@@ -55,12 +42,13 @@ class EditUserPartnerType extends AbstractType {
             ->add('email_2','email', array('required' => false))
             ->add('language')
         ;
+
         return $builder;
     }
 
     public function getName() {
 //        return 'adservice_userbundle_usertype';
-        return 'partner_type';
+        return 'assessor_type';
     }
 
 }

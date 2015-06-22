@@ -59,7 +59,7 @@
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
                                                                                                 {% trans %} menu.profile              {% endtrans %}</a>
-            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket") }}">
+            <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket", { 'option': 'assessor_pending'}) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
                                                                                                 {% trans %} menu.list_tickets         {% endtrans %}</a>
 {#             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">

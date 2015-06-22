@@ -1,8 +1,8 @@
 
 $(document).ready(function() {
 
-    $('select[id*=endtest_at').addClass('btn-date');
-    $('select[id*=endtest_at').addClass('btn-date');
+    // $('select[id*=endtest_at').addClass('btn-date');
+    // $('select[id*=endtest_at').addClass('btn-date');
 
     $('#slct_typology').val($('select[name*=typology]').val());
 
