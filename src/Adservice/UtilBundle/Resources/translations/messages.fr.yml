@@ -135,6 +135,7 @@ created_by:				 "Créé par"
 created_at:				 "Créé en"
 modified_by:			 "Modifié par"
 modified_at:			 "Modifié en"
+with_password:			 "Avec le mot de passe"
 
 #FIELDS
 date: 					 "Date"

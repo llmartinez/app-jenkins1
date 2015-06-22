@@ -302,7 +302,7 @@ function fill_car_data() {
  */
 function fill_car_by_year() {
 
-    var year = $('form[id=contact]').find('#filter_year').val();
+    var year = $('form[id=contact]').find('#new_car_form_year').val();
 
     var route  = 'car_by_year';
     var locale = $(document).find("#data_locale").val();
@@ -321,8 +321,6 @@ function fill_car_by_year() {
                 $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
             //Cambiamos el icono para indicar que se esta filtrando por motor
-            $('#filter_year').empty();
-            $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
             $('#filter_motor').empty();
             $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
@@ -345,7 +343,7 @@ function fill_car_by_year() {
  */
 function fill_car_by_motor() {
 
-    var motor = $('form[id=contact]').find('#filter_motor').val();
+    var motor = $('form[id=contact]').find('#new_car_form_motor').val();
 
     var route  = 'car_by_motor';
     var locale = $(document).find("#data_locale").val();

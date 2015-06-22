@@ -135,6 +135,7 @@ created_by:				 "Criado por"
 created_at:				 "Criado em"
 modified_by:			 "Alterado por"
 modified_at:			 "Alterado em"
+with_password:			 "Com senha"
 
 #FIELDS
 date: 					 "Data"
