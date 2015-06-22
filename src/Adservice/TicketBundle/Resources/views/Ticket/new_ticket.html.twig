@@ -31,6 +31,7 @@
             {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': '5', 'placeholder': "description" | trans  } }) }}
         </div>
 
+        <label for="new_ticket_form_image">{% trans %} image {% endtrans %}</label>
         {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
 
         <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
