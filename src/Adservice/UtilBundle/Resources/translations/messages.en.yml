@@ -134,6 +134,7 @@ created_by:				 "Created By"
 created_at:				 "Created At"
 modified_by:			 "Modified By"
 modified_at:			 "Modified At"
+with_password:			 "With password"
 
 #FIELDS
 date: 					 "Date"

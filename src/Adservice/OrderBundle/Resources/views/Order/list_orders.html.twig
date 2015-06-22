@@ -5,7 +5,7 @@
     {% set route = 'list_orders' %}
     <input type="hidden" id="route" value="{{ route }}">
     <input type="hidden" id="option" value="{{ option }}">
-        
+
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
         <li class="active">{% trans %} menu.list_orders {% endtrans %}</li>
@@ -45,7 +45,8 @@
 
 <div class='colDer85'>
 
-    {% if app.session.hasFlash('error') %}<p class="error">{{ app.session.getFlash('error') }}</p>{% endif %}
+    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>
+    {% elseif app.session.hasFlash('error') %}<p class="error">{{ app.session.getFlash('error') }}</p>{% endif %}
 
     {% if     option == 'workshop_pending'  %} {% include 'OrderBundle:Order:list_workshop_orders.html.twig'          %}
     {% elseif option == 'workshop_rejected' %} {% include 'OrderBundle:Order:list_workshop_rejected_orders.html.twig' %}
