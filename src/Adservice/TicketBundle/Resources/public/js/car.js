@@ -14,9 +14,9 @@
     $(document).on('change','#new_car_form_version',function(){
         fill_car_data();
     });
-    
+
     $(document).on('change','#id_system',function(){
-       fill_subsystem(); 
+       fill_subsystem();
     });
 
     $(document).on('click','#filter_year',function(){

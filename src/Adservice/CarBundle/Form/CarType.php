@@ -14,11 +14,11 @@ class CarType extends AbstractType
                 // ->add('brand', 'choice', array('expanded'=>false, 'multiple'=>true))
                 // ->add('model', 'choice', array('expanded'=>false, 'multiple'=>true))
                 // ->add('version', 'choice', array('expanded'=>false, 'multiple'=>true, 'required'=>'0'))
-                ->add('year', 'text', array('required'=>'0'))
-                ->add('motor')
+                ->add('year', 'text', array('required'=>'true'))
+                ->add('motor', 'text', array('required'=>'true'))
                 ->add('kW', 'text', array('required'=>'0'))
                 ->add('displacement', 'text', array('required'=>'0'))
-                ->add('vin')
+                ->add('vin', 'text', array('required'=>'true'))
                 ->add('plateNumber')
                 ;
     }

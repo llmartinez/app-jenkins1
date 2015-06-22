@@ -16,7 +16,7 @@ class UserPartnerType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',

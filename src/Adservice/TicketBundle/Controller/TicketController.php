@@ -109,7 +109,7 @@ class TicketController extends Controller {
         elseif ($option == 'assessor_pending')
         {
             $params[] = array('status', ' = '.$open->getId());
-            $params[] = array('assigned_to'   , '= '.$id_user);
+            $params[] = array('assigned_to'   , '= '.$id_user.' OR e.assigned_to IS NULL');
             $params[] = array('pending'   , '= 1');
         }
         elseif ($option == 'assessor_answered')
