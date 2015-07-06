@@ -59,8 +59,8 @@ shopOrder_reject:
 ###################################
 
 workshopOrder_listWorkshops:
-    pattern: /workshop/listWorkshops/{page}/{partner}
-    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , partner: 'none' }
+    pattern: /workshop/listWorkshops/{page}/{partner}/{status}
+    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , partner: 'none' , status: 0 }
     options:
         expose: true
 
