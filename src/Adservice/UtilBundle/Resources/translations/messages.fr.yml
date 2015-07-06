@@ -370,6 +370,7 @@ workshop_name:		 	 "Nom du garage"
 workshop_observation:	 "Observation de l’atelier"
 workshop.show_details:          "Voir les détails de l’atelier"
 reactivation-request:           "Demander la réactivation de l’Atelier"
+numTickets:				 "Nombre de billets"
 
 #USER
 user.delete:			 "Effacer Utilisateur"

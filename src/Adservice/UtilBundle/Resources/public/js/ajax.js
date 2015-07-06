@@ -173,6 +173,8 @@ function fill_code_workshop(id_partner){
 
 function fill_model() {
 
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text());
+
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
     var route  = 'car_model';
@@ -214,6 +216,7 @@ function fill_model() {
  */
 function fill_version() {
 
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
     var route  = 'car_version';
@@ -267,6 +270,7 @@ function fill_version() {
  */
 function fill_car_data() {
 
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
 
     var route  = 'car_data';

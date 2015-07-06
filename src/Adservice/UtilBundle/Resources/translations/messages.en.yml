@@ -371,6 +371,7 @@ workshop_name:		 	 "Workshop name"
 workshop_observation:	 "Workshop observations"
 workshop.show_details:          "Show workshop details"
 reactivation-request:           "Pedir la desactivación del taller"
+numTickets:				 "Number of tickets"
 
 #USER
 user.delete:			 "Delete User"

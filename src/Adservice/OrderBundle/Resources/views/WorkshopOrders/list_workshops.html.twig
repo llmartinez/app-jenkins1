@@ -32,7 +32,8 @@
                 <th>{% trans %} shop     {% endtrans %}</th>
                 <th>{% trans %} email    {% endtrans %}</th>
                 <th>{% trans %} tel      {% endtrans %}</th>
-                <th>{% trans %} active   {% endtrans %}</th>
+                {# <th>{% trans %} active   {% endtrans %}</th> #}
+                <th>{% trans %}numTickets{% endtrans %}</th>
                 <th>{% trans %} actions  {% endtrans %}</th>
             </tr>
         </thead>
@@ -45,7 +46,8 @@
                 <td>{{ workshop.shop}}          </td>
                 <td>{{ workshop.email1 }}       </td>
                 <td>{{ workshop.phoneNumber1 }} </td>
-                <td>{{ workshop.active }}       </td>
+                {# <td>{{ workshop.active }}       </td> #}
+                <td>{{ numTickets[workshop.id]}}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
