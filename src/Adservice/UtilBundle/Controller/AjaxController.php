@@ -125,7 +125,10 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
-        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.partner = ".$id_partner." OR s.id = 1";
+        $consulta = $em->createQuery($query);
+        $shops   = $consulta->getResult();
+
         $size = sizeOf($shops);
         if($size > 0) {
             foreach ($shops as $shop) {
