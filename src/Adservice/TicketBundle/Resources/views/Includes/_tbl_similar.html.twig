@@ -1,5 +1,11 @@
 {% if is_granted('ROLE_ASSESSOR') %}
 
+	<legend>{% trans %} ticket.repeated {% endtrans %}</legend>
+
+	<div id="tbl_repeated">
+		<p>{% trans %} ticket.repeated.matching {% endtrans %}</p>
+	</div>
+
 	<legend>{% trans %} ticket.similar {% endtrans %}</legend>
 
 	<div id="tbl_similar">

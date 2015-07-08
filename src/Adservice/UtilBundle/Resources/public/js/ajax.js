@@ -156,9 +156,9 @@ function fill_code_workshop(id_partner){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
                 $('#adservice_workshopbundle_workshoptype_code_workshop').empty();
-                
+
                 $('#adservice_workshopbundle_workshoptype_code_workshop').val(data['code']);
-                
+
             }
         },
         error : function(){
@@ -418,7 +418,7 @@ function fill_subsystem() {
 }
 
 /**
- * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
+ * Rellena (fill) una tabla con tickets similares
  */
 function fill_tbl_similar() {
 
@@ -452,6 +452,45 @@ function fill_tbl_similar() {
         },
         error: function() {
             console.log("Error al cargar tickets similares..");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) una tabla con tickets repetidos
+ */
+function fill_tbl_repeated() {
+
+    var route  = 'tbl_repeated';
+    var locale = $(document).find("#data_locale").val();
+    var id_model     = $('form').find('select[id*=model]').val();
+    var id_subsystem = $('form').find('select[id*=subsystem]').val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale }),
+        data: { id_model: id_model, id_subsystem: id_subsystem },
+        dataType: "json",
+        success: function(data) {
+
+            // Limpiamos y llenamos el combo con las opciones del json
+            $( "#tbl_repeated" ).empty();
+            $( "#tbl_repeated" ).append("<tr><th class='padded'> CAR </th><th class='padded'> DESCRIPTION </th></tr>");
+            //Primer campo vacío
+            $.each(data, function(idx, elm) {
+
+                if (idx != "error") {
+                    var url = Routing.generate('showTicketReadonly', {_locale: locale, id: elm.id });
+                    $("#tbl_repeated").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
+                }
+                else{
+                    $( "#tbl_repeated" ).empty();
+                    $( "#tbl_repeated" ).append("<tr><td>" + elm + "</td></tr>");
+                }
+            });
+        },
+        error: function() {
+            console.log("Error al cargar tickets repetidos..");
         }
     });
 }
