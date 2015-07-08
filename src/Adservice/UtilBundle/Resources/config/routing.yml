@@ -41,13 +41,13 @@ get_code_partner:
     defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
     options:
         expose: true
-        
+
 get_code_workshop:
     pattern: /codeWorkshopFromPartner
     defaults: { _controller: UtilBundle:Ajax:codeWorkshopFromPartner }
     options:
         expose: true
-        
+
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}
     defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}
@@ -99,5 +99,11 @@ tickets_from_workshop:
 tbl_similar:
     pattern: /tbl_similar
     defaults: { _controller: UtilBundle:Ajax:tblSimilar }
+    options:
+        expose: true
+
+tbl_repeated:
+    pattern: /tbl_repeated
+    defaults: { _controller: UtilBundle:Ajax:tblRepeated }
     options:
         expose: true
