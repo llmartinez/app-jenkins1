@@ -215,7 +215,7 @@ class WorkshopController extends Controller {
                     $password = $encoder->encodePassword($newUser->getPassword(), $salt);
                     $newUser->setPassword($password);
                     $newUser->setSalt($salt);
-                    //UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
 
