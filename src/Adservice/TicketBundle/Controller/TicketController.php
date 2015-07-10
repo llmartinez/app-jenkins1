@@ -428,35 +428,7 @@ class TicketController extends Controller {
 
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
-                    /*Validacion Formularios*/
-                        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-                        $form_errors = $form->getErrors();
-                        if(isset($form_errors[0])) {
-                            $form_errors = $form_errors[0];
-                            $form_errors = $form_errors->getMessageTemplate();
-                        }else{
-                            $form_errors = 'none';
-                        }
-
-                        $formC_errors = $formC->getErrors();
-                        if(isset($formC_errors[0])) {
-                            $formC_errors = $formC_errors[0];
-                            $formC_errors = $formC_errors->getMessageTemplate();
-                        }else{
-                            $formC_errors = 'none';
-                        }
-
-                        $formD_errors = $formD->getErrors();
-                        if(isset($formD_errors[0])) {
-                            $formD_errors = $formD_errors[0];
-                            $formD_errors = $formD_errors->getMessageTemplate();
-                        }else{
-                            $formD_errors = 'none';
-                        }
-
-                        if ((($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
-                         &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
-                         &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                        if ($form ->isValid() && $formC->isValid() && $formD->isValid()) {
 
                          // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
@@ -825,39 +797,17 @@ class TicketController extends Controller {
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
-                if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request);
+                if ($security->isGranted('ROLE_ASSESSOR')) {
 
-                    $form_errors = $form->getErrors();
-                    if(isset($form_errors[0])) {
-                        $form_errors = $form_errors[0];
-                        $form_errors = $form_errors->getMessageTemplate();
-                    }else{
-                        $form_errors = 'none';
-                    }
+                    $form->bindRequest($request);
                 }
 
-                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file'))){
+                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and $form->isValid())){
 
                     $formP->bindRequest($request);
                     $formD->bindRequest($request);
 
-                    $formP_errors = $formP->getErrors();
-                    if(isset($formP_errors[0])) {
-                        $formP_errors = $formP_errors[0];
-                        $formP_errors = $formP_errors->getMessageTemplate();
-                    }else{
-                        $formP_errors = 'none';
-                    }
-                    $formD_errors = $formD->getErrors();
-                    if(isset($formD_errors[0])) {
-                        $formD_errors = $formD_errors[0];
-                        $formD_errors = $formD_errors->getMessageTemplate();
-                    }else{
-                        $formD_errors = 'none';
-                    }
-
-                    if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
-                    and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                    if ($formP->isValid() and $formD->isValid()) {
 
                     // Controla si se ha subido un fichero erroneo
                     $file = $document->getFile();
@@ -980,15 +930,7 @@ class TicketController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $em->persist($post);
                 $em->flush();
@@ -1020,7 +962,7 @@ class TicketController extends Controller {
             $request  = $this->getRequest();
 
             if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
-            else                                                                        $form = $this->createForm(new CloseTicketType()        , $ticket);
+            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
             if ($request->getMethod() == 'POST') {
                 $form->bindRequest($request);
@@ -1032,14 +974,7 @@ class TicketController extends Controller {
 
                 if ($str_len <= $max_len ) {
 
-                    $form_errors = $form->getErrors();
-                    if(isset($form_errors[0])) {
-                        $form_errors = $form_errors[0];
-                        $form_errors = $form_errors->getMessageTemplate();
-                    }else{
-                        $form_errors = 'none';
-                    }
-                    if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+                    if ($form->isValid()) {
 
                         if ($security->isGranted('ROLE_ASSESSOR') === false) {
                             if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));

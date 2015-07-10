@@ -82,15 +82,7 @@ class SentenceController extends Controller
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $this->saveSentence($em, $sentence);
                 return $this->redirect($this->generateUrl('sentence_list'));
