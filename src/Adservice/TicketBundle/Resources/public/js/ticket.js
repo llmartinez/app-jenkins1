@@ -45,7 +45,9 @@ $('#new_file_form_file').bind('change', function() {
  */
 function clear_tbl_similar(parent) {
 
+    var similar = $( "#txt_similar" ).val();
     $( "#tbl_similar" ).empty();
+    $( "#tbl_similar" ).append("<p>"+similar+"</p>");
 }
 
 /**
@@ -54,7 +56,9 @@ function clear_tbl_similar(parent) {
  */
 function clear_tbl_repeated(parent) {
 
+    var similar = $( "#txt_repeated" ).val();
     $( "#tbl_repeated" ).empty();
+    $( "#tbl_repeated" ).append("<p>"+similar+"</p>");
 }
 
 /**
