@@ -9,7 +9,7 @@
 
 <div class="form-group">
 	<table>
-		<tr><td><img class="img_icon" src="{{ asset('bundles/util/images/icon/car.png') }}"></td><td>{% if car.brand        != "" %}{{ car.brand   }}</td>{% endif %}</tr>
+		<tr><td><img class="img_icon" src="{{ asset('bundles/util/images/icon/car.png') }}"></td><td>{% if brand        != "" %}{{ brand    }}</td>{% endif %}</tr>
 
 		{% if car.model        != "" %}<tr><td><b>{% trans %} model   {% endtrans %}:</b> </td><td>{{ car.model   }}</td></tr>{% endif %}
 		{% if car.version      != "" %}<tr><td><b>{% trans %} version {% endtrans %}:</b> </td><td>{{ car.version }}</td></tr>{% endif %}

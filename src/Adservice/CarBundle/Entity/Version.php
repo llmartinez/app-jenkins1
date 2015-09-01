@@ -7,23 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Adservice\CarBundle\Entity\Version
  *
- * @ORM\Table(name="version")
+ * @ORM\Table(name="Version_Vehiculo")
  * @ORM\Entity
  */
 class Version {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="Version", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="Descripcion", type="string", length=255)
      */
     private $name;
 
@@ -31,22 +30,10 @@ class Version {
      * @var integer $model
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     * @ORM\JoinColumn(name="modelo", referencedColumnName="Modelo")
      */
     private $model;
 
-    /**
-     * @var integer $idTecDoc
-     *
-     * @ORM\Column(name="idTecDoc", type="integer")
-     */
-    private $idTecDoc;
-
-    /**
-     * @var string $year
-     *
-     * @ORM\Column(name="year", type="string", length=255)
-     */
-    private $year;
 
     /**
      * @var string $motor
@@ -61,13 +48,6 @@ class Version {
      * @ORM\Column(name="kw", type="string", length=255)
      */
     private $kw;
-
-    /**
-     * @var string $displacement
-     *
-     * @ORM\Column(name="displacement", type="string", length=255)
-     */
-    private $displacement;
 
 
     /**
@@ -103,7 +83,7 @@ class Version {
     /**
      * Set model
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     * @param \Adservice\CarBundle\Entity\Model $model
      */
     public function setModel($model)
     {
@@ -118,46 +98,6 @@ class Version {
     public function getModel()
     {
         return $this->model;
-    }
-
-    /**
-     * Set idTecDoc
-     *
-     * @param integer $idTecDoc
-     */
-    public function setIdTecDoc($idTecDoc)
-    {
-        $this->idTecDoc = $idTecDoc;
-    }
-
-    /**
-     * Get idTecDoc
-     *
-     * @return integer
-     */
-    public function getIdTecDoc()
-    {
-        return $this->idTecDoc;
-    }
-
-    /**
-     * Set year
-     *
-     * @param string $year
-     */
-    public function setYear($year)
-    {
-        $this->year = $year;
-    }
-
-    /**
-     * Get year
-     *
-     * @return string
-     */
-    public function getYear()
-    {
-        return $this->year;
     }
 
     /**
@@ -200,33 +140,6 @@ class Version {
         return $this->kw;
     }
 
-    /**
-     * Set displacement
-     *
-     * @param string $displacement
-     */
-    public function setDisplacement($displacement)
-    {
-        $this->displacement = $displacement;
-    }
-
-    /**
-     * Get displacement
-     *
-     * @return string
-     */
-    public function getDisplacement()
-    {
-        return $this->displacement;
-    }
-
-
-//    public function jsonSerialize() {
-//        return [
-//            'id' => $this->getId(),
-//            'name' => $this->getName()
-//        ];
-//    }
 
     public function __toString() {
         return $this->name;
@@ -235,13 +148,12 @@ class Version {
     public function to_json(){
         $json = array('id'           => $this->getId(),
                       'name'         => $this->getName(),
-                      'year'         => $this->getYear(),
+                      'year'         => '',
                       'motor'        => $this->getMotor(),
                       'kw'           => $this->getKw(),
-                      'displacement' => $this->getDisplacement(),
-                      'idTecDoc'     => $this->getIdTecDoc(),
-                      'model'        => $this->getModel()->getIdTecDoc(),
-                      'brand'        => $this->getModel()->getBrand()->getIdTecDoc());
+                      'displacement' => '',
+                      'model'        => $this->getModel()->getId(),
+                      'brand'        => $this->getModel()->getBrand()->getId());
         return $json;
     }
 }

@@ -745,10 +745,11 @@ class TicketController extends Controller {
             $user     = $security->getToken()->getUser();
             $car      = $ticket->getCar();
             $version  = $car->getVersion();
-            $model    = $car->getModel()->getIdTecDoc();
-            $brand    = $car->getBrand()->getIdTecDoc();
-            if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
-            else $idTecDoc = "";
+            $model    = $car->getModel();
+            $brand    = $car->getBrand();
+
+            if (isset($version)) $id = $car->getVersion()->getId();
+            else $id = "";
 
             if ($security->isGranted('ROLE_SUPER_ADMIN')) $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
             else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
@@ -787,7 +788,7 @@ class TicketController extends Controller {
                             'brand'     => $brand,
                             'model'     => $model,
                             'version'   => $version,
-                            'idTecDoc'  => $idTecDoc );
+                            'id'        => $id );
 
             if ($security->isGranted('ROLE_ASSESSOR')) {
                 $form = $this->createForm(new EditTicketType(), $ticket);
@@ -851,6 +852,7 @@ class TicketController extends Controller {
 
                             $mail = $ticket->getWorkshop()->getEmail1();
                             $pos = strpos($mail, '@');
+
                             if ($pos != 0) {
 
                                 // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -891,15 +893,15 @@ class TicketController extends Controller {
                     }
                     }
                 }
-                return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
+
+                return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),
                                                                                 'form_name' => $formP->getName(),
                                                                                 'ticket'    => $ticket,
                                                                                 'systems'   => $systems,
                                                                                 'form_name' => $formP->getName(),
                                                                                 'brand'     => $brand,
                                                                                 'model'     => $model,
-                                                                                'version'   => $version,
-                                                                                'idTecDoc'  => $idTecDoc )));
+                                                                                'version'   => $version )));
             }
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }

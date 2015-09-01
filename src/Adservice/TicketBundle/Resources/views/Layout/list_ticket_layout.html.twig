@@ -32,7 +32,7 @@
     {% set route = 'listTicket' %}
 
     {% if is_granted('ROLE_ASSESSOR') %}
-        {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
+        {% if workshop is defined and workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
         {% else %}                  {% include 'TicketBundle:Ticket:history_ticket.html.twig' %}  {% endif %}
     {% else %}
         {% set workshop = app.security.getToken().getUser().getWorkshop() %}

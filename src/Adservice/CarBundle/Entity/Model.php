@@ -7,23 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Adservice\CarBundle\Entity\Model
  *
- * @ORM\Table(name="model")
+ * @ORM\Table(name="Modelo_Vehiculo")
  * @ORM\Entity
  */
 class Model {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="Modelo", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="Descripcion", type="string", length=255)
      */
     private $name;
 
@@ -31,6 +30,7 @@ class Model {
      * @var integer $brand
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
      */
     private $brand;
 
@@ -38,16 +38,9 @@ class Model {
      * @var string $version
      *
      * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Version", mappedBy="model")
+     * @ORM\JoinColumn(name="version", referencedColumnName="Version")
      */
     private $version;
-
-    /**
-     * @var integer $idTecDoc
-     *
-     * @ORM\Column(name="idTecDoc", type="integer")
-     */
-    private $idTecDoc;
-
 
     /**
      * Get id
@@ -99,42 +92,14 @@ class Model {
         return $this->brand;
     }
 
-    /**
-     * Set idTecDoc
-     *
-     * @param integer $idTecDoc
-     */
-    public function setIdTecDoc($idTecDoc)
-    {
-        $this->idTecDoc = $idTecDoc;
-    }
-
-    /**
-     * Get idTecDoc
-     *
-     * @return integer
-     */
-    public function getIdTecDoc()
-    {
-        return $this->idTecDoc;
-    }
-
     public function __toString() {
         return $this->name;
     }
 
-//    public function jsonSerialize() {
-//        return [
-//            'id' => $this->getId(),
-//            'name' => $this->getName()
-//        ];
-//    }
-
     public function to_json(){
         $json = array('id'      => $this->getId(),
                       'name'    => $this->getName(),
-                      'idTecDoc'=> $this->getIdTecDoc(),
-                      'brand'   => $this->getBrand()->getIdTecDoc());
+                      'brand'   => $this->getBrand()->getId());
         return $json;
     }
 
