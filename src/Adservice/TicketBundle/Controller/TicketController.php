@@ -1177,7 +1177,7 @@ class TicketController extends Controller {
 
     /**
      * Bloquea un ticket al asesor para que conteste
-     * @Route("/ticket/assingAssesor/{id}/{id_user}/")
+     * @Route("/ticket/assignAssesor/{id}/{id_user}/")
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user

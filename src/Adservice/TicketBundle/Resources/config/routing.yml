@@ -45,7 +45,7 @@ ticketsFromWorkshop:
     defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop, page: 1 }
 
 assignTicket:
-    pattern: /ticket/assingTicket/{id}/
+    pattern: /ticket/assignTicket/{id}/
     defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
 
 assignUserToTicket:
@@ -53,7 +53,7 @@ assignUserToTicket:
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
 
 blockTicket:
-    pattern: /ticket/assingAssesor/{id}/{id_user}
+    pattern: /ticket/assignAssesor/{id}/{id_user}
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
 
 closeTicket:

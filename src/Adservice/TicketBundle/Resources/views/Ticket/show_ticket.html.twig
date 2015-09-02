@@ -2,17 +2,18 @@
     <legend>{% trans %} ticket {% endtrans %} #{{ ticket.id }} {% include 'TicketBundle:Includes:_assign_btn.html.twig'   %} </legend>
 
     	{% if ( is_granted('ROLE_ASSESSOR')) %}
+			<p> <b>{{'created_at'|trans}}:</b> {{ticket.createdat|date("d/m/Y (H:i)")}} </p>
 	    	{% if ticket.assignedTo != "" %}<p><b>{% trans %} ticket.assigned_to {% endtrans %}:</b> {{ ticket.assignedTo }} </p>{% endif %}
 
-    		{% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %}
+    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %} #}
 
-				{% if ticket.importance  != "" %}{% include 'TicketBundle:Ticket:show_ticket_info.html.twig' %}{% endif %}
+				{# {% include 'TicketBundle:Ticket:edit_ticket_info.html.twig'	%} #}
 
-			{% elseif ticket.blockedBy == app.security.getToken().getUser() %}
+			{# {% elseif ticket.blockedBy == app.security.getToken().getUser() %} #}
 
 				{% include 'TicketBundle:Ticket:edit_ticket_info.html.twig'	%}
 				{{ form_rest(form) }}
-		 	{% endif %}
+		 	{# {% endif %} #}
 		{% endif %}
 
 	    <legend>{% trans %} description {% endtrans %}</legend>
@@ -27,16 +28,16 @@
 
     		<input type="hidden" id="role" value="ROLE_ASSESSOR">
 
-    		{% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %}
+    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %} #}
 
             	{% include 'TicketBundle:Post:show_posts.html.twig'     	%}
 
-			{% elseif ticket.blockedBy == app.security.getToken().getUser() %}
+			{# {% elseif ticket.blockedBy == app.security.getToken().getUser() %} #}
 
-				{% include 'TicketBundle:Post:show_last_post.html.twig'   	%}
+				{# {% include 'TicketBundle:Post:show_last_post.html.twig'   	%} #}
+
+			{# {% endif %} #}
 			 	{% include 'TicketBundle:Post:reply.html.twig'  			%}
-
-			{% endif %}
 		{% else %}
     			<input type="hidden" id="role" value="ROLE_USER">
             	{% include 'TicketBundle:Post:show_posts.html.twig'      	%}

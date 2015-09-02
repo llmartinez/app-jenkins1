@@ -284,10 +284,14 @@ function fill_car_data() {
         success: function(data) {
             // Limpiamos y llenamos los campos del coche
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('#new_car_form_year'        ).val(elm.year        );
-                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor       );
-                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw          );
-                $('form[id=contact]').find('#new_car_form_displacement').val(elm.displacement);
+
+                var inicio = elm.inicio.slice(0,4);
+                var fin    = elm.fin.slice(0,4);
+                var fecha  = inicio+' - '+fin;
+                $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
+                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
+                $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                 var dis_url = $( "#dis-url" ).val();
                 var vts_url = $( "#vts-url" ).val();
 
