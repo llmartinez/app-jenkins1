@@ -9,19 +9,22 @@
 <div>
 {# FILTROS GENERALES #}
     <div class="col-xs-4 col-md-4 form-group">
-        <legend>{% trans %} /*TRADUCIR*/ filter {% endtrans %}</legend>
-        <table>
-        <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td>
-            <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-            <input id="from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-            <input id="from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
-        </td></tr>
-        <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td><td>
-            <input id="to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('d')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-            <input id="to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:57px;float:left;">
-            <input id="to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:73px;float:left;">
-        </td></tr>
-        </table>
+        <legend>{% trans %} filter {% endtrans %}</legend>
+        <div class="col-xs-12 col-md-12 form-group">
+            <table>
+            <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td><label> {% trans %} date.end   {% endtrans %} </label></td></tr>
+            <tr><td>
+                <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}"  {% endif %} class='form-control' style="width:50px;float:left;">
+                <input id="from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:50px;float:left;">
+                <input id="from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:75px;float:left;margin-right: 30px;">
+            </td>
+            <td>
+                <input id="to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('d')}}"  {% endif %} class='form-control' style="width:50px;float:left;">
+                <input id="to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:50px;float:left;">
+                <input id="to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:75px;float:left;">
+            </td></tr>
+            </table>
+        </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -40,18 +43,37 @@
             </select>
         </div>
         {% endif %}
-        <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} top_ten {% endtrans %}</label>
-            <select id="flt_topten" class='form-control'>
-                <option value="0"            >{% trans %} any                   {% endtrans %}</option>
-                <option value="last-tickets" >{% trans %} statistic.last_tickets{% endtrans %}</option>
-                <option value="no-ticket"    >{% trans %} statistic.no_ticket   {% endtrans %}</option>
+        <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} raport {% endtrans %}</label>
+            <select id="flt_raport" class='form-control'>
+                <option value="0"                       >{% trans %} any                            {% endtrans %}</option>
+
+                {# Últimos tickets de los talleres #}
+                <option value="last-tickets"            >{% trans %} statistic.last_tickets         {% endtrans %}</option>
+
+                {# Talleres sin tickets #}
+                <option value="no-ticket"               >{% trans %} statistic.no_ticket            {% endtrans %}</option>
+
+                {# TOP TEN de tickets por socio #}
+                <option value="t10_numticketsbypartner" >{% trans %} topten.numticketsbypartner     {% endtrans %}</option>
+
+                {# TOP TEN de tickets por sistema/subsistema #}
+                <option value="t10_numticketsbysystem"  >{% trans %} topten.numticketsbysystem      {% endtrans %}</option>
+
+                {# TOP TEN de tickets por marca #}
+                <option value="t10_numticketsbybrand"   >{% trans %} topten.numticketsbybrand       {% endtrans %}</option>
+
+                {# TOP TEN de tickets por modelo #}
+                <option value="t10_numticketsbymodel"   >{% trans %} topten.numticketsbymodel       {% endtrans %}</option>
+
+                {# TOP TEN de tickets por año de fabricacion #}
+                <option value="numticketsbyfabyear"     >{% trans %} statistic.numticketsbyfabyear  {% endtrans %}</option>
              </select>
         </div>
     </div>
 
 {# FILTROS DE TICKET #}
     <div class="col-xs-4 col-md-4 form-group">
-        <legend>{% trans %} /*TRADUCIR*/ filter_ticket {% endtrans %}</legend>
+        <legend>{% trans %} filter_ticket {% endtrans %}</legend>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} workshop {% endtrans %}</label>
             <select id="flt_tck_workshop" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -91,7 +113,7 @@
 
 {# FILTROS DE TALLER #}
     <div class="col-xs-4 col-md-4 form-group">
-    <legend>{% trans %} /*TRADUCIR*/ filter_workshop {% endtrans %}</legend>
+    <legend>{% trans %} filter_workshop {% endtrans %}</legend>
 
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} shop {% endtrans %}</label>
             <select id="flt_wks_shop" class='form-control'>
@@ -133,13 +155,13 @@
 
         {% if type == 'ticket' %}
 
-        <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets  {% endtrans %}
-            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %}
-            ({{ length }})
-            <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
-        </legend>
+            <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets  {% endtrans %}
+                {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
+                {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+                {% endif %}
+                ({{ length }})
+                <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            </legend>
 
             <table class="table table-hover table-list-search">
                 <thead>
@@ -168,43 +190,43 @@
                 </tbody>
             </table>
 
-        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
+            <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% elseif type == 'workshop' %}
 
-        <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
-            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
-            {% endif %}
-            ({{ length }})
-           <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
-        </legend>
+            <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
+                {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
+                {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+                {% endif %}
+                ({{ length }})
+               <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/excel_exports.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            </legend>
 
-        <table class="table table-hover table-list-search">
-            <thead>
-                <tr>
-                    <th>{% trans %} code     {% endtrans %}</th>
-                    <th>{% trans %} workshop {% endtrans %}</th>
-                    <th>{% trans %} partner  {% endtrans %}</th>
-                    <th>{% trans %} email    {% endtrans %}</th>
-                    <th>{% trans %} tel      {% endtrans %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                    {% for workshop in statistic.results %}
-                <tr>
-                    <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
-                    <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}
-                        {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                    <td>{{ workshop.partner}}</td>
-                    <td>{{ workshop.email1 }}</td>
-                    <td>{{ workshop.phoneNumber1 }}</td>
-                </tr>
-                    {% endfor %}
-            </tbody>
-        </table>
+            <table class="table table-hover table-list-search">
+                <thead>
+                    <tr>
+                        <th>{% trans %} code     {% endtrans %}</th>
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                        <th>{% trans %} partner  {% endtrans %}</th>
+                        <th>{% trans %} email    {% endtrans %}</th>
+                        <th>{% trans %} tel      {% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for workshop in statistic.results %}
+                    <tr>
+                        <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
+                        <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}
+                            {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                        <td>{{ workshop.partner}}</td>
+                        <td>{{ workshop.email1 }}</td>
+                        <td>{{ workshop.phoneNumber1 }}</td>
+                    </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
 
-        <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
+            <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% elseif type == 'no-ticket' %}
 
@@ -248,7 +270,7 @@
 
         {% elseif type == 'last-tickets' %}
 
-        <legend> {% trans %} statistic.general {% endtrans %}
+            <legend> {% trans %} statistic.general {% endtrans %}
 
             {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
             {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
@@ -302,26 +324,27 @@
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumUsers         }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
-                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
-                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
-
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
+
+                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets_tel {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsTel    }}            </div>
 
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
-                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumShops         }}            </div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
                 <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets_app    {% endtrans %}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsApp    }}            </div>
             </div>
-    {% endif %}
+        {% endif %}
+
     {% endif %}
 
 </div>

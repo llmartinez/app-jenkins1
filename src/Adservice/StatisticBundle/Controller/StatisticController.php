@@ -14,7 +14,7 @@ class StatisticController extends Controller {
     public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                    $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                    $partner='0', $shop='0', $workshop='0', $typology='0',
-                                                   $status='0', $country='0', $assessor='0', $created_by='0') {
+                                                   $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
@@ -225,7 +225,8 @@ class StatisticController extends Controller {
 
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
                                                       $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                      $partner='0', $status='0', $country='0', $assessor='0', $created_by='0'){
+                                                      $partner='0', $shop='0', $workshop='0', $typology='0',
+                                                      $status='0', $country='0', $assessor='0', $created_by='0', $raport='0'){
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -242,6 +243,9 @@ class StatisticController extends Controller {
         $response->headers->set('Pragma', 'public');
         $date = new \DateTime();
         $response->setLastModified($date);
+
+        if ($raport == 'last-tickets') { $type = '0'; }
+        if ($raport == 'no-ticket'   ) { $type = 'no-ticket'; }
 
         if($type != '0'){
             if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"; }
@@ -352,14 +356,23 @@ class StatisticController extends Controller {
             $where .= 'AND e.workshop = w.id ';
 
             if($security->isGranted('ROLE_SUPER_ADMIN')){
-                if    ($country != '0'     ) { $$where .= 'AND e.country = '.$country.' '; }
+                if    ($country != '0'     ) { $where .= 'AND e.country = '.$country.' '; }
             }else{
                 $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
             }
 
             $where .= 'GROUP BY w.id ';
             $where .= 'ORDER BY e.id DESC ';
-            $qt = $em->createQuery("select partial e.{ id, description, solution, modified_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w WHERE ".$where);
+
+            $qid = $em->createQuery("select MAX(e.id) as t_id, w.id as w_id from TicketBundle:Ticket e JOIN e.workshop w WHERE ".$where);
+            $resultsid = $qid->getResult();
+
+            $ids = '0';
+            foreach ($resultsid as $rid) {
+                $ids .= ', '.$rid['t_id'];
+            }
+
+            $qt = $em->createQuery("select partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w WHERE e.id IN (".$ids.")");
             $results   = $qt->getResult();
 
             $response->headers->set('Content-Disposition', 'attachment;filename="informeUltimosTickets_'.date("dmY").'.csv"');
@@ -480,7 +493,7 @@ class StatisticController extends Controller {
             $reemplazar=array("", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
-            $excel.=$row->getModifiedAt()->format('Y-m-d').';';
+            $excel.=$row->getCreatedAt()->format('Y-m-d').';';
             $excel.="\n";
         }
 
