@@ -411,7 +411,8 @@ class Car
 
         $model   = $this->getModel()->getName();
         $brand   = $this->getBrand()->getName();
-        $version = $this->getVersion()->getName();
+        if (isset($version)) $version = $this->getVersion()->getName();
+        else $version = '';
         return $brand.' '.$model.' '.$version;
     }
 

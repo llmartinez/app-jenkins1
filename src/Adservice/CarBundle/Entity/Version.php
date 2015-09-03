@@ -243,7 +243,7 @@ class Version {
     /**
      * Set marca
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Marca")
+     * @param \Adservice\CarBundle\Entity\Brand $marca
      */
     public function setMarca($marca)
     {

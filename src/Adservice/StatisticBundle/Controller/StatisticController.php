@@ -244,8 +244,10 @@ class StatisticController extends Controller {
         $date = new \DateTime();
         $response->setLastModified($date);
 
-        if ($raport == 'last-tickets') { $type = '0'; }
-        if ($raport == 'no-ticket'   ) { $type = 'no-ticket'; }
+        if ($raport != '0'){
+            $type = $raport;
+            if ($raport == 'last-tickets') { $type = '0'; }
+        }
 
         if($type != '0'){
             if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"; }
@@ -281,7 +283,7 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery("select partial e.{id, created_at, description, solution } from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
+                $qt = $em->createQuery("SELECT partial e.{id, created_at, description, solution } FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
@@ -298,10 +300,10 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
 
-                $qw = $em->createQuery("select partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } from WorkshopBundle:Workshop e WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e WHERE ".$where);
                 $results   = $qw->getResult();
 
-                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
                 $res_partners   = $qp->getResult();
 
                 foreach ($res_partners as $partner) {
@@ -333,10 +335,10 @@ class StatisticController extends Controller {
                     $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }
 
-                $qw = $em->createQuery("select partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } from WorkshopBundle:Workshop e WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e WHERE ".$where);
                 $results   = $qw->getResult();
 
-                $qp = $em->createQuery("select partial p.{id, code_partner, name } from PartnerBundle:Partner p");
+                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
                 $res_partners   = $qp->getResult();
 
                 foreach ($res_partners as $partner) {
@@ -347,6 +349,45 @@ class StatisticController extends Controller {
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($results, $partners);
+            }
+            elseif ($type == 't10_numticketsbypartner'){
+
+                $select = "SELECT count(e.id) as Cantidad, p.name as Socio FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
+                $join  = ' JOIN w.partner p ';
+
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
+                                                $where .= 'AND p.id = '.$partner.' ';
+                }
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id');
+                $results   = $qt->getResult();
+
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
             }
         }
         else{
@@ -424,6 +465,7 @@ class StatisticController extends Controller {
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
+
     public function createExcelWorkshop($results, $partners){
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
@@ -458,6 +500,7 @@ class StatisticController extends Controller {
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
+
     public function createExcelLastTickets($results){
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
@@ -502,26 +545,25 @@ class StatisticController extends Controller {
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
-    public function createExcelNoTickets($results){
-        //Creación de cabecera
-        //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
-        // $excel ='Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
-        // $excel.="\n";
 
-        // $em = $this->getDoctrine()->getEntityManager();
+    public function createExcelStatistics($results){
+        $excel = '';
+        $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
 
-        // foreach ($results as $row) {
+        //Bucle para las cabeceras
+        foreach ($results[0] as $key => $value) {
+            if($firstKey == '') { $firstKey = $key; }
+            $excel.=$key.';';
+        }
 
-        //     $excel.=$row->getWorkshop()->getPartner()->getCodePartner().';';
-        //     $excel.=$row->getWorkshop()->getCodeWorkshop().';';
-        //     $excel.=$row->getWorkshop()->getName().';';
-        //     $excel.=$row->getWorkshop()->getPartner().';';
-        //     $excel.=$row->getId().';';
-        //     $excel.=$row->getDescription().';';
-        //     $excel.=$row->getStatus().';';
-        //     $excel.=$row->getModifiedAt()->format('Y-m-d').';';
-        //     $excel.="\n";
-        // }
-        // return($excel);
+        foreach ($results as $res)
+        {
+            foreach ($res as $key => $value)
+            {
+                if($firstKey == $key) $excel.="\n";
+                $excel.=$value.";";
+            }
+        }
+        return($excel);
     }
 }

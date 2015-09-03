@@ -467,7 +467,7 @@ class TicketController extends Controller {
                                 }
 
                                 $car = UtilController::newEntity($car, $user);
-                                UtilController::saveEntity($em, $car, $user, false);
+                                UtilController::saveEntity($em, $car, $user);
 
                                 //Define TICKET
                                 $ticket = UtilController::newEntity($ticket, $user);
