@@ -3,15 +3,16 @@
     {% if ticket.status != 'closed' %}
 
     {# se define bloqued_by_assessor para no repetir la comprovacion if en el codigo  #}
-        {% if ( is_granted('ROLE_ASSESSOR')
+        {# {% if ( is_granted('ROLE_ASSESSOR')
             and ticket.blockedBy is not null
             and ticket.blockedBy == app.security.getToken().getUser()) %}
 
                 {% set bloqued_by_assessor = 0 %}
         {% else %}
                 {% set bloqued_by_assessor = 1 %}
-        {% endif %}
+        {% endif %} #}
 
+    {% set bloqued_by_assessor = 0 %}
 
     {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
         {% if ( bloqued_by_assessor == 0 )

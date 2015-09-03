@@ -5,16 +5,16 @@ namespace Adservice\CarBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Adservice\CarBundle\Entity\Brand
+ * Adservice\CarBundle\Entity\Motor
  *
- * @ORM\Table(name="Marca_Vehiculo")
+ * @ORM\Table(name="Motor_Vehiculo")
  * @ORM\Entity
  */
-class Brand {
+class Motor {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="Marca", type="integer")
+     * @ORM\Column(name="Motor", type="integer")
      * @ORM\Id
      */
     private $id;
@@ -27,12 +27,12 @@ class Brand {
     private $name;
 
     /**
-     * @var string $models
+     * @var string $versiones
      *
-     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Model", mappedBy="brand")
-     * @ORM\JoinColumn(name="id", referencedColumnName="Modelo")
+     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Version", mappedBy="motor")
+     * @ORM\JoinColumn(name="version", referencedColumnName="Version")
      */
-    private $models;
+    private $versiones;
 
 
     /**
@@ -67,27 +67,27 @@ class Brand {
 
     public function __construct()
     {
-        $this->models = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->versiones = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add models
+     * Add versiones
      *
-     * @param Adservice\CarBundle\Entity\Model $models
+     * @param Adservice\CarBundle\Entity\Version $versiones
      */
-    public function addModel(\Adservice\CarBundle\Entity\Model $models)
+    public function addVersion(\Adservice\CarBundle\Entity\Version $versiones)
     {
-        $this->models[] = $models;
+        $this->versiones[] = $versiones;
     }
 
     /**
-     * Get models
+     * Get versiones
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getModels()
+    public function getVersiones()
     {
-        return $this->models;
+        return $this->versiones;
     }
 
     public function to_json(){
@@ -97,7 +97,6 @@ class Brand {
     }
 
     public function __toString() {
-
         return $this->name;
     }
 }
