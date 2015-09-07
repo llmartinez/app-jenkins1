@@ -139,6 +139,9 @@ modified_at:			 "Modificado en"
 with_password:			 "Con contraseña"
 
 #FIELDS
+number:					 "Cantidad"
+start:					 "Inicio"
+end: 					 "Fin"
 date: 					 "Fecha"
 date.start: 			 "Fecha Inicial"
 date.end: 				 "Fecha Final"

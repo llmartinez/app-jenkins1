@@ -347,12 +347,19 @@ class StatisticController extends Controller {
                  unset($res_partners);
                  unset($partner);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
+                $trans     = $this->get('translator');
+                $informe   = $trans->trans('statistic.no_ticket');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($results, $partners);
             }
             elseif ($type == 'numworkshopbypartner'){
 
-                $select = "SELECT count(e.id) as Cantidad, p.name as Socio FROM WorkshopBundle:Workshop e ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nSocio    = $trans->trans('partner');
+                $informe   = $trans->trans('numworkshopbypartner');
+
+                $select = "SELECT count(e.id) as ".$nCantidad.", p.name as ".$nSocio." FROM WorkshopBundle:Workshop e ";
                 $where .= 'AND p.id = e.partner ';
                 $join  = ' JOIN e.partner p ';
 
@@ -379,16 +386,21 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY Cantidad DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nCantidad.' DESC');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numworkshopbypartner');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'ticketbyworkshopforpartner'){
 
-                $select = "SELECT count(w.id) as Cantidad, w.name as Taller, p.name as Socio FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nTaller   = $trans->trans('workshop');
+                $nSocio    = $trans->trans('partner');
+                $informe   = $trans->trans('ticketbyworkshopforpartner');
+
+                $select = "SELECT count(w.id) as ".$nCantidad.", w.name as ".$nTaller.", p.name as ".$nSocio." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND p.id = w.partner ';
                 $join  = ' JOIN w.partner p ';
 
@@ -415,16 +427,20 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY Cantidad DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY '.$nCantidad.' DESC');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('ticketbyworkshopforpartner');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbypartner'){
 
-                $select = "SELECT count(e.id) as Cantidad, p.name as Socio FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nSocio    = $trans->trans('partner');
+                $informe   = $trans->trans('numticketsbypartner');
+
+                $select = "SELECT count(w.id) as ".$nCantidad.", p.name as ".$nSocio." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
                 $join  = ' JOIN w.partner p ';
 
@@ -455,16 +471,21 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY Cantidad DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nCantidad.' DESC');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numticketsbypartner');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbysystem'){
 
-                $select = "SELECT count(e.id) as Cantidad, s.name as Sistema, ss.name as Subsistema ";
+                $trans       = $this->get('translator');
+                $nCantidad   = $trans->trans('number');
+                $nSistema    = $trans->trans('system');
+                $nSubsistema = $trans->trans('subsystem');
+                $informe     = $trans->trans('numticketsbysystem');
+
+                $select = "SELECT count(w.id) as ".$nCantidad." s.name as ".$nSistema.", ss.name as ".$nSubsistema." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.subsystem ss ';
                 $join .= ' JOIN ss.system s ';
@@ -507,16 +528,20 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY Cantidad DESC, s.name, ss.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY '.$nCantidad.' DESC, s.name, ss.name');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numticketsbysystem');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbybrand'){
 
-                $select = "SELECT count(e.id) as Cantidad, b.name as Marca ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nMarca    = $trans->trans('brand');
+                $informe   = $trans->trans('numticketsbybrand');
+
+                $select = "SELECT count(e.id) as ".$nCantidad.", b.name as ".$nMarca." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.brand b ';
@@ -559,16 +584,20 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY Cantidad DESC, b.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY '.$nCantidad.' DESC, b.name');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numticketsbybrand');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbymodel'){
 
-                $select = "SELECT count(e.id) as Cantidad, m.name as Modelo ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nModelo    = $trans->trans('model');
+                $informe   = $trans->trans('numticketsbymodel');
+
+                $select = "SELECT count(e.id) as ".$nCantidad.", m.name as ".$nModelo." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.model m ';
@@ -611,16 +640,21 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY Cantidad DESC, m.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY '.$nCantidad.' DESC, m.name');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numticketsbymodel');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbyfabyear'){
 
-                $select = "SELECT count(e.id) as Cantidad, v.inicio as Inicio, v.fin as Fin ";
+                $trans     = $this->get('translator');
+                $nCantidad = $trans->trans('number');
+                $nInicio   = $trans->trans('start');
+                $nFin      = $trans->trans('end');
+                $informe   = $trans->trans('numticketsbyfabyear');
+
+                $select = "SELECT count(e.id) as ".$nCantidad.", v.inicio as ".$nInicio.", v.fin as ".$nFin." ";
                 $join  = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.version v ';
@@ -667,10 +701,9 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio, v.fin ORDER BY Cantidad DESC, v.inicio, v.fin');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio, v.fin ORDER BY '.$nCantidad.' DESC, v.inicio, v.fin');
                 $results   = $qt->getResult();
 
-                $informe = $this->get('translator')->trans('numticketsbymodel');
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
@@ -701,7 +734,9 @@ class StatisticController extends Controller {
             $qt = $em->createQuery("select partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w WHERE e.id IN (".$ids.")");
             $results   = $qt->getResult();
 
-            $response->headers->set('Content-Disposition', 'attachment;filename="informeUltimosTickets_'.date("dmY").'.csv"');
+            $trans     = $this->get('translator');
+            $informe   = $trans->trans('statistic.last_tickets' );
+            $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
         }
 
