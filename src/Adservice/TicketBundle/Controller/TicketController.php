@@ -363,24 +363,27 @@ class TicketController extends Controller {
 
 
             $pagination_inactive = new Pagination(1);
-            $inactive  = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
+            $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
+
+            $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
+
+            foreach ($tickets_inactive as $t) {
+                $t_inactive[$t->getId()] = $t->getId();
+            }
 
         }else{
             $inactive = 0;
+            $t_inactive = array();
         }
 
-        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => $workshops[0],
-                                                                                       'pagination' => $pagination,
-                                                                                       'tickets'    => $tickets,
-                                                                                       'country'    => $country,
-                                                                                       'num_rows'   => $num_rows,
-                                                                                       'option'     => $option,
-                                                                                       'brands'     => $brands,
-                                                                                       'systems'    => $systems,
-                                                                                       'countries'  => $countries,
-                                                                                       'adsplus'    => $adsplus,
-                                                                                       'inactive'   => $inactive,
-                                                                              ));
+        $array = array('workshop'   => $workshops[0], 'pagination' => $pagination,  'tickets'    => $tickets,
+                       'country'    => $country,      'num_rows'   => $num_rows,    'option'     => $option,    'brands'     => $brands,
+                       'systems'    => $systems,      'countries'  => $countries,   'adsplus'    => $adsplus,   'inactive'   => $inactive,
+                       't_inactive' => $t_inactive,
+              );
+
+        if($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        else                                      return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -995,6 +998,29 @@ class TicketController extends Controller {
                             UtilController::saveEntity($em, $ticket, $user);
 
                             $mail = $ticket->getWorkshop()->getEmail1();
+                            $pos = strpos($mail, '@');
+                            if ($pos != 0) {
+
+                                // Cambiamos el locale para enviar el mail en el idioma del taller
+                                $locale = $request->getLocale();
+                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                $request->setLocale($lang->getShortName());
+
+                                /* MAILING */
+                                $mailer = $this->get('cms.mailer');
+                                $mailer->setTo($mail);
+                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                                $mailer->setFrom('noreply@adserviceticketing.com');
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                                $mailer->sendMailToSpool();
+                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+
+                                // Dejamos el locale tal y como estaba
+                                $request->setLocale($locale);
+                            }
+                            //Si es el taller el que cierra, se le envia un mail al asesor asignado
+                            $mail = $ticket->getAssignedTo()->getEmail1();
                             $pos = strpos($mail, '@');
                             if ($pos != 0) {
 
