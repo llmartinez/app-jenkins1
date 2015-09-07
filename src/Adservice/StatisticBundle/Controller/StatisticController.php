@@ -15,7 +15,7 @@ class StatisticController extends Controller {
                                                    $to_y   ='0', $to_m  ='0', $to_d   ='0',
                                                    $partner='0', $shop='0', $workshop='0', $typology='0',
                                                    $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
-        $em = $this->getDoctrine()->getEntityManager();
+    $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
         $statistic = new Statistic();
@@ -350,7 +350,79 @@ class StatisticController extends Controller {
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleresSinTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($results, $partners);
             }
-            elseif ($type == 't10_numticketsbypartner'){
+            elseif ($type == 'numworkshopbypartner'){
+
+                $select = "SELECT count(e.id) as Cantidad, p.name as Socio FROM WorkshopBundle:Workshop e ";
+                $where .= 'AND p.id = e.partner ';
+                $join  = ' JOIN e.partner p ';
+
+                if ($status != '0') {
+                    if     ($status == "active"  ) {  $where .= 'AND e.active = 1 '; }
+                    elseif ($status == "deactive") {  $where .= 'AND e.active = 0 '; }
+                    elseif ($status == "test"    ) {  $where .= 'AND e.test = 1 '; }
+                    elseif ($status == "adsplus" ) {  $where .= 'AND e.ad_service_plus = 0 '; }
+                }
+                if    ($partner != "0"     ) {  $where .= 'AND e.id != 0 ';
+                                                $where .= 'AND p.id = '.$partner.' ';
+                }
+                if    ($shop != "0"        ) {  $join  = ' JOIN e.shop s ';
+                                                $where .= 'AND s.id = e.shop ';
+                                                $where .= 'AND s.id = '.$shop.' ';
+                }
+                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
+                                                $where .= 'AND tp.id = e.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
+                }
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY Cantidad DESC');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('numworkshopbypartner');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'ticketbyworkshopforpartner'){
+
+                $select = "SELECT count(w.id) as Cantidad, w.name as Taller, p.name as Socio FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $where .= 'AND p.id = w.partner ';
+                $join  = ' JOIN w.partner p ';
+
+                if ($status != '0') {
+                    if     ($status == "active"  ) {  $where .= 'AND w.active = 1 '; }
+                    elseif ($status == "deactive") {  $where .= 'AND w.active = 0 '; }
+                    elseif ($status == "test"    ) {  $where .= 'AND w.test = 1 '; }
+                    elseif ($status == "adsplus" ) {  $where .= 'AND w.ad_service_plus = 0 '; }
+                }
+                if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
+                                                $where .= 'AND p.id = '.$partner.' ';
+                }
+                if    ($shop != "0"        ) {  $join  = ' JOIN w.shop s ';
+                                                $where .= 'AND s.id = w.shop ';
+                                                $where .= 'AND s.id = '.$shop.' ';
+                }
+                if    ($typology != "0"    ) {  $join  = ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY Cantidad DESC');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('ticketbyworkshopforpartner');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'numticketsbypartner'){
 
                 $select = "SELECT count(e.id) as Cantidad, p.name as Socio FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
@@ -383,10 +455,223 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY Cantidad DESC');
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+                $informe = $this->get('translator')->trans('numticketsbypartner');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'numticketsbysystem'){
+
+                $select = "SELECT count(e.id) as Cantidad, s.name as Sistema, ss.name as Subsistema ";
+                $join = ' JOIN e.workshop w ';
+                $join .= ' JOIN e.subsystem ss ';
+                $join .= ' JOIN ss.system s ';
+                $where .= ' AND w.id = e.workshop ';
+                $where .= ' AND e.subsystem = ss.id ';
+                $where .= ' AND ss.system = s.id ';
+
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $select .= ", p.name as Socio ";
+                                                $join  .= ' JOIN w.partner p ';
+                                                $where .= ' AND w.id != 0 ';
+                                                $where .= ' AND p.id = '.$partner.' ';
+                                                $where .= ' AND p.id = w.partner ';
+                }
+                if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
+                                                $where .= ' AND w.id = '.$workshop.' ';
+                }
+                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
+                                                $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                $select .= "FROM TicketBundle:Ticket e ";
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY Cantidad DESC, s.name, ss.name');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('numticketsbysystem');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'numticketsbybrand'){
+
+                $select = "SELECT count(e.id) as Cantidad, b.name as Marca ";
+                $join = ' JOIN e.workshop w ';
+                $join .= ' JOIN e.car c ';
+                $join .= ' JOIN c.brand b ';
+                $where .= ' AND w.id = e.workshop ';
+                $where .= ' AND e.car = c.id ';
+                $where .= ' AND c.brand = b.id ';
+
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $select .= ", p.name as Socio ";
+                                                $join  .= ' JOIN w.partner p ';
+                                                $where .= ' AND w.id != 0 ';
+                                                $where .= ' AND p.id = '.$partner.' ';
+                                                $where .= ' AND p.id = w.partner ';
+                }
+                if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
+                                                $where .= ' AND w.id = '.$workshop.' ';
+                }
+                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
+                                                $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                $select .= "FROM TicketBundle:Ticket e ";
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY Cantidad DESC, b.name');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('numticketsbybrand');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'numticketsbymodel'){
+
+                $select = "SELECT count(e.id) as Cantidad, m.name as Modelo ";
+                $join = ' JOIN e.workshop w ';
+                $join .= ' JOIN e.car c ';
+                $join .= ' JOIN c.model m ';
+                $where .= ' AND w.id = e.workshop ';
+                $where .= ' AND e.car = c.id ';
+                $where .= ' AND c.model = m.id ';
+
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $select .= ", p.name as Socio ";
+                                                $join  .= ' JOIN w.partner p ';
+                                                $where .= ' AND w.id != 0 ';
+                                                $where .= ' AND p.id = '.$partner.' ';
+                                                $where .= ' AND p.id = w.partner ';
+                }
+                if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
+                                                $where .= ' AND w.id = '.$workshop.' ';
+                }
+                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
+                                                $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                $select .= "FROM TicketBundle:Ticket e ";
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY Cantidad DESC, m.name');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('numticketsbymodel');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelStatistics($results);
+            }
+            elseif ($type == 'numticketsbyfabyear'){
+
+                $select = "SELECT count(e.id) as Cantidad, v.inicio as Inicio, v.fin as Fin ";
+                $join  = ' JOIN e.workshop w ';
+                $join .= ' JOIN e.car c ';
+                $join .= ' JOIN c.version v ';
+                $where  = 'e.id != 0 '; // Reiniciamos where para no cojer los filtros e.created_at
+                $where .= ' AND w.id = e.workshop ';
+                $where .= ' AND e.car = c.id ';
+                $where .= ' AND c.version = v.id ';
+
+                if ($from_y != '0' ) { $where .= "AND v.inicio >= ".$from_y."00 "; }
+                if ($to_y   != '0' ) { $where .= "AND v.fin <= ".$to_y."99 "; }
+
+                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+                                                $where .= 'AND e.status = '.$open->getId().' ';
+                }
+                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                                $where .= 'AND e.status = '.$closed->getId().' ';
+                }
+                if    ($partner != "0"     ) {  $select .= ", p.name as Socio ";
+                                                $join  .= ' JOIN w.partner p ';
+                                                $where .= ' AND w.id != 0 ';
+                                                $where .= ' AND p.id = '.$partner.' ';
+                                                $where .= ' AND p.id = w.partner ';
+                }
+                if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
+                                                $where .= ' AND w.id = '.$workshop.' ';
+                }
+                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
+                                                $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                $select .= "FROM TicketBundle:Ticket e ";
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio, v.fin ORDER BY Cantidad DESC, v.inicio, v.fin');
+                $results   = $qt->getResult();
+
+                $informe = $this->get('translator')->trans('numticketsbymodel');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
         }
@@ -550,18 +835,20 @@ class StatisticController extends Controller {
         $excel = '';
         $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
 
-        //Bucle para las cabeceras
-        foreach ($results[0] as $key => $value) {
-            if($firstKey == '') { $firstKey = $key; }
-            $excel.=$key.';';
-        }
+        if (isset($results[0])) {
+            //Bucle para las cabeceras
+            foreach ($results[0] as $key => $value) {
+                if($firstKey == '') { $firstKey = $key; }
+                $excel.=$key.';';
+            }
 
-        foreach ($results as $res)
-        {
-            foreach ($res as $key => $value)
+            foreach ($results as $res)
             {
-                if($firstKey == $key) $excel.="\n";
-                $excel.=$value.";";
+                foreach ($res as $key => $value)
+                {
+                    if($firstKey == $key) $excel.="\n";
+                    $excel.=$value.";";
+                }
             }
         }
         return($excel);

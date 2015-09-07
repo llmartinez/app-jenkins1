@@ -45,28 +45,34 @@
         {% endif %}
         <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} raport {% endtrans %}</label>
             <select id="flt_raport" class='form-control'>
-                <option value="0"                       >{% trans %} any                            {% endtrans %}</option>
-
-                {# Últimos tickets de los talleres #}
-                <option value="last-tickets"            >{% trans %} statistic.last_tickets         {% endtrans %}</option>
+                <option value="0"                             >{% trans %} any                            {% endtrans %}</option>
 
                 {# Talleres sin tickets #}
-                <option value="no-ticket"               >{% trans %} statistic.no_ticket            {% endtrans %}</option>
+                <option value="no-ticket"                     >{% trans %} statistic.no_ticket            {% endtrans %}</option>
+
+                {# Últimos tickets de los talleres #}
+                <option value="last-tickets"                  >{% trans %} statistic.last_tickets         {% endtrans %}</option>
+
+                {# TOP TEN de talleres por socio #}
+                <option value="numworkshopbypartner"          >{% trans %} numworkshopbypartner  {% endtrans %}</option>
+
+                {# TOP TEN de tickets de talleres por socio #}
+                <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner  {% endtrans %}</option>
 
                 {# TOP TEN de tickets por socio #}
-                <option value="t10_numticketsbypartner" >{% trans %} topten.numticketsbypartner     {% endtrans %}</option>
+                <option value="numticketsbypartner"           >{% trans %} numticketsbypartner     {% endtrans %}</option>
 
                 {# TOP TEN de tickets por sistema/subsistema #}
-                <option value="t10_numticketsbysystem"  >{% trans %} topten.numticketsbysystem      {% endtrans %}</option>
+                <option value="numticketsbysystem"            >{% trans %} numticketsbysystem      {% endtrans %}</option>
 
                 {# TOP TEN de tickets por marca #}
-                <option value="t10_numticketsbybrand"   >{% trans %} topten.numticketsbybrand       {% endtrans %}</option>
+                <option value="numticketsbybrand"             >{% trans %} numticketsbybrand       {% endtrans %}</option>
 
                 {# TOP TEN de tickets por modelo #}
-                <option value="t10_numticketsbymodel"   >{% trans %} topten.numticketsbymodel       {% endtrans %}</option>
+                <option value="numticketsbymodel"             >{% trans %} numticketsbymodel       {% endtrans %}</option>
 
                 {# TOP TEN de tickets por año de fabricacion #}
-                <option value="numticketsbyfabyear"     >{% trans %} statistic.numticketsbyfabyear  {% endtrans %}</option>
+                <option value="numticketsbyfabyear"           >{% trans %} numticketsbyfabyear  {% endtrans %}</option>
              </select>
         </div>
     </div>
