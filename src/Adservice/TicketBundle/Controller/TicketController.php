@@ -60,7 +60,7 @@ class TicketController extends Controller {
             $params[] = array();
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
-                $workshops   = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
+                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
 
                 if(isset($workshops[0]) and $workshops[0]->getId() != "")
                 {
@@ -109,7 +109,7 @@ class TicketController extends Controller {
         elseif ($option == 'assessor_pending')
         {
             $params[] = array('status', ' = '.$open->getId());
-            $params[] = array('assigned_to'   , '= '.$id_user.' OR e.assigned_to IS NULL');
+            $params[] = array('id'   , ' != 0 AND (e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().'))');
             $params[] = array('pending'   , '= 1');
         }
         elseif ($option == 'assessor_answered')
@@ -235,7 +235,7 @@ class TicketController extends Controller {
         }
 
         $pagination = new Pagination($page);
-        $ordered = array('e.created_at', 'DESC');
+        $ordered = array('e.modified_at', 'DESC');
 
         if($pagination->getMaxRows() != $num_rows) $pagination = $pagination->changeMaxRows($page, $num_rows);
 
@@ -285,7 +285,6 @@ class TicketController extends Controller {
                 }
             }
             if($query_posts != '') $joins[] = array('e.status s', $query_posts);
-            else $joins = array();
 
             $tickets = $pagination->getRows      ($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
             $length  = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
@@ -333,9 +332,11 @@ class TicketController extends Controller {
 
         if ($option == null) $option = 'all';
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
-        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands    = $b_query->getResult();
+        $systems   = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
+        $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        $t_inactive = array();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));
 
@@ -373,17 +374,20 @@ class TicketController extends Controller {
 
         }else{
             $inactive = 0;
-            $t_inactive = array();
         }
 
-        $array = array('workshop'   => $workshops[0], 'pagination' => $pagination,  'tickets'    => $tickets,
-                       'country'    => $country,      'num_rows'   => $num_rows,    'option'     => $option,    'brands'     => $brands,
-                       'systems'    => $systems,      'countries'  => $countries,   'adsplus'    => $adsplus,   'inactive'   => $inactive,
-                       't_inactive' => $t_inactive,
-              );
+        $importances = $em->getRepository('TicketBundle:Importance')->findAll();
 
-        if($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
-        else                                      return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
+        if (sizeof($tickets) == 0) $pagination = new Pagination(0);
+
+        $array = array('workshop'   => $workshops[0], 'pagination'  => $pagination,  'tickets'    => $tickets,
+                       'country'    => $country,      'num_rows'    => $num_rows,    'option'     => $option,    'brands'     => $brands,
+                       'systems'    => $systems,      'countries'   => $countries,   'adsplus'    => $adsplus,   'inactive'   => $inactive,
+                       't_inactive' => $t_inactive,   'importances' => $importances,
+              );
+        if      ($security->isGranted('ROLE_ADMIN'))    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
+        elseif  ($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        else                                            return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -393,6 +397,7 @@ class TicketController extends Controller {
     public function newTicketAction($id_workshop=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
         $request  = $this->getRequest();
         $ticket   = new Ticket();
         $car      = new Car();
@@ -402,8 +407,45 @@ class TicketController extends Controller {
             { $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop); }
         else{ $workshop =  new Workshop(); }
 
+        $open_newTicket = $request->request->get('open_newTicket');
+        $id_brand = $request->request->get('n_id_brand');
+        $id_model = $request->request->get('n_id_model');
+        $id_version = $request->request->get('n_id_version');
+        $id_subsystem = $request->request->get('n_id_subsystem');
+        $id_importance = $request->request->get('n_id_importance');
+        $id_vin = $request->request->get('n_id_vin');
+        $id_plateNumber = $request->request->get('n_id_plateNumber');
+
+        if (isset($id_brand) and $id_brand != '' and $id_brand != '0') {
+            $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
+            $car->setBrand($brand);
+        }
+        if (isset($id_model) and $id_model != '' and $id_model != '0') {
+            $model = $em->getRepository('CarBundle:Model')->find($id_model);
+            $car->setModel($model);
+        }
+        if (isset($id_version) and $id_version != '' and $id_version != '0') {
+            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+            $car->setVersion($version);
+        }
+        if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
+            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+            $ticket->setSubsystem($subsystem);
+        }
+        if (isset($id_importance) and $id_importance != '' and $id_importance != '0') {
+            $importance = $em->getRepository('TicketBundle:Importance')->find($id_importance);
+            $ticket->setImportance($importance);
+        }
+        if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
+            $car->setVin($id_vin);
+        }
+        if (isset($id_plateNumber) and $id_plateNumber != '' and $id_plateNumber != '0') {
+            $car->setPlateNumber($id_plateNumber);
+        }
+
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        $brands  = $em->getRepository('CarBundle:Brand'         )->findBy(array(), array('name' => 'ASC'));
+        $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands  = $b_query->getResult();
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshop->getId() ));
 
         //Define Forms
@@ -411,10 +453,8 @@ class TicketController extends Controller {
         $formC = $this->createForm(new CarType(), $car);
         $formD = $this->createForm(new DocumentType(), $document);
 
-        if ($request->getMethod() == 'POST') {
-
+        if (isset($open_newTicket) and $open_newTicket == '1' and $request->getMethod() == 'POST') {
             //campos comunes
-            $security = $this->get('security.context');
             $user     = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
             $status   = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
@@ -445,8 +485,8 @@ class TicketController extends Controller {
                                 //Define CAR
                                 $car = UtilController::newEntity($car, $user);
 
-                                $id_brand   = $request->request->get('new_car_form_brand'  );
-                                $id_model   = $request->request->get('new_car_form_model'  );
+                                $id_brand   = $request->request->get('new_car_form_brand');
+                                $id_model   = $request->request->get('new_car_form_model');
 
                                 $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
                                 $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
@@ -567,15 +607,20 @@ class TicketController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
-        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                    'form' => $form->createView(),
-                    'formC' => $formC->createView(),
-                    'formD' => $formD->createView(),
-                    'brands' => $brands,
-                    'systems' => $systems,
-                    'adsplus' => $adsplus,
-                    'workshop' => $workshop,
-                    'form_name' => $form->getName(),));
+        $array = array( 'ticket' => $ticket,
+                        'car' => $car,
+                        'form' => $form->createView(),
+                        'formC' => $formC->createView(),
+                        'formD' => $formD->createView(),
+                        'brands' => $brands,
+                        'systems' => $systems,
+                        'adsplus' => $adsplus,
+                        'workshop' => $workshop,
+                        'form_name' => $form->getName()
+                    );
+
+        if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:new_ticket_assessor_layout.html.twig', $array);
+        else                                        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -839,8 +884,8 @@ class TicketController extends Controller {
                                 }
 
                                 //Se desbloquea el ticket una vez respondido
-                                if ($ticket->getBlockedBy() != null) {
-                                    $ticket->setBlockedBy(null);
+                                // if ($ticket->getBlockedBy() != null) {
+                                //     $ticket->setBlockedBy(null);
 
                                     /*si assessor responde se le asigna y se amrca como respondido, si es el taller se marca como pendiente */
                                     if ($security->isGranted('ROLE_ASSESSOR')) {
@@ -849,7 +894,7 @@ class TicketController extends Controller {
                                     }else{
                                         $ticket->setPending(1);
                                     }
-                                }
+                                // }
 
                             UtilController::saveEntity($em, $ticket, $user);
 
@@ -1315,41 +1360,50 @@ class TicketController extends Controller {
              $tickets = array($ticket);
         else $tickets = array();
 
-        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
+        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands    = $b_query->getResult();
         $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $importances = $em->getRepository('TicketBundle:Importance')->findAll();
 
-        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
-                                                                                       'pagination' => new Pagination(),
-                                                                                       'tickets'    => $tickets,
-                                                                                       'brands'     => $brands,
-                                                                                       'systems'    => $systems,
-                                                                                       'countries'  => $countries,
-                                                                                       'option'     => 'all',
-                                                                                       'page'       => 0,
-                                                                                       'num_rows'   => 10,
-                                                                                       'country'    => 0,
-                                                                                       'inactive'   => 0,
-                                                                                       'disablePag' => 0
-                                                                                  ));
+        $array = array('workshop'   => new Workshop(),
+                       'pagination' => new Pagination(),
+                       'tickets'    => $tickets,
+                       'brands'     => $brands,
+                       'systems'    => $systems,
+                       'countries'  => $countries,
+                       'importances' => $importances,
+                       'option'     => 'all',
+                       'page'       => 0,
+                       'num_rows'   => 10,
+                       'country'    => 0,
+                       'inactive'   => 0,
+                       'disablePag' => 0);
+
+        if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+                return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
     /**
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, $system=0, $subsystem=0, $num_rows=10)
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0,
+                                                   $system=0, $subsystem=0, $importance=0,
+                                                   $year=0, $motor=0, $kw=0, $num_rows=10)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $security   = $this->get('security.context');
+        $params = array();
 
-        if($version == '0'){ $params[] = array('brand',' = '.$brand);
-                             $params[] = array('model',' = '.$model);
-        }
-        else               { $params[] = array('brand',' = '.$brand);
-                             $params[] = array('model',' = '.$model);
-                             $params[] = array('version',' = '.$version);
-        }
+        if($brand   != '0') $params[] = array('brand',' = '.$brand);
+        if($model   != '0') $params[] = array('model',' = '.$model);
+        if($version != '0') $params[] = array('version',' = '.$version);
+
+        if($year    != '0') $params[] = array('year'," LIKE '%".$year."%' ");
+        if($motor   != '0') $params[] = array('motor'," LIKE '%".$motor."%' ");
+        if($kw      != '0') $params[] = array('kw',' = '.$kw);
 
         $pagination = new Pagination($page);
 
@@ -1378,35 +1432,236 @@ class TicketController extends Controller {
                 else {
                     $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
                 }
-                
+
             }
         }
         else {
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
-        }      
+        }
         if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
             $tickets[] = $ticket;
         }
-        $brands     = $em->getRepository('CarBundle:Brand')->findBy(array(), array('name' => 'ASC'));
-        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $b_query     = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands      = $b_query->getResult();
+        $systems     = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
+        $countries   = $em->getRepository('UtilBundle:Country')->findAll();
+        $importances = $em->getRepository('TicketBundle:Importance')->findAll();
+
         if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
         else $adsplus = null;
 
-        return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', array('workshop'   => new Workshop(),
-                                                                                       'pagination' => new Pagination(0),
-                                                                                       'tickets'    => $tickets,
-                                                                                       'brands'     => $brands,
-                                                                                       'systems'    => $systems,
-                                                                                       'countries'  => $countries,
-                                                                                       'adsplus'    => $adsplus,
-                                                                                       'option'     => 'all',
-                                                                                       'page'       => $page,
-                                                                                       'num_rows'   => $num_rows,
-                                                                                       'country'    => 0,
-                                                                                       'inactive'   => 0,
-                                                                                       'disablePag' => 0
-                                                                                  ));
+        $array = array('workshop'    => new Workshop(),
+                       'pagination'  => new Pagination(0),
+                       'brand'       => $brand,
+                       'model'       => $model,
+                       'version'     => $version,
+                       'system'      => $system,
+                       'subsystem'   => $subsystem,
+                       'importance'  => $importance,
+                       'year'        => $year,
+                       'motor'       => $motor,
+                       'kw'          => $kw,
+                       'num_rows'    => $num_rows,
+                       'tickets'     => $tickets,
+                       'brands'      => $brands,
+                       'systems'     => $systems,
+                       'countries'   => $countries,
+                       'adsplus'     => $adsplus,
+                       'importances' => $importances,
+                       'option'      => 'all',
+                       'page'        => $page,
+                       'country'     => 0,
+                       'inactive'    => 0,
+                       'disablePag'  => 0);
+
+        if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+                return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
+    }
+
+    /**
+     * Devuelve un ticket segun la id enviada por parametro
+     * @return url
+     */
+    public function findAssessorTicketByBMVAction($page=null)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security   = $this->get('security.context');
+        $request    = $this->getRequest();
+        $params = array();
+
+        // PAGE
+        if(!isset($page)) $page = $request->request->get('ftbmv_page');
+        if(!isset($page)) $page = 1;
+
+        // WORKSHOP
+        $codepartner  = $request->get('ftbmv_codepartner');
+        $codeworkshop = $request->get('ftbmv_codeworkshop');
+        $email = $request->get('ftbmv_email');
+        $phone = $request->get('ftbmv_phone');
+
+        $workshop = new Workshop();
+
+        if (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != ''){
+
+            $partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => $codepartner));
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'partner' => $partner->getId()));
+        }
+
+        // CAR
+        $brand = $request->request->get('new_car_form_brand');
+        $model = $request->request->get('new_car_form_model');
+        $version = $request->request->get('new_car_form_version');
+        $year  = $request->get('new_car_form_year');
+        $motor = $request->get('new_car_form_motor');
+        $kw = $request->request->get('new_car_form_kw');
+        $importance = $request->request->get('new_car_form_importance');
+        $system = $request->request->get('id_system');
+        $subsystem = $request->request->get('new_car_form_subsystem');
+        $displacement = $request->request->get('new_car_form_displacement');
+        $vin = $request->request->get('new_car_form_vin');
+        $plateNumber = $request->request->get('new_car_form_plateNumber');
+        $num_rows = $request->request->get('slct_numRows');
+        if(!isset($num_rows)) $num_rows = 10;
+
+        if(isset($brand) and $brand   != '0') $params[] = array('brand',' = '.$brand);
+        if(isset($model) and $model   != '0') $params[] = array('model',' = '.$model);
+        if(isset($version) and $version != '0') $params[] = array('version',' = '.$version);
+
+        // if($year    != '0') $params[] = array('year'," LIKE '%".$year."%' ");
+        // if($motor   != '0') $params[] = array('motor'," LIKE '%".$motor."%' ");
+        // if($kw      != '0') $params[] = array('kw',' = '.$kw);
+        // if($displacement != '0') $params[] = array('displacement'," = '%".$displacement."%' ");
+        // if($vin          != '0') $params[] = array('vin'," = '%".$vin."%' ");
+        // if($plateNumber  != '0') $params[] = array('plateNumber',' = '.$plateNumber);
+
+
+        $pagination = new Pagination($page);
+
+        // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
+        // Seteamos el numero de resultados que se mostraran
+        $pagination->setMaxRows(10);
+
+        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
+
+        $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        $tickets = array();
+
+        $key = array_keys($cars);
+        $size = sizeOf($key);
+        if($size > 0){
+
+            for ($i=0; $i<$size; $i++){
+
+                $id     = $cars[$key[$i]]->getId();
+                if( $subsystem == 0) $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
+
+                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                    $w_id = $workshop->getId();
+
+                    if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
+                    else $tickets[] = $ticket;
+                }
+            }
+        }
+        else {
+            $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
+            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                $w_id = $workshop->getId();
+                if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
+                else $tickets[] = $ticket;
+            }
+        }
+
+        // Se crea una segunda paginacion que servirá para calcular el numero real de tickets de la paginacion, ya que despues de la consulta se filtra por taller
+        // Busca la ultima pagina del listado, y calcula la longitud total despues de restar los registros que no coinciden con el taller
+        $pagination2 = new Pagination($pagination->getTotalPag());
+        $pagination2->setMaxRows(10);
+        $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
+        $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        $key2 = array_keys($cars2);
+        $size2 = sizeOf($key2);
+        if($size2 > 0){
+
+            for ($i=0; $i<$size2; $i++){
+
+                $id2     = $cars2[$key2[$i]]->getId();
+                if( $subsystem == 0) $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
+                else $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2,'subsystem' => $subsystem));
+
+                if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                    $w_id2 = $workshop->getId();
+                    if(isset($w_id2)) { if($workshop->getId() != $ticket2->getWorkshop()->getId()) $length2--; }
+                }
+            }
+        }
+        else {
+            $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
+            if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                $w_id2 = $workshop->getId();
+                if(isset($w_id2)) { if($workshop->getId() != $ticket2->getWorkshop()->getId()) $length2--; }
+            }
+        }
+
+        if ($length2 <= $pagination2->getFirstRow()){
+            $pagination->setTotalPagByLength($length2);
+        }
+
+        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands    = $b_query->getResult();
+        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
+        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $importances = $em->getRepository('TicketBundle:Importance')->findAll();
+
+        if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
+        else $adsplus = null;
+
+        if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
+        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->find($version);
+
+        if(isset($subsystem) and $subsystem != '0') $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
+
+        if (sizeof($tickets) == 0) $pagination = new Pagination(0);
+
+        $array = array('workshop'    => $workshop,
+                       'pagination'  => $pagination,
+                       'codepartner' => $codepartner,
+                       'codeworkshop'=> $codeworkshop,
+                       'email'       => $email,
+                       'phone'       => $phone,
+                       'brand'       => $brand,
+                       'model'       => $model,
+                       'version'     => $version,
+                       'year'        => $year,
+                       'motor'       => $motor,
+                       'kw'          => $kw,
+                       'importance'  => $importance,
+                       'system'      => $system,
+                       'subsystem'   => $subsystem,
+                       'displacement'=> $displacement,
+                       'vin'         => $vin,
+                       'plateNumber' => $plateNumber,
+                       'tickets'     => $tickets,
+                       'brands'      => $brands,
+                       'systems'     => $systems,
+                       'countries'   => $countries,
+                       'adsplus'     => $adsplus,
+                       'importances' => $importances,
+                       'option'      => 'all',
+                       'page'        => $page,
+                       'num_rows'    => $num_rows,
+                       'country'     => 0,
+                       'inactive'    => 0,
+                       'disablePag'  => 0);
+
+        if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+                return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
     /**
@@ -1456,7 +1711,7 @@ class TicketController extends Controller {
         return $tickets_filtered;
     }
 
-    // /**
+// /**
     //  * Devuelve todos los tickets realizados
     //  * @return url
     //  */

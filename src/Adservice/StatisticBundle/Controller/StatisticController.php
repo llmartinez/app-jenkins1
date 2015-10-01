@@ -11,162 +11,15 @@ use Adservice\UtilBundle\Controller\UtilController as UtilController;
 
 class StatisticController extends Controller {
 
-    public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
-                                                   $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                   $partner='0', $shop='0', $workshop='0', $typology='0',
-                                                   $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
-    $em = $this->getDoctrine()->getEntityManager();
+    public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
+
+        $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $params = array();
         $joins  = array();
-
-        if($type != '0'){
-
-            if ($from_y != '0' and $from_m != '0' and $from_d != '0') {
-                $params[]  = array('created_at', " >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'");
-            }
-            if ($to_y != '0' and $to_m != '0' and $to_d != '0') {
-                $params[] = array('created_at', " <= '".$to_y.'-'.$to_m.'-'.$to_d." 23:59:59'");
-            }
-
-            if     ($type == 'ticket'  ){
-                                        //Estadísticas de tickets de Ad-service
-                                        $bundle = 'TicketBundle';
-                                        $entity = 'Ticket';
-                                        if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-                                                                        $params[] = array('status', ' = '.$open->getId());
-                                        }
-                                        elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                                                                        $params[] = array('status', ' = '.$closed->getId());
-                                        }
-                                        if    ($partner != '0'     ) {  $joins[]  = array('e.workshop w', 'w.id != 0');
-                                                                        $joins[]  = array('w.partner  p', 'p.id = '.$partner);
-                                        }
-                                        if    ($workshop != '0'    ) {  $params[] = array('workshop', ' = '.$workshop);
-                                        }
-                                        if    ($assessor != '0'    ) {  $params[] = array('assigned_to', ' = '.$assessor);
-                                        }
-                                        if    ($created_by != '0'  ) {
-                                                                        if ($created_by == 'tel'){
-                                                                            $joins[]  = array('e.created_by u JOIN u.user_role ur', 'ur.id != 4');
-                                                                        }
-                                                                        elseif($created_by == 'app'){
-                                                                            $joins[]  = array('e.created_by u JOIN u.user_role ur', 'ur.id = 4');
-                                                                        }
-                                        }
-                                        if($security->isGranted('ROLE_SUPER_ADMIN')){
-                                            if    ($country != '0'     ) { $joins[] = array('e.workshop wks', ' wks.country = '.$country); }
-                                        }else{
-                                            $joins[] = array('e.workshop wks', ' wks.country = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }
-            }
-            elseif ($type == 'workshop'){
-                                        //Estadísticas de talleres de Ad-service
-                                        $bundle = 'WorkshopBundle';
-                                        $entity = 'Workshop';
-                                        if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
-                                        if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
-                                        if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
-                                        if     ($status == "active"  ) { $params[] = array('active', ' = 1 AND e.endtest_at IS NULL' ); }
-                                        elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                                        elseif ($status == "test"    ) { $params[] = array('test', " = 1 AND e.endtest_at >= '".date("Y-m-d H:i:s")."'"); }
-                                        elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
-                                        if($security->isGranted('ROLE_SUPER_ADMIN')){
-                                            if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
-                                        }else{
-                                            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                                        }
-            }
-            elseif ($type == 'no-ticket'){
-
-                //Estadísticas generales de Ad-service
-                $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
-                $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
-                $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
-                $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
-                $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
-                $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
-                $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
-                $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
-                $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
-
-                //listado de talleres sin tickets
-                // SELECT w.id FROM workshop w WHERE w.id NOT IN (SELECT t.workshop_id FROM ticket t GROUP BY t.workshop_id)
-
-                $consulta = $em ->createQuery('SELECT w.id FROM TicketBundle:Ticket t JOIN t.workshop w GROUP BY t.workshop');
-                $workshop_query = '0';
-
-                foreach ( $consulta->getResult() as $row) {
-                    $workshop_query = $workshop_query.', '.$row['id'];
-                }
-
-                $bundle = 'WorkshopBundle';
-                $entity = 'Workshop';
-                $params[] = array('id', ' NOT IN ('.$workshop_query.')');
-                if     ($partner  != '0') { $params[] = array('partner', ' = '.$partner); }
-                if     ($shop     != '0') { $params[] = array('shop', ' = '.$shop); }
-                if     ($typology != '0') { $params[] = array('typology', ' = '.$typology); }
-                if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-                elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-                elseif ($status == "test"    ) { $params[] = array('test', ' = 1'); }
-                elseif ($status == "adsplus" ) { $params[] = array('ad_service_plus', ' = 1'); }
-                if($security->isGranted('ROLE_SUPER_ADMIN')){
-                    if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
-                }else{
-                    $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-                }
-            }
-
-            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
-            $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, null, $joins);
-            $statistic->setResults($result);
-
-            $length = $pagination->getRowsLength($em, $bundle, $entity, $params, null, $joins);
-
-            $pagination->setTotalPagByLength($length);
-
-        }else{
-            $type = '0';
-
-            //Estadísticas generales de Ad-service
-            $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
-            $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
-            $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
-            $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
-            $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
-            $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
-            $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
-            $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
-            $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
-
-            /*
-                SELECT w.id, t.id FROM ticket t JOIN  workshop w ON t.workshop_id = w.id GROUP BY w.id ORDER BY t.id DESC
-            */
-            $bundle = 'TicketBundle';
-            $entity = 'Ticket';
-            $joins[] = array('e.workshop w', ' e.workshop = w.id ');
-            $group_by = 'w.id';
-            $order = array('e.id', 'DESC');
-
-            if($security->isGranted('ROLE_SUPER_ADMIN')){
-                if    ($country != '0'     ) { $params[] = array('country', ' = '.$country); }
-            }else{
-                $params[] = array('id != 0 AND w.country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-            }
-
-            //Extraemos los resultados segun el tipo de bsqueda y los filtros aplicados
-            $result = $pagination->getRows($em, $bundle, $entity, $params, $pagination, $order, $joins,'',$group_by);
-            $statistic->setResults($result);
-
-            $length = $pagination->getRowsLength($em, $bundle, $entity, $params, $order, $joins,'',$group_by);
-            $pagination->setTotalPagByLength($length);
-
-            $statistic->setResults($result);
-        }
-        //select partial u.{id,name} from MyApp\Domain\User u
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
 
@@ -194,9 +47,20 @@ class StatisticController extends Controller {
             $typologies = $qt->getResult();
 
         }
+        //Estadísticas generales de Ad-service
+        $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
+        $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
+        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
+        $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
+        $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
+        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
+        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
+        $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
+        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
-        return $this->render('StatisticBundle:Statistic:list_statistics.html.twig', array('statistic' => $statistic,
+        return $this->render('StatisticBundle:Statistic:list_statistics.html.twig', array('page'      => $page,
+                                                                                          'statistic' => $statistic,
                                                                                           'from_y'    => $from_y,
                                                                                           'from_m'    => $from_m,
                                                                                           'from_d'    => $from_d,
@@ -219,14 +83,12 @@ class StatisticController extends Controller {
                                                                                           'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
-                                                                                          'length'    => $length,
+                                                                                          //'length'    => $length,
                                                                             ));
     }
 
-    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0',
-                                                      $to_y   ='0', $to_m  ='0', $to_d   ='0',
-                                                      $partner='0', $shop='0', $workshop='0', $typology='0',
-                                                      $status='0', $country='0', $assessor='0', $created_by='0', $raport='0'){
+    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0'){
+
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
         $security = $this->get('security.context');
@@ -294,6 +156,8 @@ class StatisticController extends Controller {
                 if     ($partner!= "0"       ) { $where .= 'AND e.partner = '.$partner.' '; }
                 if     ($status == "active"  ) { $where .= 'AND e.active = 1 ' ; }
                 elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
+                elseif ($status == "test"    ) { $where .= 'AND e.test = 1 '; }
+                elseif ($status == "adsplus" ) { $where .= 'AND e.ad_service_plus = 1 '; }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
@@ -355,11 +219,11 @@ class StatisticController extends Controller {
             elseif ($type == 'numworkshopbypartner'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
+                $nTalleres = $trans->trans('workshops');
                 $nSocio    = $trans->trans('partner');
                 $informe   = $trans->trans('numworkshopbypartner');
 
-                $select = "SELECT count(e.id) as ".$nCantidad.", p.name as ".$nSocio." FROM WorkshopBundle:Workshop e ";
+                $select = "SELECT p.name as ".$nSocio.", count(e.id) as ".$nTalleres." FROM WorkshopBundle:Workshop e ";
                 $where .= 'AND p.id = e.partner ';
                 $join  = ' JOIN e.partner p ';
 
@@ -386,7 +250,7 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nCantidad.' DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTalleres.' DESC');
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -395,12 +259,13 @@ class StatisticController extends Controller {
             elseif ($type == 'ticketbyworkshopforpartner'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
+                $nTickets  = $trans->trans('tickets');
                 $nTaller   = $trans->trans('workshop');
                 $nSocio    = $trans->trans('partner');
+                $code      = $trans->trans('_code');
                 $informe   = $trans->trans('ticketbyworkshopforpartner');
 
-                $select = "SELECT count(w.id) as ".$nCantidad.", w.name as ".$nTaller.", p.name as ".$nSocio." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = "SELECT count(w.id) as ".$nTickets.", w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND p.id = w.partner ';
                 $join  = ' JOIN w.partner p ';
 
@@ -427,7 +292,7 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY '.$nCantidad.' DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY '.$nTickets.' DESC');
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -436,11 +301,11 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbypartner'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
+                $nTickets  = $trans->trans('tickets');
                 $nSocio    = $trans->trans('partner');
                 $informe   = $trans->trans('numticketsbypartner');
 
-                $select = "SELECT count(w.id) as ".$nCantidad.", p.name as ".$nSocio." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = "SELECT p.name as ".$nSocio.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
                 $join  = ' JOIN w.partner p ';
 
@@ -471,7 +336,7 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nCantidad.' DESC');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTickets.' DESC');
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -480,12 +345,12 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbysystem'){
 
                 $trans       = $this->get('translator');
-                $nCantidad   = $trans->trans('number');
+                $nTickets    = $trans->trans('tickets');
                 $nSistema    = $trans->trans('system');
                 $nSubsistema = $trans->trans('subsystem');
                 $informe     = $trans->trans('numticketsbysystem');
 
-                $select = "SELECT count(w.id) as ".$nCantidad." s.name as ".$nSistema.", ss.name as ".$nSubsistema." ";
+                $select = "SELECT s.name as ".$nSistema.", ss.name as ".$nSubsistema.", count(w.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.subsystem ss ';
                 $join .= ' JOIN ss.system s ';
@@ -527,9 +392,21 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
-
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY '.$nCantidad.' DESC, s.name, ss.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY '.$nTickets.' DESC, s.name, ss.name');
                 $results   = $qt->getResult();
+
+                // Traducción al idioma del administrador
+
+                $key = array_keys($results);
+                $size = sizeof($key);
+                for ($i=0; $i<$size; $i++){
+
+                    $sistema    = $results[$key[$i]][$nSistema];
+                    $subsistema = $results[$key[$i]][$nSubsistema];
+
+                    $results[$key[$i]][$nSistema]    = $trans->trans($sistema);
+                    $results[$key[$i]][$nSubsistema] = $trans->trans($subsistema);
+                }
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
@@ -537,11 +414,11 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbybrand'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
+                $nTickets  = $trans->trans('tickets');
                 $nMarca    = $trans->trans('brand');
                 $informe   = $trans->trans('numticketsbybrand');
 
-                $select = "SELECT count(e.id) as ".$nCantidad.", b.name as ".$nMarca." ";
+                $select = "SELECT b.name as ".$nMarca.", count(e.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.brand b ';
@@ -584,7 +461,7 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY '.$nCantidad.' DESC, b.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY '.$nTickets.' DESC, b.name');
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -593,17 +470,20 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbymodel'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
-                $nModelo    = $trans->trans('model');
+                $nTickets  = $trans->trans('tickets');
+                $nMarca    = $trans->trans('brand');
+                $nModelo   = $trans->trans('model');
                 $informe   = $trans->trans('numticketsbymodel');
 
-                $select = "SELECT count(e.id) as ".$nCantidad.", m.name as ".$nModelo." ";
+                $select = "SELECT b.name as ".$nMarca.", m.name as ".$nModelo.", count(e.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.model m ';
+                $join .= ' JOIN c.brand b ';
                 $where .= ' AND w.id = e.workshop ';
                 $where .= ' AND e.car = c.id ';
                 $where .= ' AND c.model = m.id ';
+                $where .= ' AND c.brand = b.id ';
 
                 if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
                                                 $where .= 'AND e.status = '.$open->getId().' ';
@@ -640,7 +520,7 @@ class StatisticController extends Controller {
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY '.$nCantidad.' DESC, m.name');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY '.$nTickets.' DESC, m.name');
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -649,12 +529,11 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbyfabyear'){
 
                 $trans     = $this->get('translator');
-                $nCantidad = $trans->trans('number');
-                $nInicio   = $trans->trans('start');
-                $nFin      = $trans->trans('end');
+                $nTickets  = $trans->trans('tickets');
+                $date      = $trans->trans('date');
                 $informe   = $trans->trans('numticketsbyfabyear');
 
-                $select = "SELECT count(e.id) as ".$nCantidad.", v.inicio as ".$nInicio.", v.fin as ".$nFin." ";
+                $select = "SELECT v.inicio as ".$date.", count(e.id) as ".$nTickets." ";
                 $join  = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.version v ';
@@ -664,7 +543,7 @@ class StatisticController extends Controller {
                 $where .= ' AND c.version = v.id ';
 
                 if ($from_y != '0' ) { $where .= "AND v.inicio >= ".$from_y."00 "; }
-                if ($to_y   != '0' ) { $where .= "AND v.fin <= ".$to_y."99 "; }
+                if ($to_y   != '0' ) { $where .= "AND v.inicio <= ".$to_y."99 "; }
 
                 if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
                                                 $where .= 'AND e.status = '.$open->getId().' ';
@@ -700,12 +579,21 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
-
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio, v.fin ORDER BY '.$nCantidad.' DESC, v.inicio, v.fin');
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio ORDER BY v.inicio DESC, '.$nTickets.' DESC ');
                 $results   = $qt->getResult();
+                $years = array();
+                foreach ($results as $res) {
+
+                    $inicio = substr($res[$date], 0, 4);
+                    if(!isset($years[$inicio])) {
+                        $years[$inicio][$nTickets] = $res[$nTickets];
+                        $years[$inicio][$date] = $inicio;
+                    }
+                    else $years[$inicio][$nTickets] = $years[$inicio][$nTickets] + $res[$nTickets];
+                }
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
-                $excel = $this->createExcelStatistics($results);
+                $excel = $this->createExcelFabYear($years);
             }
         }
         else{
@@ -748,35 +636,74 @@ class StatisticController extends Controller {
     public function createExcelTicket($results){
         //Creación de cabecera
         //'ID;Date;Car;Assigned To;Description;Status;Solution;';
-        $excel ='ID;'.
-                $this->get('translator')->trans('date').';'.
-                $this->get('translator')->trans('car').';'.
-                $this->get('translator')->trans('assigned_to').';'. //ID ticket
-                $this->get('translator')->trans('description').';'.
-                $this->get('translator')->trans('status').';'.
-                $this->get('translator')->trans('solution').';';
+        $excel =
+            $this->get('translator')->trans('ticket').';'.
+            $this->get('translator')->trans('workshop').';'.
+            $this->get('translator')->trans('region').';'.
+            $this->get('translator')->trans('typology').';'.
+            $this->get('translator')->trans('brand').';'.
+            $this->get('translator')->trans('model').';'.
+            $this->get('translator')->trans('version').';'.
+            $this->get('translator')->trans('year').';'.
+            $this->get('translator')->trans('vin').';'.
+            $this->get('translator')->trans('motor').';'.
+            $this->get('translator')->trans('system').';'.
+            $this->get('translator')->trans('subsystem').';'.
+            $this->get('translator')->trans('description').';'.
+            $this->get('translator')->trans('solution').';'.
+            $this->get('translator')->trans('status').';'.
+            $this->get('translator')->trans('date').';'.
+            $this->get('translator')->trans('assessor').';'.
+            $this->get('translator')->trans('importance').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($results as $row) {
             $excel.=$row->getId().';';
-            $created = $row->getCreatedAt();
-            $excel.=$created->format("d/m/Y").';';
-            $excel.=$row->getCar().';';
-            $excel.=$row->getAssignedTo().';';
+
+            $workshop = $row->getWorkshop();
+            $excel.=$workshop->getPartner()->getCodePartner().' - '.$workshop->getCodeWorkshop().';';
+            $excel.=$workshop->getRegion().';';
+
+            $typology = $workshop->getTypology();
+            $excel.=$this->get('translator')->trans($typology).';';
+
+            $car = $row->getCar();
+            $excel.=$car->getBrand().';';
+            $excel.=$car->getModel().';';
+            $excel.=$car->getVersion().';';
+            $excel.=$car->getYear().';';
+            $excel.=$car->getVin().';';
+            $excel.=$car->getMotor().';';
+
+            // Ticket
+            $system = $row->getSubsystem();
+            if(isset($system)) {
+                $excel.=$system->getSystem().';';
+                $excel.=$system.';';
+            }
 
             $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
             $excel.=$description.';';
 
-            $excel.=$row->getStatus().';';
-
             $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
+
+            $status = $row->getStatus();
+
+            $excel.=$this->get('translator')->trans($status).';';
+
+            $created = $row->getCreatedAt();
+            $excel.=$created->format("d/m/Y").';';
+            $excel.=$row->getAssignedTo().';';
+
+            $importance = $row->getImportance();
+            $excel.=$this->get('translator')->trans($importance).';';
 
             $excel.="\n";
         }
@@ -804,7 +731,12 @@ class StatisticController extends Controller {
         foreach ($results as $row) {
             $excel.=$row->getCodePartner().';';
             $excel.=$row->getCodeWorkshop().';';
-            $excel.=$row->getName().';';
+
+            $buscar=array(';', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $name=str_ireplace($buscar,$reemplazar,$row->getName());
+            $excel.=$name.';';
+
             $excel.=$partners[$row->getCodePartner()].';';
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
@@ -841,7 +773,12 @@ class StatisticController extends Controller {
 
             $excel.=$row->getWorkshop()->getCodePartner().';';
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
-            $excel.=$row->getWorkshop()->getName().';';
+
+            $buscar=array(';', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array("", "", "", "");
+            $name=str_ireplace($buscar,$reemplazar,$row->getWorkshop()->getName());
+            $excel.=$name.';';
+
             $excel.=$row->getWorkshop()->getPartner().';';
             $excel.=$row->getId().';';
 
@@ -882,8 +819,34 @@ class StatisticController extends Controller {
                 foreach ($res as $key => $value)
                 {
                     if($firstKey == $key) $excel.="\n";
-                    $excel.=$value.";";
+
+                    $buscar=array(',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $reemplazar=array("", "", "", "");
+                    $text=str_ireplace($buscar,$reemplazar,$value);
+                    $excel.=$text.';';
                 }
+            }
+        }
+        return($excel);
+    }
+
+    public function createExcelFabYear($results){
+        $excel = '';
+        $trans = $this->get('translator');
+        $nTickets = $trans->trans('tickets');
+        $date  = $trans->trans('date');
+
+        $excel.=$date.';'.$nTickets.';';
+
+        foreach ($results as $res)
+        {
+            foreach ($res as $key => $value)
+            {
+                if($key == $date) $excel.="\n";
+                $buscar=array(',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                $reemplazar=array("", "", "", "");
+                $text=str_ireplace($buscar,$reemplazar,$value);
+                $excel.=$text.';';
             }
         }
         return($excel);

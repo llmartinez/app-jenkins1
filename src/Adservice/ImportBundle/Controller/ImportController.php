@@ -89,8 +89,8 @@ class ImportController extends Controller
 	        $newShop->setMovileNumber2 ('0');
 	        $newShop->setFax           ('0');
 
-	        $newShop->setEmail1('test@ad-service.es');
-	        $newShop->setEmail2('test@ad-service.es');
+	        $newShop->setEmail1('test@adserviceticketing.com');
+	        $newShop->setEmail2('test@adserviceticketing.com');
 
 	        $newShop->setCity  ('...');
 	        $newShop->setRegion('...');
@@ -243,7 +243,12 @@ class ImportController extends Controller
             {
 
                     $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-                    $newWorkshop->setName 					($old_Taller->getNombre());
+
+		            $buscar=array(chr(13).chr(10), chr(9), "\r\n", "\n", "\r");
+		            $reemplazar=array("", "", "", "");
+		            $name=str_ireplace($buscar,$reemplazar,$old_Taller->getNombre());
+                    $newWorkshop->setName($name);
+
                     $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
                     $newWorkshop->setAddress 				($old_Taller->getDireccion());
                     $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
@@ -555,7 +560,7 @@ class ImportController extends Controller
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo('test@adserviceticketing.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));

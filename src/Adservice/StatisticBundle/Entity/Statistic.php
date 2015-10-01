@@ -174,22 +174,21 @@ class Statistic {
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$filter_country);
         return $query->getSingleScalarResult();
     }
-
     /**
      * Devuelve el número de tickets creados por telefono (Asesor) dentro de ADService
      * @param EntityManager $em
      * @return Integer
      */
     public function getNumTicketsByTel($em, $security) {
-        $join = 'JOIN t.created_by u JOIN u.user_role ur';
+        $join = 'JOIN t.created_by u JOIN u.user_role ur ';
+        $where = ' WHERE t.id != 0 ';
+        $and   = ' AND ur.id != 4 '; //ROL 4 = ROLE_USER
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'JOIN t.workshop w AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'JOIN t.workshop w ';
+            $and = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $where = ' WHERE t.id != 0 ';
-        $and   = ' AND ur.id != 4'; //ROL 4 = ROLE_USER
-
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
         return $query->getSingleScalarResult();
     }
@@ -200,14 +199,15 @@ class Statistic {
      * @return Integer
      */
     public function getNumTicketsByApp($em, $security) {
-        $join = 'JOIN t.created_by u JOIN u.user_role ur';
+        $join = 'JOIN t.created_by u JOIN u.user_role ur ';
+        $where = ' WHERE t.id != 0 ';
+        $and   = ' AND ur.id = 4 '; //ROL 4 = ROLE_USER
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'JOIN t.workshop w ';
+            $and = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
-        $where = ' WHERE t.id != 0 ';
-        $and   = ' AND ur.id = 4'; //ROL 4 = ROLE_USER
 
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
         return $query->getSingleScalarResult();

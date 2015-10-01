@@ -1,0 +1,23 @@
+<div style="text-align:center">
+
+    <img src="http://adserviceticketing.com/logo_adservice.png" alt="ADServiceTicketing" title="ADServiceTicketing"/>
+
+    <p>Se ha terminado el período de prueba del taller <b>{{ workshop.name }}</b></p>
+
+    <table valign="middle" align="center">
+        <h3>Datos del taller:</h3>
+
+        <tr><td><b>Taller:</b></td><td> {{ workshop.name }}
+        </td></tr>
+        <tr><td><b>Código:</b></td><td> {{ workshop.partner.codepartner }} - {{ workshop.codeworkshop }}
+        </td></tr>
+        <tr><td><b>Contacto:</b></td><td> {{ workshop.contact }}
+        </td></tr>
+        <tr><td><b>Tel:</b></td><td> {{ workshop.phoneNumber1 }}
+        </td></tr>
+        <tr><td><b>Mail:</b></td><td> {{ workshop.Email1 }}
+        </td></tr>
+        <tr><td><b>Fecha Alta:</b></td><td> {{ workshop.createdAt|date("d/m/Y") }}
+        </td></tr>
+    </table>
+</div>
