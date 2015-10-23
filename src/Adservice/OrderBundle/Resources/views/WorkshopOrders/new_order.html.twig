@@ -40,8 +40,19 @@
             {% endif %}
 
             <div class="col-xs-2 col-md-2">
-                <input type="hidden" id="id_partner" value="{{ id_partner }}">
                 <label>{% trans %} shop {% endtrans %} * </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+{#                 <input type="hidden" id="id_partner" value="{{ id_partner }}">
+                <label for="workshopOrder_newOrder_shop">{% trans %} shop {% endtrans %} * </label>
+                {% if shops is iterable %}
+                    <select id="shop" name="shop" required="required" class="form-control">
+                        <option value></option>
+                        {% for shop in shops %}
+                            <option value={{ shop.id }}>{{ shop.name }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <select id="partners"><option value=0>0</option></select>
+                {% endif %} #}
             </div>
 
             <div class="col-xs-2 col-md-2">

@@ -72,26 +72,26 @@ function confirm_delete_user_modal(user_id) {
  */
 function find_popup() {
 
-    var route  = 'popup_get';
-    var locale = $(document).find("#data_locale").val();
+    // var route  = 'popup_get';
+    // var locale = $(document).find("#data_locale").val();
 
-    $.ajax({
-        type: "POST",
-        url: Routing.generate(route, {_locale: locale}),
-        dataType: "json",
-        success: function(data) {
-            //solo mostramos el modal, si tenemos un popup que mostrar
-            if (data.length > 0) {
-                $.each(data, function(idx, elm) {
-                    $('#popup_modal_title').html(elm.name);
-                    $('#popup_modal_description').html(elm.description);
+    // $.ajax({
+    //     type: "POST",
+    //     url: Routing.generate(route, {_locale: locale}),
+    //     dataType: "json",
+    //     success: function(data) {
+    //         //solo mostramos el modal, si tenemos un popup que mostrar
+    //         if (data.length > 0) {
+    //             $.each(data, function(idx, elm) {
+    //                 $('#popup_modal_title').html(elm.name);
+    //                 $('#popup_modal_description').html(elm.description);
 
-                    $('#myModal').modal('show');
-                });
-            }
-        },
-        error: function() {
-            console.log("Error al cargar el popup...");
-        }
-    });
+    //                 $('#myModal').modal('show');
+    //             });
+    //         }
+    //     },
+    //     error: function() {
+    //         console.log("Error al cargar el popup...");
+    //     }
+    // });
 }

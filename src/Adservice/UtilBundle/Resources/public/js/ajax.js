@@ -14,6 +14,8 @@ function populate_region(route, region, city){
         url         : Routing.generate(route, {_locale: locale}),
         data        : {id_country : id_country},
         dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#data_regions').empty();
@@ -60,6 +62,8 @@ function populate_city(){
         url         : Routing.generate(route, {_locale: locale}),
         data        : {id_region : id_region},
         dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#data_cities').empty();
@@ -94,11 +98,13 @@ function populate_shop(id_shop){
         url         : Routing.generate(route, {_locale: locale }),
         data        : {id_partner : id_partner},
         dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
                 $('form').find('select[id*=_shop]').empty();
-                $('form').find('select[id*=_shop]').append("<option value=0></option>");
+                // $('form').find('select[id*=_shop]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
                     if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");
@@ -124,6 +130,8 @@ function fill_code_partner(id_partner){
         url         : Routing.generate(route, {_locale: locale }),
         data        : {id_partner : id_partner},
         dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
@@ -152,6 +160,8 @@ function fill_code_workshop(id_partner){
         url         : Routing.generate(route, {_locale: locale }),
         data        : {id_partner : id_partner},
         dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
@@ -171,7 +181,7 @@ function fill_code_workshop(id_partner){
  * Rellena el combo de los modelos segun la marca seleccionada por el usuario
  */
 
-function fill_model() {
+function fill_model(model) {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text());
 
@@ -193,6 +203,8 @@ function fill_model() {
         url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
         data: {id_brand: id_brand, filter: filter, filter_value: filter_value},
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_model').empty();
@@ -200,9 +212,17 @@ function fill_model() {
 
             if (data['error'] != "No hay coincidencias") {
                 //Primer campo vacío
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value='0'></option>");
                 $.each(data, function(idx, elm) {
-                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    if(model == elm.id )
+                        $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                    else
+                        $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                 });
+            }
+            if(model != undefined && model != '' ) {
+                var version = $("#ticket_version").val();
+                fill_version(version);
             }
         },
         error: function() {
@@ -214,7 +234,7 @@ function fill_model() {
 /**
  * Rellena (fill) el combo de las versiones (version) segun el modelo (model) seleccionado por el usuario
  */
-function fill_version() {
+function fill_version(version) {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
@@ -235,6 +255,8 @@ function fill_version() {
         url: Routing.generate(route, {_locale: locale, id_model: id_model, filter: filter, filter_value: filter_value}),
         data: {id_model: id_model, filter: filter, filter_value: filter_value},
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
@@ -243,19 +265,36 @@ function fill_version() {
             $('#new_car_form_motor').val('');
             $('#new_car_form_kW').val('');
             $('#new_car_form_displacement').val('');
-            $('#new_car_form_vin').val('');
-            $('#new_car_form_plateNumber').val('');
 
             if (data['error'] != "No hay coincidencias") {
 
-            var dis_url = $( "#dis-url" ).val();
-            var vts_url = $( "#vts-url" ).val();
+                var dis_url = $( "#dis-url" ).val();
+                var vts_url = $( "#vts-url" ).val();
+
+                //Primer campo vacío
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value='0'></option>");
 
                 $.each(data, function(idx, elm) {
-                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    if(version == elm.id )
+                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                    else
+                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+
                     $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
                     $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
                 });
+            }
+            if(version != undefined && version != '' ) {
+                fill_car_data();
+                var system = $('#id_system').val();
+                if(system == '' ) { system = $("#ticket_system").val(); }
+
+                if(system != '' ) {
+                    $('#id_system').val(system);
+                    var subsystem = $("#ticket_subsystem").val();
+                    if (subsystem != undefined)
+                       fill_subsystem(subsystem);
+                }
             }
 
         },
@@ -281,23 +320,27 @@ function fill_car_data() {
         url: Routing.generate(route, {_locale: locale, id_version: id_version}),
         data: {id_version: id_version},
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
-            // Limpiamos y llenamos los campos del coche
-            $.each(data, function(idx, elm) {
+            if (data['error'] != "No hay coincidencias") {
+                // Limpiamos y llenamos los campos del coche
+                $.each(data, function(idx, elm) {
 
-                var inicio = elm.inicio.slice(0,4);
-                var fin    = elm.fin.slice(0,4);
-                var fecha  = inicio+' - '+fin;
-                $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
-                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
-                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
-                $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
-                var dis_url = $( "#dis-url" ).val();
-                var vts_url = $( "#vts-url" ).val();
+                    var inicio = elm.inicio.slice(0,4);
+                    var fin    = elm.fin.slice(0,4);
+                    var fecha  = inicio+' - '+fin;
+                    $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
+                    $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+                    $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
+                    $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
+                    var dis_url = $( "#dis-url" ).val();
+                    var vts_url = $( "#vts-url" ).val();
 
-                $( "#dis" ).attr("href", dis_url+'/'+elm.id);
-                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.id);
-            });
+                    $( "#dis" ).attr("href", dis_url+'/'+elm.id);
+                    $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.id);
+                });
+            }
         },
         error: function() {
             console.log("Error al cargar datos de coche...");
@@ -320,11 +363,17 @@ function fill_car_by_year() {
         url: Routing.generate(route, {_locale: locale, year: year}),
         data: {year: year},
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
             // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
             $('#new_car_form_brand').empty();
             $('#new_car_form_model').empty();
             $('#new_car_form_version').empty();
+
+            //Primer campo vacío
+            $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+
             $.each(data, function(idx, elm) {
                 $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
@@ -356,39 +405,45 @@ function fill_car_by_motor() {
     var route  = 'car_by_motor';
     var locale = $(document).find("#data_locale").val();
 
-        $.ajax({
-            type: "POST",
-            url: Routing.generate(route, {_locale: locale, motor: motor}),
-            data: {motor: motor},
-            dataType: "json",
-            success: function(data) {
-                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-                $('#new_car_form_brand').empty();
-                $('#new_car_form_model').empty();
-                $('#new_car_form_version').empty();
-                $.each(data, function(idx, elm) {
-                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                });
-                //Cambiamos el icono para indicar que se esta filtrando por motor
-                $('#filter_year').empty();
-                $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale, motor: motor}),
+        data: {motor: motor},
+        dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success: function(data) {
+            // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+            $('#new_car_form_brand').empty();
+            $('#new_car_form_model').empty();
+            $('#new_car_form_version').empty();
 
-                $('#filter_motor').empty();
-                if(motor != ''){
-                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-                }else{
-                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
-                }
-            },
-            error: function() {
-                console.log("Error al filtrar por motor...");
+            //Primer campo vacío
+            $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+
+            $.each(data, function(idx, elm) {
+                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+            });
+            //Cambiamos el icono para indicar que se esta filtrando por motor
+            $('#filter_year').empty();
+            $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+
+            $('#filter_motor').empty();
+            if(motor != ''){
+                $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+            }else{
+                $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
             }
-        });
+        },
+        error: function() {
+            console.log("Error al filtrar por motor...");
+        }
+    });
 }
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
  */
-function fill_subsystem() {
+function fill_subsystem(subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
 
@@ -404,15 +459,21 @@ function fill_subsystem() {
         url: Routing.generate(route, {_locale: locale }),
         data: {id_system: id_system},
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
             // Limpiamos y llenamos el combo con las opciones del json
             $('select[id*=_subsystem]').empty();
 
             //Primer campo vacío
+            $('form[id=contact]').find('select[id*=_subsystem]').append("<option value='0'></option>");
+
             $.each(data, function(idx, elm) {
-                if (elm.id == id_subsystem) $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                else                        $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                if (elm.id == id_subsystem || elm.id == subsystem)
+                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                else
+                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
             });
         },
         error: function() {
@@ -436,14 +497,15 @@ function fill_tbl_similar() {
         url: Routing.generate(route, {_locale: locale }),
         data: { id_model: id_model, id_subsystem: id_subsystem },
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
             // Limpiamos y llenamos el combo con las opciones del json
             $( "#tbl_similar" ).empty();
             $( "#tbl_similar" ).append("<tr><th class='padded'> CAR </th><th class='padded'> DESCRIPTION </th></tr>");
-            //Primer campo vacío
-            $.each(data, function(idx, elm) {
 
+            $.each(data, function(idx, elm) {
                 if (idx != "error") {
                     var url = Routing.generate('showTicketReadonly', {_locale: locale, id: elm.id });
                     $("#tbl_similar").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
@@ -475,6 +537,8 @@ function fill_tbl_repeated() {
         url: Routing.generate(route, {_locale: locale }),
         data: { id_model: id_model, id_subsystem: id_subsystem },
         dataType: "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
             // Limpiamos y llenamos el combo con las opciones del json

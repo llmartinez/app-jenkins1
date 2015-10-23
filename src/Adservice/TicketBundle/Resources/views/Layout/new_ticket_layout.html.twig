@@ -37,6 +37,8 @@
     {% if workshop.id != "" %}
         <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
+          <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
+
           {% include 'TicketBundle:Car:new_car.html.twig'        %}
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}

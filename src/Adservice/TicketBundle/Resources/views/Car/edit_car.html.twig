@@ -1,7 +1,7 @@
 
    <div class="col-xs-4 col-md-4 form-group">
         <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
-        <select id="new_car_form_brand" name="new_car_form_brand" class="form-control" multiple="multiple", required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
+        <select id="new_car_form_brand" name="new_car_form_brand" class="form-control" {# multiple="multiple" #}, required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
             {% for brand in brands %}
                 <option value={{ brand.id }}
                 {% if ticket.car is defined and ticket.car.brand == brand.name %} selected {% endif %}
@@ -12,7 +12,7 @@
 
     <div class="col-xs-4 col-md-4 form-group">
         <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
-        <select id="new_car_form_model" name="new_car_form_model" class="form-control" multiple="multiple", required data-url="{{ path("car_version") }}">
+        <select id="new_car_form_model" name="new_car_form_model" class="form-control" {# multiple="multiple" #}, required data-url="{{ path("car_version") }}">
             {% for model in models %}
                 <option value={{ model.id }}
                 {% if ticket.car is defined and ticket.car.model == model.name %} selected {% endif %}
@@ -23,7 +23,7 @@
 
     <div class="col-xs-4 col-md-4 form-group">
         <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
-        <select id="new_car_form_version" name="new_car_form_version" class="form-control" multiple="multiple" >
+        <select id="new_car_form_version" name="new_car_form_version" class="form-control" {# multiple="multiple" #} >
             {% for version in versions %}
                 <option value={{ version.id }}
                 {% if ticket.car is defined and ticket.car.version == version.name %} selected {% endif %}
