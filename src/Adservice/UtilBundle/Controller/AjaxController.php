@@ -154,9 +154,14 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         if($filter != '') {
-            $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
-                      WHERE b.id = m.brand AND m.id = v.model AND b.id = ".$id_brand." AND v.".$filter." like '%".$filter_value."%'
-                      ORDER BY m.name";
+            if($filter == 'motor'){
+                $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
+                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND b.id = ".$id_brand." AND mt.name like '%".$filter_value."%'
+                          ORDER BY m.name";}
+            elseif($filter == 'year'){
+                $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m
+                          WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.inicio like '".$filter_value."%' OR m.fin like '".$filter_value."%'
+                          GROUP BY m.id ORDER BY m.name";}
 
             $consulta = $em->createQuery($query);
             $models   = $consulta->getResult();
@@ -185,9 +190,15 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         if($filter != '') {
-            $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
-                      WHERE b.id = m.brand AND m.id = v.model AND m.id = ".$id_model." AND v.".$filter." like '%".$filter_value."%'
-                      ORDER BY v.name";
+            if($filter == 'motor')
+                $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
+                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND m.id = ".$id_model." AND mt.name like '%".$filter_value."%'
+                          ORDER BY m.name";
+            elseif($filter == 'year')
+                $query = "SELECT v FROM CarBundle:Version v
+                          WHERE v.model = ".$id_model." AND ( v.inicio like '".$filter_value."%' OR v.fin like '".$filter_value."%' )
+                          GROUP BY v.id ORDER BY v.name";
+
             $consulta = $em->createQuery($query);
             $versions   = $consulta->getResult();
         }
@@ -216,8 +227,14 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_version = $petition->request->get('id_version');
-        $id_version = $id_version[0];
+
         $version = $em->getRepository('CarBundle:Version')->find($id_version);
+
+        if (isset($version)) {
+            $id_motor = $version->getMotor();
+            $motor = $em->getRepository('CarBundle:Motor')->find($id_motor);
+            $version->setMotor($motor->getName());
+        }
 
         if(isset($version)) {
             $json[] = $version->to_json();
@@ -237,7 +254,8 @@ class AjaxController extends Controller
 
         $year = $petition->request->get('year');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.inicio like '".$year."%' AND v.fin like '".$year."%' ORDER BY b.name ASC";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND m.inicio like '".$year."%' OR m.fin like '".$year."%' GROUP BY b.id ORDER BY b.name ASC";
+
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -263,7 +281,7 @@ class AjaxController extends Controller
 
         $motor = $petition->request->get('motor');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.motor like '%".$motor."%' ORDER BY b.name ASC";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND mt.name like '%".$motor."%' ORDER BY b.name ASC";
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -350,8 +368,8 @@ class AjaxController extends Controller
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
 
         if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
-            if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
-            if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
+            if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
+            if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
             $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
 

@@ -1,0 +1,62 @@
+
+{# <legend> {% trans %} workshop.search {% endtrans %} </legend> #}
+<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
+    <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
+    <div class="form-group">
+
+    <div class="col-xs-12 col-md-12 form-group">
+	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
+
+    <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} code  {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
+        <input type="text" id="w_idpartner" name="w_idpartner" class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} partner  {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.partner.codepartner}}"
+            {% elseif codepartner is defined %}value="{{codepartner}}"
+            {% endif %}>
+        <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} workshop {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.codeworkshop}}"
+            {% elseif codeworkshop is defined %}value="{{codeworkshop}}"
+            {% endif %}>
+    </div>
+    <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} workshop_name  {% endtrans %}</label>
+        <input type="text" id="w_name"      name="w_name"      class="form-control" placeholder="{% trans %} name     {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.name}}"{% endif %} disabled>
+    </div>
+    <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} email {% endtrans %}</label>
+        <input type="text" id="w_email"     name="w_email"     class="form-control" placeholder="{% trans %} email    {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.email1}}"
+            {% elseif email is defined %}value="{{email}}"{% endif %}>
+    </div>
+    <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} tel   {% endtrans %}</label>
+        <input type="text" id="w_tel"       name="w_tel"       class="form-control" placeholder="{% trans %} tel      {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.phoneNumber1}}"
+            {% elseif phone is defined %}value="{{phone}}"{% endif %}>
+    </div>
+   {#  <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} cif   {% endtrans %}</label>
+        <input type="text" id="w_cif"       name="w_cif"       class="form-control" placeholder="{% trans %} cif      {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.cif}}"{% endif %}>
+    </div> #}
+{#     <div class="col-xs-2 col-md-2 form-group">
+        <label style="width: 100%;">    {% trans %} region{% endtrans %}</label>
+        <input type="text" id="w_region"    name="w_region"    class="form-control" placeholder="{% trans %} region   {% endtrans %}"
+            {% if workshop.id != "" %}value="{{workshop.region}}"{% endif %}>
+    </div> #}
+        <div class="col-xs-2 col-md-2 form-group">
+            {% if workshop.id != "" %}<label style="width: 100%;">{% trans %} workshop {% endtrans %}: {{ workshop.name }} </label>
+                                      <label style="width: 100%;">{% trans %} contact {% endtrans %}: {{ workshop.contact }}</label> {% endif %}
+
+            <button type="submit" class="btn btn-primary fl" id="btn_check" name="btn_search" style="display: none;">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} workshop {% endtrans %}</button>
+{#
+        <button type="button" class="btn btn-primary" id="btn_search_by_bmv" name="btn_search_by_bmv">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} car {% endtrans %}</button>
+        <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}"> #}
+        </div>
+    </div>
+    </div>
+</form>

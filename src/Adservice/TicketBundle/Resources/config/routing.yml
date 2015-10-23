@@ -32,6 +32,12 @@ findTicketByBMV:
     options:
         expose: true
 
+findAssessorTicketByBMV:
+    pattern:  /ticket/findAssessorTicketByBMV/{page}
+    defaults: { _controller: TicketBundle:Ticket:findAssessorTicketByBMV, page: null }
+    options:
+        expose: true
+
 # listTicketFiltered:
 #     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
 #     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }

@@ -207,11 +207,20 @@ class WorkshopOrderController extends Controller {
                 var_dump($form_errors);
             }
         }
+
+        // $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+
+        // $shops[] = $em->getRepository("PartnerBundle:Shop")->find(1);
+
+        // $array_shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+
+        // foreach ($array_shops as $shop) { $shops[] = $shop; }
+
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,
                                                                                      'form_name'        => $form->getName(),
                                                                                      'form'             => $form->createView(),
                                                                                      'partners'         => $partners,
-                                                                                     //'shops'            => $shops,
+                                                                                     // 'shops'            => $shops,
                                                                                      'id_partner'       => $id_partner,
                                                                                      'code'             => $code));
     }

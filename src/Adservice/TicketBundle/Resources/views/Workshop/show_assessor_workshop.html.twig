@@ -23,50 +23,49 @@
 	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
 
 	{# WORKSHOP #}
-	<div class="form-group">
+	<div>
 		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>
 	</div>
 
+	{# MAIL #}
+	<div>
+		<table>
+		{% if workshop.email1 != "" %} <tr><td><img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png') }}'></td><td> {{ workshop.email1 }} </td></tr>{% endif %}
+		{% if workshop.email2 != "" %} <tr><td></td><td> {{ workshop.email2 }} </td></tr>{% endif %}
+		</table>
+	</div>
+
+
+	{# TEL #}
+	<div>
+		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
+		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
+	</div>
+	<div>
+		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
+		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+	</div>
+
 	{# CIF #}
-	<div class="form-group">
+	<div>
 		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
 	</div>
-	<div class="form-group">
+	<div>
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
 	{# PARTNER #}
-	<div class="form-group">
+	<div>
 		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
 	</div>
 
 	{# LOCATION #}
-	<div class="form-group">
+	<div>
 		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
 		{% if workshop.city         != "" %}  {{ workshop.city|length > 15 ? workshop.city|slice(0, 15) ~ '...' : workshop.city  }}{% endif %}
 		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
 		{% if workshop.region       != "" %}, {{ workshop.region|length > 15 ? workshop.region|slice(0, 15) ~ '...' : workshop.region  }}{% endif %}
 	</div>
 
-	{# TEL #}
-	<div class="form-group">
-		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
-		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
-	</div>
-	<div class="form-group">
-		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
-	</div>
-	<div class="form-group">
-		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}
-	</div>
-
-	{# MAIL #}
-	<div class="form-group">
-		<table>
-		{% if workshop.email1 != "" %} <tr><td><img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png') }}'></td><td> {{ workshop.email1 }} </td></tr>{% endif %}
-		{% if workshop.email2 != "" %} <tr><td></td><td> {{ workshop.email2 }} </td></tr>{% endif %}
-		</table>
-	</div>
 
 	{# OBERVATIONS #}
 	{% if is_granted('ROLE_ADMIN') %}
@@ -98,5 +97,6 @@
 {# 			<a href="{{ path('workshop_observation', { 'id': workshop.id, 'id_ticket': ticket.id }) }}">
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'></a> #}
 		{% endif %}
+	</div>
 	</div>
 {% endif %}
