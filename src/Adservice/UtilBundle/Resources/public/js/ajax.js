@@ -156,9 +156,9 @@ function fill_code_workshop(id_partner){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
                 $('#adservice_workshopbundle_workshoptype_code_workshop').empty();
-                
+
                 $('#adservice_workshopbundle_workshoptype_code_workshop').val(data['code']);
-                
+
             }
         },
         error : function(){
@@ -172,6 +172,8 @@ function fill_code_workshop(id_partner){
  */
 
 function fill_model() {
+
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text());
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
@@ -214,6 +216,7 @@ function fill_model() {
  */
 function fill_version() {
 
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
     var route  = 'car_version';
@@ -267,6 +270,7 @@ function fill_version() {
  */
 function fill_car_data() {
 
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
 
     var route  = 'car_data';
@@ -280,15 +284,19 @@ function fill_car_data() {
         success: function(data) {
             // Limpiamos y llenamos los campos del coche
             $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('#new_car_form_year'        ).val(elm.year        );
-                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor       );
-                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw          );
-                $('form[id=contact]').find('#new_car_form_displacement').val(elm.displacement);
+
+                var inicio = elm.inicio.slice(0,4);
+                var fin    = elm.fin.slice(0,4);
+                var fecha  = inicio+' - '+fin;
+                $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
+                $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+                $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
+                $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                 var dis_url = $( "#dis-url" ).val();
                 var vts_url = $( "#vts-url" ).val();
 
-                $( "#dis" ).attr("href", dis_url+'/'+elm.idTecDoc);
-                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.idTecDoc);
+                $( "#dis" ).attr("href", dis_url+'/'+elm.id);
+                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.id);
             });
         },
         error: function() {
@@ -414,7 +422,7 @@ function fill_subsystem() {
 }
 
 /**
- * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
+ * Rellena (fill) una tabla con tickets similares
  */
 function fill_tbl_similar() {
 
@@ -448,6 +456,45 @@ function fill_tbl_similar() {
         },
         error: function() {
             console.log("Error al cargar tickets similares..");
+        }
+    });
+}
+
+/**
+ * Rellena (fill) una tabla con tickets repetidos
+ */
+function fill_tbl_repeated() {
+
+    var route  = 'tbl_repeated';
+    var locale = $(document).find("#data_locale").val();
+    var id_model     = $('form').find('select[id*=model]').val();
+    var id_subsystem = $('form').find('select[id*=subsystem]').val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale }),
+        data: { id_model: id_model, id_subsystem: id_subsystem },
+        dataType: "json",
+        success: function(data) {
+
+            // Limpiamos y llenamos el combo con las opciones del json
+            $( "#tbl_repeated" ).empty();
+            $( "#tbl_repeated" ).append("<tr><th class='padded'> CAR </th><th class='padded'> DESCRIPTION </th></tr>");
+            //Primer campo vacío
+            $.each(data, function(idx, elm) {
+
+                if (idx != "error") {
+                    var url = Routing.generate('showTicketReadonly', {_locale: locale, id: elm.id });
+                    $("#tbl_repeated").append("<tr><td class='padded'>" + elm.car + "</td><td class='padded'><a onclick='window.open( \""+ url +"\" , \"width=1000, height=800, top=100px, left=100px, toolbar=no, status=no, location=no, directories=no, menubar=no\" )' > " + elm.description + "</a></td></tr>");
+                }
+                else{
+                    $( "#tbl_repeated" ).empty();
+                    $( "#tbl_repeated" ).append("<tr><td>" + elm + "</td></tr>");
+                }
+            });
+        },
+        error: function() {
+            console.log("Error al cargar tickets repetidos..");
         }
     });
 }

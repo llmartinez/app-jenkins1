@@ -92,7 +92,7 @@ class WorkshopRepository extends EntityRepository
 
         return $consulta->getResult();
     }
-    
+
     public function findPhone($number) {
         $em = $this->getEntityManager();
         $query = 'SELECT COUNT(w) FROM WorkshopBundle:Workshop w '
@@ -102,9 +102,9 @@ class WorkshopRepository extends EntityRepository
                    .'OR w.movile_number_1 = '.$number;
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0];
-                
+
     }
-    
+
     public function findPhoneNoId($number,$id) {
         $em = $this->getEntityManager();
         $query = 'SELECT COUNT(w) FROM WorkshopBundle:Workshop w '
@@ -114,6 +114,14 @@ class WorkshopRepository extends EntityRepository
                    .' OR w.movile_number_1 = '.$number.')';
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0];
-                
+
+    }
+
+    public function getNumTickets($id) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT COUNT(t) FROM TicketBundle:Ticket t '
+                .'WHERE t.workshop = '.$id.'';
+        $consulta = $em-> createQuery($query);
+        return $consulta->getResult()[0][1];
     }
 }

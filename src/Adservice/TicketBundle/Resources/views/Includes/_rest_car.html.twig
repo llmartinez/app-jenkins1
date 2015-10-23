@@ -30,13 +30,8 @@
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
-        {% if workshop.country == 'france' %}
             <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %} *<a id="txt_plateNumber"></a></label>
             {{ form_widget(formC.plateNumber, { 'attr': { 'class': 'form-control', 'required': 'required', 'placeholder': 'plate_number' | trans } }) }}
-        {% else %}
-            <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %} <a id="txt_plateNumber"></a></label>
-            {{ form_widget(formC.plateNumber, { 'attr': { 'class': 'form-control', 'placeholder': 'plate_number' | trans } }) }}
-        {% endif %}
     </div>
 
     {{ form_rest(formC) }}

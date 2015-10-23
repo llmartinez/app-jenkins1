@@ -125,7 +125,10 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
-        $shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
+        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.partner = ".$id_partner." OR s.id = 1";
+        $consulta = $em->createQuery($query);
+        $shops   = $consulta->getResult();
+
         $size = sizeOf($shops);
         if($size > 0) {
             foreach ($shops as $shop) {
@@ -152,12 +155,14 @@ class AjaxController extends Controller
 
         if($filter != '') {
             $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
-                      WHERE b.id = m.brand AND m.id = v.model AND b.id = ".$id_brand." AND v.".$filter." like '%".$filter_value."%' ";
+                      WHERE b.id = m.brand AND m.id = v.model AND b.id = ".$id_brand." AND v.".$filter." like '%".$filter_value."%'
+                      ORDER BY m.name";
+
             $consulta = $em->createQuery($query);
             $models   = $consulta->getResult();
         }
         else{
-            $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand));
+            $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand), array('name' => 'ASC'));
         }
 
         $size = sizeOf($models);
@@ -181,7 +186,8 @@ class AjaxController extends Controller
 
         if($filter != '') {
             $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v
-                      WHERE b.id = m.brand AND m.id = v.model AND m.id = ".$id_model." AND v.".$filter." like '%".$filter_value."%' ";
+                      WHERE b.id = m.brand AND m.id = v.model AND m.id = ".$id_model." AND v.".$filter." like '%".$filter_value."%'
+                      ORDER BY v.name";
             $consulta = $em->createQuery($query);
             $versions   = $consulta->getResult();
         }
@@ -231,7 +237,7 @@ class AjaxController extends Controller
 
         $year = $petition->request->get('year');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.year like '%".$year."%' ORDER BY b.name ASC";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v WHERE b.id = m.brand AND m.id = v.model AND v.inicio like '".$year."%' AND v.fin like '".$year."%' ORDER BY b.name ASC";
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -342,6 +348,39 @@ class AjaxController extends Controller
         $id_subsystem = $petition->request->get('id_subsystem');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+
+        if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
+            if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
+            if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
+
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
+
+            if(count($tickets) > 0) {
+                foreach ($tickets as $ticket) {
+                    $json[] = $ticket->to_json_subsystem();
+                }
+            }else{
+                $json = array( 'error' => 'No hay coincidencias');
+            }
+        }else{
+            $json = array( 'error' => 'No hay coincidencias');
+        }
+
+        return new Response(json_encode($json), $status = 200);
+    }
+
+    /**
+     * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function tblRepeatedAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+
+        $id_model     = $petition->request->get('id_model');
+        $id_subsystem = $petition->request->get('id_subsystem');
+
+        $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
         if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
             if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }

@@ -8,11 +8,11 @@ $(document).ready(function() {
 });
 
     //vacia tbl_similar
-    $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); });
-    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); });
-    $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); });
+    $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); clear_tbl_repeated('brand' ); });
+    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); clear_tbl_repeated('model' ); });
+    $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); clear_tbl_repeated('system'); });
     //llena tbl_similar
-    $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
+    $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); fill_tbl_repeated(); });
     $('#btn_search_by_bmv').click(function() { search_by_bmv(); });
 
 
@@ -45,17 +45,20 @@ $('#new_file_form_file').bind('change', function() {
  */
 function clear_tbl_similar(parent) {
 
+    var similar = $( "#txt_similar" ).val();
     $( "#tbl_similar" ).empty();
+    $( "#tbl_similar" ).append("<p>"+similar+"</p>");
+}
 
-    // if (parent == 'brand' )                 { var son = 'Model';     }
-    // else {
-    //         if (parent == 'model' )         { var son = 'System';    }
-    //         else {
-    //                 if (parent == 'system') { var son = 'Subsystem'; }
-    //         }
-    // }
+/**
+ * vacia tbl_repeated
+ * @return AjaxFunction
+ */
+function clear_tbl_repeated(parent) {
 
-    // $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
+    var similar = $( "#txt_repeated" ).val();
+    $( "#tbl_repeated" ).empty();
+    $( "#tbl_repeated" ).append("<p>"+similar+"</p>");
 }
 
 /**

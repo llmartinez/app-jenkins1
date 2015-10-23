@@ -3,16 +3,21 @@
 
     $(document).ready(function() {
 
+        var status = $('#status').val();
+        $("#flt_status").val(status);
+
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
         $('#flt_partner_s').change(function() {
 
             var partner = $('#flt_partner_s').val();
-
             if(partner == null) partner = 'none';
+
+            var status  = $('#flt_status').val();
+            if(status  == null) status  = 0;
 
             var route = 'shopOrder_listShops';
             var locale = $(document).find("#data_locale").val();
-            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner });
+            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner, status: status  });
 
             window.open(url, "_self");
         });
@@ -21,12 +26,14 @@
         $('#flt_partner_w').change(function() {
 
             var partner = $('#flt_partner_w').val();
-
             if(partner == null) partner = 'none';
+
+            var status  = $('#flt_status').val();
+            if(status  == null) status  = 0;
 
             var route = 'workshopOrder_listWorkshops';
             var locale = $(document).find("#data_locale").val();
-            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner });
+            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner, status: status  });
 
             window.open(url, "_self");
         });
@@ -43,6 +50,21 @@
             var route = $('#route').val();
             var locale = $(document).find("#data_locale").val();
             var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country});
+
+            window.open(url, "_self");
+        });
+
+        $('#flt_status').change(function() {
+
+            var status  = $('#flt_status').val();
+            if(status  == null) status  = 0;
+
+            var partner = $('#flt_partner_w').val();
+            if(partner == null) partner = 'none';
+
+            var route = 'workshopOrder_listWorkshops';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, partner: partner, status: status });
 
             window.open(url, "_self");
         });

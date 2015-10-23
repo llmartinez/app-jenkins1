@@ -81,7 +81,7 @@ class PopupController extends Controller {
         }
         $popup = new Popup();
         $request = $this->getRequest();
-        
+
         // Creamos variables de sesion para fitlrar los resultados del formulario
         $role = $security->getToken()->getUser()->getRoles();
         $role = $role[0]->getName();
@@ -98,18 +98,10 @@ class PopupController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
         $form = $this->createForm(new PopupType(), $popup);
-        
+
         $form->bindRequest($request);
 
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{ 
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+        if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getEntityManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -159,15 +151,7 @@ class PopupController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
                 $this->savePopup($em, $popup); }
             return $this->redirect($this->generateUrl('popup_list'));
         }

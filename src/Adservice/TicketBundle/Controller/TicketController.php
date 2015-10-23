@@ -428,35 +428,7 @@ class TicketController extends Controller {
 
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
-                    /*Validacion Formularios*/
-                        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-                        $form_errors = $form->getErrors();
-                        if(isset($form_errors[0])) {
-                            $form_errors = $form_errors[0];
-                            $form_errors = $form_errors->getMessageTemplate();
-                        }else{
-                            $form_errors = 'none';
-                        }
-
-                        $formC_errors = $formC->getErrors();
-                        if(isset($formC_errors[0])) {
-                            $formC_errors = $formC_errors[0];
-                            $formC_errors = $formC_errors->getMessageTemplate();
-                        }else{
-                            $formC_errors = 'none';
-                        }
-
-                        $formD_errors = $formD->getErrors();
-                        if(isset($formD_errors[0])) {
-                            $formD_errors = $formD_errors[0];
-                            $formD_errors = $formD_errors->getMessageTemplate();
-                        }else{
-                            $formD_errors = 'none';
-                        }
-
-                        if ((($form ->isValid() or $form_errors  == 'The uploaded file was too large. Please try to upload a smaller file')
-                         &&  ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file'))
-                         &&  ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                        if ($form ->isValid() && $formC->isValid() && $formD->isValid()) {
 
                          // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
@@ -495,7 +467,7 @@ class TicketController extends Controller {
                                 }
 
                                 $car = UtilController::newEntity($car, $user);
-                                UtilController::saveEntity($em, $car, $user, false);
+                                UtilController::saveEntity($em, $car, $user);
 
                                 //Define TICKET
                                 $ticket = UtilController::newEntity($ticket, $user);
@@ -773,10 +745,11 @@ class TicketController extends Controller {
             $user     = $security->getToken()->getUser();
             $car      = $ticket->getCar();
             $version  = $car->getVersion();
-            $model    = $car->getModel()->getIdTecDoc();
-            $brand    = $car->getBrand()->getIdTecDoc();
-            if (isset($version)) $idTecDoc = $car->getVersion()->getIdTecDoc();
-            else $idTecDoc = "";
+            $model    = $car->getModel();
+            $brand    = $car->getBrand();
+
+            if (isset($version)) $id = $car->getVersion()->getId();
+            else $id = "";
 
             if ($security->isGranted('ROLE_SUPER_ADMIN')) $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
             else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
@@ -815,7 +788,7 @@ class TicketController extends Controller {
                             'brand'     => $brand,
                             'model'     => $model,
                             'version'   => $version,
-                            'idTecDoc'  => $idTecDoc );
+                            'id'        => $id );
 
             if ($security->isGranted('ROLE_ASSESSOR')) {
                 $form = $this->createForm(new EditTicketType(), $ticket);
@@ -825,39 +798,17 @@ class TicketController extends Controller {
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
-                if ($security->isGranted('ROLE_ASSESSOR')) { $form->bindRequest($request);
+                if ($security->isGranted('ROLE_ASSESSOR')) {
 
-                    $form_errors = $form->getErrors();
-                    if(isset($form_errors[0])) {
-                        $form_errors = $form_errors[0];
-                        $form_errors = $form_errors->getMessageTemplate();
-                    }else{
-                        $form_errors = 'none';
-                    }
+                    $form->bindRequest($request);
                 }
 
-                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file'))){
+                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and $form->isValid())){
 
                     $formP->bindRequest($request);
                     $formD->bindRequest($request);
 
-                    $formP_errors = $formP->getErrors();
-                    if(isset($formP_errors[0])) {
-                        $formP_errors = $formP_errors[0];
-                        $formP_errors = $formP_errors->getMessageTemplate();
-                    }else{
-                        $formP_errors = 'none';
-                    }
-                    $formD_errors = $formD->getErrors();
-                    if(isset($formD_errors[0])) {
-                        $formD_errors = $formD_errors[0];
-                        $formD_errors = $formD_errors->getMessageTemplate();
-                    }else{
-                        $formD_errors = 'none';
-                    }
-
-                    if (($formP->isValid() or $formP_errors == 'The uploaded file was too large. Please try to upload a smaller file')
-                    and ($formD->isValid() or $formD_errors == 'The uploaded file was too large. Please try to upload a smaller file')) {
+                    if ($formP->isValid() and $formD->isValid()) {
 
                     // Controla si se ha subido un fichero erroneo
                     $file = $document->getFile();
@@ -901,6 +852,7 @@ class TicketController extends Controller {
 
                             $mail = $ticket->getWorkshop()->getEmail1();
                             $pos = strpos($mail, '@');
+
                             if ($pos != 0) {
 
                                 // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -941,15 +893,15 @@ class TicketController extends Controller {
                     }
                     }
                 }
-                return $this->redirect($this->generateUrl('showTicket', array(  'id' => $ticket->getId(),
+
+                return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),
                                                                                 'form_name' => $formP->getName(),
                                                                                 'ticket'    => $ticket,
                                                                                 'systems'   => $systems,
                                                                                 'form_name' => $formP->getName(),
                                                                                 'brand'     => $brand,
                                                                                 'model'     => $model,
-                                                                                'version'   => $version,
-                                                                                'idTecDoc'  => $idTecDoc )));
+                                                                                'version'   => $version )));
             }
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
@@ -980,15 +932,7 @@ class TicketController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $em->persist($post);
                 $em->flush();
@@ -1020,7 +964,7 @@ class TicketController extends Controller {
             $request  = $this->getRequest();
 
             if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
-            else                                                                        $form = $this->createForm(new CloseTicketType()        , $ticket);
+            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
             if ($request->getMethod() == 'POST') {
                 $form->bindRequest($request);
@@ -1032,14 +976,7 @@ class TicketController extends Controller {
 
                 if ($str_len <= $max_len ) {
 
-                    $form_errors = $form->getErrors();
-                    if(isset($form_errors[0])) {
-                        $form_errors = $form_errors[0];
-                        $form_errors = $form_errors->getMessageTemplate();
-                    }else{
-                        $form_errors = 'none';
-                    }
-                    if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+                    if ($form->isValid()) {
 
                         if ($security->isGranted('ROLE_ASSESSOR') === false) {
                             if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
@@ -1240,7 +1177,7 @@ class TicketController extends Controller {
 
     /**
      * Bloquea un ticket al asesor para que conteste
-     * @Route("/ticket/assingAssesor/{id}/{id_user}/")
+     * @Route("/ticket/assignAssesor/{id}/{id_user}/")
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user

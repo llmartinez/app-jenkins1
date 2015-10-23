@@ -10,7 +10,8 @@
 <legend> {% trans %} menu.list_workshops {% endtrans %}
   <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
     <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
-    {% trans %} menu.new_workshop_order {% endtrans %}</a></legend>
+    {% trans %} menu.new_workshop_order {% endtrans %}</a>
+</legend>
 
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
@@ -22,6 +23,16 @@
     </select></div>
     {% endif %}
 
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} status {% endtrans %} </label>
+        <input id="status" type="hidden" value="{{status}}">
+        <select id="flt_status" class='form-control'>
+                <option value="0" selected>{% trans %} all      {% endtrans %}</option>
+                <option value="active"    >{% trans %} active   {% endtrans %}</option>
+                <option value="deactive"  >{% trans %} inactive {% endtrans %}</option>
+                <option value="test"      >{% trans %} testing  {% endtrans %}</option>
+             </select>
+    </select></div>
+
     {% if workshops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
@@ -32,7 +43,8 @@
                 <th>{% trans %} shop     {% endtrans %}</th>
                 <th>{% trans %} email    {% endtrans %}</th>
                 <th>{% trans %} tel      {% endtrans %}</th>
-                <th>{% trans %} active   {% endtrans %}</th>
+                {# <th>{% trans %} active   {% endtrans %}</th> #}
+                <th>{% trans %}numTickets{% endtrans %}</th>
                 <th>{% trans %} actions  {% endtrans %}</th>
             </tr>
         </thead>
@@ -45,7 +57,8 @@
                 <td>{{ workshop.shop}}          </td>
                 <td>{{ workshop.email1 }}       </td>
                 <td>{{ workshop.phoneNumber1 }} </td>
-                <td>{{ workshop.active }}       </td>
+                {# <td>{{ workshop.active }}       </td> #}
+                <td>{{ numTickets[workshop.id]}}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
@@ -109,7 +122,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination_by_partner.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_by_partner_status.js') }}"></script>
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
     <script src="{{ asset('bundles/order/js/order.js') }}"></script>

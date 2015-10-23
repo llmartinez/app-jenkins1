@@ -32,7 +32,7 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listWorkshopsAction($page=1 , $partner='none') {
+    public function listWorkshopsAction($page=1 , $partner='none' , $status=0) {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
         if ($security->isGranted('ROLE_AD') === false) {
@@ -48,6 +48,12 @@ class WorkshopOrderController extends Controller {
         }
         else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
+        if ($status != 'none') {
+            if     ($status == 'active')   $params[] = array('active', ' = 1');
+            elseif ($status == 'deactive') $params[] = array('active', ' = 0');
+            elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
+        }
+
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
@@ -61,10 +67,18 @@ class WorkshopOrderController extends Controller {
         if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()));
         else $partners = array();
 
-        return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops' => $workshops,
+        $numTickets = array();
+        foreach ($workshops as $workshop) {
+            $id = $workshop->getId();
+            $numTickets[$id] = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
+        }
+
+        return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
+                                                                                           'numTickets' => $numTickets,
                                                                                            'pagination' => $pagination,
                                                                                            'partners'   => $partners,
-                                                                                           'partner'    => $partner));
+                                                                                           'partner'    => $partner,
+                                                                                           'status'     => $status));
     }
 
 //  _   _ _______        __
@@ -131,15 +145,7 @@ class WorkshopOrderController extends Controller {
 
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-    	    $form_errors = $form->getErrors();
-    	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array( 'partner' => $partner->getId(),
                                                                                         'code_workshop' => $workshopOrder->getCodeWorkshop()));
@@ -276,15 +282,8 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
-             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-	    $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+            if ($form->isValid()) {
                 $user = $security->getToken()->getUser();
 
                 $workshopOrder = UtilController::newEntity($workshopOrder, $user);
@@ -444,15 +443,7 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $workshopOrder->setAction('rejected');
                 $workshopOrder->setRejectionReason($form->get('rejection_reason')->getData());     //recogemos del formulario el motivo de rechazo...
