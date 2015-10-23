@@ -72,7 +72,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'shop' )
     	{
-			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
+			//$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
 			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
 
 			// TIENDA POR DEFECTO
@@ -98,21 +98,21 @@ class ImportController extends Controller
 	        $newShop->setCountry($locations['countries']['spain']);
 			UtilController::saveEntity($em, $newShop, $sa,false);
 
-			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
+			// $partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
-			foreach ($old_Tiendas as $old_Tienda)
-			{
-				$newShop = UtilController::newEntity(new Shop(), $sa);
-				$name = $old_Tienda->getNombre();
-				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-				$newShop->setName($name);
-				$newShop->setPartner($partner);
-				$newShop->setActive('1');
-				$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
-				UtilController::saveEntity($em, $newShop, $sa,false);
-			}
-			$em->flush();
+			// foreach ($old_Tiendas as $old_Tienda)
+			// {
+			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
+			// 	$name = $old_Tienda->getNombre();
+			// 	$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+			// 	$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+			// 	$newShop->setName($name);
+			// 	$newShop->setPartner($partner);
+			// 	$newShop->setActive('1');
+			// 	$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+			// 	UtilController::saveEntity($em, $newShop, $sa,false);
+			// }
+			// $em->flush();
 			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');

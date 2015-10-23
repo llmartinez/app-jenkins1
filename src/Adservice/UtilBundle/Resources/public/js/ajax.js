@@ -104,7 +104,7 @@ function populate_shop(id_shop){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
                 $('form').find('select[id*=_shop]').empty();
-                $('form').find('select[id*=_shop]').append("<option value=0></option>");
+                // $('form').find('select[id*=_shop]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
                     if(elm.id == id_shop) $('form').find('select[id*=_shop]').append("<option value="+elm.id+" selected>"+elm.shop+"</option>");

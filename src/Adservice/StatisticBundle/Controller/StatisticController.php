@@ -586,8 +586,8 @@ class StatisticController extends Controller {
 
                     $inicio = substr($res[$date], 0, 4);
                     if(!isset($years[$inicio])) {
-                        $years[$inicio][$nTickets] = $res[$nTickets];
                         $years[$inicio][$date] = $inicio;
+                        $years[$inicio][$nTickets] = $res[$nTickets];
                     }
                     else $years[$inicio][$nTickets] = $years[$inicio][$nTickets] + $res[$nTickets];
                 }
@@ -682,6 +682,8 @@ class StatisticController extends Controller {
             if(isset($system)) {
                 $excel.=$system->getSystem().';';
                 $excel.=$system.';';
+            }else{
+                $excel.=$system.'- ; - ;';
             }
 
             $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
