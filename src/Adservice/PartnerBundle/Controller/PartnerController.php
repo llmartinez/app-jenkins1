@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\PartnerBundle\Entity\Shop;
+use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -93,7 +94,44 @@ class PartnerController extends Controller {
                 {
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
                     $partner = UtilController::settersContact($partner, $partner);
+
+                    /*CREAR USERNAME Y EVITAR REPETICIONES*/
+                    $username = UtilController::getUsernameUnused($em, $partner->getName());
+
+                    /*CREAR PASSWORD AUTOMATICAMENTE*/
+                    $pass = substr( md5(microtime()), 1, 8);
+
+                    $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_AD');
+                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($partner->getCountry()->getLang());
+
+                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                    $newUser->setUsername      ($username);
+                    $newUser->setPassword      ($pass);
+                    $newUser->setName          ($partner->getName());
+                    $newUser->setSurname       ($this->get('translator')->trans('partner'));
+                    $newUser->setActive        ('1');
+                    $newUser->setCreatedBy     ($partner->getCreatedBy());
+                    $newUser->setCreatedAt     (new \DateTime());
+                    $newUser->setModifiedBy    ($partner->getCreatedBy());
+                    $newUser->setModifiedAt    (new \DateTime());
+                    $newUser->setLanguage      ($lang);
+                    $newUser->setPartner       ($partner);
+                    $newUser->addRole          ($role);
+
+                    $newUser = UtilController::settersContact($newUser, $partner);
+
+                    //password nuevo, se codifica con el nuevo salt
+                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
+                    $salt = md5(time());
+                    $password = $encoder->encodePassword($newUser->getPassword(), $salt);
+                    $newUser->setPassword($password);
+                    $newUser->setSalt($salt);
+
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
+                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
+                    $this->get('session')->setFlash('alert', $flash);
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
