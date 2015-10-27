@@ -1,5 +1,6 @@
 
             <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
+            <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
 
             <div class="col-xs-2 col-md-2 form-group">
                 <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_1' | trans } }) }}

@@ -59,6 +59,7 @@ change_password.correct: "Password cambiado correctamente. Se enviará un mail a
 change_password.error:   "Password incorrecto. Introduce correctamente el password actual."
 error:                   "Se ha producido un error"
 error.same_password:	 "Las contraseñas no coinciden"
+error.bad_password:	     "Las contraseña introducida debe tener mayúsculas, minúsculas y números"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 error.access.IE:		 "Navegador no compatible"

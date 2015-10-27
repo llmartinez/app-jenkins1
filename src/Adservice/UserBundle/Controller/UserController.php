@@ -336,7 +336,7 @@ class UserController extends Controller {
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
 
-                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
