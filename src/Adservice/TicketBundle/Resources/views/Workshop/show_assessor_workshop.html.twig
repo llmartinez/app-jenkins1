@@ -58,6 +58,21 @@
 		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
 	</div>
 
+	{# TIPOLOGY #}
+	<div>
+		{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} typology {% endtrans %}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
+	</div>
+
+	{# DIAG MACHINE #}
+	<div>
+		{% if workshop.diagnosisMachines is iterable %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
+            {% for diag_machine in workshop.diagnosisMachines %}
+            	- {{ diag_machine.name|length > 15 ? diag_machine.name|slice(0, 15) ~ '...' : diag_machine.name }}
+			{% endfor %}
+		{% endif %}
+	</div>
+
 	{# LOCATION #}
 	<div>
 		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
