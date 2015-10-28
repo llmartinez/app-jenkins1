@@ -66,7 +66,7 @@ class PartnerController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $partner = new Partner();
         $request = $this->getRequest();
-       
+
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
@@ -78,7 +78,7 @@ class PartnerController extends Controller {
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {

@@ -74,6 +74,10 @@ listTicket:
     pattern:  /ticket/{page}/{num_rows}/{country}/{option}
     defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , num_rows: 10 , country: 0, option: null  }
 
+callTicket:
+    pattern:  /call/{code_partner}/{code_workshop}
+    defaults: { _controller: TicketBundle:Ticket:callTicket, code_partner: 0 , code_workshop: 0 }
+
 
 ################################
 #    GESTIÓN DE POSTS          #

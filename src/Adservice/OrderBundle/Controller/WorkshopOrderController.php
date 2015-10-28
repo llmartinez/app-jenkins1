@@ -876,7 +876,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setTypology      ($workshopOrder->getTypology());
         $workshop->setTest          ($workshopOrder->getTest());
         $workshop->setContactName   ($workshopOrder->getContact());
-        $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
+        $workshop->setPhoneNumber1  ($tel1);
         $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
         $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());
         $workshop->setMovileNumber2 ($workshopOrder->getMovileNumber2());

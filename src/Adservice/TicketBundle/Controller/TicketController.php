@@ -39,6 +39,26 @@ use Adservice\UtilBundle\Entity\Mailer;
 class TicketController extends Controller {
 
     /**
+     * Acceso directo de centralita para abrir el listado de tickets desde una llamada de taller
+     * @return url
+     */
+    public function listTicketAction($page=1, $num_rows=10, $country=0, $option=null)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => $code_partner ));
+        $workshop = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
+
+
+        $array = array('workshop'   => $workshop, 'pagination'  => $pagination,  'tickets'    => $tickets,
+                       'country'    => $country,      'num_rows'    => $num_rows,    'option'     => $option,    'brands'     => $brands,
+                       'systems'    => $systems,      'countries'   => $countries,   'adsplus'    => $adsplus,   'inactive'   => $inactive,
+                       't_inactive' => $t_inactive,   'importances' => $importances,
+              );
+        if ($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+    }
+
+    /**
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
