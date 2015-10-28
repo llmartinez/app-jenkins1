@@ -37,19 +37,18 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
 
             if(($diff->invert == 1 and $diff->days >= 0)) {
 
-                //$mail   = 'info@adserviceticketing.com';
-                $mail   = 'dmaya@grupeina.com';
+                // $mail   = 'info@adserviceticketing.com';
+                // $mail   = 'dmaya@grupeina.com';
 
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
-                    ->setFrom('noreply@adserviceticketing.com')
-                    ->setTo($mail)
-                    ->setCharset('UTF-8')
-                    ->setContentType('text/html')
-                    ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:end_test_workshop.html.twig', array('workshop' => $workshop)));
+                // $message = \Swift_Message::newInstance()
+                //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
+                //     ->setFrom('noreply@adserviceticketing.com')
+                //     ->setTo($mail)
+                //     ->setCharset('UTF-8')
+                //     ->setContentType('text/html')
+                //     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:end_test_workshop.html.twig', array('workshop' => $workshop)));
 
-                $this->getContainer()->get('mailer')->send($message);
-
+                // $this->getContainer()->get('mailer')->send($message);
 
                 $workshop->setEndtestAt(null);
                 $workshop->setTest(0);
