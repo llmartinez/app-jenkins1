@@ -381,6 +381,7 @@ workshop_observation:	 "Observaciones del taller"
 workshop.show_details:          "Ver detalles del taller"
 reactivation-request:           "Request Workshop reactivation"
 numTickets:				 "Núm. Tickets"
+reply_inactive: 		 "No puedes responder este ticket, no estas dado de alta."
 
 #USER
 user.delete:			 "Borrar Usuario"
