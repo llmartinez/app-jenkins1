@@ -98,6 +98,9 @@ legend {
 .btn-change-pass {
     margin-top: 20px
 }
+.btn-disabled {
+    background-color: #888!important;
+}
 
 /*
     HEADER
