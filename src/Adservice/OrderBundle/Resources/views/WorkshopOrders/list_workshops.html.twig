@@ -11,6 +11,7 @@
   <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
     <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
     {% trans %} menu.new_workshop_order {% endtrans %}</a>
+        <span class="pull-right">{% trans %}numTickets{% endtrans %}: {{numTickets}}</span>
 </legend>
 
     {% if is_granted('ROLE_SUPER_AD') %}
@@ -44,7 +45,7 @@
                 <th>{% trans %} email    {% endtrans %}</th>
                 <th>{% trans %} tel      {% endtrans %}</th>
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
-                <th>{% trans %}numTickets{% endtrans %}</th>
+                {# <th>{% trans %}numTickets{% endtrans %}</th> #}
                 <th>{% trans %} actions  {% endtrans %}</th>
             </tr>
         </thead>
@@ -58,7 +59,7 @@
                 <td>{{ workshop.email1 }}       </td>
                 <td>{{ workshop.phoneNumber1 }} </td>
                 {# <td>{{ workshop.active }}       </td> #}
-                <td>{{ numTickets[workshop.id]}}</td>
+                {# <td>{{ numTickets[workshop.id]}}</td> #}
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>

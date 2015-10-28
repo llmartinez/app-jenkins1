@@ -67,10 +67,11 @@ class WorkshopOrderController extends Controller {
         if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()));
         else $partners = array();
 
-        $numTickets = array();
+        $numTickets = 0;
         foreach ($workshops as $workshop) {
             $id = $workshop->getId();
-            $numTickets[$id] = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
+            $num = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
+            $numTickets += $num;
         }
 
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
