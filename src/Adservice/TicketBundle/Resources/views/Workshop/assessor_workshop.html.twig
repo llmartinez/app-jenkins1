@@ -47,8 +47,7 @@
             {% if workshop.id != "" %}value="{{workshop.region}}"{% endif %}>
     </div> #}
         <div class="col-xs-2 col-md-2 form-group">
-            {% if workshop.id != "" %}<label style="width: 100%;">{% trans %} workshop {% endtrans %}: {{ workshop.name }} </label>
-                                      <label style="width: 100%;">{% trans %} contact {% endtrans %}: {{ workshop.contact }}</label> {% endif %}
+            {% if workshop.id != "" %}<label style="width: 100%;">{% trans %} contact {% endtrans %}: {{ workshop.contact }}</label> {% endif %}
 
             <button type="submit" class="btn btn-primary fl" id="btn_check" name="btn_search" style="display: none;">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} workshop {% endtrans %}</button>

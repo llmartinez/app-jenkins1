@@ -183,6 +183,7 @@ function search_by_bmv() {
        var subsystem  = $(this).find("#ticket_subsystem").val();
        var importance = $(this).find("#ticket_importance").val();
        var desc       = $(this).find("#ticket_description").val();
+       var date       = $(this).find("#ticket_date").val();
        var sol        = $(this).find("#ticket_solution").val();
 
         $('#flt_id').empty();
@@ -200,6 +201,8 @@ function search_by_bmv() {
         $('#new_car_form_importance').val(importance);
 
 
+        $('#list_date').text('');
+        $('#list_date').text(date);
         $('#list_description').text('');
         $('#list_description').text(desc);
         $('#list_solution').text('');
