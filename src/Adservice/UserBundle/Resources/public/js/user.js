@@ -33,9 +33,12 @@
             var find = 0;
             var error = 0;
 
-            for(i=0; i<pass.length; i++){
-                if (numeros.indexOf(pass.charAt(i),0)!=-1){
-                    find = 1;
+            if(password.length < 8) error = 1;
+            else {
+                for(i=0; i<pass.length; i++){
+                    if (numeros.indexOf(pass.charAt(i),0)!=-1){
+                        find = 1;
+                    }
                 }
             }
             if (find == 0) error = 1;
