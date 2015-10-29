@@ -10,6 +10,14 @@ $(document).ready(function() {
         $('select[name*=typology]').val($('#slct_typology').val());
     });
 
+    $('#adservice_workshopbundle_workshoptype_diagnosis_machines option').each(function() {
+        var id = $(this).val();
+        var lan = $('#lan_diag_machines input#lan'+id).val();
+        var text = $('#adservice_workshopbundle_workshoptype_diagnosis_machines option[value="'+id+'"]').text();
+        if(text != '...' && lan != undefined){
+            $('#adservice_workshopbundle_workshoptype_diagnosis_machines option[value="'+id+'"]').text(text+' ('+lan+')');
+        }
+    });
     $('#slct_diagnosis_machine').val($('select[name*=diagnosis_machine]').val());
 
     $('#slct_diagnosis_machine').change(function() {

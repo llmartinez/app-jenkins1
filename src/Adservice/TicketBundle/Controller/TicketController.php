@@ -855,7 +855,6 @@ class TicketController extends Controller {
                 if($interval->h > 1) {
                     $ticket->setBlockedBy(null);
                 }
-
             }
 
             //Define Forms
