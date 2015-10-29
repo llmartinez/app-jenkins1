@@ -148,9 +148,23 @@ class WorkshopOrderController extends Controller {
 
             if ($form->isValid()) {
 
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array( 'partner' => $partner->getId(),
-                                                                                        'code_workshop' => $workshopOrder->getCodeWorkshop()));
-                if($find == null)
+                /*CHECK CODE WORKSHOP NO SE REPITA*/
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
+                                                                                 'code_workshop' => $workshopOrder->getCodeWorkshop()));
+                $findPhone = array(0,0,0,0);
+                if($workshopOrder->getPhoneNumber1() !=null){
+                    $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber1());
+                }
+                if($workshopOrder->getPhoneNumber2() !=null){
+                    $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
+                }
+                if($workshopOrder->getMovileNumber1() !=null){
+                    $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber1());
+                }
+                if($workshopOrder->getMovileNumber2() !=null){
+                    $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber2());
+                }
+                if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
                     $user = $security->getToken()->getUser();
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
@@ -200,9 +214,22 @@ class WorkshopOrderController extends Controller {
                     return $this->redirect($this->generateUrl('list_orders'));
 
                 }else{
+                    if($findPhone[0]['1']>0){
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber1();
+                    }
+                    else if($findPhone[1]['1']>0){
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
+                    }
+                    else if($findPhone[2]['1']>0){
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber1();
+                    }
+                    else if($findPhone[3]['1']>0){
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber2();
+                    }
+                    else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
-                        $this->get('session')->setFlash('error', $flash);
-                        $this->get('session')->setFlash('code' , $code);
+                    }
+                    $this->get('session')->setFlash('error', $flash);
                 }
             }else{
                 var_dump($form_errors);
@@ -682,9 +709,9 @@ class WorkshopOrderController extends Controller {
                     if ($workshopOrder->getTest() != null) {
                         $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                     }
-
                     $action = $workshopOrder->getWantedAction();
                     $em->remove($workshopOrder);
+
                     UtilController::newEntity($workshop, $user);
                     UtilController::saveEntity($em, $workshop, $user);
 
@@ -876,7 +903,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setTypology      ($workshopOrder->getTypology());
         $workshop->setTest          ($workshopOrder->getTest());
         $workshop->setContactName   ($workshopOrder->getContact());
-        $workshop->setPhoneNumber1  ($tel1);
+        $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
         $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
         $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());
         $workshop->setMovileNumber2 ($workshopOrder->getMovileNumber2());

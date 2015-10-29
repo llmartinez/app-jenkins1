@@ -1615,8 +1615,14 @@ class TicketController extends Controller {
         // Busca la ultima pagina del listado, y calcula la longitud total despues de restar los registros que no coinciden con el taller
         $pagination2 = new Pagination($pagination->getTotalPag());
         $pagination2->setMaxRows(10);
-        $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
-        $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        if (sizeof($cars) > 0){
+            $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
+            $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
+        }else{
+            $cars2 = array();
+            $length2 = array();
+        }
 
         $key2 = array_keys($cars2);
         $size2 = sizeOf($key2);
