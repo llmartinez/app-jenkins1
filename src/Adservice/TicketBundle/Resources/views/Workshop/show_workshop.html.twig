@@ -69,14 +69,14 @@
 	</div>
 
 	{# TIPOLOGY #}
-	<div>
-		{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} typology {% endtrans %}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
+	<div class="form-group">
+		{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_typology_.png') }}'> <b>{% trans %} typology {% endtrans %}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
 	</div>
 
 	{# DIAG MACHINE #}
-	<div>
+	<div class="form-group">
 		{% if workshop.diagnosisMachines is iterable %}
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/diagnostic_machines_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
             {% for diag_machine in workshop.diagnosisMachines %}
             	- {{ diag_machine.name|length > 15 ? diag_machine.name|slice(0, 15) ~ '...' : diag_machine.name }}
 			{% endfor %}
