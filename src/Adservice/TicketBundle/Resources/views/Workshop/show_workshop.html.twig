@@ -2,20 +2,20 @@
 {% if workshop.id         != "" %}
 	<legend>{% trans %} workshop {% endtrans %}
 
-			{# {% if is_granted('ROLE_ASSESSOR')%}
-				<a href="{{ path('workshop_edit', { 'id': workshop.id }) }}">
-					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
-						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %} #}
+		{# {% if is_granted('ROLE_ASSESSOR')%}
+			<a href="{{ path('workshop_edit', { 'id': workshop.id }) }}">
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
+					 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %} #}
 
-			{% if workshop.test == 1 %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
-					 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
+		{% if workshop.test == 1 %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
+				 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
 
-			{% if adsplus.id is defined %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
-					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
+		{% if adsplus.id is defined %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
+				 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
 
-			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
+		<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
@@ -31,9 +31,12 @@
 	<div class="form-group">
 		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
 	</div>
+
+	{# CONTACTO #}
 	<div class="form-group">
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
+
 	{# PARTNER #}
 	<div class="form-group">
 		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
@@ -82,7 +85,6 @@
 			{% endfor %}
 		{% endif %}
 	</div>
-
 
 	{# OBERVATIONS #}
 	{% if is_granted('ROLE_ADMIN') %}
