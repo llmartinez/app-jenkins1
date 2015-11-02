@@ -243,6 +243,7 @@ btn.search:			 	 "Buscar"
 btn.open:			 	 "Abrir"
 btn.close:			 	 "Cerrar"
 btn.delete:			 	 "Borrar"
+btn.clear:			 	 "Limpiar filtros"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Inserta ID de ticket"
