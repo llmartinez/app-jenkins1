@@ -77,8 +77,8 @@
 	</div>
 
 	{# DIAG MACHINE #}
-	<div class="form-group" {% if workshop.diagnosisMachines is iterable %}title="{{workshop.diagnosisMachines[0].name}}" alt="{{workshop.diagnosisMachines[0].name}}"{% endif %}>
-		{% if workshop.diagnosisMachines is iterable %}
+	<div class="form-group" {% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}title="{{workshop.diagnosisMachines[0].name}}" alt="{{workshop.diagnosisMachines[0].name}}"{% endif %}>
+		{% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/diagnostic_machines_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
             {% for diag_machine in workshop.diagnosisMachines %}
             	- {{ diag_machine.name|length > 15 ? diag_machine.name|slice(0, 15) ~ '...' : diag_machine.name }}
