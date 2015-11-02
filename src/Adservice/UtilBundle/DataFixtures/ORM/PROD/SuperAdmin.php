@@ -23,6 +23,10 @@ class SuperAdmin extends AbstractFixture implements OrderedFixtureInterface {
         $pass = 'mcobJtS8ExG2JAUrEg3VzeLlgyxyyviEr5/uO+vel5stbf3TeHTJxZoHUZqfVHOqON1QNKcm5PXemcz9rW4BZg==';
         $salt = '79bc6981377363689c90b9c7d6962da9';*/
 
+        /* password: grupeina16
+        $pass = 'x4uoLJGpW3o+8BNqNj+EdW9a/sBW5Dr8qHn/NqxhWDtx5+rXyRfr3bRVuIs4cMdPo/zAstrpinia3KaMo8LUbA==';
+        $salt = 'f0ca168348b28d18b048632fe3c1ac27';*/
+
         $entidad = new User();
 
             $entidad->setUsername   ($type);
