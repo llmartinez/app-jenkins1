@@ -1,0 +1,13 @@
+{% extends 'TwigBundle::layout.html.twig' %}
+
+{% block title %}
+    {% trans %}error.access{% endtrans %}
+{% endblock %}
+
+{% block titleException %}        
+    <div id="title_error"><h1>{% trans %}error.access{% endtrans %}</h1></div>
+{% endblock %}
+    
+{% block exception %}    
+    <a onclick="javascript:history.back()" title="{% trans %}back{% endtrans %}" target="_self">{% filter upper %}{% trans %}back{% endtrans %}{% endfilter %}</a>
+{% endblock %}
