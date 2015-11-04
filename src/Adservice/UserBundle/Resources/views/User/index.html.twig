@@ -9,9 +9,9 @@
     {% if is_granted('ROLE_ADMIN') %}
         <div name="tbl_admin" align="center">
             <legend>{% trans %} menu.title_admin {% endtrans %}</legend>
-            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+            {# <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                            {% trans %} menu.profile           {% endtrans %}</a>
+                                                                                                            {% trans %} menu.profile           {% endtrans %}</a> #}
             <a class="btn-menu" id="listStatistics"         href="{{ path("listStatistics"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_statistics.png') }}">
                                                                                                             {% trans %} menu.list_statistics   {% endtrans %}</a>
@@ -41,12 +41,12 @@
             <a class="btn-menu" id="user_list"              href="{{ path("user_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
                                                                                                             {% trans %} menu.list_users         {% endtrans %}</a>
-            <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket") }}" >
-                                                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
-                                                                                                            {% trans %} menu.list_tickets       {% endtrans %}</a>
             <a class="btn-menu" id="sentence_list"          href="{{ path("sentence_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_sentences.png') }}">
                                                                                                             {% trans %} menu.list_sentences    {% endtrans %}</a>
+            <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket") }}" >
+                                                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
+                                                                                                            {% trans %} menu.list_tickets       {% endtrans %}</a>
            {#  <a class="btn-menu" id="ticketWorkshopList"     href="{{ path("ticketWorkshopList"     ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_ticket_assign.png') }}">
                                                                                                             {% trans %} menu.asign_user_to_ticket  {% endtrans %}</a> #}
@@ -83,9 +83,9 @@
     {% elseif is_granted('ROLE_AD') %}
          <div name="tbl_user" align="center">
             <legend>{% trans %} menu.title_ad {% endtrans %}</legend>
-            <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
+            {# <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+                                                                                                {% trans %} menu.profile              {% endtrans %}</a> #}
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
