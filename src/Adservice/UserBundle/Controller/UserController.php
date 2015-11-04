@@ -39,10 +39,23 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
-        if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
+        $security = $this->get('security.context');
+
+        if ($security->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
 
-        return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+        if($security->isGranted('ROLE_ADMIN') OR $security->isGranted('ROLE_AD'))
+
+            return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+
+        elseif($security->isGranted('ROLE_ASSESSOR')) {
+
+            $array = array('page' => 1, 'num_rows' => 10, 'country' => 0, 'option' => 'assessor_pending');
+
+            return $this->redirect($this->generateUrl('listTicket', $array ));
+        }
+        else
+            return $this->redirect($this->generateUrl('listTicket'));
     }
 
     /**
