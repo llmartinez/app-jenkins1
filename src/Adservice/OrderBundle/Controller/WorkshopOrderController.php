@@ -68,11 +68,9 @@ class WorkshopOrderController extends Controller {
         else $partners = array();
 
         $numTickets = 0;
-        foreach ($workshops as $workshop) {
-            $id = $workshop->getId();
-            $num = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
-            $numTickets += $num;
-        }
+        if ($partner != 'none') $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
+        else                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
+
 
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
                                                                                            'numTickets' => $numTickets,

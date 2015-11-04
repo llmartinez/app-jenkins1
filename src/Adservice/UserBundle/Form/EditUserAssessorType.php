@@ -19,7 +19,7 @@ class EditUserAssessorType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('charge')
+            // ->add('charge')
             //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
