@@ -32,9 +32,9 @@
                 <label>{% trans %} language {% endtrans %}</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
 
-                {% if form.charge is defined %} {# DEPRECATED #}
-                <label>{% trans %} charge {% endtrans %} *</label> {{ form_widget(form.charge, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-                {% endif %}
+                {# {% if form.charge is defined %} #} {# DEPRECATED #}
+                {# <label>{% trans %} charge {% endtrans %} *</label> {{ form_widget(form.charge, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                {% endif %} #}
             </div>
 
              <div class="col-xs-4 col-md-4 form-group">

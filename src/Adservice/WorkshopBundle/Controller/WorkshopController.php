@@ -143,10 +143,10 @@ class WorkshopController extends Controller {
                 }
                 if($workshop->getPhoneNumber2() !=null){
                     $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber2());
-                }  
+                }
                 if($workshop->getMovileNumber1() !=null){
                     $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber1());
-                }  
+                }
                 if($workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber2());
                 }
@@ -239,7 +239,7 @@ class WorkshopController extends Controller {
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
-                else{                        
+                else{
                     if($findPhone[0]['1']>0){
                         $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
                     }
@@ -260,7 +260,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
+        if (!$security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
@@ -332,21 +332,21 @@ class WorkshopController extends Controller {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $partner->getId(),'code_workshop' => $workshop->getCodeWorkshop()));
-                
+
                 $findPhone = array(0,0,0,0);
-                
+
                 if($workshop->getPhoneNumber1() !='0' and $workshop->getPhoneNumber1() !=null){
                     $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getPhoneNumber1(),$workshop->getId());
                 }
                 if($workshop->getPhoneNumber2() !='0' and $workshop->getPhoneNumber2() !=null){
                     $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getPhoneNumber2(),$workshop->getId());
-                }                 
+                }
                 if($workshop->getMovileNumber1() !='0' and $workshop->getMovileNumber1() !=null){
                     $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getMovileNumber1(),$workshop->getId());
-                }  
+                }
                 if($workshop->getMovileNumber2() !='0' and $workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getMovileNumber2(),$workshop->getId());
-                }         
+                }
                 if(($find == null or $workshop->getCodeWorkshop() == $last_code ) and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
@@ -434,7 +434,7 @@ class WorkshopController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            
+
             if ($form->isValid()) {
 
                 $em->persist($workshop);

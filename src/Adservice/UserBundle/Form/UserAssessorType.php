@@ -25,7 +25,7 @@ class UserAssessorType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('charge', 'integer', array('empty_data' => '1'))
+            // ->add('charge', 'integer', array('empty_data' => '1'))
             //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,

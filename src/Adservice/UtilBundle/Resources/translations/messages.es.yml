@@ -59,6 +59,7 @@ change_password.correct: "Password cambiado correctamente. Se enviará un mail a
 change_password.error:   "Password incorrecto. Introduce correctamente el password actual."
 error:                   "Se ha producido un error"
 error.same_password:	 "Las contraseñas no coinciden"
+error.bad_password:	     "Las contraseña introducida debe tener al menos 8 caracteres y contener mayúsculas, minúsculas y números"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
 error.old_password:	 	 "La contraseña introducida no coincide con la actual"
 error.access.IE:		 "Navegador no compatible"
@@ -242,6 +243,7 @@ btn.search:			 	 "Buscar"
 btn.open:			 	 "Abrir"
 btn.close:			 	 "Cerrar"
 btn.delete:			 	 "Borrar"
+btn.clear:			 	 "Limpiar filtros"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Inserta ID de ticket"
@@ -377,9 +379,10 @@ workshop_inactive:		 "El taller esta dado de baja o no existe"
 workshop_confirm:		 "Tus datos coinciden con mas de un taller "
 workshop_name:		 	 "Nombre del taller"
 workshop_observation:	 "Observaciones del taller"
-workshop.show_details:          "Ver detalles del taller"
-reactivation-request:           "Request Workshop reactivation"
+workshop.show_details:   "Ver detalles del taller"
+reactivation-request:    "Request Workshop reactivation"
 numTickets:				 "Núm. Tickets"
+reply_inactive: 		 "No puedes responder este ticket, no estas dado de alta."
 
 #USER
 user.delete:			 "Borrar Usuario"

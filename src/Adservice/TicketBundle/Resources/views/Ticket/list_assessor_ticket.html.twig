@@ -37,6 +37,7 @@
                        {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id }}">{% endif %}
 
                         <input type="hidden" id="ticket_description" value="{{ticket.description }}">
+                        <input type="hidden" id="ticket_date" value="{{ticket.modifiedAt|date("d/m/Y") }}">
                         <input type="hidden" id="ticket_solution"    value="{{ticket.solution }}">
 
                         <td id="id_ticket">{{ ticket.id         }}</td>

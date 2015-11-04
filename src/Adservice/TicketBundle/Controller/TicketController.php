@@ -39,10 +39,33 @@ use Adservice\UtilBundle\Entity\Mailer;
 class TicketController extends Controller {
 
     /**
+     * Acceso directo de centralita para abrir el listado de tickets desde una llamada de taller
+     * @throws AccessDeniedException
+     * @return url
+     */
+    public function callTicketAction($code_partner=0, $code_workshop=0)
+    {
+        $security   = $this->get('security.context');
+        if (!$security->isGranted('ROLE_ASSESSOR')) throw new AccessDeniedException();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $array = array();
+
+        if($code_partner != 0 and $code_workshop != 0)
+        {
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_partner'  => $code_partner,
+                                                                                       'code_workshop' => $code_workshop));
+
+            $array = array('page' => 1, 'num_rows' => 10, 'country' => 0, 'option' => 'all', 'workshop_id' => $workshop->getId() );
+        }
+            return $this->redirect($this->generateUrl('listTicket', $array ));
+    }
+
+    /**
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page=1, $num_rows=10, $country=0, $option=null)
+    public function listTicketAction($page=1, $num_rows=10, $country=0, $option=null, $workshop_id=null)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $request    = $this->getRequest();
@@ -51,9 +74,15 @@ class TicketController extends Controller {
         $id_user    = $security->getToken()->getUser()->getId();
         $open       = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
         $closed     = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
-        $workshops  = array('0' => new Workshop());
         $params     = array();
         $joins      = array();
+
+        /* Entrada desde Centralita al listado con el taller seleccionado */
+        if($security->isGranted('ROLE_ASSESSOR') and $workshop_id != null) {
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($workshop_id);
+            $workshops = array('0' => $workshop);
+        }else
+            $workshops  = array('0' => new Workshop());
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
         if($option == null){
@@ -61,6 +90,11 @@ class TicketController extends Controller {
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
+
+                if ($workshops[0]->getActive() == 0) {
+                    $error = $this->get('translator')->trans('workshop_inactive');
+                    $this->get('session')->setFlash('error', '¡Error! '.$error);
+                }
 
                 if(isset($workshops[0]) and $workshops[0]->getId() != "")
                 {
@@ -385,6 +419,7 @@ class TicketController extends Controller {
                        'systems'    => $systems,      'countries'   => $countries,   'adsplus'    => $adsplus,   'inactive'   => $inactive,
                        't_inactive' => $t_inactive,   'importances' => $importances,
               );
+
         if      ($security->isGranted('ROLE_ADMIN'))    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
         elseif  ($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else                                            return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -820,7 +855,6 @@ class TicketController extends Controller {
                 if($interval->h > 1) {
                     $ticket->setBlockedBy(null);
                 }
-
             }
 
             //Define Forms
@@ -1581,8 +1615,14 @@ class TicketController extends Controller {
         // Busca la ultima pagina del listado, y calcula la longitud total despues de restar los registros que no coinciden con el taller
         $pagination2 = new Pagination($pagination->getTotalPag());
         $pagination2->setMaxRows(10);
-        $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
-        $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        if (sizeof($cars) > 0){
+            $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
+            $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
+        }else{
+            $cars2 = array();
+            $length2 = array();
+        }
 
         $key2 = array_keys($cars2);
         $size2 = sizeOf($key2);

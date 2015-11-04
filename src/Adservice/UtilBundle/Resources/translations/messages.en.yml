@@ -59,6 +59,7 @@ change_password.correct: "Password changed successfully. An email will be sent t
 change_password.error:   "Incorrect Password. Enter the current password correctly."
 error:                   "An error has occurred"
 error.same_password:	 "The passwords don't match"
+error.bad_password:	     "The password entered must be at least 8 characters long and contain uppercase and lowercase letters and numbers"
 error.length_password:	 "The password must have 8 characters at least"
 error.old_password:	 	 "The password inserted don't match with the actual password"
 error.access.IE:		 "Browser not compatible"
@@ -242,6 +243,7 @@ btn.search:			 	 "Search"
 btn.open:			 	 "Open"
 btn.close:			 	 "Close"
 btn.delete:			 	 "Delete"
+btn.clear:			 	 "Clean filters"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Insert ticket ID"
@@ -380,6 +382,7 @@ workshop_observation:	 "Workshop observations"
 workshop.show_details:          "Show workshop details"
 reactivation-request:           "Pedir la desactivación del taller"
 numTickets:				 "Number of tickets"
+reply_inactive: 		 "You can not reply to this ticket, you are not activated at the application"
 
 #USER
 user.delete:			 "Delete User"

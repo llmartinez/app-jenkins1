@@ -23,49 +23,57 @@
 	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
 
 	{# WORKSHOP #}
-	<div>
-		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>
+	<div style="float:left;margin-bottom:5px;width: 50%;height: 40px;" {% if workshop.name != "" %}title="{{workshop.name}}" alt="{{workshop.name}}"{% endif %}>
+		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{workshop.name}}{# {{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }} #}</b>
 	</div>
 
 	{# MAIL #}
-	<div>
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.email1 != "" %}title="{{workshop.email1}}" alt="{{workshop.email1}}"{% endif %}>
 		<table>
 		{% if workshop.email1 != "" %} <tr><td><img class='img_icon' src='{{ asset('bundles/util/images/icon/email.png') }}'></td><td> {{ workshop.email1 }} </td></tr>{% endif %}
 		{% if workshop.email2 != "" %} <tr><td></td><td> {{ workshop.email2 }} </td></tr>{% endif %}
 		</table>
 	</div>
 
-
-	{# TEL #}
-	<div>
-		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
-		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
-	</div>
-	<div>
-		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
-	</div>
-
-	{# CIF #}
-	<div>
-		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
-	</div>
-	<div>
+	{# CONTACTO #}
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.contact != "" %}title="{{workshop.contact}}" alt="{{workshop.contact}}"{% endif %} >
 		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
-	{# PARTNER #}
-	<div>
-		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
+
+	{# TEL #}
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.phoneNumber1 != "" %}title="{{workshop.phoneNumber1}}" alt="{{workshop.phoneNumber1}}"{% endif %}>
+		<div style="width: 100%;">
+			{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
+			{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
+		</div>
+		<div style="width: 100%;">
+			{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
+			{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+		</div>
 	</div>
 
 	{# LOCATION #}
-	<div>
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.region != "" %}title="{{workshop.region}}" alt="{{workshop.region}}"{% endif %}>
 		{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
 		{% if workshop.city         != "" %}  {{ workshop.city|length > 15 ? workshop.city|slice(0, 15) ~ '...' : workshop.city  }}{% endif %}
 		{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
 		{% if workshop.region       != "" %}, {{ workshop.region|length > 15 ? workshop.region|slice(0, 15) ~ '...' : workshop.region  }}{% endif %}
 	</div>
 
+	{# PARTNER #}
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.partner.name != "" %}title="{{workshop.partner.name}}" alt="{{workshop.partner.name}}"{% endif %}>
+		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
+	</div>
+
+	{# TIPOLOGY #}
+	<div style="float:left;margin-bottom:5px;width: 25%;height: 40px;" {% if workshop.typology != "" %}title="{{workshop.typology}}" alt="{{workshop.typology}}"{% endif %}>
+		{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_typology_.png') }}'> <b>{% trans %} typology {% endtrans %}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
+	</div>
+
+	{# CIF #}
+	{# <div style="float:left;margin-bottom:5px;width: 25%;" {% if workshop.cif != "" %}title="{{workshop.cif}}" alt="{{workshop.cif}}"{% endif %}>
+		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
+	</div> #}
 
 	{# OBERVATIONS #}
 	{% if is_granted('ROLE_ADMIN') %}
@@ -76,7 +84,7 @@
 		{% set observation = workshop.observationWorkshop %}
 	{% endif %}
 
-	<div class="form-group" title="{{observation}}">
+	<div class="form-group" title="{{observation}}" style="float:left;margin-bottom:5px;width: 50%;height: 40px;" {% if observation != "" %}title="{{observation}}" alt="{{observation}}"{% endif %}>
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
 
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
@@ -98,5 +106,16 @@
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'></a> #}
 		{% endif %}
 	</div>
+
+	{# DIAG MACHINE #}
+	<div style="float:left;margin-bottom:5px;width: 50%;height: 40px;" {% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}title="{{workshop.diagnosisMachines[0].name}}" alt="{{workshop.diagnosisMachines[0].name}}"{% endif %}>
+		{% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/diagnostic_machines_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
+            {% for diag_machine in workshop.diagnosisMachines %}
+            	- {{ diag_machine.name|length > 15 ? diag_machine.name|slice(0, 15) ~ '...' : diag_machine.name }}
+			{% endfor %}
+		{% endif %}
+	</div>
+
 	</div>
 {% endif %}

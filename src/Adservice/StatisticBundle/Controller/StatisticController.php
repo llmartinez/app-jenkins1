@@ -725,7 +725,9 @@ class StatisticController extends Controller {
                 $this->get('translator')->trans('shop').';'.
                 $this->get('translator')->trans('email').';'.
                 $this->get('translator')->trans('tel').';'.
-                $this->get('translator')->trans('active').';';
+                $this->get('translator')->trans('active').';'.
+                $this->get('translator')->trans('testing').';'.
+                $this->get('translator')->trans('adsplus').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -743,9 +745,19 @@ class StatisticController extends Controller {
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
+
             if ($row->getActive() == 1) $active = $this->get('translator')->trans('yes');
             else $active = $this->get('translator')->trans('no');
             $excel.=$active.';';
+
+            if ($row->getTest() == 1) $test = $this->get('translator')->trans('yes');
+            else $test = $this->get('translator')->trans('no');
+            $excel.=$test.';';
+
+            if ($row->getAdServicePlus() == 1) $adsplus = $this->get('translator')->trans('yes');
+            else $adsplus = $this->get('translator')->trans('no');
+            $excel.=$adsplus.';';
+
             $excel.="\n";
         }
 
