@@ -34,6 +34,12 @@
                 <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
+
+                {% if user_type == "assessor" %}
+                    {% set service_country = 0 %}
+                    <label> {% trans %} service_country {% endtrans %} *</label> {{ form_widget(form.country,  { 'attr': {'class': 'form-control'} }) }}
+                {% endif %}
+
                 <label>{% trans %} language {% endtrans %} *</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
 

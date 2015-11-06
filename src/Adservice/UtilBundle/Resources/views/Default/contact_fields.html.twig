@@ -27,9 +27,11 @@
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-            </div>
+            {% if service_country is not defined %}
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            {% endif %}
             <div class="col-xs-2 col-md-2 form-group">
                 <label> {% trans %} region          {% endtrans %} *</label>
                 <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
