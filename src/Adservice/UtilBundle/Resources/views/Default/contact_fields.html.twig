@@ -27,43 +27,43 @@
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
-            </div>
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} region          {% endtrans %} *</label>
-                <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
-                {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
-                <input type='hidden' id='no-region' value='{% trans %} no-region {% endtrans %}'>
-                <div id="region_autocomplete">
-                    <select hidden='hidden' id="data_regions"></select>
-                    <div id="div_regions">
-                        <select id="slct_region"></select>
-                    </div>
-                </div> #}
-            </div>
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} city            {% endtrans %} *</label>
-                <div> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
-                {# <div hidden='hidden'> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
-                <input type='hidden' id='no-city' value='{% trans %} no-city {% endtrans %}'>
-                <div id="city_autocomplete">
-                    <select hidden='hidden' id="data_cities"></select>
-                    <div id="div_cities">
-                        <select id="slct_city"></select>
-                    </div>
-                </div> #}
-            </div>
-            <div class="col-xs-4 col-md-4 form-group">
-                <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class'      : 'form-control',
-                                                                                                                              'required'   : 'required' ,
-                                                                                                                              'placeholder': 'address' | trans } }) }}
-            </div>
-            <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
-                                                                                                                              'min': 0,
-                                                                                                                              'required': 'required' } }) }}
-            </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} region          {% endtrans %} *</label>
+                    <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
+                    {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
+                    <input type='hidden' id='no-region' value='{% trans %} no-region {% endtrans %}'>
+                    <div id="region_autocomplete">
+                        <select hidden='hidden' id="data_regions"></select>
+                        <div id="div_regions">
+                            <select id="slct_region"></select>
+                        </div>
+                    </div> #}
+                </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} city            {% endtrans %} *</label>
+                    <div> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
+                    {# <div hidden='hidden'> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
+                    <input type='hidden' id='no-city' value='{% trans %} no-city {% endtrans %}'>
+                    <div id="city_autocomplete">
+                        <select hidden='hidden' id="data_cities"></select>
+                        <div id="div_cities">
+                            <select id="slct_city"></select>
+                        </div>
+                    </div> #}
+                </div>
+                <div class="col-xs-4 col-md-4 form-group">
+                    <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class'      : 'form-control',
+                                                                                                                                  'required'   : 'required' ,
+                                                                                                                                  'placeholder': 'address' | trans } }) }}
+                </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                                                                                                                                  'min': 0,
+                                                                                                                                  'required': 'required' } }) }}
+                </div>
         </div>
 
         {% if partner is defined or shop is defined or workshop is defined or user is defined or shopOrder is defined or workshopOrder is defined %}

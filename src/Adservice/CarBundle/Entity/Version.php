@@ -23,6 +23,7 @@ class Version {
      * @var string $name
      *
      * @ORM\Column(name="Descripcion", type="string", length=255)
+     * @ORM\Id
      */
     private $name;
 
@@ -31,6 +32,7 @@ class Version {
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
+     * @ORM\Id
      */
     private $brand;
 
@@ -39,6 +41,7 @@ class Version {
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
      * @ORM\JoinColumn(name="modelo", referencedColumnName="Modelo")
+     * @ORM\Id
      */
     private $model;
 
@@ -47,6 +50,7 @@ class Version {
      * @var string $motor
      *
      * @ORM\Column(name="Motor", type="string", length=255)
+     * @ORM\Id
      */
     private $motor;
 

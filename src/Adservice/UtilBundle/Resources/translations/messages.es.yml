@@ -140,6 +140,8 @@ modified_by:			 "Modificado por"
 modified_at:			 "Modificado en"
 with_password:			 "Con contraseña"
 
+service_country: 		 "País de servicio"
+
 #FIELDS
 number:					 "Cantidad"
 start:					 "Inicio"

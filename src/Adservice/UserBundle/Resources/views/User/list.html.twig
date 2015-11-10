@@ -59,7 +59,9 @@
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination_user.html.twig' %}
+    {% set len = users_role_super_admin|length + users_role_admin|length + users_role_super_ad|length + users_role_ad|length + users_role_assessor|length + users_role_user|length %}
+
+    {% if len != 0 %}{% include 'UtilBundle:Pagination:pagination_user.html.twig' %}{% endif %}
 
 {% endblock %}
 
