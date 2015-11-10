@@ -27,6 +27,15 @@ class UserAssessorType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
             // ->add('charge', 'integer', array('empty_data' => '1'))
             //CONTACT
+            ->add('country_service', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'property' => 'country',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country); }))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
@@ -36,10 +45,10 @@ class UserAssessorType extends AbstractType {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
                                                           ->where('c.id'.$id_country); }))
-            ->add('region')
-            ->add('city')
-            ->add('address')
-            ->add('postal_code')
+            ->add('region', 'text', array('required' => false))
+            ->add('city', 'text', array('required' => false))
+            ->add('address', 'text', array('required' => false))
+            ->add('postal_code', 'text', array('required' => false))
             ->add('phone_number_1' , 'text')
             ->add('phone_number_2' , 'text', array('required' => false))
             ->add('movile_number_1', 'text', array('required' => false))

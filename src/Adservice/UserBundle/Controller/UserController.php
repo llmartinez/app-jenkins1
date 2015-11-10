@@ -39,23 +39,10 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
-        $security = $this->get('security.context');
-
-        if ($security->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
+        if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
 
-        if($security->isGranted('ROLE_ADMIN') OR $security->isGranted('ROLE_AD'))
-
-            return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
-
-        elseif($security->isGranted('ROLE_ASSESSOR')) {
-
-            $array = array('page' => 1, 'num_rows' => 10, 'country' => 0, 'option' => 'assessor_pending');
-
-            return $this->redirect($this->generateUrl('listTicket', $array ));
-        }
-        else
-            return $this->redirect($this->generateUrl('listTicket'));
+        return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
     }
 
     /**
@@ -236,11 +223,13 @@ class UserController extends Controller {
 
                 $error_username = $this->get('translator')->trans('username_used').$username;
 
-                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                                   'user_type'  => $type,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView(),
-                                                                                    'error_username' => $error_username));
+                $array = array('user'       => $user,
+                               'user_type'  => $type,
+                               'form_name'  => $form->getName(),
+                               'form'       => $form->createView(),
+                               'error_username' => $error_username);
+
+                return $this->render('UserBundle:User:new_user.html.twig', $array);
             }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -255,10 +244,12 @@ class UserController extends Controller {
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                           'user_type'  => $type,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()));
+        $array = array('user'       => $user,
+                       'user_type'  => $type,
+                       'form_name'  => $form->getName(),
+                       'form'       => $form->createView());
+
+        return $this->render('UserBundle:User:new_user.html.twig', $array);
     }
 
     /**
@@ -356,6 +347,7 @@ class UserController extends Controller {
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                          'role'      => $role,
                                                                           'form_name' => $form->getName(),
                                                                           'form'      => $form->createView()));
     }

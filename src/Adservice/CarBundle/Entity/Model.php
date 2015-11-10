@@ -23,6 +23,7 @@ class Model {
      * @var string $name
      *
      * @ORM\Column(name="Descripcion", type="string", length=255)
+     * @ORM\Id
      */
     private $name;
 
@@ -31,6 +32,7 @@ class Model {
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
+     * @ORM\Id
      */
     private $brand;
 

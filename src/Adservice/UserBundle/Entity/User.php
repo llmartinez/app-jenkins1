@@ -96,6 +96,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $language;
 
     /**
+     * @var string $country_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country_service;
+
+    /**
      *
      * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
@@ -239,6 +246,24 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getLanguage() {
         return $this->language;
+    }
+
+    /**
+     * Set country_service
+     *
+     * @param string $country_service
+     */
+    public function setCountryService(\Adservice\UtilBundle\Entity\Country $country_service) {
+        $this->country_service = $country_service;
+    }
+
+    /**
+     * Get country_service
+     *
+     * @return string
+     */
+    public function getCountryService() {
+        return $this->country_service;
     }
 
     public function getName() {
