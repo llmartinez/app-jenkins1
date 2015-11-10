@@ -26,6 +26,7 @@ use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\UtilBundle\Controller\LanguageController as LanguageController;
 
 class UserController extends Controller {
 
@@ -39,8 +40,30 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
+
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
+
+        // Se pondrá por defecto el idioma del usuario en el primer login
+        if(!isset($_SESSION['lang'])) {
+            $request  = $this->getRequest();
+            $locale = $request->getLocale();
+            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = substr($lang, 0, strrpos($lang, '_'));
+
+            $currentLocale = $request->getLocale();
+            $request->setLocale($lang);
+
+            if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
+            else                                 $currentPath = $this->generateUrl('user_index');
+
+            $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+
+            $_SESSION['lang'] = $lang;
+
+            return $this->redirect($currentPath);
+        }
+
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
     }
