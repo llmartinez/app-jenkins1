@@ -107,7 +107,7 @@ class PartnerController extends Controller {
                     $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
-                    $newUser->setName          ($partner->getName());
+                    $newUser->setName          ($partner->getContact());
                     $newUser->setSurname       ($this->get('translator')->trans('partner'));
                     $newUser->setActive        ('1');
                     $newUser->setCreatedBy     ($partner->getCreatedBy());
