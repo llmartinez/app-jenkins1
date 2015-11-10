@@ -245,7 +245,7 @@ class TicketController extends Controller {
             else{
                 $joins[] = array('e.workshop w ', 'w.country = '.$country);
             }
-      }else{
+        }else{
             if($country != 'none'){
                 if($country != 0) {
                     if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
@@ -256,7 +256,8 @@ class TicketController extends Controller {
                         $joins[] = array('e.workshop w ', 'w.country = '.$country);
                     }
                 }else{
-                    $country = $security->getToken()->getUser()->getCountry()->getId();
+                    if($security->isGranted('ROLE_ASSESSOR')) $country = $security->getToken()->getUser()->getCountryService()->getId();
+                    else $country = $security->getToken()->getUser()->getCountry()->getId();
                      if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
                     {
                         $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
