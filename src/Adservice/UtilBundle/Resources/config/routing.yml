@@ -48,6 +48,12 @@ get_code_workshop:
     options:
         expose: true
 
+get_id_from_code_partner:
+    pattern: /getIdFromCodePartner/{code}
+    defaults: { _controller: UtilBundle:Ajax:getIdFromCodePartner, code: 0 }
+    options:
+        expose: true
+
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}
     defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}

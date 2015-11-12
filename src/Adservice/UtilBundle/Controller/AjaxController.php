@@ -96,19 +96,32 @@ class AjaxController extends Controller
         }
         return new Response(json_encode($json), $status = 200);
     }
-    
+
     public function codeWorkshopFromPartnerAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-        
+
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        
+
         $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);
     }
+
+     public function getIdFromCodePartnerAction($code) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $code = $petition->request->get('code');
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $code));
+
+        if (isset($partner) and $partner->getId() != null) $json = array('id' => $partner->getId());
+        else $json = array('id' => '0');
+
+        return new Response(json_encode($json), $status = 200);
+     }
 
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \

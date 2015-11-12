@@ -586,3 +586,30 @@ function string_to_slug(str) {
 
     return str;
 }
+
+/**
+ * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
+ */
+function get_id_from_code_partner(code){
+    var route     = 'get_id_from_code_partner';
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale}),
+        data        : {code : code},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+
+            if(data.id != 0) $('form').find('select[name*=partner]').val(data.id);
+            else{
+                alert($('#partner_not_found').val());
+            }
+        },
+        error : function(){
+            console.log("Error al cargar id desde código...");
+        }
+    });
+}

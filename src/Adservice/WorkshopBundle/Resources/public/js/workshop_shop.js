@@ -13,7 +13,20 @@ $(document).ready(function() {
     $('form').find('select[name*=partner]').change(function() {
         populate_shop();
         fill_code_partner($(this).val());
-        
+
         fill_code_workshop($(this).val());
+    });
+
+    $( "#code_partner" ).on( "keydown", function( event ) {
+
+        if (event.which == 13) {
+
+            var code = $(this).val();
+
+            if ( ! isNaN(code) ){
+                event.preventDefault();
+                get_id_from_code_partner(code);
+            }
+        }
     });
 });
