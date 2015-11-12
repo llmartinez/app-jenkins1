@@ -125,8 +125,9 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
-        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1";
-        if($id_partner != '') $query .= "s.partner = ".$id_partner." OR";
+        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1 ";
+        if($id_partner != '') $query .= "OR s.partner = ".$id_partner." ";
+
         $consulta = $em->createQuery($query);
         $shops   = $consulta->getResult();
 

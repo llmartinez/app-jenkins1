@@ -26,7 +26,7 @@
             </table>
         </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
-            <select id="flt_partner" class='form-control'>
+            <select id="flt_partner" name="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
                 {% for partner in partners %}
                     <option value="{{ partner.id }}">{{ partner }}</option>
