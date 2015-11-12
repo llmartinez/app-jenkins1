@@ -197,7 +197,11 @@ function search_by_bmv() {
         $('#new_car_form_brand').val(brand);
         fill_model(model);
         fill_subsystem(subsystem);
-        $('#new_car_form_subsystem').val(subsystem);
+
+        if(subsystem != undefined){ $('#new_car_form_subsystem').val(subsystem); }
+        else {
+            $("#new_car_form_subsystem").append('<option value="0" selected></option>');
+        }
         $('#new_car_form_importance').val(importance);
 
 
