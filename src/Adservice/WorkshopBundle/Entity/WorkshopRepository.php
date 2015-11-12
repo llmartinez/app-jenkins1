@@ -102,6 +102,22 @@ class WorkshopRepository extends EntityRepository
 
     }
 
+    public function findPhoneGetCode($number) {
+
+        $em = $this->getEntityManager();
+        $query = 'SELECT w.code_partner, w.code_workshop, w.name FROM WorkshopBundle:Workshop w '
+                .'WHERE w.phone_number_1 = '.$number
+                   .'OR w.phone_number_2 = '.$number
+                   .'OR w.movile_number_1 = '.$number
+                   .'OR w.movile_number_1 = '.$number;
+        $consulta = $em-> createQuery($query);
+
+        $result = $consulta->getResult()[0];
+        $res = $result['code_partner'].' - '.$result['code_workshop'].' '.$result['name'];
+
+        return $res;
+    }
+
     public function findPhoneNoId($number,$id) {
         $em = $this->getEntityManager();
         $query = 'SELECT COUNT(w) FROM WorkshopBundle:Workshop w '
@@ -111,6 +127,21 @@ class WorkshopRepository extends EntityRepository
                    .' OR w.movile_number_1 = '.$number.')';
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0];
+    }
+
+    public function findPhoneNoIdGetCode($number,$id) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT w.code_partner, w.code_workshop, w.name FROM WorkshopBundle:Workshop w '
+                .'WHERE w.id != '.$id.' AND (w.phone_number_1 = '.$number
+                   .' OR w.phone_number_2 = '.$number
+                   .' OR w.movile_number_1 = '.$number
+                   .' OR w.movile_number_1 = '.$number.')';
+        $consulta = $em-> createQuery($query);
+
+        $result = $consulta->getResult()[0];
+        $res = $result['code_partner'].' - '.$result['code_workshop'].' '.$result['name'];
+
+        return $res;
 
     }
 

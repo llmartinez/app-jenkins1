@@ -150,6 +150,7 @@ class WorkshopController extends Controller {
                 if($workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber2());
                 }
+
                 if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
                     $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
@@ -241,16 +242,24 @@ class WorkshopController extends Controller {
                 }
                 else{
                     if($findPhone[0]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1()
+                        .' -> '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber1());
                     }
                     else if($findPhone[1]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2());
                     }
                     else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber1());
                     }
                     else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber2());
                     }
                     else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
@@ -364,16 +373,25 @@ class WorkshopController extends Controller {
                 }
                 else{
                     if($findPhone[0]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1()
+                        .' -> '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneNoIdGetCode($workshop->getPhoneNumber1(),$workshop->getId());
                     }
+
                     else if($findPhone[1]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2(),$workshop->getId());
                     }
                     else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber1(),$workshop->getId());
                     }
                     else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber2(),$workshop->getId());
                     }
                     else {
                         $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
