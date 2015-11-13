@@ -39,10 +39,14 @@ class WorkshopController extends Controller {
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
+                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
-
-            $params[] = array($term, " LIKE '%".$field."%'");
         }else{
             if($security->isGranted('ROLE_SUPER_ADMIN')) {
                 if ($country != '0') $params[] = array('country', ' = '.$country);
@@ -92,7 +96,8 @@ class WorkshopController extends Controller {
                                                                              'country'    => $country,
                                                                              'partner'    => $partner,
                                                                              'status'     => $status,
-                                                                             'name'       => $name));
+                                                                             'term'       => $term,
+                                                                             'field'      => $field));
     }
 
     public function newWorkshopAction() {
