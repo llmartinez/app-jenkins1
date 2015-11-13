@@ -1,8 +1,6 @@
 
 $(document).ready(function() {
-flt_search_term
-flt_search_field
-btn_search_field
+
     //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     $('#btn_search_field').click(function() {
 
