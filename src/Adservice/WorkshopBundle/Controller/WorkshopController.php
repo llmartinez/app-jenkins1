@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $name='0') {
+    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
 
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -36,8 +36,13 @@ class WorkshopController extends Controller {
             throw new AccessDeniedException();
         }
 
-        if ($name != '0'){
-            $params[] = array('name', " LIKE '%".$name."%'");
+        if ($term != '0' and $field != '0'){
+
+            if ($term == 'tel') {
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+
+            $params[] = array($term, " LIKE '%".$field."%'");
         }else{
             if($security->isGranted('ROLE_SUPER_ADMIN')) {
                 if ($country != '0') $params[] = array('country', ' = '.$country);
