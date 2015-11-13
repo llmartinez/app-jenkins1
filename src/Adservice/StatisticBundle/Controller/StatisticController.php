@@ -664,6 +664,12 @@ class StatisticController extends Controller {
 
             $workshop = $row->getWorkshop();
             $excel.=$workshop->getPartner()->getCodePartner().' - '.$workshop->getCodeWorkshop().';';
+
+            $shop = $workshop->getShop();
+            if(isset($shop)) $code_shop = $shop->getCodeShop();
+            else $code_shop = '-';
+            $excel.=$code_shop.';';
+
             $excel.=$workshop->getRegion().';';
 
             $typology = $workshop->getTypology();
@@ -719,6 +725,7 @@ class StatisticController extends Controller {
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
         $excel =$this->get('translator')->trans('code_partner').';'.
+                $this->get('translator')->trans('code_shop').';'.
                 $this->get('translator')->trans('code_workshop').';'.
                 $this->get('translator')->trans('name').';'.
                 $this->get('translator')->trans('partner').';'. //ID ticket
@@ -734,6 +741,12 @@ class StatisticController extends Controller {
 
         foreach ($results as $row) {
             $excel.=$row->getCodePartner().';';
+
+            $shop = $row->getShop();
+            if(isset($shop)) $code_shop = $shop->getCodeShop();
+            else $code_shop = '-';
+            $excel.=$code_shop.';';
+
             $excel.=$row->getCodeWorkshop().';';
 
             $buscar=array(';', chr(13).chr(10), "\r\n", "\n", "\r");
@@ -771,6 +784,7 @@ class StatisticController extends Controller {
         //Creación de cabecera
         //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
         $excel =$this->get('translator')->trans('code_partner').';'.
+                $this->get('translator')->trans('code_shop').';'.
                 $this->get('translator')->trans('code_workshop').';'.
                 $this->get('translator')->trans('name').';'.
                 $this->get('translator')->trans('partner').';ID '. //ID ticket

@@ -21,7 +21,8 @@ $(document).ready(function() {
                     // Limpiamos y llenamos el combo con las opciones del json
                     if (data['error'] != "No hay coincidencias") {
                         $('#flt_wks_shop').empty();
-                        // $('form').find('select[id*=_shop]').append("<option value=0></option>");
+                        var lbl_all = $('#lbl_all').val();
+                        $('#flt_wks_shop').append("<option value='0'>"+ lbl_all +"</option>");
                         $.each(data, function(idx, elm) {
 
                             $('#flt_wks_shop').append("<option value="+elm.id+">"+elm.shop+"</option>");
