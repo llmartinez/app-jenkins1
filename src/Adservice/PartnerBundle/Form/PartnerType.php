@@ -16,6 +16,7 @@ class PartnerType extends AbstractType {
         $builder
             ->add('name')
             ->add('code_partner')
+            ->add('cif')
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(

@@ -26,6 +26,7 @@ class ShopType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
+            ->add('cif')
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
             ->add('contact', 'text', array('required' => false))

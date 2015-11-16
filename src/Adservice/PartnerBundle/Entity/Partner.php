@@ -49,6 +49,12 @@ class Partner {//implements EventSubscriber{
     private $active;
 
     /**
+     * @var string $cif
+     * @ORM\Column(name="cif", type="string", length=255, nullable=true)
+     */
+    private $cif;
+
+    /**
      * @var string $contact
      *
      * @ORM\Column(name="contact", type="string", length=255, nullable=true)
@@ -161,6 +167,14 @@ class Partner {//implements EventSubscriber{
      */
     public function getActive() {
         return $this->active;
+    }
+
+    public function getCif() {
+        return $this->cif;
+    }
+
+    public function setCif($cif) {
+        $this->cif = $cif;
     }
 
     /**

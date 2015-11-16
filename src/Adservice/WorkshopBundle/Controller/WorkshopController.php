@@ -47,6 +47,9 @@ class WorkshopController extends Controller {
             elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
         }else{
             if($security->isGranted('ROLE_SUPER_ADMIN')) {
                 if ($country != '0') $params[] = array('country', ' = '.$country);
