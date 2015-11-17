@@ -8,11 +8,15 @@ use Adservice\StatisticBundle\Entity\Statistic;
 use Adservice\StatisticBundle\Form\DateType;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class StatisticController extends Controller {
 
     public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
 
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+            throw new AccessDeniedException();
+        }
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
@@ -50,11 +54,11 @@ class StatisticController extends Controller {
         //Estadísticas generales de Ad-service
         $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
         $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
-        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security));
+        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security)-1); //Tienda por defecto '...' no cuenta.
         $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
         $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
-        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel($em, $security));
-        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp($em, $security));
+        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel        ($em, $security));
+        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp        ($em, $security));
         $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
         $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
@@ -163,11 +167,15 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
+                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
+                                                $where .= 'AND tp.id = e.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
                 $results   = $qw->getResult();
 
-                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
+                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p ");
                 $res_partners   = $qp->getResult();
 
                 foreach ($res_partners as $partner) {
@@ -198,8 +206,12 @@ class StatisticController extends Controller {
                 }else{
                     $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }
+                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
+                                                $where .= 'AND tp.id = e.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
                 $results   = $qw->getResult();
 
                 $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
@@ -240,7 +252,7 @@ class StatisticController extends Controller {
                                                 $where .= 'AND s.id = e.shop ';
                                                 $where .= 'AND s.id = '.$shop.' ';
                 }
-                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
+                if    ($typology != "0"    ) {  $join  .= ' JOIN e.typology tp ';
                                                 $where .= 'AND tp.id = e.typology ';
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
@@ -282,7 +294,7 @@ class StatisticController extends Controller {
                                                 $where .= 'AND s.id = w.shop ';
                                                 $where .= 'AND s.id = '.$shop.' ';
                 }
-                if    ($typology != "0"    ) {  $join  = ' JOIN w.typology tp ';
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
                                                 $where .= 'AND tp.id = w.typology ';
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
@@ -335,6 +347,10 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
 
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTickets.' DESC');
                 $results   = $qt->getResult();
@@ -385,6 +401,10 @@ class StatisticController extends Controller {
                                                     $join .= 'JOIN e.created_by u JOIN u.user_role ur';
                                                     $where .= 'AND ur.id = 4';
                                                 }
+                }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
@@ -454,6 +474,10 @@ class StatisticController extends Controller {
                                                     $where .= 'AND ur.id = 4';
                                                 }
                 }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
@@ -512,6 +536,10 @@ class StatisticController extends Controller {
                                                     $join .= 'JOIN e.created_by u JOIN u.user_role ur';
                                                     $where .= 'AND ur.id = 4';
                                                 }
+                }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
@@ -573,6 +601,10 @@ class StatisticController extends Controller {
                                                     $where .= 'AND ur.id = 4';
                                                 }
                 }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
@@ -602,6 +634,10 @@ class StatisticController extends Controller {
             */
             $where .= 'AND e.workshop = w.id ';
 
+            if    ($typology != "0"    ) {  $join  = ' JOIN w.typology tp ';
+                                            $where .= 'AND tp.id = w.typology ';
+                                            $where .= 'AND tp.id = '.$typology.' ';
+            }
             if($security->isGranted('ROLE_SUPER_ADMIN')){
                 if    ($country != '0'     ) { $where .= 'AND e.country = '.$country.' '; }
             }else{
@@ -611,7 +647,7 @@ class StatisticController extends Controller {
             $where .= 'GROUP BY w.id ';
             $where .= 'ORDER BY e.id DESC ';
 
-            $qid = $em->createQuery("select MAX(e.id) as t_id, w.id as w_id from TicketBundle:Ticket e JOIN e.workshop w WHERE ".$where);
+            $qid = $em->createQuery("select MAX(e.id) as t_id, w.id as w_id from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
             $resultsid = $qid->getResult();
 
             $ids = '0';
@@ -619,7 +655,7 @@ class StatisticController extends Controller {
                 $ids .= ', '.$rid['t_id'];
             }
 
-            $qt = $em->createQuery("select partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w WHERE e.id IN (".$ids.")");
+            $qt = $em->createQuery("select partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE e.id IN (".$ids.")");
             $results   = $qt->getResult();
 
             $trans     = $this->get('translator');

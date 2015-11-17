@@ -415,8 +415,8 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
-        else $country = null;
+        $country = $workshop->getCountry()->getId();
+
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
         $workshop_machines  = $workshop->getDiagnosisMachines();
