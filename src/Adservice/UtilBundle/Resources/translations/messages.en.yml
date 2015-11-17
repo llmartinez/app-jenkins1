@@ -85,6 +85,7 @@ Bad credentials: 				"Bad credentials"
 The presented password is invalid.: "The presented password is invalid"
 The presented password cannot be empty.: "The presented password cannot be empty"
 username_used:					"The name entered already exists or is incorrect, try: "
+partner_not_found:				"There is not a partner with the code introduced."
 
 #ENTITY
 role:					 "Role"
@@ -140,7 +141,10 @@ modified_by:			 "Modified By"
 modified_at:			 "Modified At"
 with_password:			 "With password"
 
+service_country: 		 "Country Service"
+
 #FIELDS
+find_by:				 "Find by"
 number:					 "Number"
 start:					 "Start"
 end: 					 "End"
@@ -150,6 +154,7 @@ date.end: 				 "End Date"
 code:					 "Code"
 _code:					 "Code"
 code_partner:			 "Partner Code"
+code_shop:			 	 "Shop Code"
 code_workshop:			 "Workshop Code"
 code_numeric:			 "The code is not a number"
 code_error:				 "The code is not correct"
@@ -529,6 +534,7 @@ popup.delete:				  "Delete popup"
 popup.delete.confirm:		  "Are you sure you want to delete this popup?"
 
 #ORDERS
+value:							"Value"
 values:							"Values"
 workshop_pending:			  	"Pending Workshop Orders"
 workshop_rejected:				"Rejected Workshop Orders"

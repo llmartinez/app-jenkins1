@@ -1,4 +1,4 @@
-header.welcome: "ADService España"
+header.welcome: "ADService Portugal"
 
 adserviceticketing.com: "www.adserviceticketing.com"
 www.adserviceticketing.com: "www.adserviceticketing.com"
@@ -59,6 +59,7 @@ change_password.correct: "Palavra-passe alterada corretamente. O utilizador irá
 change_password.error:   "Palavra-passe incorreta. Introduza corretamente a palavra-passe atual."
 error:                          "Ocorreu um erro"
 error.same_password:	 "As palavras-passe não coincidem"
+error.bad_password:	     "A senha digitada deve ter pelo menos 8 caracteres e conter letras e números maiúsculos e minúsculos."
 error.length_password:	 "A palavra-passe deve ter, no mínimo, 8 carateres"
 error.old_password:	 	 "A palavra-passe introduzida não coincide com a atual"
 error.access.IE:		 "Navegador não compatível"
@@ -84,6 +85,7 @@ Bad credentials: 				"credenciais incorretas"
 The presented password is invalid.: "A senha não está correta."
 The presented password cannot be empty.: "A senha não pode ser vazia."
 username_used:					"O nome introduzido já existe ou não está correto, tente: "
+partner_not_found:				"Não é um parceiro com o código introduzido."
 
 #ENTITY
 role:					 "Função"
@@ -139,7 +141,10 @@ modified_by:			 "Alterado por"
 modified_at:			 "Alterado em"
 with_password:			 "Com senha"
 
+service_country: 		 "Serviço País"
+
 #FIELDS
+find_by:				 "Busca"
 number:					 "Quantidade"
 start:					 "Iniciação"
 end: 					 "Final"
@@ -149,6 +154,7 @@ date.end: 				 "Data Final"
 code:					 "Código"
 _code:					 "Codigo"
 code_partner:			 "Código de Sócio"
+code_shop:			 	 "Loja de Código"
 code_workshop:			 "Código de Oficina"
 code_numeric:			 "O código que introduziu não é um número"
 code_error:				 "O código que introduziu não é o correto"
@@ -242,6 +248,7 @@ btn.search:			 	 "Procurar"
 btn.open:			 	 "Abrir"
 btn.close:			 	 "Fechar"
 btn.delete:			 	 "Excluir"
+btn.clear:			 	 "Como limpar filtros"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Inserir ID de talão"
@@ -380,6 +387,7 @@ workshop_observation:	 "Observações da oficina"
 workshop.show_details:          "Ver detalhes da oficina"
 reactivation-request:           "Request Workshop reactivation"
 numTickets:				 "Núm. bilhetes"
+reply_inactive: 		 "Você não pode responder a este bilhete, você não está descarregada."
 
 #USER
 user.delete:			 "Apagar Utilizador"
@@ -527,6 +535,7 @@ popup.delete:				  "Apagar pop-up"
 popup.delete.confirm:		  "Tem a certeza de que pretende eliminar este pop-up?"
 
 #ORDERS
+value:							"Valor"
 values:							"Valores"
 workshop_pending:			  	"Ped. Oficina pendentes"
 workshop_rejected:				"Ped. Oficina recusados"
