@@ -1,4 +1,8 @@
-{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+{% extends 'TicketBundle:Default:assessor_ticketing_layout.html.twig' %}
+
+{% block header %}
+    {% include 'TicketBundle:Default:assessor_header.html.twig' %}
+{% endblock %}
 
 {% block breadcrumb %}
 
@@ -34,6 +38,7 @@
         {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}
 </div>
 <div class="content">
+    {% include 'TicketBundle:Includes:_buttons_assessor_ticket.html.twig' %}
 
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'listTicket' %}

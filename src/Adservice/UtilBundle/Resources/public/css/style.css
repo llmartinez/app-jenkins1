@@ -59,7 +59,7 @@ legend {
 .margined {
     margin-right: 40px;
 }
-.floating {
+.floating, .fl {
     float:left;
 }
 .mb3 {
@@ -654,4 +654,79 @@ textarea.form-control_ged {
     position: absolute;
     z-index: 999;
     color: #FFFFFF !important;
+}
+
+/* Estilos para el asesor */
+.asr_navbar {
+    height: 70px;
+    margin-bottom: 0px!important;
+}
+
+.asr_img_logo {
+    margin-top: 8px;
+    width: 500px;
+}
+
+.asr_btn-default {padding: 3px!important;}
+
+.asr_slct-default {
+    padding: 3px!important;
+    min-width: 100px;
+}
+
+.asr_user { margin: 19px 19px 0 0;}
+
+.asr_MainContent{
+      padding: 0 0 20px 0!important;
+}
+
+.asr_wrapper {
+    padding: 0px 20px;
+}
+
+.asr_form-control {
+    height: 30px!important;
+    border-radius: 10px!important;
+    -webkit-box-shadow: inset 0px 0px 5px 4px rgba(0, 0, 0, 0.075)!important;
+    box-shadow: inset 0px 0px 5px 4px rgba(0, 0, 0, 0.075)!important;
+}
+
+.asr_form-control[disabled],
+.asr_form-control[readonly],
+fieldset[disabled] .asr_form-control {
+    background-color: #f0f0f0;
+}
+
+.asr_btn {
+    margin-top: 5px!important;
+    padding-top: 4px!important;
+}
+
+/* grids */
+
+.no-margin { margin: 0!important; }
+
+.w10  { width:  10%!important; }
+.w15  { width:  15%!important; }
+.w20  { width:  20%!important; }
+.w25  { width:  25%!important; }
+.w30  { width:  30%!important; }
+.w40  { width:  40%!important; }
+.w45  { width:  45%!important; }
+.w50  { width:  50%!important; }
+.w60  { width:  60%!important; }
+.w70  { width:  70%!important; }
+.w75  { width:  75%!important; }
+.w80  { width:  80%!important; }
+.w90  { width:  90%!important; }
+.w95  { width:  95%!important; }
+.w100 { width: 100%!important; }
+
+.grid {
+    float: left;
+    margin-right: 10px;
+}
+.grid-full {
+    float: left;
+    margin-bottom: 10px;
 }

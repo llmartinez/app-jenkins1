@@ -373,6 +373,9 @@ class WorkshopController extends Controller {
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
 
+                    $code_partner = $workshop->getPartner()->getCodePartner();
+                    $workshop->setCodePartner($code_partner);
+
                     // Set default shop to NULL
                     $shop = $form['shop']->getClientData();
                     if($shop == 0) { $workshop->setShop(null); }
