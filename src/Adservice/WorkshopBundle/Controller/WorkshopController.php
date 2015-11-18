@@ -371,7 +371,7 @@ class WorkshopController extends Controller {
                 }
                 if(($find == null or $workshop->getCodeWorkshop() == $last_code ) and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
-                    $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+                    $workshop = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
 
                     $code_partner = $workshop->getPartner()->getCodePartner();
                     $workshop->setCodePartner($code_partner);

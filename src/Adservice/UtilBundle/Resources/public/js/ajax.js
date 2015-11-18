@@ -603,7 +603,10 @@ function get_id_from_code_partner(code){
         complete: function(){ $("body").css("cursor", "default"); },
         success : function(data) {
 
-            if(data.id != 0) $('form').find('select[name*=partner]').val(data.id);
+            if(data.id != 0) {
+                $('form').find('select[name*=partner]').val(data.id);
+                $('form').find('input[name*=code_workshop]').val(data.code);
+            }
             else{
                 alert($('#partner_not_found').val());
             }

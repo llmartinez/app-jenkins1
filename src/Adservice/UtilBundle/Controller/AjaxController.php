@@ -117,8 +117,13 @@ class AjaxController extends Controller
 
         $partner = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $code));
 
-        if (isset($partner) and $partner->getId() != null) $json = array('id' => $partner->getId());
-        else $json = array('id' => '0');
+        if (isset($partner) and $partner->getId() != null) {
+
+            $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
+
+            $json = array('id' => $partner->getId(), 'code' => $workshop);
+        }
+        else $json = array('id' => '0', 'code' => '0');
 
         return new Response(json_encode($json), $status = 200);
      }
