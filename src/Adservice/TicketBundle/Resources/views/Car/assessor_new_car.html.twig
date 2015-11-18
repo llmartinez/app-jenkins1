@@ -1,0 +1,30 @@
+
+<legend>{% trans %} car {% endtrans %}: <a id='car'></a></legend>
+
+<div class="grid-full">
+
+    <div class="grid-full w100">
+        <div class="grid-33">
+            <label for="new_car_form_brand">{% trans %} brand {% endtrans %} *</label>
+            <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" required>
+                <option value="0" ></option>
+                {% for brand in brands %}
+                    <option value={{ brand.id }}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="grid-33">
+            <label for="new_car_form_model">{% trans %} model {% endtrans %} *</label>
+            <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" required></select>
+        </div>
+
+        <div class="grid-33">
+            <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
+            <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control">
+            </select>
+        </div>
+    </div>
+
+    {% include 'TicketBundle:Includes:_rest_car.html.twig' %}
+</div>

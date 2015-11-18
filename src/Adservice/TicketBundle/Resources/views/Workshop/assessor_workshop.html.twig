@@ -37,10 +37,9 @@
                 {% elseif email is defined %}value="{{email}}"{% endif %}>
         </div>
         <div class="grid w15">
-            {% if workshop.id != "" %}
-                <label>{% trans %} contact {% endtrans %}: </label>
-                <input type="text" class="form-control asr_form-control" placeholder="{{ workshop.contact }}" value="{{workshop.contact}}" disabled>
-            {% endif %}
+
+            <label>{% trans %} contact {% endtrans %}: </label>
+            <input type="text" class="form-control asr_form-control" placeholder="{% trans %} contact {% endtrans %}" {% if workshop.id != "" %}value="{{workshop.contact}}"{% endif %} disabled>
 
             <button type="submit" class="btn btn-primary fl" id="btn_check" name="btn_search" style="display: none;">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} workshop {% endtrans %}</button>

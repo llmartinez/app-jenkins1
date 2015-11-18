@@ -1,0 +1,9 @@
+
+    {% if ( is_granted('ROLE_ASSESSOR')) %}
+
+        <input type="hidden" id="role" value="ROLE_ASSESSOR">
+
+        {% include 'TicketBundle:Post:show_posts.html.twig'       %}
+
+        {% include 'TicketBundle:Post:reply_assessor.html.twig'        %}
+    {% endif %}

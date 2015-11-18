@@ -57,6 +57,28 @@
         </div>
 
         <div class="grid-full w100">
+
+            <div class="grid w10">
+                <label for="new_car_form_displacement">{% trans %} displacement {% endtrans %}</label>
+                <input type="text" id="new_car_form_displacement" name="new_car_form_displacement" class="form-control asr_form-control"
+                    {% if displacement is defined %}value="{{displacement}}"{% endif %} >
+                </input>
+            </div>
+
+            <div class="grid w10">
+                <label for="new_car_form_vin">{% trans %} vin {% endtrans %}</label>
+                <input type="text" id="new_car_form_vin" name="new_car_form_vin" class="form-control asr_form-control"
+                    {% if vin is defined %}value="{{vin}}"{% endif %} >
+                </input>
+            </div>
+
+            <div class="grid w10">
+                <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
+                <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
+                    {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %} >
+                </input>
+            </div>
+
             <div class="grid w15">
                 <label for="new_car_form_importance">{% trans %} importance {% endtrans %}</label>
                 <select id="new_car_form_importance" name="new_car_form_importance" class="form-control asr_form-control" >
@@ -84,27 +106,6 @@
                 </select>
             </div>
 
-
-            <div class="grid w10">
-                <label for="new_car_form_displacement">{% trans %} displacement {% endtrans %}</label>
-                <input type="text" id="new_car_form_displacement" name="new_car_form_displacement" class="form-control asr_form-control"
-                    {% if displacement is defined %}value="{{displacement}}"{% endif %} >
-                </input>
-            </div>
-
-            <div class="grid w10">
-                <label for="new_car_form_vin">{% trans %} vin {% endtrans %}</label>
-                <input type="text" id="new_car_form_vin" name="new_car_form_vin" class="form-control asr_form-control"
-                    {% if vin is defined %}value="{{vin}}"{% endif %} >
-                </input>
-            </div>
-
-            <div class="grid w10">
-                <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
-                <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
-                    {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %} >
-                </input>
-            </div>
             <div class="grid w15">
                 <label class="w100">
                     <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">

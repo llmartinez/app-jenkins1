@@ -1,4 +1,4 @@
-    <div id="botones" class="col-xs-12 col-md-12 form-group" >
+    <div id="botones" class="grid-full w100" >
         {# FIN BY ID #}
 
             {# <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p> #}
@@ -11,9 +11,9 @@
         {% if is_granted('ROLE_ASSESSOR') %}
             <div class="grid w30">
             {% if workshop.id is defined and workshop.id != "" %}
-                <button class="btn btn-primary w100" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+                <button class="btn btn-primary w100 asr_form-control asr_btn" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
             {% else %}
-                <button class="btn btn-primary w100" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+                <button class="btn btn-primary w100 asr_form-control asr_btn" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
             {% endif %}
             </div>
         {% endif %}
@@ -37,7 +37,7 @@
                         <input type="hidden" id="n_id_displacement" name="n_id_displacement">
                         <input type="hidden" id="n_id_vin" name="n_id_vin">
                         <input type="hidden" id="n_id_plateNumber" name="n_id_plateNumber">
-                        <button class="btn btn-primary mb15 w100" id="newTicket"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+                        <button class="btn btn-primary mb15 w100 asr_form-control asr_btn" id="newTicket"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
                     </form>
                 {% endif %}
             </div>
@@ -50,5 +50,10 @@
 
         {###  INACTIVE TICKETS ###}
         {% set route = 'listTicket' %}
-        {% if inactive != 0 %}<div class="pending_application2">{{ inactive }}</div><a href="{{ path(route, {'page': '1', 'country': 0, 'num_rows': 10, 'option': 'inactive' }) }}" class="pull-right">{% trans %}ticket.inactive{% endtrans %}: </a>{% endif %}
+        {% if inactive != 0 %}
+            <div class="grid w30 fr">
+                <div class="asr_pending_application2">{{ inactive }}</div>
+                <h4 href="{{ path(route, {'page': '1', 'country': 0, 'num_rows': 10, 'option': 'inactive' }) }}" class="pull-right">{% trans %}ticket.inactive{% endtrans %}: </h4>
+            </div>
+        {% endif %}
     </div>

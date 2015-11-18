@@ -266,6 +266,14 @@ class TicketController extends Controller {
                         $joins[] = array('e.workshop w ', 'w.country = '.$country);
                     }
                 }
+            }else{
+                 if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                {
+                    $joins[0][1] = $joins[0][1].' AND w.country != 0';
+                }
+                else{
+                    $joins[] = array('e.workshop w ', 'w.country != 0');
+                }
             }
         }
 
@@ -727,13 +735,15 @@ class TicketController extends Controller {
             }
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
-            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
-                                                                                            'form'      => $form->createView(),
-                                                                                            'form_name' => $form->getName(),
-                                                                                            'ticket'    => $ticket,
-                                                                                            'systems'   => $systems,
-                                                                                            'form_name' => $form->getName(),
-                                                                                        ));
+            $array = array(
+                            'form'      => $form->createView(),
+                            'form_name' => $form->getName(),
+                            'ticket'    => $ticket,
+                            'systems'   => $systems,
+                            'form_name' => $form->getName(),
+                        );
+            if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
+            else                                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -989,7 +999,8 @@ class TicketController extends Controller {
 
             if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
 
-            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+            if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
+            else                                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

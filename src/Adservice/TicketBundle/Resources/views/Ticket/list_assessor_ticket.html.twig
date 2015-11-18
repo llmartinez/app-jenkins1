@@ -7,11 +7,9 @@
         <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
             <thead>
                 <tr>
-                    <th> #                                           </th>
-                    <th>{% trans %} status             {% endtrans %}</th>
-
-                    {% if is_granted('ROLE_ASSESSOR') %} <th>{% trans %} ticket.assigned_to {% endtrans %}</th> {% endif %}
-
+                    <th> # </th>
+                    <th></th>
+                    <th>{% trans %} ticket.workshop    {% endtrans %}</th>
                     <th>{% trans %} car                {% endtrans %}</th>
                     <th>{% trans %} description        {% endtrans %}</th>
                     <th></th>
@@ -86,7 +84,7 @@
         </table>
 
         {% else %}
-            <legend class="padded" align="center">{% trans %} error404.ticket {% endtrans %}</legend>
+            <p class="alert padded" align="center">{% trans %} error404.ticket {% endtrans %}</p>
         {% endif %}
 
         {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
