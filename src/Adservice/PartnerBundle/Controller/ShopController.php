@@ -23,7 +23,7 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $partner='none') {
+    public function listAction($page=1, $country='none', $partner='none', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
@@ -33,12 +33,28 @@ class ShopController extends Controller {
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
-        }
-        else {
-            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        if ($term != '0' and $field != '0'){
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+        }else{
+            if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != 'none') $params[] = array('country', ' = '.$country);
+                if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
+            }
+            else {
+                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            }
         }
 
         $pagination = new Pagination($page);
@@ -61,6 +77,8 @@ class ShopController extends Controller {
                                                                                 'country'      => $country,
                                                                                 'partners'     => $partners,
                                                                                 'partner'      => $partner,
+                                                                                'term'         => $term,
+                                                                                'field'        => $field
                                                                                 ));
     }
 

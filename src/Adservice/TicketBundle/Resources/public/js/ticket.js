@@ -31,18 +31,6 @@ $(document).ready(function() {
     $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); clear_tbl_repeated('system'); });
     //llena tbl_similar
     $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); fill_tbl_repeated(); });
-    // $('#btn_search_by_bmv').click(function() {
-
-        // var flt_id = $('#btn_searchbyid').val();
-
-        // if(flt_id != "") {
-        //     $('#flt_id').val(flt_id);
-        //     $('#findTicketById').submit();
-        // }
-        // else
-            // search_by_bmv();
-
-    // });
 
     $('#newTicket').click(function() {
 
@@ -197,7 +185,11 @@ function search_by_bmv() {
         $('#new_car_form_brand').val(brand);
         fill_model(model);
         fill_subsystem(subsystem);
-        $('#new_car_form_subsystem').val(subsystem);
+
+        if(subsystem != undefined){ $('#new_car_form_subsystem').val(subsystem); }
+        else {
+            $("#new_car_form_subsystem").append('<option value="0" selected></option>');
+        }
         $('#new_car_form_importance').val(importance);
 
 

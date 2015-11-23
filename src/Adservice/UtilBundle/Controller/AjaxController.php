@@ -96,19 +96,37 @@ class AjaxController extends Controller
         }
         return new Response(json_encode($json), $status = 200);
     }
-    
+
     public function codeWorkshopFromPartnerAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-        
+
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        
+
         $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);
     }
+
+     public function getIdFromCodePartnerAction($code) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $code = $petition->request->get('code');
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $code));
+
+        if (isset($partner) and $partner->getId() != null) {
+
+            $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
+
+            $json = array('id' => $partner->getId(), 'code' => $workshop);
+        }
+        else $json = array('id' => '0', 'code' => '0');
+
+        return new Response(json_encode($json), $status = 200);
+     }
 
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \
@@ -125,8 +143,9 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
-        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1";
-        if($id_partner != '') $query .= "s.partner = ".$id_partner." OR";
+        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1 ";
+        if($id_partner != '') $query .= "OR s.partner = ".$id_partner." ";
+
         $consulta = $em->createQuery($query);
         $shops   = $consulta->getResult();
 
@@ -334,7 +353,7 @@ class AjaxController extends Controller
 
         if (sizeOf($id_system) == 1 and $id_system != "") {
 
-            $system = $em->getRepository('TicketBundle:System')->find($id_system[0]);
+            $system = $em->getRepository('TicketBundle:System')->find($id_system);
             $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
 
             $size = sizeOf($subsystems);

@@ -1,0 +1,12 @@
+
+    <legend>{% trans %} ticket {% endtrans %} #{{ ticket.id }} {% include 'TicketBundle:Includes:_assign_btn.html.twig'   %} </legend>
+
+	    <legend>{% trans %} description {% endtrans %}</legend>
+	    <p> {{ ticket.description|nl2br }} </p><br>
+
+		{% if ticket.status == 'closed' %}
+		    <legend>{% trans %} solution {% endtrans %}</legend>
+		    <p> {{ ticket.solution|nl2br }} </p><br>
+		{% endif %}
+
+

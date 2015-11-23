@@ -1,4 +1,8 @@
-{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+{% extends 'TicketBundle:Default:assessor_ticketing_layout.html.twig' %}
+
+{% block header %}
+    {% include 'TicketBundle:Default:assessor_header.html.twig' %}
+{% endblock %}
 
 {% block breadcrumb %}
 
@@ -11,10 +15,10 @@
 
 {% endblock  %}
 {% block main %}
-<div class="col-xs-12 col-md-12 form-group">
+<div class="grid-full w100">
     {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
 </div>
-<div class="info">
+<div class="info asr_info">
 
       {% if is_granted('ROLE_ASSESSOR') %}
 
@@ -48,12 +52,14 @@
               {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id}}">{% endif %}
             {% endif %}
 
-            {% include 'TicketBundle:Car:new_car.html.twig'        %}
+            <div class="tblContainer">
+              {% include 'TicketBundle:Car:assessor_new_car.html.twig'        %}
 
-            {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
+              {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-            <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
-            {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+              <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+              {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+            </div>
           </form>
 
       {% endif %}

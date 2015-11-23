@@ -1,0 +1,57 @@
+{% extends 'TicketBundle:Default:assessor_ticketing_layout.html.twig' %}
+
+{% block header %}
+    {% include 'TicketBundle:Default:assessor_header.html.twig' %}
+{% endblock %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{% if is_granted('ROLE_ASSESSOR') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li class="active">#{{ ticket.id }}</li>
+    </ol>
+
+{% endblock  %}
+
+{% block main %}
+
+  {% set workshop = ticket.workshop %}
+
+  <div class="grid-full w100">
+      {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
+  </div>
+  <div class="info asr_info">
+
+      {% if is_granted('ROLE_ASSESSOR') %}
+
+          {% include 'TicketBundle:Ticket:show_assessor_ticket.html.twig'  %}
+
+      {% endif %}
+
+      {% set car      = ticket.car      %}
+      {% include 'TicketBundle:Car:show_car.html.twig'            %}
+
+  </div>
+  <div class="content">
+
+      <div class="form-group">
+          <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+
+              {% include 'TicketBundle:Ticket:edit_ticket_assessor_info.html.twig' %}
+
+              {% include 'TicketBundle:Ticket:show_assessor_post.html.twig' %}
+
+              {{ form_row(form._token) }}
+              {{ form_rest(form) }}
+          </form>
+      </div>
+  </div>
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/sentence.js') }}"></script>
+  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+{% endblock %}

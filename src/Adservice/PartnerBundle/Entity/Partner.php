@@ -49,6 +49,26 @@ class Partner {//implements EventSubscriber{
     private $active;
 
     /**
+     * @var string $cif
+     * @ORM\Column(name="cif", type="string", length=255, nullable=true)
+     */
+    private $cif;
+
+    /**
+     * @var string $contact
+     *
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     */
+    private $contact;
+
+    /**
+     *
+     * @var string $observations
+     * @ORM\Column(name="observations", type="string", length=255, nullable=true)
+     */
+    private $observations;
+
+    /**
      *
      * @var string $shops
      *
@@ -147,6 +167,40 @@ class Partner {//implements EventSubscriber{
      */
     public function getActive() {
         return $this->active;
+    }
+
+    public function getCif() {
+        return $this->cif;
+    }
+
+    public function setCif($cif) {
+        $this->cif = $cif;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     */
+    public function setContact($contact) {
+        $this->contact = $contact;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact() {
+        return $this->contact;
+    }
+
+    public function getObservations() {
+        return $this->observations;
+    }
+
+    public function setObservations($observations) {
+        $this->observations = $observations;
     }
 
     /**
