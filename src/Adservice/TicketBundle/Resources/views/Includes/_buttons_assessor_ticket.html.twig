@@ -9,7 +9,7 @@
 
         {###  HISTORICO  ###}
         {% if is_granted('ROLE_ASSESSOR') %}
-            <div class="grid w30">
+            <div class="grid-33">
             {% if workshop.id is defined and workshop.id != "" %}
                 <button class="btn btn-primary w100 asr_form-control asr_btn" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
             {% else %}
@@ -22,7 +22,7 @@
         {% if workshop.id is defined and workshop.id != "" %}
 
             {% if workshop.active == 1 %}
-                <div class="grid w30">
+                <div class="grid-33">
                 {% if is_granted('ROLE_ASSESSOR') or workshop.country == app.security.getToken().getUser().getCountry() %}
                     <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="form-newTicket" role="form" method="post">
                         <input type="hidden" id="open_newTicket" name="open_newTicket" value="0">

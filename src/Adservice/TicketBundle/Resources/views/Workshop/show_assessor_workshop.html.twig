@@ -15,7 +15,10 @@
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
 					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
 
-			<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
+			<a class="btn btn-primary fr asr_form-control asr_btn" href="{{ path('listTicket') }}">
+				<img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} back {% endtrans %}" alt="{% trans %} back {% endtrans %}">
+				{% trans %} back {% endtrans %}
+			</a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">

@@ -94,7 +94,7 @@
                 <select id="id_system" name="id_system" class="form-control asr_form-control" >
                     <option value="0"></option>
                     {% for _system in systems %}
-                        <option value={{ _system.id }} {% if system is defined and system == _system.id %}selected{% endif %}>{{ _system.name }}</option>
+                        <option value={{ _system.id }} {% if system is defined and system == _system.id %}selected{% endif %}>{{ _system.name|trans }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -102,7 +102,7 @@
             <div class="grid w15">
                 <label for="new_car_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
                 <select id="new_car_form_subsystem" name="new_car_form_subsystem" class="form-control asr_form-control" >
-                    {% if subsystem.id is defined %}<option value="{{subsystem.id}}">{{subsystem.name}}{% endif %}</option>
+                    {% if subsystem.id is defined %}<option value="{{subsystem.id}}">{{subsystem.name|trans}}{% endif %}</option>
                 </select>
             </div>
 

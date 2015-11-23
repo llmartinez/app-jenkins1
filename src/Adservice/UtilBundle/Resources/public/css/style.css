@@ -10,7 +10,7 @@
     BODY
 */
 
-html, body { 
+html, body {
     background: url(../images/icon/background.jpg) repeat;
 }
 
@@ -750,6 +750,10 @@ fieldset[disabled] .asr_form-control {
 }
 .mt20 {
     margin-top: 20px;
+}
+
+.pd_txt {
+    padding: 10px 15px;;
 }
 
 /* grids */

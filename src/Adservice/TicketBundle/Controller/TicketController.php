@@ -887,7 +887,6 @@ class TicketController extends Controller {
                 $form = $this->createForm(new EditTicketType(), $ticket);
                 $array['form'] = $form->createView();
             }
-
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
@@ -896,13 +895,22 @@ class TicketController extends Controller {
                     $form->bindRequest($request);
                 }
 
-                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and $form->isValid())){
+                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') /*and $form->isValid()*/)){
 
                     $formP->bindRequest($request);
                     $formD->bindRequest($request);
 
                     if ($formP->isValid() and $formD->isValid()) {
 
+                        if($security->isGranted('ROLE_ASSESSOR')){
+
+                            $id_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
+                            if($id_subsystem != '0' and ($ticket->getSubsystem() == null or $ticket->getSubsystem()->getId() != $id_subsystem)) {
+                                $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+
+                                if(isset($subsystem )) $ticket->setSubsystem($subsystem);
+                            }
+                        }
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
                         if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
@@ -997,10 +1005,12 @@ class TicketController extends Controller {
                                                                                 'version'   => $version )));
             }
 
-            if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
-
-            if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
-            else                                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+            if ($security->isGranted('ROLE_ASSESSOR'))
+            {
+                $array['form'] = ($form ->createView());
+                return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
+            }
+            else return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

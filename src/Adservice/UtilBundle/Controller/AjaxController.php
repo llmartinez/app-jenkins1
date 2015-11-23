@@ -353,7 +353,7 @@ class AjaxController extends Controller
 
         if (sizeOf($id_system) == 1 and $id_system != "") {
 
-            $system = $em->getRepository('TicketBundle:System')->find($id_system[0]);
+            $system = $em->getRepository('TicketBundle:System')->find($id_system);
             $subsystems = $em->getRepository('TicketBundle:Subsystem')->findBy(array('system' => $system->getId()));
 
             $size = sizeOf($subsystems);

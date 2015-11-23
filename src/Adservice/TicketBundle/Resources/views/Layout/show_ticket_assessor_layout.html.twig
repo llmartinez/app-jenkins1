@@ -1,4 +1,4 @@
-{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+{% extends 'TicketBundle:Default:assessor_ticketing_layout.html.twig' %}
 
 {% block header %}
     {% include 'TicketBundle:Default:assessor_header.html.twig' %}
@@ -40,9 +40,11 @@
           <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
               {% include 'TicketBundle:Ticket:edit_ticket_assessor_info.html.twig' %}
-              {{ form_rest(form) }}
 
               {% include 'TicketBundle:Ticket:show_assessor_post.html.twig' %}
+
+              {{ form_row(form._token) }}
+              {{ form_rest(form) }}
           </form>
       </div>
   </div>

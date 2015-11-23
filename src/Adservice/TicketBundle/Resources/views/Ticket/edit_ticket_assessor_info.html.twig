@@ -1,8 +1,8 @@
 
-    <legend class="grid-full w50"> {% trans %} edit.ticket.info {% endtrans %} </legend>
+    <legend class="grid-full w25"> {% trans %} edit.ticket.info {% endtrans %} </legend>
 
     {% if ( is_granted('ROLE_ASSESSOR')) %}
-        <div class="grid-full w50">
+        <div class="grid-full w70 fr">
             <p class="fr">
                 <b>{{'created_at'|trans}}:</b> {{ticket.createdat|date("d/m/Y (H:i)")}}
                 {% if ticket.assignedTo != "" %}
@@ -31,6 +31,9 @@
         </div>
 
         <div class="grid-33">
+            {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
+                <input type="hidden" id="subsystem_id" value="{{ ticket.subsystem.id }}">
+            {% endif %}
             <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
             {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
         </div>

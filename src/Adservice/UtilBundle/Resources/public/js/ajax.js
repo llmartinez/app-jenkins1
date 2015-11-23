@@ -480,6 +480,9 @@ function fill_subsystem(subsystem) {
                     else
                         $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                 });
+
+                var subsys_id = $('#subsystem_id').val();
+                if(subsys_id != undefined && subsys_id != '0' ) $('#edit_ticket_form_subsystem').val(subsys_id);
             }
         },
         error: function() {
@@ -487,7 +490,6 @@ function fill_subsystem(subsystem) {
         }
     });
 }
-
 /**
  * Rellena (fill) una tabla con tickets similares
  */
