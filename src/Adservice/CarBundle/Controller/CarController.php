@@ -32,15 +32,7 @@ class CarController extends Controller {
             $formC->bindRequest($request);
 
             //Define CAR
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $formC_errors = $formC->getErrors();
-	    if(isset($formC_errors[0])) {
-                $formC_errors = $formC_errors[0];
-                $formC_errors = $formC_errors->getMessageTemplate();
-            }else{
-                $formC_errors = 'none';
-            }
-            if ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($formC->isValid()) {
 
                 // if ($car->getVersion() != "") {
 

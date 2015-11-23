@@ -1,0 +1,93 @@
+
+
+        <input type="hidden" id='slct_historyTickets' value={{ option }}>
+
+        {% if tickets|length != 0 %}
+        {# Si encuentra un ticket #}
+        <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
+            <thead>
+                <tr>
+                    <th> #                                           </th>
+                    <th>{% trans %} status             {% endtrans %}</th>
+
+                    {% if is_granted('ROLE_ASSESSOR') %} <th>{% trans %} ticket.assigned_to {% endtrans %}</th> {% endif %}
+
+                    <th>{% trans %} car                {% endtrans %}</th>
+                    <th>{% trans %} description        {% endtrans %}</th>
+                    <th></th>
+                    <th>{% trans %} date               {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                {% for ticket in tickets %}
+                    {% set ticket_info = '' %}
+                    {#{% if ticket.assignedTo != null %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}#}
+                    <tr class="ticketRow" title="{{ticket_info}}">
+                        <input type="hidden" id="ticket_id"         value="{{ticket.id }}">
+                        <input type="hidden" id="ticket_brand"      value="{{ticket.car.brand.id }}">
+                        <input type="hidden" id="ticket_model"      value="{{ticket.car.model.id }}">
+
+                       {% if ticket.car.version.id  is defined %} <input type="hidden" id="ticket_version"    value="{{ticket.car.version.id }}">{% endif %}
+
+                       {% if ticket.subsystem is defined and ticket.subsystem.system is defined and ticket.subsystem.system.id is defined %}
+                            <input type="hidden" id="ticket_system" value="{{ticket.subsystem.system.id }}">{% endif %}
+
+                       {% if ticket.subsystem is defined and ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem"  value="{{ticket.subsystem.id }}">{% endif %}
+
+                       {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id }}">{% endif %}
+
+                        <input type="hidden" id="ticket_description" value="{{ticket.description }}">
+                        <input type="hidden" id="ticket_date" value="{{ticket.modifiedAt|date("d/m/Y") }}">
+                        <input type="hidden" id="ticket_solution"    value="{{ticket.solution }}">
+
+                        <td id="id_ticket">{{ ticket.id         }}</td>
+
+                        {% if ticket.status == 'open' %}
+                                {% if ticket.assignedTo == null %}
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                {% else %}
+                                    {% if ticket.pending == 1 %}
+                                        {% if is_granted('ROLE_ASSESSOR') %}
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                        {% else %}
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if is_granted('ROLE_ASSESSOR') %}
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                        {% else %}
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% elseif ticket.status == 'closed' %}
+                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}"></td>
+                            {% endif %}
+
+                        {% if is_granted('ROLE_ASSESSOR') %}
+
+                            <td title="{{ticket.assignedTo}}" >   {{ ticket.assignedTo|length > 15 ? ticket.assignedTo|slice(0, 15) ~ '...' : ticket.assignedTo  }}</td>
+
+                            {% set len = 25 %}
+                        {% else %}
+                            {% set len = 40 %}
+                        {% endif %}
+
+                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
+
+                        <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
+
+                        <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                        <td>{{ ticket.createdAt | date("d/m/y") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+            <legend class="padded" align="center">{% trans %} error404.ticket {% endtrans %}</legend>
+        {% endif %}
+
+        {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
+        <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>

@@ -249,6 +249,26 @@ class LoadLocation extends AbstractFixture implements FixtureInterface, OrderedF
 
         $this->addReference($country->getCountry(), $country);
 
+## UK ##
+        //LEE EL .xls Y DEVUELVE EL OBJETO EXCEL_READER
+        // $data = new Spreadsheet_Excel_Reader();
+        // $data->setOutputEncoding('CP1251');
+
+        // $filePath = $this->container->get('kernel')->getRootDir().'/../data/xls/spain.xls';
+
+        // $data->read($filePath);
+
+        $country = new Country();
+        $country->setCountry('uk');
+        $country->setLang('english');
+        $country->setShortName('UK');
+
+        //Persisto la última provincia
+        $manager->persist($country);
+
+        $this->addReference($country->getCountry(), $country);
+
+
         $manager->flush();
     }
 }

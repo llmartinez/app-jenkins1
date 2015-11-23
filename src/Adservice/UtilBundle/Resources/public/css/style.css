@@ -98,6 +98,9 @@ legend {
 .btn-change-pass {
     margin-top: 20px
 }
+.btn-disabled {
+    background-color: #888!important;
+}
 
 /*
     HEADER
@@ -616,6 +619,9 @@ textarea.form-control_ged {
 }
 .prl0 {
     padding-right: 0px !important;
+}
+#car {
+    font-size: 0.7em;
 }
 .pending_application {
     background: none repeat scroll 0 0 #f00;

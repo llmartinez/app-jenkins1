@@ -4,11 +4,11 @@
     Se ha producido un error ({{ status_code }} {{ status_text }})
 {% endblock %}
 
-{% block titleException %}        
+{% block titleException %}
     <div id="title_error"><h1>{% trans %}error{% endtrans %}</h1></div>
 {% endblock %}
-    
-{% block exception %}    
+
+{% block exception %}
     <div id="content_error">
             {% include 'TwigBundle:Exception:exception.html.twig' %}
     </div>

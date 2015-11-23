@@ -5,16 +5,56 @@ $(document).ready(function() {
     if (typeof new_ticket != 'undefined') {
         new_ticket.focus();
     }
+
+    if ($('#open_newTicket').val() == 1){
+        var ticket_brand = $('#ticket_brand').val();
+        var ticket_model = $('#ticket_model').val();
+        var ticket_version = $('#ticket_version').val();
+        var ticket_system  = $('#ticket_system').val();
+        var ticket_subsystem  = $('#ticket_subsystem').val();
+        var ticket_importance = $('#ticket_importance').val();
+
+        if(ticket_brand != '')
+            $('#new_car_form_brand').val(ticket_brand);
+
+        if(ticket_model != '')
+            fill_model(ticket_model);
+
+        if(ticket_importance != '')
+            $('#new_car_form_importance').val(ticket_importance);
+    }
 });
 
     //vacia tbl_similar
-    $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); });
-    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); });
-    $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); });
+    $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); clear_tbl_repeated('brand' ); });
+    $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); clear_tbl_repeated('model' ); });
+    $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); clear_tbl_repeated('system'); });
     //llena tbl_similar
-    $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); });
-    $('#btn_search_by_bmv').click(function() { search_by_bmv(); });
+    $(document).on('change','#ticket_form_subsystem',function(){ fill_tbl_similar(); fill_tbl_repeated(); });
+    // $('#btn_search_by_bmv').click(function() {
 
+        // var flt_id = $('#btn_searchbyid').val();
+
+        // if(flt_id != "") {
+        //     $('#flt_id').val(flt_id);
+        //     $('#findTicketById').submit();
+        // }
+        // else
+            // search_by_bmv();
+
+    // });
+
+    $('#newTicket').click(function() {
+
+        $('#n_id_brand').val( $('#new_car_form_brand').val());
+        $('#n_id_model').val( $('#new_car_form_model').val());
+        $('#n_id_version').val( $('#new_car_form_version').val());
+        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
+        $('#n_id_importance').val( $('#new_car_form_importance').val());
+        $('#n_id_vin').val( $('#new_car_form_vin').val());
+        $('#n_id_plateNumber').val( $('#new_car_form_plateNumber').val());
+
+    });
 
 $('#new_file_form_file').bind('change', function() {
 
@@ -45,17 +85,20 @@ $('#new_file_form_file').bind('change', function() {
  */
 function clear_tbl_similar(parent) {
 
+    var similar = $( "#txt_similar" ).val();
     $( "#tbl_similar" ).empty();
+    $( "#tbl_similar" ).append("<p>"+similar+"</p>");
+}
 
-    // if (parent == 'brand' )                 { var son = 'Model';     }
-    // else {
-    //         if (parent == 'model' )         { var son = 'System';    }
-    //         else {
-    //                 if (parent == 'system') { var son = 'Subsystem'; }
-    //         }
-    // }
+/**
+ * vacia tbl_repeated
+ * @return AjaxFunction
+ */
+function clear_tbl_repeated(parent) {
 
-    // $( "#tbl_similar" ).append("<p>Select "+ son +" for matching similar tickets..</p>");
+    var similar = $( "#txt_repeated" ).val();
+    $( "#tbl_repeated" ).empty();
+    $( "#tbl_repeated" ).append("<p>"+similar+"</p>");
 }
 
 /**
@@ -114,7 +157,7 @@ function search_by_bmv() {
         version = 0;
     }
     if(system == null) {
-        system = 0;      
+        system = 0;
     }
     if(subsystem == null) {
         subsystem = 0;
@@ -130,6 +173,42 @@ function search_by_bmv() {
     var url = Routing.generate(route, {_locale: locale, page: 1, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows });
     window.open(url, "_self");
 }
+
+    $('.ticketRow').click( function() {
+
+       var id         = $(this).find("#ticket_id").val();
+       var brand      = $(this).find("#ticket_brand").val();
+       var model      = $(this).find("#ticket_model").val();
+       var system     = $(this).find("#ticket_system").val();
+       var subsystem  = $(this).find("#ticket_subsystem").val();
+       var importance = $(this).find("#ticket_importance").val();
+       var desc       = $(this).find("#ticket_description").val();
+       var date       = $(this).find("#ticket_date").val();
+       var sol        = $(this).find("#ticket_solution").val();
+
+        $('#flt_id').empty();
+        $('#id_system').val(system);
+        $('#new_car_form_model').val('');
+        $('#new_car_form_version').val('');
+        $('#new_car_form_subsystem').val('');
+        $('#new_car_form_importance').val('');
+
+        $('#flt_id').val(id);
+        $('#new_car_form_brand').val(brand);
+        fill_model(model);
+        fill_subsystem(subsystem);
+        $('#new_car_form_subsystem').val(subsystem);
+        $('#new_car_form_importance').val(importance);
+
+
+        $('#list_date').text('');
+        $('#list_date').text(date);
+        $('#list_description').text('');
+        $('#list_description').text(desc);
+        $('#list_solution').text('');
+        $('#list_solution').text(sol);
+
+    });
 
 /**
  * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar

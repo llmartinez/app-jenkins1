@@ -11,6 +11,14 @@ services:
     isMSIE:
         class: Adservice\UtilBundle\Controller\ServiceController
 
+    cms.mailer:
+        class: Adservice\UtilBundle\Entity\Mailer
+        arguments: ["@mailer","@swiftmailer.transport.real","@templating"]
+
+    instant_mailer:
+        class: %swiftmailer.class%
+        arguments: ["@?swiftmailer.transport.real"]
+
 #    my.listener:
 #        class: Adservice\UtilBundle\Listener\EntityUtilListener
 #        arguments: ['@service_container']

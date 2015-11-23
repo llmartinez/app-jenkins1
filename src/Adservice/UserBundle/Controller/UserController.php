@@ -26,6 +26,7 @@ use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\UtilBundle\Controller\LanguageController as LanguageController;
 
 class UserController extends Controller {
 
@@ -39,8 +40,30 @@ class UserController extends Controller {
 //        $session = $this->getRequest()->getSession();
 //        $session->set('id_logged_user', $id_logged_user);
 
+
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
+
+        // Se pondrá por defecto el idioma del usuario en el primer login
+        if(!isset($_SESSION['lang'])) {
+            $request  = $this->getRequest();
+            $locale = $request->getLocale();
+            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = substr($lang, 0, strrpos($lang, '_'));
+
+            $currentLocale = $request->getLocale();
+            $request->setLocale($lang);
+
+            if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
+            else                                 $currentPath = $this->generateUrl('user_index');
+
+            $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+
+            $_SESSION['lang'] = $lang;
+
+            return $this->redirect($currentPath);
+        }
+
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
     }
@@ -210,16 +233,7 @@ class UserController extends Controller {
 
         $form->bindRequest($request);
 
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-
-            if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
@@ -232,11 +246,13 @@ class UserController extends Controller {
 
                 $error_username = $this->get('translator')->trans('username_used').$username;
 
-                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                                   'user_type'  => $type,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView(),
-                                                                                    'error_username' => $error_username));
+                $array = array('user'       => $user,
+                               'user_type'  => $type,
+                               'form_name'  => $form->getName(),
+                               'form'       => $form->createView(),
+                               'error_username' => $error_username);
+
+                return $this->render('UserBundle:User:new_user.html.twig', $array);
             }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -251,10 +267,12 @@ class UserController extends Controller {
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                           'user_type'  => $type,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()));
+        $array = array('user'       => $user,
+                       'user_type'  => $type,
+                       'form_name'  => $form->getName(),
+                       'form'       => $form->createView());
+
+        return $this->render('UserBundle:User:new_user.html.twig', $array);
     }
 
     /**
@@ -324,15 +342,7 @@ class UserController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-            if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -353,13 +363,14 @@ class UserController extends Controller {
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
                 $this->saveUser($em, $user, $original_password);
 
-                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                          'role'      => $role,
                                                                           'form_name' => $form->getName(),
                                                                           'form'      => $form->createView()));
     }

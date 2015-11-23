@@ -26,7 +26,7 @@ class WorkshopNewOrderType extends AbstractType
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 0'); }))
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                   'required' => true,

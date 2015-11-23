@@ -72,7 +72,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'shop' )
     	{
-			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
+			//$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
 			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
 
 			// TIENDA POR DEFECTO
@@ -89,8 +89,8 @@ class ImportController extends Controller
 	        $newShop->setMovileNumber2 ('0');
 	        $newShop->setFax           ('0');
 
-	        $newShop->setEmail1('test@ad-service.es');
-	        $newShop->setEmail2('test@ad-service.es');
+	        $newShop->setEmail1('test@adserviceticketing.com');
+	        $newShop->setEmail2('test@adserviceticketing.com');
 
 	        $newShop->setCity  ('...');
 	        $newShop->setRegion('...');
@@ -98,21 +98,21 @@ class ImportController extends Controller
 	        $newShop->setCountry($locations['countries']['spain']);
 			UtilController::saveEntity($em, $newShop, $sa,false);
 
-			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
+			// $partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
-			foreach ($old_Tiendas as $old_Tienda)
-			{
-				$newShop = UtilController::newEntity(new Shop(), $sa);
-				$name = $old_Tienda->getNombre();
-				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-				$newShop->setName($name);
-				$newShop->setPartner($partner);
-				$newShop->setActive('1');
-				$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
-				UtilController::saveEntity($em, $newShop, $sa,false);
-			}
-			$em->flush();
+			// foreach ($old_Tiendas as $old_Tienda)
+			// {
+			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
+			// 	$name = $old_Tienda->getNombre();
+			// 	$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+			// 	$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+			// 	$newShop->setName($name);
+			// 	$newShop->setPartner($partner);
+			// 	$newShop->setActive('1');
+			// 	$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+			// 	UtilController::saveEntity($em, $newShop, $sa,false);
+			// }
+			// $em->flush();
 			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
@@ -243,7 +243,12 @@ class ImportController extends Controller
             {
 
                     $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-                    $newWorkshop->setName 					($old_Taller->getNombre());
+
+		            $buscar=array(chr(13).chr(10), chr(9), "\r\n", "\n", "\r");
+		            $reemplazar=array("", "", "", "");
+		            $name=str_ireplace($buscar,$reemplazar,$old_Taller->getNombre());
+                    $newWorkshop->setName($name);
+
                     $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
                     $newWorkshop->setAddress 				($old_Taller->getDireccion());
                     $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
@@ -555,7 +560,7 @@ class ImportController extends Controller
 
         /* MAILING */
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo('test@adserviceticketing.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));

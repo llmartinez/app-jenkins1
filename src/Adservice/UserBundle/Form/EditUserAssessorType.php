@@ -19,8 +19,16 @@ class EditUserAssessorType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active', 'checkbox', array('required' => false))
-            ->add('charge')
+            // ->add('charge')
             //CONTACT
+            ->add('country_service', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'property' => 'country',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country); }))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',

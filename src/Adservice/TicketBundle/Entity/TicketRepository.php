@@ -198,62 +198,65 @@ class TicketRepository extends EntityRepository
 
         return $consulta->getResult();
     }
+
+
+    public function findTicketInfo($request)
+    {
+        $em = $this->getEntityManager();
+
+        $w_id        = $request->get('w_id'       );
+        $w_idpartner = $request->get('w_idpartner');
+        $w_name      = $request->get('w_name'     );
+        $w_cif       = $request->get('w_cif'      );
+        $w_email     = $request->get('w_email'    );
+        $w_tel       = $request->get('w_tel'      );
+        $w_region    = $request->get('w_region'   );
+
+
+        if((is_numeric ($w_id) and is_numeric ($w_idpartner)) or ($w_email != '' or $w_tel != ''))
+        {
+            $active = 1;
+            if ($w_id != "" and $w_idpartner   != ""){
+                $partner  = $em->getRepository('PartnerBundle:Partner'  )->findOneBy(array('code_partner'  => $w_idpartner ));
+
+                if (isset($partner)) $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id,
+                                                                                                                'partner'       => $partner->getId()));
+                else $active = 0;
+
+                if (isset($workshop)) $active = $workshop->getActive();
+            }
+
+            if($active == 1) {
+                $query = 'SELECT w ';
+                $from  = 'FROM WorkshopBundle:Workshop w ';
+                $where = 'WHERE w.active = 1 ';
+
+                if ($w_id          != "") {  $where .= "AND w.code_workshop = ".$w_id." "; }
+                if ($w_idpartner   != "") {  $query .= ", p ";
+                                             $from  .= "JOIN w.partner p ";
+                                             $where .= "AND p.code_partner = ".$w_idpartner." "; }
+                if ($w_name        != "") {  $where .= "AND w.name like '%".$w_name."%' "; }
+                if ($w_cif         != "") {  $where .= "AND w.cif like '%".$w_cif."%' "; }
+                if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' "; }
+                if ($w_tel         != "") {  $where .= "AND (w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
+                                                        OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%')"; }
+                if ($w_region      != "") {  $where .= "AND w.region like '%".$w_region."%' "; }
+
+                //Crea la consulta
+                $sql = $query.$from.$where.' ORDER BY w.id ';
+                // echo $sql;
+                $consulta = $em->createQuery($sql);
+                $array = $consulta->getResult();
+
+                //Si la consulta da resultado y hay algun campo de los filtros introducido se devuelve el resultado, sino se devuelve un array vacio
+                if ((sizeof($array) > 0) and ($w_id != "" or $w_idpartner != "" or $w_email != "" or $w_tel != "" or $w_name != "" or $w_cif != "" or $w_region != "" ))
+                    {  return $array;  }
+                else
+                    {  return array('0' => new Workshop()); }
+            }else
+                {   return array('error' => 'error'); }
+
+        }else
+            {   return array('error' => 'error'); }
+    }
 }
-
-
-
-
-    // public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null){
-
-    //     $query = 'SELECT e FROM '.$bundle.':'.$entity.' e ';
-
-    //     $where = 'WHERE e.id > 0 ';
-
-    //     foreach ($params as $param) {
-    //         $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
-    //     }
-
-    //     ($ordered != null) ? $order = 'ORDER BY e.modified_at '.$ordered.' ' : $order = '';
-
-    //     if($pagination != null){
-
-    //         $consulta = $em ->createQuery($query.$where.$order)
-    //                         ->setMaxResults($pagination->getMaxRows())
-    //                         ->setFirstResult($pagination->getFirstRow());
-    //     }else{
-    //         $consulta = $em->createQuery($query.$where.$order);
-    //     }
-    //     return $consulta->getResult();
-    // }
-
-    // public function getEntityLength($em, $bundle, $entity)
-    // {
-    //     $query = 'SELECT COUNT(e) FROM '.$bundle.':'.$entity.' e ';
-
-    //     $consulta = $em->createQuery($query);
-
-    //     return $consulta->getResult()[0][1];
-    // }
-
-
-    // public function findAllByOwner ($user, $status)
-    // {
-    //     if ( $status != 'all' ) { $array = array('created_by'  => $user->getId(),
-    //                                              'status' => $status->getId()); }
-
-    //     else                    { $array = array('created_by'  => $user->getId()); }
-
-    //     $tickets = $this->findBy($array);
-    //     return $tickets;
-    // }
-
-    // public function findAllByWorkshop ($user, $status)
-    // {
-    //     if ( $status != 'all' ) { $array = array('workshop'  => $user->getWorkshop()->getId(),
-    //                                              'status'    => $status->getId()); }
-
-    //     else                    { $array = array('workshop'  => $user->getWorkshop()->getId()); }
-
-    //     $tickets = $this->findBy($array);
-    //     return $tickets;
-    // }

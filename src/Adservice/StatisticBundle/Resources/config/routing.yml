@@ -1,10 +1,10 @@
 listStatistics:
-    pattern:  /list/{type}/{page}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{assessor}/{created_by}
-    defaults: { _controller: StatisticBundle:Statistic:list, type: '0', page: 1, from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', assessor: '0', created_by: '0' }
+    pattern:  /list/{type}/{page}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{assessor}/{created_by}/{raport}
+    defaults: { _controller: StatisticBundle:Statistic:list, type: '0', page: 1, from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', assessor: '0', created_by: '0', raport: '0' }
     options:
         expose: true
 doExcel:
-    pattern:  /doExcel/{type}/{page}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{assessor}/{created_by}
-    defaults: { _controller: StatisticBundle:Statistic:doExcel, type: '0', page: 1, from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', assessor: '0', created_by: '0' }
+    pattern:  /doExcel/{type}/{page}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{assessor}/{created_by}/{raport}
+    defaults: { _controller: StatisticBundle:Statistic:doExcel, type: '0', page: 1, from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', assessor: '0', created_by: '0', raport: '0' }
     options:
         expose: true

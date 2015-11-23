@@ -132,15 +132,7 @@ class WorkshopController extends Controller {
             $partner = $workshop->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
@@ -151,10 +143,10 @@ class WorkshopController extends Controller {
                 }
                 if($workshop->getPhoneNumber2() !=null){
                     $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber2());
-                }  
+                }
                 if($workshop->getMovileNumber1() !=null){
                     $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber1());
-                }  
+                }
                 if($workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber2());
                 }
@@ -215,7 +207,7 @@ class WorkshopController extends Controller {
                     $password = $encoder->encodePassword($newUser->getPassword(), $salt);
                     $newUser->setPassword($password);
                     $newUser->setSalt($salt);
-                    //UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     $this->createHistoric($em, $workshop); /*Genera un historial de cambios del taller*/
 
@@ -247,7 +239,7 @@ class WorkshopController extends Controller {
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
-                else{                        
+                else{
                     if($findPhone[0]['1']>0){
                         $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
                     }
@@ -268,7 +260,7 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
+        if (!$security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
         else $country = null;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
@@ -336,33 +328,25 @@ class WorkshopController extends Controller {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $partner->getId(),'code_workshop' => $workshop->getCodeWorkshop()));
-                
+
                 $findPhone = array(0,0,0,0);
-                
+
                 if($workshop->getPhoneNumber1() !='0' and $workshop->getPhoneNumber1() !=null){
                     $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getPhoneNumber1(),$workshop->getId());
                 }
                 if($workshop->getPhoneNumber2() !='0' and $workshop->getPhoneNumber2() !=null){
                     $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getPhoneNumber2(),$workshop->getId());
-                }                 
+                }
                 if($workshop->getMovileNumber1() !='0' and $workshop->getMovileNumber1() !=null){
                     $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getMovileNumber1(),$workshop->getId());
-                }  
+                }
                 if($workshop->getMovileNumber2() !='0' and $workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getMovileNumber2(),$workshop->getId());
-                }         
+                }
                 if(($find == null or $workshop->getCodeWorkshop() == $last_code ) and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
                     $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
@@ -450,15 +434,8 @@ class WorkshopController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-                if(isset($form_errors[0])) {
-                    $form_errors = $form_errors[0];
-                    $form_errors = $form_errors->getMessageTemplate();
-                }else{
-                    $form_errors = 'none';
-                }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+
+            if ($form->isValid()) {
 
                 $em->persist($workshop);
                 $em->flush();
