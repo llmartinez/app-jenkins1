@@ -366,26 +366,28 @@ function fill_car_by_year() {
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
-            // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-            $('#new_car_form_brand').empty();
-            $('#new_car_form_model').empty();
-            $('#new_car_form_version').empty();
+            if (data['error'] != "No hay coincidencias") {
+                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+                $('#new_car_form_brand').empty();
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
 
-            //Primer campo vacío
-            $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+                //Primer campo vacío
+                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
 
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-            //Cambiamos el icono para indicar que se esta filtrando por motor
-            $('#filter_motor').empty();
-            $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+                $.each(data, function(idx, elm) {
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                });
+                //Cambiamos el icono para indicar que se esta filtrando por motor
+                $('#filter_motor').empty();
+                $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-            $('#filter_year').empty();
-            if(year != ''){
-                $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
-            }else{
-                $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                $('#filter_year').empty();
+                if(year != ''){
+                    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                }else{
+                    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                }
             }
         },
         error: function() {
@@ -413,26 +415,28 @@ function fill_car_by_motor() {
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
-            // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-            $('#new_car_form_brand').empty();
-            $('#new_car_form_model').empty();
-            $('#new_car_form_version').empty();
+            if (data['error'] != "No hay coincidencias") {
+                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+                $('#new_car_form_brand').empty();
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
 
-            //Primer campo vacío
-            $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+                //Primer campo vacío
+                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
 
-            $.each(data, function(idx, elm) {
-                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
-            //Cambiamos el icono para indicar que se esta filtrando por motor
-            $('#filter_year').empty();
-            $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+                $.each(data, function(idx, elm) {
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                });
+                //Cambiamos el icono para indicar que se esta filtrando por motor
+                $('#filter_year').empty();
+                $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-            $('#filter_motor').empty();
-            if(motor != ''){
-                $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-            }else{
-                $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                $('#filter_motor').empty();
+                if(motor != ''){
+                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                }else{
+                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                }
             }
         },
         error: function() {
@@ -462,26 +466,30 @@ function fill_subsystem(subsystem) {
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
+            if (data['error'] != "No hay coincidencias") {
 
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('select[id*=_subsystem]').empty();
+                // Limpiamos y llenamos el combo con las opciones del json
+                $('select[id*=_subsystem]').empty();
 
-            //Primer campo vacío
-            $('form[id=contact]').find('select[id*=_subsystem]').append("<option value='0'></option>");
+                //Primer campo vacío
+                $('form[id=contact]').find('select[id*=_subsystem]').append("<option value='0'></option>");
 
-            $.each(data, function(idx, elm) {
-                if (elm.id == id_subsystem || elm.id == subsystem)
-                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                else
-                    $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-            });
+                $.each(data, function(idx, elm) {
+                    if (elm.id == id_subsystem || elm.id == subsystem)
+                        $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                    else
+                        $('form[id=contact]').find('select[id*=_subsystem]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                });
+
+                var subsys_id = $('#subsystem_id').val();
+                if(subsys_id != undefined && subsys_id != '0' ) $('#edit_ticket_form_subsystem').val(subsys_id);
+            }
         },
         error: function() {
             console.log("Error al cargar subsistemas...");
         }
     });
 }
-
 /**
  * Rellena (fill) una tabla con tickets similares
  */
@@ -579,4 +587,34 @@ function string_to_slug(str) {
     .replace(/-+/g, '-'); // collapse dashes
 
     return str;
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
+ */
+function get_id_from_code_partner(code){
+    var route     = 'get_id_from_code_partner';
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale}),
+        data        : {code : code},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+
+            if(data.id != 0) {
+                $('form').find('select[name*=partner]').val(data.id);
+                $('form').find('input[name*=code_workshop]').val(data.code);
+            }
+            else{
+                alert($('#partner_not_found').val());
+            }
+        },
+        error : function(){
+            console.log("Error al cargar id desde código...");
+        }
+    });
 }

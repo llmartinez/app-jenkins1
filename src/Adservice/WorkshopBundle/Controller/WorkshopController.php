@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $name='0') {
+    public function listAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
 
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -36,8 +36,20 @@ class WorkshopController extends Controller {
             throw new AccessDeniedException();
         }
 
-        if ($name != '0'){
-            $params[] = array('name', " LIKE '%".$name."%'");
+        if ($term != '0' and $field != '0'){
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
         }else{
             if($security->isGranted('ROLE_SUPER_ADMIN')) {
                 if ($country != '0') $params[] = array('country', ' = '.$country);
@@ -87,7 +99,8 @@ class WorkshopController extends Controller {
                                                                              'country'    => $country,
                                                                              'partner'    => $partner,
                                                                              'status'     => $status,
-                                                                             'name'       => $name));
+                                                                             'term'       => $term,
+                                                                             'field'      => $field));
     }
 
     public function newWorkshopAction() {
@@ -150,6 +163,7 @@ class WorkshopController extends Controller {
                 if($workshop->getMovileNumber2() !=null){
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMovileNumber2());
                 }
+
                 if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
                     $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
@@ -241,16 +255,24 @@ class WorkshopController extends Controller {
                 }
                 else{
                     if($findPhone[0]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1()
+                        .' -> '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber1());
                     }
                     else if($findPhone[1]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2());
                     }
                     else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber1());
                     }
                     else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber2());
                     }
                     else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
@@ -349,7 +371,10 @@ class WorkshopController extends Controller {
                 }
                 if(($find == null or $workshop->getCodeWorkshop() == $last_code ) and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
-                    $workshop   = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+                    $workshop = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
+
+                    $code_partner = $workshop->getPartner()->getCodePartner();
+                    $workshop->setCodePartner($code_partner);
 
                     // Set default shop to NULL
                     $shop = $form['shop']->getClientData();
@@ -364,16 +389,25 @@ class WorkshopController extends Controller {
                 }
                 else{
                     if($findPhone[0]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber1()
+                        .' -> '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneNoIdGetCode($workshop->getPhoneNumber1(),$workshop->getId());
                     }
+
                     else if($findPhone[1]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getPhoneNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2(),$workshop->getId());
                     }
                     else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber1()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber1(),$workshop->getId());
                     }
                     else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshop->getMovileNumber2()
+                        .' - '.$this->get('translator')->trans('workshop')
+                        .' '.$em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMovileNumber2(),$workshop->getId());
                     }
                     else {
                         $code  = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
@@ -384,8 +418,8 @@ class WorkshopController extends Controller {
             }
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
-        else $country = null;
+        $country = $workshop->getCountry()->getId();
+
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
         $workshop_machines  = $workshop->getDiagnosisMachines();

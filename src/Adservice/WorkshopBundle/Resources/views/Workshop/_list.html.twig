@@ -35,7 +35,9 @@
     </table>
         {% include 'UtilBundle:Pagination:pagination_workshop.html.twig' %}
 {% else %}
-    {% trans %} any.workshop {% endtrans %}
+    <div class="col-xs-12 col-md-12 form-group">
+        <p class="alert">{% trans %} any.workshop {% endtrans %}</p>
+    </div>
 {% endif %}
 
 

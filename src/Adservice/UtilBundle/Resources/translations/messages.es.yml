@@ -85,6 +85,7 @@ Bad credentials: 				"Credenciales incorrectas"
 The presented password is invalid.: "La contraseña introducida no es correcta"
 The presented password cannot be empty.: "La contraseña no puede estar vacía."
 username_used:					"El nombre introducido ya existe o no es correcto, prueba con: "
+partner_not_found:				"No existe un Socio con el código introducido."
 
 #ENTITY
 role:					 "Rol"
@@ -143,6 +144,7 @@ with_password:			 "Con contraseña"
 service_country: 		 "País de servicio"
 
 #FIELDS
+find_by:				 "Buscar por"
 number:					 "Cantidad"
 start:					 "Inicio"
 end: 					 "Fin"
@@ -152,6 +154,7 @@ date.end: 				 "Fecha Final"
 code:					 "Código"
 _code:					 "Codigo"
 code_partner:			 "Código de Socio"
+code_shop:			 	 "Código de Tienda"
 code_workshop:			 "Código de Taller"
 code_numeric:			 "El código que has introducido no es un número"
 code_error:				 "El código que has introducido no es correcto"
@@ -532,6 +535,7 @@ popup.delete:				  "Borrar popup"
 popup.delete.confirm:		  "Estas seguro que quieres eliminar este popup?"
 
 #ORDERS
+value:							"Valor"
 values:							"Valores"
 workshop_pending:			  	"Sol.Taller pendientes"
 workshop_rejected:				"Sol.Taller rechazadas"
@@ -693,7 +697,7 @@ _mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de
 lock.list_incidences: 	"Historico de Incidencias"
 
 error: Se ha producido un error
-back:  Volver a la aplicación
+back_app:  Volver a la aplicación
 
 termsConditions:	" "
 _termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.

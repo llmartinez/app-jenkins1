@@ -55,7 +55,23 @@ class UserController extends Controller {
             $request->setLocale($lang);
 
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
-            else                                 $currentPath = $this->generateUrl('user_index');
+            elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
+
+                if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
+                    $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
+                    $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
+                                                                      'num_rows' => 10,
+                                                                      'country'  => $country,
+                                                                      'option'   => 'assessor_pending'));
+                }else{
+                    $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
+                }
+            }
+            else    $currentPath = $this->generateUrl('user_index');
+
 
             $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
 

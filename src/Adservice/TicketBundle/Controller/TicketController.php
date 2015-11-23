@@ -266,6 +266,14 @@ class TicketController extends Controller {
                         $joins[] = array('e.workshop w ', 'w.country = '.$country);
                     }
                 }
+            }else{
+                 if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
+                {
+                    $joins[0][1] = $joins[0][1].' AND w.country != 0';
+                }
+                else{
+                    $joins[] = array('e.workshop w ', 'w.country != 0');
+                }
             }
         }
 
@@ -727,13 +735,15 @@ class TicketController extends Controller {
             }
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
-            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', array(
-                                                                                            'form'      => $form->createView(),
-                                                                                            'form_name' => $form->getName(),
-                                                                                            'ticket'    => $ticket,
-                                                                                            'systems'   => $systems,
-                                                                                            'form_name' => $form->getName(),
-                                                                                        ));
+            $array = array(
+                            'form'      => $form->createView(),
+                            'form_name' => $form->getName(),
+                            'ticket'    => $ticket,
+                            'systems'   => $systems,
+                            'form_name' => $form->getName(),
+                        );
+            if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
+            else                                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -877,7 +887,6 @@ class TicketController extends Controller {
                 $form = $this->createForm(new EditTicketType(), $ticket);
                 $array['form'] = $form->createView();
             }
-
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
@@ -886,94 +895,103 @@ class TicketController extends Controller {
                     $form->bindRequest($request);
                 }
 
-                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') and $form->isValid())){
+                if(!$security->isGranted('ROLE_ASSESSOR') or ($security->isGranted('ROLE_ASSESSOR') /*and $form->isValid()*/)){
 
                     $formP->bindRequest($request);
                     $formD->bindRequest($request);
 
                     if ($formP->isValid() and $formD->isValid()) {
 
-                    // Controla si se ha subido un fichero erroneo
-                    $file = $document->getFile();
-                    if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
-                    if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
+                        if($security->isGranted('ROLE_ASSESSOR')){
 
-                    if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                     or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+                            $id_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
+                            if($id_subsystem != '0' and ($ticket->getSubsystem() == null or $ticket->getSubsystem()->getId() != $id_subsystem)) {
+                                $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
 
-                        if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                            $str_len = strlen($post->getMessage());
-                            if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                            else { $max_len = 500; }
-                            if ($str_len <= $max_len ) {
-                                //Define Post
-                                $post = UtilController::newEntity($post, $user);
-                                $post->setTicket($ticket);
-                                UtilController::saveEntity($em, $post, $user, false);
-
-                                //Define Document
-                                $document->setPost($post);
-
-                                if ($file != "") {
-                                        $em->persist($document);
-                                }
-
-                                //Se desbloquea el ticket una vez respondido
-                                // if ($ticket->getBlockedBy() != null) {
-                                //     $ticket->setBlockedBy(null);
-
-                                    /*si assessor responde se le asigna y se amrca como respondido, si es el taller se marca como pendiente */
-                                    if ($security->isGranted('ROLE_ASSESSOR')) {
-                                        $ticket->setAssignedTo($user);
-                                        $ticket->setPending(0);
-                                    }else{
-                                        $ticket->setPending(1);
-                                    }
-                                // }
-
-                            UtilController::saveEntity($em, $ticket, $user);
-
-                            $mail = $ticket->getWorkshop()->getEmail1();
-                            $pos = strpos($mail, '@');
-
-                            if ($pos != 0) {
-
-                                // Cambiamos el locale para enviar el mail en el idioma del taller
-                                $locale = $request->getLocale();
-                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                                $request->setLocale($lang->getShortName());
-
-                                /* MAILING */
-                                $mailer = $this->get('cms.mailer');
-                                $mailer->setTo($mail);
-                                $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
-                                $mailer->setFrom('noreply@adserviceticketing.com');
-                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
-                                $mailer->sendMailToSpool();
-
-                                if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
-                                    $mailer->setTo($ticket->getAssignedTo()->getEmail1());
-                                    $mailer->sendMailToSpool();
-                                }
-                                //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
-
-                                // Dejamos el locale tal y como estaba
-                                $request->setLocale($locale);
+                                if(isset($subsystem )) $ticket->setSubsystem($subsystem);
                             }
-                        }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                        }
+                        // Controla si se ha subido un fichero erroneo
+                        $file = $document->getFile();
+                        if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                        if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
+
+                        if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+
+                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                                $str_len = strlen($post->getMessage());
+                                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                                else { $max_len = 500; }
+                                if ($str_len <= $max_len ) {
+                                    //Define Post
+                                    $post = UtilController::newEntity($post, $user);
+                                    $post->setTicket($ticket);
+                                    UtilController::saveEntity($em, $post, $user, false);
+
+                                    //Define Document
+                                    $document->setPost($post);
+
+                                    if ($file != "") {
+                                            $em->persist($document);
+                                    }
+
+                                    //Se desbloquea el ticket una vez respondido
+                                    // if ($ticket->getBlockedBy() != null) {
+                                    //     $ticket->setBlockedBy(null);
+
+                                        /*si assessor responde se le asigna y se amrca como respondido, si es el taller se marca como pendiente */
+                                        if ($security->isGranted('ROLE_ASSESSOR')) {
+                                            $ticket->setAssignedTo($user);
+                                            $ticket->setPending(0);
+                                        }else{
+                                            $ticket->setPending(1);
+                                        }
+                                    // }
+
+                                    UtilController::saveEntity($em, $ticket, $user);
+
+                                    $mail = $ticket->getWorkshop()->getEmail1();
+                                    $pos = strpos($mail, '@');
+
+                                    if ($pos != 0) {
+
+                                        // Cambiamos el locale para enviar el mail en el idioma del taller
+                                        $locale = $request->getLocale();
+                                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                        $request->setLocale($lang->getShortName());
+
+                                        /* MAILING */
+                                        $mailer = $this->get('cms.mailer');
+                                        $mailer->setTo($mail);
+                                        $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                                        $mailer->setFrom('noreply@adserviceticketing.com');
+                                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
+                                        $mailer->sendMailToSpool();
+
+                                        if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
+                                            $mailer->setTo($ticket->getAssignedTo()->getEmail1());
+                                            $mailer->sendMailToSpool();
+                                        }
+                                        //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
+
+                                        // Dejamos el locale tal y como estaba
+                                        $request->setLocale($locale);
+                                    }
+                                } else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                            } else {
+                                // ERROR tamaño
+                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+
+                                return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+                            }
                         } else {
-                            // ERROR tamaño
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+                            // ERROR tipo de fichero
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
 
                             return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
-                         }
-                    } else {
-                        // ERROR tipo de fichero
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
-
-                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
-                    }
+                        }
                     }
                 }
 
@@ -987,9 +1005,12 @@ class TicketController extends Controller {
                                                                                 'version'   => $version )));
             }
 
-            if ($security->isGranted('ROLE_ASSESSOR')) {  $array['form'] = ($form ->createView()); }
-
-            return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
+            if ($security->isGranted('ROLE_ASSESSOR'))
+            {
+                $array['form'] = ($form ->createView());
+                return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
+            }
+            else return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

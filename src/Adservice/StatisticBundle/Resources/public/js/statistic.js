@@ -1,6 +1,41 @@
 
 $(document).ready(function() {
 
+    $("#flt_partner").change(function() {
+
+        var id_partner = $('#flt_partner option:selected').val();
+
+        if (id_partner != undefined) {
+
+            var route  = 'shops_from_partner';
+            var locale = $(document).find("#data_locale").val();
+
+            $.ajax({
+                type        : "POST",
+                url         : Routing.generate(route, {_locale: locale }),
+                data        : {id_partner : id_partner},
+                dataType    : "json",
+                beforeSend: function(){ $("body").css("cursor", "progress"); },
+                complete: function(){ $("body").css("cursor", "default"); },
+                success : function(data) {
+                    // Limpiamos y llenamos el combo con las opciones del json
+                    if (data['error'] != "No hay coincidencias") {
+                        $('#flt_wks_shop').empty();
+                        var lbl_all = $('#lbl_all').val();
+                        $('#flt_wks_shop').append("<option value='0'>"+ lbl_all +"</option>");
+                        $.each(data, function(idx, elm) {
+
+                            $('#flt_wks_shop').append("<option value="+elm.id+">"+elm.shop+"</option>");
+                        });
+                    }
+                },
+                error : function(){
+                    console.log("Error al cargar las tiendas...");
+                }
+            });
+        }
+    });
+
     //Rellena los campos socio, pais y estado del filtro de ticket o taller con la busqueda realizada
     var type     = $(document).find("#type").val();
     var from_y   = $(document).find("#type_from_y"  ).val();

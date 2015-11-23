@@ -26,7 +26,7 @@
             </table>
         </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
-            <select id="flt_partner" class='form-control'>
+            <select id="flt_partner" name="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
                 {% for partner in partners %}
                     <option value="{{ partner.id }}">{{ partner }}</option>
@@ -122,6 +122,7 @@
         <legend>{% trans %} filter_workshop {% endtrans %}</legend>
 
             <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} shop {% endtrans %}</label>
+                <input type="hidden" id="lbl_all" value="{% trans %} all {% endtrans %}">
                 <select id="flt_wks_shop" class='form-control'>
                         <option value="0">{% trans %} all {% endtrans %}</option>
                     {% for shop in shops %}

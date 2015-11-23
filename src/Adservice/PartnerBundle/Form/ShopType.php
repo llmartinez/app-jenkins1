@@ -15,6 +15,7 @@ class ShopType extends AbstractType {
 
         $builder
             ->add('name')
+            ->add('code_shop')
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
@@ -25,8 +26,10 @@ class ShopType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
+            ->add('cif')
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
+            ->add('contact', 'text', array('required' => false))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',

@@ -12,10 +12,11 @@ class PartnerType extends AbstractType {
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('name')
             ->add('code_partner')
+            ->add('cif')
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(
@@ -38,6 +39,8 @@ class PartnerType extends AbstractType {
             ->add('fax', 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
+            ->add('contact', 'text', array('required' => false))
+            ->add('observations', 'textarea', array('required' => false))
         ;
     }
 

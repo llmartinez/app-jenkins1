@@ -1,4 +1,4 @@
-header.welcome: "ADService España"
+header.welcome: "ADService France"
 
 adserviceticketing.com: "www.adserviceticketing.com"
 www.adserviceticketing.com: "www.adserviceticketing.com"
@@ -59,6 +59,7 @@ change_password.correct: "Mot de passe changé avec succès. Un mail contenant l
 change_password.error:   "Mot de passe incorrect. Introduisez correctement le mot de passe actuel."
 error:                   "Une erreur s’est produite"
 error.same_password:	 "Les mots de passes sont différents"
+error.bad_password:	     "Le mot de passe entré doit être d'au moins 8 caractères et contenir des lettres et des chiffres majuscules et minuscules"
 error.length_password:	 "Le mot de passe doit contenir au moins 8 caractères"
 error.old_password:	 	 "Le mot de passe introduit ne correspond pas à l’actuel"
 error.access.IE:		 "Navigateur incompatible"
@@ -84,6 +85,7 @@ Bad credentials: 				"Compte d'utilisateur ou mot de passe incorrect"
 The presented password is invalid.: "Le mot de passe est erroné."
 The presented password cannot be empty.: "Le champs 'mot de passe' ne peut pas être vide."
 username_used:					"Le nom existe déjà ou est incorrect, essayez avec: "
+partner_not_found:				"Il est un partenaire avec le code introduit."
 
 #ENTITY
 role:					 "Rol"
@@ -139,7 +141,10 @@ modified_by:			 "Modifié par"
 modified_at:			 "Modifié en"
 with_password:			 "Avec le mot de passe"
 
+service_country: 		 "Service Pays"
+
 #FIELDS
+find_by:				 ""Recherche
 number:					 "Quantité"
 start:					 "Initiation"
 end: 					 "Fin"
@@ -149,6 +154,7 @@ date.end: 				 "Date finale"
 code:					 "Código"
 _code:					 "Codigo"
 code_partner:			 "Code de Partenaire"
+code_shop:			 	 "Code de la boutique"
 code_workshop:			 "Code d’Atelier"
 code_numeric:			 "Le code que vous avez introduit n’est pas un numéro"
 code_error:				 "Le code que vous avez introduit est incorrect"
@@ -242,6 +248,7 @@ btn.search:			 	 "Chercher"
 btn.open:			 	 "Ouvrir"
 btn.close:			 	 "Fermer"
 btn.delete:			 	 "Supprimer"
+btn.clear:			 	 "Effacer les filtres"
 
 #PLACEHOLDERS
 placeholder.ticket.id:	 "Insérer ID du ticket"
@@ -380,6 +387,7 @@ workshop_observation:	 "Observation de l’atelier"
 workshop.show_details:          "Voir les détails de l’atelier"
 reactivation-request:           "Demander la réactivation de l’Atelier"
 numTickets:				 "Nombre de billets"
+reply_inactive: 		 "Vous ne pouvez pas répondre à ce billet, vous n'êtes pas libéré."
 
 #USER
 user.delete:			 "Effacer Utilisateur"
@@ -527,6 +535,7 @@ popup.delete:				  "Effacer pop-up"
 popup.delete.confirm:		  "Êtes-vous sûr de vouloir effacer cette pop-up?"
 
 #ORDERS
+value:							"Valor"
 values:							"Valeurs"
 workshop_pending:			  	"Dem. Atelier en attente"
 workshop_rejected:				"Dem. Atelier rejetées"
@@ -688,7 +697,7 @@ _mail.textDisclaimer: "DISPOSITIONS LÉGALES. L'information contenue dans ce cou
 lock.list_incidences: 	"Historique des Incidences"
 
 error: "Une erreur s’est produite"
-back:  "Revenir à l’application"
+back_app:  "Revenir à l’application"
 
 termsConditions:	" "
 _termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."

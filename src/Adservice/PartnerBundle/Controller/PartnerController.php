@@ -23,7 +23,7 @@ class PartnerController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none') {
+    public function listAction($page=1, $country='none', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false) {
@@ -31,11 +31,27 @@ class PartnerController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+        if ($term != '0' and $field != '0'){
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+        }else{
+            if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != 'none') $params[] = array('country', ' = '.$country);
+                else                    $params[] = array();
+            }
+            else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
         }
-        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -52,6 +68,8 @@ class PartnerController extends Controller {
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
                                                                                     'country'      => $country,
+                                                                                    'term'         => $term,
+                                                                                    'field'        => $field
                                                                                     ));
     }
     /**
@@ -107,7 +125,7 @@ class PartnerController extends Controller {
                     $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
-                    $newUser->setName          ($partner->getName());
+                    $newUser->setName          ($partner->getContact());
                     $newUser->setSurname       ($this->get('translator')->trans('partner'));
                     $newUser->setActive        ('1');
                     $newUser->setCreatedBy     ($partner->getCreatedBy());

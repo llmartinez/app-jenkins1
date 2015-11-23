@@ -1,0 +1,40 @@
+
+    <legend class="grid-full w25"> {% trans %} edit.ticket.info {% endtrans %} </legend>
+
+    {% if ( is_granted('ROLE_ASSESSOR')) %}
+        <div class="grid-full w70 fr">
+            <p class="fr">
+                <b>{{'created_at'|trans}}:</b> {{ticket.createdat|date("d/m/Y (H:i)")}}
+                {% if ticket.assignedTo != "" %}
+                    <b>{% trans %} ticket.assigned_to {% endtrans %}:</b> {{ ticket.assignedTo }} </a>
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="grid-full w100">
+        <div class="grid-33">
+            <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %}</label>
+            {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+        </div>
+
+        <div class="grid-33">
+            <label for="id_system">{% trans %} system {% endtrans %}</label>
+            <select class="form-control asr_form-control" id="id_system" {# multiple="multiple" #} required>
+                 <option value="0">...</option>
+                {% for system in systems %}
+                    <option value="{{ system.id }}"
+                        {% if ticket.subsystem != null and ticket.subsystem.system.id == system.id %} selected {% endif %}
+                    > {{ system.name | trans }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="grid-33">
+            {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
+                <input type="hidden" id="subsystem_id" value="{{ ticket.subsystem.id }}">
+            {% endif %}
+            <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
+            {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+        </div>
+    </div>

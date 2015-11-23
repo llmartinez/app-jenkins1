@@ -9,6 +9,7 @@
     <div class="col-xs-4 col-md-4 form-group">
         <label for="id_system">{% trans %} system {% endtrans %}</label>
         <select class="form-control" id="id_system" {# multiple="multiple" #} required>
+             <option value="0">...</option>
             {% for system in systems %}
                 <option value="{{ system.id }}"
                     {% if ticket.subsystem != null and ticket.subsystem.system.id == system.id %} selected {% endif %}
