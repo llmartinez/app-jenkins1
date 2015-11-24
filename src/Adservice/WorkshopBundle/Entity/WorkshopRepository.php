@@ -162,4 +162,13 @@ class WorkshopRepository extends EntityRepository
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0][1];
     }
+    
+    public function getNumTicketsByPartnerId($id) {
+        $em = $this->getEntityManager();
+
+        $query = 'SELECT COUNT(t) FROM TicketBundle:Ticket t JOIN t.workshop w JOIN w.partner p WHERE p.id = '.$id;
+        
+        $consulta = $em-> createQuery($query);
+        return $consulta->getResult()[0][1];
+    }
 }
