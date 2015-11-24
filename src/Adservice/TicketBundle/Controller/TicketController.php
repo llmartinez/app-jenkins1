@@ -56,7 +56,10 @@ class TicketController extends Controller {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_partner'  => $code_partner,
                                                                                        'code_workshop' => $code_workshop));
 
+            if(isset($workshop))
             $array = array('page' => 1, 'num_rows' => 10, 'country' => 0, 'option' => 'all', 'workshop_id' => $workshop->getId() );
+            else
+            $array = array('page' => 1, 'num_rows' => 10, 'country' => 0, 'option' => 'all');
         }
             return $this->redirect($this->generateUrl('listTicket', $array ));
     }
@@ -662,6 +665,7 @@ class TicketController extends Controller {
                         'workshop' => $workshop,
                         'form_name' => $form->getName()
                     );
+        // if(isset($subsystem)) { $array[] = 'subsystem' => $subsystem; }
 
         if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:new_ticket_assessor_layout.html.twig', $array);
         else                                        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
@@ -1121,27 +1125,29 @@ class TicketController extends Controller {
                                 $request->setLocale($locale);
                             }
                             //Si es el taller el que cierra, se le envia un mail al asesor asignado
-                            $mail = $ticket->getAssignedTo()->getEmail1();
-                            $pos = strpos($mail, '@');
-                            if ($pos != 0) {
+                            if ($ticket->getAssignedTo() != null) {
+                                $mail = $ticket->getAssignedTo()->getEmail1();
+                                $pos = strpos($mail, '@');
+                                if ($pos != 0) {
 
-                                // Cambiamos el locale para enviar el mail en el idioma del taller
-                                $locale = $request->getLocale();
-                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                                $request->setLocale($lang->getShortName());
+                                    // Cambiamos el locale para enviar el mail en el idioma del taller
+                                    $locale = $request->getLocale();
+                                    $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                    $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                    $request->setLocale($lang->getShortName());
 
-                                /* MAILING */
-                                $mailer = $this->get('cms.mailer');
-                                $mailer->setTo($mail);
-                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-                                $mailer->setFrom('noreply@adserviceticketing.com');
-                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
-                                $mailer->sendMailToSpool();
-                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+                                    /* MAILING */
+                                    $mailer = $this->get('cms.mailer');
+                                    $mailer->setTo($mail);
+                                    $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                                    $mailer->setFrom('noreply@adserviceticketing.com');
+                                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                                    $mailer->sendMailToSpool();
+                                    //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
-                                // Dejamos el locale tal y como estaba
-                                $request->setLocale($locale);
+                                    // Dejamos el locale tal y como estaba
+                                    $request->setLocale($locale);
+                                }
                             }
 
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
@@ -1584,14 +1590,6 @@ class TicketController extends Controller {
         if(isset($model) and $model   != '0') $params[] = array('model',' = '.$model);
         if(isset($version) and $version != '0') $params[] = array('version',' = '.$version);
 
-        // if($year    != '0') $params[] = array('year'," LIKE '%".$year."%' ");
-        // if($motor   != '0') $params[] = array('motor'," LIKE '%".$motor."%' ");
-        // if($kw      != '0') $params[] = array('kw',' = '.$kw);
-        // if($displacement != '0') $params[] = array('displacement'," = '%".$displacement."%' ");
-        // if($vin          != '0') $params[] = array('vin'," = '%".$vin."%' ");
-        // if($plateNumber  != '0') $params[] = array('plateNumber',' = '.$plateNumber);
-
-
         $pagination = new Pagination($page);
 
         // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
@@ -1616,7 +1614,7 @@ class TicketController extends Controller {
                 if( $subsystem == 0) $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
                 else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
 
-                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
                     $w_id = $workshop->getId();
 
                     if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
@@ -1626,7 +1624,7 @@ class TicketController extends Controller {
         }
         else {
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
-            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
                 $w_id = $workshop->getId();
                 if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
                 else $tickets[] = $ticket;
