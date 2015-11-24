@@ -68,8 +68,17 @@ class WorkshopOrderController extends Controller {
         else $partners = array();
 
         $numTickets = 0;
-        if ($partner != 'none') $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
-        else                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
+        
+        if($security->isGranted('ROLE_SUPER_AD')){
+            if ($partner != 'none') 
+                $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
+            elseif ($security->isGranted('ROLE_SUPER_AD'))                   
+                $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
+        }
+        elseif ($security->isGranted('ROLE_AD')){
+            $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerId($user->getPartner()->getId());
+        }
+        
 
 
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
