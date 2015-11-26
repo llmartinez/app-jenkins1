@@ -1,4 +1,4 @@
-header.welcome: "ADService France"
+header.welcome: "Assistance Diag 24"
 
 adserviceticketing.com: "www.adserviceticketing.com"
 www.adserviceticketing.com: "www.adserviceticketing.com"
@@ -560,6 +560,7 @@ page.next:						"Page suivante"
 page.last:						"Dernière page"
 
 #MAIL
+mail.welcome:							"Nouvelle plate-forme Assistance Diag 24!!"
 mail.image:								"http://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"97 267 77 70"
 mail.info.more:							"Plus d'informations:"

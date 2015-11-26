@@ -9,8 +9,11 @@ incidences:
 test_mail:
     pattern:  /mail
     defaults: { _controller: ImportBundle:Import:testMailing }
-    
+
+user_credentials:
+    pattern:  /user-credentials/{type}
+    defaults: { _controller: ImportBundle:Import:sendUserCredentials }
+
 import:
     pattern:  /{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }
-    

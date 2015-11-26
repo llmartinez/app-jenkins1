@@ -758,6 +758,93 @@ class ImportController extends Controller
         return($excel);
     }
 
+    public function sendUserCredentialsAction($type)
+    {
+        $em      = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+
+        // $users = $em->createQuery('SELECT u FROM UserBundle:User u WHERE u.'.$type.' IS NOT NULL' )->getResult();
+        $users[] = $em->getRepository("UserBundle:User")->find(48);
+        $users[] = $em->getRepository("UserBundle:User")->find(66);
+
+       	$break = 1; //50 (2*bucle => 100)
+       	$index = 0;
+
+        foreach ($users as $user) {
+
+	        /*CREAR PASSWORD AUTOMATICAMENTE*/
+	        $password = substr( md5(microtime()), 1, 8);
+
+	        //password nuevo, se codifica con el nuevo salt
+	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+	        $salt = md5(time());
+	        $coded_pass = $encoder->encodePassword($password, $salt);
+	        $user->setPassword($coded_pass);
+	        $user->setSalt($salt);
+			$em->persist($user);
+			$em->flush();
+
+	        $mail = $user->getEmail1();
+	        $pos = strpos($mail, '@');
+	        if ($pos != 0) {
+
+	            // Cambiamos el locale para enviar el mail en el idioma del taller
+	            $locale = $request->getLocale();
+	            $lang_u = $user->getCountry()->getLang();
+	            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+	            $request->setLocale($lang->getShortName());
+
+            	/* MAILING */
+		            $mailerUser = $this->get('cms.mailer');
+		            $mailerUser->setTo($mail);
+		            $mailerUser->setFrom('noreply@adserviceticketing.com');
+
+			    	if($type = 'workshop') {
+			    		$mailerUser->setSubject($this->get('translator')->trans('mail.welcome').$user->getUsername());
+			    		$mailerUser->setBody($this->renderView('UtilBundle:Mailing:welcome_user_mail.html.twig', array('user' => $user, 'password' => $password)));
+			    	}elseif($type = 'partner') {
+			    		// $mailerUser->setSubject($this->get('translator')->trans('mail.welcome').$user->getUsername());
+			    		// $mailerUser->setBody($this->renderView('UtilBundle:Mailing:welcome_user_mail.html.twig', array('user' => $user, 'password' => $password)));
+			    	}
+
+		            $mailerUser->sendMailToSpool();
+
+	            /* MAILING BACKUP */
+		            $mailerUser->setTo('db@adserviceticketing.com');
+
+			    	if($type = 'workshop') {
+			    		$mailerUser->setSubject('Credenciales taller '.$user->getWorkshop()->getCodePartner().' - '.
+			            											   $user->getWorkshop()->getCodeWorkshop().': '.
+			            											   $user->getWorkshop()->getName().' ');
+			    		$mailerUser->setBody($this->renderView('UtilBundle:Mailing:credentials_user_mail.html.twig', array('user' => $user, 'password' => $password)));
+			    	}
+			    	elseif($type = 'partner') {
+			    		// $mailerUser->setSubject('Credenciales taller '.$user->getWorkshop()->getCodePartner().' - '.
+			      //       											   $user->getWorkshop()->getCodeWorkshop().': '.
+			      //       											   $user->getWorkshop()->getName().' ');
+			    		// $mailerUser->setBody($this->renderView('UtilBundle:Mailing:credentials_user_mail.html.twig', array('user' => $user, 'password' => $password)));
+			    	}
+		            $mailerUser->sendMailToSpool();
+
+	            // Dejamos el locale tal y como estaba
+	            $request->setLocale($locale);
+	        }
+
+	        $index++;
+	        // Si se llega al máximo de envios simultaneos se hará un delay de 2min
+	        if ($break == $index) {
+	        	sleep(120);
+	        	$index = 0;
+	        }
+	    }
+
+    	$session = $this->get('session');
+		$session->set('msg' , 'Credenciales de talleres generados correctamente!');
+
+		return $this->render('ImportBundle:Import:import.html.twig');
+
+    }
+
     public function testMailingAction()
     {
         $em      = $this->getDoctrine()->getEntityManager();

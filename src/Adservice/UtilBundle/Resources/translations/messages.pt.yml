@@ -560,6 +560,7 @@ page.next:						"Página seguinte"
 page.last:						"Última página"
 
 #MAIL
+mail.welcome:							"Nova plataforma AD Service!!"
 mail.image:								"http://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"97 267 77 70"
 mail.info.more:							"Mais informação:"
