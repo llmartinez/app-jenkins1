@@ -481,8 +481,35 @@ class WorkshopController extends Controller {
                                                                                              'form_name' => $form->getName(),
                                                                                              'form'      => $form->createView()));
     }
+    
+    public function insertCifAction($workshop_id, $country){
+        $request  = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $em = $this->getDoctrine()->getEntityManager();
+                       
+            $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneById($workshop_id);
+            $CIF = $request->request->get('new_car_form_CIF');
+            $tmp_workshop = $em->getRepository("WorkshopBundle:Workshop")->findByCif($CIF);
+            if(count($tmp_workshop)>0){
+                //$flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
+                $flash = $this->get('translator')->trans('workshop.cif_error');
+                $this->get('session')->setFlash('error', $flash);
+                return $this->render('TicketBundle:Workshop:insert_cif.html.twig', array('workshop_id'  => $workshop_id, 'country' => $country));
+            }else{
+                $workshop->setCIF($CIF);
+            $this->saveWorkshop($em, $workshop);
+            
+            $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
+            }            
+            return $this->redirect($currentPath);
+            
+        }
+        return $this->render('TicketBundle:Workshop:insert_cif.html.twig', array('workshop_id'  => $workshop_id, 'country' => $country));
+    }
 
-     /**
+    /**
      * Genera un historial de cambios del taller
      * @return WorkshopHistory
      */
