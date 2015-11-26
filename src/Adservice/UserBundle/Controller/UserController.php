@@ -53,7 +53,6 @@ class UserController extends Controller {
 
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
-
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
             elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
 
@@ -63,6 +62,19 @@ class UserController extends Controller {
                                                                       'num_rows' => 10,
                                                                       'country'  => $country,
                                                                       'option'   => 'assessor_pending'));
+                }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+                    $user=$country = $this->get('security.context')->getToken()->getUser();
+                    if(!empty($user->getWorkshop())){
+                        if(empty($user->getWorkshop()->getCIF()) || $user->getWorkshop()->getCIF() == "0" ){
+                            $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
+                                                                                  'country'  => $country));
+                        }
+                        else{                            
+                            $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
+                        }
+                    }
                 }else{
                     $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
                     $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
@@ -70,11 +82,11 @@ class UserController extends Controller {
                                                                             'country'  => $country));
                 }
             }
+            
             else    $currentPath = $this->generateUrl('user_index');
 
-
+            
             $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
-
             $_SESSION['lang'] = $lang;
 
             return $this->redirect($currentPath);
