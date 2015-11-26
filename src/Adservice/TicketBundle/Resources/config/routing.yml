@@ -38,6 +38,10 @@ findAssessorTicketByBMV:
     options:
         expose: true
 
+insert_cif:
+    pattern:  /insertcif/{workshop_id}
+    defaults: { _controller: WorkshopBundle:Workshop:insertCif, workshop_id: 0 , country: '0'}
+    
 # listTicketFiltered:
 #     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
 #     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
