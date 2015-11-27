@@ -144,7 +144,7 @@ with_password:			 "Avec le mot de passe"
 service_country: 		 "Service Pays"
 
 #FIELDS
-find_by:				 ""Recherche
+find_by:				 "Recherche"
 number:					 "Quantité"
 start:					 "Initiation"
 end: 					 "Fin"
@@ -388,6 +388,7 @@ workshop.show_details:          "Voir les détails de l’atelier"
 workshop.insert_cif:    "insérer CIF"
 workshop.cif:           "Pour activer votre profil entrer le numéro de CIF de son atelier"
 workshop.cif_error:     "Déjà il ya un atelier avec cette TVA"
+workshop.cif_error2:     "Le CIF ne peut pas être 0 ou vide"
 reactivation-request:           "Demander la réactivation de l’Atelier"
 numTickets:				 "Nombre de billets"
 reply_inactive: 		 "Vous ne pouvez pas répondre à ce billet, vous n'êtes pas libéré."

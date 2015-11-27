@@ -284,6 +284,7 @@ class WorkshopController extends Controller {
 
         if (!$security->isGranted('ROLE_SUPER_ADMIN')) $country = $security->getToken()->getUser()->getCountry()->getId();
         else $country = null;
+        //var_dump($country);die;
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
 
@@ -327,7 +328,7 @@ class WorkshopController extends Controller {
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
-            $_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['id_country'] = ' = '.$workshop->getCountry()->getId();
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -419,10 +420,11 @@ class WorkshopController extends Controller {
         }
 
         $country = $workshop->getCountry()->getId();
-
+        
         $typologies = TypologyRepository::findTypologiesList($em, $country);
         $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
         $workshop_machines  = $workshop->getDiagnosisMachines();
+       
         // if($workshop_machines[0] and !isset($id_machine)){
         //     $id_machine = $workshop_machines[0];
         //     $id_machine = $id_machine->getId();
@@ -490,6 +492,11 @@ class WorkshopController extends Controller {
             $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneById($workshop_id);
             $CIF = $request->request->get('new_car_form_CIF');
             $tmp_workshop = $em->getRepository("WorkshopBundle:Workshop")->findByCif($CIF);
+            if($CIF == 0 || empty($CIF)){
+                $flash = $this->get('translator')->trans('workshop.cif_error2');
+                $this->get('session')->setFlash('error', $flash);
+                return $this->render('TicketBundle:Workshop:insert_cif.html.twig', array('workshop_id'  => $workshop_id, 'country' => $country));
+            }
             if(count($tmp_workshop)>0){
                 //$flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
                 $flash = $this->get('translator')->trans('workshop.cif_error');
