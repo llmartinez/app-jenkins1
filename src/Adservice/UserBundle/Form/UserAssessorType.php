@@ -29,7 +29,7 @@ class UserAssessorType extends AbstractType {
             //CONTACT
             ->add('country_service', 'entity', array(
                   'required' => true,
-                  'class' => 'Adservice\UtilBundle\Entity\Country',
+                  'class' => 'Adservice\UtilBundle\Entity\CountryService',
                   'property' => 'country',
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
