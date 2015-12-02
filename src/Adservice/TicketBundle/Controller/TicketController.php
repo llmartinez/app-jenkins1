@@ -146,9 +146,12 @@ class TicketController extends Controller {
         elseif ($option == 'assessor_pending')
         {
             $params[] = array('status', ' = '.$open->getId());
-            $params[] = array('id'   , ' != 0 AND (e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().'))');
-            $params[] = array('pending'   , '= 1');
+
+            $country_service = $security->getToken()->getUser()->getCountryService()->getId();
+            if($country_service == '7') $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
+            else                        $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
         }
+
         elseif ($option == 'assessor_answered')
         {
             $params[] = array('status', ' = '.$open->getId());
@@ -232,41 +235,49 @@ class TicketController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
             {
-                if ($country != 0) $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
-                else               $joins[0][1] = $joins[0][1].' AND w.country != 0';
+                if     ($country == '7') $joins[0][1] = $joins[0][1].' AND w.country IN (5,6) ';
+                elseif ($country != 0)   $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                else                     $joins[0][1] = $joins[0][1].' AND w.country != 0';
             }
             else{
-                if ($country != 0) $joins[] = array('e.workshop w ', 'w.country = '.$country);
-                else               $joins[] = array('e.workshop w ', 'w.country != 0');
+                if     ($country == '7') $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                elseif ($country != 0)   $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                else                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }elseif($security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
             $country = $security->getToken()->getUser()->getCountry()->getId();
             if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
             {
-                $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                if($country == '7') $joins[0][1] = $joins[0][1].' AND w.country IN (5,6) ';
+                else                $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
             }
             else{
-                $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                if($country == '7') $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                else                $joins[] = array('e.workshop w ', 'w.country = '.$country);
             }
         }else{
             if($country != 'none'){
                 if($country != 0) {
                     if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
                     {
-                        $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                        if($country == '7') $joins[0][1] = $joins[0][1].' AND w.country IN (5,6) ';
+                        else                $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
                     }
                     else{
-                        $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                        if($country == '7') $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                        else                $joins[] = array('e.workshop w ', 'w.country = '.$country);
                     }
                 }else{
                     if($security->isGranted('ROLE_ASSESSOR')) $country = $security->getToken()->getUser()->getCountryService()->getId();
                     else $country = $security->getToken()->getUser()->getCountry()->getId();
                      if(isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ')
                     {
-                        $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
+                        if($country == '7') $joins[0][1] = $joins[0][1].' AND w.country IN (5,6) ';
+                        else                $joins[0][1] = $joins[0][1].' AND w.country = '.$country;
                     }
                     else{
-                        $joins[] = array('e.workshop w ', 'w.country = '.$country);
+                        if($country == '7') $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                        else                $joins[] = array('e.workshop w ', 'w.country = '.$country);
                     }
                 }
             }else{
@@ -381,7 +392,9 @@ class TicketController extends Controller {
         $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands    = $b_query->getResult();
         $systems   = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-        $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+             $countries = $em->getRepository('UtilBundle:CountryService')->findAll();
+        else $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $t_inactive = array();
 
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $workshops[0]->getId() ));

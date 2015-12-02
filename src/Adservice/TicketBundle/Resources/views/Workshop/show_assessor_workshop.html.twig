@@ -60,6 +60,7 @@
 
 		{# LOCATION #}
 		<div class="grid-full w25" {% if workshop.region != "" %}title="{{workshop.region}}" alt="{{workshop.region}}"{% endif %}>
+			{% if workshop.country      != "" %}  <input type="hidden" id="id_country" value="{{workshop.country.id}}">{% endif %}
 			{% if workshop.region       != "" %}  <img class='img_icon' src='{{ asset('bundles/util/images/icon/location.png') }}'>{% endif %}
 			{% if workshop.city         != "" %}  {{ workshop.city|length > 30 ? workshop.city|slice(0, 30) ~ '...' : workshop.city  }}{% endif %}
 			{% if workshop.postalCode   != "" %}  {% if workshop.postalCode|length < 5 %}0{% endif %}{{ workshop.postalCode }}{% endif %}
