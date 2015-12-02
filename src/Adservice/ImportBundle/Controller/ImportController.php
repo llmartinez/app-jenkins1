@@ -1051,6 +1051,10 @@ class ImportController extends Controller
 				$this_array['Codigo_Taller'] = $user->getWorkshop()->getCodeWorkshop();
 				$this_array['Nombre'] 		 = $user->getWorkshop()->getName();
 			}
+			elseif($type == 'country_service') //ASESOR
+			{
+				$this_array['Nombre'] 		 = $user->getName();
+			}
 
 			$array[] = $this_array;
 	    }
@@ -1098,12 +1102,13 @@ class ImportController extends Controller
         //Creación de cabecera
         if($type == 'partner')      $excel ='Codigo Socio;Socio;Usuario;Password;Email;';
     	elseif($type == 'workshop') $excel ='Codigo Socio;Codigo Taller;Taller;Usuario;Password;Email;';
+    	elseif($type == 'country_service') $excel ='Asesor;Usuario;Password;Email;';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($array as $row) {
-            $excel.=$row['Codigo_Socio'].';';
+            if(isset($row['Codigo_Socio'])) $excel.=$row['Codigo_Socio'].';';
             if(isset($row['Codigo_Taller'])) $excel.=$row['Codigo_Taller'].';';
 
 	        // Reemplazar caracteres especiales
