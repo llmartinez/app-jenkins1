@@ -564,7 +564,7 @@ page.next:						"Next page"
 page.last:						"Last page"
 
 #MAIL
-mail.welcome:							"Welcome to the platform Phone Eina!!"
+mail.welcome:							"Welcome to the Phone Eina platform!!"
 mail.image:								"http://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"610 40 09 16"
 mail.info.more:							"More info:"
