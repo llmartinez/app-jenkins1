@@ -728,12 +728,12 @@ class StatisticController extends Controller {
                 $excel.=$system.'- ; - ;';
             }
 
-            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
             $excel.=$description.';';
 
-            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
@@ -785,10 +785,14 @@ class StatisticController extends Controller {
 
             $excel.=$row->getCodeWorkshop().';';
 
-            $buscar=array(';', chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $name=str_ireplace($buscar,$reemplazar,$row->getName());
-            $excel.=$name.';';
+
+            // Problema con caracteres especiales
+            $buscar=array("ª");
+            $reemplazar=array("a");
+            $name=str_ireplace($buscar,$reemplazar,$name);
 
             $excel.=$partners[$row->getCodePartner()].';';
             $excel.=$row->getShop().';';
@@ -838,7 +842,7 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getCodePartner().';';
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
 
-            $buscar=array(';', chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $name=str_ireplace($buscar,$reemplazar,$row->getWorkshop()->getName());
             $excel.=$name.';';
@@ -846,14 +850,14 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getPartner().';';
             $excel.=$row->getId().';';
 
-            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
             $excel.=$description.';';
 
             $excel.=$row->getStatus().';';
 
-            $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
@@ -884,7 +888,7 @@ class StatisticController extends Controller {
                 {
                     if($firstKey == $key) $excel.="\n";
 
-                    $buscar=array(',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
                     $reemplazar=array("", "", "", "");
                     $text=str_ireplace($buscar,$reemplazar,$value);
                     $excel.=$text.';';
@@ -907,7 +911,7 @@ class StatisticController extends Controller {
             foreach ($res as $key => $value)
             {
                 if($key == $date) $excel.="\n";
-                $buscar=array(',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
                 $reemplazar=array("", "", "", "");
                 $text=str_ireplace($buscar,$reemplazar,$value);
                 $excel.=$text.';';

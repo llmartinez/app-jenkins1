@@ -258,7 +258,9 @@ spain: 					 "Espanha"
 andorra:				 "Andorra"
 france:					 "França"
 portugal:				 "Portugal"
-uk:				 		 "Reino Unido"
+ireland:				 "Irlanda"
+england:				 "Inglaterra"
+british_isles:	 		 "Ilhas britânicas"
 
 #LANGUAGE
 english:				 "Inglês"
@@ -563,6 +565,7 @@ page.next:						"Página seguinte"
 page.last:						"Última página"
 
 #MAIL
+mail.welcome:							"Bem-vindo à plataforma AD Service!!"
 mail.image:								"http://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"97 267 77 70"
 mail.info.more:							"Mais informação:"

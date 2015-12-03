@@ -384,14 +384,17 @@ class AjaxController extends Controller
 
         $id_model     = $petition->request->get('id_model');
         $id_subsystem = $petition->request->get('id_subsystem');
+        $id_country  = $petition->request->get('id_country');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
 
-        if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
+        if (sizeOf($id_model) == 1 and $id_model != ""
+            and sizeOf($id_subsystem) == 1 and $id_subsystem != ""
+            and sizeOf($id_country) == 1 and $id_country != "") {
             if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
             if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country);
 
             if(count($tickets) > 0) {
                 foreach ($tickets as $ticket) {

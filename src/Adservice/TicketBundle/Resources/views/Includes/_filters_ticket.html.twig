@@ -7,7 +7,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN')%}
                 <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
             {% elseif workshop.country == app.security.getToken().getUser().getCountry() %}
-                <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+                <a class="btn btn-primary fr asr_btn" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
             {% endif %}
 
         {% else %}
@@ -16,7 +16,7 @@
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
     {% else  %}
 
-        <form action="{{ path('findTicketById') }}" id="findTicketById" class="form" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('findTicketById') }}" id="findTicketById" class="form grid-33" role="form" method="post" enctype="multipart/form-data">
 
             <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p>
             <div class="col-xs-8 col-md-8 form-group pdl0">
@@ -30,11 +30,11 @@
 
         <br>
 
-        <div class="col-xs-12 col-md-12 form-group pdl0">{% trans %} ticket.history.check {% endtrans %}:</div>
     {% endif %}
     {###  HISTORICO  ###}
     {% if is_granted('ROLE_ASSESSOR') %}
-        <div class="col-xs-12 col-md-12 form-group pdl0">
+        <p>{% trans %} ticket.history.check {% endtrans %}:</p>
+        <div class="grid-33">
         {% if workshop.id is defined and workshop.id != "" %}
             <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
         {% else %}

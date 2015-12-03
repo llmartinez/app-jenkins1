@@ -98,7 +98,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var string $country_service
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\CountryService")
      */
     private $country_service;
 
@@ -253,7 +253,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $country_service
      */
-    public function setCountryService(\Adservice\UtilBundle\Entity\Country $country_service) {
+    public function setCountryService(\Adservice\UtilBundle\Entity\CountryService $country_service) {
         $this->country_service = $country_service;
     }
 

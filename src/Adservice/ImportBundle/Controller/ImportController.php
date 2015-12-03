@@ -1011,4 +1011,121 @@ class ImportController extends Controller
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
+
+    public function sendUserCredentialsAction($type)
+    {
+        $em      = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+
+        $users = $em->createQuery('SELECT u FROM UserBundle:User u WHERE u.'.$type.' IS NOT NULL' )->getResult();
+        $array = array();
+
+        foreach ($users as $user) {
+
+	        /*CREAR PASSWORD AUTOMATICAMENTE*/
+	        $password = substr( md5(microtime()), 1, 8);
+	        // Los passwords que acaban en 'e' y 3 numeros (e051) se malinterpretan por el csv
+	        $password = str_replace('e', 'd', $password);
+
+	        //password nuevo, se codifica con el nuevo salt
+	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+	        $salt = md5(time());
+	        $coded_pass = $encoder->encodePassword($password, $salt);
+	        $user->setPassword($coded_pass);
+	        $user->setSalt($salt);
+			$em->persist($user);
+			$em->flush();
+
+			$this_array = array('Usuario' 		=> $user->getUsername(),
+							 	'Contraseña' 	=> $password,
+							 	'Email' 		=> $user->getEmail1(),
+							   );
+			if($type == 'partner')
+			{
+				$this_array['Codigo_Socio']  = $user->getPartner()->getCodePartner();
+			 	$this_array['Nombre'] 		 = $user->getPartner()->getName();
+			}
+			elseif($type == 'workshop')
+			{
+				$this_array['Codigo_Socio']  = $user->getWorkshop()->getCodePartner();
+				$this_array['Codigo_Taller'] = $user->getWorkshop()->getCodeWorkshop();
+				$this_array['Nombre'] 		 = $user->getWorkshop()->getName();
+			}
+			elseif($type == 'country_service') //ASESOR
+			{
+				$this_array['Nombre'] 		 = $user->getName();
+			}
+
+			$array[] = $this_array;
+	    }
+		if(sizeof($users) != 0) {
+
+    		$session = $this->get('session');
+
+			// Generarando excel usuarios
+			$response = $this->doExcelCredentialsAction($type, $array);
+			$session->set('response' ,	$response);
+
+ 			if(isset($response)) {
+ 				return $response;
+			}
+		}
+
+		$session->set('msg' , 'Credenciales de talleres generados correctamente!');
+
+		return $this->render('ImportBundle:Import:import.html.twig');
+
+    }
+
+    private function doExcelCredentialsAction($type, $array) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+        $response->headers->set('Pragma', 'public');
+        $date    = new \DateTime();
+        $response->setLastModified($date);
+
+        $response->headers->set('Content-Disposition', 'attachment;filename="credenciales_'.date("d-m-Y").'.csv"');
+        $excel   = $this->createExcelCredentials($type, $array);
+
+        $response->setContent($excel);
+        return $response;
+    }
+
+    public function createExcelCredentials($type, $array){
+        //Creación de cabecera
+        if($type == 'partner')      $excel ='Codigo Socio;Socio;Usuario;Password;Email;';
+    	elseif($type == 'workshop') $excel ='Codigo Socio;Codigo Taller;Taller;Usuario;Password;Email;';
+    	elseif($type == 'country_service') $excel ='Asesor;Usuario;Password;Email;';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($array as $row) {
+            if(isset($row['Codigo_Socio'])) $excel.=$row['Codigo_Socio'].';';
+            if(isset($row['Codigo_Taller'])) $excel.=$row['Codigo_Taller'].';';
+
+	        // Reemplazar caracteres especiales
+	        $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+	        $reemplazar=array("");
+	        $name = str_ireplace($buscar,$reemplazar,$row['Nombre']);
+        	$name = str_replace(',', '.', $name);
+	        $name = UtilController::sinAcentos($name);
+            $excel.=$name.';';
+
+            $excel.=$row['Usuario'].';';
+            $excel.=$row['Contraseña'].';';
+            $excel.=$row['Email'].';';
+            $excel.="\n";
+
+        }
+
+        return($excel);
+    }
 }
