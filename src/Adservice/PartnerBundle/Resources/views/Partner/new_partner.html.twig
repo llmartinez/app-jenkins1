@@ -19,7 +19,7 @@
                 <label>{% trans %} code_partner {% endtrans %} *</label> {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 1, 'value': partner.codePartner } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} cif         {% endtrans %}</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{% trans %} cif          {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             <div class="col-xs-4 col-md-4 form-group">
                 {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
