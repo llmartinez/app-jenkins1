@@ -612,6 +612,7 @@ function get_id_from_code_partner(code){
             else{
                 alert($('#partner_not_found').val());
             }
+            populate_shop();
         },
         error : function(){
             console.log("Error al cargar id desde código...");

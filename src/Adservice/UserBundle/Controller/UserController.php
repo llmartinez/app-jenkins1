@@ -64,12 +64,12 @@ class UserController extends Controller {
                                                                       'option'   => 'assessor_pending'));
                 }elseif($this->get('security.context')->isGranted('ROLE_USER')){
                     $user=$country = $this->get('security.context')->getToken()->getUser();
-                    if(!empty($user->getWorkshop())){
-                        if(empty($user->getWorkshop()->getCIF()) || $user->getWorkshop()->getCIF() == "0" ){
+                    if($user->getWorkshop() != null){
+                        if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
                             $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
                                                                                   'country'  => $country));
                         }
-                        else{                            
+                        else{
                             $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
                                                                             'num_rows' => 10,
                                                                             'country'  => $country));
@@ -82,10 +82,10 @@ class UserController extends Controller {
                                                                             'country'  => $country));
                 }
             }
-            
+
             else    $currentPath = $this->generateUrl('user_index');
 
-            
+
             $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
             $_SESSION['lang'] = $lang;
 
