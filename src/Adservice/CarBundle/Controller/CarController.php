@@ -40,28 +40,32 @@ class CarController extends Controller {
                     $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
                     $id_model = $request->request->get('new_car_form_model');
                     $model = $em->getRepository('CarBundle:Model')->find($id_model);
-
-                    $car->setBrand($brand);
-                    $car->setModel($model);
-
-                    //SI NO HA ESCOGIDO VERSION DE DEJA NULL
-                    $id_version = $request->request->get('new_car_form_version');
-                    if (isset($id_version)){
-                        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                    if(empty($model)){
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                        
                     }
-                    else{
-                        $id_version = null;
-                    }
-                    if (isset($version)){
-                        $car->setVersion($version);
-                    }
-                    else{
-                        $car->setVersion(null);
-                    }
-                    UtilController::saveEntity($em, $car, $user);
+                    else {
+                        $car->setBrand($brand);
+                        $car->setModel($model);
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                        //SI NO HA ESCOGIDO VERSION DE DEJA NULL
+                        $id_version = $request->request->get('new_car_form_version');
+                        if (isset($id_version)){
+                            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                        }
+                        else{
+                            $id_version = null;
+                        }
+                        if (isset($version)){
+                            $car->setVersion($version);
+                        }
+                        else{
+                            $car->setVersion(null);
+                        }
+                        UtilController::saveEntity($em, $car, $user);
 
+                        return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                    }
                 // } else { $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente'); }
 
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
