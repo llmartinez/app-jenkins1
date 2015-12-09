@@ -268,7 +268,7 @@ function fill_version(version) {
             var flt_motor = $('#flt_motor').val();
             if(flt_motor == undefined || flt_motor == '' || flt_motor == '0') $('#new_car_form_motor').val('');
 
-            $('#new_car_form_kw').val('');
+            $('#new_car_form_kW').val('');
             $('#new_car_form_displacement').val('');
 
             if (data['error'] != "No hay coincidencias") {
@@ -338,7 +338,7 @@ function fill_car_data() {
 
                     $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
                     $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
-                    $('form[id=contact]').find('#new_car_form_kw'          ).val(elm.kw     );
+                    $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                     $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                     var dis_url = $( "#dis-url" ).val();
                     var vts_url = $( "#vts-url" ).val();
