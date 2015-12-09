@@ -9,7 +9,7 @@
 
     <div class="grid-full w100">
         <div class="grid w15">
-            <label class="w100" >    {% trans %} code  {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
+            <label class="w100">    {% trans %} code  {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
             <input type="text" id="w_idpartner" name="w_idpartner" class="w50 fl form-control asr_form-control" placeholder="{% trans %} partner  {% endtrans %}"
                 {% if workshop.id != "" %}value="{{workshop.partner.codepartner}}"
                 {% elseif codepartner is defined %}value="{{codepartner}}"
@@ -20,7 +20,7 @@
                 {% endif %}>
         </div>
         <div class="grid w25">
-            <label>    {% trans %} workshop_name  {% endtrans %}</label>
+            <label class="lbl_lgray">    {% trans %} workshop_name  {% endtrans %}</label>
             <input type="text" id="w_name"      name="w_name"      class="form-control asr_form-control" placeholder="{% trans %} name     {% endtrans %}"
                 {% if workshop.id != "" %}value="{{workshop.name}}"{% endif %} disabled>
         </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="grid w15">
 
-            <label>{% trans %} contact {% endtrans %}: </label>
+            <label class="lbl_lgray">{% trans %} contact {% endtrans %}: </label>
             <input type="text" class="form-control asr_form-control" placeholder="{% trans %} contact {% endtrans %}" {% if workshop.id != "" %}value="{{workshop.contact}}"{% endif %} disabled>
 
             <button type="submit" class="btn btn-primary fl" id="btn_check" name="btn_search" style="display: none;">
