@@ -777,7 +777,6 @@ fieldset[disabled] .asr_form-control {
 .w90  { width:  90%!important; }
 .w95  { width:  95%!important; }
 .w100 { width: 100%!important; }
-
 .grid-33  {
     width:  30%!important;
     margin-right: 3.3%;
@@ -791,4 +790,8 @@ fieldset[disabled] .asr_form-control {
 .grid-full {
     float: left;
     margin-bottom: 10px;
+}
+
+.lbl_lgray {
+    color: silver;
 }
