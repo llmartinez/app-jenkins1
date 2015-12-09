@@ -93,23 +93,27 @@ class TicketController extends Controller {
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request);
+                if(!empty($workshops)){
+                    if ($workshops[0]->getActive() == 0) {
+                        $error = $this->get('translator')->trans('workshop_inactive');
+                        $this->get('session')->setFlash('error', '¡Error! '.$error);
+                    }
 
-                if ($workshops[0]->getActive() == 0) {
+                    if(isset($workshops[0]) and $workshops[0]->getId() != "")
+                    {
+                        $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
+                        $option  = $workshops[0]->getId();
+                    }
+                    elseif(isset($workshops['error']))
+                    {
+                        $error = $this->get('translator')->trans('workshop_inactive');
+                        $this->get('session')->setFlash('error', '¡Error! '.$error);
+                    }
+                    else{ $joins[] = array(); }
+                }else {
                     $error = $this->get('translator')->trans('workshop_inactive');
                     $this->get('session')->setFlash('error', '¡Error! '.$error);
                 }
-
-                if(isset($workshops[0]) and $workshops[0]->getId() != "")
-                {
-                    $joins[] = array('e.workshop w ', 'w.code_workshop = '.$workshops[0]->getCodeWorkshop()." AND w.partner = ".$workshops[0]->getPartner()->getid()." ");
-                    $option  = $workshops[0]->getId();
-                }
-                elseif(isset($workshops['error']))
-                {
-                    $error = $this->get('translator')->trans('workshop_inactive');
-                    $this->get('session')->setFlash('error', '¡Error! '.$error);
-                }
-                else{ $joins[] = array(); }
             }
             elseif (!$security->isGranted('ROLE_ASSESSOR'))
             {

@@ -106,7 +106,6 @@ class UserController extends Controller {
 
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
         return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
     }
 
