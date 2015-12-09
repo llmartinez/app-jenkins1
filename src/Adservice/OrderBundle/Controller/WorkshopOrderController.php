@@ -64,7 +64,7 @@ class WorkshopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()));
+        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()),array('name'=>'ASC'));
         else $partners = array();
 
         $numTickets = 0;

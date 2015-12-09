@@ -58,7 +58,7 @@ class ShopOrderController extends Controller {
 
         if($security->isGranted('ROLE_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country);
+            $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
         }
         else $partners = array();
 
