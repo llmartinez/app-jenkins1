@@ -1604,7 +1604,7 @@ class TicketController extends Controller {
         $version = $request->request->get('new_car_form_version');
         $year  = $request->get('new_car_form_year');
         $motor = $request->get('new_car_form_motor');
-        $kw = $request->request->get('new_car_form_kw');
+        $kw = $request->request->get('new_car_form_kW');
         $importance = $request->request->get('new_car_form_importance');
         $system = $request->request->get('id_system');
         $subsystem = $request->request->get('new_car_form_subsystem');

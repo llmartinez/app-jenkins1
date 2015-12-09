@@ -227,7 +227,7 @@ function search_by_bmv() {
         $('#new_car_form_importance').append('<option value="'+id_importance+'" selected>'+importance+'</option>');
         $('#new_car_form_year').val(year);
         $('#new_car_form_motor').val(motor);
-        $('#new_car_form_kw').val(kw);
+        $('#new_car_form_kW').val(kw);
         $('#new_car_form_displacement').val(displacement);
         $('#new_car_form_vin').val(vin);
         $('#new_car_form_plateNumber').val(plateNumber);
