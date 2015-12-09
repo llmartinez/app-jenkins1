@@ -38,7 +38,7 @@
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_year">{% trans %} year {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_year">{% trans %} year {% endtrans %}</label>
                 <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 <input type="text" id="new_car_form_year" name="new_car_form_year" class="form-control asr_form-control"
                     {% if year is defined %}value="{{year}}"{% endif %}>
@@ -46,7 +46,8 @@
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
+
+                <label class="lbl_lgray" for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
                 <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 <input type="text" id="new_car_form_motor" name="new_car_form_motor" class="form-control asr_form-control"
                     {% if motor is defined %}value="{{motor}}"{% endif %}>
@@ -54,7 +55,7 @@
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_kw">{% trans %} kw {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_kw">{% trans %} kw {% endtrans %}</label>
                 <input type="text" id="new_car_form_kw" name="new_car_form_kw" class="form-control asr_form-control"
                     {% if kw is defined %}value="{{kw}}"{% endif %}>
                 </input>
@@ -64,28 +65,28 @@
         <div class="grid-full w100">
 
             <div class="grid w10">
-                <label for="new_car_form_displacement">{% trans %} displacement {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_displacement">{% trans %} displacement {% endtrans %}</label>
                 <input type="text" id="new_car_form_displacement" name="new_car_form_displacement" class="form-control asr_form-control"
                     {% if displacement is defined %}value="{{displacement}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_vin">{% trans %} vin {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_vin">{% trans %} vin {% endtrans %}</label>
                 <input type="text" id="new_car_form_vin" name="new_car_form_vin" class="form-control asr_form-control"
                     {% if vin is defined %}value="{{vin}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
                 <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
                     {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w15">
-                <label for="new_car_form_importance">{% trans %} importance {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_importance">{% trans %} importance {% endtrans %}</label>
                 <select id="new_car_form_importance" name="new_car_form_importance" class="form-control asr_form-control" >
                     <option value="0"></option>
                     {% for _importance in importances %}
@@ -95,7 +96,7 @@
             </div>
 
             <div class="grid w15">
-                <label for="id_system">{% trans %} system {% endtrans %}</label>
+                <label class="lbl_lgray" for="id_system">{% trans %} system {% endtrans %}</label>
                 <select id="id_system" name="id_system" class="form-control asr_form-control" >
                     <option value="0"></option>
                     {% for _system in systems %}
