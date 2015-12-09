@@ -13,7 +13,7 @@ list_orders:
 ##############################
 shopOrder_listShops:
     pattern: /shop/listShops/{page}/{partner}
-    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none', term: 0, field: 0 }
+    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none' }
     options:
         expose: true
 
