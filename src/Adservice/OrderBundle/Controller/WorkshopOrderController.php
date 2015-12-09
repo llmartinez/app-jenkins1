@@ -38,8 +38,8 @@ class WorkshopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-
         $em = $this->getDoctrine()->getEntityManager();
+        $params   = array();
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
@@ -55,10 +55,8 @@ class WorkshopOrderController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
-        else{
             if($security->isGranted('ROLE_SUPER_AD')) {
-                if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
-                else                    $params   = array();
+                if ($partner != '0') $params[] = array('partner', ' = '.$partner);
                 $params[] = array('country', ' = '.$user->getCountry()->getId());
             }
             else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
@@ -68,9 +66,8 @@ class WorkshopOrderController extends Controller {
                 elseif ($status == 'deactive') $params[] = array('active', ' = 0');
                 elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
             }
-        }
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-
+        
         $pagination = new Pagination($page);
 
         $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination);
@@ -85,7 +82,7 @@ class WorkshopOrderController extends Controller {
         $numTickets = 0;
         
         if($security->isGranted('ROLE_SUPER_AD')){
-            if ($partner != 'none') 
+            if ($partner != '0') 
                 $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
             elseif ($security->isGranted('ROLE_SUPER_AD'))                   
                 $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
@@ -93,9 +90,6 @@ class WorkshopOrderController extends Controller {
         elseif ($security->isGranted('ROLE_AD')){
             $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerId($user->getPartner()->getId());
         }
-        
-
-        
                 
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
                                                                                            'numTickets' => $numTickets,

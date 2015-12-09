@@ -101,9 +101,11 @@
            if(field == null) field = '0';
            var country = $('#flt_country').val();
            if(country == null) country = '0';
+           var partner = $('#flt_partner_w').val();
+           if(partner == null) partner = '0';
 
            var locale = $(document).find("#data_locale").val();
-           var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: '0', w_id: '0', country: country, partner: '0', status: '0', term: term, field: field });
+           var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: '0', w_id: '0', country: country, partner: partner, status: '0', term: term, field: field });
 
            window.open(url, "_self");
        });

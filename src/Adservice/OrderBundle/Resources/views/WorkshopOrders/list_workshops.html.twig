@@ -2,6 +2,7 @@
 
 {% block body %}
 
+    <input type="hidden" id="route" value="workshopOrder_listWorkshops">
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
@@ -17,7 +18,7 @@
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
         <select id="flt_partner_w" class='form-control'>
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="0">{% trans %} all {% endtrans %}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>
             {% endfor %}
@@ -63,6 +64,7 @@
                 <th>{% trans %} typology {% endtrans %}</th>
                 <th>{% trans %} internal_code {% endtrans %}</th>
                 <th>{% trans %} cif      {% endtrans %}</th>
+                <th>{% trans %} tel     {% endtrans %}</th>
                 <th>{% trans %} shop      {% endtrans %}</th>
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
                 {# <th>{% trans %}numTickets{% endtrans %}</th> #}
@@ -80,6 +82,7 @@
                 <td>{{ workshop.typology }}</td>
                 <td>{{ workshop.internalCode }}       </td>
                 <td>{{ workshop.cif }}</td>
+                <td>{{ workshop.phoneNumber1 }} </td>
                 <td>{{ workshop.shop }} </td>
                 {# <td>{{ workshop.active }}       </td> #}
                 {# <td>{{ numTickets[workshop.id]}}</td> #}
