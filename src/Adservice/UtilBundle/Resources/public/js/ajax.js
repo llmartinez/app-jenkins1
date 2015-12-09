@@ -165,9 +165,9 @@ function fill_code_workshop(id_partner){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                $('#adservice_workshopbundle_workshoptype_code_workshop').empty();
+                $('form').find('input[name*=code_workshop]').empty();
 
-                $('#adservice_workshopbundle_workshoptype_code_workshop').val(data['code']);
+                $('form').find('input[name*=code_workshop]').val(data['code']);
 
             }
         },
