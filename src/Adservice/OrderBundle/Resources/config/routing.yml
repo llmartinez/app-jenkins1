@@ -13,7 +13,7 @@ list_orders:
 ##############################
 shopOrder_listShops:
     pattern: /shop/listShops/{page}/{partner}
-    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none' }
+    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none', term: 0, field: 0 }
     options:
         expose: true
 
@@ -59,8 +59,8 @@ shopOrder_reject:
 ###################################
 
 workshopOrder_listWorkshops:
-    pattern: /workshop/listWorkshops/{page}/{partner}/{status}
-    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , partner: 'none' , status: 0 }
+    pattern: /workshop/listWorkshops/{page}/{w_idpartner}/{w_id}/{country}/{partner}/{status}/{term}/{field}
+    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0', term: '0', field: '0'  }
     options:
         expose: true
 

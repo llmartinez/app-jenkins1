@@ -93,10 +93,10 @@
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                 {% trans %} menu.list_shops         {% endtrans %}</a>
-            <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops" ) }}">
+            <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': 0, 'status': none, 'term':0, 'field':0    } ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                 {% trans %} menu.list_workshops         {% endtrans %}</a>
-        </div>
+        </div>                                                                             
     {% endif %}
 
     <!-- Modal -->

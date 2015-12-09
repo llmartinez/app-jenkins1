@@ -31,8 +31,8 @@ class WorkshopOrderController extends Controller {
      * Devuelve todos los talleres segun el usuario logeado
      * @return type
      * @throws AccessDeniedException
-     */
-    public function listWorkshopsAction($page=1 , $partner='none' , $status=0) {
+     */                                 
+    public function listWorkshopsAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
         if ($security->isGranted('ROLE_AD') === false) {
@@ -40,20 +40,35 @@ class WorkshopOrderController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+        if ($term != '0' and $field != '0'){
 
-        if($security->isGranted('ROLE_SUPER_AD')) {
-            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
-            else                    $params   = array();
-            $params[] = array('country', ' = '.$user->getCountry()->getId());
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
         }
-        else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
+        else{
+            if($security->isGranted('ROLE_SUPER_AD')) {
+                if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
+                else                    $params   = array();
+                $params[] = array('country', ' = '.$user->getCountry()->getId());
+            }
+            else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
-        if ($status != 'none') {
-            if     ($status == 'active')   $params[] = array('active', ' = 1');
-            elseif ($status == 'deactive') $params[] = array('active', ' = 0');
-            elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
+            if ($status != 'none') {
+                if     ($status == 'active')   $params[] = array('active', ' = 1');
+                elseif ($status == 'deactive') $params[] = array('active', ' = 0');
+                elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
+            }
         }
-
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
@@ -80,12 +95,15 @@ class WorkshopOrderController extends Controller {
         }
         
 
-
+        
+                
         return $this->render('OrderBundle:WorkshopOrders:list_workshops.html.twig', array( 'workshops'  => $workshops,
                                                                                            'numTickets' => $numTickets,
                                                                                            'pagination' => $pagination,
                                                                                            'partners'   => $partners,
                                                                                            'partner'    => $partner,
+                                                                                           'term'       => $term,
+                                                                                           'field'       => $field,
                                                                                            'status'     => $status));
     }
 
