@@ -112,7 +112,7 @@
                         {% if is_granted('ROLE_ASSESSOR') %}
 
                             <td title="{{workshop.codePartner}} - {{workshop.codeWorkshop}} {{workshop.name}}" >   {{workshop.codePartner}} - {{workshop.codeWorkshop}}
-                            {{ workshop.name|length > 20 ? workshop.name|slice(0, 20) ~ '...' : workshop.name  }}
+                            {{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}
                             </td>
 
                             {% set len = 30 %}
@@ -120,8 +120,8 @@
                             {% set len = 60 %}
                         {% endif %}
 
-                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
-                        <td title="{{car}}"               >   {{ car|length > 20 ? car|slice(0, 20) ~ '...' : car  }}</td>
+                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                        <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 

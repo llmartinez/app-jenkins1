@@ -261,8 +261,13 @@ function fill_version(version) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
-            $('#new_car_form_year').val('');
-            $('#new_car_form_motor').val('');
+
+            var flt_year = $('#flt_year').val();
+            if(flt_year == undefined || flt_year == '' || flt_year == '0') $('#new_car_form_year').val('');
+
+            var flt_motor = $('#flt_motor').val();
+            if(flt_motor == undefined || flt_motor == '' || flt_motor == '0') $('#new_car_form_motor').val('');
+
             $('#new_car_form_kW').val('');
             $('#new_car_form_displacement').val('');
 
@@ -330,8 +335,14 @@ function fill_car_data() {
                     var inicio = elm.inicio.slice(0,4);
                     var fin    = elm.fin.slice(0,4);
                     var fecha  = inicio+' - '+fin;
-                    $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
-                    $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+                    var flt_year = $('#flt_year').val();
+                    var flt_motor = $('#flt_motor').val();
+
+                    if(flt_year == undefined || flt_year == '' || flt_year == '0')
+                        $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
+                    if(flt_motor == undefined || flt_motor == '' || flt_motor == '0')
+                        $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+
                     $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                     $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                     var dis_url = $( "#dis-url" ).val();
@@ -384,11 +395,11 @@ function fill_car_by_year() {
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
                     $('#filter_motor').empty();
-                    $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+                    $('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
 
                     $('#filter_year').empty();
                     if(year != ''){
-                        $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                        $('#filter_year').append('<input type="hidden" id="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
                     }else{
                         $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
                     }
@@ -442,7 +453,7 @@ function fill_car_by_motor() {
 
                     $('#filter_motor').empty();
                     if(motor != ''){
-                        $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                        $('#filter_motor').append('<input type="hidden" id="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
                     }else{
                         $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
                     }

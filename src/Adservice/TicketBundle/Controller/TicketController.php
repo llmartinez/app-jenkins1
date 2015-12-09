@@ -533,7 +533,12 @@ class TicketController extends Controller {
 
             if ($str_len <= $max_len ) {
 
-                $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+                $ticket_form = $request->request->get('ticket_form');
+                if (isset($ticket_form['subsystem'])) {
+                    $id_subsystem = $ticket_form['subsystem'];
+                }else{
+                    $id_subsystem = '0';
+                }
                 if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
                     $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
                     $ticket->setSubsystem($subsystem);
