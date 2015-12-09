@@ -40,6 +40,9 @@
             <tr>
                 <th>{% trans %} code     {% endtrans %}</th>
                 <th>{% trans %} workshop {% endtrans %}</th>
+                {% if is_granted('ROLE_SUPER_AD') %}
+                     <th>{% trans %} partner {% endtrans %}</th>
+                {% endif %}
                 <th>{% trans %} typology {% endtrans %}</th>
                 <th>{% trans %} internal_code {% endtrans %}</th>
                 <th>{% trans %} cif      {% endtrans %}</th>
@@ -52,8 +55,11 @@
         <tbody>
             {% for workshop in workshops %}
             <tr>
-                <td>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</td>
+                <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
                 <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }} {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                {% if is_granted('ROLE_SUPER_AD') %}
+                     <td>{{ workshop.partner.name }}</td>
+                {% endif %}
                 <td>{{ workshop.typology }}</td>
                 <td>{{ workshop.internalCode }}       </td>
                 <td>{{ workshop.cif }}</td>
