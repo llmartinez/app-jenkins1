@@ -529,9 +529,15 @@ class TicketController extends Controller {
 
             if ($str_len <= $max_len ) {
 
+                $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+                if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
+                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+                    $ticket->setSubsystem($subsystem);
+                }
+
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
-                        if ($form ->isValid() && $formC->isValid() && $formD->isValid()) {
+                    if ($formC->isValid() && $formD->isValid()) {
 
                          // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();

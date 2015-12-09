@@ -180,7 +180,7 @@ class AjaxController extends Controller
                           ORDER BY m.name";}
             elseif($filter == 'year'){
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m
-                          WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.inicio like '".$filter_value."%' OR m.fin like '".$filter_value."%'
+                          WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.brand IS NOT NULL AND m.inicio <= '".$filter_value."00' AND m.fin >= '".$filter_value."99'
                           GROUP BY m.id ORDER BY m.name";}
 
             $consulta = $em->createQuery($query);
@@ -216,7 +216,7 @@ class AjaxController extends Controller
                           ORDER BY m.name";
             elseif($filter == 'year')
                 $query = "SELECT v FROM CarBundle:Version v
-                          WHERE v.model = ".$id_model." AND ( v.inicio like '".$filter_value."%' OR v.fin like '".$filter_value."%' )
+                          WHERE v.model = ".$id_model." AND v.model IS NOT NULL AND v.inicio <= '".$filter_value."00' AND v.fin >= '".$filter_value."99'
                           GROUP BY v.id ORDER BY v.name";
 
             $consulta = $em->createQuery($query);
@@ -274,18 +274,23 @@ class AjaxController extends Controller
 
         $year = $petition->request->get('year');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND m.inicio like '".$year."%' OR m.fin like '".$year."%' GROUP BY b.id ORDER BY b.name ASC";
+        if(strlen($year) == 4)
+        {
+            $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND m.brand IS NOT NULL AND m.inicio <= '".$year."00' AND m.fin >= '".$year."99' GROUP BY b.id ORDER BY b.name ASC";
 
-        $consulta = $em->createQuery($query);
-        $brands   = $consulta->getResult();
+            $consulta = $em->createQuery($query);
+            $brands   = $consulta->getResult();
 
-        $size = sizeOf($brands);
-        if($size > 0) {
-            foreach ($brands as $brand) {
-                $json[] = $brand->to_json();
+            $size = sizeOf($brands);
+            if($size > 0) {
+                foreach ($brands as $brand) {
+                    $json[] = $brand->to_json();
+                }
+            }else{
+                    $json = array( 'error' => 'No hay coincidencias');
             }
         }else{
-                $json = array( 'error' => 'No hay coincidencias');
+                $json = array( 'error' => 'msg_bad_filter');
         }
 
         return new Response(json_encode($json), $status = 200);

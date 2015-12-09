@@ -26,12 +26,11 @@ class StatisticController extends Controller {
         $joins  = array();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
-
-            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p");
-            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w");
-            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3");
-            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t");
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 and a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.active = 1 ");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
@@ -39,11 +38,11 @@ class StatisticController extends Controller {
             $typologies = $qt->getResult();
         }else{
             $country = $security->getToken()->getUser()->getCountry()->getId();
-            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." ");
-            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." ");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." ");
-            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." ");
-            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." ");
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." AND p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." AND s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." AND a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." AND t.active = 1 ");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
@@ -790,26 +789,28 @@ class StatisticController extends Controller {
             $name=str_ireplace($buscar,$reemplazar,$row->getName());
 
             // Problema con caracteres especiales
-            $buscar=array("ª");
-            $reemplazar=array("a");
+            $buscar=array("ª", "´", "·");
+            $reemplazar=array("a", "'", ".");
             $name=str_ireplace($buscar,$reemplazar,$name);
+
+            $excel.=$name.';';
 
             $excel.=$partners[$row->getCodePartner()].';';
             $excel.=$row->getShop().';';
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
 
-            if ($row->getActive() == 1) $active = $this->get('translator')->trans('yes');
-            else $active = $this->get('translator')->trans('no');
-            $excel.=$active.';';
+            if ($row->getActive() == 0) $active = $this->get('translator')->trans('no');
+            else $active = " "; //$this->get('translator')->trans('no');
+            $excel.=strtoupper($active).';';
 
             if ($row->getTest() == 1) $test = $this->get('translator')->trans('yes');
-            else $test = $this->get('translator')->trans('no');
-            $excel.=$test.';';
+            else $test = " "; //$this->get('translator')->trans('no');
+            $excel.=strtoupper($test).';';
 
             if ($row->getAdServicePlus() == 1) $adsplus = $this->get('translator')->trans('yes');
-            else $adsplus = $this->get('translator')->trans('no');
-            $excel.=$adsplus.';';
+            else $adsplus = " "; //$this->get('translator')->trans('no');
+            $excel.=strtoupper($adsplus).';';
 
             $excel.="\n";
         }

@@ -3,6 +3,8 @@
         <div class="grid-full w100">
             <legend>{% trans %} ticket_info {% endtrans %}</legend>
 
+            <input id="error_ticket" type="hidden" value="{{'error.bad_introduction.ticket'|trans}}">
+
             {% if app.session.hasFlash('error_ticket') %}
                 <p class="grid-full w100 error">{{ app.session.getFlash('error_ticket') }}</p>
             {% endif %}

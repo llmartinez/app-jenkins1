@@ -86,6 +86,7 @@ The presented password is invalid.: "The presented password is invalid"
 The presented password cannot be empty.: "The presented password cannot be empty"
 username_used:					"The name entered already exists or is incorrect, try: "
 partner_not_found:				"There is not a partner with the code introduced."
+msg_bad_filter:                 "The filter entered is incorrect"
 
 #ENTITY
 role:					 "Role"

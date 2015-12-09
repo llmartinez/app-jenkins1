@@ -86,6 +86,7 @@ The presented password is invalid.: "Le mot de passe est erroné."
 The presented password cannot be empty.: "Le champs 'mot de passe' ne peut pas être vide."
 username_used:					"Le nom existe déjà ou est incorrect, essayez avec: "
 partner_not_found:				"Il est un partenaire avec le code introduit."
+msg_bad_filter:                 "Le filtre entré est incorrect"
 
 #ENTITY
 role:					 "Rol"

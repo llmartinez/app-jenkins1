@@ -86,6 +86,7 @@ The presented password is invalid.: "A senha não está correta."
 The presented password cannot be empty.: "A senha não pode ser vazia."
 username_used:					"O nome introduzido já existe ou não está correto, tente: "
 partner_not_found:				"Não é um parceiro com o código introduzido."
+msg_bad_filter:                 "O filtro inserido está incorreto"
 
 #ENTITY
 role:					 "Função"

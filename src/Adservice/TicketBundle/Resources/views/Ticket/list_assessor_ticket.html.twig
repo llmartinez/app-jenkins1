@@ -9,7 +9,9 @@
                 <tr>
                     <th> # </th>
                     <th></th>
-                    <th>{% trans %} workshop    {% endtrans %}</th>
+                    {% if is_granted('ROLE_ASSESSOR') %}
+                        <th>{% trans %} workshop {% endtrans %}</th>
+                    {% endif %}
                     <th>{% trans %} car         {% endtrans %}</th>
                     <th>{% trans %} description {% endtrans %}</th>
                     <th></th>
@@ -19,24 +21,65 @@
             <tbody id="ticketBody">
                 {% for ticket in tickets %}
                     {% set ticket_info = '' %}
+                    {% set workshop = ticket.workshop %}
+
                     {#{% if ticket.assignedTo != null %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}#}
                     <tr class="ticketRow" title="{{ticket_info}}">
+
+                        <input type="hidden" id="workshop_code_partner"  value="{{workshop.codePartner }}">
+                        <input type="hidden" id="workshop_code_workshop" value="{{workshop.codeWorkshop }}">
+                        <input type="hidden" id="workshop_name"          value="{{workshop.name }}">
+                        <input type="hidden" id="workshop_tel"           value="{{workshop.PhoneNumber1 }}">
+                        <input type="hidden" id="workshop_mail"          value="{{workshop.Email1 }}">
+                        <input type="hidden" id="workshop_contact"       value="{{workshop.contact }}">
+
                         <input type="hidden" id="ticket_id"         value="{{ticket.id }}">
-                        <input type="hidden" id="ticket_brand"      value="{{ticket.car.brand.id }}">
-                        <input type="hidden" id="ticket_model"      value="{{ticket.car.model.id }}">
+                        <input type="hidden" id="ticket_id_brand"   value="{{ticket.car.brand.id }}">
+                        <input type="hidden" id="ticket_brand"      value="{{ticket.car.brand.name }}">
+                        <input type="hidden" id="ticket_id_model"   value="{{ticket.car.model.id }}">
+                        <input type="hidden" id="ticket_model"      value="{{ticket.car.model.name }}">
 
-                       {% if ticket.car.version.id  is defined %} <input type="hidden" id="ticket_version"    value="{{ticket.car.version.id }}">{% endif %}
+                        {% if ticket.car.version.id  is defined %}
+                            <input type="hidden" id="ticket_id_version" value="{{ticket.car.version.id }}">
+                            <input type="hidden" id="ticket_version"    value="{{ticket.car.version.name }}">
+                        {% else %}
+                            <input type="hidden" id="ticket_id_version" value="0">
+                            <input type="hidden" id="ticket_version"    value=" ">
+                        {% endif %}
 
-                       {% if ticket.subsystem is defined and ticket.subsystem.system is defined and ticket.subsystem.system.id is defined %}
-                            <input type="hidden" id="ticket_system" value="{{ticket.subsystem.system.id }}">{% endif %}
+                        {% if ticket.subsystem is defined and ticket.subsystem.system is defined and ticket.subsystem.system.id is defined %}
+                            <input type="hidden" id="ticket_id_system" value="{{ticket.subsystem.system.id }}">
+                            <input type="hidden" id="ticket_system"    value="{{ticket.subsystem.system.name }}">
+                        {% else %}
+                            <input type="hidden" id="ticket_id_system" value="0">
+                            <input type="hidden" id="ticket_system"    value=" ">
+                        {% endif %}
 
-                       {% if ticket.subsystem is defined and ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem"  value="{{ticket.subsystem.id }}">{% endif %}
+                        {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
+                            <input type="hidden" id="ticket_id_subsystem" value="{{ticket.subsystem.id }}">
+                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name }}">
+                        {% else %}
+                            <input type="hidden" id="ticket_id_subsystem" value="0">
+                            <input type="hidden" id="ticket_subsystem"    value=" ">
+                        {% endif %}
 
-                       {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id }}">{% endif %}
+                        {% if ticket.importance.id is defined %}
+                            <input type="hidden" id="ticket_id_importance" value="{{ticket.importance.id }}">
+                            <input type="hidden" id="ticket_importance"    value="{{ticket.importance.importance }}">
+                        {% else %}
+                            <input type="hidden" id="ticket_id_importance" value="0">
+                            <input type="hidden" id="ticket_importance"    value=" ">
+                        {% endif %}
 
-                        <input type="hidden" id="ticket_description" value="{{ticket.description }}">
-                        <input type="hidden" id="ticket_date" value="{{ticket.modifiedAt|date("d/m/Y") }}">
-                        <input type="hidden" id="ticket_solution"    value="{{ticket.solution }}">
+                        <input type="hidden" id="ticket_year"         value="{{ticket.car.year }}">
+                        <input type="hidden" id="ticket_motor"        value="{{ticket.car.motor }}">
+                        <input type="hidden" id="ticket_kw"           value="{{ticket.car.kw }}">
+                        <input type="hidden" id="ticket_displacement" value="{{ticket.car.displacement }}">
+                        <input type="hidden" id="ticket_vin"          value="{{ticket.car.vin }}">
+                        <input type="hidden" id="ticket_plateNumber"  value="{{ticket.car.plateNumber }}">
+                        <input type="hidden" id="ticket_date"         value="{{ticket.modifiedAt|date("d/m/Y") }}">
+                        <input type="hidden" id="ticket_description"  value="{{ticket.description }}">
+                        <input type="hidden" id="ticket_solution"     value="{{ticket.solution }}">
 
                         <td id="id_ticket">{{ ticket.id         }}</td>
 
@@ -46,15 +89,19 @@
                                 {% else %}
                                     {% if ticket.pending == 1 %}
                                         {% if is_granted('ROLE_ASSESSOR') %}
-                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                                            alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"></td>
                                         {% else %}
-                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                                            alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"></td>
                                         {% endif %}
                                     {% else %}
                                         {% if is_granted('ROLE_ASSESSOR') %}
-                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                                            alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"></td>
                                         {% else %}
-                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                                            alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"></td>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -64,15 +111,17 @@
 
                         {% if is_granted('ROLE_ASSESSOR') %}
 
-                            <td title="{{ticket.assignedTo}}" >   {{ ticket.assignedTo|length > 15 ? ticket.assignedTo|slice(0, 15) ~ '...' : ticket.assignedTo  }}</td>
+                            <td title="{{workshop.codePartner}} - {{workshop.codeWorkshop}} {{workshop.name}}" >   {{workshop.codePartner}} - {{workshop.codeWorkshop}}
+                            {{ workshop.name|length > 20 ? workshop.name|slice(0, 20) ~ '...' : workshop.name  }}
+                            </td>
 
-                            {% set len = 25 %}
+                            {% set len = 30 %}
                         {% else %}
-                            {% set len = 40 %}
+                            {% set len = 60 %}
                         {% endif %}
 
                         {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
-                        <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
+                        <td title="{{car}}"               >   {{ car|length > 20 ? car|slice(0, 20) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 
