@@ -4,10 +4,12 @@
     {% set prevpages = pagination.prevpages %}
     {% set nextpages = pagination.nextpages %}
     {% set totalpag  = pagination.totalpag  %}
+    {% set total  = pagination.totalpag %}
 
     {# PAGINACION #}
 
     <input type="hidden" id="totalpag" value="{{ totalpag }}">
+    <input type="hidden" id="total" value="{{ total }}">
     {# <input type="hidden" id="order_by" value="{{ order_by }}"> #}
     {# <input type="hidden" id="trend"    value="{{ trend    }}"> #}
     {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
