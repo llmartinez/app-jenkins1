@@ -2,6 +2,7 @@
 
 {% block body %}
 
+    <input type="hidden" id="route" value="workshopOrder_listWorkshops">
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li class="active">{% trans %} menu.list_workshops {% endtrans %}</li>
@@ -17,7 +18,7 @@
     {% if is_granted('ROLE_SUPER_AD') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
         <select id="flt_partner_w" class='form-control'>
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="0">{% trans %} all {% endtrans %}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>
             {% endfor %}
@@ -33,7 +34,24 @@
                 <option value="test"      >{% trans %} testing  {% endtrans %}</option>
              </select>
     </select></div>
-
+             
+    <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
+            <label> {% trans %} find_by {% endtrans %} </label>
+            <select id="flt_search_term" name="flt_search_term" class='form-control'>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+             </select>
+        </div>
+        <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+        </div>
+        <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
+            <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
+        </div>
+    </div>         
     {% if workshops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
@@ -46,6 +64,7 @@
                 <th>{% trans %} typology {% endtrans %}</th>
                 <th>{% trans %} internal_code {% endtrans %}</th>
                 <th>{% trans %} cif      {% endtrans %}</th>
+                <th>{% trans %} tel     {% endtrans %}</th>
                 <th>{% trans %} shop      {% endtrans %}</th>
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
                 {# <th>{% trans %}numTickets{% endtrans %}</th> #}
@@ -63,6 +82,7 @@
                 <td>{{ workshop.typology }}</td>
                 <td>{{ workshop.internalCode }}       </td>
                 <td>{{ workshop.cif }}</td>
+                <td>{{ workshop.phoneNumber1 }} </td>
                 <td>{{ workshop.shop }} </td>
                 {# <td>{{ workshop.active }}       </td> #}
                 {# <td>{{ numTickets[workshop.id]}}</td> #}

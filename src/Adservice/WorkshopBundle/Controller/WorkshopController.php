@@ -39,10 +39,10 @@ class WorkshopController extends Controller {
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
-                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'mail'){
-                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
@@ -50,30 +50,28 @@ class WorkshopController extends Controller {
             elseif($term == 'cif'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
-        }else{
-            if($security->isGranted('ROLE_SUPER_ADMIN')) {
-                if ($country != '0') $params[] = array('country', ' = '.$country);
+        }
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != '0') $params[] = array('country', ' = '.$country);
+        }
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
+        if($security->isGranted('ROLE_ADMIN')) {
+
+            if ($partner != '0') $params[] = array('partner', ' = '.$partner);
+
+            if ($w_idpartner != '0' and $w_id != '0')
+            {
+                $params[] = array('code_workshop', ' = '.$w_id);
+                $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
+                $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = '.$w_idpartner.' ');
             }
-            else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-            if($security->isGranted('ROLE_ADMIN')) {
-
-                if ($partner != '0') $params[] = array('partner', ' = '.$partner);
-
-                if ($w_idpartner != '0' and $w_id != '0')
-                {
-                    $params[] = array('code_workshop', ' = '.$w_id);
-                    $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
-                    $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = '.$w_idpartner.' ');
-                }
-
-                if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
-                elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
-            }
+            if     ($status == "active"  ) { $params[] = array('active', ' = 1' ); }
+            elseif ($status == "deactive") { $params[] = array('active', ' != 1'); }
         }
 
         if(!isset($params)) $params[] = array();
-
         $pagination = new Pagination($page);
 
         $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination, null, $joins);
