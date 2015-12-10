@@ -176,11 +176,13 @@ class AjaxController extends Controller
         if($filter != '') {
             if($filter == 'motor'){
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
-                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND b.id = ".$id_brand." AND mt.name like '%".$filter_value."%'
+                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND b.id = ".$id_brand."
+                          AND mt.name like '%".$filter_value."%'
                           ORDER BY m.name";}
             elseif($filter == 'year'){
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m
-                          WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.brand IS NOT NULL AND m.inicio <= '".$filter_value."00' AND m.fin >= '".$filter_value."99'
+                          WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.brand IS NOT NULL
+                          AND (m.inicio <= '".$filter_value."99' AND m.inicio != '') AND (m.fin >= '".$filter_value."00' OR m.fin = '')
                           GROUP BY m.id ORDER BY m.name";}
 
             $consulta = $em->createQuery($query);
@@ -212,11 +214,13 @@ class AjaxController extends Controller
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
-                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND m.id = ".$id_model." AND mt.name like '%".$filter_value."%'
+                          WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
+                          AND m.id = ".$id_model." AND mt.name like '%".$filter_value."%'
                           ORDER BY m.name";
             elseif($filter == 'year')
                 $query = "SELECT v FROM CarBundle:Version v
-                          WHERE v.model = ".$id_model." AND v.model IS NOT NULL AND v.inicio <= '".$filter_value."00' AND v.fin >= '".$filter_value."99'
+                          WHERE v.model = ".$id_model." AND v.model IS NOT NULL
+                          AND (v.inicio <= '".$filter_value."99' AND v.inicio != '') AND (v.fin >= '".$filter_value."00' OR v.fin = '')
                           GROUP BY v.id ORDER BY v.name";
 
             $consulta = $em->createQuery($query);
@@ -276,7 +280,9 @@ class AjaxController extends Controller
 
         if(strlen($year) == 4)
         {
-            $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND m.brand IS NOT NULL AND m.inicio <= '".$year."00' AND m.fin >= '".$year."99' GROUP BY b.id ORDER BY b.name ASC";
+            $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND m.brand IS NOT NULL
+            AND (m.inicio <= '".$year."99' AND m.inicio != '') AND (m.fin >= '".$year."00' OR m.fin = '')
+            GROUP BY b.id ORDER BY b.name ASC";
 
             $consulta = $em->createQuery($query);
             $brands   = $consulta->getResult();

@@ -15,6 +15,11 @@
 
 {% endblock  %}
 {% block main %}
+
+{% if car.brand.id is defined %} {% set brand = car.brand.id %}{% endif %}
+{% if car.model.id is defined %} {% set model = car.model.id %}{% endif %}
+{% if car.version.id is defined %} {% set version = car.version.id %}{% endif %}
+
 <div class="grid-full w100">
     {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
 </div>

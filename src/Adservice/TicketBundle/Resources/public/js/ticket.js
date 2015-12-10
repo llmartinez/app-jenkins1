@@ -205,6 +205,9 @@ function search_by_bmv() {
         var date         = $(this).find("#ticket_date").val();
         var sol          = $(this).find("#ticket_solution").val();
 
+        var dis_url = $( "#dis-url" ).val();
+        var vts_url = $( "#vts-url" ).val();
+
         $('#flt_id').empty();
         $('#flt_id').val(id);
 
@@ -223,8 +226,8 @@ function search_by_bmv() {
         $('#id_system').val(id_system);
         $('#new_car_form_subsystem' ).empty();
         $('#new_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
-        $('#new_car_form_importance').empty();
-        $('#new_car_form_importance').append('<option value="'+id_importance+'" selected>'+importance+'</option>');
+
+        $('#new_car_form_importance').val(id_importance);
         $('#new_car_form_year').val(year);
         $('#new_car_form_motor').val(motor);
         $('#new_car_form_kW').val(kw);
@@ -238,6 +241,14 @@ function search_by_bmv() {
         $('#list_description').text(desc);
         $('#list_solution').text('');
         $('#list_solution').text(sol);
+
+        if(id_version == '0'){
+            $( "#dis" ).attr("href", dis_url+'/model-'+id_model);
+            $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model);
+        }else{
+            $( "#dis" ).attr("href", dis_url+'/'+id_version);
+            $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model+'/'+id_version);
+        }
     });
 
 /**
