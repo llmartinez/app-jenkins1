@@ -227,6 +227,7 @@ edit.order.workshop:	 "Editar Pedido da Oficina"
 edit.sentence:			 "Editar Frase"
 
 #ANY
+not_found:				 "Nenhum resultado encontrado"
 any.partner:			 "Não existem sócios!"
 any.shop:				 "Não existem lojas!"
 any.workshop:			 "Não existem oficinas!"

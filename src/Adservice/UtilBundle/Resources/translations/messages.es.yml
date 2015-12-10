@@ -227,6 +227,7 @@ edit.order.workshop:	 "Editar Solicitud del Taller"
 edit.sentence:			 "Editar Sentencia"
 
 #ANY
+not_found:				 "No se han encontrado resultados"
 any.partner:			 "No hay socios!!"
 any.shop:				 "No hay tiendas!!"
 any.workshop:			 "No hay talleres!!"

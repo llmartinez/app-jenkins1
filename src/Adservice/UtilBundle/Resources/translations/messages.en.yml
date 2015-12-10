@@ -227,6 +227,7 @@ edit.order.workshop:	 "Edit Workshop Order"
 edit.sentence:			 "Edit Sentence"
 
 #ANY
+not_found:				 "No results found"
 any.partner:			 "No partners!!"
 any.shop:				 "No shops!!"
 any.workshop:			 "No workshops!!"

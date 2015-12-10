@@ -227,6 +227,7 @@ edit.order.workshop:	 "Éditer la Demande de l’Atelier"
 edit.sentence:			 "Éditer la Requête"
 
 #ANY
+not_found:				 "Aucun résultat trouvé"
 any.partner:			 "Partenaire introuvable!! "
 any.shop:				 "Distributeur introuvable!! "
 any.workshop:			 "Atelier introuvable!!"
