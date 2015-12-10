@@ -165,9 +165,9 @@ function fill_code_workshop(id_partner){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                $('#adservice_workshopbundle_workshoptype_code_workshop').empty();
+                $('form').find('input[name*=code_workshop]').empty();
 
-                $('#adservice_workshopbundle_workshoptype_code_workshop').val(data['code']);
+                $('form').find('input[name*=code_workshop]').val(data['code']);
 
             }
         },
@@ -261,8 +261,13 @@ function fill_version(version) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
             $('#ticket_form_subsystem').empty();
-            $('#new_car_form_year').val('');
-            $('#new_car_form_motor').val('');
+
+            var flt_year = $('#flt_year').val();
+            if(flt_year == undefined || flt_year == '' || flt_year == '0') $('#new_car_form_year').val('');
+
+            var flt_motor = $('#flt_motor').val();
+            if(flt_motor == undefined || flt_motor == '' || flt_motor == '0') $('#new_car_form_motor').val('');
+
             $('#new_car_form_kW').val('');
             $('#new_car_form_displacement').val('');
 
@@ -330,6 +335,7 @@ function fill_car_data() {
                     var inicio = elm.inicio.slice(0,4);
                     var fin    = elm.fin.slice(0,4);
                     var fecha  = inicio+' - '+fin;
+
                     $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
                     $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
                     $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
@@ -367,26 +373,31 @@ function fill_car_by_year() {
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
             if (data['error'] != "No hay coincidencias") {
-                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-                $('#new_car_form_brand').empty();
-                $('#new_car_form_model').empty();
-                $('#new_car_form_version').empty();
-
-                //Primer campo vacío
-                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
-
-                $.each(data, function(idx, elm) {
-                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                });
-                //Cambiamos el icono para indicar que se esta filtrando por motor
-                $('#filter_motor').empty();
-                $('#filter_motor').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
-
-                $('#filter_year').empty();
-                if(year != ''){
-                    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                if (data['error'] == "msg_bad_filter") {
+                    msg_bad_filter = $('#msg_bad_filter').val();
+                    alert(msg_bad_filter);
                 }else{
-                    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                    // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+                    $('#new_car_form_brand').empty();
+                    $('#new_car_form_model').empty();
+                    $('#new_car_form_version').empty();
+
+                    //Primer campo vacío
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+
+                    $.each(data, function(idx, elm) {
+                        $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    });
+                    //Cambiamos el icono para indicar que se esta filtrando por motor
+                    $('#filter_motor').empty();
+                    $('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
+
+                    $('#filter_year').empty();
+                    if(year != ''){
+                        $('#filter_year').append('<input type="hidden" id="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                    }else{
+                        $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                    }
                 }
             }
         },
@@ -416,26 +427,31 @@ function fill_car_by_motor() {
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
             if (data['error'] != "No hay coincidencias") {
-                // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
-                $('#new_car_form_brand').empty();
-                $('#new_car_form_model').empty();
-                $('#new_car_form_version').empty();
-
-                //Primer campo vacío
-                $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
-
-                $.each(data, function(idx, elm) {
-                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                });
-                //Cambiamos el icono para indicar que se esta filtrando por motor
-                $('#filter_year').empty();
-                $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
-
-                $('#filter_motor').empty();
-                if(motor != ''){
-                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                if (data['error'] == "msg_bad_filter") {
+                    msg_bad_filter = $('#msg_bad_filter').val();
+                    alert(msg_bad_filter);
                 }else{
-                    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                    // Vaciamos marca, modelo y gama y recargamos las marcas filtradas
+                    $('#new_car_form_brand').empty();
+                    $('#new_car_form_model').empty();
+                    $('#new_car_form_version').empty();
+
+                    //Primer campo vacío
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+
+                    $.each(data, function(idx, elm) {
+                        $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    });
+                    //Cambiamos el icono para indicar que se esta filtrando por motor
+                    $('#filter_year').empty();
+                    $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+
+                    $('#filter_motor').empty();
+                    if(motor != ''){
+                        $('#filter_motor').append('<input type="hidden" id="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                    }else{
+                        $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                    }
                 }
             }
         },

@@ -149,8 +149,12 @@
             {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 
         {% else %}
-            {% trans %} any.order.pending {% endtrans %}
+            <div class="grid w100">
+                <p class="alert">{% trans %} not_found {% endtrans %}</p>
+            </div>
         {% endif %}
     {% else %}
-        {% trans %} any.order.pending {% endtrans %}
-{% endif %}
+        <div class="grid w100">
+            <p class="alert">{% trans %} not_found {% endtrans %}</p>
+        </div>
+    {% endif %}

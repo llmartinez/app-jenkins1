@@ -40,7 +40,7 @@ class WorkshopType extends AbstractType
                                                           ->andWhere('s.country'.$id_country)
                                                           ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('typology', 'entity', array(
-                  'required' => false,
+                  'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',

@@ -86,6 +86,7 @@ The presented password is invalid.: "The presented password is invalid"
 The presented password cannot be empty.: "The presented password cannot be empty"
 username_used:					"The name entered already exists or is incorrect, try: "
 partner_not_found:				"There is not a partner with the code introduced."
+msg_bad_filter:                 "The filter entered is incorrect"
 
 #ENTITY
 role:					 "Role"
@@ -226,6 +227,7 @@ edit.order.workshop:	 "Edit Workshop Order"
 edit.sentence:			 "Edit Sentence"
 
 #ANY
+not_found:				 "No results found"
 any.partner:			 "No partners!!"
 any.shop:				 "No shops!!"
 any.workshop:			 "No workshops!!"
@@ -565,7 +567,7 @@ page.next:						"Next page"
 page.last:						"Last page"
 
 #MAIL
-mail.welcome:							"Welcome to the platform Phone Eina!!"
+mail.welcome:							"Welcome to the Phone Eina platform!!"
 mail.image:								"http://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"610 40 09 16"
 mail.info.more:							"More info:"

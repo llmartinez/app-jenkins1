@@ -11,7 +11,14 @@ class NewTicketType extends AbstractType
         $builder
                 ->add('description', 'textarea')
                 ->add('importance')
-                ->add('subsystem')
+                ->add('subsystem', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\TicketBundle\Entity\Subsystem',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->where('s.id = 0'); }))
                 ;
     }
     public function getName()

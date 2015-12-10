@@ -44,6 +44,17 @@ $(document).ready(function() {
 
     });
 
+$('.sendTicket').click(function() {
+    var subsystem = $('#ticket_form_subsystem').val();
+
+    if (subsystem == '' || subsystem == "0" ) {
+        var error_ticket = $('#error_ticket').val();
+        alert(error_ticket);
+        event.preventDefault();
+    }
+});
+
+
 $('#new_file_form_file').bind('change', function() {
 
     var size = this.files[0].size;
@@ -164,34 +175,62 @@ function search_by_bmv() {
 
     $('.ticketRow').click( function() {
 
-       var id         = $(this).find("#ticket_id").val();
-       var brand      = $(this).find("#ticket_brand").val();
-       var model      = $(this).find("#ticket_model").val();
-       var system     = $(this).find("#ticket_system").val();
-       var subsystem  = $(this).find("#ticket_subsystem").val();
-       var importance = $(this).find("#ticket_importance").val();
-       var desc       = $(this).find("#ticket_description").val();
-       var date       = $(this).find("#ticket_date").val();
-       var sol        = $(this).find("#ticket_solution").val();
+        var code_partner  = $(this).find("#workshop_code_partner").val();
+        var code_workshop = $(this).find("#workshop_code_workshop").val();
+        var name          = $(this).find("#workshop_name").val();
+        var tel           = $(this).find("#workshop_tel").val();
+        var mail          = $(this).find("#workshop_mail").val();
+        var contact       = $(this).find("#workshop_contact").val();
+
+        var id           = $(this).find("#ticket_id").val();
+        var id_brand     = $(this).find("#ticket_id_brand").val();
+        var brand        = $(this).find("#ticket_brand").val();
+        var id_model     = $(this).find("#ticket_id_model").val();
+        var model        = $(this).find("#ticket_model").val();
+        var id_version   = $(this).find("#ticket_id_version").val();
+        var version      = $(this).find("#ticket_version").val();
+        var id_system    = $(this).find("#ticket_id_system").val();
+        var system       = $(this).find("#ticket_system").val();
+        var id_subsystem = $(this).find("#ticket_id_subsystem").val();
+        var subsystem    = $(this).find("#ticket_subsystem").val();
+        var id_importance= $(this).find("#ticket_id_importance").val();
+        var importance   = $(this).find("#ticket_importance").val();
+        var year         = $(this).find("#ticket_year").val();
+        var motor        = $(this).find("#ticket_motor").val();
+        var kw           = $(this).find("#ticket_kw").val();
+        var displacement = $(this).find("#ticket_displacement").val();
+        var vin          = $(this).find("#ticket_vin").val();
+        var plateNumber  = $(this).find("#ticket_plateNumber").val();
+        var desc         = $(this).find("#ticket_description").val();
+        var date         = $(this).find("#ticket_date").val();
+        var sol          = $(this).find("#ticket_solution").val();
 
         $('#flt_id').empty();
-        $('#id_system').val(system);
-        $('#new_car_form_model').val('');
-        $('#new_car_form_version').val('');
-        $('#new_car_form_subsystem').val('');
-        $('#new_car_form_importance').val('');
-
         $('#flt_id').val(id);
-        $('#new_car_form_brand').val(brand);
-        fill_model(model);
-        fill_subsystem(subsystem);
 
-        if(subsystem != undefined){ $('#new_car_form_subsystem').val(subsystem); }
-        else {
-            $("#new_car_form_subsystem").append('<option value="0" selected></option>');
-        }
-        $('#new_car_form_importance').val(importance);
+        $('#w_idpartner').val(code_partner);
+        $('#w_id'       ).val(code_workshop);
+        $('#w_name'     ).val(name);
+        $('#w_tel'      ).val(tel);
+        $('#w_email'    ).val(mail);
+        $('#w_contact'  ).val(contact);
 
+        $('#new_car_form_brand'     ).val(id_brand);
+        $('#new_car_form_model'     ).empty();
+        $('#new_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
+        $('#new_car_form_version'   ).empty();
+        $('#new_car_form_version'   ).append('<option value="'+id_version   +'" selected>'+version+'</option>');
+        $('#id_system').val(id_system);
+        $('#new_car_form_subsystem' ).empty();
+        $('#new_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
+        $('#new_car_form_importance').empty();
+        $('#new_car_form_importance').append('<option value="'+id_importance+'" selected>'+importance+'</option>');
+        $('#new_car_form_year').val(year);
+        $('#new_car_form_motor').val(motor);
+        $('#new_car_form_kW').val(kw);
+        $('#new_car_form_displacement').val(displacement);
+        $('#new_car_form_vin').val(vin);
+        $('#new_car_form_plateNumber').val(plateNumber);
 
         $('#list_date').text('');
         $('#list_date').text(date);
@@ -199,7 +238,6 @@ function search_by_bmv() {
         $('#list_description').text(desc);
         $('#list_solution').text('');
         $('#list_solution').text(sol);
-
     });
 
 /**

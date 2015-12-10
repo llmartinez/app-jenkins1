@@ -86,6 +86,7 @@ The presented password is invalid.: "La contraseña introducida no es correcta"
 The presented password cannot be empty.: "La contraseña no puede estar vacía."
 username_used:					"El nombre introducido ya existe o no es correcto, prueba con: "
 partner_not_found:				"No existe un Socio con el código introducido."
+msg_bad_filter:                "El filtro introducido no es correcto"
 
 #ENTITY
 role:					 "Rol"
@@ -226,6 +227,7 @@ edit.order.workshop:	 "Editar Solicitud del Taller"
 edit.sentence:			 "Editar Sentencia"
 
 #ANY
+not_found:				 "No se han encontrado resultados"
 any.partner:			 "No hay socios!!"
 any.shop:				 "No hay tiendas!!"
 any.workshop:			 "No hay talleres!!"

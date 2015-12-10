@@ -108,7 +108,9 @@
     </table>
     {% include 'UtilBundle:Pagination:pagination_shop_order.html.twig' %}
 {% else %}
-    {% trans %} any.shop {% endtrans %}
+     <div class="grid w100">
+        <p class="alert">{% trans %} not_found {% endtrans %}</p>
+    </div>
 {% endif %}
 
 
