@@ -63,7 +63,10 @@
         </tr>
         {% if user.workshop is defined and user.workshop.codePartner is defined and user.workshop.codeWorkshop is defined %}
         <tr>
-            <td><b>{% trans %} workshop {% endtrans %}</b></td><td>{{ user.workshop.codePartner}} - {{user.workshop.codeWorkshop}} {{user.workshop    }}</td>
+            <td><b>{% trans %} code {% endtrans %}</b></td><td>{{ user.workshop.codePartner}} - {{user.workshop.codeWorkshop}}</td>
+        </tr>
+        <tr>
+            <td><b>{% trans %} workshop {% endtrans %}</b></td><td>{{user.workshop    }}</td>
         </tr>
         {% endif %}
 
