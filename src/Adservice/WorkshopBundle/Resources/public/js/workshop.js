@@ -42,12 +42,11 @@ $(document).ready(function() {
                 $('#adservice_workshopbundle_workshoptype_endtest_at_year'  ).val(d.getFullYear());
             }
             $('#adservice_workshopbundle_workshoptype_endtest_at_day'   ).val(d.getDate());
-            
         }
         else{
             var d = new Date();
             $('#adservice_workshopbundle_workshoptype_endtest_at_month' ).val(d.getMonth()+1);
-           
+
             $('#adservice_workshopbundle_workshoptype_endtest_at_day'   ).val(d.getDate());
             $('#adservice_workshopbundle_workshoptype_endtest_at_year'  ).val(d.getFullYear());
         }

@@ -130,7 +130,7 @@ class WorkshopOrderController extends Controller {
                 $id_partner = '0';
 
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+                                                                                    'active' => '1'),array('name'=>'ASC'));
         }
         else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
                $partners   = '0';

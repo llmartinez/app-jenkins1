@@ -53,7 +53,7 @@
         {% if inactive != 0 %}
             <div class="grid w30 fr">
                 <div class="asr_pending_application2">{{ inactive }}</div>
-                <h4 href="{{ path(route, {'page': '1', 'country': 0, 'num_rows': 10, 'option': 'inactive' }) }}" class="pull-right">{% trans %}ticket.inactive{% endtrans %}: </h4>
+                <h4><a href="{{ path(route, {'page': '1', 'country': 0, 'num_rows': 10, 'option': 'inactive' }) }}" class="pull-right">{% trans %}ticket.inactive{% endtrans %}: </a></h4>
             </div>
         {% endif %}
     </div>

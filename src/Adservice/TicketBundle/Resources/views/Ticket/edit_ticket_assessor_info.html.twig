@@ -1,8 +1,8 @@
 
-    <legend class="grid-full w25"> {% trans %} edit.ticket.info {% endtrans %} </legend>
+    <legend class="grid-full w50"> {% trans %} edit.ticket.info {% endtrans %} </legend>
 
     {% if ( is_granted('ROLE_ASSESSOR')) %}
-        <div class="grid-full w70 fr">
+        <div class="grid-full w50 fr">
             <p class="fr">
                 <b>{{'created_at'|trans}}:</b> {{ticket.createdat|date("d/m/Y (H:i)")}}
                 {% if ticket.assignedTo != "" %}

@@ -533,9 +533,20 @@ class TicketController extends Controller {
 
             if ($str_len <= $max_len ) {
 
+                $ticket_form = $request->request->get('ticket_form');
+                if (isset($ticket_form['subsystem'])) {
+                    $id_subsystem = $ticket_form['subsystem'];
+                }else{
+                    $id_subsystem = '0';
+                }
+                if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
+                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+                    $ticket->setSubsystem($subsystem);
+                }
+
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
-                        if ($form ->isValid() && $formC->isValid() && $formD->isValid()) {
+                    if ($formC->isValid() && $formD->isValid()) {
 
                          // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
@@ -1593,7 +1604,7 @@ class TicketController extends Controller {
         $version = $request->request->get('new_car_form_version');
         $year  = $request->get('new_car_form_year');
         $motor = $request->get('new_car_form_motor');
-        $kw = $request->request->get('new_car_form_kw');
+        $kw = $request->request->get('new_car_form_kW');
         $importance = $request->request->get('new_car_form_importance');
         $system = $request->request->get('id_system');
         $subsystem = $request->request->get('new_car_form_subsystem');
