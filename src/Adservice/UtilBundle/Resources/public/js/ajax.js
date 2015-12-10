@@ -499,6 +499,8 @@ function fill_subsystem(subsystem) {
 
                 var subsys_id = $('#subsystem_id').val();
                 if(subsys_id != undefined && subsys_id != '0' ) $('#edit_ticket_form_subsystem').val(subsys_id);
+            }else{
+                $('select[id*=_subsystem]').empty();
             }
         },
         error: function() {
