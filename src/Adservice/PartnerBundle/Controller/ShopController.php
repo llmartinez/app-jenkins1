@@ -23,23 +23,22 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $partner='none', $term='0', $field='0') {
+    public function listAction($page=1, $country='0', $partner='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
-
+        
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
-                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'mail'){
-                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
@@ -47,18 +46,16 @@ class ShopController extends Controller {
             elseif($term == 'cif'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
-        }else{
-            if($security->isGranted('ROLE_SUPER_ADMIN')) {
-                if ($country != 'none') $params[] = array('country', ' = '.$country);
-                if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
-            }
-            else {
-                $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-            }
         }
-
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != '0' && $country != 'none') $params[] = array('country', ' = '.$country);
+            if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
+        }
+        else {
+            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        }
         $pagination = new Pagination($page);
-
+        
         $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
 
         $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Shop', $params);

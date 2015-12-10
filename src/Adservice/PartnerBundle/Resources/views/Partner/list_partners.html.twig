@@ -20,7 +20,7 @@
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control'>
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="0">{% trans %} all {% endtrans %}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country | trans }}</option>
             {% endfor %}
@@ -76,7 +76,7 @@
         </tbody>
     </table>
 
-    {% include 'UtilBundle:Pagination:pagination.html.twig' %}
+    {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 
     {% else %}
         <p class="alert"> {% trans %} any.partner {% endtrans %}</p>
@@ -86,7 +86,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_order.js') }}"></script>
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
     <script>

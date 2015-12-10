@@ -23,21 +23,21 @@ class PartnerController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $term='0', $field='0') {
+    public function listAction($page=1, $country='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-
+        $params = array();
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
-                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'mail'){
-                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
@@ -45,25 +45,23 @@ class PartnerController extends Controller {
             elseif($term == 'cif'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
-        }else{
-            if($security->isGranted('ROLE_SUPER_ADMIN')) {
-                if ($country != 'none') $params[] = array('country', ' = '.$country);
-                else                    $params[] = array();
-            }
-            else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
         }
-
+        
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != '0') $params[] = array('country', ' = '.$country);
+                             
+            }
+        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        
         $pagination = new Pagination($page);
 
         $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
-
         $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
 
         $pagination->setTotalPagByLength($length);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
-
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,

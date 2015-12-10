@@ -4,12 +4,14 @@
     {% set prevpages = pagination.prevpages %}
     {% set nextpages = pagination.nextpages %}
     {% set totalpag  = pagination.totalpag  %}
+    {% set total  = pagination.totalpag %}
 
     {# PAGINACION #}
     <div id="pagination"  class="pagination_content">
 	    <input type="hidden" id="route" name="route" value="list_orders">
-	    <input type="hidden" id="total" name="total" value="{{ totalpag }}">
-	    <input type="hidden" id="option" name="option" value="{{ option }}">
+	    <input type="hidden" id="totalpag" value="{{ totalpag }}">
+            <input type="hidden" id="total" value="{{ total }}">
+	    {#<input type="hidden" id="option" name="option" value="{{ option }}">#}
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<button id="firstpage"    class="page_number"><span class="glyphicon glyphicon-backward"     title="{% trans %} page.first {% endtrans %}"></span></button>

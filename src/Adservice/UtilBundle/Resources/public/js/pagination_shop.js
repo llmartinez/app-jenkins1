@@ -9,10 +9,11 @@
 		    var country = $("#flt_country").val();
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
-		    if(country == undefined || country == '') country = '0';
-                    if(option == undefined || option == '') option = '0';
+                    var partner = $("#flt_partner").val();
+		    if(country == undefined || country == '' || country == 'none') country = '0';
+                    if(option == undefined || option == ''|| option == 'none') option = '0';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country, term: term, field: field});
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), country: country, partner: partner, term: term, field: field, option: option});
 
 	    	url = url.replace("plc_page", 1);
 	    	window.open(url, "_self");
@@ -30,11 +31,12 @@
                         var option = $("#option").val();
                         var country = $("#flt_country").val();
                         var term = $("#flt_search_term").val();
-                    var field = $("#flt_search_field").val();
-		    			if(country == undefined || country == '') country = '0';
-                                        if(option == undefined || option == '') option = '0';
+                        var field = $("#flt_search_field").val();
+                        var partner = $("#flt_partner").val();
+		    	if(country == undefined || country == '' || country == 'none') country = '0';
+                        if(option == undefined || option == ''|| option == 'none') option = '0';
                         var locale = $(document).find("#data_locale").val();
-                        var url = Routing.generate(route, {_locale: locale, page: prev_page, option: option, country: country, term: term, field: field });
+                        var url = Routing.generate(route, {_locale: locale, page: $(this).text(), country: country, partner: partner, term: term, field: field, option: option});
 
                     window.open(url, "_self");
                 }
@@ -48,10 +50,11 @@
 		    var country = $("#flt_country").val();
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
-		    if(country == undefined || country == '') country = '0';
-                    if(option == undefined || option == '') option = '0';
+                    var partner = $("#flt_partner").val();
+		    if(country == undefined || country == '' || country == 'none') country = '0';
+                    if(option == undefined || option == ''|| option == 'none') option = '0';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), option: option, country: country, term: term, field: field });
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), country: country, partner: partner, term: term, field: field, option: option});
 
 	    	window.open(url, "_self");
 	    });
@@ -73,10 +76,11 @@
                     var country = $("#flt_country").val();
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
+                    var partner = $("#flt_partner").val();
                     if(country == undefined || country == '' || country == 'none') country = '0';
                     if(option == undefined || option == ''|| option == 'none') option = '0';
                     var locale = $(document).find("#data_locale").val();
-                    var url = Routing.generate(route, {_locale: locale, page: next_page, option: option, country: country, term: term, field: field });
+                    var url = Routing.generate(route, {_locale: locale, page: next_page, country: country, partner: partner, term: term, field: field, option: option});
 
                 window.open(url, "_self");
 
