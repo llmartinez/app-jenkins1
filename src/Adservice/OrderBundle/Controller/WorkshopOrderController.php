@@ -40,7 +40,6 @@ class WorkshopOrderController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $params   = array();
-        //var_dump($partner);die;
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
