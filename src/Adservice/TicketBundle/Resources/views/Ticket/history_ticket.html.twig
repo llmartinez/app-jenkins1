@@ -106,7 +106,7 @@
                             {% set car = ticket.car.brand.name ~ ' ' ~ ticket.car.model.name %}
                             <td>{{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
                             <td>{{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description  }}</td>
-                            <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                            <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                             <td>{{ ticket.createdAt | date("d/m/y")}}</td>
                         </tr>
                     {% endfor %}

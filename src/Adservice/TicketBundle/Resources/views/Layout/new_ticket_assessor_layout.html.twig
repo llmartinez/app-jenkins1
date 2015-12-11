@@ -8,13 +8,18 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{% if is_granted('ROLE_ASSESSOR') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+      <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
                    {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
       <li class="active">{% trans %} new.ticket {% endtrans %}</li>
     </ol>
 
 {% endblock  %}
 {% block main %}
+
+{% if car.brand.id is defined %} {% set brand = car.brand.id %}{% endif %}
+{% if car.model.id is defined %} {% set model = car.model.id %}{% endif %}
+{% if car.version.id is defined %} {% set version = car.version.id %}{% endif %}
+
 <div class="grid-full w100">
     {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
 </div>
