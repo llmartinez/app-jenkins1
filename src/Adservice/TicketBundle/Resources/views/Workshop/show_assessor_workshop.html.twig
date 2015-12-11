@@ -15,7 +15,7 @@
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
 					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
 
-			<a class="btn btn-primary fr asr_form-control asr_btn" href="{{ path('listTicket') }}">
+			<a class="btn btn-primary fr asr_form-control asr_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}{% else %}{{ path('listTicket') }}{% endif %}">
 				<img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} back {% endtrans %}" alt="{% trans %} back {% endtrans %}">
 				{% trans %} back {% endtrans %}
 			</a>
