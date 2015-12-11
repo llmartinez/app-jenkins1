@@ -466,6 +466,7 @@ class TicketController extends Controller {
         $ticket   = new Ticket();
         $car      = new Car();
         $document = new Document();
+        $created = 'no';
 
         if ($id_workshop != null)
             { $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop); }
@@ -667,12 +668,14 @@ class TicketController extends Controller {
 
                             // Dejamos el locale tal y como estaba
                             $request->setLocale($locale);
+
+                            $created = 'created';
                         }
 
                         if (isset($_POST['save&close'])){
                             return $this->redirect($this->generateUrl('closeTicket', array( 'id' => $ticket->getId())));
                         }else{
-                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId(), 'created' => $created,)));
                         }
 
                     } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
@@ -691,7 +694,7 @@ class TicketController extends Controller {
                         'systems' => $systems,
                         'adsplus' => $adsplus,
                         'workshop' => $workshop,
-                        'form_name' => $form->getName()
+                        'form_name' => $form->getName(),
                     );
         // if(isset($subsystem)) { $array[] = 'subsystem' => $subsystem; }
 
@@ -858,7 +861,7 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketAction($ticket)
+    public function showTicketAction($ticket, $created=null)
     {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -913,7 +916,8 @@ class TicketController extends Controller {
                             'brand'     => $brand,
                             'model'     => $model,
                             'version'   => $version,
-                            'id'        => $id );
+                            'id'        => $id,
+                            'created'   => $created );
 
             if ($security->isGranted('ROLE_ASSESSOR')) {
                 $form = $this->createForm(new EditTicketType(), $ticket);
@@ -1034,7 +1038,8 @@ class TicketController extends Controller {
                                                                                 'form_name' => $formP->getName(),
                                                                                 'brand'     => $brand,
                                                                                 'model'     => $model,
-                                                                                'version'   => $version )));
+                                                                                'version'   => $version,
+                                                                                'created'   => $created )));
             }
 
             if ($security->isGranted('ROLE_ASSESSOR'))

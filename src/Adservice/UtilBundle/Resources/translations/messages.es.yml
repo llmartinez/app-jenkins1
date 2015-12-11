@@ -436,6 +436,8 @@ subsystem:					  "Subsistema"
 sentence:					  "Sentencia"
 image:                        "Añadir una imagen o nota técnica (Opcional)"
 
+ticket_created:			  	  "Ticket creado correctamente, este es el detalle del ticket."
+ticket_return:			  	  "Volver al listado"
 ticket_assigned:			  "Ticket asignado"
 ticket_assign_not:			  "Ticket sin asignar"
 ticket_closed:				  "Ticket cerrado"

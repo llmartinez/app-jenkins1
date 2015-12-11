@@ -436,6 +436,8 @@ subsystem:					  "Subsistema"
 sentence:					  "Frase"
 image:                                            "Adicionar uma imagem ou uma nota técnica (Opcional)"
 
+ticket_created:			  	  "Ticket criado corretamente, isto é os detalhes do bilhete."
+ticket_return:			  	  "Voltar à lista"
 ticket_assigned:			  "Talão atribuído"
 ticket_assign_not:			  "Talão sem atribuição"
 ticket_closed:				  "Talão fechado"

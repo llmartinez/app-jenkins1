@@ -19,8 +19,8 @@ findTicket:
     defaults: { _controller: TicketBundle:Ticket:findTicket }
 
 showTicket:
-    pattern:  /ticket/show/{id}
-    defaults: { _controller: TicketBundle:Ticket:showTicket }
+    pattern:  /ticket/show/{id}/{created}
+    defaults: { _controller: TicketBundle:Ticket:showTicket, created: null }
 
 findTicketById:
     pattern:  /ticket/findTicketById/

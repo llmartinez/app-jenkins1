@@ -9,6 +9,10 @@
       <li class="active">#{{ ticket.id }}</li>
     </ol>
 
+{% if created == 'created' %}
+  <p class="alert_created">{{'ticket_created'|trans}}
+  <a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+                   {% else %}{{ path('listTicket') }}{% endif %}">{{'ticket_return'|trans}}</a></p>{% endif %}
 {% endblock  %}
 
 {% block info %}
