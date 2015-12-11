@@ -34,8 +34,11 @@
     <div class="form-group">
         <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
-            {% include 'TicketBundle:Ticket:show_ticket.html.twig'  %}
+            <a class="btn btn-primary fr asr_form-control asr_btn" href="/app_dev.php/es/ticket">
+              <img class="img_icon" src="/bundles/util/images/icon/back_.png" title="{% trans %} back {% endtrans %}" alt="{% trans %} back {% endtrans %}">{% trans %} back {% endtrans %}
+            </a>
 
+            {% include 'TicketBundle:Ticket:show_ticket.html.twig'  %}
         </form>
     </div>
 {% endblock  %}
