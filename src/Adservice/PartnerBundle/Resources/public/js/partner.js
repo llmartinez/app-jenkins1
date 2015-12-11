@@ -49,7 +49,7 @@
                 var country = $('#flt_country').val();
                 if(country == null || country == "") country = '0';
 
-                var partner = $('#flt_partner_w').val();
+                var partner = $('#flt_partner').val();
                 if(partner == null || partner == "") partner = '0';
 
                 var status = $('#flt_status').val();
