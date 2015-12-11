@@ -43,10 +43,10 @@ class WorkshopOrderController extends Controller {
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
-                $params[] = array('phone_number_1', " LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%'");
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'mail'){
-                $params[] = array('email_1', " LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%'");
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'name'){
                 $params[] = array($term, " LIKE '%".$field."%'");
@@ -55,6 +55,7 @@ class WorkshopOrderController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
+        
             if($security->isGranted('ROLE_SUPER_AD')) {
                 if ($partner != '0') $params[] = array('partner', ' = '.$partner);
                 $params[] = array('country', ' = '.$user->getCountry()->getId());
