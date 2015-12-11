@@ -426,32 +426,32 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function tblRepeatedAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $petition = $this->getRequest();
 
-        $id_model     = $petition->request->get('id_model');
-        $id_subsystem = $petition->request->get('id_subsystem');
+    //     $id_model     = $petition->request->get('id_model');
+    //     $id_subsystem = $petition->request->get('id_subsystem');
 
-        $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+    //     $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
-        if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
-            if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
-            if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
+    //     if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
+    //         if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
+    //         if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
 
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
+    //         $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
 
-            if(count($tickets) > 0) {
-                foreach ($tickets as $ticket) {
-                    $json[] = $ticket->to_json_subsystem();
-                }
-            }else{
-                $json = array( 'error' => 'No hay coincidencias');
-            }
-        }else{
-            $json = array( 'error' => 'No hay coincidencias');
-        }
+    //         if(count($tickets) > 0) {
+    //             foreach ($tickets as $ticket) {
+    //                 $json[] = $ticket->to_json_subsystem();
+    //             }
+    //         }else{
+    //             $json = array( 'error' => 'No hay coincidencias');
+    //         }
+    //     }else{
+    //         $json = array( 'error' => 'No hay coincidencias');
+    //     }
 
-        return new Response(json_encode($json), $status = 200);
+    //     return new Response(json_encode($json), $status = 200);
     }
 
     /**
