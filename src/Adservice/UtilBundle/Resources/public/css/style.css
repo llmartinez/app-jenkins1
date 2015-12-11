@@ -146,6 +146,9 @@ legend {
   width: 100%;
   text-align: center;
 }
+.return_btn {
+    margin-bottom: -35px!important;
+}
 
 .content {
     width: 70%;
