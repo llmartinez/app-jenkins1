@@ -3,7 +3,7 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = '0';
             var option = $("#option").val();
@@ -28,7 +28,7 @@
 
 	    	if (prev_page > 0 ) {
                     
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = '0';
             var option = $("#option").val();
@@ -50,7 +50,7 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = '0';
             var term = $("#flt_search_term").val();
@@ -83,7 +83,7 @@
                     var country = $("#flt_country").val();
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
-                    var partner = $('#flt_partner_w').val();
+                    var partner = $('#flt_partner').val();
 	            if(partner == null) var partner = $('#flt_partner_s').val();
 	            if(partner == null) partner = '0';
                     var status = $('#flt_status').val();
@@ -101,7 +101,7 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = '0';
             var option = $("#option").val();

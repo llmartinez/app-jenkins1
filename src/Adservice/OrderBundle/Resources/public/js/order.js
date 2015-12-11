@@ -23,9 +23,9 @@
         });
 
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_partner_w').change(function() {
+        $('#flt_partner').change(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
             var status  = $('#flt_status').val();
@@ -59,7 +59,7 @@
             var status  = $('#flt_status').val();
             if(status  == null) status  = 0;
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) partner = 'none';
 
             var route = 'workshopOrder_listWorkshops';

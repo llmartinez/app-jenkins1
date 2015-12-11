@@ -3,7 +3,7 @@
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
@@ -21,7 +21,7 @@
 
 	    	if (prev_page > 0 ) {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
@@ -36,7 +36,7 @@
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
@@ -55,7 +55,7 @@
 
 	    	if (next_page <= total ) {
 
-	            var partner = $('#flt_partner_w').val();
+	            var partner = $('#flt_partner').val();
 	            if(partner == null) var partner = $('#flt_partner_s').val();
 	            if(partner == null) partner = 'none';
 
@@ -70,7 +70,7 @@
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
 
-            var partner = $('#flt_partner_w').val();
+            var partner = $('#flt_partner').val();
             if(partner == null) var partner = $('#flt_partner_s').val();
             if(partner == null) partner = 'none';
 
