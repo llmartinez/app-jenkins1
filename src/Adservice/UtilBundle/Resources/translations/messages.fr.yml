@@ -411,8 +411,8 @@ year:					 " Année "
 motor:					 "Moteur"
 kw:						 "kW"
 displacement:			 "Cylindrée"
-vin:					 "Numéro de châssis"
-plate_number:			 "Numéro d’immatriculation"
+vin:					 "Châssis"
+plate_number:			 "Immatriculation"
 
 #APP
 app:					 "Applications"

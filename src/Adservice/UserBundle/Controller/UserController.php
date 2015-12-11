@@ -35,10 +35,9 @@ class UserController extends Controller {
      */
     public function indexAction() {
 
-//        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-//
-//        $session = $this->getRequest()->getSession();
-//        $session->set('id_logged_user', $id_logged_user);
+        //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
+        //  $session = $this->getRequest()->getSession();
+        //  $session->set('id_logged_user', $id_logged_user);
 
 
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
