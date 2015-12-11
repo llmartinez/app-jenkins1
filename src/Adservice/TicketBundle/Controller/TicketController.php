@@ -1634,6 +1634,7 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
+
         if($size > 0){
 
             for ($i=0; $i<$size; $i++){
@@ -1648,14 +1649,6 @@ class TicketController extends Controller {
                     if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
                     else $tickets[] = $ticket;
                 }
-            }
-        }
-        else {
-            $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
-            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
-                $w_id = $workshop->getId();
-                if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
-                else $tickets[] = $ticket;
             }
         }
 

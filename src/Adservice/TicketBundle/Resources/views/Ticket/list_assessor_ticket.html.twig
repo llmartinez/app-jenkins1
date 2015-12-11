@@ -57,7 +57,7 @@
 
                         {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
                             <input type="hidden" id="ticket_id_subsystem" value="{{ticket.subsystem.id }}">
-                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name }}">
+                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name|trans }}">
                         {% else %}
                             <input type="hidden" id="ticket_id_subsystem" value="0">
                             <input type="hidden" id="ticket_subsystem"    value=" ">
