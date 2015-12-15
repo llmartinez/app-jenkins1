@@ -41,6 +41,7 @@
 
             var numeros="0123456789";
             var letras="abcdefghyjklmnñopqrstuvwxyz";
+            var LETRAS="ABCDEFGHYJKLMNÑOPQRSTUVWXYZ";
             var find = 0;
             var error = 0;
 
@@ -65,7 +66,7 @@
             else {
                 find = 0;
                 for(i=0; i<PASS.length; i++){
-                    if (letras.indexOf(PASS.charAt(i),0)!=-1){
+                    if (LETRAS.indexOf(PASS.charAt(i),0)!=-1){
                         find = 1;
                     }
                 }

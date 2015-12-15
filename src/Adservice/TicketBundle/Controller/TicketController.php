@@ -1118,7 +1118,7 @@ class TicketController extends Controller {
 
                         if ($security->isGranted('ROLE_ASSESSOR') === false) {
                             if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
-                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
+                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
                             elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
                         }
 

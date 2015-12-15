@@ -475,7 +475,7 @@ ticket.blocked:				  "Ticket blocked"
 ticket.unlock:				  "Unlock ticket"
 ticket.close:				  "Close Ticket"
 ticket.close_as_instructions: "Followed advisor instructions"
-ticket.close_irreparable car: "The car is irreparable"
+ticket.close_irreparable_car: "The car is irreparable"
 ticket.close_other:			  "Other"
 ticket.closed:				  "Ticket closed"
 ticket.reopen:				  "Reopen ticket"
@@ -710,5 +710,5 @@ error: An error has occurred
 back_app:  Back to the application
 
 termsConditions: 	" "
-_termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
-footerText: 	 	© Grup Eina Digital · Center of Innovation and Resources
+_termsConditions: 	By using the application you accept the following <a href="">terms and conditions</a>.
+footerText: 	 	© Grup Eina International · Center of Innovation and Resources
