@@ -212,7 +212,7 @@ function fill_model(model) {
 
             if (data['error'] != "No hay coincidencias") {
                 //Primer campo vacío
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value='0'></option>");
+                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
                 $.each(data, function(idx, elm) {
                     if(model == elm.id )
                         $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
@@ -277,7 +277,7 @@ function fill_version(version) {
                 var vts_url = $( "#vts-url" ).val();
 
                 //Primer campo vacío
-                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value='0'></option>");
+                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
 
                 $.each(data, function(idx, elm) {
                     if(version == elm.id )
@@ -383,7 +383,7 @@ function fill_car_by_year() {
                     $('#new_car_form_version').empty();
 
                     //Primer campo vacío
-                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option></option>");
 
                     $.each(data, function(idx, elm) {
                         $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
@@ -437,7 +437,7 @@ function fill_car_by_motor() {
                     $('#new_car_form_version').empty();
 
                     //Primer campo vacío
-                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value='0'></option>");
+                    $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option></option>");
 
                     $.each(data, function(idx, elm) {
                         $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
@@ -488,7 +488,7 @@ function fill_subsystem(subsystem) {
                 $('select[id*=_subsystem]').empty();
 
                 //Primer campo vacío
-                $('form[id=contact]').find('select[id*=_subsystem]').append("<option value='0'></option>");
+                $('form[id=contact]').find('select[id*=_subsystem]').append("<option></option>");
 
                 $.each(data, function(idx, elm) {
                     if (elm.id == id_subsystem || elm.id == subsystem)
