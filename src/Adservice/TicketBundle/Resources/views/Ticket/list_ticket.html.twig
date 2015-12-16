@@ -56,8 +56,14 @@
                             {% set len = 100 %}
                         {% endif %}
 
-                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
-                        <td title="{{car ~ ticket.car.version}}">{{ car|length > 30 ? car|slice(0, 30) ~ '...' : car  }}</td>
+                        {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                        {% elseif ticket.car.model.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        {% else %}
+                            {% set car = ticket.car.brand %}
+                        {% endif %}
+                        <td title="{{car}}">{{ car|length > 30 ? car|slice(0, 30) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 

@@ -103,7 +103,14 @@
                                 {% endif %}
                             {% endif %}
                             <td>{{ ticket.workshop.name|length > 15 ? ticket.workshop.name|slice(0, 15) ~ '...' : ticket.workshop.name  }}</td>
-                            {% set car = ticket.car.brand.name ~ ' ' ~ ticket.car.model.name %}
+
+                        {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                        {% elseif ticket.car.model.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        {% else %}
+                            {% set car = ticket.car.brand %}
+                        {% endif %}
                             <td>{{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
                             <td>{{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description  }}</td>
                             <td><a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
