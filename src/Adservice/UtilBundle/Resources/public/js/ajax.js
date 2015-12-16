@@ -260,6 +260,7 @@ function fill_version(version) {
         success: function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             $('#new_car_form_version').empty();
+            $('#id_system').val("");
             $('#ticket_form_subsystem').empty();
 
             var flt_year = $('#flt_year').val();
