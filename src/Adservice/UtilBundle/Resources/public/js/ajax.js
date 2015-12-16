@@ -187,48 +187,51 @@ function fill_model(model) {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
-    var route  = 'car_model';
-    var locale = $(document).find("#data_locale").val();
-    var filter = '';
-    var filter_value = '';
+    if (id_brand != undefined && id_brand != "" && id_brand != "0") {
 
-    if ($('#year_selected').val()  == '') { filter       = 'year';
-                                            filter_value = $('#new_car_form_year').val(); }
+        var route  = 'car_model';
+        var locale = $(document).find("#data_locale").val();
+        var filter = '';
+        var filter_value = '';
 
-    if ($('#motor_selected').val() == '') { filter       = 'motor';
-                                            filter_value = $('#new_car_form_motor').val(); }
+        if ($('#year_selected').val()  == '') { filter       = 'year';
+                                                filter_value = $('#new_car_form_year').val(); }
 
-    $.ajax({
-        type: "POST",
-        url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
-        data: {id_brand: id_brand, filter: filter, filter_value: filter_value},
-        dataType: "json",
-        beforeSend: function(){ $("body").css("cursor", "progress"); },
-        complete: function(){ $("body").css("cursor", "default"); },
-        success: function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#new_car_form_model').empty();
-            $('#new_car_form_version').empty();
+        if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                filter_value = $('#new_car_form_motor').val(); }
 
-            if (data['error'] != "No hay coincidencias") {
-                //Primer campo vacío
-                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
-                $.each(data, function(idx, elm) {
-                    if(model == elm.id )
-                        $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                    else
-                        $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                });
+        $.ajax({
+            type: "POST",
+            url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
+            data: {id_brand: id_brand, filter: filter, filter_value: filter_value},
+            dataType: "json",
+            beforeSend: function(){ $("body").css("cursor", "progress"); },
+            complete: function(){ $("body").css("cursor", "default"); },
+            success: function(data) {
+                // Limpiamos y llenamos el combo con las opciones del json
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
+
+                if (data['error'] != "No hay coincidencias") {
+                    //Primer campo vacío
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
+                    $.each(data, function(idx, elm) {
+                        if(model == elm.id )
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                        else
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                    });
+                }
+                if(model != undefined && model != '' ) {
+                    var version = $("#ticket_version").val();
+                    fill_version(version);
+                }
+            },
+            error: function() {
+                console.log("Error al cargar modelos...");
             }
-            if(model != undefined && model != '' ) {
-                var version = $("#ticket_version").val();
-                fill_version(version);
-            }
-        },
-        error: function() {
-            console.log("Error al cargar modelos...");
-        }
-    });
+        });
+    }
 }
 
 /**

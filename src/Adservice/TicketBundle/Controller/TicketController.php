@@ -1489,13 +1489,13 @@ class TicketController extends Controller {
         $security   = $this->get('security.context');
         $params = array();
 
-        if($brand   != '0') $params[] = array('brand',' = '.$brand);
-        if($model   != '0') $params[] = array('model',' = '.$model);
-        if($version != '0') $params[] = array('version',' = '.$version);
+        if($brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
+        if($model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
+        if($version != '0' and $version != '') $params[] = array('version',' = '.$version);
 
-        if($year    != '0') $params[] = array('year'," LIKE '%".$year."%' ");
-        if($motor   != '0') $params[] = array('motor'," LIKE '%".$motor."%' ");
-        if($kw      != '0') $params[] = array('kw',' = '.$kw);
+        if($year    != '0' and $year    != '') $params[] = array('year'," LIKE '%".$year."%' ");
+        if($motor   != '0' and $motor   != '') $params[] = array('motor'," LIKE '%".$motor."%' ");
+        if($kw      != '0' and $kw      != '') $params[] = array('kw',' = '.$kw);
 
         $pagination = new Pagination($page);
 
@@ -1616,9 +1616,9 @@ class TicketController extends Controller {
         $num_rows = $request->request->get('slct_numRows');
         if(!isset($num_rows)) $num_rows = 10;
 
-        if(isset($brand) and $brand   != '0') $params[] = array('brand',' = '.$brand);
-        if(isset($model) and $model   != '0') $params[] = array('model',' = '.$model);
-        if(isset($version) and $version != '0') $params[] = array('version',' = '.$version);
+        if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
+        if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
+        if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
 
         $pagination = new Pagination($page);
 
@@ -1642,7 +1642,7 @@ class TicketController extends Controller {
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
-                if( $subsystem == 0) $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
                 else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
 
                 if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
@@ -1674,7 +1674,7 @@ class TicketController extends Controller {
             for ($i=0; $i<$size2; $i++){
 
                 $id2     = $cars2[$key2[$i]]->getId();
-                if( $subsystem == 0) $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
+                if( $subsystem == 0 or $subsystem == '') $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
                 else $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2,'subsystem' => $subsystem));
 
                 if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
@@ -1707,7 +1707,8 @@ class TicketController extends Controller {
         if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->find($version);
 
-        if(isset($subsystem) and $subsystem != '0') $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
+        if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
+            $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
 
