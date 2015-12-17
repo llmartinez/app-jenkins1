@@ -174,6 +174,7 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
+        $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
@@ -189,7 +190,6 @@ class AjaxController extends Controller
             $consulta = $em->createQuery($query);
             $models   = $consulta->getResult();
 
-            $id_mts = '';
             $size = sizeOf($models);
             if($size == 0) {
 
@@ -238,6 +238,7 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
+        $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
@@ -253,7 +254,6 @@ class AjaxController extends Controller
             $consulta = $em->createQuery($query);
             $versions = $consulta->getResult();
 
-            $id_mts = '';
             $size = sizeOf($versions);
             if($size == 0) {
 
