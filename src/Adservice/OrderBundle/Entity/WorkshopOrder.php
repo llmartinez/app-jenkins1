@@ -5,7 +5,6 @@ namespace Adservice\OrderBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
-use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
 
 /**
@@ -198,6 +197,8 @@ class WorkshopOrder {
      * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="workshop")
      */
     private $tickets;
+    
+    
 
     /**
      * Get id

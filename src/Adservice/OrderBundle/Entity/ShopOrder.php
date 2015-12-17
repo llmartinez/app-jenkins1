@@ -51,6 +51,18 @@ class ShopOrder {
      */
     private $rejection_reason;
 
+    /**
+    * @var integer $code_shop
+    *
+    * @ORM\Column(name="code_shop", type="integer")
+    */
+    private $code_shop;
+    
+    /**
+     * @var string $cif
+     * @ORM\Column(name="cif", type="string", length=255, nullable=true)
+     */
+    private $cif;
 //  _____ _  __
 // |  ___| |/ /
 // | |_  | ' /
@@ -124,7 +136,25 @@ class ShopOrder {
     public function setIdShop($id_shop) {
         $this->id_shop = $id_shop;
     }
+    
+    /**
+     * Set code_shop
+     *
+     * @param string $code_shop
+     */
+    public function setCodeShop($code_shop) {
+        $this->code_shop = $code_shop;
+    }
 
+    /**
+     * Get code_shop
+     *
+     * @return string
+     */
+    public function getCodeShop() {
+        return $this->code_shop;
+    }
+    
     public function getAction() {
         return $this->action;
     }
@@ -147,6 +177,14 @@ class ShopOrder {
 
     public function setWantedAction($wanted_action) {
         $this->wanted_action = $wanted_action;
+    }
+    
+    public function getCif() {
+        return $this->cif;
+    }
+
+    public function setCif($cif) {
+        $this->cif = $cif;
     }
 
 //  ________________________________________________________________________________
@@ -267,6 +305,13 @@ class ShopOrder {
 //  \____\___/|_| \_| |_/_/   \_\____| |_|
 
     /**
+     * @var string $contact
+     *
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     */
+    private $contact;
+    
+    /**
      * @var string $country
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
@@ -352,6 +397,25 @@ class ShopOrder {
 
 //  ___________________________________________________________________
 // |___________________________________________________________________|
+
+    
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     */
+    public function setContact($contact) {
+        $this->contact = $contact;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact() {
+        return $this->contact;
+    }
 
     /**
      * Set country
