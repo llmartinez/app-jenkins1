@@ -361,7 +361,8 @@ class WorkshopController extends Controller {
 
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $partner->getId(),'code_workshop' => $workshop->getCodeWorkshop()));
-
+//Comprobar telefono
+                
                 $findPhone = array(0,0,0,0);
 
                 if($workshop->getPhoneNumber1() !='0' and $workshop->getPhoneNumber1() !=null){

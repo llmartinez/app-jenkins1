@@ -69,7 +69,7 @@
                 <td>{{ partner.region|length > 15 ? partner.region|slice(0, 15) ~ '...' : partner.region  }}</td>
                 <td>{{ partner.city|length > 15 ? partner.city|slice(0, 15) ~ '...' : partner.city  }}</td>
                 <td>
-                    <a id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                    <a title="{% trans %} edit.partner {% endtrans %}" id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                 </td>
             </tr>
                 {% endfor %}

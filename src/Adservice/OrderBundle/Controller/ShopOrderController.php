@@ -152,8 +152,8 @@ class ShopOrderController extends Controller {
 
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
+                    
                 }
-
                 return $this->redirect($this->generateUrl('list_orders'));
             }
         }
@@ -272,6 +272,7 @@ class ShopOrderController extends Controller {
 
             }
         }
+        
         return $this->render('OrderBundle:ShopOrders:edit_order.html.twig', array('shopOrder' => $shopOrder,
                                                                                   'shop'      => $shop,
                                                                                   'form_name' => $form->getName(),
@@ -609,7 +610,6 @@ class ShopOrderController extends Controller {
         $request = $this->getRequest();
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-
         $em = $this->getDoctrine()->getEntityManager();
 
         // activate   + accepted = setActive a TRUE  and delete shopOrder
@@ -715,6 +715,9 @@ class ShopOrderController extends Controller {
         $shopOrder->setFax           ($shop->getFax());
         $shopOrder->setEmail1        ($shop->getEmail1());
         $shopOrder->setEmail2        ($shop->getEmail2());
+        $shopOrder->setCodeShop      ($shop->getCodeShop());
+        $shopOrder->setCif           ($shop->getCif());
+        $shopOrder->setContact       ($shop->getContact());
 
         if ($shop->getCreatedBy() != null ) {
             $shopOrder->setCreatedBy($shop->getCreatedBy());
@@ -753,6 +756,9 @@ class ShopOrderController extends Controller {
         $shop->setFax           ($shopOrder->getFax());
         $shop->setEmail1        ($shopOrder->getEmail1());
         $shop->setEmail2        ($shopOrder->getEmail2());
+        $shop->setCodeShop      ($shopOrder->getCodeShop());
+        $shop->setCif           ($shopOrder->getCif());
+        $shop->setContact       ($shopOrder->getContact());
 
         if ($shopOrder->getCreatedBy() != null ) {
             $shop->setCreatedBy($shopOrder->getCreatedBy());
@@ -778,7 +784,6 @@ class ShopOrderController extends Controller {
      * @return Array
      */
     public static function getShopOrdersBefore($em, $shopOrders) {
-
         $ordersBefore = array();
 
         foreach ($shopOrders as $shopOrder) {

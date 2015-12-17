@@ -44,7 +44,7 @@
             var country = $('#flt_country').val();
             var option = $('#option').val();
 
-            if(country == null) country = 'none';
+            if(country == null) country = '0';
             if(option == null) option = 'workshop_pending';
 
             var route = $('#route').val();

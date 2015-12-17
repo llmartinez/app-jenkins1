@@ -22,7 +22,7 @@
 
                     {% if ordersBefore[shopOrder.id] is defined %}
                         {% set orderBefore = ordersBefore[shopOrder.id] %}
-                    {% endif %}
+                    {% endif %}                    
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
                             <td> {{ shopOrder.id           }} </td>
                             <td> {{ shopOrder.name|length > 15 ? shopOrder.name|slice(0, 15) ~ '...' : shopOrder.name  }} </td>
@@ -71,6 +71,9 @@
                                                         <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ orderBefore.name          }}</td><td>{{ shopOrder.name          }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ orderBefore.codeShop      }}</td><td>{{ shopOrder.codeShop      }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif           }}</td><td>{{ shopOrder.cif           }}</td></tr>
+                                                        <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ orderBefore.contact       }}</td><td>{{ shopOrder.contact       }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ orderBefore.phoneNumber1  }}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ orderBefore.phoneNumber2  }}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
                                                         <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ orderBefore.movileNumber1 }}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
@@ -87,6 +90,9 @@
                                                     <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ shopOrder.name          }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ shopOrder.codeShop      }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ shopOrder.cif           }}</td></tr>
+                                                        <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ shopOrder.contact       }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
                                                         <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
