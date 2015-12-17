@@ -205,7 +205,7 @@ class WorkshopOrderController extends Controller {
                     // Set default shop to NULL
                     $shop = $form['shop']->getClientData();
                     if($shop == 0) { $workshopOrder->setShop(null); }
-
+                    
                     UtilController::saveEntity($em, $workshopOrder, $user);
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -255,7 +255,7 @@ class WorkshopOrderController extends Controller {
                 var_dump($form_errors);
             }
         }
-
+        
         // $id_partner = $security->getToken()->getUser()->getPartner()->getId();
 
         // $shops[] = $em->getRepository("PartnerBundle:Shop")->find(1);
@@ -687,19 +687,48 @@ class WorkshopOrderController extends Controller {
 
         /*CHECK CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
-                                                                               'code_workshop' => $workshopOrder->getCodeWorkshop()));
-
+                                                                                    'code_workshop' => $workshopOrder->getCodeWorkshop()));
+        $code= 0;
+        $flash = "";   
+        $findPhone = array(0,0,0,0);
+        if($workshopOrder->getPhoneNumber1() !=null){
+            $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber1());
+        }
+        if($workshopOrder->getPhoneNumber2() !=null){
+            $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
+        }
+        if($workshopOrder->getMovileNumber1() !=null){
+            $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber1());
+        }
+        if($workshopOrder->getMovileNumber2() !=null){
+            $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber2());
+        }
         if(isset($find))$codeWorkshop = $find->getCodeWorkshop();
         else            $codeWorkshop = " ";
-
-        $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
-        $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
+        if($find){
+            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+            $flash .= $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
+        }
+        if($findPhone[0]['1']>0){
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber1();
+        }
+        else if($findPhone[1]['1']>0){
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
+        }
+        else if($findPhone[2]['1']>0){
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber1();
+        }
+        else if($findPhone[3]['1']>0){
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber2();
+        }
+   
 //        else $this->get('session')->setFlash('error', $flash);
 
             if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
                 $workshop->setActive(true);
+               
                 $action = $workshopOrder->getWantedAction();
                 $em->remove($workshopOrder);
                 UtilController::newEntity($workshop, $user);
@@ -725,7 +754,6 @@ class WorkshopOrderController extends Controller {
                 if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
                 {
                     $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
-
                     if ($workshopOrder->getTest() != null) {
                         $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                     }
@@ -938,7 +966,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
         $workshop->setAdServicePlus ($workshopOrder->getAdServicePlus());
-
+        
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshop->setCreatedBy($workshopOrder->getCreatedBy());
         }

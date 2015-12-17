@@ -11,7 +11,7 @@
 
                 var country = $('#flt_country').val();
                 var partner = $('#flt_partner').val();
-                if(country == null) var country = 'none';
+                if(country == null) var country = '0';
                 if(partner == null) var partner = 'none';
 
                 var route = 'shop_list';
@@ -25,7 +25,7 @@
                 var partner = $('#flt_partner').val();
                 var country = $('#flt_country').val();
                 if(partner == null) var partner = 'none';
-                if(country == null) var country = 'none';
+                if(country == null) var country = '0';
 
                 var route = 'shop_list';
                 var locale = $(document).find("#data_locale").val();

@@ -4,7 +4,7 @@
         $('#flt_country').change(function() {
 
             var country = $('#flt_country').val();
-            if(country == null) country = 'none';
+            if(country == null) country = '0';
 
             var route = 'partner_list';
             var locale = $(document).find("#data_locale").val();

@@ -10,6 +10,8 @@
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
                     var partner = $('#flt_partner').val();
+                    if(term == null || term == "") term = '0';
+                    if(field == null || field == "") field = '0';
                     if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
                     if(option == undefined || option == '') option = '0';
@@ -34,6 +36,8 @@
                         var term = $("#flt_search_term").val();
                         var field = $("#flt_search_field").val();
                         var partner = $('#flt_partner').val();
+                        if(term == null || term == "") term = '0';
+                        if(field == null || field == "") field = '0';
                         if(partner == null || partner == "") partner = '0';
                         if(country == undefined || country == '') country = '0';
                         if(option == undefined || option == '') option = '0';
@@ -53,6 +57,8 @@
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
                     var partner = $('#flt_partner').val();
+                    if(term == null || term == "") term = '0';
+                    if(field == null || field == "") field = '0';
                     if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
                     if(option == undefined || option == '') option = '0';
@@ -78,6 +84,8 @@
                 var term = $("#flt_search_term").val();
                 var field = $("#flt_search_field").val();
                 var partner = $('#flt_partner').val();
+                if(term == null || term == "") term = '0';
+                if(field == null || field == "") field = '0';
                 if(partner == null || partner == "") partner = '0';
                 if(country == undefined || country == '' || country == 'none') country = '0';
                 if(option == undefined || option == ''|| option == 'none') option = '0';
@@ -98,6 +106,8 @@
                     var term = $("#flt_search_term").val();
                     var field = $("#flt_search_field").val();
                     var partner = $('#flt_partner').val();
+                    if(term == null || term == "") term = '0';
+                    if(field == null || field == "") field = '0';
                     if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
                     if(option == undefined || option == '') option = '0';

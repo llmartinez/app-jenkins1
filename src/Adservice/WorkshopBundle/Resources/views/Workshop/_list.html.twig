@@ -26,7 +26,7 @@
                 <td>{{ workshop.phoneNumber1 }}</td>
                 {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}
                     <td>
-                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                        <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>
