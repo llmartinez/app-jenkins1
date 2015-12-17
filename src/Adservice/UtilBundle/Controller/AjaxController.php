@@ -216,7 +216,7 @@ class AjaxController extends Controller
                 $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                           WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                           AND m.id = ".$id_model." AND mt.name like '%".$filter_value."%'
-                          ORDER BY m.name";
+                          ORDER BY v.name";
             elseif($filter == 'year')
                 $query = "SELECT v FROM CarBundle:Version v
                           WHERE v.model = ".$id_model." AND v.model IS NOT NULL
@@ -228,12 +228,14 @@ class AjaxController extends Controller
         }
         else{
             $model = $em->getRepository('CarBundle:Model')->find($id_model);
-            $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
+            $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()), array('name' => 'ASC'));
         }
 
         $size = sizeOf($versions);
         if($size > 0) {
             foreach ($versions as $version) {
+
+                var_dump($version);die;
                 $json[] = $version->to_json();
             }
         }else{
