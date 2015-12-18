@@ -1204,6 +1204,18 @@ class TicketController extends Controller {
     }
 
     /**
+     * Muestra una lista de motores
+     * @return url
+     */
+    public function listMotorsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
+
+        return $this->render('TicketBundle:Layout:show_motors_layout.html.twig', array('motors' => $motors));
+    }
+
+    /**
      * Reabre el ticket
      * @Route("/ticket/reopen/{id}/")
      * @ParamConverter("ticket", class="TicketBundle:Ticket")

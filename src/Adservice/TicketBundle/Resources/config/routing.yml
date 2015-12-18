@@ -82,6 +82,9 @@ callTicket:
     pattern:  /call/{code_partner}/{code_workshop}
     defaults: { _controller: TicketBundle:Ticket:callTicket, code_partner: 0 , code_workshop: 0 }
 
+listMotors:
+    pattern:  /motors/
+    defaults: { _controller: TicketBundle:Ticket:listMotors  }
 
 ################################
 #    GESTIÓN DE POSTS          #

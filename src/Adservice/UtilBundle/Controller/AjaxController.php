@@ -326,8 +326,16 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_version = $petition->request->get('id_version');
+        $motor = $petition->request->get('motor');
 
-        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+        if($motor != ''){
+            $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
+                                        WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$motor."%'");
+            $version = $query->getResult();
+            $version = $version[0];
+        }else{
+            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+        }
 
         if (isset($version)) {
             $id_motor = $version->getMotor();
@@ -338,7 +346,7 @@ class AjaxController extends Controller
         if(isset($version)) {
             $json[] = $version->to_json();
         }
-        else                {$json   = array( 'error' => 'No hay coincidencias');}
+        else $json   = array( 'error' => 'No hay coincidencias');
 
         return new Response(json_encode($json), $status = 200);
     }
@@ -390,6 +398,7 @@ class AjaxController extends Controller
         $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                     WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                     AND mt.name LIKE '%".$motor."%' ORDER BY b.name ASC";
+
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 

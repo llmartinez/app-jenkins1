@@ -49,6 +49,7 @@
 
                 <label class="lbl_lgray" for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
                 <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
+                <a class="pull-right" id="list_motor" title="{% trans %} motor {% endtrans %}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a>
                 <input type="text" id="new_car_form_motor" name="new_car_form_motor" class="form-control asr_form-control"
                     {% if motor is defined %}value="{{motor}}"{% endif %}>
                 </input>
