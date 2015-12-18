@@ -174,7 +174,7 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $id_mts = '';
+        // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
@@ -190,29 +190,29 @@ class AjaxController extends Controller
             $consulta = $em->createQuery($query);
             $models   = $consulta->getResult();
 
-            $size = sizeOf($models);
-            if($size == 0) {
+            // $size = sizeOf($models);
+            // if($size == 0) {
 
-                $id_mts = $petition->request->get('id_mts');
+            //     $id_mts = $petition->request->get('id_mts');
 
-                if($id_mts == '')
-                {
-                    $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
-                    $consulta = $em->createQuery($query);
-                    $motors   = $consulta->getResult();
+            //     if($id_mts == '')
+            //     {
+            //         $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            //         $consulta = $em->createQuery($query);
+            //         $motors   = $consulta->getResult();
 
-                    $motor = $petition->request->get('motor');
-                    $motor = UtilController::getSlug($motor, '');
+            //         $motor = $petition->request->get('motor');
+            //         $motor = UtilController::getSlug($motor, '');
 
-                    $id_mts = $this->getMotorsId($motors, $motor);
-                }
+            //         $id_mts = $this->getMotorsId($motors, $motor);
+            //     }
 
-                $query = "SELECT m FROM CarBundle:Model m, CarBundle:Version v
-                          WHERE m.id = v.model AND v.motor IN ".$id_mts."
-                          ORDER BY m.name ASC";
-                $consulta = $em->createQuery($query);
-                $models   = $consulta->getResult();
-            }
+            //     $query = "SELECT m FROM CarBundle:Model m, CarBundle:Version v
+            //               WHERE m.id = v.model AND v.motor IN ".$id_mts."
+            //               ORDER BY m.name ASC";
+            //     $consulta = $em->createQuery($query);
+            //     $models   = $consulta->getResult();
+            // }
         }
         else{
             $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand), array('name' => 'ASC'));
@@ -223,7 +223,7 @@ class AjaxController extends Controller
             foreach ($models as $model) {
                 $json[] = $model->to_json();
             }
-            $json['id_mts'] = $id_mts;
+            // $json['id_mts'] = $id_mts;
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
@@ -238,7 +238,7 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $id_mts = '';
+        // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
@@ -254,42 +254,42 @@ class AjaxController extends Controller
             $consulta = $em->createQuery($query);
             $versions = $consulta->getResult();
 
-            $size = sizeOf($versions);
-            if($size == 0) {
+            // $size = sizeOf($versions);
+            // if($size == 0) {
 
-                $id_mts = $petition->request->get('id_mts');
+            //     $id_mts = $petition->request->get('id_mts');
 
-                if($id_mts == '')
-                {
-                    $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
-                    $consulta = $em->createQuery($query);
-                    $motors   = $consulta->getResult();
+            //     if($id_mts == '')
+            //     {
+            //         $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            //         $consulta = $em->createQuery($query);
+            //         $motors   = $consulta->getResult();
 
-                    $motor = $petition->request->get('motor');
-                    $motor = UtilController::getSlug($motor, '');
+            //         $motor = $petition->request->get('motor');
+            //         $motor = UtilController::getSlug($motor, '');
 
-                    $id_mts = $this->getMotorsId($motors, $motor);
-                }
+            //         $id_mts = $this->getMotorsId($motors, $motor);
+            //     }
 
-                $query = "SELECT v FROM CarBundle:Version v
-                          WHERE v.motor IN ".$id_mts."
-                          ORDER BY v.name ASC";
-                $consulta = $em->createQuery($query);
-                $versions   = $consulta->getResult();
-            }
+            //     $query = "SELECT v FROM CarBundle:Version v
+            //               WHERE v.motor IN ".$id_mts."
+            //               ORDER BY v.name ASC";
+            //     $consulta = $em->createQuery($query);
+            //     $versions   = $consulta->getResult();
+            // }
         }
         else{
             $q_version = $em->createQuery("SELECT v FROM CarBundle:Version v WHERE v.model = ".$id_model." GROUP BY v.id ORDER BY v.name ASC");
             $versions = $q_version->getResult();
         }
 
-        if($id_mts == '') {
+        // if($id_mts == '') {
             $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
                                         WHERE v.motor = m.id AND v.model = ".$id_model);
-        }else{
-            $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
-                                        WHERE v.motor = m.id AND m.id IN ".$id_mts." AND v.model = ".$id_model." ");
-        }
+        // }else{
+        //     $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
+        //                                 WHERE v.motor = m.id AND m.id IN ".$id_mts." AND v.model = ".$id_model." ");
+        // }
         $res_motors = $q_motor->getResult();
 
         $motors = array();
@@ -310,7 +310,7 @@ class AjaxController extends Controller
                 }
 
             }
-            $json['id_mts'] = $id_mts;
+            // $json['id_mts'] = $id_mts;
         }else{
                 $json = array( 'error' => 'No hay coincidencias');
         }
@@ -398,32 +398,32 @@ class AjaxController extends Controller
             foreach ($brands as $brand) {
                 $json[] = $brand->to_json();
             }
-            $json['id_mts'] = '';
+            // $json['id_mts'] = '';
         }else{
-            // Slug del campo introducido
-            $motor = UtilController::getSlug($motor, '');
+            // // Slug del campo introducido
+            // $motor = UtilController::getSlug($motor, '');
 
-            $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
-            $consulta = $em->createQuery($query);
-            $motors   = $consulta->getResult();
+            // $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            // $consulta = $em->createQuery($query);
+            // $motors   = $consulta->getResult();
 
-            $id_mts = $this->getMotorsId($motors, $motor);
+            // $id_mts = $this->getMotorsId($motors, $motor);
 
-            $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Version v
-                        WHERE b.id = v.brand AND v.motor IN ".$id_mts." ORDER BY b.name ASC";
-            $consulta = $em->createQuery($query);
-            $brands   = $consulta->getResult();
+            // $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Version v
+            //             WHERE b.id = v.brand AND v.motor IN ".$id_mts." ORDER BY b.name ASC";
+            // $consulta = $em->createQuery($query);
+            // $brands   = $consulta->getResult();
 
-            $size = sizeOf($brands);
+            // $size = sizeOf($brands);
 
-            if($size > 0) {
-                foreach ($brands as $brand) {
-                    $json[] = $brand->to_json();
-                }
-                $json['id_mts'] = $id_mts;
-            }else{
+            // if($size > 0) {
+            //     foreach ($brands as $brand) {
+            //         $json[] = $brand->to_json();
+            //     }
+            //     $json['id_mts'] = $id_mts;
+            // }else{
                 $json = array( 'error' => 'No hay coincidencias');
-            }
+            // }
         }
 
         return new Response(json_encode($json), $status = 200);
@@ -433,22 +433,22 @@ class AjaxController extends Controller
      * Devuelve un array de ids de motores que coinciden con una cadena con un slug
      * @return $string
      */
-    public function getMotorsId($motors, $motor) {
+    // public function getMotorsId($motors, $motor) {
 
-        $id_mts = '(0';
-        foreach ($motors as $mt) {
-            $mt_name = $mt->getName();
-            $mt_name = UtilController::getSlug($mt_name, '');
+    //     $id_mts = '(0';
+    //     foreach ($motors as $mt) {
+    //         $mt_name = $mt->getName();
+    //         $mt_name = UtilController::getSlug($mt_name, '');
 
-            $pos = strpos($mt_name, $motor);
-            if ($pos !== false) {
-                $id_mts .= ', '.$mt->getId();
-            }
-        }
-        $id_mts .= ')';
+    //         $pos = strpos($mt_name, $motor);
+    //         if ($pos !== false) {
+    //             $id_mts .= ', '.$mt->getId();
+    //         }
+    //     }
+    //     $id_mts .= ')';
 
-        return $id_mts;
-    }
+    //     return $id_mts;
+    // }
 
 //  _____ ___ ____ _  _______ _____
 // |_   _|_ _/ ___| |/ / ____|_   _|
