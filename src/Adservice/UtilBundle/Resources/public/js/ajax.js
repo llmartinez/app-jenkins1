@@ -201,8 +201,9 @@ function fill_model(model) {
 
         if ($('#motor_selected').val() == '') { filter       = 'motor';
                                                 filter_value = $('#new_car_form_motor').val();
-                                                // id_mts       = $('#id_mts').val(); }
+                                                // id_mts       = $('#id_mts').val();
                                                 // motor        = $('form[id=contact]').find('#new_car_form_motor').val();
+                                              }
 
         $.ajax({
             type: "POST",
@@ -260,7 +261,8 @@ function fill_version(version) {
 
     if ($('#motor_selected').val() == '') { filter       = 'motor';
                                             filter_value = $('#new_car_form_motor').val();
-                                            // id_mts       = $('#id_mts').val();}
+                                            // id_mts       = $('#id_mts').val();
+                                          }
 
     $.ajax({
         type: "POST",
@@ -460,8 +462,8 @@ function fill_car_by_motor() {
                     $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option></option>");
 
                     $.each(data, function(idx, elm) {
-                        // if (idx == 'id_mts') $('#id_mts').val(elm);
-                        // else
+                        if (idx == 'id_mts') $('#id_mts').val(elm);
+                        else
                             $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
