@@ -612,7 +612,10 @@ class TicketController extends Controller {
                                     UtilController::saveEntity($em, $post, $user, false);
 
                                     $document->setPost($post);
-                                    mkdir($document->getUploadRootDir(), 0775);
+                                    $dir = $document->getUploadRootDir();
+                                    if (!file_exists($dir) && !is_dir($dir)) {
+                                        mkdir($dir, 0775);
+                                    }
 
                                     $em->persist($document);
                                     $em->flush();
