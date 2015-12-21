@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$( "#w_idpartner" ).focus();
 
 	function codeNumeric(){
-		if (($( "#w_id" ).val() != '' && !$.isNumeric($( "#w_id" ).val())) || ($( "#w_idpartner" ).val() != '' && !$.isNumeric($( "#w_idpartner" ).val()))) {
+		if ($( "#w_id").val() != '' && $( "#w_idpartner" ).val() != '' && (!$.isNumeric($( "#w_id" ).val()) || !$.isNumeric($( "#w_idpartner" ).val()))) {
 			event.preventDefault();
 
             var txt    = $( "#code_numeric").val();

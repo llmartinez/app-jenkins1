@@ -24,7 +24,7 @@ class WorkshopRepository extends EntityRepository
         $w_region    = $request->get('w_region'   );
 
 
-        if((is_numeric ($w_id) and is_numeric ($w_idpartner)) or ($w_email != '' or $w_tel != ''))
+        if((is_int ($w_id) and is_int ($w_idpartner)) or ($w_email != '' or $w_tel != ''))
         {
             $active = 1;
             if ($w_id != "" and $w_idpartner   != ""){
