@@ -44,15 +44,24 @@ $(document).ready(function() {
 
     });
 
-$('.sendTicket').click(function() {
-    var subsystem = $('#ticket_form_subsystem').val();
+// $('.sendTicket').click(function() {
+//     var model = $('#new_car_form_model').val();
 
-    if (subsystem == '' || subsystem == "0" ) {
-        var error_ticket = $('#error_ticket').val();
-        alert(error_ticket);
-        event.preventDefault();
-    }
-});
+//     var subsystem = $('#ticket_form_subsystem').val();
+
+//     if (model == '' || model == "0") {
+//         var error_ticket = $('#error_ticket').val();
+//         var field = $("label[for='new_car_form_model']").text();
+//         alert(error_ticket+ ' ('+field+')');
+//         event.preventDefault();
+//     }
+//     if (subsystem == '' || subsystem == "0" ) {
+//         var error_ticket = $('#error_ticket').val();
+//         var field = $("label[for='new_ticket_form_subsystem']").text();
+//         alert(error_ticket+ ' ('+field+')');
+//         event.preventDefault();
+//     }
+// });
 
 
 $('#new_file_form_file').bind('change', function() {

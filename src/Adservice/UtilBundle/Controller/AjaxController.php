@@ -172,21 +172,47 @@ class AjaxController extends Controller
      */
     public function carModelAction($id_brand, $filter='', $filter_value='') {
         $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
 
+        // $id_mts = '';
         if($filter != '') {
-            if($filter == 'motor'){
+            if($filter == 'motor')
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                           WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND b.id = ".$id_brand."
                           AND mt.name like '%".$filter_value."%'
-                          ORDER BY m.name";}
-            elseif($filter == 'year'){
+                          ORDER BY m.name";
+            elseif($filter == 'year')
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m
                           WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.brand IS NOT NULL
                           AND (m.inicio <= '".$filter_value."99' AND m.inicio != '') AND (m.fin >= '".$filter_value."00' OR m.fin = '')
-                          GROUP BY m.id ORDER BY m.name";}
+                          GROUP BY m.id ORDER BY m.name";
 
             $consulta = $em->createQuery($query);
             $models   = $consulta->getResult();
+
+            // $size = sizeOf($models);
+            // if($size == 0) {
+
+            //     $id_mts = $petition->request->get('id_mts');
+
+            //     if($id_mts == '')
+            //     {
+            //         $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            //         $consulta = $em->createQuery($query);
+            //         $motors   = $consulta->getResult();
+
+            //         $motor = $petition->request->get('motor');
+            //         $motor = UtilController::getSlug($motor, '');
+
+            //         $id_mts = $this->getMotorsId($motors, $motor);
+            //     }
+
+            //     $query = "SELECT m FROM CarBundle:Model m, CarBundle:Version v
+            //               WHERE m.id = v.model AND v.motor IN ".$id_mts."
+            //               ORDER BY m.name ASC";
+            //     $consulta = $em->createQuery($query);
+            //     $models   = $consulta->getResult();
+            // }
         }
         else{
             $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand), array('name' => 'ASC'));
@@ -197,8 +223,9 @@ class AjaxController extends Controller
             foreach ($models as $model) {
                 $json[] = $model->to_json();
             }
+            // $json['id_mts'] = $id_mts;
         }else{
-                $json = array( 'error' => 'No hay coincidencias');
+            $json = array( 'error' => 'No hay coincidencias');
         }
         return new Response(json_encode($json), $status = 200);
     }
@@ -211,12 +238,13 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
+        // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
                 $query = "SELECT v FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                           WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                           AND m.id = ".$id_model." AND mt.name like '%".$filter_value."%'
-                          ORDER BY m.name";
+                          ORDER BY v.name";
             elseif($filter == 'year')
                 $query = "SELECT v FROM CarBundle:Version v
                           WHERE v.model = ".$id_model." AND v.model IS NOT NULL
@@ -224,18 +252,65 @@ class AjaxController extends Controller
                           GROUP BY v.id ORDER BY v.name";
 
             $consulta = $em->createQuery($query);
-            $versions   = $consulta->getResult();
+            $versions = $consulta->getResult();
+
+            // $size = sizeOf($versions);
+            // if($size == 0) {
+
+            //     $id_mts = $petition->request->get('id_mts');
+
+            //     if($id_mts == '')
+            //     {
+            //         $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            //         $consulta = $em->createQuery($query);
+            //         $motors   = $consulta->getResult();
+
+            //         $motor = $petition->request->get('motor');
+            //         $motor = UtilController::getSlug($motor, '');
+
+            //         $id_mts = $this->getMotorsId($motors, $motor);
+            //     }
+
+            //     $query = "SELECT v FROM CarBundle:Version v
+            //               WHERE v.motor IN ".$id_mts."
+            //               ORDER BY v.name ASC";
+            //     $consulta = $em->createQuery($query);
+            //     $versions   = $consulta->getResult();
+            // }
         }
         else{
-            $model = $em->getRepository('CarBundle:Model')->find($id_model);
-            $versions = $em->getRepository('CarBundle:Version')->findBy(array('model' => $model->getId()));
+            $q_version = $em->createQuery("SELECT v FROM CarBundle:Version v WHERE v.model = ".$id_model." GROUP BY v.id ORDER BY v.name ASC");
+            $versions = $q_version->getResult();
         }
+
+        // if($id_mts == '') {
+            $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
+                                        WHERE v.motor = m.id AND v.model = ".$id_model);
+        // }else{
+        //     $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
+        //                                 WHERE v.motor = m.id AND m.id IN ".$id_mts." AND v.model = ".$id_model." ");
+        // }
+        $res_motors = $q_motor->getResult();
+
+        $motors = array();
+        foreach ( $res_motors as $motor) { $motors[$motor->getId()] = $motor->getName(); }
 
         $size = sizeOf($versions);
         if($size > 0) {
             foreach ($versions as $version) {
-                $json[] = $version->to_json();
+
+                $id_motor = $version->getMotor();
+
+                if(isset($motors[$id_motor])) {
+                    $m_name = $motors[$id_motor];
+                    $v_name = $version->getName().' ['.$m_name.']';
+                    $version->setName($v_name);
+
+                    $json[] = $version->to_json();
+                }
+
             }
+            // $json['id_mts'] = $id_mts;
         }else{
                 $json = array( 'error' => 'No hay coincidencias');
         }
@@ -251,8 +326,16 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $id_version = $petition->request->get('id_version');
+        $motor = $petition->request->get('motor');
 
-        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+        if($motor != ''){
+            $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
+                                        WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$motor."%'");
+            $version = $query->getResult();
+            $version = $version[0];
+        }else{
+            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+        }
 
         if (isset($version)) {
             $id_motor = $version->getMotor();
@@ -263,7 +346,7 @@ class AjaxController extends Controller
         if(isset($version)) {
             $json[] = $version->to_json();
         }
-        else                {$json   = array( 'error' => 'No hay coincidencias');}
+        else $json   = array( 'error' => 'No hay coincidencias');
 
         return new Response(json_encode($json), $status = 200);
     }
@@ -312,7 +395,10 @@ class AjaxController extends Controller
 
         $motor = $petition->request->get('motor');
 
-        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND mt.name like '%".$motor."%' ORDER BY b.name ASC";
+        $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
+                    WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
+                    AND mt.name LIKE '%".$motor."%' ORDER BY b.name ASC";
+
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -321,12 +407,57 @@ class AjaxController extends Controller
             foreach ($brands as $brand) {
                 $json[] = $brand->to_json();
             }
+            // $json['id_mts'] = '';
         }else{
+            // // Slug del campo introducido
+            // $motor = UtilController::getSlug($motor, '');
+
+            // $query = "SELECT partial mt.{id, name} FROM CarBundle:Motor mt";
+            // $consulta = $em->createQuery($query);
+            // $motors   = $consulta->getResult();
+
+            // $id_mts = $this->getMotorsId($motors, $motor);
+
+            // $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Version v
+            //             WHERE b.id = v.brand AND v.motor IN ".$id_mts." ORDER BY b.name ASC";
+            // $consulta = $em->createQuery($query);
+            // $brands   = $consulta->getResult();
+
+            // $size = sizeOf($brands);
+
+            // if($size > 0) {
+            //     foreach ($brands as $brand) {
+            //         $json[] = $brand->to_json();
+            //     }
+            //     $json['id_mts'] = $id_mts;
+            // }else{
                 $json = array( 'error' => 'No hay coincidencias');
+            // }
         }
 
         return new Response(json_encode($json), $status = 200);
     }
+
+    /**
+     * Devuelve un array de ids de motores que coinciden con una cadena con un slug
+     * @return $string
+     */
+    // public function getMotorsId($motors, $motor) {
+
+    //     $id_mts = '(0';
+    //     foreach ($motors as $mt) {
+    //         $mt_name = $mt->getName();
+    //         $mt_name = UtilController::getSlug($mt_name, '');
+
+    //         $pos = strpos($mt_name, $motor);
+    //         if ($pos !== false) {
+    //             $id_mts .= ', '.$mt->getId();
+    //         }
+    //     }
+    //     $id_mts .= ')';
+
+    //     return $id_mts;
+    // }
 
 //  _____ ___ ____ _  _______ _____
 // |_   _|_ _/ ___| |/ / ____|_   _|
@@ -381,7 +512,6 @@ class AjaxController extends Controller
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
-        //var_dump($json);
         return new Response(json_encode($json), $status = 200);
     }
 
@@ -426,32 +556,32 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function tblRepeatedAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $petition = $this->getRequest();
 
-        $id_model     = $petition->request->get('id_model');
-        $id_subsystem = $petition->request->get('id_subsystem');
+    //     $id_model     = $petition->request->get('id_model');
+    //     $id_subsystem = $petition->request->get('id_subsystem');
 
-        $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
+    //     $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
-        if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
-            if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
-            if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
+    //     if (sizeOf($id_model) == 1 and $id_model != "" and sizeOf($id_subsystem) == 1 and $id_subsystem != "") {
+    //         if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model[0]);     } else { $model     = null; }
+    //         if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem[0]); } else { $subsystem = null; }
 
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
+    //         $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem);
 
-            if(count($tickets) > 0) {
-                foreach ($tickets as $ticket) {
-                    $json[] = $ticket->to_json_subsystem();
-                }
-            }else{
-                $json = array( 'error' => 'No hay coincidencias');
-            }
-        }else{
-            $json = array( 'error' => 'No hay coincidencias');
-        }
+    //         if(count($tickets) > 0) {
+    //             foreach ($tickets as $ticket) {
+    //                 $json[] = $ticket->to_json_subsystem();
+    //             }
+    //         }else{
+    //             $json = array( 'error' => 'No hay coincidencias');
+    //         }
+    //     }else{
+    //         $json = array( 'error' => 'No hay coincidencias');
+    //     }
 
-        return new Response(json_encode($json), $status = 200);
+    //     return new Response(json_encode($json), $status = 200);
     }
 
     /**

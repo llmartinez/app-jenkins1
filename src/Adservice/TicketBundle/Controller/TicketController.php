@@ -667,6 +667,8 @@ class TicketController extends Controller {
 
                             // Dejamos el locale tal y como estaba
                             $request->setLocale($locale);
+
+                            $this->get('session')->setFlash('ticket_created', $this->get('translator')->trans('ticket_created'));
                         }
 
                         if (isset($_POST['save&close'])){
@@ -691,7 +693,7 @@ class TicketController extends Controller {
                         'systems' => $systems,
                         'adsplus' => $adsplus,
                         'workshop' => $workshop,
-                        'form_name' => $form->getName()
+                        'form_name' => $form->getName(),
                     );
         // if(isset($subsystem)) { $array[] = 'subsystem' => $subsystem; }
 
@@ -1116,7 +1118,7 @@ class TicketController extends Controller {
 
                         if ($security->isGranted('ROLE_ASSESSOR') === false) {
                             if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
-                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable car'));
+                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
                             elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
                         }
 
@@ -1199,6 +1201,18 @@ class TicketController extends Controller {
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
+    }
+
+    /**
+     * Muestra una lista de motores
+     * @return url
+     */
+    public function listMotorsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
+
+        return $this->render('TicketBundle:Layout:show_motors_layout.html.twig', array('motors' => $motors));
     }
 
     /**
@@ -1487,13 +1501,13 @@ class TicketController extends Controller {
         $security   = $this->get('security.context');
         $params = array();
 
-        if($brand   != '0') $params[] = array('brand',' = '.$brand);
-        if($model   != '0') $params[] = array('model',' = '.$model);
-        if($version != '0') $params[] = array('version',' = '.$version);
+        if($brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
+        if($model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
+        if($version != '0' and $version != '') $params[] = array('version',' = '.$version);
 
-        if($year    != '0') $params[] = array('year'," LIKE '%".$year."%' ");
-        if($motor   != '0') $params[] = array('motor'," LIKE '%".$motor."%' ");
-        if($kw      != '0') $params[] = array('kw',' = '.$kw);
+        if($year    != '0' and $year    != '') $params[] = array('year'," LIKE '%".$year."%' ");
+        if($motor   != '0' and $motor   != '') $params[] = array('motor'," LIKE '%".$motor."%' ");
+        if($kw      != '0' and $kw      != '') $params[] = array('kw',' = '.$kw);
 
         $pagination = new Pagination($page);
 
@@ -1614,9 +1628,9 @@ class TicketController extends Controller {
         $num_rows = $request->request->get('slct_numRows');
         if(!isset($num_rows)) $num_rows = 10;
 
-        if(isset($brand) and $brand   != '0') $params[] = array('brand',' = '.$brand);
-        if(isset($model) and $model   != '0') $params[] = array('model',' = '.$model);
-        if(isset($version) and $version != '0') $params[] = array('version',' = '.$version);
+        if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
+        if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
+        if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
 
         $pagination = new Pagination($page);
 
@@ -1634,12 +1648,13 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
+
         if($size > 0){
 
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
-                if( $subsystem == 0) $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
                 else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
 
                 if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
@@ -1648,14 +1663,6 @@ class TicketController extends Controller {
                     if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
                     else $tickets[] = $ticket;
                 }
-            }
-        }
-        else {
-            $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
-            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
-                $w_id = $workshop->getId();
-                if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
-                else $tickets[] = $ticket;
             }
         }
 
@@ -1679,7 +1686,7 @@ class TicketController extends Controller {
             for ($i=0; $i<$size2; $i++){
 
                 $id2     = $cars2[$key2[$i]]->getId();
-                if( $subsystem == 0) $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
+                if( $subsystem == 0 or $subsystem == '') $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
                 else $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2,'subsystem' => $subsystem));
 
                 if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
@@ -1712,7 +1719,8 @@ class TicketController extends Controller {
         if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->find($version);
 
-        if(isset($subsystem) and $subsystem != '0') $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
+        if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
+            $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
 

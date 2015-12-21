@@ -136,6 +136,20 @@ legend {
   text-align: center;
 }
 
+.alert_created {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #428bca;
+  border-radius: 4px;
+  color: #428bca;
+  font-size: 19px;
+  width: 100%;
+  text-align: center;
+}
+.return_btn {
+    margin-bottom: -35px!important;
+}
+
 .content {
     width: 70%;
     padding: 10px;

@@ -16,7 +16,7 @@
             <div class="grid-33 form-group">
                 <label for="id_system">{% trans %} system {% endtrans %} *</label>
                 <select class="form-control asr_form-control" id="id_system" {# multiple="multiple" #} required>
-                <option value="0" ></option>
+                <option></option>
                     {% for system in systems %}
                         <option value="{{ system.id }}"> {{ system.name | trans }} </option>
                     {% endfor %}

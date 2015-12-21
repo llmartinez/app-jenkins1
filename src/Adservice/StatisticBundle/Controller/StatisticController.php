@@ -700,10 +700,10 @@ class StatisticController extends Controller {
             $workshop = $row->getWorkshop();
             $excel.=$workshop->getPartner()->getCodePartner().' - '.$workshop->getCodeWorkshop().';';
 
-            $shop = $workshop->getShop();
-            if(isset($shop)) $code_shop = $shop->getCodeShop();
-            else $code_shop = '-';
-            $excel.=$code_shop.';';
+            // $shop = $workshop->getShop();
+            // if(isset($shop)) $code_shop = $shop->getCodeShop();
+            // else $code_shop = '-';
+            // $excel.=$code_shop.';';
 
             $excel.=$workshop->getRegion().';';
 

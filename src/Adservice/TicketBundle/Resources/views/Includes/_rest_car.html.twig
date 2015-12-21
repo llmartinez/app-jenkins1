@@ -13,7 +13,9 @@
         <div class="grid-33">
             <label for="new_car_form_motor">{% trans %} motor {% endtrans %} *</label>
             <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
+            <a class="pull-right" id="list_motor" title="{% trans %} motor {% endtrans %}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a>
             {{ form_widget(formC.motor, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'motor' | trans } }) }}
+            <input type="hidden" id="id_mts" value="">
         </div>
 
         <div class="grid-33">
