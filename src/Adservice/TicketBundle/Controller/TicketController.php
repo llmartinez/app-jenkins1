@@ -209,7 +209,7 @@ class TicketController extends Controller {
                 $params[] = array('id', ' NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
             }
             // Recupera la fecha del ultimo post de cada ticket
-            // SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
+            //  SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
             else{
                 $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
                 $ids = '0';
