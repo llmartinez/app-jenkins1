@@ -242,7 +242,7 @@ class WorkshopController extends Controller {
                         $mailerUser->setFrom('noreply@adserviceticketing.com');
                         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
                         // $mailerUser->sendMailToSpool();
-                        echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
+                        //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
                         /* Dejamos el locale tal y como estaba */
                         $request->setLocale($locale);
