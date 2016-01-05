@@ -61,7 +61,9 @@
                     {% if is_granted('ROLE_SUPER_ADMIN') and diagnosis_machines[0].id is defined %}
                         <div id="lan_diag_machines">
                             {% for diag_machine in diagnosis_machines %}
-                                <input type="hidden" id="lan{{diag_machine.id}}" value="{{diag_machine.country.shortName}}">
+                                {% if diag_machine.id is defined and diag_machine.country is defined and diag_machine.country.shortName is defined %}
+                                    <input type="hidden" id="lan{{diag_machine.id}}" value="{{diag_machine.country.shortName}}">
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% endif %}
