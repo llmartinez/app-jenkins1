@@ -749,6 +749,9 @@ fieldset[disabled] .asr_form-control {
     background: none repeat scroll 0 0 #e1001a;
 }
 
+
+/* autocomplete */
+
 .ui-autocomplete {
     background-color: #fff;
     padding: 0!important;
