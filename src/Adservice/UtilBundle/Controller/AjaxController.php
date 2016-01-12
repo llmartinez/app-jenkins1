@@ -249,7 +249,7 @@ class AjaxController extends Controller
                 $query = "SELECT v FROM CarBundle:Version v
                           WHERE v.model = ".$id_model." AND v.model IS NOT NULL
                           AND (v.inicio <= '".$filter_value."99' AND v.inicio != '') AND (v.fin >= '".$filter_value."00' OR v.fin = '')
-                          GROUP BY v.id ORDER BY v.name";
+                          ORDER BY v.name";
 
             $consulta = $em->createQuery($query);
             $versions = $consulta->getResult();
@@ -279,13 +279,15 @@ class AjaxController extends Controller
             // }
         }
         else{
-            $q_version = $em->createQuery("SELECT v FROM CarBundle:Version v WHERE v.model = ".$id_model." GROUP BY v.id ORDER BY v.name ASC");
+            $q_version = $em->createQuery("SELECT v FROM CarBundle:Motor m, CarBundle:Version v
+                                           WHERE v.model = ".$id_model." AND v.motor = m.id
+                                           group by m.id ORDER BY v.name ASC");
             $versions = $q_version->getResult();
         }
 
         // if($id_mts == '') {
             $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
-                                        WHERE v.motor = m.id AND v.model = ".$id_model);
+                                        WHERE v.motor = m.id AND v.model = ".$id_model." GROUP BY m.name");
         // }else{
         //     $q_motor = $em->createQuery("SELECT partial m.{id,name} from CarBundle:Motor m, CarBundle:Version v
         //                                 WHERE v.motor = m.id AND m.id IN ".$id_mts." AND v.model = ".$id_model." ");

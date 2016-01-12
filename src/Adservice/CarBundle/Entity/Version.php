@@ -47,6 +47,7 @@ class Version {
      * @var string $motor
      *
      * @ORM\Column(name="Motor", type="string", length=255)
+     * @ORM\Id
      */
     private $motor;
 
