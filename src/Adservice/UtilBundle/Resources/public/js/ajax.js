@@ -336,7 +336,8 @@ function fill_car_data() {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
-    var motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
+    var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
+    var year = $('form[id=contact]').find('input[id=flt_year]').val();
 
     if (id_version != undefined && id_version != "" && id_version != "0") {
         var route  = 'car_data';
@@ -345,7 +346,7 @@ function fill_car_data() {
         $.ajax({
             type: "POST",
             url: Routing.generate(route, {_locale: locale, id_version: id_version, motor: motor}),
-            data: {id_version: id_version, motor: motor},
+            data: {id_version: id_version, motor: motor, year: year},
             dataType: "json",
             beforeSend: function(){ $("body").css("cursor", "progress"); },
             complete: function(){ $("body").css("cursor", "default"); },
@@ -358,7 +359,9 @@ function fill_car_data() {
                         var fin    = elm.fin.slice(0,4);
                         var fecha  = inicio+' - '+fin;
 
-                        $('form[id=contact]').find('#new_car_form_year'        ).val(fecha      );
+                        if(year == undefined) {
+                            $('form[id=contact]').find('#new_car_form_year'    ).val(fecha      );
+                        }
                         $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                         $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
@@ -417,7 +420,7 @@ function fill_car_by_year() {
 
                     $('#filter_year').empty();
                     if(year != ''){
-                        $('#filter_year').append('<input type="hidden" id="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                        $('#filter_year').append('<input type="hidden" id="flt_year" name="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
                     }else{
                         $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
                     }
@@ -477,7 +480,7 @@ function fill_car_by_motor() {
 
                     $('#filter_motor').empty();
                     if(motor != ''){
-                        $('#filter_motor').append('<input type="hidden" id="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                        $('#filter_motor').append('<input type="hidden" id="flt_motor" name="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
                     }else{
                         $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
                     }
