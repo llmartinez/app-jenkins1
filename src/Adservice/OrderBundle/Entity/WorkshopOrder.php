@@ -562,7 +562,7 @@ class WorkshopOrder {
      *
      * @param Role $userRoles
      */
-    public function addDiagnosisMachine(DiagnosisMachine $diagnosis_machine) {
+    public function addDiagnosisMachine(\Adservice\WorkshopBundle\Entity\DiagnosisMachine $diagnosis_machine) {
         $this->diagnosis_machines[] = $diagnosis_machine;
     }
 

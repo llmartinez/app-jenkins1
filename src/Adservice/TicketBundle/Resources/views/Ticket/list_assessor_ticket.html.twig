@@ -36,8 +36,14 @@
                         <input type="hidden" id="ticket_id"         value="{{ticket.id }}">
                         <input type="hidden" id="ticket_id_brand"   value="{{ticket.car.brand.id }}">
                         <input type="hidden" id="ticket_brand"      value="{{ticket.car.brand.name }}">
-                        <input type="hidden" id="ticket_id_model"   value="{{ticket.car.model.id }}">
-                        <input type="hidden" id="ticket_model"      value="{{ticket.car.model.name }}">
+
+                         {% if ticket.car.model.id  is defined %}
+                            <input type="hidden" id="ticket_id_model" value="{{ticket.car.model.id }}">
+                            <input type="hidden" id="ticket_model"    value="{{ticket.car.model.name }}">
+                        {% else %}
+                            <input type="hidden" id="ticket_id_model" value="0">
+                            <input type="hidden" id="ticket_model"    value=" ">
+                        {% endif %}
 
                         {% if ticket.car.version.id  is defined %}
                             <input type="hidden" id="ticket_id_version" value="{{ticket.car.version.id }}">
@@ -57,7 +63,7 @@
 
                         {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
                             <input type="hidden" id="ticket_id_subsystem" value="{{ticket.subsystem.id }}">
-                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name }}">
+                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name|trans }}">
                         {% else %}
                             <input type="hidden" id="ticket_id_subsystem" value="0">
                             <input type="hidden" id="ticket_subsystem"    value=" ">

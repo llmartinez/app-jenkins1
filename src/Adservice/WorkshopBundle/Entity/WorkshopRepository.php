@@ -23,11 +23,13 @@ class WorkshopRepository extends EntityRepository
         $w_tel       = $request->get('w_tel'      );
         $w_region    = $request->get('w_region'   );
 
+        $w_id        = intval($w_id);
+        $w_idpartner = intval($w_idpartner);
 
-        if((is_numeric ($w_id) and is_numeric ($w_idpartner)) or ($w_email != '' or $w_tel != ''))
+        if(($w_id != 0 and $w_idpartner != 0) or ($w_email != '' or $w_tel != ''))
         {
             $active = 1;
-            if ($w_id != "" and $w_idpartner   != ""){
+            if ($w_id != 0 and $w_idpartner   != 0){
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id,
                                                                                            'code_partner'  => $w_idpartner));
                 if (isset($workshop)) $active = $workshop->getActive();
@@ -40,12 +42,12 @@ class WorkshopRepository extends EntityRepository
             $where = 'WHERE w.id != 0 ';
             // $where = 'WHERE w.active = 1 ';
 
-            if ($w_id          != "") {  $where .= "AND w.code_workshop = ".$w_id." "; }
-            if ($w_idpartner   != "") {  $query .= ", p ";
+            if ($w_id          != 0) {  $where .= "AND w.code_workshop = ".$w_id." "; }
+            if ($w_idpartner   != 0) {  $query .= ", p ";
                                          $from  .= "JOIN w.partner p ";
                                          $where .= "AND p.code_partner = ".$w_idpartner." "; }
 
-            if ($w_id == "" and $w_idpartner == ""){
+            if ($w_id == 0 and $w_idpartner == 0){
                 if ($w_name        != "") {  $where .= "AND w.name like '%".$w_name."%' "; }
                 if ($w_cif         != "") {  $where .= "AND w.cif like '%".$w_cif."%' "; }
                 if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' "; }
@@ -60,7 +62,7 @@ class WorkshopRepository extends EntityRepository
             $array = $consulta->getResult();
 
             //Si la consulta da resultado y hay algun campo de los filtros introducido se devuelve el resultado, sino se devuelve un array vacio
-            if ((sizeof($array) > 0) and ($w_id != "" or $w_idpartner != "" or $w_email != "" or $w_tel != "" or $w_name != "" or $w_cif != "" or $w_region != "" ))
+            if ((sizeof($array) > 0) and ($w_id != 0 or $w_idpartner != 0 or $w_email != "" or $w_tel != "" or $w_name != "" or $w_cif != "" or $w_region != "" ))
                 {  return $array;  }
             else
                 {  return array('0' => new Workshop()); }

@@ -14,8 +14,6 @@
 		{% if adsplus.id is defined %}
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
 				 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
-
-		<a href="{{ path('listTicket') }}"><span class="glyphicon glyphicon-arrow-left" title="{% trans %} back {% endtrans %}"></span></a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">

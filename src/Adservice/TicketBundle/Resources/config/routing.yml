@@ -41,7 +41,7 @@ findAssessorTicketByBMV:
 insert_cif:
     pattern:  /insertcif/{workshop_id}
     defaults: { _controller: WorkshopBundle:Workshop:insertCif, workshop_id: 0 , country: '0'}
-    
+
 # listTicketFiltered:
 #     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
 #     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
@@ -82,6 +82,9 @@ callTicket:
     pattern:  /call/{code_partner}/{code_workshop}
     defaults: { _controller: TicketBundle:Ticket:callTicket, code_partner: 0 , code_workshop: 0 }
 
+listMotors:
+    pattern:  /engines/
+    defaults: { _controller: TicketBundle:Ticket:listMotors  }
 
 ################################
 #    GESTIÓN DE POSTS          #
