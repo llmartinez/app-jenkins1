@@ -450,7 +450,9 @@ class TicketController extends Controller {
               );
 
         if      ($security->isGranted('ROLE_ADMIN'))    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
-        elseif  ($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        elseif  ($security->isGranted('ROLE_ASSESSOR')) {
+            return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        }
         else                                            return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
@@ -489,7 +491,7 @@ class TicketController extends Controller {
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '' and $id_version != '0') {
-            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
         }
         if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
@@ -572,7 +574,7 @@ class TicketController extends Controller {
                                 //SI NO HA ESCOGIDO VERSION DE DEJA NULL
                                 $id_version = $request->request->get('new_car_form_version');
                                 if (isset($id_version)){
-                                    $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                                    $version = $em->getRepository('CarBundle:Version')->findById($id_version);
                                 }
                                 else{
                                     $id_version = null;

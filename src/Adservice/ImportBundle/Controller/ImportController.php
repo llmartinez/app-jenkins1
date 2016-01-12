@@ -876,7 +876,7 @@ class ImportController extends Controller
         $car = new Car();
 		$car->setBrand($em->getRepository('CarBundle:Brand'  )->find(1));
 		$car->setModel($em->getRepository('CarBundle:Model'  )->find(1));
-		$car->setVersion($em->getRepository('CarBundle:Version')->find(1));
+		$car->setVersion($em->getRepository('CarBundle:Version')->findById(1));
 		$car->setCreatedAt(new \DateTime('today'));
 		$car->setCreatedBy($admin);
 		$car->setModifiedAt(new \DateTime('today'));
