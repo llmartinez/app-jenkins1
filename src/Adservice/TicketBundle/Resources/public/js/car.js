@@ -27,6 +27,29 @@
         fill_car_by_motor();
     });
 
+    $(document).on('click','#filter_motor',function(){
+        fill_car_by_motor();
+    });
+
+    $(document).on('click','.closeTicket',function(){
+        if ($('#year_assessor').val() != undefined)
+            checkYearLength();
+    });
+    $(document).on('click','.sendTicket',function(){
+        if ($('#year_assessor').val() != undefined)
+            checkYearLength();
+    });
+
+    function checkYearLength(){
+        
+        var len = $('#new_car_form_year').val().length;
+        if (len != 4) {
+            event.preventDefault();
+            var err = $('#msg_bad_year').val();
+            alert(err);
+        }
+    }
+
     // AUTOCOMPLETAR CAMPO MOTOR
     $(function() {
 

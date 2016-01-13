@@ -2,12 +2,14 @@
     <input type="hidden" id="funnel"          value="{{ asset('bundles/util/images/icon/funnel.png') }}">
     <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
     <input type="hidden" id="msg_bad_filter"  value="{% trans %} msg_bad_filter {% endtrans %}">
+    <input type="hidden" id="msg_bad_year"    value="{% trans %} error.bad_introduction.ticket {% endtrans %} ({% trans %} year {% endtrans %}: 4 {% trans %} values {% endtrans %})">
 
     <div class="grid-full w100">
         <div class="grid-33">
             <label for="new_car_form_year">{% trans %} year {% endtrans %} *</label>
             <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
             {{ form_widget(formC.year, { 'attr': { 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'year' | trans } }) }}
+            <input type="hidden" id="year_assessor" value="assessor">
         </div>
 
         <div class="grid-33">
