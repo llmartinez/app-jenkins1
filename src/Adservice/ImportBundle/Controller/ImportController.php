@@ -89,8 +89,9 @@ class ImportController extends Controller
 	        $newShop->setMovileNumber2 ('0');
 	        $newShop->setFax           ('0');
 
-	        $newShop->setEmail1('test@adserviceticketing.com');
-	        $newShop->setEmail2('test@adserviceticketing.com');
+	        $mail = $this->container->getParameter('mail_test');
+	        $newShop->setEmail1($mail);
+	        $newShop->setEmail2($mail);
 
 	        $newShop->setCity  ('...');
 	        $newShop->setRegion('...');
@@ -559,8 +560,9 @@ class ImportController extends Controller
         else $entity->setCountry($locations['countries']['spain']);
 
         /* MAILING */
+	    // $mail = $this->container->getParameter('mail_test');
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('test@adserviceticketing.com');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo($mail);  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
