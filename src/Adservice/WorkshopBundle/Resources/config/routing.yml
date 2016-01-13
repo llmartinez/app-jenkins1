@@ -64,3 +64,9 @@ typology_edit:
 #user_provinces:
 #    pattern: /provincesFromRegion
 #    defaults: { _controller: UtilBundle:Workshop:provincesFromRegion }
+
+search_cif:
+    pattern: /new/{cif}
+    defaults: { _controller: WorkshopBundle:Workshop:findCif }
+    options:
+        expose: true

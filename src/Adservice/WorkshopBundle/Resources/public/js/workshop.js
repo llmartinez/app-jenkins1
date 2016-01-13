@@ -75,6 +75,38 @@ $(document).ready(function() {
                 }
             });
         });
+       
+
+       
+        $('#adservice_workshopbundle_workshoptype_cif').blur(function() {
+            var cif = $('#adservice_workshopbundle_workshoptype_cif').val();
+            var w_cif = $('#workshop_cif').val()
+            var text_error = $('#exist_cif').val();
+            if(cif != w_cif){
+                $.ajax({
+                   type: "POST",
+                   url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+                   dataType: "json",
+                   success: function (data) {
+                       var find = JSON.parse(data);
+                       if(find == true){
+                           $('.error_cif').empty();
+                           $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
+                       }    
+                       else{
+                           $('.error_cif').empty();
+                       }
+
+                   },
+                   error: function () {
+                       console.log("Error loading versions...");
+                   }
+               });
+           }
+           else{
+               $('.error_cif').empty();
+           }
+        });
 });
 
 /**

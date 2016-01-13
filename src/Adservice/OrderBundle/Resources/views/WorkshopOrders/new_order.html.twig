@@ -12,6 +12,8 @@
     <form action="{{ path('workshopOrder_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="col-xs-12 col-md-12 form-group">
+            <input type="hidden" id="exist_cif" value="{% trans %}workshop.cif_exist{% endtrans %} ">
+            <div class="error_cif"></div>
             {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
             {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
         </div>

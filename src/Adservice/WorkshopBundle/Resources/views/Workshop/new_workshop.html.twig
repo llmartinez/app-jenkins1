@@ -15,6 +15,8 @@
             <legend>{% trans %} workshop {% endtrans %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
+                <input type="hidden" id="exist_cif" value="{% trans %}workshop.cif_exist{% endtrans %} ">
+                <div class="error_cif"></div>
             {% if app.session.hasFlash('error') %}
                 <p class="error">{{ app.session.getFlash('error') }}</p>
             {% endif %}

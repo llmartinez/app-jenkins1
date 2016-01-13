@@ -51,5 +51,54 @@
                 }
             });
         });
+        
+        $('#workshopOrder_newOrder_cif').blur(function() {
+            var cif = $('#workshopOrder_newOrder_cif').val();
+            var text_error = $('#exist_cif').val();
+             $.ajax({
+                type: "POST",
+                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+                dataType: "json",
+                success: function (data) {
+                    var find = JSON.parse(data);
+                    if(find == true){
+                        $('.error_cif').empty();
+                        $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
+                    }    
+                    else{
+                        $('.error_cif').empty();
+                    }
+                        
+                },
+                error: function () {
+                    console.log("Error loading versions...");
+                }
+            });
+        });
+        
+        
+        $('#workshopOrder_editOrder_cif').blur(function() {
+            var cif = $('#workshopOrder_editOrder_cif').val();
+            var text_error = $('#exist_cif').val();
+             $.ajax({
+                type: "POST",
+                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+                dataType: "json",
+                success: function (data) {
+                    var find = JSON.parse(data);
+                    if(find == true){
+                        $('.error_cif').empty();
+                        $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
+                    }    
+                    else{
+                        $('.error_cif').empty();
+                    }
+                        
+                },
+                error: function () {
+                    console.log("Error loading versions...");
+                }
+            });
+        });
        
     });
