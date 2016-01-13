@@ -303,6 +303,10 @@ legend {
   font-weight: bold;
 }
 
+.error_cif {
+  color: red;
+  font-weight: bold;
+}
  /*
     LISTADO TICKETS
  */

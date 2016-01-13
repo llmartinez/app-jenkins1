@@ -1058,4 +1058,16 @@ class WorkshopOrderController extends Controller {
         }
         return $ordersBefore;
     }
+    
+    public function findCifAction($cif) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
+        $find = false;
+        if($workshop){
+            $find=true;
+        }            
+        $json = json_encode($find);
+        return new Response(json_encode($json), $status = 200);        
+    }
+
 }
