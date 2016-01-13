@@ -150,9 +150,16 @@ class ShopOrderController extends Controller {
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
+
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
-                    
+
                 }
                 return $this->redirect($this->generateUrl('list_orders'));
             }
@@ -264,6 +271,13 @@ class ShopOrderController extends Controller {
                     // echo $this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
                     //                                                                                   'shop'      => $shop));die;
 
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
+
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
                 }
@@ -272,7 +286,7 @@ class ShopOrderController extends Controller {
 
             }
         }
-        
+
         return $this->render('OrderBundle:ShopOrders:edit_order.html.twig', array('shopOrder' => $shopOrder,
                                                                                   'shop'      => $shop,
                                                                                   'form_name' => $form->getName(),
@@ -346,6 +360,13 @@ class ShopOrderController extends Controller {
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
+
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
         }
@@ -405,6 +426,13 @@ class ShopOrderController extends Controller {
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
 
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
@@ -469,6 +497,13 @@ class ShopOrderController extends Controller {
                 // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('shopOrder' => $shopOrder,
                 //                                                                                'action'   => $action));die;
 
+                // Copia del mail de confirmacion a modo de backup
+                //
+                $mail = $this->container->getParameter('mail_report');
+                $request->setLocale('es_ES');
+                $mailer->setTo($mail);
+                $mailer->sendMailToSpool();
+
                 // Dejamos el locale tal y como estaba
                 $request->setLocale($locale);
             }
@@ -521,6 +556,13 @@ class ShopOrderController extends Controller {
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -581,6 +623,13 @@ class ShopOrderController extends Controller {
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                     'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -659,6 +708,8 @@ class ShopOrderController extends Controller {
 
         }
 
+        // MAIL DE CONFIRMACION
+
         $mail = $shopOrder->getCreatedBy()->getEmail1();
         $pos = strpos($mail, '@');
         if ($pos != 0) {
@@ -679,6 +730,13 @@ class ShopOrderController extends Controller {
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
             //                                                                                     'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -777,7 +835,6 @@ class ShopOrderController extends Controller {
         return $shop;
     }
 
-        //
     /**
      * crea un array con los valores anteriores a la modificacion/rechazo de la solicitud
      * @param  Array $shopsOrders
