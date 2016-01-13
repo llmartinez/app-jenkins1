@@ -70,6 +70,10 @@ closeTicket:
     pattern:  /ticket/close/{id}
     defaults: { _controller: TicketBundle:Ticket:closeTicket, id: null }
 
+editDescription:
+    pattern:  /ticket/editDescription/{id}
+    defaults: { _controller: TicketBundle:Ticket:editDescription, id: null }
+
 reopenTicket:
     pattern: /ticket/reopen/{id}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }

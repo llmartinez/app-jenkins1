@@ -14,6 +14,7 @@ use Adservice\TicketBundle\Form\NewTicketType;
 use Adservice\TicketBundle\Form\EditTicketType;
 use Adservice\TicketBundle\Form\CloseTicketType;
 use Adservice\TicketBundle\Form\CloseTicketWorkshopType;
+use Adservice\TicketBundle\Form\EditDescriptionType;
 
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
@@ -1202,6 +1203,59 @@ class TicketController extends Controller {
                                                                                             'systems'   => $systems,
                                                                                             'form'      => $form->createView(),
                                                                                             'form_name' => $form->getName(), ));
+        }
+        else{
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
+        }
+    }
+
+    /**
+     * Edita la descripcion del ticket
+     * @Route("/ticket/editDescription/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @return url
+     */
+    public function editDescriptionAction($id, $ticket)
+    {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ASSESSOR'))
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $request  = $this->getRequest();
+
+            $form = $this->createForm(new EditDescriptionType(), $ticket);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+
+                /*Validacion Ticket*/
+                $str_len = strlen($ticket->getSolution());
+                $max_len = 10000;
+
+                if ($str_len <= $max_len ) {
+
+                    if ($form->isValid()) {
+
+                        if($ticket->getDescription() != ""){
+
+                            $user   = $security->getToken()->getUser();
+
+                            UtilController::saveEntity($em, $ticket, $user);
+
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+                        }
+                        else{
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                        }
+                    }else{
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                    }
+                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+            }
+
+            return $this->render('TicketBundle:Layout:edit_description_layout.html.twig', array('ticket'    => $ticket,
+                                                                                                'form'      => $form->createView(),
+                                                                                                'form_name' => $form->getName(), ));
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
