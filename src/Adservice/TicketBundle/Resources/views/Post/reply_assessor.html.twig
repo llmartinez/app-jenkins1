@@ -33,7 +33,7 @@
                 <div class="grid-full w100">{{ form_widget(formP.message, { 'attr': {'class': 'ac-message asr_form-textarea pd_txt', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
                 {{ form_widget(formD.file, { 'attr': {'class': 'ac-message asr_form-textarea'} })  }}
-                <label class="grid-full w100 error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
+                <label class="grid-full w100 error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}4Mb</label>
 
                 {% if app.session.hasFlash('error') %}
                 {% endif %}
