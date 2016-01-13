@@ -91,3 +91,13 @@ workshopOrder_resendOrder:
 workshopOrder_reject:
     pattern: /workshop/reject/{id}
     defaults: { _controller: OrderBundle:WorkshopOrder:reject }
+    
+##############################
+#       RUTAS AJAX           #
+##############################
+
+search_cif:
+    pattern: /new/{cif}
+    defaults: { _controller: OrderBundle:WorkshopOrder:findCif }
+    options:
+        expose: true
