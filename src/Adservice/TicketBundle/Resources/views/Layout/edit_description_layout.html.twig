@@ -6,16 +6,14 @@
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
       <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
                    {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active">#{{ ticket.id }}</li>
+      <li class="active">{% trans %} ticket {% endtrans %} #{{ ticket.id }}</li>
     </ol>
 
-{% if app.session.hasFlash('ticket_created') %}
-  <p class="alert_created">{{'ticket_created'|trans}}</p>{% endif %}
 {% endblock  %}
 
 {% block info %}
 
-    {% if is_granted('ROLE_ASSESSOR') %}
+	{% if is_granted('ROLE_ASSESSOR') %}
 
         {% set workshop = ticket.workshop %}
         {% include 'TicketBundle:Workshop:show_workshop.html.twig'  %}
@@ -30,21 +28,20 @@
 {% block content %}
 
     <div class="form-group">
-        <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
-
-            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" onclick="window.close()">
-
+        <form action="{{ path('editDescription', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
               <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
               {% trans %} ticket_return {% endtrans %}
             </a>
 
-            {% include 'TicketBundle:Ticket:show_ticket.html.twig'  %}
+            {% include 'TicketBundle:Ticket:edit_description.html.twig'  %}
+
         </form>
     </div>
+
 {% endblock  %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/ticket/js/sentence.js') }}"></script>
-  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+  {% if is_granted('ROLE_ASSESSOR') == false %} <script src="{{ asset('bundles/ticket/js/ticket_close.js') }}"></script> {% endif %}
 {% endblock %}
