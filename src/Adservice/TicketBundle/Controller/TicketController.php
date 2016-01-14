@@ -18,6 +18,8 @@ use Adservice\TicketBundle\Form\EditDescriptionType;
 
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
+use Adservice\CarBundle\Entity\Version;
+use Adservice\CarBundle\Entity\Motor;
 use Adservice\CarBundle\Form\CarType;
 
 use Adservice\TicketBundle\Entity\Post;
@@ -1282,6 +1284,14 @@ class TicketController extends Controller {
     {
         $em = $this->getDoctrine()->getEntityManager();
         $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
+
+        $query   = $em->createQuery('SELECT m FROM CarBundle:Version v, CarBundle:Motor m
+                                        WHERE m.id = v.motor
+                                        AND v.motor IN (
+                                            SELECT mt FROM CarBundle:Motor mt)
+                                        GROUP BY m.name
+                                        ORDER BY m.name');
+        $motors    = $query->getResult();
 
         return $this->render('TicketBundle:Layout:show_motors_layout.html.twig', array('motors' => $motors));
     }
