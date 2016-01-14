@@ -14,6 +14,7 @@ use Adservice\TicketBundle\Form\NewTicketType;
 use Adservice\TicketBundle\Form\EditTicketType;
 use Adservice\TicketBundle\Form\CloseTicketType;
 use Adservice\TicketBundle\Form\CloseTicketWorkshopType;
+use Adservice\TicketBundle\Form\EditDescriptionType;
 
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
@@ -450,7 +451,9 @@ class TicketController extends Controller {
               );
 
         if      ($security->isGranted('ROLE_ADMIN'))    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
-        elseif  ($security->isGranted('ROLE_ASSESSOR')) return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        elseif  ($security->isGranted('ROLE_ASSESSOR')) {
+            return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
+        }
         else                                            return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
 
@@ -489,7 +492,7 @@ class TicketController extends Controller {
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '' and $id_version != '0') {
-            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
         }
         if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
@@ -572,13 +575,19 @@ class TicketController extends Controller {
                                 //SI NO HA ESCOGIDO VERSION DE DEJA NULL
                                 $id_version = $request->request->get('new_car_form_version');
                                 if (isset($id_version)){
-                                    $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                                    $version = $em->getRepository('CarBundle:Version')->findById($id_version);
                                 }
                                 else{
                                     $id_version = null;
                                 }
-                                if (isset($version)){
-                                    $car->setVersion($version);
+
+                                if (isset($version))
+                                {
+                                    $sizeV = sizeof($version);
+
+                                    if ($size > 0) {
+                                        $car->setVersion($version);
+                                    }
                                 }
                                 else{
                                     $car->setVersion(null);
@@ -625,6 +634,7 @@ class TicketController extends Controller {
                                 $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
 
                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                            'action' => 'newTicket',
                                             'form' => $form->createView(),
                                             'formC' => $formC->createView(),
                                             'formD' => $formD->createView(),
@@ -639,6 +649,7 @@ class TicketController extends Controller {
                             $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
 
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                        'action' => 'newTicket',
                                         'form' => $form->createView(),
                                         'formC' => $formC->createView(),
                                         'formD' => $formD->createView(),
@@ -688,6 +699,7 @@ class TicketController extends Controller {
         }
 
         $array = array( 'ticket' => $ticket,
+                        'action' => 'newTicket',
                         'car' => $car,
                         'form' => $form->createView(),
                         'formC' => $formC->createView(),
@@ -773,6 +785,7 @@ class TicketController extends Controller {
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
             $array = array(
+                            'action'    => 'showTicket',
                             'form'      => $form->createView(),
                             'form_name' => $form->getName(),
                             'ticket'    => $ticket,
@@ -911,6 +924,7 @@ class TicketController extends Controller {
 
             $array = array( 'formP'     => $formP->createView(),
                             'formD'     => $formD->createView(),
+                            'action'    => 'showTicket',
                             'ticket'    => $ticket,
                             'systems'   => $systems,
                             'sentences' => $sentences,
@@ -1034,6 +1048,7 @@ class TicketController extends Controller {
 
                 return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),
                                                                                 'form_name' => $formP->getName(),
+                                                                                'action'    => 'showTicket',
                                                                                 'ticket'    => $ticket,
                                                                                 'systems'   => $systems,
                                                                                 'form_name' => $formP->getName(),
@@ -1200,6 +1215,59 @@ class TicketController extends Controller {
                                                                                             'systems'   => $systems,
                                                                                             'form'      => $form->createView(),
                                                                                             'form_name' => $form->getName(), ));
+        }
+        else{
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
+        }
+    }
+
+    /**
+     * Edita la descripcion del ticket
+     * @Route("/ticket/editDescription/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @return url
+     */
+    public function editDescriptionAction($id, $ticket)
+    {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ASSESSOR'))
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $request  = $this->getRequest();
+
+            $form = $this->createForm(new EditDescriptionType(), $ticket);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+
+                /*Validacion Ticket*/
+                $str_len = strlen($ticket->getSolution());
+                $max_len = 10000;
+
+                if ($str_len <= $max_len ) {
+
+                    if ($form->isValid()) {
+
+                        if($ticket->getDescription() != ""){
+
+                            $user   = $security->getToken()->getUser();
+
+                            UtilController::saveEntity($em, $ticket, $user);
+
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+                        }
+                        else{
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                        }
+                    }else{
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                    }
+                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+            }
+
+            return $this->render('TicketBundle:Layout:edit_description_layout.html.twig', array('ticket'    => $ticket,
+                                                                                                'form'      => $form->createView(),
+                                                                                                'form_name' => $form->getName(), ));
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

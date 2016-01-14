@@ -42,7 +42,6 @@ class CarController extends Controller {
                     $model = $em->getRepository('CarBundle:Model')->find($id_model);
                     if(empty($model)){
                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
-                        
                     }
                     else {
                         $car->setBrand($brand);
@@ -51,7 +50,7 @@ class CarController extends Controller {
                         //SI NO HA ESCOGIDO VERSION DE DEJA NULL
                         $id_version = $request->request->get('new_car_form_version');
                         if (isset($id_version)){
-                            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
                         }
                         else{
                             $id_version = null;

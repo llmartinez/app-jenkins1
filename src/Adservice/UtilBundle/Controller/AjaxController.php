@@ -329,14 +329,26 @@ class AjaxController extends Controller
 
         $id_version = $petition->request->get('id_version');
         $motor = $petition->request->get('motor');
+        $year = $petition->request->get('year');
 
-        if($motor != ''){
+        if(isset($motor)){
+            $motor = $petition->request->get('motor');
             $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
                                         WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$motor."%'");
             $version = $query->getResult();
             $version = $version[0];
+        }
+        elseif($year != null){
+            $year = $petition->request->get('year');
+            $query = $em->createQuery("SELECT v FROM CarBundle:Version v
+                                        WHERE v.id = ".$id_version."
+                                        AND (v.inicio <= '".$year."99' AND v.inicio != '')
+                                        AND (v.fin >= '".$year."00' OR v.fin = '')");
+            $version = $query->getResult();
+            $version = $version[0];
         }else{
-            $version = $em->getRepository('CarBundle:Version')->find($id_version);
+            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
+            $version = $version[0];
         }
 
         if (isset($version)) {

@@ -32,6 +32,7 @@ class UtilController extends Controller
         $entity->setModifiedBy($user);
         $entity->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $em->persist($entity);
+
         if($auto_flush) $em->flush();
         return true;
     }

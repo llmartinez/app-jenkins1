@@ -225,7 +225,7 @@ class WorkshopController extends Controller {
 
 
                     // $mail = $newUser->getEmail1();
-                    $mail = 'db@adserviceticketing.com';
+                    $mail = $this->container->getParameter('mail_db');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 
