@@ -580,8 +580,14 @@ class TicketController extends Controller {
                                 else{
                                     $id_version = null;
                                 }
-                                if (isset($version)){
-                                    $car->setVersion($version);
+
+                                if (isset($version))
+                                {
+                                    $sizeV = sizeof($version);
+
+                                    if ($size > 0) {
+                                        $car->setVersion($version);
+                                    }
                                 }
                                 else{
                                     $car->setVersion(null);
@@ -628,6 +634,7 @@ class TicketController extends Controller {
                                 $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
 
                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                            'action' => 'newTicket',
                                             'form' => $form->createView(),
                                             'formC' => $formC->createView(),
                                             'formD' => $formD->createView(),
@@ -642,6 +649,7 @@ class TicketController extends Controller {
                             $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
 
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                        'action' => 'newTicket',
                                         'form' => $form->createView(),
                                         'formC' => $formC->createView(),
                                         'formD' => $formD->createView(),
@@ -691,6 +699,7 @@ class TicketController extends Controller {
         }
 
         $array = array( 'ticket' => $ticket,
+                        'action' => 'newTicket',
                         'car' => $car,
                         'form' => $form->createView(),
                         'formC' => $formC->createView(),
@@ -776,6 +785,7 @@ class TicketController extends Controller {
             $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
 
             $array = array(
+                            'action'    => 'showTicket',
                             'form'      => $form->createView(),
                             'form_name' => $form->getName(),
                             'ticket'    => $ticket,
@@ -914,6 +924,7 @@ class TicketController extends Controller {
 
             $array = array( 'formP'     => $formP->createView(),
                             'formD'     => $formD->createView(),
+                            'action'    => 'showTicket',
                             'ticket'    => $ticket,
                             'systems'   => $systems,
                             'sentences' => $sentences,
@@ -1037,6 +1048,7 @@ class TicketController extends Controller {
 
                 return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),
                                                                                 'form_name' => $formP->getName(),
+                                                                                'action'    => 'showTicket',
                                                                                 'ticket'    => $ticket,
                                                                                 'systems'   => $systems,
                                                                                 'form_name' => $formP->getName(),
