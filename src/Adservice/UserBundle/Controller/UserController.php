@@ -38,15 +38,14 @@ class UserController extends Controller {
         //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         //  $session = $this->getRequest()->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
-
-
+        $request  = $this->getRequest();
+        $locale = $request->getLocale();
+        $currentLocale = $request->getLocale();
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
-
         // Se pondrá por defecto el idioma del usuario en el primer login
         if(!isset($_SESSION['lang'])) {
-            $request  = $this->getRequest();
-            $locale = $request->getLocale();
+            
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
@@ -89,10 +88,32 @@ class UserController extends Controller {
             $_SESSION['lang'] = $lang;
 
             return $this->redirect($currentPath);
+        }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+            $user=$country = $this->get('security.context')->getToken()->getUser();
+            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = substr($lang, 0, strrpos($lang, '_'));
+
+            if($user->getWorkshop() != null){
+               
+                if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
+                    $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
+                                                                          'country'  => $country));
+                    
+                }
+                else{
+                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                    'num_rows' => 10,
+                                                                    'country'  => $country));
+                }
+                $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+                $_SESSION['lang'] = $lang;
+
+                return $this->redirect($currentPath);
+            }
         }
 
-
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+        
     }
 
     /**

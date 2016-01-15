@@ -39,13 +39,37 @@
         if ($('#year_assessor').val() != undefined)
             checkYearLength();
     });
-
+    
     function checkYearLength(){
 
         var len = $('#new_car_form_year').val().length;
         if (len != 4) {
             event.preventDefault();
             var err = $('#msg_bad_year').val();
+            alert(err);
+        }
+    }
+    
+    $(document).on('click','#btn_create',function(){
+        checkVIN()
+    });
+    
+    
+    $(document).on('click','#save_close',function(){
+        checkVIN()
+    });
+
+    function checkVIN(){
+        var str = $('#new_car_form_vin').val()
+        var len = str.length;
+        if (len != 17){
+            event.preventDefault();
+            var err = $('#msg_bad_cif_length').val();
+            alert(err);
+        }
+        if(str.toLowerCase().indexOf("o") >= 0){
+            event.preventDefault();
+            var err = $('#msg_bad_cif_o').val();
             alert(err);
         }
     }

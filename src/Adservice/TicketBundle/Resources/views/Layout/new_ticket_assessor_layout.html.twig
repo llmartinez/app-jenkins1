@@ -15,7 +15,8 @@
 
 {% endblock  %}
 {% block main %}
-
+<input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
+<input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
 {% if car.brand.id is defined %} {% set brand = car.brand.id %}{% endif %}
 {% if car.model.id is defined %} {% set model = car.model.id %}{% endif %}
 {% if car.version.id is defined %} {% set version = car.version.id %}{% endif %}
@@ -63,7 +64,7 @@
               {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
               <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
-              {% if is_granted('ROLE_ASSESSOR') %}<button id="save&close" name="save&close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+              {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
             </div>
           </form>
 

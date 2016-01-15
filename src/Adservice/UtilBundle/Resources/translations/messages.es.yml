@@ -491,6 +491,8 @@ ticket.similar.matching:	  "Selecciona Modelo y Subsistema para buscar tickets r
 ticket_blocked_by:			  "Ticket bloqueado por "
 ticket_at:					  "a fecha "
 ticket_reassign:			  "Desbloquea y reassigna"
+ticket_vin_error_length:                  "El bastidor debe tener 17 caracteres"
+ticket_vin_error_o:                  "El bastidor no  puede contener la letra 'O' ni 'o' "
 filter_by_year: 			  "Filtrar por año"
 filter_by_motor: 			  "Filtrar por motor"
 filter_by_type:				  "Tipo de ticket"
