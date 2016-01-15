@@ -428,11 +428,19 @@ class TicketController extends Controller {
             $params_inactive[] = array('status', ' = '.$open->getId());
             $params_inactive[] = array('id', ' NOT IN ('.$ids_not.')');
 
-
             $pagination_inactive = new Pagination(1);
-            $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
 
-            $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
+            if(isset($country) and $country != 0) {
+                // Buscar tickets inactivos según el país de servicio
+                $joins[] = array('e.workshop wo ', 'wo.country = '.$country." ");
+                $inactive  = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive, null, $joins);
+                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive, $pagination_inactive, null, $joins);
+
+            }else{
+                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
+                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
+            }
+
 
             foreach ($tickets_inactive as $t) {
                 $t_inactive[$t->getId()] = $t->getId();
