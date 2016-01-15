@@ -491,6 +491,8 @@ ticket.similar.matching:	  "Sélectionner Modèle et Sous-système pour chercher
 ticket_blocked_by:			  "Ticket bloqué par"
 ticket_at:					  "à la date du"
 ticket_reassign:			  "Débloquez et réassignez"
+ticket_vin_error_length:                  "Le Châssis doit être 17 caractères"
+ticket_vin_error_o:                  "Le Châssis peut ne pas avoir la lettre 'O' ou 'o'"
 filter_by_year: 			  "Filtrer par année"
 filter_by_motor: 			  "Filtrer par moteur"
 filter_by_type:				  "Type de ticket"

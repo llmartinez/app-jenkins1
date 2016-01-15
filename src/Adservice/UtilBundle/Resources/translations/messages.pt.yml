@@ -491,6 +491,8 @@ ticket.similar.matching:	  "Selecione Modelo e Subsistema para procurar talões 
 ticket_blocked_by:			  "Talão bloqueado por"
 ticket_at:					  "à data de"
 ticket_reassign:			  "Desbloqueia e volta a atribuir"
+ticket_vin_error_length:                  "O Número de chassis deve ser 17 caracteres"
+ticket_vin_error_o:                  "O Número pode não ter a letra 'O' ou 'o'"
 filter_by_year: 			  "Filtrar por ano"
 filter_by_motor: 			  "Filtrar por motor"
 filter_by_type:				  "Tipo de bilhete"
