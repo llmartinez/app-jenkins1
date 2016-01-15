@@ -18,6 +18,8 @@ use Adservice\TicketBundle\Form\EditDescriptionType;
 
 use Adservice\TicketBundle\Entity\Status;
 use Adservice\CarBundle\Entity\Car;
+use Adservice\CarBundle\Entity\Version;
+use Adservice\CarBundle\Entity\Motor;
 use Adservice\CarBundle\Form\CarType;
 
 use Adservice\TicketBundle\Entity\Post;
@@ -426,11 +428,19 @@ class TicketController extends Controller {
             $params_inactive[] = array('status', ' = '.$open->getId());
             $params_inactive[] = array('id', ' NOT IN ('.$ids_not.')');
 
-
             $pagination_inactive = new Pagination(1);
-            $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
 
-            $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
+            if(isset($country) and $country != 0) {
+                // Buscar tickets inactivos según el país de servicio
+                $joins[] = array('e.workshop wo ', 'wo.country = '.$country." ");
+                $inactive  = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive, null, $joins);
+                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive, $pagination_inactive, null, $joins);
+
+            }else{
+                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
+                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
+            }
+
 
             foreach ($tickets_inactive as $t) {
                 $t_inactive[$t->getId()] = $t->getId();
@@ -1313,6 +1323,14 @@ class TicketController extends Controller {
     {
         $em = $this->getDoctrine()->getEntityManager();
         $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
+
+        $query   = $em->createQuery('SELECT m FROM CarBundle:Version v, CarBundle:Motor m
+                                        WHERE m.id = v.motor
+                                        AND v.motor IN (
+                                            SELECT mt FROM CarBundle:Motor mt)
+                                        GROUP BY m.name
+                                        ORDER BY m.name');
+        $motors    = $query->getResult();
 
         return $this->render('TicketBundle:Layout:show_motors_layout.html.twig', array('motors' => $motors));
     }
