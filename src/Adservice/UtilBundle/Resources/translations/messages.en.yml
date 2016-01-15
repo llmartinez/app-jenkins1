@@ -491,6 +491,8 @@ ticket.similar.matching:	  "Select Model and Subsystem for matching similar clos
 ticket_blocked_by:			  "Ticket blocked by "
 ticket_at:					  "at date "
 ticket_reassign:			  "Unlock and reassign"
+ticket_vin_error_length:                  "The Vin must be 17 characters"
+ticket_vin_error_o:                  "The Vin may not have letter 'O' or 'o' "
 filter_by_year: 			  "Filter by year"
 filter_by_motor: 			  "Filter by motor"
 filter_by_type:				  "Ticket type"

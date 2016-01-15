@@ -23,13 +23,14 @@
 {% endblock  %}
 
 {% block content %}
-
+    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
+    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
     <div class="form-group">
         <form action="{{ path('editCar', { 'id': ticket.id }) }}" id="contact" class="form" role="form" method="post">
 
             <legend> {% trans %} edit.car {% endtrans %} </legend>
             {% include 'TicketBundle:Car:edit_car.html.twig'  %}
-            <button class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button id="btn_create" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
         </form>
     </div>
 
