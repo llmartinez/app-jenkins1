@@ -1,4 +1,20 @@
 
+    {% if id_version  is defined %}
+        <input type="hidden" id="ticket_version" value="{{id_version }}">
+    {% else %}
+        <input type="hidden" id="ticket_version" value="0">
+    {% endif %}
+    {% if id_system  is defined %}
+        <input type="hidden" id="ticket_system" value="{{id_system }}">
+    {% else %}
+        <input type="hidden" id="ticket_system" value="0">
+    {% endif %}
+    {% if id_subsystem  is defined %}
+        <input type="hidden" id="ticket_subsystem" value="{{id_subsystem }}">
+    {% else %}
+        <input type="hidden" id="ticket_subsystem" value="0">
+    {% endif %}
+
     {% if (is_granted('ROLE_ASSESSOR')) %}
         <div class="grid-full w100">
             <legend>{% trans %} ticket_info {% endtrans %}</legend>
