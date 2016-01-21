@@ -739,8 +739,15 @@ class TicketController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
-        $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
-        $id_system = $subsystem->getSystem()->getId();
+        if(isset($id_subsystem)) {
+            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+            $id_system = $subsystem->getSystem()->getId();
+            $id_subsystem = $subsystem->getId();
+        }else {
+            $id_system = '0';
+            $id_subsystem = '0';
+        }
+
 
         $array = array( 'ticket' => $ticket,
                         'action' => 'newTicket',
@@ -751,7 +758,7 @@ class TicketController extends Controller {
                         'brands' => $brands,
                         'id_version' => $id_version,
                         'id_system' => $id_system,
-                        'id_subsystem' => $subsystem->getId(),
+                        'id_subsystem' => $id_subsystem,
                         'systems' => $systems,
                         'adsplus' => $adsplus,
                         'workshop' => $workshop,
