@@ -105,7 +105,7 @@
                             <td>{{ ticket.workshop.name|length > 15 ? ticket.workshop.name|slice(0, 15) ~ '...' : ticket.workshop.name  }}</td>
 
                         {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
-                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
                         {% elseif ticket.car.model.id  is defined %}
                             {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
                         {% else %}
