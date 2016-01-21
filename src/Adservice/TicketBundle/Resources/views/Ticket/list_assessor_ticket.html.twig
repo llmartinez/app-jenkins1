@@ -126,7 +126,7 @@
                             {% set len = 60 %}
                         {% endif %}
 
-                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
                         <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>

@@ -583,7 +583,7 @@ class TicketController extends Controller {
                                 $car->setModel($model);
                                 $vin = $car->getVin();
                                 //SI VIN TIENE LONGITUD 17
-                                if(strlen($vin) == 17){                
+                                if(strlen($vin) == 17){
                                     //SI VIN NO CONTIENE 'O'
                                     if(!strpos(strtolower($vin),'o')){
                                         //SI NO HA ESCOGIDO VERSION DE DEJA NULL
@@ -656,7 +656,7 @@ class TicketController extends Controller {
                                                     'workshop' => $workshop,
                                                     'form_name' => $form->getName(),));
                                     }
-                                            
+
                                 }else {
                                     $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_length'));
 
@@ -739,6 +739,16 @@ class TicketController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
+        if(isset($id_subsystem)) {
+            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+            $id_system = $subsystem->getSystem()->getId();
+            $id_subsystem = $subsystem->getId();
+        }else {
+            $id_system = '0';
+            $id_subsystem = '0';
+        }
+
+
         $array = array( 'ticket' => $ticket,
                         'action' => 'newTicket',
                         'car' => $car,
@@ -746,6 +756,9 @@ class TicketController extends Controller {
                         'formC' => $formC->createView(),
                         'formD' => $formD->createView(),
                         'brands' => $brands,
+                        'id_version' => $id_version,
+                        'id_system' => $id_system,
+                        'id_subsystem' => $id_subsystem,
                         'systems' => $systems,
                         'adsplus' => $adsplus,
                         'workshop' => $workshop,
@@ -1837,7 +1850,7 @@ class TicketController extends Controller {
         else $adsplus = null;
 
         if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
-        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->find($version);
+        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->findById($version);
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
             $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
