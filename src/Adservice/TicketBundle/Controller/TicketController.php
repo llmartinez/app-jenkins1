@@ -1850,7 +1850,7 @@ class TicketController extends Controller {
         else $adsplus = null;
 
         if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
-        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->find($version);
+        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version'  )->findByIdVersion($version);
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
             $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
