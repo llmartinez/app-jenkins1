@@ -759,7 +759,9 @@ fieldset[disabled] .asr_form-control {
 .ui-autocomplete {
     background-color: #fff;
     padding: 0!important;
-    width: 200px!important;
+    width: 122px!important;
+    max-height: 235px;
+    overflow: scroll;
 }
 
 .ui-autocomplete li.ui-menu-item {
