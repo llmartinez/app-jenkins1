@@ -757,12 +757,13 @@ fieldset[disabled] .asr_form-control {
 /* autocomplete */
 
 .ui-autocomplete {
-    background-color: #fff;
-    padding: 0!important;
     width: 122px!important;
-    max-height: 222px;
+    max-height: 300px;
     overflow: scroll;
     overflow-x: hidden;
+    padding: 0!important;
+    background-color: #fff;
+    font-size: 12px;
 }
 
 .ui-autocomplete li.ui-menu-item {
