@@ -502,6 +502,8 @@ function fill_subsystem(subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
 
+    if(id_system == '0') $("#ticket_system").val();
+
     var route  = 'ticket_system';
     var locale = $(document).find("#data_locale").val();
 

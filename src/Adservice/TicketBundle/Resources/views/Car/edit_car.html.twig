@@ -30,7 +30,7 @@
             <option></option>
             {% for version in versions %}
                 <option value={{ version.id }}
-                {% if ticket.car is defined and ticket.car.version.name == version.name %} selected {% endif %}
+                {% if ticket.car is defined and ticket.car.version == version.name %} selected {% endif %}
                 >{{ version.name }}</option>
             {% endfor %}
         </select>

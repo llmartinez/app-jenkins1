@@ -739,13 +739,13 @@ class TicketController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
-        if(isset($id_subsystem)) {
+        if($id_subsystem != '') {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
             $id_system = $subsystem->getSystem()->getId();
             $id_subsystem = $subsystem->getId();
         }else {
-            $id_system = '0';
-            $id_subsystem = '0';
+            $id_system = '';
+            $id_subsystem = '';
         }
 
 
@@ -976,11 +976,21 @@ class TicketController extends Controller {
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
 
+            if($ticket->getSubsystem() != null) {
+                $id_subsystem = $ticket->getSubsystem()->getId();
+                $id_system = $ticket->getSubsystem()->getSystem()->getId();
+            }else {
+                $id_system = '';
+                $id_subsystem = '';
+            }
+
             $array = array( 'formP'     => $formP->createView(),
                             'formD'     => $formD->createView(),
                             'action'    => 'showTicket',
                             'ticket'    => $ticket,
                             'systems'   => $systems,
+                            'id_system' => $id_system,
+                            'id_subsystem' => $id_subsystem,
                             'sentences' => $sentences,
                             'form_name' => $formP->getName(),
                             'brand'     => $brand,
@@ -1009,7 +1019,6 @@ class TicketController extends Controller {
 
                         if($security->isGranted('ROLE_ASSESSOR')){
 
-                            $id_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
                             if($id_subsystem != '0' and ($ticket->getSubsystem() == null or $ticket->getSubsystem()->getId() != $id_subsystem)) {
                                 $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
 
