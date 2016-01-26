@@ -15089,6 +15089,12 @@
       source: availableTags
     });
 
+    // Ocultamos el autocomplete en un div para no mostrar errores de visualizacion
+    //  (el tamaño de la lista afecta al tamaño de pantalla)
+
+    $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;"></div>');
+    $('.ui-autocomplete').appendTo('#autocomplete-hider');
+
         // var array_motors = new Array();
 
         // $('#array_motors').each(function() {
