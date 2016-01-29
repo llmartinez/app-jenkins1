@@ -561,118 +561,147 @@ class TicketController extends Controller {
 
                     if ($formC->isValid() && $formD->isValid()) {
 
-                         // Controla si se ha subido un fichero erroneo
-                        $file = $document->getFile();
-                        if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
-                        if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
+                        $id_brand   = $request->request->get('new_car_form_brand');
+                        $id_model   = $request->request->get('new_car_form_model');
+                        $id_version = $request->request->get('new_car_form_version');
 
-                        if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                         or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+                        $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
+                        $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
 
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                                //Define CAR
-                                $car = UtilController::newEntity($car, $user);
+                        //SI NO HA ESCOGIDO VERSION SE DEJA NULL
+                        if (isset($id_version)) { $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version)); }
+                        else { $id_version = null; }
 
-                                $id_brand   = $request->request->get('new_car_form_brand');
-                                $id_model   = $request->request->get('new_car_form_model');
+                        // Controla si ya existe el mismo ticket
+                        $select = "SELECT t FROM TicketBundle:Ticket t
+                                        WHERE t.workshop = ".$workshop->getId()."
+                                        AND t.description LIKE '".$ticket->getDescription()."'
+                                        AND t.car IN (
+                                            SELECT c FROM CarBundle:Car c
+                                            WHERE c.brand = ".$id_brand."
+                                            AND c.model = ".$id_model." ";
 
-                                $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                                $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
+                        if($id_version != null){
+                            $select .= "AND c.version = ".$id_version; }
+                        $select .= ')';
 
-                                $car->setBrand($brand);
-                                $car->setModel($model);
-                                $vin = $car->getVin();
-                                //SI VIN TIENE LONGITUD 17
-                                if(strlen($vin) == 17){
-                                    //SI VIN NO CONTIENE 'O'
-                                    if(!strpos(strtolower($vin),'o')){
-                                        //SI NO HA ESCOGIDO VERSION DE DEJA NULL
-                                        $id_version = $request->request->get('new_car_form_version');
-                                        if (isset($id_version)){
-                                            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
-                                        }
-                                        else{
-                                            $id_version = null;
-                                        }
+                        $query = $em->createQuery($select);
+                        $existTicket = $query->getResult();
 
-                                        if (isset($version))
-                                        {
-                                            $sizeV = sizeof($version);
+                        if($existTicket == null) {
 
-                                            if ($size > 0) {
-                                                $car->setVersion($version);
+                            // Controla si se ha subido un fichero erroneo
+                            $file = $document->getFile();
+                            if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                            if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
+
+                            if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                             or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+
+                                if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                                    //Define CAR
+                                    $car = UtilController::newEntity($car, $user);
+
+                                    $car->setBrand($brand);
+                                    $car->setModel($model);
+                                    $vin = $car->getVin();
+                                    //SI VIN TIENE LONGITUD 17
+                                    if(strlen($vin) == 17){
+                                        //SI VIN NO CONTIENE 'O'
+                                        if(!strpos(strtolower($vin),'o')){
+                                            if (isset($version))
+                                            {
+                                                $sizeV = sizeof($version);
+
+                                                if ($sizeV > 0) {
+                                                    $car->setVersion($version);
+                                                }
                                             }
-                                        }
-                                        else{
-                                            $car->setVersion(null);
-                                        }
-
-                                        $car = UtilController::newEntity($car, $user);
-                                        UtilController::saveEntity($em, $car, $user);
-
-                                        //Define TICKET
-                                        $ticket = UtilController::newEntity($ticket, $user);
-                                        if ($security->isGranted('ROLE_ASSESSOR'))
-                                        {
-                                            $ticket->setWorkshop($workshop);
-                                            $ticket->setAssignedTo($user);
-                                        }else{
-                                            $ticket->setWorkshop($user->getWorkshop());
-                                        }
-                                        $ticket->setStatus($status);
-                                        $ticket->setPending(1);
-                                        $ticket->setCar($car);
-                                        UtilController::saveEntity($em, $ticket, $user);
-
-                                        //Define Document
-                                        if ($file != "") {
-
-                                            //Define Post
-                                            $post = new Post();
-                                            $post = UtilController::newEntity($post, $user);
-                                            $post->setTicket($ticket);
-                                            $post->setMessage(" ");
-                                            UtilController::saveEntity($em, $post, $user, false);
-
-                                            $document->setPost($post);
-                                            $dir = $document->getUploadRootDir();
-                                            if (!file_exists($dir) && !is_dir($dir)) {
-                                                mkdir($dir, 0775);
+                                            else{
+                                                $car->setVersion(null);
                                             }
 
-                                            $em->persist($document);
-                                            $em->flush();
-                                        }
-                                    } else {
-                                        $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_o'));
+                                            $car = UtilController::newEntity($car, $user);
+                                            UtilController::saveEntity($em, $car, $user);
 
-                                        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                                    'form' => $form->createView(),
-                                                    'formC' => $formC->createView(),
-                                                    'formD' => $formD->createView(),
-                                                    'brands' => $brands,
-                                                    'systems' => $systems,
-                                                    'adsplus' => $adsplus,
-                                                    'workshop' => $workshop,
-                                                    'form_name' => $form->getName(),));
+                                            //Define TICKET
+                                            $ticket = UtilController::newEntity($ticket, $user);
+                                            if ($security->isGranted('ROLE_ASSESSOR'))
+                                            {
+                                                $ticket->setWorkshop($workshop);
+                                                $ticket->setAssignedTo($user);
+                                            }else{
+                                                $ticket->setWorkshop($user->getWorkshop());
+                                            }
+                                            $ticket->setStatus($status);
+                                            $ticket->setPending(1);
+                                            $ticket->setCar($car);
+                                            UtilController::saveEntity($em, $ticket, $user);
+
+                                            //Define Document
+                                            if ($file != "") {
+
+                                                //Define Post
+                                                $post = new Post();
+                                                $post = UtilController::newEntity($post, $user);
+                                                $post->setTicket($ticket);
+                                                $post->setMessage(" ");
+                                                UtilController::saveEntity($em, $post, $user, false);
+
+                                                $document->setPost($post);
+                                                $dir = $document->getUploadRootDir();
+                                                if (!file_exists($dir) && !is_dir($dir)) {
+                                                    mkdir($dir, 0775);
+                                                }
+
+                                                $em->persist($document);
+                                                $em->flush();
+                                            }
+                                        } else {
+                                            $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_o'));
+
+                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                                        'form' => $form->createView(),
+                                                        'formC' => $formC->createView(),
+                                                        'formD' => $formD->createView(),
+                                                        'brands' => $brands,
+                                                        'systems' => $systems,
+                                                        'adsplus' => $adsplus,
+                                                        'workshop' => $workshop,
+                                                        'form_name' => $form->getName(),));
+                                        }
+
+                                    }else {
+                                        $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_length'));
+
+                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                                        'form' => $form->createView(),
+                                                        'formC' => $formC->createView(),
+                                                        'formD' => $formD->createView(),
+                                                        'brands' => $brands,
+                                                        'systems' => $systems,
+                                                        'adsplus' => $adsplus,
+                                                        'workshop' => $workshop,
+                                                        'form_name' => $form->getName(),));
                                     }
+                                } else {
+                                    // ERROR tamaño
+                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
 
-                                }else {
-                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_length'));
-
-                                        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                                    'form' => $form->createView(),
-                                                    'formC' => $formC->createView(),
-                                                    'formD' => $formD->createView(),
-                                                    'brands' => $brands,
-                                                    'systems' => $systems,
-                                                    'adsplus' => $adsplus,
-                                                    'workshop' => $workshop,
-                                                    'form_name' => $form->getName(),));
+                                    return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
+                                                'action' => 'newTicket',
+                                                'form' => $form->createView(),
+                                                'formC' => $formC->createView(),
+                                                'formD' => $formD->createView(),
+                                                'brands' => $brands,
+                                                'systems' => $systems,
+                                                'adsplus' => $adsplus,
+                                                'workshop' => $workshop,
+                                                'form_name' => $form->getName(),));
                                 }
                             } else {
-                                // ERROR tamaño
-                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+                                // ERROR tipo de fichero
+                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
 
                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                                             'action' => 'newTicket',
@@ -687,7 +716,8 @@ class TicketController extends Controller {
                             }
                         } else {
                             // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
+                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.same_ticket')
+                                                                    .' ('.$this->get('translator')->trans('ticket').' #'.$existTicket[0]->getId().')');
 
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
                                         'action' => 'newTicket',
