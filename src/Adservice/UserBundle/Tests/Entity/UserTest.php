@@ -25,8 +25,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
        $user->setCity('Badalona');
        $user->setPhoneNumber1('931112233');
        $user->setPhoneNumber2('931112233');
-       $user->setMovileNumber1('655112233');
-       $user->setMovileNumber2('655112233');
+       $user->setMobileNumber1('655112233');
+       $user->setMobileNumber2('655112233');
        $user->setFax('931112233');
        $user->setEmail1('test@test.es');
        $user->setEmail2('test@test.es');

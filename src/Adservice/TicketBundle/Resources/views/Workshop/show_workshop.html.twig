@@ -53,9 +53,9 @@
 		{% if workshop.phoneNumber1  != "" %} 	 <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone.png'       ) }}'> {{ workshop.phoneNumber1  }} {% endif %}
 		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
 	</div>
-	<div class="form-group" {% if workshop.movileNumber1 != "" %}title="{{workshop.movileNumber1}}" alt="{{workshop.movileNumber1}}"{% endif %}>
-		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+	<div class="form-group" {% if workshop.mobileNumber1 != "" %}title="{{workshop.mobileNumber1}}" alt="{{workshop.mobileNumber1}}"{% endif %}>
+		{% if workshop.mobileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.mobileNumber1 }} {% endif %}
+		{% if workshop.mobileNumber2 != "" %}    - {{ workshop.mobileNumber2 }} {% endif %}
 	</div>
 	{# <div class="form-group" {% if workshop.fax != "" %}title="{{workshop.fax}}" alt="{{workshop.fax}}"{% endif %}>
 		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}

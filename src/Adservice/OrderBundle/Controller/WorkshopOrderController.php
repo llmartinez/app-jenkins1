@@ -43,7 +43,7 @@ class WorkshopOrderController extends Controller {
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
-                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.movile_number_1 LIKE '%".$field."%' OR e.movile_number_2 LIKE '%".$field."%') ");
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.mobile_number_1 LIKE '%".$field."%' OR e.mobile_number_2 LIKE '%".$field."%') ");
             }
             elseif($term == 'mail'){
                 $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
@@ -178,11 +178,11 @@ class WorkshopOrderController extends Controller {
                 if($workshopOrder->getPhoneNumber2() !=null){
                     $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
                 }
-                if($workshopOrder->getMovileNumber1() !=null){
-                    $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber1());
+                if($workshopOrder->getMobileNumber1() !=null){
+                    $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber1());
                 }
-                if($workshopOrder->getMovileNumber2() !=null){
-                    $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber2());
+                if($workshopOrder->getMobileNumber2() !=null){
+                    $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber2());
                 }
                 if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
@@ -248,10 +248,10 @@ class WorkshopOrderController extends Controller {
                         $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
                     }
                     else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber1();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber1();
                     }
                     else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber2();
+                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
                     }
                     else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
@@ -739,11 +739,11 @@ class WorkshopOrderController extends Controller {
         if($workshopOrder->getPhoneNumber2() !=null){
             $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
         }
-        if($workshopOrder->getMovileNumber1() !=null){
-            $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber1());
+        if($workshopOrder->getMobileNumber1() !=null){
+            $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber1());
         }
-        if($workshopOrder->getMovileNumber2() !=null){
-            $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMovileNumber2());
+        if($workshopOrder->getMobileNumber2() !=null){
+            $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber2());
         }
         if(isset($find))$codeWorkshop = $find->getCodeWorkshop();
         else            $codeWorkshop = " ";
@@ -758,10 +758,10 @@ class WorkshopOrderController extends Controller {
             $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
         }
         else if($findPhone[2]['1']>0){
-            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber1();
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber1();
         }
         else if($findPhone[3]['1']>0){
-            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMovileNumber2();
+            $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
         }
 
 //        else $this->get('session')->setFlash('error', $flash);
@@ -836,8 +836,8 @@ class WorkshopOrderController extends Controller {
                     $newUser->setSurname       ($workshop->getName());
                     $newUser->setPhoneNumber1  ($workshop->getPhoneNumber1());
                     $newUser->setPhoneNumber2  ($workshop->getPhoneNumber2());
-                    $newUser->setMovileNumber1 ($workshop->getMovileNumber1());
-                    $newUser->setMovileNumber2 ($workshop->getMovileNumber2());
+                    $newUser->setMobileNumber1 ($workshop->getMobileNumber1());
+                    $newUser->setMobileNumber2 ($workshop->getMobileNumber2());
                     $newUser->setFax           ($workshop->getFax());
                     $newUser->setEmail1        ($workshop->getEmail1());
                     $newUser->setEmail2        ($workshop->getEmail2());
@@ -951,8 +951,8 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setContactName   ($workshop->getContactName());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());
         $workshopOrder->setPhoneNumber2  ($workshop->getPhoneNumber2());
-        $workshopOrder->setMovileNumber1 ($workshop->getMovileNumber1());
-        $workshopOrder->setMovileNumber2 ($workshop->getMovileNumber2());
+        $workshopOrder->setMobileNumber1 ($workshop->getMobileNumber1());
+        $workshopOrder->setMobileNumber2 ($workshop->getMobileNumber2());
         $workshopOrder->setFax           ($workshop->getFax());
         $workshopOrder->setEmail1        ($workshop->getEmail1());
         $workshopOrder->setEmail2        ($workshop->getEmail2());
@@ -1003,8 +1003,8 @@ class WorkshopOrderController extends Controller {
         $workshop->setContactName   ($workshopOrder->getContact());
         $workshop->setPhoneNumber1  ($workshopOrder->getPhoneNumber1());
         $workshop->setPhoneNumber2  ($workshopOrder->getPhoneNumber2());
-        $workshop->setMovileNumber1 ($workshopOrder->getMovileNumber1());
-        $workshop->setMovileNumber2 ($workshopOrder->getMovileNumber2());
+        $workshop->setMobileNumber1 ($workshopOrder->getMobileNumber1());
+        $workshop->setMobileNumber2 ($workshopOrder->getMobileNumber2());
         $workshop->setFax           ($workshopOrder->getFax());
         $workshop->setEmail1        ($workshopOrder->getEmail1());
         $workshop->setEmail2        ($workshopOrder->getEmail2());
