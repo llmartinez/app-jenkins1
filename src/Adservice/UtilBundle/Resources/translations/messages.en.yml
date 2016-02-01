@@ -502,6 +502,7 @@ filter_by_country:			  "Filter by country"
 
 search_by_car: 				  "Search by car"
 clear_filters:				  "Clear filters"
+
 sentence.default:			  "Default sentences..."
 
 #POST
