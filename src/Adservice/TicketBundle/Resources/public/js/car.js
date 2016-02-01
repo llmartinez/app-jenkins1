@@ -15092,7 +15092,7 @@
     // Ocultamos el autocomplete en un div para no mostrar errores de visualizacion
     //  (el tamaño de la lista afecta al tamaño de pantalla)
 
-    $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;"></div>');
+    $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;position:absolute;top:0;"></div>');
     $('.ui-autocomplete').appendTo('#autocomplete-hider');
 
     });

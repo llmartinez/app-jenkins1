@@ -26,72 +26,72 @@
                     {#{% if ticket.assignedTo != null %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}#}
                     <tr class="ticketRow" title="{{ticket_info}}">
 
-                        <input type="hidden" id="workshop_code_partner"  value="{{workshop.codePartner }}">
-                        <input type="hidden" id="workshop_code_workshop" value="{{workshop.codeWorkshop }}">
-                        <input type="hidden" id="workshop_name"          value="{{workshop.name }}">
-                        <input type="hidden" id="workshop_tel"           value="{{workshop.PhoneNumber1 }}">
-                        <input type="hidden" id="workshop_mail"          value="{{workshop.Email1 }}">
-                        <input type="hidden" id="workshop_contact"       value="{{workshop.contact }}">
+                        <input type="hidden" class="workshop_code_partner"  value="{{workshop.codePartner }}">
+                        <input type="hidden" class="workshop_code_workshop" value="{{workshop.codeWorkshop }}">
+                        <input type="hidden" class="workshop_name"          value="{{workshop.name }}">
+                        <input type="hidden" class="workshop_tel"           value="{{workshop.PhoneNumber1 }}">
+                        <input type="hidden" class="workshop_mail"          value="{{workshop.Email1 }}">
+                        <input type="hidden" class="workshop_contact"       value="{{workshop.contact }}">
 
-                        <input type="hidden" id="ticket_id"         value="{{ticket.id }}">
-                        <input type="hidden" id="ticket_id_brand"   value="{{ticket.car.brand.id }}">
-                        <input type="hidden" id="ticket_brand"      value="{{ticket.car.brand.name }}">
+                        <input type="hidden" class="ticket_id"         value="{{ticket.id }}">
+                        <input type="hidden" class="ticket_id_brand"   value="{{ticket.car.brand.id }}">
+                        <input type="hidden" class="ticket_brand"      value="{{ticket.car.brand.name }}">
 
                          {% if ticket.car.model.id  is defined %}
-                            <input type="hidden" id="ticket_id_model" value="{{ticket.car.model.id }}">
-                            <input type="hidden" id="ticket_model"    value="{{ticket.car.model.name }}">
+                            <input type="hidden" class="ticket_id_model" value="{{ticket.car.model.id }}">
+                            <input type="hidden" class="ticket_model"    value="{{ticket.car.model.name }}">
                         {% else %}
-                            <input type="hidden" id="ticket_id_model" value="0">
-                            <input type="hidden" id="ticket_model"    value=" ">
+                            <input type="hidden" class="ticket_id_model" value="0">
+                            <input type="hidden" class="ticket_model"    value=" ">
                         {% endif %}
 
                         {% if ticket.car.version.id  is defined %}
-                            <input type="hidden" id="ticket_id_version" value="{{ticket.car.version.id }}">
-                            <input type="hidden" id="ticket_version"    value="{{ticket.car.version.name }}">
+                            <input type="hidden" class="ticket_id_version" value="{{ticket.car.version.id }}">
+                            <input type="hidden" class="ticket_version"    value="{{ticket.car.version.name }}">
                         {% else %}
-                            <input type="hidden" id="ticket_id_version" value="0">
-                            <input type="hidden" id="ticket_version"    value=" ">
+                            <input type="hidden" class="ticket_id_version" value="0">
+                            <input type="hidden" class="ticket_version"    value="">
                         {% endif %}
 
                         {% if ticket.car.year is defined %}
-                            <input type="hidden" id="ticket_year" value="{{ticket.car.year}}">
+                            <input type="hidden" class="ticket_year" value="{{ticket.car.year}}">
                         {% else %}
-                            <input type="hidden" id="ticket_year" value="0">
+                            <input type="hidden" class="ticket_year" value="0">
                         {% endif %}
 
                         {% if ticket.subsystem is defined and ticket.subsystem.system is defined and ticket.subsystem.system.id is defined %}
-                            <input type="hidden" id="ticket_id_system" value="{{ticket.subsystem.system.id }}">
-                            <input type="hidden" id="ticket_system"    value="{{ticket.subsystem.system.name }}">
+                            <input type="hidden" class="ticket_id_system" value="{{ticket.subsystem.system.id }}">
+                            <input type="hidden" class="ticket_system"    value="{{ticket.subsystem.system.name }}">
                         {% else %}
-                            <input type="hidden" id="ticket_id_system" value="0">
-                            <input type="hidden" id="ticket_system"    value=" ">
+                            <input type="hidden" class="ticket_id_system" value="0">
+                            <input type="hidden" class="ticket_system"    value=" ">
                         {% endif %}
 
                         {% if ticket.subsystem is defined and ticket.subsystem.id is defined %}
-                            <input type="hidden" id="ticket_id_subsystem" value="{{ticket.subsystem.id }}">
-                            <input type="hidden" id="ticket_subsystem"    value="{{ticket.subsystem.name|trans }}">
+                            <input type="hidden" class="ticket_id_subsystem" value="{{ticket.subsystem.id }}">
+                            <input type="hidden" class="ticket_subsystem"    value="{{ticket.subsystem.name|trans }}">
                         {% else %}
-                            <input type="hidden" id="ticket_id_subsystem" value="0">
-                            <input type="hidden" id="ticket_subsystem"    value=" ">
+                            <input type="hidden" class="ticket_id_subsystem" value="0">
+                            <input type="hidden" class="ticket_subsystem"    value=" ">
                         {% endif %}
 
                         {% if ticket.importance.id is defined %}
-                            <input type="hidden" id="ticket_id_importance" value="{{ticket.importance.id }}">
-                            <input type="hidden" id="ticket_importance"    value="{{ticket.importance.importance }}">
+                            <input type="hidden" class="ticket_id_importance" value="{{ticket.importance.id }}">
+                            <input type="hidden" class="ticket_importance"    value="{{ticket.importance.importance }}">
                         {% else %}
-                            <input type="hidden" id="ticket_id_importance" value="0">
-                            <input type="hidden" id="ticket_importance"    value=" ">
+                            <input type="hidden" class="ticket_id_importance" value="0">
+                            <input type="hidden" class="ticket_importance"    value=" ">
                         {% endif %}
 
-                        <input type="hidden" id="ticket_year"         value="{{ticket.car.year }}">
-                        <input type="hidden" id="ticket_motor"        value="{{ticket.car.motor }}">
-                        <input type="hidden" id="ticket_kw"           value="{{ticket.car.kw }}">
-                        <input type="hidden" id="ticket_displacement" value="{{ticket.car.displacement }}">
-                        <input type="hidden" id="ticket_vin"          value="{{ticket.car.vin }}">
-                        <input type="hidden" id="ticket_plateNumber"  value="{{ticket.car.plateNumber }}">
-                        <input type="hidden" id="ticket_date"         value="{{ticket.modifiedAt|date("d/m/Y") }}">
-                        <input type="hidden" id="ticket_description"  value="{{ticket.description }}">
-                        <input type="hidden" id="ticket_solution"     value="{{ticket.solution }}">
+                        <input type="hidden" class="ticket_year"         value="{{ticket.car.year }}">
+                        <input type="hidden" class="ticket_motor"        value="{{ticket.car.motor }}">
+                        <input type="hidden" class="ticket_kw"           value="{{ticket.car.kw }}">
+                        <input type="hidden" class="ticket_displacement" value="{{ticket.car.displacement }}">
+                        <input type="hidden" class="ticket_vin"          value="{{ticket.car.vin }}">
+                        <input type="hidden" class="ticket_plateNumber"  value="{{ticket.car.plateNumber }}">
+                        <input type="hidden" class="ticket_date"         value="{{ticket.modifiedAt|date("d/m/Y") }}">
+                        <input type="hidden" class="ticket_description"  value="{{ticket.description }}">
+                        <input type="hidden" class="ticket_solution"     value="{{ticket.solution }}">
 
                         <td id="id_ticket">{{ ticket.id         }}</td>
 
