@@ -85,8 +85,8 @@ class ImportController extends Controller
 			$newShop->setActive('1');
 			$newShop->setPhoneNumber1  ('0');
 	        $newShop->setPhoneNumber2  ('0');
-	        $newShop->setMovileNumber1 ('0');
-	        $newShop->setMovileNumber2 ('0');
+	        $newShop->setMobileNumber1 ('0');
+	        $newShop->setMobileNumber2 ('0');
 	        $newShop->setFax           ('0');
 
 	        $mail = $this->container->getParameter('mail_test');
@@ -536,8 +536,8 @@ class ImportController extends Controller
     {
         $entity->setPhoneNumber1  ($old_entity->getTfno());
         $entity->setPhoneNumber2  ($old_entity->getTfno2());
-        $entity->setMovileNumber1 ($old_entity->getMovil());
-        $entity->setMovileNumber2 ($old_entity->getMovil2());
+        $entity->setMobileNumber1 ($old_entity->getMovil());
+        $entity->setMobileNumber2 ($old_entity->getMovil2());
         $entity->setFax           ($old_entity->getFax());
 
         $email = $old_entity->getEmail();
@@ -681,8 +681,8 @@ class ImportController extends Controller
             $excel.=$row[0]->getEmail2().';';
             $excel.=$row[0]->getPhoneNumber1().';';
             $excel.=$row[0]->getPhoneNumber2().';';
-            $excel.=$row[0]->getMovileNumber1().';';
-            $excel.=$row[0]->getMovileNumber2().';';
+            $excel.=$row[0]->getMobileNumber1().';';
+            $excel.=$row[0]->getMobileNumber2().';';
             $excel.=$row[0]->getRegion().';';
             $excel.=$row[0]->getCity().';';
             $excel.=$row[0]->getAddress().';';
@@ -775,8 +775,8 @@ class ImportController extends Controller
 		$postal_code = '08080';
 		$phoneNumber1 = '931112233';
 		$phoneNumber2 = '931112233';
-		$movileNumber1 = '655112233';
-		$movileNumber2 = '655112233';
+		$mobileNumber1 = '655112233';
+		$mobileNumber2 = '655112233';
 		$fax = '931112233';
         $email1 = 'test@test.es';
         $email2 = 'test@test.es';
@@ -791,8 +791,8 @@ class ImportController extends Controller
        	$user->setCity($city);
        	$user->setPhoneNumber1($phoneNumber1);
         $user->setPhoneNumber2($phoneNumber2);
-        $user->setMovileNumber1($movileNumber1);
-        $user->setMovileNumber2($movileNumber2);
+        $user->setMobileNumber1($mobileNumber1);
+        $user->setMobileNumber2($mobileNumber2);
         $user->setFax($fax);
         $user->setEmail1($email1);
         $user->setEmail2($email1);
@@ -819,8 +819,8 @@ class ImportController extends Controller
         $shopOrder->setPostalCode($postal_code);
         $shopOrder->setPhoneNumber1($phoneNumber1);
         $shopOrder->setPhoneNumber2($phoneNumber2);
-        $shopOrder->setMovileNumber1($movileNumber1);
-        $shopOrder->setMovileNumber2($movileNumber2);
+        $shopOrder->setMobileNumber1($mobileNumber1);
+        $shopOrder->setMobileNumber2($mobileNumber2);
         $shopOrder->setFax($fax);
         $shopOrder->setEmail1($email1);
         $shopOrder->setEmail2($email1);
@@ -862,8 +862,8 @@ class ImportController extends Controller
 		$workshopOrder->setPostalCode($postal_code);
 		$workshopOrder->setPhoneNumber1($phoneNumber1);
 		$workshopOrder->setPhoneNumber2($phoneNumber2);
-		$workshopOrder->setMovileNumber1($movileNumber1);
-		$workshopOrder->setMovileNumber2($movileNumber2);
+		$workshopOrder->setMobileNumber1($mobileNumber1);
+		$workshopOrder->setMobileNumber2($mobileNumber2);
 		$workshopOrder->setFax($fax);
 		$workshopOrder->setEmail1($email1);
 		$workshopOrder->setEmail2($email2);

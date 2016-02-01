@@ -39,7 +39,7 @@
         if ($('#year_assessor').val() != undefined)
             checkYearLength();
     });
-    
+
     function checkYearLength(){
 
         var len = $('#new_car_form_year').val().length;
@@ -49,12 +49,12 @@
             alert(err);
         }
     }
-    
+
     $(document).on('click','#btn_create',function(){
         checkVIN()
     });
-    
-    
+
+
     $(document).on('click','#save_close',function(){
         checkVIN()
     });
@@ -15089,15 +15089,10 @@
       source: availableTags
     });
 
-        // var array_motors = new Array();
+    // Ocultamos el autocomplete en un div para no mostrar errores de visualizacion
+    //  (el tamaño de la lista afecta al tamaño de pantalla)
 
-        // $('#array_motors').each(function() {
-        //     array_motors.push($(this).attr("src"));
-        // });
+    $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;"></div>');
+    $('.ui-autocomplete').appendTo('#autocomplete-hider');
 
-        // $("#new_car_form_motor").autocomplete({
-        //     source: arrLinks
-        // }).data("autocomplete")._renderItem = function(ul, item) {
-        //     return $("<li>").data("item.autocomplete", item).append("<a>" + item.url + "</a>").appendTo(ul);
-        // };
     });

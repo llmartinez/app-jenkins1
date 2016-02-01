@@ -26,8 +26,8 @@ class WorkshopTest extends \PHPUnit_Framework_TestCase
        $workshop->setLowdateAt(new \DateTime('tomorrow'));
        $workshop->setModifiedAt(new \DateTime('today'));
        $workshop->setModifiedBy(UserTest::GetUser());
-       $workshop->setMovileNumber1('655112233');
-       $workshop->setMovileNumber2('655112233');
+       $workshop->setMobileNumber1('655112233');
+       $workshop->setMobileNumber2('655112233');
        $workshop->setObservationWorkshop('ObservationWorkshopTest');
        $workshop->setObservationAssessor('ObservationAssessorTest');
        $workshop->setObservationAdmin   ('ObservationAdminTest'   );

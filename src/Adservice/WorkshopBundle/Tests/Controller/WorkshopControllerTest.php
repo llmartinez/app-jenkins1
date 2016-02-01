@@ -33,8 +33,8 @@ class WorkshopControllerTest extends WebTestCase
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[region]']                   = 1                      ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[phone_number_1]']           = '111111111'            ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[phone_number_2]']           = '222222222'            ;
-                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_number_1]']          = '333333333'            ;
-                  $newWorkshopForm['adservice_workshopbundle_workshoptype[movile_number_2]']          = '444444444'            ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[mobile_number_1]']          = '333333333'            ;
+                  $newWorkshopForm['adservice_workshopbundle_workshoptype[mobile_number_2]']          = '444444444'            ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[fax]']                      = '555555555'            ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[contact_name]']             = 'contact_name'         ;
                   $newWorkshopForm['adservice_workshopbundle_workshoptype[contact_surname]']          = 'contact_surname'      ;
