@@ -37,6 +37,7 @@ $(document).ready(function() {
         $('#n_id_brand').val( $('#new_car_form_brand').val());
         $('#n_id_model').val( $('#new_car_form_model').val());
         $('#n_id_version').val( $('#new_car_form_version').val());
+        $('#n_id_year').val( $('#new_car_form_year').val());
         $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
         $('#n_id_importance').val( $('#new_car_form_importance').val());
         $('#n_id_vin').val( $('#new_car_form_vin').val());

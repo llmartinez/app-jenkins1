@@ -490,6 +490,7 @@ class TicketController extends Controller {
         $id_version = $request->request->get('n_id_version');
         $id_subsystem = $request->request->get('n_id_subsystem');
         $id_importance = $request->request->get('n_id_importance');
+        $id_year = $request->request->get('n_id_year');
         $id_vin = $request->request->get('n_id_vin');
         $id_plateNumber = $request->request->get('n_id_plateNumber');
 
@@ -512,6 +513,9 @@ class TicketController extends Controller {
         if (isset($id_importance) and $id_importance != '' and $id_importance != '0') {
             $importance = $em->getRepository('TicketBundle:Importance')->find($id_importance);
             $ticket->setImportance($importance);
+        }
+        if (isset($id_year) and $id_year != '' and $id_year != '0') {
+            $car->setYear($id_year);
         }
         if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
             $car->setVin($id_vin);
@@ -769,7 +773,7 @@ class TicketController extends Controller {
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
         }
 
-        if($id_subsystem != '') {
+        if($id_subsystem != '' and $id_subsystem != '0') {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
             $id_system = $subsystem->getSystem()->getId();
             $id_subsystem = $subsystem->getId();

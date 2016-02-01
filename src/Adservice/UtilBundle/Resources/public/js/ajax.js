@@ -27,11 +27,14 @@ function populate_region(route, region, city){
                 if (idx != "error") {
                     if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region)))
                     {
-                        region_edit = elm.region; city_edit = city;
+                        region_edit = elm.region;
+                        city_edit   = city;
                         $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");
                     }
                     else{
-                        if( region != 'no-region' ) { region_edit = region; city_edit = city;
+                        if( region != 'no-region' ) {
+                            region_edit = region;
+                            city_edit   = city;
                             $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
                         }
                         else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
@@ -359,8 +362,15 @@ function fill_car_data() {
                         var fin    = elm.fin.slice(0,4);
                         var fecha  = inicio+' - '+fin;
 
-                        if(year == undefined) {
-                            $('form[id=contact]').find('#new_car_form_year'    ).val(fecha      );
+                        var year_setted = $('form[id=contact]').find('#new_car_form_year').attr('value');
+
+                        if(year_setted != undefined && year_setted != ''){
+                            $('form[id=contact]').find('#new_car_form_year'    ).val(year_setted);
+                            $('form[id=contact]').find('#new_car_form_year').attr('value', '');
+                        }else{
+                            if(year == undefined) {
+                                $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
+                            }
                         }
                         $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );

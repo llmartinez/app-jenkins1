@@ -53,6 +53,12 @@
                             <input type="hidden" id="ticket_version"    value=" ">
                         {% endif %}
 
+                        {% if ticket.car.year is defined %}
+                            <input type="hidden" id="ticket_year" value="{{ticket.car.year}}">
+                        {% else %}
+                            <input type="hidden" id="ticket_year" value="0">
+                        {% endif %}
+
                         {% if ticket.subsystem is defined and ticket.subsystem.system is defined and ticket.subsystem.system.id is defined %}
                             <input type="hidden" id="ticket_id_system" value="{{ticket.subsystem.system.id }}">
                             <input type="hidden" id="ticket_system"    value="{{ticket.subsystem.system.name }}">
@@ -126,7 +132,11 @@
                             {% set len = 60 %}
                         {% endif %}
 
-                        {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
+                        {% if ticket.car.version.name is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
+                        {% else %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        {% endif %}
                         <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>

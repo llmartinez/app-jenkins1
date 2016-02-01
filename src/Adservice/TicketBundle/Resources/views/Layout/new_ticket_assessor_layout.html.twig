@@ -53,6 +53,7 @@
               {% if car.brand.id is defined %} <input type="hidden" id="ticket_brand"   value="{{car.brand.id}}">{% endif %}
               {% if car.model.id is defined %} <input type="hidden" id="ticket_model"   value="{{car.model.id}}">{% endif %}
               {% if car.version.id is defined %} <input type="hidden" id="ticket_version" value="{{car.version.id}}">{% endif %}
+              {% if car.year is defined %} <input type="hidden" id="ticket_year" value="{{car.year}}">{% endif %}
               {% if ticket.subsystem.system.id is defined %} <input type="hidden" id="ticket_system"  value="{{ticket.subsystem.system.id}}">{% endif %}
               {% if ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem" value="{{ticket.subsystem.id}}">{% endif %}
               {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id}}">{% endif %}
