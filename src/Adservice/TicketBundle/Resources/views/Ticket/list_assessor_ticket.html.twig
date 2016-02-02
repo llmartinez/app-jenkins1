@@ -37,7 +37,7 @@
                         <input type="hidden" class="ticket_id_brand"   value="{{ticket.car.brand.id }}">
                         <input type="hidden" class="ticket_brand"      value="{{ticket.car.brand.name }}">
 
-                         {% if ticket.car.model.id  is defined %}
+                        {% if ticket.car.model.id  is defined %}
                             <input type="hidden" class="ticket_id_model" value="{{ticket.car.model.id }}">
                             <input type="hidden" class="ticket_model"    value="{{ticket.car.model.name }}">
                         {% else %}

@@ -184,12 +184,12 @@ function search_by_bmv() {
 
     $('.ticketRow').click( function() {
 
-        var code_partner  = $(this).find("#workshop_code_partner").val();
-        var code_workshop = $(this).find("#workshop_code_workshop").val();
-        var name          = $(this).find("#workshop_name").val();
-        var tel           = $(this).find("#workshop_tel").val();
-        var mail          = $(this).find("#workshop_mail").val();
-        var contact       = $(this).find("#workshop_contact").val();
+        var code_partner  = $(this).find(".workshop_code_partner").val();
+        var code_workshop = $(this).find(".workshop_code_workshop").val();
+        var name          = $(this).find(".workshop_name").val();
+        var tel           = $(this).find(".workshop_tel").val();
+        var mail          = $(this).find(".workshop_mail").val();
+        var contact       = $(this).find(".workshop_contact").val();
 
         var id           = $(this).find(".ticket_id").val();
         var id_brand     = $(this).find(".ticket_id_brand").val();
