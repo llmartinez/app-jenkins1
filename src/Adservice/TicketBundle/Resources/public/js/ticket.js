@@ -7,12 +7,12 @@ $(document).ready(function() {
     }
 
     if ($('#open_newTicket').val() == 1){
-        var ticket_brand = $('#ticket_brand').val();
-        var ticket_model = $('#ticket_model').val();
-        var ticket_version = $('#ticket_version').val();
-        var ticket_system  = $('#ticket_system').val();
-        var ticket_subsystem  = $('#ticket_subsystem').val();
-        var ticket_importance = $('#ticket_importance').val();
+        var ticket_brand = $('.ticket_brand').val();
+        var ticket_model = $('.ticket_model').val();
+        var ticket_version = $('.ticket_version').val();
+        var ticket_system  = $('.ticket_system').val();
+        var ticket_subsystem  = $('.ticket_subsystem').val();
+        var ticket_importance = $('.ticket_importance').val();
 
         if(ticket_brand != '')
             $('#new_car_form_brand').val(ticket_brand);
@@ -184,35 +184,35 @@ function search_by_bmv() {
 
     $('.ticketRow').click( function() {
 
-        var code_partner  = $(this).find("#workshop_code_partner").val();
-        var code_workshop = $(this).find("#workshop_code_workshop").val();
-        var name          = $(this).find("#workshop_name").val();
-        var tel           = $(this).find("#workshop_tel").val();
-        var mail          = $(this).find("#workshop_mail").val();
-        var contact       = $(this).find("#workshop_contact").val();
+        var code_partner  = $(this).find(".workshop_code_partner").val();
+        var code_workshop = $(this).find(".workshop_code_workshop").val();
+        var name          = $(this).find(".workshop_name").val();
+        var tel           = $(this).find(".workshop_tel").val();
+        var mail          = $(this).find(".workshop_mail").val();
+        var contact       = $(this).find(".workshop_contact").val();
 
-        var id           = $(this).find("#ticket_id").val();
-        var id_brand     = $(this).find("#ticket_id_brand").val();
-        var brand        = $(this).find("#ticket_brand").val();
-        var id_model     = $(this).find("#ticket_id_model").val();
-        var model        = $(this).find("#ticket_model").val();
-        var id_version   = $(this).find("#ticket_id_version").val();
-        var version      = $(this).find("#ticket_version").val();
-        var id_system    = $(this).find("#ticket_id_system").val();
-        var system       = $(this).find("#ticket_system").val();
-        var id_subsystem = $(this).find("#ticket_id_subsystem").val();
-        var subsystem    = $(this).find("#ticket_subsystem").val();
-        var id_importance= $(this).find("#ticket_id_importance").val();
-        var importance   = $(this).find("#ticket_importance").val();
-        var year         = $(this).find("#ticket_year").val();
-        var motor        = $(this).find("#ticket_motor").val();
-        var kw           = $(this).find("#ticket_kw").val();
-        var displacement = $(this).find("#ticket_displacement").val();
-        var vin          = $(this).find("#ticket_vin").val();
-        var plateNumber  = $(this).find("#ticket_plateNumber").val();
-        var desc         = $(this).find("#ticket_description").val();
-        var date         = $(this).find("#ticket_date").val();
-        var sol          = $(this).find("#ticket_solution").val();
+        var id           = $(this).find(".ticket_id").val();
+        var id_brand     = $(this).find(".ticket_id_brand").val();
+        var brand        = $(this).find(".ticket_brand").val();
+        var id_model     = $(this).find(".ticket_id_model").val();
+        var model        = $(this).find(".ticket_model").val();
+        var id_version   = $(this).find(".ticket_id_version").val();
+        var version      = $(this).find(".ticket_version").val();
+        var id_system    = $(this).find(".ticket_id_system").val();
+        var system       = $(this).find(".ticket_system").val();
+        var id_subsystem = $(this).find(".ticket_id_subsystem").val();
+        var subsystem    = $(this).find(".ticket_subsystem").val();
+        var id_importance= $(this).find(".ticket_id_importance").val();
+        var importance   = $(this).find(".ticket_importance").val();
+        var year         = $(this).find(".ticket_year").val();
+        var motor        = $(this).find(".ticket_motor").val();
+        var kw           = $(this).find(".ticket_kw").val();
+        var displacement = $(this).find(".ticket_displacement").val();
+        var vin          = $(this).find(".ticket_vin").val();
+        var plateNumber  = $(this).find(".ticket_plateNumber").val();
+        var desc         = $(this).find(".ticket_description").val();
+        var date         = $(this).find(".ticket_date").val();
+        var sol          = $(this).find(".ticket_solution").val();
 
         var dis_url = $( "#dis-url" ).val();
         var vts_url = $( "#vts-url" ).val();

@@ -56,7 +56,7 @@ class CarController extends Controller {
                             $id_version = null;
                         }
                         if (isset($version)){
-                            $car->setVersion($version);
+                            $car->setVersion($version[0]);
                         }
                         else{
                             $car->setVersion(null);

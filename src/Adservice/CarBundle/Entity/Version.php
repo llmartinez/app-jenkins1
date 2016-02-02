@@ -27,12 +27,12 @@ class Version {
     private $name;
 
     /**
-     * @var integer $brand
+     * @var integer $marca
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
      * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
      */
-    private $brand;
+    private $marca;
 
     /**
      * @var integer $model
@@ -349,7 +349,7 @@ class Version {
     public function getDateInicio()
     {
         $inicio = '01-'.substr ($this->inicio, -2).'-'.substr ($this->inicio, 0, -2); //ej. 01-01-2015
-        return $this->version;
+        return $inicio;
     }
     /**
      * Get dateFin
@@ -359,7 +359,7 @@ class Version {
     public function getDateFin()
     {
         $fin    = '31-'.substr ($this->fin, -2).'-'.substr ($this->fin, 0, -2); //ej. 31-12-2015
-        return $this->version;
+        return $fin;
     }
 
     /**
@@ -409,7 +409,7 @@ class Version {
 
     public function getLitros()
     {
-        return $this->$litros;
+        return $this->litros;
     }
 
     public function setCilindros($cilindros)
@@ -419,7 +419,7 @@ class Version {
 
     public function getCilindros()
     {
-        return $this->$cilindros;
+        return $this->cilindros;
     }
 
     public function setPuertas($puertas)
@@ -429,7 +429,7 @@ class Version {
 
     public function getPuertas()
     {
-        return $this->$puertas;
+        return $this->puertas;
     }
 
     public function setDeposito($deposito)
@@ -439,7 +439,7 @@ class Version {
 
     public function getDeposito()
     {
-        return $this->$deposito;
+        return $this->deposito;
     }
 
     public function setVoltaje($voltaje)
@@ -449,7 +449,7 @@ class Version {
 
     public function getVoltaje()
     {
-        return $this->$voltaje;
+        return $this->voltaje;
     }
 
     public function setABS($abs)
@@ -459,7 +459,7 @@ class Version {
 
     public function getABS()
     {
-        return $this->$abs;
+        return $this->abs;
     }
 
     public function setASR($asr)
@@ -469,7 +469,7 @@ class Version {
 
     public function getASR()
     {
-        return $this->$asr;
+        return $this->asr;
     }
 
     public function setTipoMotor($tipomotor)
@@ -479,7 +479,7 @@ class Version {
 
     public function getTipoMotor()
     {
-        return $this->$tipomotor;
+        return $this->tipomotor;
     }
 
     public function setTipoVehiculo($tipovehiculo)
@@ -489,7 +489,7 @@ class Version {
 
     public function getTipoVehiculo()
     {
-        return $this->$tipovehiculo;
+        return $this->tipovehiculo;
     }
 
     public function setTipoTraccion($tipotraccion)
@@ -499,7 +499,7 @@ class Version {
 
     public function getTipoTraccion()
     {
-        return $this->$tipotraccion;
+        return $this->tipotraccion;
     }
 
     public function setTipoFreno($tipofreno)
@@ -509,7 +509,7 @@ class Version {
 
     public function getTipoFreno()
     {
-        return $this->$tipofreno;
+        return $this->tipofreno;
     }
 
     public function setTipoFrenado($tipofrenado)
@@ -519,7 +519,7 @@ class Version {
 
     public function getTipoFrenado()
     {
-        return $this->$tipofrenado;
+        return $this->tipofrenado;
     }
 
     public function setTipoCombustible($tipocombustible)
@@ -529,7 +529,7 @@ class Version {
 
     public function getTipoCombustible()
     {
-        return $this->$tipocombustible;
+        return $this->tipocombustible;
     }
 
     public function setTipoCatalizador($tipocatalizador)
@@ -539,7 +539,7 @@ class Version {
 
     public function getTipoCatalizador()
     {
-        return $this->$tipocatalizador;
+        return $this->tipocatalizador;
     }
 
     public function setTipoTransmision($tipotransmision)
@@ -549,7 +549,7 @@ class Version {
 
     public function getTipoTransmision()
     {
-        return $this->$tipotransmision;
+        return $this->tipotransmision;
     }
 
     public function setTipoConstruccion($tipoconstruccion)
@@ -559,7 +559,7 @@ class Version {
 
     public function getTipoConstruccion()
     {
-        return $this->$tipoconstruccion;
+        return $this->tipoconstruccion;
     }
 
     public function setPlanRevision($planrevision)
@@ -569,7 +569,7 @@ class Version {
 
     public function getPlanRevision()
     {
-        return $this->$planrevision;
+        return $this->planrevision;
     }
 
     public function setDatosTecnicos($datostecnicos)
@@ -579,7 +579,7 @@ class Version {
 
     public function getDatosTecnicos()
     {
-        return $this->$datostecnicos;
+        return $this->datostecnicos;
     }
 
     public function setTiemposReparacion($tiemposreparacion)
@@ -589,7 +589,7 @@ class Version {
 
     public function getTiemposReparacion()
     {
-        return $this->$tiemposreparacion;
+        return $this->tiemposreparacion;
     }
 
     public function setAlineacionRuedas($alineacionruedas)
@@ -599,7 +599,7 @@ class Version {
 
     public function getAlineacionRuedas()
     {
-        return $this->$alineacionruedas;
+        return $this->alineacionruedas;
     }
 
     public function to_json(){
