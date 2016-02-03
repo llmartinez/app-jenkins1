@@ -327,7 +327,8 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
-        $id_version = $petition->request->get('id_version');
+        $id_version    = $petition->request->get('id_version');
+        $version_motor = $petition->request->get('version_motor');
         $motor = $petition->request->get('motor');
         $year = $petition->request->get('year');
 
@@ -347,7 +348,9 @@ class AjaxController extends Controller
             $version = $query->getResult();
             $version = $version[0];
         }else{
-            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
+            $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
+                                        WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$version_motor."%'");
+            $version = $query->getResult();
             $version = $version[0];
         }
 
