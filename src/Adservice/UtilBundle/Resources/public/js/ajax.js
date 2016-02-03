@@ -339,6 +339,7 @@ function fill_car_data() {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
+    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[')[1].slice(0, -1);
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
 
@@ -348,8 +349,8 @@ function fill_car_data() {
 
         $.ajax({
             type: "POST",
-            url: Routing.generate(route, {_locale: locale, id_version: id_version, motor: motor}),
-            data: {id_version: id_version, motor: motor, year: year},
+            url: Routing.generate(route, {_locale: locale, id_version: id_version, version_motor: version_motor, motor: motor}),
+            data: {id_version: id_version, version_motor: version_motor, motor: motor, year: year},
             dataType: "json",
             beforeSend: function(){ $("body").css("cursor", "progress"); },
             complete: function(){ $("body").css("cursor", "default"); },
