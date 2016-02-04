@@ -114,12 +114,12 @@ class Car
      */
     private $modified_by;
 
-    /**
-     * @var integer $ticket
-     *
-     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="car")
-     * @ORM\JoinColumn(name="car_id", referencedColumnName="Car")
-     */
+//    /**
+//     * @var integer $ticket
+//     *
+//     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="car")
+//     * @ORM\JoinColumn(name="car_id", referencedColumnName="Car")
+//     */
     //private $ticket;
 
     /**
