@@ -61,7 +61,10 @@ class UserController extends Controller {
                                                                       'country'  => $country,
                                                                       'option'   => 'assessor_pending'));
                 }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-                    $user=$country = $this->get('security.context')->getToken()->getUser();
+
+                    $user = $this->get('security.context')->getToken()->getUser();
+                    $country = $user->getCountry()->getId();
+
                     if($user->getWorkshop() != null){
                         if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
                             $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
