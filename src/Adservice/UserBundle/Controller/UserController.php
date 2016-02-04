@@ -45,7 +45,7 @@ class UserController extends Controller {
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
         if(!isset($_SESSION['lang'])) {
-            
+
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
@@ -94,11 +94,11 @@ class UserController extends Controller {
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
             if($user->getWorkshop() != null){
-               
+
                 if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
                     $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
                                                                           'country'  => $country));
-                    
+
                 }
                 else{
                     $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
@@ -113,7 +113,7 @@ class UserController extends Controller {
         }
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
-        
+
     }
 
     /**

@@ -223,16 +223,16 @@ class StatisticController extends Controller {
                  unset($partner);
 
                 $trans     = $this->get('translator');
-                $informe   = $trans->trans('statistic.no_ticket');
+                $informe   = UtilController::sinAcentos($trans->trans('statistic.no_ticket'));
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($results, $partners);
             }
             elseif ($type == 'numworkshopbypartner'){
 
                 $trans     = $this->get('translator');
-                $nTalleres = $trans->trans('workshops');
-                $nSocio    = $trans->trans('partner');
-                $informe   = $trans->trans('numworkshopbypartner');
+                $nTalleres = UtilController::sinAcentos($trans->trans('workshops'));
+                $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
+                $informe   = UtilController::sinAcentos($trans->trans('numworkshopbypartner'));
 
                 $select = "SELECT p.name as ".$nSocio.", count(e.id) as ".$nTalleres." FROM WorkshopBundle:Workshop e ";
                 $where .= 'AND p.id = e.partner ';
@@ -270,11 +270,11 @@ class StatisticController extends Controller {
             elseif ($type == 'ticketbyworkshopforpartner'){
 
                 $trans     = $this->get('translator');
-                $nTickets  = $trans->trans('tickets');
-                $nTaller   = $trans->trans('workshop');
-                $nSocio    = $trans->trans('partner');
-                $code      = $trans->trans('_code');
-                $informe   = $trans->trans('ticketbyworkshopforpartner');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $nTaller   = UtilController::sinAcentos($trans->trans('workshop'));
+                $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
+                $code      = UtilController::sinAcentos($trans->trans('_code'));
+                $informe   = UtilController::sinAcentos($trans->trans('ticketbyworkshopforpartner'));
 
                 $select = "SELECT count(w.id) as ".$nTickets.", w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND p.id = w.partner ';
@@ -312,9 +312,9 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbypartner'){
 
                 $trans     = $this->get('translator');
-                $nTickets  = $trans->trans('tickets');
-                $nSocio    = $trans->trans('partner');
-                $informe   = $trans->trans('numticketsbypartner');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbypartner'));
 
                 $select = "SELECT p.name as ".$nSocio.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
@@ -360,10 +360,10 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbysystem'){
 
                 $trans       = $this->get('translator');
-                $nTickets    = $trans->trans('tickets');
-                $nSistema    = $trans->trans('system');
-                $nSubsistema = $trans->trans('subsystem');
-                $informe     = $trans->trans('numticketsbysystem');
+                $nTickets    = UtilController::sinAcentos($trans->trans('tickets'));
+                $nSistema    = UtilController::sinAcentos($trans->trans('system'));
+                $nSubsistema = UtilController::sinAcentos($trans->trans('subsystem'));
+                $informe     = UtilController::sinAcentos($trans->trans('numticketsbysystem'));
 
                 $select = "SELECT s.name as ".$nSistema.", ss.name as ".$nSubsistema.", count(w.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
@@ -423,8 +423,8 @@ class StatisticController extends Controller {
                     $sistema    = $results[$key[$i]][$nSistema];
                     $subsistema = $results[$key[$i]][$nSubsistema];
 
-                    $results[$key[$i]][$nSistema]    = $trans->trans($sistema);
-                    $results[$key[$i]][$nSubsistema] = $trans->trans($subsistema);
+                    $results[$key[$i]][$nSistema]    = UtilController::sinAcentos($trans->trans($sistema));
+                    $results[$key[$i]][$nSubsistema] = UtilController::sinAcentos($trans->trans($subsistema));
                 }
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
@@ -433,9 +433,9 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbybrand'){
 
                 $trans     = $this->get('translator');
-                $nTickets  = $trans->trans('tickets');
-                $nMarca    = $trans->trans('brand');
-                $informe   = $trans->trans('numticketsbybrand');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $nMarca    = UtilController::sinAcentos($trans->trans('brand'));
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbybrand'));
 
                 $select = "SELECT b.name as ".$nMarca.", count(e.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
@@ -493,10 +493,10 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbymodel'){
 
                 $trans     = $this->get('translator');
-                $nTickets  = $trans->trans('tickets');
-                $nMarca    = $trans->trans('brand');
-                $nModelo   = $trans->trans('model');
-                $informe   = $trans->trans('numticketsbymodel');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $nMarca    = UtilController::sinAcentos($trans->trans('brand'));
+                $nModelo   = UtilController::sinAcentos($trans->trans('model'));
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbymodel'));
 
                 $select = "SELECT b.name as ".$nMarca.", m.name as ".$nModelo.", count(e.id) as ".$nTickets." ";
                 $join = ' JOIN e.workshop w ';
@@ -556,9 +556,9 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbyfabyear'){
 
                 $trans     = $this->get('translator');
-                $nTickets  = $trans->trans('tickets');
-                $date      = $trans->trans('date');
-                $informe   = $trans->trans('numticketsbyfabyear');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $date      = UtilController::sinAcentos($trans->trans('date'));
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbyfabyear'));
 
                 $select = "SELECT v.inicio as ".$date.", count(e.id) as ".$nTickets." ";
                 $join  = ' JOIN e.workshop w ';
@@ -658,7 +658,7 @@ class StatisticController extends Controller {
             $results   = $qt->getResult();
 
             $trans     = $this->get('translator');
-            $informe   = $trans->trans('statistic.last_tickets' );
+            $informe   = UtilController::sinAcentos($trans->trans('statistic.last_tickets' ));
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
         }
@@ -902,8 +902,8 @@ class StatisticController extends Controller {
     public function createExcelFabYear($results){
         $excel = '';
         $trans = $this->get('translator');
-        $nTickets = $trans->trans('tickets');
-        $date  = $trans->trans('date');
+        $nTickets = UtilController::sinAcentos($trans->trans('tickets'));
+        $date  = UtilController::sinAcentos($trans->trans('date'));
 
         $excel.=$date.';'.$nTickets.';';
 

@@ -129,12 +129,12 @@ class Ticket {
      */
     private $posts;
 
-    /**
-     * @var string $cars
-     *
-     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
-     */
-    private $cars;
+//    /**
+//     * @var string $cars
+//     *
+//     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
+//     */
+    //private $cars;
 
     /**
      * Get id
