@@ -312,11 +312,12 @@ class StatisticController extends Controller {
             elseif ($type == 'numticketsbypartner'){
 
                 $trans     = $this->get('translator');
+                $cSocio    = UtilController::sinAcentos($trans->trans('code'));
                 $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
                 $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
                 $informe   = UtilController::sinAcentos($trans->trans('numticketsbypartner'));
 
-                $select = "SELECT p.name as ".$nSocio.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = 'SELECT p.code_partner as '.$cSocio.', p.name as '.$nSocio.', count(w.id) as '.$nTickets.' FROM TicketBundle:Ticket e JOIN e.workshop w ';
                 $where .= 'AND w.id = e.workshop AND p.id = w.partner ';
                 $join  = ' JOIN w.partner p ';
 
@@ -670,10 +671,15 @@ class StatisticController extends Controller {
 
     public function createExcelTicket($results){
         //Creación de cabecera
-        //'ID;Date;Car;Assigned To;Description;Status;Solution;';
         $excel =
             $this->get('translator')->trans('ticket').';'.
-            $this->get('translator')->trans('workshop').';'.
+            $this->get('translator')->trans('code_partner').';'.
+            $this->get('translator')->trans('code_shop').';'.
+            $this->get('translator')->trans('code_workshop').';'.
+            $this->get('translator')->trans('internal_code').';'.
+            $this->get('translator')->trans('name').';'.
+            $this->get('translator')->trans('partner').';'.
+            $this->get('translator')->trans('shop').';'.
             $this->get('translator')->trans('region').';'.
             $this->get('translator')->trans('typology').';'.
             $this->get('translator')->trans('brand').';'.
@@ -698,12 +704,21 @@ class StatisticController extends Controller {
             $excel.=$row->getId().';';
 
             $workshop = $row->getWorkshop();
-            $excel.=$workshop->getPartner()->getCodePartner().' - '.$workshop->getCodeWorkshop().';';
+            $excel.=$workshop->getPartner()->getCodePartner().';';
 
-            // $shop = $workshop->getShop();
-            // if(isset($shop)) $code_shop = $shop->getCodeShop();
-            // else $code_shop = '-';
-            // $excel.=$code_shop.';';
+            $shop = $workshop->getShop();
+            if(isset($shop)) $code_shop = $shop->getCodeShop();
+            else $code_shop = '-';
+            $excel.=$code_shop.';';
+
+            $excel.=$workshop->getCodeWorkshop().';';
+            $excel.=$workshop->getInternalCode().';';
+            $excel.=$workshop->getName().';';
+            $excel.=$workshop->getPartner()->getName().';';
+
+            if(isset($shop)) $name_shop = $shop->getName();
+            else $name_shop = '-';
+            $excel.=$name_shop.';';
 
             $excel.=$workshop->getRegion().';';
 
@@ -758,12 +773,12 @@ class StatisticController extends Controller {
 
     public function createExcelWorkshop($results, $partners){
         //Creación de cabecera
-        //'Code Partner;Code Workshop;Name;Partner;Shop;Email1;Phone Number1;Active;';
         $excel =$this->get('translator')->trans('code_partner').';'.
                 $this->get('translator')->trans('code_shop').';'.
                 $this->get('translator')->trans('code_workshop').';'.
+                $this->get('translator')->trans('internal_code').';'.
                 $this->get('translator')->trans('name').';'.
-                $this->get('translator')->trans('partner').';'. //ID ticket
+                $this->get('translator')->trans('partner').';'.
                 $this->get('translator')->trans('shop').';'.
                 $this->get('translator')->trans('email').';'.
                 $this->get('translator')->trans('tel').';'.
@@ -783,6 +798,7 @@ class StatisticController extends Controller {
             $excel.=$code_shop.';';
 
             $excel.=$row->getCodeWorkshop().';';
+            $excel.=$row->getInternalCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
@@ -796,7 +812,16 @@ class StatisticController extends Controller {
             $excel.=$name.';';
 
             $excel.=$partners[$row->getCodePartner()].';';
-            $excel.=$row->getShop().';';
+
+            if(isset($shop)) {
+                $name_shop = $shop->getName();
+                $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+                $reemplazar=array("", "", "", "");
+                $name_shop=str_ireplace($buscar,$reemplazar,$name_shop);
+            }
+            else $name_shop = '-';
+            $excel.=$name_shop.';';
+
             $excel.=$row->getEmail1().';';
             $excel.=$row->getPhoneNumber1().';';
 
@@ -823,14 +848,15 @@ class StatisticController extends Controller {
 
     public function createExcelLastTickets($results){
         //Creación de cabecera
-        //'Code Partner;Code Workshop;Name;Partner;ID Ticket;Ticket;Status;Date;';
         $excel =$this->get('translator')->trans('code_partner').';'.
                 $this->get('translator')->trans('code_shop').';'.
                 $this->get('translator')->trans('code_workshop').';'.
+                $this->get('translator')->trans('internal_code').';'.
                 $this->get('translator')->trans('name').';'.
-                $this->get('translator')->trans('partner').';ID '. //ID ticket
+                $this->get('translator')->trans('partner').';'.
+                $this->get('translator')->trans('shop').';'.
                 $this->get('translator')->trans('ticket').';'.
-                $this->get('translator')->trans('ticket').';'.
+                $this->get('translator')->trans('description').';'.
                 $this->get('translator')->trans('status').';'.
                 $this->get('translator')->trans('solution').';'.
                 $this->get('translator')->trans('date').';';
@@ -841,7 +867,14 @@ class StatisticController extends Controller {
         foreach ($results as $row) {
 
             $excel.=$row->getWorkshop()->getCodePartner().';';
+
+            $shop = $row->getWorkshop()->getShop();
+            if(isset($shop)) $code_shop = $shop->getCodeShop();
+            else $code_shop = '-';
+            $excel.=$code_shop.';';
+
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
+            $excel.=$row->getWorkshop()->getInternalCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
@@ -849,6 +882,16 @@ class StatisticController extends Controller {
             $excel.=$name.';';
 
             $excel.=$row->getWorkshop()->getPartner().';';
+
+            if(isset($shop)) {
+                $name_shop = $shop->getName();
+                $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+                $reemplazar=array("", "", "", "");
+                $name_shop=str_ireplace($buscar,$reemplazar,$name_shop);
+            }
+            else $name_shop = '-';
+            $excel.=$name_shop.';';
+
             $excel.=$row->getId().';';
 
             $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
