@@ -92,7 +92,10 @@ class UserController extends Controller {
 
             return $this->redirect($currentPath);
         }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-            $user=$country = $this->get('security.context')->getToken()->getUser();
+
+            $user= $this->get('security.context')->getToken()->getUser();
+            $country= $user->getCountry()->getId();
+
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
