@@ -712,9 +712,9 @@ _mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidencias"
 
-error: Se ha producido un error
-back_app:  Volver a la aplicación
+error: "Se ha producido un error"
+back_app:  "Volver a la aplicación"
 
 termsConditions:	" "
-_termsConditions: 	Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.
-footerText: 	 	© Grup Eina Digital · Centro de Innovación y Recursos
+_termsConditions: 	'Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.'
+footerText: 	 	"© Grup Eina Digital · Centro de Innovación y Recursos"
