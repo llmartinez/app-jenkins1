@@ -215,7 +215,13 @@ class AjaxController extends Controller
             // }
         }
         else{
-            $models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand), array('name' => 'ASC'));
+            //$models = $em->getRepository('CarBundle:Model')->findBy(array('brand' => $id_brand), array('name' => 'ASC'));
+            $query = "SELECT m FROM CarBundle:Model m
+                          WHERE m.brand = ".$id_brand."
+                          ORDER BY m.name";
+
+            $consulta = $em->createQuery($query);
+            $models   = $consulta->getResult();
         }
 
         $size = sizeOf($models);

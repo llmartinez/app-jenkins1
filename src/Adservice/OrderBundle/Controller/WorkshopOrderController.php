@@ -780,6 +780,8 @@ class WorkshopOrderController extends Controller {
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
                 $workshop->setActive(false);
+                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+
                 $action = $workshopOrder->getWantedAction();
                 $em->remove($workshopOrder);
                 UtilController::saveEntity($em, $workshop, $user);
@@ -1058,16 +1060,16 @@ class WorkshopOrderController extends Controller {
         }
         return $ordersBefore;
     }
-    
+
     public function findCifAction($cif) {
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
         $find = false;
         if($workshop){
             $find=true;
-        }            
+        }
         $json = json_encode($find);
-        return new Response(json_encode($json), $status = 200);        
+        return new Response(json_encode($json), $status = 200);
     }
 
 }

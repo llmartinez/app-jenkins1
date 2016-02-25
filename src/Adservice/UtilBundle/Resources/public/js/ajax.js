@@ -183,7 +183,6 @@ function fill_code_workshop(id_partner){
 /**
  * Rellena el combo de los modelos segun la marca seleccionada por el usuario
  */
-
 function fill_model(model) {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text());
