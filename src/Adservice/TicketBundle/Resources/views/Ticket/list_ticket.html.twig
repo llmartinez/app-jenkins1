@@ -68,7 +68,7 @@
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 
                         <td>
-                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a>
+                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}" {% if is_granted('ROLE_ASSESSOR') %}target="_blank"{% endif %}></a>
 
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{% trans %}ticket.delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
