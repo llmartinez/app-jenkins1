@@ -10,6 +10,7 @@
 /app/spool/*
 /app/bootstrap*
 vendor/*
+vendor.zip
 /web/bundles/*
 /web/css/*
 /web/js/*
