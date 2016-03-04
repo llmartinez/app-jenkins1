@@ -26,8 +26,9 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_SUPER_AD]
+        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_TOP_AD]
         ROLE_ASSESSOR: ROLE_USER
+        ROLE_TOP_AD: ROLE_SUPER_AD
         ROLE_SUPER_AD: ROLE_AD
 
     access_control:
@@ -46,10 +47,11 @@ security:
       - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/statistic/list-top,         roles: [ROLE_TOP_AD]                }
+      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_TOP_AD]                }
       # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN]           }
-      # - { path: ^/(es|en|fr|pt)/,                           roles: [ROLE_USER]                  }
+      # - { path: ^/(es|en|fr|pt)/,                         roles: [ROLE_USER]                  }
 
     encoders:
         Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
