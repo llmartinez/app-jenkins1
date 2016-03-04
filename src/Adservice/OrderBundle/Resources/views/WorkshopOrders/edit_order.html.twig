@@ -7,10 +7,15 @@
         <li class="active">{% trans %} edit.order.workshop {% endtrans %}</li>
     </ol>
 
-    <h1>{% trans %} edit.order.workshop {% endtrans %} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b></h1>
+    <h1>
+        {% trans %} edit.order.workshop {% endtrans %} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b>
+        <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class='pull-right'>
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
+        </a>
+    </h1>
 
     <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-        
+
         <div class="col-xs-12 col-md-12 form-group">
             <input type="hidden" id="exist_cif" value="{% trans %}workshop.cif_exist{% endtrans %} ">
             <div class="error_cif"></div>

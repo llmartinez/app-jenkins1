@@ -352,7 +352,6 @@ VARIOS:							"Varios"
 "VARIOS ":						"Varios"
 VARIOS CARROCERIA:				"Varios Carrocería"
 
-
 #PARTNER
 partner.delete:			 "Borrar Socio"
 partner.delete.confirm:	 "¿Estás seguro de que quieres eliminar este socio?"
@@ -534,6 +533,7 @@ numticketsbysystem: 		  "Número de tickets por sistema/subsistema"
 numticketsbybrand: 			  "Número de tickets por marca"
 numticketsbymodel: 			  "Número de tickets por modelo"
 numticketsbyfabyear: 		  "Número de tickets por año de fabricación"
+numticketsbymonth: 		   	  "Número de tickets de talleres por mes"
 statistic.general:			  "Estadísticas generales"
 statistic.tickets:			  "Estadísticas de tickets"
 statistic.workshops:		  "Estadísticas de talleres"

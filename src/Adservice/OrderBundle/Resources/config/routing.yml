@@ -1,5 +1,5 @@
 ##############################
-#   APDO. RUTAS SHOP ORDER   #
+#   APDO. RUTAS ORDER        #
 ##############################
 
 list_orders:
@@ -91,7 +91,12 @@ workshopOrder_resendOrder:
 workshopOrder_reject:
     pattern: /workshop/reject/{id}
     defaults: { _controller: OrderBundle:WorkshopOrder:reject }
-    
+
+doPdfWorkshop:
+    pattern: /workshop/doPdfWorkshop/{id}
+    defaults: { _controller: OrderBundle:WorkshopOrder:doPdfWorkshop }
+
+
 ##############################
 #       RUTAS AJAX           #
 ##############################
