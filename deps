@@ -40,6 +40,7 @@
 
 [twig-extensions]
     git=git://github.com/fabpot/Twig-extensions.git
+    version=v1.0.1
 
 [metadata]
     git=git://github.com/schmittjoh/metadata.git
