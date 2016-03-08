@@ -274,7 +274,7 @@ class StatisticController extends Controller {
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test, created_at, lowdate_at } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
                 $results   = $qw->getResult();
 
                 $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
