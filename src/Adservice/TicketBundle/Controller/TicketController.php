@@ -652,32 +652,55 @@ class TicketController extends Controller {
                                             $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($car->getVin());
                                             $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
 
-                                            if($exist_vin != null AND ($exist_vin->getBrand()->getId() != $car->getBrand()->getId()
-                                                                    OR $exist_vin->getModel()->getId() != $car->getModel()->getId()
-                                                                    OR ($exist_vin->getVersion() == null and $car->getVersion() == null)
-                                                                    OR ($exist_vin->getVersion() != null and $car->getVersion() != null
-                                                                        and $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
-                                                                       )
-                                                                    )
-                                                ){
+                                            if($exist_vin == null AND $exist_num == null) {
+                                                $exist_car = '0';
+                                            }
+                                            elseif(
+                                                ($exist_vin != null AND $exist_num == null)
+                                                OR
+                                                ($exist_vin == null AND $exist_num != null)
+                                                OR
+                                                ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
+                                            ){
+                                                $exist_car = $trans->trans('error.vin_platenumber_not_match');
+                                            }
+                                            elseif(
+                                                $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
+                                                OR
+                                                $exist_vin->getModel()->getId() != $car->getModel()->getId()
+                                                OR (
+                                                    ($exist_vin->getVersion() != null AND $car->getVersion() == null)
+                                                    OR
+                                                    ($exist_vin->getVersion() == null AND $car->getVersion() != null)
+                                                    )
+                                                OR (
+                                                    $exist_vin->getVersion() != null
+                                                    AND
+                                                    $car->getVersion() != null
+                                                    AND
+                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
+                                                    )
+                                            ){
                                                 $exist_car = $trans->trans('error.same_vin');
                                             }
-                                            else {
-                                                if($exist_num != null AND ($exist_num->getBrand()->getId() != $car->getBrand()->getId()
-                                                                    OR $exist_num->getModel()->getId() != $car->getModel()->getId()
-                                                                    OR ($exist_num->getVersion() == null and $car->getVersion() == null
-                                                                        and $exist_num->getVersion()->getId() != $car->getVersion()->getId()
-                                                                       )
-                                                                    OR ($exist_num->getVersion() != null and $car->getVersion() != null
-                                                                        and $exist_num->getVersion()->getId() != $car->getVersion()->getId()
-                                                                       )
-                                                                    )
-                                                ){
-                                                    $exist_car = $trans->trans('error.same_platenumber');
-                                                }
-                                            }
-                                            if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId()){
-                                                $exist_car = $trans->trans('error.vin_platenumber_not_match');
+                                            elseif(
+                                                $exist_num->getBrand()->getId() != $car->getBrand()->getId()
+                                                OR
+                                                $exist_num->getModel()->getId() != $car->getModel()->getId()
+                                                OR (
+                                                    ($exist_num->getVersion() != null AND $car->getVersion() == null)
+                                                    OR
+                                                    ($exist_num->getVersion() == null AND $car->getVersion() != null)
+                                                    )
+                                                OR (
+                                                    $exist_num->getVersion() != null
+                                                    AND
+                                                    $car->getVersion() != null
+                                                    AND
+                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+                                                    )
+                                            ){
+                                                $exist_car = $trans->trans('error.same_platenumber');
                                             }
 
                                             if($exist_car == '0') {
