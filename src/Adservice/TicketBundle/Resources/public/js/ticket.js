@@ -7,12 +7,12 @@ $(document).ready(function() {
     }
 
     if ($('#open_newTicket').val() == 1){
-        var ticket_brand = $('.ticket_brand').val();
-        var ticket_model = $('.ticket_model').val();
-        var ticket_version = $('.ticket_version').val();
-        var ticket_system  = $('.ticket_system').val();
-        var ticket_subsystem  = $('.ticket_subsystem').val();
-        var ticket_importance = $('.ticket_importance').val();
+        var ticket_brand = $('#ticket_brand').val();
+        var ticket_model = $('#ticket_model').val();
+        var ticket_version = $('#ticket_version').val();
+        var ticket_system  = $('#ticket_system').val();
+        var ticket_subsystem  = $('#ticket_subsystem').val();
+        var ticket_importance = $('#ticket_importance').val();
 
         if(ticket_brand != '')
             $('#new_car_form_brand').val(ticket_brand);
@@ -38,11 +38,13 @@ $(document).ready(function() {
         $('#n_id_model').val( $('#new_car_form_model').val());
         $('#n_id_version').val( $('#new_car_form_version').val());
         $('#n_id_year').val( $('#new_car_form_year').val());
-        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
-        $('#n_id_importance').val( $('#new_car_form_importance').val());
+        $('#n_id_motor').val( $('#new_car_form_motor').val());
+        $('#n_id_kw').val( $('#new_car_form_kw').val());
+        $('#n_id_displacement').val( $('#new_car_form_displacement').val());
         $('#n_id_vin').val( $('#new_car_form_vin').val());
         $('#n_id_plateNumber').val( $('#new_car_form_plateNumber').val());
-
+        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
+        $('#n_id_importance').val( $('#new_car_form_importance').val());
     });
 
 // $('.sendTicket').click(function() {

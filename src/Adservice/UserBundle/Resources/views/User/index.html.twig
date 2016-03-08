@@ -86,6 +86,11 @@
             {# <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
                                                                                                 {% trans %} menu.profile              {% endtrans %}</a> #}
+        {% if is_granted('ROLE_TOP_AD') %}
+            <a class="btn-menu" id="listStatistics-top" href="{{ path("listStatistics_top"  ) }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_statistics.png') }}">
+                                                                                                {% trans %} menu.list_statistics   {% endtrans %}</a>
+        {% endif %}
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
@@ -96,7 +101,7 @@
             <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                 {% trans %} menu.list_workshops         {% endtrans %}</a>
-        </div>                                                                             
+        </div>
     {% endif %}
 
     <!-- Modal -->

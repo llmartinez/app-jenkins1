@@ -90,6 +90,70 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
+    public function listTopAction($type='0', $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
+
+        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false){
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+        $request  = $this->getRequest();
+        $statistic = new Statistic();
+        $params = array();
+        $joins  = array();
+
+        if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 and a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.active = 1 ");
+            $partners   = $qp->getResult();
+            $shops      = $qs->getResult();
+            $workshops  = $qw->getResult();
+            $assessors  = $qa->getResult();
+            $typologies = $qt->getResult();
+        }else{
+            $country = $security->getToken()->getUser()->getCountry()->getId();
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." AND p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." AND s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." AND a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." AND t.active = 1 ");
+            $partners   = $qp->getResult();
+            $shops      = $qs->getResult();
+            $workshops  = $qw->getResult();
+            $assessors  = $qa->getResult();
+            $typologies = $qt->getResult();
+
+        }
+        $countries = $em->getRepository('UtilBundle:Country')->findAll();
+
+        return $this->render('StatisticBundle:Statistic:list_statistics_top.html.twig', array('from_y'    => $from_y,
+                                                                                          'from_m'    => $from_m,
+                                                                                          'from_d'    => $from_d,
+                                                                                          'to_y'      => $to_y  ,
+                                                                                          'to_m'      => $to_m ,
+                                                                                          'to_d'      => $to_d  ,
+                                                                                          'partners'  => $partners,
+                                                                                          'shops'     => $shops,
+                                                                                          'workshops' => $workshops,
+                                                                                          'assessors' => $assessors,
+                                                                                          'typologies'=> $typologies,
+                                                                                          'countries' => $countries,
+                                                                                          'type'      => $type,
+                                                                                          'partner'   => $partner,
+                                                                                          'shop'      => $shop,
+                                                                                          'wks'       => $workshop,
+                                                                                          'assessor'  => $assessor,
+                                                                                          'created_by'  => $created_by,
+                                                                                          'typology'  => $typology,
+                                                                                          'status'    => $status,
+                                                                                          'country'   => $country,
+                                                                                          //'length'    => $length,
+                                                                            ));
+    }
+
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0'){
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -171,7 +235,7 @@ class StatisticController extends Controller {
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, created_at, lowdate_at, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
                 $results   = $qw->getResult();
 
                 $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p ");
@@ -210,7 +274,7 @@ class StatisticController extends Controller {
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
+                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test, created_at, lowdate_at } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
                 $results   = $qw->getResult();
 
                 $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
@@ -389,8 +453,7 @@ class StatisticController extends Controller {
                 if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
                                                 $where .= ' AND w.id = '.$workshop.' ';
                 }
-                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
-                                                $where .= 'AND e.assigned_to = '.$assessor;
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
                 if    ($created_by != '0'  ) {
                                                 if ($created_by == 'tel'){
@@ -461,8 +524,7 @@ class StatisticController extends Controller {
                 if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
                                                 $where .= ' AND w.id = '.$workshop.' ';
                 }
-                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
-                                                $where .= 'AND e.assigned_to = '.$assessor;
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
                 if    ($created_by != '0'  ) {
                                                 if ($created_by == 'tel'){
@@ -524,8 +586,7 @@ class StatisticController extends Controller {
                 if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
                                                 $where .= ' AND w.id = '.$workshop.' ';
                 }
-                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
-                                                $where .= 'AND e.assigned_to = '.$assessor;
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
                 if    ($created_by != '0'  ) {
                                                 if ($created_by == 'tel'){
@@ -556,12 +617,18 @@ class StatisticController extends Controller {
             }
             elseif ($type == 'numticketsbyfabyear'){
 
-                $trans     = $this->get('translator');
-                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
-                $date      = UtilController::sinAcentos($trans->trans('date'));
-                $informe   = UtilController::sinAcentos($trans->trans('numticketsbyfabyear'));
+                $locale = $this->getRequest()->getLocale();
 
-                $select = "SELECT v.inicio as ".$date.", count(e.id) as ".$nTickets." ";
+                $trans     = $this->get('translator');
+
+                if ($locale == 'es') $year = 'Year';
+                else $year =  UtilController::sinAcentos($trans->trans('year'));
+                $locale = $this->getRequest()->getLocale();
+
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbyfabyear'));
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+
+                $select = "SELECT v.inicio as ".$year.", count(e.id) as ".$nTickets." ";
                 $join  = ' JOIN e.workshop w ';
                 $join .= ' JOIN e.car c ';
                 $join .= ' JOIN c.version v ';
@@ -588,8 +655,7 @@ class StatisticController extends Controller {
                 if    ($workshop != "0"    ) {  $select .= ", w.name as Taller ";
                                                 $where .= ' AND w.id = '.$workshop.' ';
                 }
-                if    ($assessor != '0'    ) {  $select .= ", a.name as Asesor ";
-                                                $where .= 'AND e.assigned_to = '.$assessor;
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
                 if    ($created_by != '0'  ) {
                                                 if ($created_by == 'tel'){
@@ -616,9 +682,9 @@ class StatisticController extends Controller {
                 $years = array();
                 foreach ($results as $res) {
 
-                    $inicio = substr($res[$date], 0, 4);
+                    $inicio = substr($res[$year], 0, 4);
                     if(!isset($years[$inicio])) {
-                        $years[$inicio][$date] = $inicio;
+                        $years[$inicio][$year] = $inicio;
                         $years[$inicio][$nTickets] = $res[$nTickets];
                     }
                     else $years[$inicio][$nTickets] = $years[$inicio][$nTickets] + $res[$nTickets];
@@ -626,6 +692,65 @@ class StatisticController extends Controller {
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelFabYear($years);
+            }
+            elseif ($type == 'numticketsbymonth'){
+
+                $trans     = $this->get('translator');
+                $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+                $nTaller   = UtilController::sinAcentos($trans->trans('workshop'));
+                $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
+                $code      = UtilController::sinAcentos($trans->trans('_code'));
+                $date      = UtilController::sinAcentos($trans->trans('date'));
+                $informe   = UtilController::sinAcentos($trans->trans('numticketsbymonth'));
+
+                $select = "SELECT p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", p.name as ".$nSocio.", w.name as ".$nTaller.", e.created_at as ".$date." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $where .= 'AND p.id = w.partner ';
+                $join  = ' JOIN w.partner p ';
+
+                if ($status != '0') {
+                    if     ($status == "active"  ) {  $where .= 'AND w.active = 1 '; }
+                    elseif ($status == "deactive") {  $where .= 'AND w.active = 0 '; }
+                    elseif ($status == "test"    ) {  $where .= 'AND w.test = 1 '; }
+                    elseif ($status == "adsplus" ) {  $where .= 'AND w.ad_service_plus = 0 '; }
+                }
+                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
+                }
+                if    ($created_by != '0'  ) {
+                                                if ($created_by == 'tel'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id != 4';
+                                                }
+                                                elseif($created_by == 'app'){
+                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
+                                                    $where .= 'AND ur.id = 4';
+                                                }
+                }
+                if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
+                                                $where .= 'AND p.id = '.$partner.' ';
+                }
+                if    ($shop != "0"        ) {  $join  = ' JOIN w.shop s ';
+                                                $where .= 'AND s.id = w.shop ';
+                                                $where .= 'AND s.id = '.$shop.' ';
+                }
+                if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
+                                                $where .= 'AND tp.id = w.typology ';
+                                                $where .= 'AND tp.id = '.$typology.' ';
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                $qt = $em->createQuery($select.$join." WHERE ".$where.' ORDER BY w.id, e.created_at');
+                $results   = $qt->getResult();
+
+                $queryF = "SELECT e.created_at as ".$date." FROM TicketBundle:Ticket e ORDER BY e.created_at";
+                $qF = $em->createQuery($queryF);
+                $resultsF = $qF->getResult();
+
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+                $excel = $this->createExcelByMonth($results, $resultsF);
             }
         }
         else{
@@ -670,32 +795,39 @@ class StatisticController extends Controller {
     }
 
     public function createExcelTicket($results){
+
+        $locale = $this->getRequest()->getLocale();
+        $trans = $this->get('translator');
         //Creación de cabecera
         $excel =
-            $this->get('translator')->trans('ticket').';'.
-            $this->get('translator')->trans('code_partner').';'.
-            $this->get('translator')->trans('code_shop').';'.
-            $this->get('translator')->trans('code_workshop').';'.
-            $this->get('translator')->trans('internal_code').';'.
-            $this->get('translator')->trans('name').';'.
-            $this->get('translator')->trans('partner').';'.
-            $this->get('translator')->trans('shop').';'.
-            $this->get('translator')->trans('region').';'.
-            $this->get('translator')->trans('typology').';'.
-            $this->get('translator')->trans('brand').';'.
-            $this->get('translator')->trans('model').';'.
-            $this->get('translator')->trans('version').';'.
-            $this->get('translator')->trans('year').';'.
-            $this->get('translator')->trans('vin').';'.
-            $this->get('translator')->trans('motor').';'.
-            $this->get('translator')->trans('system').';'.
-            $this->get('translator')->trans('subsystem').';'.
-            $this->get('translator')->trans('description').';'.
-            $this->get('translator')->trans('solution').';'.
-            $this->get('translator')->trans('status').';'.
-            $this->get('translator')->trans('date').';'.
-            $this->get('translator')->trans('assessor').';'.
-            $this->get('translator')->trans('importance').';';
+            $trans->trans('ticket').';'.
+            $trans->trans('code_partner').';'.
+            $trans->trans('code_shop').';'.
+            $trans->trans('code_workshop').';'.
+            $trans->trans('internal_code').';'.
+            $trans->trans('name').';'.
+            $trans->trans('partner').';'.
+            $trans->trans('shop').';'.
+            $trans->trans('region').';'.
+            $trans->trans('typology').';'.
+            $trans->trans('brand').';'.
+            $trans->trans('model').';'.
+            $trans->trans('version').';';
+
+            if ($locale == 'es') $excel .= 'Year'.';';
+            else $excel .= $trans->trans('year').';';
+
+        $excel .=
+            $trans->trans('vin').';'.
+            $trans->trans('motor').';'.
+            $trans->trans('system').';'.
+            $trans->trans('subsystem').';'.
+            $trans->trans('description').';'.
+            $trans->trans('solution').';'.
+            $trans->trans('status').';'.
+            $trans->trans('date').';'.
+            $trans->trans('assessor').';'.
+            $trans->trans('importance').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -772,19 +904,22 @@ class StatisticController extends Controller {
     }
 
     public function createExcelWorkshop($results, $partners){
+        $trans = $this->get('translator');
         //Creación de cabecera
-        $excel =$this->get('translator')->trans('code_partner').';'.
-                $this->get('translator')->trans('code_shop').';'.
-                $this->get('translator')->trans('code_workshop').';'.
-                $this->get('translator')->trans('internal_code').';'.
-                $this->get('translator')->trans('name').';'.
-                $this->get('translator')->trans('partner').';'.
-                $this->get('translator')->trans('shop').';'.
-                $this->get('translator')->trans('email').';'.
-                $this->get('translator')->trans('tel').';'.
-                $this->get('translator')->trans('active').';'.
-                $this->get('translator')->trans('testing').';'.
-                $this->get('translator')->trans('adsplus').';';
+        $excel =$trans->trans('code_partner').';'.
+                $trans->trans('code_shop').';'.
+                $trans->trans('code_workshop').';'.
+                $trans->trans('internal_code').';'.
+                $trans->trans('name').';'.
+                $trans->trans('partner').';'.
+                $trans->trans('shop').';'.
+                $trans->trans('email').';'.
+                $trans->trans('tel').';'.
+                $trans->trans('active').';'.
+                $trans->trans('subscribed').';'.
+                $trans->trans('unsubscribed').';'.
+                $trans->trans('testing').';'.
+                $trans->trans('adsplus').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -829,6 +964,14 @@ class StatisticController extends Controller {
             else $active = " "; //$this->get('translator')->trans('no');
             $excel.=strtoupper($active).';';
 
+            if ($row->getCreatedAt() == NULL) $created = '--';
+            else $created = $row->getCreatedAt()->format("d-m-Y"); //$this->get('translator')->trans('no');
+            $excel.=strtoupper($created).';';
+
+            if ($row->getLowdateAt() == NULL) $lowdated = '--';
+            else $lowdated = $row->getLowdateAt()->format("d-m-Y"); //$this->get('translator')->trans('no');
+            $excel.=strtoupper($lowdated).';';
+
             if ($row->getTest() == 1) $test = $this->get('translator')->trans('yes');
             else $test = " "; //$this->get('translator')->trans('no');
             $excel.=strtoupper($test).';';
@@ -847,19 +990,20 @@ class StatisticController extends Controller {
     }
 
     public function createExcelLastTickets($results){
+        $trans = $this->get('translator');
         //Creación de cabecera
-        $excel =$this->get('translator')->trans('code_partner').';'.
-                $this->get('translator')->trans('code_shop').';'.
-                $this->get('translator')->trans('code_workshop').';'.
-                $this->get('translator')->trans('internal_code').';'.
-                $this->get('translator')->trans('name').';'.
-                $this->get('translator')->trans('partner').';'.
-                $this->get('translator')->trans('shop').';'.
-                $this->get('translator')->trans('ticket').';'.
-                $this->get('translator')->trans('description').';'.
-                $this->get('translator')->trans('status').';'.
-                $this->get('translator')->trans('solution').';'.
-                $this->get('translator')->trans('date').';';
+        $excel =$trans->trans('code_partner').';'.
+                $trans->trans('code_shop').';'.
+                $trans->trans('code_workshop').';'.
+                $trans->trans('internal_code').';'.
+                $trans->trans('name').';'.
+                $trans->trans('partner').';'.
+                $trans->trans('shop').';'.
+                $trans->trans('ticket').';'.
+                $trans->trans('description').';'.
+                $trans->trans('status').';'.
+                $trans->trans('solution').';'.
+                $trans->trans('date').';';
         $excel.="\n";
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -944,22 +1088,139 @@ class StatisticController extends Controller {
 
     public function createExcelFabYear($results){
         $excel = '';
-        $trans = $this->get('translator');
-        $nTickets = UtilController::sinAcentos($trans->trans('tickets'));
-        $date  = UtilController::sinAcentos($trans->trans('date'));
 
-        $excel.=$date.';'.$nTickets.';';
+        $locale = $this->getRequest()->getLocale();
+        $trans  = $this->get('translator');
+
+        $nTickets = UtilController::sinAcentos($trans->trans('tickets'));
+
+        if ($locale == 'es') $year = 'Year';
+        else $year =  UtilController::sinAcentos($trans->trans('year'));
+
+        $excel.=$year.';'.$nTickets.';';
 
         foreach ($results as $res)
         {
             foreach ($res as $key => $value)
             {
-                if($key == $date) $excel.="\n";
+                if($key == $year) $excel.="\n";
                 $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
                 $reemplazar=array("", "", "", "");
                 $text=str_ireplace($buscar,$reemplazar,$value);
                 $excel.=$text.';';
             }
+        }
+        return($excel);
+    }
+
+    public function createExcelByMonth($results, $resultsF){
+        $excel = '';
+
+        $locale = $this->getRequest()->getLocale();
+        $trans  = $this->get('translator');
+
+        $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
+        $nTaller   = UtilController::sinAcentos($trans->trans('workshop'));
+        $nSocio    = UtilController::sinAcentos($trans->trans('partner'));
+        $code      = UtilController::sinAcentos($trans->trans('_code'));
+        $date      = UtilController::sinAcentos($trans->trans('date'));
+
+        $excel.= $code." ".$nSocio.";".$code." ".$nTaller.";".$nSocio.";".$nTaller.";";
+
+        $arrayF = array();
+        $fechas = array();
+        // array para el rango de fechas de los datos
+        foreach ($resultsF as $resF)
+        {
+            $fecha = $resF[$date]->format('m-y');
+            $arrayF[$fecha] = $fecha;
+        }
+        foreach ($arrayF as $fecha) {
+            $excel.= $fecha.';';
+            $fechas[$fecha] = 0;
+        }
+        $excel.="\n";
+
+        $cSocio = 0;
+        $cTaller = 0;
+        $month = 0;
+        $year = 0;
+        $num = 0;
+        $str = "";
+        $array = array();
+
+        // array de datos del taller con numero de tickets por mes
+        foreach ($results as $res)
+        {
+            if($cSocio == $res[$code.$nSocio] and $cTaller == $res[$code.$nTaller]){
+
+                $fecha = $res[$date];
+                if($month == $fecha->format('m') and $year == $fecha->format('y')){
+                    $num++;
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+                }else{
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+                    $num = 1;
+                    $month  = $fecha->format('m');
+                    $year  = $fecha->format('y');
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+                }
+            }else{
+
+                if($num != 0) {
+                    // Añadimos el último resultado del taller
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+
+                    // Añadimos el nuevo resultado del taller
+                    $cSocio  = $res[$code.$nSocio];
+                    $cTaller = $res[$code.$nTaller];
+                    $Socio = $res[$nSocio];
+                    $Taller = $res[$nTaller];
+
+                    $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $reemplazar=array("", "", "", "");
+                    $Socio=str_ireplace($buscar,$reemplazar,$Socio);
+                    $Taller=str_ireplace($buscar,$reemplazar,$Taller);
+
+                    $fecha = $res[$date];
+                    $month  = $fecha->format('m');
+                    $year  = $fecha->format('y');
+                    $num = 1;
+                    $str = $cSocio.';'.$cTaller.';'.$Socio.';'.$Taller.';';
+                    $array[$cSocio.'-'.$cTaller] = array('fecha' => $fechas, 'str' => $str);
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+                }
+                else {
+                    $cSocio  = $res[$code.$nSocio];
+                    $cTaller = $res[$code.$nTaller];
+                    $Socio = $res[$nSocio];
+                    $Taller = $res[$nTaller];
+
+                    $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $reemplazar=array("", "", "", "");
+                    $Socio=str_ireplace($buscar,$reemplazar,$Socio);
+                    $Taller=str_ireplace($buscar,$reemplazar,$Taller);
+
+                    $fecha = $res[$date];
+                    $month  = $fecha->format('m');
+                    $year  = $fecha->format('y');
+
+                    $num = 1;
+                    $str = $cSocio.';'.$cTaller.';'.$Socio.';'.$Taller.';';
+                    $array[$cSocio.'-'.$cTaller] = array('fecha' => $fechas, 'str' => $str);
+                    $array[$cSocio.'-'.$cTaller]['fecha'][$month.'-'.$year] = $num;
+                }
+            }
+        }
+
+        // Recorro el array para generar el contenido del excel
+        foreach ($array as $value) {
+            $excel .= $value['str'];
+
+            foreach ($value['fecha'] as $valueF) {
+                $excel .= $valueF.';';
+            }
+            $excel.="\n";
         }
         return($excel);
     }

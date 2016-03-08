@@ -476,6 +476,7 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
+        $trans    = $this->get('translator');
         $ticket   = new Ticket();
         $car      = new Car();
         $document = new Document();
@@ -488,9 +489,12 @@ class TicketController extends Controller {
         $id_brand = $request->request->get('n_id_brand');
         $id_model = $request->request->get('n_id_model');
         $id_version = $request->request->get('n_id_version');
+        $id_year = $request->request->get('n_id_year');
+        $id_motor = $request->request->get('n_id_motor');
+        $id_kw = $request->request->get('n_id_kw');
         $id_subsystem = $request->request->get('n_id_subsystem');
         $id_importance = $request->request->get('n_id_importance');
-        $id_year = $request->request->get('n_id_year');
+        $id_displacement = $request->request->get('n_id_displacement');
         $id_vin = $request->request->get('n_id_vin');
         $id_plateNumber = $request->request->get('n_id_plateNumber');
 
@@ -506,6 +510,15 @@ class TicketController extends Controller {
             $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
         }
+        if (isset($id_year) and $id_year != '' and $id_year != '0') {
+            $car->setYear($id_year);
+        }
+        if (isset($id_motor) and $id_motor != '' and $id_motor != '0') {
+            $car->setMotor($id_motor);
+        }
+        if (isset($id_kw) and $id_kw != '' and $id_kw != '0') {
+            $car->setKw($id_kw);
+        }
         if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
             $ticket->setSubsystem($subsystem);
@@ -514,8 +527,8 @@ class TicketController extends Controller {
             $importance = $em->getRepository('TicketBundle:Importance')->find($id_importance);
             $ticket->setImportance($importance);
         }
-        if (isset($id_year) and $id_year != '' and $id_year != '0') {
-            $car->setYear($id_year);
+        if (isset($id_displacement) and $id_displacement != '' and $id_displacement != '0') {
+            $car->setDisplacement($id_displacement);
         }
         if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
             $car->setVin($id_vin);
@@ -542,6 +555,16 @@ class TicketController extends Controller {
             $form ->bindRequest($request);
             $formC->bindRequest($request);
             $formD->bindRequest($request);
+
+            $array = array( 'ticket' => $ticket,
+                            'form' => $form->createView(),
+                            'formC' => $formC->createView(),
+                            'formD' => $formD->createView(),
+                            'brands' => $brands,
+                            'systems' => $systems,
+                            'adsplus' => $adsplus,
+                            'workshop' => $workshop,
+                            'form_name' => $form->getName());
 
             /*Validacion Ticket*/
             $str_len = strlen($ticket->getDescription());
@@ -625,114 +648,137 @@ class TicketController extends Controller {
                                                 $car->setVersion(null);
                                             }
 
-                                            $car = UtilController::newEntity($car, $user);
-                                            UtilController::saveEntity($em, $car, $user);
+                                            $exist_car = '0';
+                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($car->getVin());
+                                            $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
 
-                                            //Define TICKET
-                                            $ticket = UtilController::newEntity($ticket, $user);
-                                            if ($security->isGranted('ROLE_ASSESSOR'))
-                                            {
-                                                $ticket->setWorkshop($workshop);
-                                                $ticket->setAssignedTo($user);
-                                            }else{
-                                                $ticket->setWorkshop($user->getWorkshop());
+                                            if($exist_vin == null AND $exist_num == null) {
+                                                $exist_car = '0';
                                             }
-                                            $ticket->setStatus($status);
-                                            $ticket->setPending(1);
-                                            $ticket->setCar($car);
-                                            UtilController::saveEntity($em, $ticket, $user);
+                                            elseif(
+                                                ($exist_vin != null AND $exist_num == null)
+                                                OR
+                                                ($exist_vin == null AND $exist_num != null)
+                                                OR
+                                                ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
+                                            ){
+                                                $exist_car = $trans->trans('error.vin_platenumber_not_match');
+                                            }
+                                            elseif(
+                                                $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
+                                                OR
+                                                $exist_vin->getModel()->getId() != $car->getModel()->getId()
+                                                OR (
+                                                    ($exist_vin->getVersion() != null AND $car->getVersion() == null)
+                                                    OR
+                                                    ($exist_vin->getVersion() == null AND $car->getVersion() != null)
+                                                    )
+                                                OR (
+                                                    $exist_vin->getVersion() != null
+                                                    AND
+                                                    $car->getVersion() != null
+                                                    AND
+                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
+                                                    )
+                                            ){
+                                                $exist_car = $trans->trans('error.same_vin');
+                                            }
+                                            elseif(
+                                                $exist_num->getBrand()->getId() != $car->getBrand()->getId()
+                                                OR
+                                                $exist_num->getModel()->getId() != $car->getModel()->getId()
+                                                OR (
+                                                    ($exist_num->getVersion() != null AND $car->getVersion() == null)
+                                                    OR
+                                                    ($exist_num->getVersion() == null AND $car->getVersion() != null)
+                                                    )
+                                                OR (
+                                                    $exist_num->getVersion() != null
+                                                    AND
+                                                    $car->getVersion() != null
+                                                    AND
+                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+                                                    )
+                                            ){
+                                                $exist_car = $trans->trans('error.same_platenumber');
+                                            }
 
-                                            //Define Document
-                                            if ($file != "") {
+                                            if($exist_car == '0') {
 
-                                                //Define Post
-                                                $post = new Post();
-                                                $post = UtilController::newEntity($post, $user);
-                                                $post->setTicket($ticket);
-                                                $post->setMessage(" ");
-                                                UtilController::saveEntity($em, $post, $user, false);
-
-                                                $document->setPost($post);
-                                                $dir = $document->getUploadRootDir();
-                                                if (!file_exists($dir) && !is_dir($dir)) {
-                                                    mkdir($dir, 0775);
+                                                if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
+                                                    $car = $exist_vin;
                                                 }
 
-                                                $em->persist($document);
-                                                $em->flush();
+                                                UtilController::saveEntity($em, $car, $user);
+
+                                                //Define TICKET
+                                                $ticket = UtilController::newEntity($ticket, $user);
+                                                if ($security->isGranted('ROLE_ASSESSOR'))
+                                                {
+                                                    $ticket->setWorkshop($workshop);
+                                                    $ticket->setAssignedTo($user);
+                                                }else{
+                                                    $ticket->setWorkshop($user->getWorkshop());
+                                                }
+                                                $ticket->setStatus($status);
+                                                $ticket->setPending(1);
+                                                $ticket->setCar($car);
+                                                UtilController::saveEntity($em, $ticket, $user);
+
+                                                //Define Document
+                                                if ($file != "") {
+
+                                                    //Define Post
+                                                    $post = new Post();
+                                                    $post = UtilController::newEntity($post, $user);
+                                                    $post->setTicket($ticket);
+                                                    $post->setMessage(" ");
+                                                    UtilController::saveEntity($em, $post, $user, false);
+
+                                                    $document->setPost($post);
+                                                    $dir = $document->getUploadRootDir();
+                                                    if (!file_exists($dir) && !is_dir($dir)) {
+                                                        mkdir($dir, 0775);
+                                                    }
+
+                                                    $em->persist($document);
+                                                    $em->flush();
+                                                }
+                                            } else {
+                                                // ERROR tipo de fichero
+                                                $this->get('session')->setFlash('error', $exist_car);
+
+                                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                             }
                                         } else {
-                                            $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_o'));
+                                            $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_o'));
 
-                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                                        'form' => $form->createView(),
-                                                        'formC' => $formC->createView(),
-                                                        'formD' => $formD->createView(),
-                                                        'brands' => $brands,
-                                                        'systems' => $systems,
-                                                        'adsplus' => $adsplus,
-                                                        'workshop' => $workshop,
-                                                        'form_name' => $form->getName(),));
+                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                         }
 
                                     }else {
-                                        $this->get('session')->setFlash('error', $this->get('translator')->trans('ticket_vin_error_length'));
+                                        $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_length'));
 
-                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                                        'form' => $form->createView(),
-                                                        'formC' => $formC->createView(),
-                                                        'formD' => $formD->createView(),
-                                                        'brands' => $brands,
-                                                        'systems' => $systems,
-                                                        'adsplus' => $adsplus,
-                                                        'workshop' => $workshop,
-                                                        'form_name' => $form->getName(),));
+                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                     }
                                 } else {
                                     // ERROR tamaño
-                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+                                    $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
 
-                                    return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                                'action' => 'newTicket',
-                                                'form' => $form->createView(),
-                                                'formC' => $formC->createView(),
-                                                'formD' => $formD->createView(),
-                                                'brands' => $brands,
-                                                'systems' => $systems,
-                                                'adsplus' => $adsplus,
-                                                'workshop' => $workshop,
-                                                'form_name' => $form->getName(),));
+                                    return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                 }
                             } else {
                                 // ERROR tipo de fichero
-                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
+                                $this->get('session')->setFlash('error', $trans->trans('error.file'));
 
-                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                            'action' => 'newTicket',
-                                            'form' => $form->createView(),
-                                            'formC' => $formC->createView(),
-                                            'formD' => $formD->createView(),
-                                            'brands' => $brands,
-                                            'systems' => $systems,
-                                            'adsplus' => $adsplus,
-                                            'workshop' => $workshop,
-                                            'form_name' => $form->getName(),));
+                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                             }
                         } else {
                             // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.same_ticket')
-                                                                    .' ('.$this->get('translator')->trans('ticket').' #'.$existTicket[0]->getId().')');
+                            $this->get('session')->setFlash('error', $trans->trans('error.same_ticket')
+                                                                    .' ('.$trans->trans('ticket').' #'.$existTicket[0]->getId().')');
 
-                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', array('ticket' => $ticket,
-                                        'action' => 'newTicket',
-                                        'form' => $form->createView(),
-                                        'formC' => $formC->createView(),
-                                        'formD' => $formD->createView(),
-                                        'brands' => $brands,
-                                        'systems' => $systems,
-                                        'adsplus' => $adsplus,
-                                        'workshop' => $workshop,
-                                        'form_name' => $form->getName(),));
+                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                          }
 
                         $mail = $ticket->getWorkshop()->getEmail1();
@@ -781,7 +827,6 @@ class TicketController extends Controller {
             $id_system = '';
             $id_subsystem = '';
         }
-
 
         $array = array( 'ticket' => $ticket,
                         'action' => 'newTicket',
@@ -1206,7 +1251,7 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function closeTicketAction($id, $ticket)
+    public function closeTicketAction($id, $ticket, $close='1')
     {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -1311,7 +1356,8 @@ class TicketController extends Controller {
             return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
                                                                                             'systems'   => $systems,
                                                                                             'form'      => $form->createView(),
-                                                                                            'form_name' => $form->getName(), ));
+                                                                                            'form_name' => $form->getName(),
+                                                                                            'close'     => $close ));
         }
         else{
             return $this->render('TwigBundle:Exception:exception_access.html.twig');

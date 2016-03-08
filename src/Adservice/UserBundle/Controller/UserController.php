@@ -44,6 +44,7 @@ class UserController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
+
         if(!isset($_SESSION['lang'])) {
 
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
@@ -575,7 +576,8 @@ class UserController extends Controller {
         $not_rejected = array('action' , " != 'rejected'");
 
 
-        if    ($role == "ROLE_SUPER_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+        if    ($role == "ROLE_SUPER_AD"
+            OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
                                             $workshop_rejected[] = $by_country;
                                             $workshop_rejected[] = $rejected;
                                             $shop_rejected[]     = $by_country;

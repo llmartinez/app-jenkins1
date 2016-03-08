@@ -12,8 +12,12 @@
     <form action="{{ path("workshop_edit", { 'id':workshop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <input type="hidden" id="workshop_cif" value="{{workshop.cif}}">
         <div class="container">
-            <legend>{% trans %} workshop {% endtrans %}</legend>
-            
+            <legend>{% trans %} workshop {% endtrans %}
+                    <p class="pull-right mr40"><small>{% trans %} subscribed {% endtrans %}: {{ workshop.createdAt|date("d-m-Y") }}
+                    {% if workshop.active == 0 and workshop.lowdateAt != NULL %}, {% trans %} unsubscribed {% endtrans %}: {{ workshop.lowdateAt|date("d-m-Y") }}{% endif %}
+                    </small></p>
+                 </legend>
+
             <div class="col-xs-12 col-md-12 form-group">
                 <input type="hidden" id="exist_cif" value="{% trans %}workshop.cif_exist{% endtrans %} ">
                 <div class="error_cif"></div>

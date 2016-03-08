@@ -121,3 +121,9 @@ services:
 
 parameters:
     adservice.post.uploadpath: 'web/uploads/tickets'
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     "/usr/local/bin/wkhtmltopdf"
+        options:    []

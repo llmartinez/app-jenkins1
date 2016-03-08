@@ -352,8 +352,8 @@ class WorkshopController extends Controller {
 
                 /* CHECK CODE WORKSHOP NO SE REPITA */
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $workshop->getCodeWorkshop()));
-//Comprobar telefono
 
+                //Comprobar telefono
                 $findPhone = array(0, 0, 0, 0);
 
                 if ($workshop->getPhoneNumber1() != '0' and $workshop->getPhoneNumber1() != null) {
@@ -575,8 +575,12 @@ class WorkshopController extends Controller {
      * @param Workshop $workshop
      */
     private function saveWorkshop($em, $workshop) {
+
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
+
+        if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+
         $em->persist($workshop);
         $em->flush();
     }

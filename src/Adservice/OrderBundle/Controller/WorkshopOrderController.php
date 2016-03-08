@@ -4,6 +4,7 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -780,6 +781,8 @@ class WorkshopOrderController extends Controller {
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
                 $workshop->setActive(false);
+                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+
                 $action = $workshopOrder->getWantedAction();
                 $em->remove($workshopOrder);
                 UtilController::saveEntity($em, $workshop, $user);
@@ -1058,16 +1061,42 @@ class WorkshopOrderController extends Controller {
         }
         return $ordersBefore;
     }
-    
+
     public function findCifAction($cif) {
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
         $find = false;
         if($workshop){
             $find=true;
-        }            
+        }
         $json = json_encode($find);
-        return new Response(json_encode($json), $status = 200);        
+        return new Response(json_encode($json), $status = 200);
+    }
+
+
+    /**
+     * Genera un pdf con los datos del Taller
+     * @Route("/workshop/doPdfWorkshop/{id}")
+     * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
+     */
+    public function doPdfWorkshopAction($workshop) {
+
+        $trans = $this->get('translator');
+        $filename = $trans->trans('workshop').'_'.$workshop->getCodePartner().'-'.$workshop->getCodeWorkshop();
+        // $filename = $trans->trans('workshop').'_'.$workshop->getCodePartner().'-'.$workshop->getCodeWorkshop().'_'.date("d-m-Y");
+
+        $html = $this->renderView('OrderBundle:WorkshopOrders:order_workshop_pdf.html.twig', array(
+            'workshop'  => $workshop
+        ));
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="'.$filename.'.pdf"'
+            )
+        );
     }
 
 }
