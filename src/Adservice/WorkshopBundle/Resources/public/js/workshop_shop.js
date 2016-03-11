@@ -15,6 +15,8 @@ $(document).ready(function() {
         fill_code_partner($(this).val());
 
         fill_code_workshop($(this).val());
+
+        get_country_partner($(this).val());
     });
 
     $( "#code_partner" ).on( "keydown", function( event ) {
