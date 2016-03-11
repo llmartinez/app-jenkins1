@@ -679,6 +679,8 @@ function get_id_from_code_partner(code){
                 alert($('#partner_not_found').val());
             }
             populate_shop();
+
+            get_country_partner(data.id);
         },
         error : function(){
             console.log("Error al cargar id desde código...");
