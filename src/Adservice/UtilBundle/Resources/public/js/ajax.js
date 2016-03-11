@@ -679,6 +679,39 @@ function get_id_from_code_partner(code){
                 alert($('#partner_not_found').val());
             }
             populate_shop();
+
+            get_country_partner(data.id);
+        },
+        error : function(){
+            console.log("Error al cargar id desde código...");
+        }
+    });
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
+ */
+function get_country_partner(id_partner){
+    var route     = 'get_country_partner';
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale, id_partner: id_partner}),
+        data        : {id_partner : id_partner},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+
+            if(data.id != 0) {
+                $('form').find('select[name*=country]').empty();
+                $('form').find('select[name*=country]').append("<option value="+data.id+" selected>"+data.name+"</option>");
+            }
+            else{
+                alert($('#bad_introduction').val());
+            }
+            populate_shop();
         },
         error : function(){
             console.log("Error al cargar id desde código...");

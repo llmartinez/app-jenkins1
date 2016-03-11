@@ -69,7 +69,7 @@ class AjaxController extends Controller
         }else{
                 $json = array( 'error' => 'No hay coincidencias');
         }
-       return new Response(json_encode($json), $status = 200);
+        return new Response(json_encode($json), $status = 200);
     }
 
     //  ____
@@ -82,7 +82,8 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las tiendas de un socio
      * @return json
      */
-    public function codePartnerFromPartnerAction() {
+    public function codePartnerFromPartnerAction()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
@@ -97,7 +98,8 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function codeWorkshopFromPartnerAction() {
+    public function codeWorkshopFromPartnerAction()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
 
@@ -110,7 +112,8 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-     public function getIdFromCodePartnerAction($code) {
+    public function getIdFromCodePartnerAction($code)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         $code = $petition->request->get('code');
@@ -126,7 +129,26 @@ class AjaxController extends Controller
         else $json = array('id' => '0', 'code' => '0');
 
         return new Response(json_encode($json), $status = 200);
-     }
+    }
+
+    public function getCountryPartnerAction($id_partner)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
+
+        if (isset($partner) and $partner->getId() != null) {
+
+            $country = $partner->getCountry();
+
+            $name = $this->get('translator')->trans($country->getCountry());
+
+            $json = array('id' => $country->getId(), 'name' => $name);
+        }
+        else $json = array('id' => '0', 'name' => '0');
+
+        return new Response(json_encode($json), $status = 200);
+    }
 
     //  ____  _   _  ___  ____
     // / ___|| | | |/ _ \|  _ \

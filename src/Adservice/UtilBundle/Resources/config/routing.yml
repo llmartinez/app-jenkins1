@@ -54,6 +54,12 @@ get_id_from_code_partner:
     options:
         expose: true
 
+get_country_partner:
+    pattern: /getCountryPartner/{id_partner}
+    defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
+    options:
+        expose: true
+
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}
     defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}
