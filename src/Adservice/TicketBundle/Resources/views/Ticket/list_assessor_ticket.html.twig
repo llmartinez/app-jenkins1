@@ -142,7 +142,7 @@
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 
                         <td>
-                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/email_open.png') }}"></a></td>
+                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="open img_icon" src="{{ asset('bundles/util/images/icon/email_open.png') }}"></a></td>
 
                         <td>{{ ticket.createdAt | date("d/m/y") }}</td>
                     </tr>
