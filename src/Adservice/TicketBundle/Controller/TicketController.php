@@ -662,7 +662,31 @@ class TicketController extends Controller {
                                                 OR
                                                 ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
                                             ){
-                                                $exist_car = $trans->trans('error.vin_platenumber_not_match');
+                                                $str = $trans->trans('error.vin_platenumber_not_match');
+
+                                                if($exist_vin != null) {
+                                                    $str .=' ('.$trans->trans('vin').' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                    if($exist_vin->getVersion() != null){
+                                                        $str .= ' '.$exist_vin->getVersion();
+                                                        if($exist_vin->getMotor() != null){
+                                                            $str .= ' ['.$exist_vin->getMotor().']';
+                                                        }
+                                                    }
+                                                    $str .= ' )';
+                                                }
+                                                if($exist_vin != null and $exist_num != null) $str .= ', ';
+
+                                                if($exist_num != null) {
+                                                    $str .=' ('.$trans->trans('plate_number').' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                    if($exist_num->getVersion() != null){
+                                                        $str .= ' '.$exist_num->getVersion();
+                                                        if($exist_num->getMotor() != null){
+                                                            $str .= ' ['.$exist_num->getMotor().']';
+                                                        }
+                                                    }
+                                                    $str .= ' )';
+                                                }
+                                                $exist_car = $str;
                                             }
                                             elseif(
                                                 $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
@@ -681,7 +705,18 @@ class TicketController extends Controller {
                                                     $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
                                                     )
                                             ){
-                                                $exist_car = $trans->trans('error.same_vin');
+                                                $str = $trans->trans('error.same_vin');
+                                                if($exist_vin != null) {
+                                                    $str .=' ('.$trans->trans('vin').' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                    if($exist_vin->getVersion() != null){
+                                                        $str .= ' '.$exist_vin->getVersion();
+                                                        if($exist_vin->getMotor() != null){
+                                                            $str .= ' ['.$exist_vin->getMotor().']';
+                                                        }
+                                                    }
+                                                    $str .= ' )';
+                                                }
+                                                $exist_car = $str;
                                             }
                                             elseif(
                                                 $exist_num->getBrand()->getId() != $car->getBrand()->getId()
@@ -700,7 +735,18 @@ class TicketController extends Controller {
                                                     $exist_num->getVersion()->getId() != $car->getVersion()->getId()
                                                     )
                                             ){
-                                                $exist_car = $trans->trans('error.same_platenumber');
+                                                $str = $trans->trans('error.same_platenumber');
+                                                if($exist_num != null) {
+                                                    $str .=' ('.$trans->trans('plate_number').' ->'.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                    if($exist_num->getVersion() != null){
+                                                        $str .= ' '.$exist_num->getVersion();
+                                                        if($exist_num->getMotor() != null){
+                                                            $str .= ' ['.$exist_num->getMotor().']';
+                                                        }
+                                                    }
+                                                    $str .= ' )';
+                                                }
+                                                $exist_car = $str;
                                             }
 
                                             if($exist_car == '0') {
@@ -1763,7 +1809,7 @@ class TicketController extends Controller {
         else {
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
         }
-        if(sizeof($ticket) > 1) {
+        if(sizeof($ticket) >= 1) {
             foreach ($ticket as $tck) {
                 if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
                     $tickets[] = $tck;
@@ -1882,7 +1928,7 @@ class TicketController extends Controller {
                 if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
                 else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id,'subsystem' => $subsystem));
 
-                if(sizeof($ticket) > 1) {
+                if(sizeof($ticket) >= 1) {
                     foreach ($ticket as $tck) {
                         if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
                             $w_id = $workshop->getId();
