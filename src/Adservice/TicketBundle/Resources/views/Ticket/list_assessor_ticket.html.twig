@@ -133,11 +133,15 @@
                         {% endif %}
 
                         {% if ticket.car.version.name is defined %}
-                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
+                            {% if ticket.car.motor is defined %}
+                                {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name ~ ' [' ~ ticket.car.motor ~ ']' %}
+                            {% else %}
+                                {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
+                            {% endif %}
                         {% else %}
                             {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
                         {% endif %}
-                        <td title="{{car}}"               >   {{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
+                        <td title="{{car}}"               >   {{ car|length > 20 ? car|slice(0, 20) ~ '...' : car  }}</td>
 
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 
