@@ -1752,29 +1752,33 @@ class TicketController extends Controller {
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
-               if( $subsystem == 0) {
-                    $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
+                if( $subsystem == 0) {
+                    $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
                 }
                 else {
-                    $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
+                    $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id,'subsystem' => $subsystem));
                 }
-
             }
         }
         else {
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
         }
-        if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
-            $tickets[] = $ticket;
+        if(sizeof($ticket) > 1) {
+            foreach ($ticket as $tck) {
+                if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                    $tickets[] = $tck;
+                }
+            }
+        }else{
+            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
+                $tickets[] = $ticket;
+            }
         }
         $b_query     = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands      = $b_query->getResult();
         $systems     = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries   = $em->getRepository('UtilBundle:Country')->findAll();
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
-
-        if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
-        else $adsplus = null;
 
         $array = array('workshop'    => new Workshop(),
                        'pagination'  => new Pagination(0),
@@ -1792,7 +1796,6 @@ class TicketController extends Controller {
                        'brands'      => $brands,
                        'systems'     => $systems,
                        'countries'   => $countries,
-                       'adsplus'     => $adsplus,
                        'importances' => $importances,
                        'option'      => 'all',
                        'page'        => $page,
@@ -1876,14 +1879,25 @@ class TicketController extends Controller {
             for ($i=0; $i<$size; $i++){
 
                 $id     = $cars[$key[$i]]->getId();
-                if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id));
-                else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id,'subsystem' => $subsystem));
+                if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
+                else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id,'subsystem' => $subsystem));
 
-                if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
-                    $w_id = $workshop->getId();
+                if(sizeof($ticket) > 1) {
+                    foreach ($ticket as $tck) {
+                        if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
+                            $w_id = $workshop->getId();
 
-                    if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
-                    else $tickets[] = $ticket;
+                            if(isset($w_id)) { if($workshop->getId() == $tck->getWorkshop()->getId()) $tickets[] = $tck; }
+                            else $tickets[] = $tck;
+                        }
+                    }
+                }else{
+                    if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
+                        $w_id = $workshop->getId();
+
+                        if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
+                        else $tickets[] = $ticket;
+                    }
                 }
             }
         }
@@ -1935,13 +1949,9 @@ class TicketController extends Controller {
         $countries  = $em->getRepository('UtilBundle:Country')->findAll();
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
 
-        if (isset($ticket)) $adsplus = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
-        else $adsplus = null;
-
         if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0'){
-            $version = $em->getRepository('CarBundle:Version'  )->findById($version);
-            $version = $version[0];
+            $version = $em->getRepository('CarBundle:Version'  )->findOneById($version);
         }
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
@@ -1971,7 +1981,6 @@ class TicketController extends Controller {
                        'brands'      => $brands,
                        'systems'     => $systems,
                        'countries'   => $countries,
-                       'adsplus'     => $adsplus,
                        'importances' => $importances,
                        'option'      => 'all',
                        'page'        => $page,
