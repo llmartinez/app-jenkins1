@@ -32,12 +32,12 @@
     });
 
     $(document).on('click','.closeTicket',function(){
-        if ($('#year_assessor').val() != undefined)
-            checkYearLength();
+        //if ($('#year_assessor').val() != undefined)
+        //    checkYearLength();
     });
     $(document).on('click','.sendTicket',function(){
-        if ($('#year_assessor').val() != undefined)
-            checkYearLength();
+        //if ($('#year_assessor').val() != undefined)
+        //    checkYearLength();
     });
 
     function checkYearLength(){

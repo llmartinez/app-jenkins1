@@ -665,9 +665,9 @@ class TicketController extends Controller {
                                                 $str = $trans->trans('error.vin_platenumber_not_match');
 
                                                 if($exist_vin != null) {
-                                                    $str .=' ('.$trans->trans('vin').' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                    $str .=' ('.$trans->trans('vin').' '.$exist_vin->getVin().' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion();
+                                                        $str .= ' '.$exist_vin->getVersion()->getName();
                                                         if($exist_vin->getMotor() != null){
                                                             $str .= ' ['.$exist_vin->getMotor().']';
                                                         }
@@ -677,7 +677,7 @@ class TicketController extends Controller {
                                                 if($exist_vin != null and $exist_num != null) $str .= ', ';
 
                                                 if($exist_num != null) {
-                                                    $str .=' ('.$trans->trans('plate_number').' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                    $str .=' ('.$trans->trans('plate_number').' '.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
                                                         $str .= ' '.$exist_num->getVersion();
                                                         if($exist_num->getMotor() != null){
@@ -707,7 +707,7 @@ class TicketController extends Controller {
                                             ){
                                                 $str = $trans->trans('error.same_vin');
                                                 if($exist_vin != null) {
-                                                    $str .=' ('.$trans->trans('vin').' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                    $str .=' ('.$exist_vin->getVin().' -> '.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
                                                         $str .= ' '.$exist_vin->getVersion();
                                                         if($exist_vin->getMotor() != null){
@@ -737,7 +737,7 @@ class TicketController extends Controller {
                                             ){
                                                 $str = $trans->trans('error.same_platenumber');
                                                 if($exist_num != null) {
-                                                    $str .=' ('.$trans->trans('plate_number').' ->'.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                    $str .=' ('.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
                                                         $str .= ' '.$exist_num->getVersion();
                                                         if($exist_num->getMotor() != null){
@@ -1905,13 +1905,14 @@ class TicketController extends Controller {
 
         $pagination = new Pagination($page);
 
-        // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
         // Seteamos el numero de resultados que se mostraran
-        $pagination->setMaxRows(10);
+        $max_rows = 100;
+        $pagination->setMaxRows($max_rows);
+        $ordered = array('e.modified_at', 'DESC');
 
-        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
+        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
 
-        $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params);
+        $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
 
         $pagination->setTotalPagByLength($length);
 
@@ -1919,6 +1920,9 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
+
+        if($length > $max_rows) $more_results = $length-$max_rows;
+        else $more_results = 0;
 
         if($size > 0){
 
@@ -1930,63 +1934,19 @@ class TicketController extends Controller {
 
                 if(sizeof($ticket) >= 1) {
                     foreach ($ticket as $tck) {
+
                         if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
                             $w_id = $workshop->getId();
 
-                            if(isset($w_id)) { if($workshop->getId() == $tck->getWorkshop()->getId()) $tickets[] = $tck; }
-                            else $tickets[] = $tck;
+                            if(isset($w_id)) {
+                                if($workshop->getId() == $tck->getWorkshop()->getId()) {
+                                    $tickets[] = $tck;
+                                }
+                            }
                         }
                     }
-                }else{
-                    if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
-                        $w_id = $workshop->getId();
-
-                        if(isset($w_id)) { if($workshop->getId() == $ticket->getWorkshop()->getId()) $tickets[] = $ticket; }
-                        else $tickets[] = $ticket;
-                    }
                 }
             }
-        }
-
-        // Se crea una segunda paginacion que servirá para calcular el numero real de tickets de la paginacion, ya que despues de la consulta se filtra por taller
-        // Busca la ultima pagina del listado, y calcula la longitud total despues de restar los registros que no coinciden con el taller
-        $pagination2 = new Pagination($pagination->getTotalPag());
-        $pagination2->setMaxRows(10);
-
-        if (sizeof($cars) > 0){
-            $cars2 = $pagination2->getRows($em, 'CarBundle', 'Car', $params, $pagination2);
-            $length2 = $pagination2->getRowsLength($em, 'CarBundle', 'Car', $params);
-        }else{
-            $cars2 = array();
-            $length2 = array();
-        }
-
-        $key2 = array_keys($cars2);
-        $size2 = sizeOf($key2);
-        if($size2 > 0){
-
-            for ($i=0; $i<$size2; $i++){
-
-                $id2     = $cars2[$key2[$i]]->getId();
-                if( $subsystem == 0 or $subsystem == '') $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2));
-                else $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('car' => $id2,'subsystem' => $subsystem));
-
-                if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
-                    $w_id2 = $workshop->getId();
-                    if(isset($w_id2)) { if($workshop->getId() != $ticket2->getWorkshop()->getId()) $length2--; }
-                }
-            }
-        }
-        else {
-            $ticket2 = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('subsystem' => $subsystem));
-            if($ticket2 and ($ticket2->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))){
-                $w_id2 = $workshop->getId();
-                if(isset($w_id2)) { if($workshop->getId() != $ticket2->getWorkshop()->getId()) $length2--; }
-            }
-        }
-
-        if ($length2 <= $pagination2->getFirstRow()){
-            $pagination->setTotalPagByLength($length2);
         }
 
         $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
@@ -2001,39 +1961,41 @@ class TicketController extends Controller {
         }
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
-            $subsystem = $em->getRepository('TicketBundle:Subsystem'  )->find($subsystem);
+            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
 
-        $array = array('workshop'    => $workshop,
-                       'pagination'  => $pagination,
-                       'codepartner' => $codepartner,
-                       'codeworkshop'=> $codeworkshop,
-                       'email'       => $email,
-                       'phone'       => $phone,
-                       'brand'       => $brand,
-                       'model'       => $model,
-                       'version'     => $version,
-                       'year'        => $year,
-                       'motor'       => $motor,
-                       'kw'          => $kw,
-                       'importance'  => $importance,
-                       'system'      => $system,
-                       'subsystem'   => $subsystem,
-                       'displacement'=> $displacement,
-                       'vin'         => $vin,
-                       'plateNumber' => $plateNumber,
-                       'tickets'     => $tickets,
-                       'brands'      => $brands,
-                       'systems'     => $systems,
-                       'countries'   => $countries,
-                       'importances' => $importances,
-                       'option'      => 'all',
-                       'page'        => $page,
-                       'num_rows'    => $num_rows,
-                       'country'     => 0,
-                       'inactive'    => 0,
-                       'disablePag'  => 0);
+
+        $array = array('workshop'     => $workshop,
+                       'pagination'   => $pagination,
+                       'codepartner'  => $codepartner,
+                       'codeworkshop' => $codeworkshop,
+                       'email'        => $email,
+                       'phone'        => $phone,
+                       'brand'        => $brand,
+                       'model'        => $model,
+                       'version'      => $version,
+                       'year'         => $year,
+                       'motor'        => $motor,
+                       'kw'           => $kw,
+                       'importance'   => $importance,
+                       'system'       => $system,
+                       'subsystem'    => $subsystem,
+                       'displacement' => $displacement,
+                       'vin'          => $vin,
+                       'plateNumber'  => $plateNumber,
+                       'tickets'      => $tickets,
+                       'brands'       => $brands,
+                       'systems'      => $systems,
+                       'countries'    => $countries,
+                       'importances'  => $importances,
+                       'option'       => 'all',
+                       'page'         => $page,
+                       'num_rows'     => $num_rows,
+                       'more_results' => $more_results,
+                       'country'      => 0,
+                       'inactive'     => 0,
+                       'disablePag'   => 0);
 
         if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
