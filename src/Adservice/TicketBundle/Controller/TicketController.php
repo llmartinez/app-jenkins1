@@ -1905,9 +1905,9 @@ class TicketController extends Controller {
 
         $pagination = new Pagination($page);
 
-        // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
         // Seteamos el numero de resultados que se mostraran
-        $pagination->setMaxRows(50);
+        $max_rows = 100;
+        $pagination->setMaxRows($max_rows);
         $ordered = array('e.modified_at', 'DESC');
 
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
@@ -1920,6 +1920,9 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
+
+        if($length > $max_rows) $more_results = $length-$max_rows;
+        else $more_results = 0;
 
         if($size > 0){
 
@@ -1962,35 +1965,37 @@ class TicketController extends Controller {
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
 
-        $array = array('workshop'    => $workshop,
-                       'pagination'  => $pagination,
-                       'codepartner' => $codepartner,
-                       'codeworkshop'=> $codeworkshop,
-                       'email'       => $email,
-                       'phone'       => $phone,
-                       'brand'       => $brand,
-                       'model'       => $model,
-                       'version'     => $version,
-                       'year'        => $year,
-                       'motor'       => $motor,
-                       'kw'          => $kw,
-                       'importance'  => $importance,
-                       'system'      => $system,
-                       'subsystem'   => $subsystem,
-                       'displacement'=> $displacement,
-                       'vin'         => $vin,
-                       'plateNumber' => $plateNumber,
-                       'tickets'     => $tickets,
-                       'brands'      => $brands,
-                       'systems'     => $systems,
-                       'countries'   => $countries,
-                       'importances' => $importances,
-                       'option'      => 'all',
-                       'page'        => $page,
-                       'num_rows'    => $num_rows,
-                       'country'     => 0,
-                       'inactive'    => 0,
-                       'disablePag'  => 0);
+
+        $array = array('workshop'     => $workshop,
+                       'pagination'   => $pagination,
+                       'codepartner'  => $codepartner,
+                       'codeworkshop' => $codeworkshop,
+                       'email'        => $email,
+                       'phone'        => $phone,
+                       'brand'        => $brand,
+                       'model'        => $model,
+                       'version'      => $version,
+                       'year'         => $year,
+                       'motor'        => $motor,
+                       'kw'           => $kw,
+                       'importance'   => $importance,
+                       'system'       => $system,
+                       'subsystem'    => $subsystem,
+                       'displacement' => $displacement,
+                       'vin'          => $vin,
+                       'plateNumber'  => $plateNumber,
+                       'tickets'      => $tickets,
+                       'brands'       => $brands,
+                       'systems'      => $systems,
+                       'countries'    => $countries,
+                       'importances'  => $importances,
+                       'option'       => 'all',
+                       'page'         => $page,
+                       'num_rows'     => $num_rows,
+                       'more_results' => $more_results,
+                       'country'      => 0,
+                       'inactive'     => 0,
+                       'disablePag'   => 0);
 
         if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
