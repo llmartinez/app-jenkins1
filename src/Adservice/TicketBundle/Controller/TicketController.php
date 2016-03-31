@@ -1860,9 +1860,20 @@ class TicketController extends Controller {
      */
     public function findAssessorTicketByBMVAction($page=null)
     {
+
+        /***********************************************************************************************************************
+         * TODO:
+         * En una nueva version (2.8) habría que separar esta funcion en otras 2,
+         *  en función de si se ha escogido un taller en la busqueda o no
+         * (La comprobacion "$workshop->getId();" muestra menos registros que los de $pagination, y hace fallar la paginación)
+         * -- QF:
+         *     - De momento se mostrará un listado fijo ($max_rows = 100;) y se ocultará la paginación,
+         *       a fin de evitar registros que no se mostraban al estar en una segunda página de $pagination.
+         *
+         ***********************************************************************************************************************/
         $em = $this->getDoctrine()->getEntityManager();
-        $security   = $this->get('security.context');
-        $request    = $this->getRequest();
+        $security = $this->get('security.context');
+        $request  = $this->getRequest();
         $params = array();
 
         // PAGE
@@ -1872,33 +1883,33 @@ class TicketController extends Controller {
         // WORKSHOP
         $codepartner  = $request->get('ftbmv_codepartner');
         $codeworkshop = $request->get('ftbmv_codeworkshop');
-        $email = $request->get('ftbmv_email');
-        $phone = $request->get('ftbmv_phone');
+        $email        = $request->get('ftbmv_email');
+        $phone        = $request->get('ftbmv_phone');
 
         $workshop = new Workshop();
 
         if (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != ''){
 
-            $partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => $codepartner));
+            $partner  = $em->getRepository('PartnerBundle:Partner'  )->findOneBy(array('code_partner'  => $codepartner));
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'partner' => $partner->getId()));
         }
 
         // CAR
-        $brand = $request->request->get('new_car_form_brand');
-        $model = $request->request->get('new_car_form_model');
-        $version = $request->request->get('new_car_form_version');
-        $year  = $request->get('new_car_form_year');
-        $motor = $request->get('new_car_form_motor');
-        $kw = $request->request->get('new_car_form_kW');
-        $importance = $request->request->get('new_car_form_importance');
-        $system = $request->request->get('id_system');
-        $subsystem = $request->request->get('new_car_form_subsystem');
+        $brand        = $request->request->get('new_car_form_brand');
+        $model        = $request->request->get('new_car_form_model');
+        $version      = $request->request->get('new_car_form_version');
+        $year         = $request->request->get('new_car_form_year');
+        $motor        = $request->request->get('new_car_form_motor');
+        $kw           = $request->request->get('new_car_form_kW');
+        $importance   = $request->request->get('new_car_form_importance');
+        $system       = $request->request->get('id_system');
+        $subsystem    = $request->request->get('new_car_form_subsystem');
         $displacement = $request->request->get('new_car_form_displacement');
-        $vin = $request->request->get('new_car_form_vin');
-        $plateNumber = $request->request->get('new_car_form_plateNumber');
-        $num_rows = $request->request->get('slct_numRows');
-        if(!isset($num_rows)) $num_rows = 10;
+        $vin          = $request->request->get('new_car_form_vin');
+        $plateNumber  = $request->request->get('new_car_form_plateNumber');
+        $num_rows     = $request->request->get('slct_numRows');
 
+        if(!isset($num_rows)) $num_rows = 10;
         if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
@@ -1924,13 +1935,13 @@ class TicketController extends Controller {
         if($length > $max_rows) $more_results = $length-$max_rows;
         else $more_results = 0;
 
-        if($size > 0){
+        if($size > 0) {
 
-            for ($i=0; $i<$size; $i++){
+            for ($i=0; $i<$size; $i++) {
 
-                $id     = $cars[$key[$i]]->getId();
-                if( $subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
-                else                 $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id,'subsystem' => $subsystem));
+                $id = $cars[$key[$i]]->getId();
+                if($subsystem == 0 or $subsystem == '') $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
+                else $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id,'subsystem' => $subsystem));
 
                 if(sizeof($ticket) >= 1) {
                     foreach ($ticket as $tck) {
@@ -1938,10 +1949,15 @@ class TicketController extends Controller {
                         if($tck and ($tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))){
                             $w_id = $workshop->getId();
 
+                            // Si esta definido el taller añadimos al array solo las que coinciden con el taller
                             if(isset($w_id)) {
                                 if($workshop->getId() == $tck->getWorkshop()->getId()) {
                                     $tickets[] = $tck;
                                 }
+                            }
+                            // Sino añadimos todos los tickets independientemente del taller que sean
+                            else {
+                                $tickets[] = $tck;
                             }
                         }
                     }
@@ -1949,22 +1965,19 @@ class TicketController extends Controller {
             }
         }
 
-        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
-        $brands    = $b_query->getResult();
-        $systems    = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-        $countries  = $em->getRepository('UtilBundle:Country')->findAll();
+        $b_query     = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brands      = $b_query->getResult();
+        $countries   = $em->getRepository('UtilBundle:Country')->findAll();
+        $systems     = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
 
-        if(isset($model) and $model != '0') $model = $em->getRepository('CarBundle:Model'  )->find($model);
-        if(isset($version) and $version != '0'){
-            $version = $em->getRepository('CarBundle:Version'  )->findOneById($version);
-        }
+        if(isset($model)   and $model   != '0') $model   = $em->getRepository('CarBundle:Model'  )->find($model);
+        if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
-
 
         $array = array('workshop'     => $workshop,
                        'pagination'   => $pagination,
