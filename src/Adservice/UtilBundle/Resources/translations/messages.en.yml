@@ -352,7 +352,6 @@ VARIOS:							"Various"
 "VARIOS ":						"Various"
 VARIOS CARROCERIA:				"Various Body"
 
-
 #PARTNER
 partner.delete:			 "Delete Partner"
 partner.delete.confirm:	 "Are you sure you want to delete this Partner?"
@@ -510,6 +509,7 @@ search_by_car: 				  "Search by car"
 clear_filters:				  "Clear filters"
 
 sentence.default:			  "Default sentences..."
+showing_max_results: 		  "There are more results than the displayed information, please shorten the search to see more specific results."
 
 #POST
 reply:						  "Answer"

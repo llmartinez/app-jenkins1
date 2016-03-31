@@ -352,7 +352,6 @@ VARIOS:							"Vários"
 "VARIOS ":						"Vários"
 VARIOS CARROCERIA:				"Vários Carroçaria"
 
-
 #PARTNER
 partner.delete:			 "Apagar Sócio"
 partner.delete.confirm:	 "Tem a certeza de que pretende eliminar este sócio?"
@@ -510,6 +509,7 @@ search_by_car: 				  "Procurar por veículo"
 clear_filters:				  "Limpar filtros"
 
 sentence.default:			  "Frases predefinidas..."
+showing_max_results: 		  "Há mais resultados mostrados, encurta a busca para ver resultados mais concretos."
 
 #POST
 reply:						  "Responder"
@@ -534,6 +534,7 @@ numticketsbysystem: 		  "Número de talões por sistema/subsistema"
 numticketsbybrand: 			  "Número de talões por marca"
 numticketsbymodel: 			  "Número de talões por modelo"
 numticketsbyfabyear: 		  "Número de talões por ano de fabrico"
+numticketsbymonth: 		   	  "Número de talões de oficinas por mês"
 statistic.general:			  "Estatísticas gerais"
 statistic.tickets:			  "Estatísticas de talões"
 statistic.workshops:		  "Estatísticas de oficinas"
