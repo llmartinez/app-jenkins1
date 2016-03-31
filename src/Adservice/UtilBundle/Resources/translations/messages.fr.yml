@@ -510,6 +510,7 @@ search_by_car: 				  "Rechercher par voitures"
 clear_filters:				  "Effacer les filtres"
 
 sentence.default:			  "Requêtes par défaut..."
+showing_max_results: 		  "Il y a plus de résultas que l'information affichée, abréger la recherche pour voir des résultats plus concrets."
 
 #POST
 reply:						  "Répondre"
