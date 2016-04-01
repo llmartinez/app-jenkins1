@@ -142,6 +142,7 @@ class WorkshopController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
+
             $partner = $workshop->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
@@ -219,10 +220,10 @@ class WorkshopController extends Controller {
                     $password = $encoder->encodePassword($newUser->getPassword(), $salt);
                     $newUser->setPassword($password);
                     $newUser->setSalt($salt);
+
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
-
 
                     // $mail = $newUser->getEmail1();
                     $mail = $this->container->getParameter('mail_db');
@@ -254,6 +255,7 @@ class WorkshopController extends Controller {
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 } else {
+
                     if ($findPhone[0]['1'] > 0) {
                         $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber1()
                                 . ' -> ' . $this->get('translator')->trans('workshop')
