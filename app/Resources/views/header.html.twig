@@ -8,7 +8,12 @@
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
-                            <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}">
+                            {% if     app.session.locale == 'es' %}<img class="img_logo" src="{{ asset('bundles/util/images/icon/logo_ES.png') }}">
+                            {% elseif app.session.locale == 'pt' %}<img class="img_logo" src="{{ asset('bundles/util/images/icon/logo_ES.png') }}">
+                            {% elseif app.session.locale == 'en' %}<img class="img_logo" src="{{ asset('bundles/util/images/icon/logo_EN.png') }}">
+                            {% elseif app.session.locale == 'fr' %}<img class="img_logo" src="{{ asset('bundles/util/images/icon/logo_FR.png') }}">
+                            {% else                              %}<img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}">
+                            {% endif %}
                         </td>
                         <td align="right">
                             <!-- Split button -->
