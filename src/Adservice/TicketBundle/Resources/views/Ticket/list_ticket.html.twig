@@ -1,9 +1,10 @@
 
-    <legend class="grid w50"> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
+    <legend class="grid w100" style="clear: both;"> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
 
         <input type="hidden" id='slct_historyTickets' value={{ option }}>
 
-        {# Si encuentra un ticket #}
+        {% include 'TicketBundle:Includes:_filters_workshop_ticket.html.twig' %}
+
         <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
             <thead>
                 <tr>
@@ -21,7 +22,7 @@
             <tbody id="ticketBody">
                 {% for ticket in tickets %}
                     {% set ticket_info = '' %}
-                    {#{% if ticket.assignedTo != null %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}#}
+
                     <tr id="ticketRow" title="{{ticket_info}}">
                         <td id="id_ticket">{{ ticket.id         }}</td>
 
