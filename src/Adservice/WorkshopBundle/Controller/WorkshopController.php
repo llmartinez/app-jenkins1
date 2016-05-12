@@ -123,7 +123,8 @@ class WorkshopController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
-        } elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }
+        elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) {
@@ -170,6 +171,10 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
+
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -248,7 +253,6 @@ class WorkshopController extends Controller {
                         /* Dejamos el locale tal y como estaba */
                         $request->setLocale($locale);
                     }
-
 
                     $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username . ' ' . $this->get('translator')->trans('with_password') . ': ' . $pass;
                     $this->get('session')->setFlash('alert', $flash);
@@ -383,6 +387,9 @@ class WorkshopController extends Controller {
                     }
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
 

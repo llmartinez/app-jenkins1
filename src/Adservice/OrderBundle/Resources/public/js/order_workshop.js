@@ -29,6 +29,35 @@
             fill_code_workshop($(this).val());
         });
 
+        // CHECKS
+        enable_checks($('#workshopOrder_newOrder_haschecks').is(':checked'));
+        enable_checks($('#workshopOrder_editOrder_haschecks').is(':checked'));
+
+        $('#workshopOrder_newOrder_haschecks').click(function(){
+
+            var checked = $(this).is(':checked');
+            $('#workshopOrder_newOrder_numchecks' ).val('');
+            enable_checks(checked);
+        });
+
+        $('#workshopOrder_editOrder_haschecks').click(function(){
+
+            var checked = $(this).is(':checked');
+            $('#workshopOrder_editOrder_numchecks' ).val('');
+            enable_checks(checked);
+        });
+
+        function enable_checks(bool) {
+            if(bool == true) {
+                $('#workshopOrder_newOrder_numchecks' ).removeAttr("disabled");
+                $('#workshopOrder_editOrder_numchecks' ).removeAttr("disabled");
+            }else{
+                $('#workshopOrder_newOrder_numchecks' ).attr("disabled", "disabled");
+                $('#workshopOrder_editOrder_numchecks' ).attr("disabled", "disabled");
+            }
+        }
+        // END CHECKS
+
         $('#btn_create').click(function() {
             $("input[id*='number_']").each(function() {
                 if ( isNaN($(this).val())) {
@@ -51,7 +80,7 @@
                 }
             });
         });
-        
+
         $('#workshopOrder_newOrder_cif').blur(function() {
             var cif = $('#workshopOrder_newOrder_cif').val();
             var text_error = $('#exist_cif').val();
@@ -64,19 +93,19 @@
                     if(find == true){
                         $('.error_cif').empty();
                         $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
-                    }    
+                    }
                     else{
                         $('.error_cif').empty();
                     }
-                        
+
                 },
                 error: function () {
                     console.log("Error loading versions...");
                 }
             });
         });
-        
-        
+
+
         $('#workshopOrder_editOrder_cif').blur(function() {
             var cif = $('#workshopOrder_editOrder_cif').val();
             var text_error = $('#exist_cif').val();
@@ -89,16 +118,16 @@
                     if(find == true){
                         $('.error_cif').empty();
                         $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
-                    }    
+                    }
                     else{
                         $('.error_cif').empty();
                     }
-                        
+
                 },
                 error: function () {
                     console.log("Error loading versions...");
                 }
             });
         });
-       
+
     });

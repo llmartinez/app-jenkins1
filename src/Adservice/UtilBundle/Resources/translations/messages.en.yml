@@ -404,6 +404,8 @@ workshop.cif_exist: "The tax ID number already exists"
 reactivation-request:           "Request workshop reactivation"
 numTickets:				 "Number of tickets"
 reply_inactive: 		 "You cannot reply to this ticket, your account is not active"
+haschecks:				 "With checks"
+numchecks:				 "Num. Checks"
 
 #USER
 user.delete:			 "Delete User"

@@ -405,6 +405,8 @@ workshop.cif_exist:      "Le numéro de TVA existe déjà"
 reactivation-request:    "Demander la réactivation de l'atelier"
 numTickets:				 "Nombre de tickets"
 reply_inactive: 		 "Vous ne pouvez pas répondre à ce ticket, vous n'êtes pas inscrit."
+haschecks:				 "Avec chéquiers"
+numchecks:				 "Nombre de chéquiers"
 
 #USER
 user.delete:			 "Effacer utilisateur"

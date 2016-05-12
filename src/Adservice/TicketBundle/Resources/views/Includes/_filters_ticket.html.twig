@@ -4,10 +4,18 @@
         {# New Ticket #}
         {% if workshop.active == 1 %}
 
-            {% if is_granted('ROLE_SUPER_ADMIN')%}
+            {% if workshop.haschecks == true and workshop.numchecks < 1 %}
+                <button class="btn btn-disabled pull-right mb15" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+            {% elseif is_granted('ROLE_SUPER_ADMIN')%}
                 <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
             {% elseif workshop.country == app.security.getToken().getUser().getCountry() %}
                 <a class="btn btn-primary fr asr_btn" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            {% endif %}
+
+            {% if workshop.haschecks == true %}
+            <div class="grid w15 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+            </div>
             {% endif %}
 
         {% else %}

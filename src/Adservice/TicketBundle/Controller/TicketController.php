@@ -751,6 +751,12 @@ class TicketController extends Controller {
 
                                             if($exist_car == '0') {
 
+                                                if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null) {
+                                                    $numchecks = $workshop->getNumChecks();
+                                                    $workshop->setNumChecks($numchecks - 1);
+                                                    UtilController::saveEntity($em, $workshop, $user);
+                                                }
+
                                                 if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
                                                     $car = $exist_vin;
                                                 }

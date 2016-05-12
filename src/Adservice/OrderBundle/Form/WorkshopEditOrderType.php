@@ -47,6 +47,8 @@ class WorkshopEditOrderType extends AbstractType
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
+            ->add('haschecks', 'checkbox', array('required' => false))
+            ->add('numchecks', 'integer', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
              //CONTACT

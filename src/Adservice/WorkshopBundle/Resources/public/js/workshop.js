@@ -25,11 +25,12 @@ $(document).ready(function() {
     });
 
     enable_endtest($('#adservice_workshopbundle_workshoptype_test').is(':checked'));
+    enable_checks($('#adservice_workshopbundle_workshoptype_haschecks').is(':checked'));
 
     // DATE TEST
     $('#adservice_workshopbundle_workshoptype_test').click(function(){
 
-        var checked = $('#adservice_workshopbundle_workshoptype_test').is(':checked');
+        var checked = $(this).is(':checked');
 
         if(checked) {
             var d = new Date();
@@ -53,60 +54,66 @@ $(document).ready(function() {
         enable_endtest(checked);
     });
 
-        $('#btn_create').click(function() {
-            $("input[id*='number_']").each(function() {
-                if ( isNaN($(this).val())) {
-                    $(this).css('border-color','#FF0000');
-                    alert($("#isNaN").val());
-                    event.preventDefault();
-                }else{
-                    $(this).css('border-color','#ccc');
-                }
-            });
-        });
-        $('#btn_edit').click(function() {
-            $("input[id*='number_']").each(function() {
-                if ( isNaN($(this).val())) {
-                    $(this).css('border-color','#FF0000');
-                    alert($("#isNaN").val());
-                    event.preventDefault();
-                }else{
-                    $(this).css('border-color','#ccc');
-                }
-            });
-        });
-       
+    // CHECKS
+    $('#adservice_workshopbundle_workshoptype_haschecks').click(function(){
 
-       
-        $('#adservice_workshopbundle_workshoptype_cif').blur(function() {
-            var cif = $('#adservice_workshopbundle_workshoptype_cif').val();
-            var w_cif = $('#workshop_cif').val()
-            var text_error = $('#exist_cif').val();
-            if(cif != w_cif){
-                $.ajax({
-                   type: "POST",
-                   url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
-                   dataType: "json",
-                   success: function (data) {
-                       var find = JSON.parse(data);
-                       if(find == true){
-                           $('.error_cif').empty();
-                           $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
-                       }    
-                       else{
-                           $('.error_cif').empty();
-                       }
+        var checked = $(this).is(':checked');
+        $('#adservice_workshopbundle_workshoptype_numchecks' ).val('');
+        enable_checks(checked);
+    });
 
-                   },
-                   error: function () {
-                       console.log("Error loading versions...");
+    $('#btn_create').click(function() {
+        $("input[id*='number_']").each(function() {
+            if ( isNaN($(this).val())) {
+                $(this).css('border-color','#FF0000');
+                alert($("#isNaN").val());
+                event.preventDefault();
+            }else{
+                $(this).css('border-color','#ccc');
+            }
+        });
+    });
+    $('#btn_edit').click(function() {
+        $("input[id*='number_']").each(function() {
+            if ( isNaN($(this).val())) {
+                $(this).css('border-color','#FF0000');
+                alert($("#isNaN").val());
+                event.preventDefault();
+            }else{
+                $(this).css('border-color','#ccc');
+            }
+        });
+    });
+
+    $('#adservice_workshopbundle_workshoptype_cif').blur(function() {
+        var cif = $('#adservice_workshopbundle_workshoptype_cif').val();
+        var w_cif = $('#workshop_cif').val()
+        var text_error = $('#exist_cif').val();
+        if(cif != w_cif){
+            $.ajax({
+               type: "POST",
+               url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+               dataType: "json",
+               success: function (data) {
+                   var find = JSON.parse(data);
+                   if(find == true){
+                       $('.error_cif').empty();
+                       $('.error_cif').append('<p id="lbl_error">'+ text_error +'</p>');
                    }
-               });
-           }
-           else{
-               $('.error_cif').empty();
-           }
-        });
+                   else{
+                       $('.error_cif').empty();
+                   }
+
+               },
+               error: function () {
+                   console.log("Error loading versions...");
+               }
+           });
+       }
+       else{
+           $('.error_cif').empty();
+       }
+    });
 });
 
 /**
@@ -128,5 +135,13 @@ function enable_endtest(bool) {
         $('#adservice_workshopbundle_workshoptype_endtest_at_month' ).attr("disabled", "disabled");
         $('#adservice_workshopbundle_workshoptype_endtest_at_day'   ).attr("disabled", "disabled");
         $('#adservice_workshopbundle_workshoptype_endtest_at_year'  ).attr("disabled", "disabled");
+    }
+}
+
+function enable_checks(bool) {
+    if(bool == true) {
+        $('#adservice_workshopbundle_workshoptype_numchecks' ).removeAttr("disabled");
+    }else{
+        $('#adservice_workshopbundle_workshoptype_numchecks' ).attr("disabled", "disabled");
     }
 }

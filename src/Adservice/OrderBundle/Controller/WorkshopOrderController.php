@@ -207,6 +207,9 @@ class WorkshopOrderController extends Controller {
                     $shop = $form['shop']->getClientData();
                     if($shop == 0) { $workshopOrder->setShop(null); }
 
+                    if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                    if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+
                     UtilController::saveEntity($em, $workshopOrder, $user);
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -366,6 +369,9 @@ class WorkshopOrderController extends Controller {
                 // Set default shop to NULL
                 $shop = $form['shop']->getClientData();
                 if($shop == 0) { $workshopOrder->setShop(null); }
+
+                if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
 
                 UtilController::saveEntity($em, $workshopOrder, $user);
 
@@ -965,6 +971,8 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setAddress       ($workshop->getAddress());
         $workshopOrder->setPostalCode    ($workshop->getPostalCode());
         $workshopOrder->setAdServicePlus ($workshop->getAdServicePlus());
+        $workshopOrder->setHasChecks     ($workshop->getHasChecks());
+        $workshopOrder->setNumChecks     ($workshop->getNumChecks());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshopOrder->setCreatedBy($workshopOrder->getCreatedBy());
@@ -1017,6 +1025,8 @@ class WorkshopOrderController extends Controller {
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
         $workshop->setAdServicePlus ($workshopOrder->getAdServicePlus());
+        $workshop->setHasChecks     ($workshopOrder->getHasChecks());
+        $workshop->setNumChecks     ($workshopOrder->getNumChecks());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshop->setCreatedBy($workshopOrder->getCreatedBy());

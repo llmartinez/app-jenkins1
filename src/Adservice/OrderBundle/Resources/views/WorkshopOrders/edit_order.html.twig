@@ -44,6 +44,14 @@
             <div class="col-xs-2 col-md-2">
                 <label>{% trans %} typology {% endtrans %} *</label> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
             </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} ad_service_plus {% endtrans %}</label>
+                {{ form_widget(form.ad_service_plus) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} test {% endtrans %}</label>
+                {{ form_widget(form.test) }}
+            </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2">
@@ -62,19 +70,17 @@
                 <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
                 {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
             </div>
-            <div class="col-xs-6 col-md-6">
-                <div class="col-xs-6 col-md-6 form-group">
-                    <label>{% trans %} ad_service_plus {% endtrans %}</label>
-                    {{ form_widget(form.ad_service_plus) }}
-                </div>
-                <div class="col-xs-6 col-md-6 form-group">
-                    <label>{% trans %} test {% endtrans %}</label>
-                    {{ form_widget(form.test) }}
-                </div>
-                <div class="col-xs-12 col-md-12 form-group">
-                    {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-                    {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
-                </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="workshopOrder_editOrder_haschecks">{% trans %} haschecks {% endtrans %}</label>
+                {{ form_widget(form.haschecks) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="workshopOrder_editOrder_numchecks">{% trans %} numchecks {% endtrans %}</label>
+                {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+            </div>
+            <div class="col-xs-12 col-md-12 form-group">
+                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             </div>
         </div>
         <legend>{% trans %} contact {% endtrans %}</legend>
