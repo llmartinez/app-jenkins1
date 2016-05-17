@@ -168,20 +168,6 @@ class Workshop {
     private $conflictive;
 
     /**
-     * @var boolean $buyedchecks
-     *
-     * @ORM\Column(name="buyed_checks", type="integer")
-     */
-    private $buyedchecks;
-
-    /**
-     * @var boolean $remainingchecks
-     *
-     * @ORM\Column(name="remaining_checks", type="integer")
-     */
-    private $remainingchecks;
-
-    /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosis_machine",
      *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},

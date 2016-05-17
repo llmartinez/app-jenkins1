@@ -17,7 +17,7 @@
                     {% endif %}
         {% endif %}
 
-         {% if ( is_granted('ROLE_ADMIN')) or post.id == last_post.id and post.createdBy == app.security.getToken().getUser() %}
+         {% if (is_granted('ROLE_ADMIN')) or post.id == last_post.id and post.createdBy == app.security.getToken().getUser() and ticket.status != 'closed' %}
             <a href="{{ path("post_edit", { 'id': post.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
         {% endif %}
         <a style="color:gray; float:right; text-decoration:none;"> {{ post.created_at | date("H:i (d/m/y) ") }} </a>
