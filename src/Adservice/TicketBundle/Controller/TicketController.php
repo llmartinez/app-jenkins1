@@ -825,7 +825,7 @@ class TicketController extends Controller {
                                                                     .' ('.$trans->trans('ticket').' #'.$existTicket[0]->getId().')');
 
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
-                         }
+                        }
 
                         $mail = $ticket->getWorkshop()->getEmail1();
                         $pos = strpos($mail, '@');
@@ -845,6 +845,16 @@ class TicketController extends Controller {
                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+
+                            // if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
+                            // {
+                            //     $mail_centralita = $this->container->getParameter('mail_centralita');
+                            //     $mailer->setTo($mail_centralita);
+                            //     $mailer->setSubject('ticket: '.$ticket->getId());
+                            //     $date = date("Y-m-d H:i:s");
+                            //     $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
+                            //     $mailer->sendMailToSpool();
+                            // }
 
                             // Dejamos el locale tal y como estaba
                             $request->setLocale($locale);
@@ -1157,7 +1167,7 @@ class TicketController extends Controller {
                                 if(isset($subsystem )) $ticket->setSubsystem($subsystem);
                             }
                         }
-   
+
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
                         if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }

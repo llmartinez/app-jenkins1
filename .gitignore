@@ -15,6 +15,7 @@ vendor.zip
 /web/css/*
 /web/js/*
 /web/uploads/*
+/web/help/*
 /data
 
 # -- Capifony ---
