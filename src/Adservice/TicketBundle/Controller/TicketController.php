@@ -1105,8 +1105,15 @@ class TicketController extends Controller {
                 $id_subsystem = $ticket->getSubsystem()->getId();
                 $id_system = $ticket->getSubsystem()->getSystem()->getId();
             }else {
-                $id_system = '';
-                $id_subsystem = '';
+                $new_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
+                if($new_subsystem != null){
+                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($new_subsystem);
+                    $id_system = $subsystem->getSystem()->getId();
+                    $id_subsystem = $new_subsystem;
+                }else{
+                    $id_system = '';
+                    $id_subsystem = '';
+                }
             }
 
             $array = array( 'formP'     => $formP->createView(),
@@ -1150,6 +1157,7 @@ class TicketController extends Controller {
                                 if(isset($subsystem )) $ticket->setSubsystem($subsystem);
                             }
                         }
+   
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
                         if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
