@@ -1157,7 +1157,7 @@ class TicketController extends Controller {
                                 if(isset($subsystem )) $ticket->setSubsystem($subsystem);
                             }
                         }
-
+   
                         // Controla si se ha subido un fichero erroneo
                         $file = $document->getFile();
                         if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
