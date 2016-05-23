@@ -796,10 +796,10 @@ class ImportController extends Controller
         $user->setFax($fax);
         $user->setEmail1($email1);
         $user->setEmail2($email1);
-        $user->addRole 		($role);
-        $user->setRegion 	($region);
-        $user->setWorkshop 	($workshop);
-        $user->setCountry 	($country);
+        $user->addRole ($role);
+        $user->setRegion ($region);
+        $user->setWorkshop ($workshop);
+        $user->setCountry ($country);
         $user->setCreatedAt(new \DateTime('today'));
         $user->setModifiedAt(new \DateTime('today'));
         $user->setModifiedBy($admin);
@@ -1038,9 +1038,9 @@ class ImportController extends Controller
 			$em->persist($user);
 			$em->flush();
 
-			$this_array = array('Usuario' 		=> $user->getUsername(),
-							 	'Contraseña' 	=> $password,
-							 	'Email' 		=> $user->getEmail1(),
+			$this_array = array('Usuario' 	 => $user->getUsername(),
+							 	'Contraseña' => $password,
+							 	'Email' 	 => $user->getEmail1(),
 							   );
 			if($type == 'partner')
 			{
@@ -1066,7 +1066,7 @@ class ImportController extends Controller
 
 			// Generarando excel usuarios
 			$response = $this->doExcelCredentialsAction($type, $array);
-			$session->set('response' ,	$response);
+			$session->set('response', $response);
 
  			if(isset($response)) {
  				return $response;

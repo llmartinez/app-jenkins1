@@ -225,6 +225,7 @@ class WorkshopController extends Controller {
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
+                // TO PROD!!!!!
                     // $mail = $newUser->getEmail1();
                     $mail = $this->container->getParameter('mail_db');
                     $pos = strpos($mail, '@');
@@ -350,7 +351,7 @@ class WorkshopController extends Controller {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
 
-            if ($form->isValid()) {
+            //if ($form->isValid()) {
 
                 /* CHECK CODE WORKSHOP NO SE REPITA */
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $workshop->getCodeWorkshop()));
@@ -414,7 +415,7 @@ class WorkshopController extends Controller {
                     }
                     $this->get('session')->setFlash('error', $flash);
                 }
-            }
+            //}
         }
 
         $country = $workshop->getCountry()->getId();
