@@ -763,11 +763,12 @@ class TicketController extends Controller {
                                                 {
                                                     $ticket->setWorkshop($workshop);
                                                     $ticket->setAssignedTo($user);
+                                                    $ticket->setPending(0);
                                                 }else{
                                                     $ticket->setWorkshop($user->getWorkshop());
+                                                    $ticket->setPending(1);
                                                 }
                                                 $ticket->setStatus($status);
-                                                $ticket->setPending(1);
                                                 $ticket->setCar($car);
                                                 UtilController::saveEntity($em, $ticket, $user);
 
