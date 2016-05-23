@@ -15,11 +15,28 @@
         });
         $('#slct_country').change(function() {
             var country = $(this).val();
-            var role = $('#slct_role').val()
+            var role = $('#slct_role').val();
             var route = 'user_list';
             var locale = $(document).find("#data_locale").val();
             var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
             window.open(url, "_self");
+        });
+        $('#btn_search_field').click(function() {
+            var route = 'user_list';
+            var role = $('#slct_role').val();
+            var country = $('#slct_country').val();
+            var term = $('#flt_search_term').val();
+            var field = $('#flt_search_field').val();
+
+            if(role == null || role == "") role = '0';
+            if(country == null || country == "") country = '0';
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role, term: term, field: field });
+
+                window.open(url, "_self");
         });
 
         $('#btn_create').click(function() {
@@ -31,23 +48,6 @@
                 return false;
             }
         });
-
-        //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        // $('#btn_search_field').click(function() {
-
-        //     var route   = $('#route').val();
-        //     var term = $('#flt_search_term').val();
-
-        //     if(term == null || term == "") term = '0';
-
-        //     var field = $('#flt_search_field').val();
-        //     if(field == null || field == "") field = '0';
-
-        //     var locale = $(document).find("#data_locale").val();
-        //     var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: w_idpartner, w_id: w_id, country: country, partner: partner, status: status, term: term, field: field });
-
-        //         window.open(url, "_self");
-        // });
     });
 
 /**

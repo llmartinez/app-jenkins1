@@ -10,6 +10,10 @@ help:
     pattern: /help/
     defaults: { _controller: UtilBundle:Default:help }
 
+ayuda:
+    pattern: /ayuda/
+    defaults: { _controller: UtilBundle:Default:help }
+
 
 #############################
 #   APDO. FILE              #

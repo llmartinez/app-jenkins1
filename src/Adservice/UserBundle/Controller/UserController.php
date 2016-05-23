@@ -146,7 +146,7 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $country=0, $option=null) {
+    public function userListAction($page=1, $country=0, $option='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -172,7 +172,18 @@ class UserController extends Controller {
             }
         }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-        if($option == null or $option == 'all' or $option == 'none'){
+        if ($term != '0' and $field != '0') {
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'mail') {
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'user') {
+                $params[] = array('username', " LIKE '%" . $field . "%'");
+            }
+        }
+
+        if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
                 $role_id  = 'none';
@@ -219,6 +230,8 @@ class UserController extends Controller {
                                                                         'countries'              => $countries,
                                                                         'country'                => $country,
                                                                         'option'                 => $role_id,
+                                                                        'term'                   => $term,
+                                                                        'field'                  => $field,
                                                                        ));
     }
 
