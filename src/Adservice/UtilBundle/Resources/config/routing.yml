@@ -6,6 +6,11 @@ changeLanguage:
     pattern: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
 
+help:
+    pattern: /help/
+    defaults: { _controller: UtilBundle:Default:help }
+
+
 #############################
 #   APDO. FILE              #
 #############################
