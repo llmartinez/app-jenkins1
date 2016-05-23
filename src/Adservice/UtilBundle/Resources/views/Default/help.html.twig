@@ -7,9 +7,18 @@
 		<li class="active">{% trans %} help {% endtrans %}</li>
 	</ol>
 
-    <p><a href="http://adserviceticketing.com/uploads/help/manual-{{ app.session.locale }}.pdf" target="_blank">{% trans %}help.manual{% endtrans %}</a></p>
+	<h1 class="tc">{% trans %}help.adservice{% endtrans %}</h1>
 
-    <p><a href="#" target="_blank">{% trans %}help.video{% endtrans %}</a></p>
+	<br>
+	<div class="tc">
+    	<h2>
+    	{#<a href="http://adserviceticketing.com/uploads/help/manual-{{ app.session.locale }}.pdf" target="_blank">{% trans %}help.manual{% endtrans %}</a>#}
+    		<a href="http://adserviceticketing.com/uploads/help/manual-es.pdf" target="_blank">{% trans %}help.manual{% endtrans %}</a>
+    	</h2>
+    </div>
+	<br>
+
+    <div class="tc">{% trans %}help.video{% endtrans %}</div>
 
 {% endblock %}
 

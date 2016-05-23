@@ -719,6 +719,11 @@ _mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidencias"
 
+help:			"Ayuda"
+help.adservice: "Ayuda ADService"
+help.manual: 	"Consulta el Manual"
+help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/6HGiUhddNVM" frameborder="0" allowfullscreen></iframe>'
+
 error: "Se ha producido un error"
 back_app:  "Volver a la aplicación"
 

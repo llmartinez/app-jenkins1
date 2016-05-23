@@ -719,6 +719,11 @@ _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans c
 #HISTORICO
 lock.list_incidences: 	"Historique des Incidents"
 
+help:			"Aider"
+help.adservice: "Aider Assistance Diag 24"
+help.manual: 	"Consultez le manuel"
+help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/6HGiUhddNVM" frameborder="0" allowfullscreen></iframe>'
+
 error: "Une erreur s’est produite"
 back_app:  "Revenir à l’application"
 
