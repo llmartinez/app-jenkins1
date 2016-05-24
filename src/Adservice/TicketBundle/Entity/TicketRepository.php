@@ -239,7 +239,7 @@ class TicketRepository extends EntityRepository
                 if ($w_cif         != "") {  $where .= "AND w.cif like '%".$w_cif."%' "; }
                 if ($w_email       != "") {  $where .= "AND w.email_1 like '%".$w_email."%' OR w.email_2 like '%".$w_email."%' "; }
                 if ($w_tel         != "") {  $where .= "AND (w.phone_number_1 like '%".$w_tel."%' OR w.phone_number_2 like '%".$w_tel."%'
-                                                        OR  w.movile_number_1 like '%".$w_tel."%' OR w.movile_number_2 like '%".$w_tel."%')"; }
+                                                        OR  w.mobile_number_1 like '%".$w_tel."%' OR w.mobile_number_2 like '%".$w_tel."%')"; }
                 if ($w_region      != "") {  $where .= "AND w.region like '%".$w_region."%' "; }
 
                 //Crea la consulta

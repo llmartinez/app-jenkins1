@@ -1,0 +1,26 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+	<ol class="breadcrumb">
+		<li class="active"><a href="{{ path("_login")}}">{% trans %} home {% endtrans %}</a></li>
+		<li class="active">{% trans %} help {% endtrans %}</li>
+	</ol>
+
+	<h1 class="tc">{% trans %}help.adservice{% endtrans %}</h1>
+
+	<br>
+	<div class="tc">
+    	<h2>
+    	{#<a href="http://adserviceticketing.com/uploads/help/manual-{{ app.session.locale }}.pdf" target="_blank">{% trans %}help.manual{% endtrans %}</a>#}
+    		<a href="http://adserviceticketing.com/uploads/help/manual-es.pdf" target="_blank">{% trans %}help.manual{% endtrans %}</a>
+    	</h2>
+    </div>
+	<br>
+
+    <div class="tc">{% trans %}help.video{% endtrans %}</div>
+
+{% endblock %}
+
+
+{% block javascripts %}{{ parent() }}{% endblock %}

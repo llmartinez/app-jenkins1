@@ -67,8 +67,8 @@ blockTicket:
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
 
 closeTicket:
-    pattern:  /ticket/close/{id}
-    defaults: { _controller: TicketBundle:Ticket:closeTicket, id: null }
+    pattern:  /ticket/close/{id}/{close}
+    defaults: { _controller: TicketBundle:Ticket:closeTicket, id: null, close: '1' }
 
 editDescription:
     pattern:  /ticket/editDescription/{id}

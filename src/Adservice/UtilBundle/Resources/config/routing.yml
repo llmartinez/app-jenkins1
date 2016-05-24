@@ -6,6 +6,15 @@ changeLanguage:
     pattern: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
 
+help:
+    pattern: /help/
+    defaults: { _controller: UtilBundle:Default:help }
+
+ayuda:
+    pattern: /ayuda/
+    defaults: { _controller: UtilBundle:Default:help }
+
+
 #############################
 #   APDO. FILE              #
 #############################
@@ -51,6 +60,12 @@ get_code_workshop:
 get_id_from_code_partner:
     pattern: /getIdFromCodePartner/{code}
     defaults: { _controller: UtilBundle:Ajax:getIdFromCodePartner, code: 0 }
+    options:
+        expose: true
+
+get_country_partner:
+    pattern: /getCountryPartner/{id_partner}
+    defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
     options:
         expose: true
 

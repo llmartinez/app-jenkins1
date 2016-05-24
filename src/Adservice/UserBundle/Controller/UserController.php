@@ -44,8 +44,9 @@ class UserController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
+
         if(!isset($_SESSION['lang'])) {
-            
+
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
@@ -61,7 +62,10 @@ class UserController extends Controller {
                                                                       'country'  => $country,
                                                                       'option'   => 'assessor_pending'));
                 }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-                    $user=$country = $this->get('security.context')->getToken()->getUser();
+
+                    $user = $this->get('security.context')->getToken()->getUser();
+                    $country = $user->getCountry()->getId();
+
                     if($user->getWorkshop() != null){
                         if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
                             $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
@@ -89,16 +93,19 @@ class UserController extends Controller {
 
             return $this->redirect($currentPath);
         }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-            $user=$country = $this->get('security.context')->getToken()->getUser();
+
+            $user= $this->get('security.context')->getToken()->getUser();
+            $country= $user->getCountry()->getId();
+
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
             if($user->getWorkshop() != null){
-               
+
                 if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
                     $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
                                                                           'country'  => $country));
-                    
+
                 }
                 else{
                     $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
@@ -113,7 +120,7 @@ class UserController extends Controller {
         }
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
-        
+
     }
 
     /**
@@ -139,7 +146,7 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $country=0, $option=null) {
+    public function userListAction($page=1, $country=0, $option='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -165,7 +172,18 @@ class UserController extends Controller {
             }
         }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-        if($option == null or $option == 'all' or $option == 'none'){
+        if ($term != '0' and $field != '0') {
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'mail') {
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'user') {
+                $params[] = array('username', " LIKE '%" . $field . "%'");
+            }
+        }
+
+        if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
                 $role_id  = 'none';
@@ -212,6 +230,8 @@ class UserController extends Controller {
                                                                         'countries'              => $countries,
                                                                         'country'                => $country,
                                                                         'option'                 => $role_id,
+                                                                        'term'                   => $term,
+                                                                        'field'                  => $field,
                                                                        ));
     }
 
@@ -569,7 +589,8 @@ class UserController extends Controller {
         $not_rejected = array('action' , " != 'rejected'");
 
 
-        if    ($role == "ROLE_SUPER_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+        if    ($role == "ROLE_SUPER_AD"
+            OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
                                             $workshop_rejected[] = $by_country;
                                             $workshop_rejected[] = $rejected;
                                             $shop_rejected[]     = $by_country;

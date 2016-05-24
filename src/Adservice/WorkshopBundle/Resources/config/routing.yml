@@ -22,7 +22,6 @@ workshop_new:
 workshop_observation:
     pattern: /observation/{id}/{id_ticket}
     defaults: { _controller: WorkshopBundle:Workshop:workshopObservation }
-    
 
 ##############################
 #   APDO. RUTAS DIAGNOSIS    #

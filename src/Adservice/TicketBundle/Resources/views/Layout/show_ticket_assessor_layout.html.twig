@@ -16,7 +16,7 @@
 {% endblock  %}
 
 {% block main %}
-
+  {% set close = '0' %}
   {% set workshop = ticket.workshop %}
 
   <div class="grid-full w100">
@@ -38,7 +38,6 @@
 
       <div class="form-group">
           <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
-
               {% include 'TicketBundle:Ticket:edit_ticket_assessor_info.html.twig' %}
 
               {% include 'TicketBundle:Ticket:show_assessor_post.html.twig' %}

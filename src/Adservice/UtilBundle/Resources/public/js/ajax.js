@@ -27,11 +27,14 @@ function populate_region(route, region, city){
                 if (idx != "error") {
                     if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region)))
                     {
-                        region_edit = elm.region; city_edit = city;
+                        region_edit = elm.region;
+                        city_edit   = city;
                         $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");
                     }
                     else{
-                        if( region != 'no-region' ) { region_edit = region; city_edit = city;
+                        if( region != 'no-region' ) {
+                            region_edit = region;
+                            city_edit   = city;
                             $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
                         }
                         else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
@@ -180,7 +183,6 @@ function fill_code_workshop(id_partner){
 /**
  * Rellena el combo de los modelos segun la marca seleccionada por el usuario
  */
-
 function fill_model(model) {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text());
@@ -336,6 +338,7 @@ function fill_car_data() {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
+    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[')[1].slice(0, -1);
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
 
@@ -345,8 +348,8 @@ function fill_car_data() {
 
         $.ajax({
             type: "POST",
-            url: Routing.generate(route, {_locale: locale, id_version: id_version, motor: motor}),
-            data: {id_version: id_version, motor: motor, year: year},
+            url: Routing.generate(route, {_locale: locale, id_version: id_version, version_motor: version_motor, motor: motor}),
+            data: {id_version: id_version, version_motor: version_motor, motor: motor, year: year},
             dataType: "json",
             beforeSend: function(){ $("body").css("cursor", "progress"); },
             complete: function(){ $("body").css("cursor", "default"); },
@@ -359,8 +362,15 @@ function fill_car_data() {
                         var fin    = elm.fin.slice(0,4);
                         var fecha  = inicio+' - '+fin;
 
-                        if(year == undefined) {
-                            $('form[id=contact]').find('#new_car_form_year'    ).val(fecha      );
+                        var year_setted = $('form[id=contact]').find('#new_car_form_year').attr('value');
+
+                        if(year_setted != undefined && year_setted != ''){
+                            $('form[id=contact]').find('#new_car_form_year'    ).val(year_setted);
+                            $('form[id=contact]').find('#new_car_form_year').attr('value', '');
+                        }else{
+                            if(year == undefined) {
+                                $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
+                            }
                         }
                         $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
@@ -501,6 +511,8 @@ function fill_car_by_motor() {
 function fill_subsystem(subsystem) {
 
     var id_system = $('form[id=contact]').find('select[id=id_system]').val();
+
+    if(id_system == '0') $("#ticket_system").val();
 
     var route  = 'ticket_system';
     var locale = $(document).find("#data_locale").val();
@@ -665,6 +677,39 @@ function get_id_from_code_partner(code){
             }
             else{
                 alert($('#partner_not_found').val());
+            }
+            populate_shop();
+
+            get_country_partner(data.id);
+        },
+        error : function(){
+            console.log("Error al cargar id desde código...");
+        }
+    });
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
+ */
+function get_country_partner(id_partner){
+    var route     = 'get_country_partner';
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale, id_partner: id_partner}),
+        data        : {id_partner : id_partner},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+
+            if(data.id != 0) {
+                $('form').find('select[name*=country]').empty();
+                $('form').find('select[name*=country]').append("<option value="+data.id+" selected>"+data.name+"</option>");
+            }
+            else{
+                alert($('#bad_introduction').val());
             }
             populate_shop();
         },

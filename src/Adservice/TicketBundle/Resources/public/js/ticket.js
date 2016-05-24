@@ -37,11 +37,14 @@ $(document).ready(function() {
         $('#n_id_brand').val( $('#new_car_form_brand').val());
         $('#n_id_model').val( $('#new_car_form_model').val());
         $('#n_id_version').val( $('#new_car_form_version').val());
-        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
-        $('#n_id_importance').val( $('#new_car_form_importance').val());
+        $('#n_id_year').val( $('#new_car_form_year').val());
+        $('#n_id_motor').val( $('#new_car_form_motor').val());
+        $('#n_id_kw').val( $('#new_car_form_kw').val());
+        $('#n_id_displacement').val( $('#new_car_form_displacement').val());
         $('#n_id_vin').val( $('#new_car_form_vin').val());
         $('#n_id_plateNumber').val( $('#new_car_form_plateNumber').val());
-
+        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
+        $('#n_id_importance').val( $('#new_car_form_importance').val());
     });
 
 // $('.sendTicket').click(function() {
@@ -181,81 +184,91 @@ function search_by_bmv() {
     window.open(url, "_self");
 }
 
+    $('.img_icon.open').click(function(){
+        $(this).data('clicked', true);
+    });
+
     $('.ticketRow').click( function() {
 
-        var code_partner  = $(this).find("#workshop_code_partner").val();
-        var code_workshop = $(this).find("#workshop_code_workshop").val();
-        var name          = $(this).find("#workshop_name").val();
-        var tel           = $(this).find("#workshop_tel").val();
-        var mail          = $(this).find("#workshop_mail").val();
-        var contact       = $(this).find("#workshop_contact").val();
+        var is_clicked = $(this).find('.img_icon.open').data('clicked');
 
-        var id           = $(this).find("#ticket_id").val();
-        var id_brand     = $(this).find("#ticket_id_brand").val();
-        var brand        = $(this).find("#ticket_brand").val();
-        var id_model     = $(this).find("#ticket_id_model").val();
-        var model        = $(this).find("#ticket_model").val();
-        var id_version   = $(this).find("#ticket_id_version").val();
-        var version      = $(this).find("#ticket_version").val();
-        var id_system    = $(this).find("#ticket_id_system").val();
-        var system       = $(this).find("#ticket_system").val();
-        var id_subsystem = $(this).find("#ticket_id_subsystem").val();
-        var subsystem    = $(this).find("#ticket_subsystem").val();
-        var id_importance= $(this).find("#ticket_id_importance").val();
-        var importance   = $(this).find("#ticket_importance").val();
-        var year         = $(this).find("#ticket_year").val();
-        var motor        = $(this).find("#ticket_motor").val();
-        var kw           = $(this).find("#ticket_kw").val();
-        var displacement = $(this).find("#ticket_displacement").val();
-        var vin          = $(this).find("#ticket_vin").val();
-        var plateNumber  = $(this).find("#ticket_plateNumber").val();
-        var desc         = $(this).find("#ticket_description").val();
-        var date         = $(this).find("#ticket_date").val();
-        var sol          = $(this).find("#ticket_solution").val();
+        if(is_clicked == true) {
+            $(this).find('.img_icon.open').data('clicked', false);
+        }else {
+            var code_partner  = $(this).find(".workshop_code_partner").val();
+            var code_workshop = $(this).find(".workshop_code_workshop").val();
+            var name          = $(this).find(".workshop_name").val();
+            var tel           = $(this).find(".workshop_tel").val();
+            var mail          = $(this).find(".workshop_mail").val();
+            var contact       = $(this).find(".workshop_contact").val();
 
-        var dis_url = $( "#dis-url" ).val();
-        var vts_url = $( "#vts-url" ).val();
+            var id           = $(this).find(".ticket_id").val();
+            var id_brand     = $(this).find(".ticket_id_brand").val();
+            var brand        = $(this).find(".ticket_brand").val();
+            var id_model     = $(this).find(".ticket_id_model").val();
+            var model        = $(this).find(".ticket_model").val();
+            var id_version   = $(this).find(".ticket_id_version").val();
+            var version      = $(this).find(".ticket_version").val();
+            var id_system    = $(this).find(".ticket_id_system").val();
+            var system       = $(this).find(".ticket_system").val();
+            var id_subsystem = $(this).find(".ticket_id_subsystem").val();
+            var subsystem    = $(this).find(".ticket_subsystem").val();
+            var id_importance= $(this).find(".ticket_id_importance").val();
+            var importance   = $(this).find(".ticket_importance").val();
+            var year         = $(this).find(".ticket_year").val();
+            var motor        = $(this).find(".ticket_motor").val();
+            var kw           = $(this).find(".ticket_kw").val();
+            var displacement = $(this).find(".ticket_displacement").val();
+            var vin          = $(this).find(".ticket_vin").val();
+            var plateNumber  = $(this).find(".ticket_plateNumber").val();
+            var desc         = $(this).find(".ticket_description").val();
+            var date         = $(this).find(".ticket_date").val();
+            var sol          = $(this).find(".ticket_solution").val();
 
-        $('#flt_id').empty();
-        $('#flt_id').val(id);
+            var dis_url = $( "#dis-url" ).val();
+            var vts_url = $( "#vts-url" ).val();
 
-        $('#w_idpartner').val(code_partner);
-        $('#w_id'       ).val(code_workshop);
-        $('#w_name'     ).val(name);
-        $('#w_tel'      ).val(tel);
-        $('#w_email'    ).val(mail);
-        $('#w_contact'  ).val(contact);
+            $('#flt_id').empty();
+            $('#flt_id').val(id);
 
-        $('#new_car_form_brand'     ).val(id_brand);
-        $('#new_car_form_model'     ).empty();
-        $('#new_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
-        $('#new_car_form_version'   ).empty();
-        $('#new_car_form_version'   ).append('<option value="'+id_version   +'" selected>'+version+'</option>');
-        $('#id_system').val(id_system);
-        $('#new_car_form_subsystem' ).empty();
-        $('#new_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
+            $('#w_idpartner').val(code_partner);
+            $('#w_id'       ).val(code_workshop);
+            $('#w_name'     ).val(name);
+            $('#w_tel'      ).val(tel);
+            $('#w_email'    ).val(mail);
+            $('#w_contact'  ).val(contact);
 
-        $('#new_car_form_importance').val(id_importance);
-        $('#new_car_form_year').val(year);
-        $('#new_car_form_motor').val(motor);
-        $('#new_car_form_kW').val(kw);
-        $('#new_car_form_displacement').val(displacement);
-        $('#new_car_form_vin').val(vin);
-        $('#new_car_form_plateNumber').val(plateNumber);
+            $('#new_car_form_brand'     ).val(id_brand);
+            $('#new_car_form_model'     ).empty();
+            $('#new_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
+            $('#new_car_form_version'   ).empty();
+            $('#new_car_form_version'   ).append('<option value="'+id_version   +'" selected>'+version+'</option>');
+            $('#id_system').val(id_system);
+            $('#new_car_form_subsystem' ).empty();
+            $('#new_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
 
-        $('#list_date').text('');
-        $('#list_date').text(date);
-        $('#list_description').text('');
-        $('#list_description').text(desc);
-        $('#list_solution').text('');
-        $('#list_solution').text(sol);
+            $('#new_car_form_importance').val(id_importance);
+            $('#new_car_form_year').val(year);
+            $('#new_car_form_motor').val(motor);
+            $('#new_car_form_kW').val(kw);
+            $('#new_car_form_displacement').val(displacement);
+            $('#new_car_form_vin').val(vin);
+            $('#new_car_form_plateNumber').val(plateNumber);
 
-        if(id_version == '0'){
-            $( "#dis" ).attr("href", dis_url+'/model-'+id_model);
-            $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model);
-        }else{
-            $( "#dis" ).attr("href", dis_url+'/'+id_version);
-            $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model+'/'+id_version);
+            $('#list_date').text('');
+            $('#list_date').text(date);
+            $('#list_description').text('');
+            $('#list_description').text(desc);
+            $('#list_solution').text('');
+            $('#list_solution').text(sol);
+
+            if(id_version == '0'){
+                $( "#dis" ).attr("href", dis_url+'/model-'+id_model);
+                $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model);
+            }else{
+                $( "#dis" ).attr("href", dis_url+'/'+id_version);
+                $( "#vts" ).attr("href", vts_url+'/'+id_brand+'/'+id_model+'/'+id_version);
+            }
         }
     });
 

@@ -53,6 +53,7 @@
               {% if car.brand.id is defined %} <input type="hidden" id="ticket_brand"   value="{{car.brand.id}}">{% endif %}
               {% if car.model.id is defined %} <input type="hidden" id="ticket_model"   value="{{car.model.id}}">{% endif %}
               {% if car.version.id is defined %} <input type="hidden" id="ticket_version" value="{{car.version.id}}">{% endif %}
+              {% if car.year is defined %} <input type="hidden" id="ticket_year" value="{{car.year}}">{% endif %}
               {% if ticket.subsystem.system.id is defined %} <input type="hidden" id="ticket_system"  value="{{ticket.subsystem.system.id}}">{% endif %}
               {% if ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem" value="{{ticket.subsystem.id}}">{% endif %}
               {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id}}">{% endif %}
@@ -64,7 +65,12 @@
               {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
               <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
-              {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+              {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %}btn.create_close{% endtrans %}</button>{% endif %}
+              {% if workshop.haschecks == true %}
+                <div class="grid w20 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                </div>
+              {% endif %}
             </div>
           </form>
 

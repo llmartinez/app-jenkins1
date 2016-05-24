@@ -51,6 +51,12 @@
           <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
 
           {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+              {% if workshop.haschecks == true %}
+                <div class="grid w20 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                </div>
+              {% endif %}
+            </div>
         </form>
 
     {% endif %}

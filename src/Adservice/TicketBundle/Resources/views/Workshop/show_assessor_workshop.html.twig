@@ -15,6 +15,7 @@
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
 					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
 
+
 			<a class="btn btn-primary fr asr_form-control asr_btn"
 			    {% if action is defined and action == 'showTicket' %}onclick="window.close()"
 		    	{% else %}
@@ -57,8 +58,8 @@
 				{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
 			</div>
 			<div style="width: 100%;">
-				{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-				{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+				{% if workshop.mobileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.mobileNumber1 }} {% endif %}
+				{% if workshop.mobileNumber2 != "" %}    - {{ workshop.mobileNumber2 }} {% endif %}
 			</div>
 		</div>
 

@@ -175,8 +175,8 @@ class UtilController extends Controller
     {
         $entity->setPhoneNumber1  (UtilController::getSlug($data->getPhoneNumber1() , ''));
         $entity->setPhoneNumber2  (UtilController::getSlug($data->getPhoneNumber2() , ''));
-        $entity->setMovileNumber1 (UtilController::getSlug($data->getMovileNumber1(), ''));
-        $entity->setMovileNumber2 (UtilController::getSlug($data->getMovileNumber2(), ''));
+        $entity->setMobileNumber1 (UtilController::getSlug($data->getMobileNumber1(), ''));
+        $entity->setMobileNumber2 (UtilController::getSlug($data->getMobileNumber2(), ''));
         $entity->setFax           (UtilController::getSlug($data->getFax()          , ''));
         $entity->setCountry       ($data->getCountry());
         $entity->setAddress       ($data->getAddress());
