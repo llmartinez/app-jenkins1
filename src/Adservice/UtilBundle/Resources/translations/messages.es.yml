@@ -404,6 +404,8 @@ workshop.cif_exist: 	 "El CIF ya existe"
 reactivation-request:    "Solicitar reactivación del taller"
 numTickets:				 "Núm. Tickets"
 reply_inactive: 		 "No puedes responder este ticket, no estás dado de alta."
+haschecks:				 "Con cheques"
+numchecks:				 "Núm. cheques"
 
 #USER
 user.delete:			 "Borrar Usuario"
