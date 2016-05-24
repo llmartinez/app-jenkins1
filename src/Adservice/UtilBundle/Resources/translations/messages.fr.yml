@@ -405,6 +405,8 @@ workshop.cif_exist:      "Le numéro de TVA existe déjà"
 reactivation-request:    "Demander la réactivation de l'atelier"
 numTickets:				 "Nombre de tickets"
 reply_inactive: 		 "Vous ne pouvez pas répondre à ce ticket, vous n'êtes pas inscrit."
+haschecks:				 "Avec chéquiers"
+numchecks:				 "Nombre de chéquiers"
 
 #USER
 user.delete:			 "Effacer utilisateur"
@@ -718,6 +720,11 @@ _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans c
 
 #HISTORICO
 lock.list_incidences: 	"Historique des Incidents"
+
+help:			"Aider"
+help.adservice: "Aider Assistance Diag 24"
+help.manual: 	"Consultez le manuel"
+help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/6HGiUhddNVM" frameborder="0" allowfullscreen></iframe>'
 
 error: "Une erreur s’est produite"
 back_app:  "Revenir à l’application"

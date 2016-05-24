@@ -168,6 +168,20 @@ class Workshop {
     private $conflictive;
 
     /**
+     * @var boolean $haschecks
+     *
+     * @ORM\Column(name="has_checks", type="boolean", nullable=true)
+     */
+    private $haschecks;
+
+    /**
+     * @var boolean $numchecks
+     *
+     * @ORM\Column(name="num_checks", type="integer", nullable=true)
+     */
+    private $numchecks;
+
+    /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosis_machine",
      *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
@@ -503,6 +517,42 @@ class Workshop {
      */
     public function getConflictive() {
         return $this->conflictive;
+    }
+
+    /**
+     * Set haschecks
+     *
+     * @param boolean $haschecks
+     */
+    public function setHasChecks($haschecks) {
+        $this->haschecks = $haschecks;
+    }
+
+    /**
+     * Get haschecks
+     *
+     * @return boolean
+     */
+    public function getHasChecks() {
+        return $this->haschecks;
+    }
+
+    /**
+     * Set numchecks
+     *
+     * @param integer $numchecks
+     */
+    public function setNumChecks($numchecks) {
+        $this->numchecks = $numchecks;
+    }
+
+    /**
+     * Get numchecks
+     *
+     * @return integer
+     */
+    public function getNumChecks() {
+        return $this->numchecks;
     }
 
     /**

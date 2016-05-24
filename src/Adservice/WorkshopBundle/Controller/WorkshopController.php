@@ -123,7 +123,8 @@ class WorkshopController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
-        } elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }
+        elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) {
@@ -148,7 +149,7 @@ class WorkshopController extends Controller {
 
             if ($form->isValid()) {
 
-                /* CHECK CODE WORKSHOP NO SE REPITA */
+                /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
                     'code_workshop' => $workshop->getCodeWorkshop()));
                 $findPhone = array(0, 0, 0, 0);
@@ -170,6 +171,11 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
+
+                    // CHECK
+                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -249,7 +255,6 @@ class WorkshopController extends Controller {
                         /* Dejamos el locale tal y como estaba */
                         $request->setLocale($locale);
                     }
-
 
                     $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username . ' ' . $this->get('translator')->trans('with_password') . ': ' . $pass;
                     $this->get('session')->setFlash('alert', $flash);
@@ -385,6 +390,10 @@ class WorkshopController extends Controller {
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
+                    // CHECK
+                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+
                     $this->saveWorkshop($em, $workshop);
 
                     if ($security->isGranted('ROLE_ADMIN'))
@@ -501,7 +510,6 @@ class WorkshopController extends Controller {
                     $validador = $this->get('validadorCIF');
                     $result = $validador->check_cif($CIF);
                 }
-                
                 if ($result > 0) {
                     $tmp_workshop = $em->getRepository("WorkshopBundle:Workshop")->findByCif($CIF);
 

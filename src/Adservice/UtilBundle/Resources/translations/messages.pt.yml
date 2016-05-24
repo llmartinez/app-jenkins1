@@ -719,6 +719,11 @@ _mail.textDisclaimer: "AVISO LEGAL. A informação contida nesta mensagem de cor
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidências"
 
+help:			"Ajuda"
+help.adservice: "Ajuda ADService"
+help.manual: 	"Consulte o Manual"
+help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/6HGiUhddNVM" frameborder="0" allowfullscreen></iframe>'
+
 error: 		"Ocorreu um erro"
 back_app:  	"Voltar à aplicação"
 

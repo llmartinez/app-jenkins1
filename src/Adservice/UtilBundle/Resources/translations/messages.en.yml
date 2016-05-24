@@ -404,6 +404,8 @@ workshop.cif_exist: "The tax ID number already exists"
 reactivation-request:           "Request workshop reactivation"
 numTickets:				 "Number of tickets"
 reply_inactive: 		 "You cannot reply to this ticket, your account is not active"
+haschecks:				 "With checks"
+numchecks:				 "Num. Checks"
 
 #USER
 user.delete:			 "Delete User"
@@ -718,6 +720,11 @@ _mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is 
 
 #HISTORICO
 lock.list_incidences: 	"Incidences History"
+
+help:			"Help"
+help.adservice: "Help PhoneEina"
+help.manual: 	"Check the manual"
+help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/6HGiUhddNVM" frameborder="0" allowfullscreen></iframe>'
 
 error: 		"An error has occurred"
 back_app:  	"Back to the application"
