@@ -550,7 +550,7 @@ class UserController extends Controller {
             $mailerUser->setTo($mail);
             $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
             $mailerUser->setFrom('noreply@adserviceticketing.com');
-            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password, '__locale' => $locale)));
             $mailerUser->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
