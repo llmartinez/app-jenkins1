@@ -1,0 +1,17 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+	<ol class="breadcrumb">
+		<li class="active"><a href="{{ path("_login")}}">{% trans %} home {% endtrans %}</a></li>
+		<li class="active">{% trans %} privacy {% endtrans %}</li>
+	</ol>
+
+	<h1 class="tc">{% trans %}privacy.title{% endtrans %}</h1>
+
+    <div class="tc">{% trans %}privacy.text{% endtrans %}</div>
+
+{% endblock %}
+
+
+{% block javascripts %}{{ parent() }}{% endblock %}

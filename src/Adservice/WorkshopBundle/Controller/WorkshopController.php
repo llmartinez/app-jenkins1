@@ -248,7 +248,7 @@ class WorkshopController extends Controller {
                         $mailerUser->setTo($mail);
                         $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject') . $newUser->getWorkshop());
                         $mailerUser->setFrom('noreply@adserviceticketing.com');
-                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
+                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
                         $mailerUser->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 

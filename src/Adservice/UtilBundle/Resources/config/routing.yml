@@ -14,6 +14,14 @@ ayuda:
     pattern: /ayuda/
     defaults: { _controller: UtilBundle:Default:help }
 
+privacy:
+    pattern: /privacy/
+    defaults: { _controller: UtilBundle:Default:privacy }
+
+autologin:
+    pattern: /autologin
+    defaults: { _controller: UtilBundle:Security:autologin }
+
 
 #############################
 #   APDO. FILE              #

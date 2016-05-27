@@ -95,6 +95,11 @@
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
+        {# {% if is_granted('ROLE_SUPER_AD') %}
+            <a class="btn-menu" id="listPartners" href="{{ path("partnerOrder_listpartners"  ) }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
+                                                                                                {% trans %} menu.list_partners   {% endtrans %}</a>
+        {% endif %} #}
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                 {% trans %} menu.list_shops         {% endtrans %}</a>
