@@ -719,10 +719,19 @@ _mail.textDisclaimer: "AVISO LEGAL. A informação contida nesta mensagem de cor
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidências"
 
-help:			"Ajuda"
-help.adservice: "Ajuda ADService"
-help.manual: 	"Consulte o Manual"
-help.video: 	'<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'
+#HELP
+help:				"Ajuda"
+help.adservice: 	"Ajuda ADService"
+help.check_manual: 	"Consulte o Manual"
+
+help.manual: 'http://adserviceticketing.com/uploads/help/manual-es.pdf'
+help.video:  '<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'
+
+#PRIVACY
+privacy: "Privacidad"
+privacy.title: "POLÍTICA DE PRIVACIDAD Y PROTECCIÓN DE DATOS"
+privacy.text: "<br>Este sitio web es propiedad de <b>Grup Eina Digital SL</b>.<br><br><br>En cumplimiento con lo dispuesto en la Ley Orgánica 15/1999, de 13 de diciembre, de Protección de Datos de Carácter Personal (LOPD) <b>Grup Eina Digital SL</b> informa a los usuarios del presente sitio web que los datos personales facilitados y los que pudieran surgir en un futuro van a pasar a formar parte de un fichero automatizado de datos de carácter personal, cuya titularidad y responsabilidad corresponde a <b>Grup Eina Digital SL</b> siendo su finalidad el poder atender y procesar adecuadamente las solicitudes de consultas remitidas desde los formularios de contacto, así como poder informarle y transmitirle información de los servicios ofrecidos.<br><br><br>Con la remisión de sus datos, Ud. presta su consentimiento expreso para que se pueda llevar a cabo el tratamiento automatizado. Sus datos personales serán tratados con la máxima confidencialidad, habiendo adoptado <b>Grup Eina Digital SL</b> como responsable del fichero, las medidas de orden técnico y organizativo marcadas por el RD 994/99 de Medidas de Seguridad para Ficheros Informatizados, con el fin de garantizar la confidencialidad y seguridad de los datos personales, evitando su alteración, pérdida, tratamiento o acceso no autorizado.<br><br><br><b>Grup Eina Digital SL</b> procede al archivo de los datos que los usuarios facilitan para realizar una consulta o remitir una solicitud. El usuario es advertido, convenientemente, de la necesidad de facilitar dichos datos. Le informamos que la dirección de correo electrónico se utiliza para dar respuesta a su consulta, así como poder transmitirle información de los servicios ofrecidos por <b>Grup Eina Digital SL</b> e informarle de cualesquiera otros cambios relevantes que se produzcan o se pudieran producir.<br><br><br>Es nuestro compromiso que cualquier cambio en la Política de Privacidad de este sitio web será inmediatamente advertido, a través del presente sitio web, incluyendo la oportuna rectificación en este apartado.<br><br><br>Asimismo, con relación a los datos personales recabados en la forma prevista en esta Política de Privacidad, se informa a los usuarios que tienen reconocidos los derechos de acceso, rectificación, oposición y cancelación de sus datos personales. Los referidos derechos podrán ser ejercitados, bien por el usuario, bien por su representante, mediante la remisión de una solicitud escrita y firmada, a la siguiente dirección<br><br><br><b>Grup Eina Digital S.L.<br>Av. Llenguadoc, 29.<br>08915 Badalona (Barcelona) - España</b><br><br><br>La solicitud deberá contener el nombre y apellidos del usuario, fotocopia del DNI así como el contenido de la petición que desee realizar, en su caso."
+
 
 error: 		"Ocorreu um erro"
 back_app:  	"Voltar à aplicação"

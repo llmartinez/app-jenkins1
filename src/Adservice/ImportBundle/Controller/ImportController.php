@@ -1036,7 +1036,6 @@ class ImportController extends Controller
 	        $user->setPassword($coded_pass);
 	        $user->setSalt($salt);
 			$em->persist($user);
-			$em->flush();
 
 			$this_array = array('Usuario' 	 => $user->getUsername(),
 							 	'Contraseña' => $password,
@@ -1049,15 +1048,23 @@ class ImportController extends Controller
 			}
 			elseif($type == 'workshop')
 			{
-				$this_array['Codigo_Socio']  = $user->getWorkshop()->getCodePartner();
-				$this_array['Codigo_Taller'] = $user->getWorkshop()->getCodeWorkshop();
-				$this_array['Nombre'] 		 = $user->getWorkshop()->getName();
+				$workshop = $user->getWorkshop();
+
+				$this_array['Codigo_Socio']  = $workshop->getCodePartner();
+				$this_array['Codigo_Taller'] = $workshop->getCodeWorkshop();
+				$this_array['Nombre'] 		 = $workshop->getName();
+
+				//Asignamos un Token para AD360
+				$token = UtilController::getRandomToken();
+				$workshop->setToken($token);
+				$em->persist($workshop);
 			}
 			elseif($type == 'country_service') //ASESOR
 			{
 				$this_array['Nombre'] 		 = $user->getName();
 			}
 
+			$em->flush();
 			$array[] = $this_array;
 	    }
 		if(sizeof($users) != 0) {
