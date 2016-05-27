@@ -182,6 +182,13 @@ class Workshop {
     private $numchecks;
 
     /**
+     * @var boolean $token
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosis_machine",
      *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
@@ -553,6 +560,24 @@ class Workshop {
      */
     public function getNumChecks() {
         return $this->numchecks;
+    }
+
+    /**
+     * Set token
+     *
+     * @param integer $token
+     */
+    public function setToken($token) {
+        $this->token = $token;
+    }
+
+    /**
+     * Get token
+     *
+     * @return integer
+     */
+    public function getToken() {
+        return $this->token;
     }
 
     /**

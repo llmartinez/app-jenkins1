@@ -81,6 +81,22 @@ class UtilController extends Controller
     }
 
     /**
+     * Genera un Token aleatorio
+     * @return string
+     */
+    static public function getRandomToken()
+    {
+          $key = '';
+          $keys = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
+
+          for ($i = 0; $i < 20; $i++) {
+              $key .= $keys[array_rand($keys)];
+          }
+
+          return $key;
+    }
+
+    /**
      * Obtiene el Slug de un username sin usar. Si la cadena pasada por parametro ya existe, se le añade un '-' y un numero.
      * @param  entityManager $em
      * @param  string        $name

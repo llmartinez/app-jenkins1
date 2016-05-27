@@ -146,7 +146,7 @@ class ShopOrderController extends Controller {
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
@@ -266,7 +266,8 @@ class ShopOrderController extends Controller {
                     $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                                  'shop'  => $shop )));
+                                                                                                                  'shop'  => $shop,
+                                                                                                                  '__locale' => $locale )));
                     $mailer->sendMailToSpool();
                     // echo $this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
                     //                                                                                   'shop'      => $shop));die;
@@ -356,7 +357,7 @@ class ShopOrderController extends Controller {
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
@@ -423,7 +424,7 @@ class ShopOrderController extends Controller {
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
@@ -492,7 +493,8 @@ class ShopOrderController extends Controller {
                 $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                                'action'    => $action)));
+                                                                                                                'action'    => $action,
+                                                                                                                '__locale' => $locale)));
                 $mailer->sendMailToSpool();
                 // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('shopOrder' => $shopOrder,
                 //                                                                                'action'   => $action));die;
@@ -552,7 +554,8 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                            'action'    => $action)));
+                                                                                                            'action'    => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                'action'   => $action));die;
@@ -619,7 +622,8 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                            'action'    => $action)));
+                                                                                                            'action'    => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                     'action'   => $action));die;
@@ -726,7 +730,8 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop,
-                                                                                                            'action' => $action)));
+                                                                                                            'action' => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
             //                                                                                     'action'   => $action));die;

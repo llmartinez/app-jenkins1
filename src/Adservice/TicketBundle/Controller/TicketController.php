@@ -849,7 +849,7 @@ class TicketController extends Controller {
                             $mailer->setTo($mail);
                             $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
                             $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
@@ -964,7 +964,7 @@ class TicketController extends Controller {
                             $mailer->setTo($mail);
                             $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
                             $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket)));
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
@@ -1050,7 +1050,7 @@ class TicketController extends Controller {
                 $mailer->setTo($mail);
                 $mailer->setSubject($this->get('translator')->trans('mail.deleteTicket.subject').$id);
                 $mailer->setFrom('noreply@adserviceticketing.com');
-                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket)));
+                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                 $mailer->sendMailToSpool();
                 //echo $this->renderView('UtilBundle:Mailing:ticket_delete_mail.html.twig', array('ticket' => $ticket));die;
 
@@ -1231,7 +1231,7 @@ class TicketController extends Controller {
                                         $mailer->setTo($mail);
                                         $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
                                         $mailer->setFrom('noreply@adserviceticketing.com');
-                                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket)));
+                                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                                         $mailer->sendMailToSpool();
 
                                         if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
@@ -1378,7 +1378,7 @@ class TicketController extends Controller {
                                 $mailer->setTo($mail);
                                 $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
                                 $mailer->setFrom('noreply@adserviceticketing.com');
-                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                                 $mailer->sendMailToSpool();
                                 //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
@@ -1402,7 +1402,7 @@ class TicketController extends Controller {
                                     $mailer->setTo($mail);
                                     $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
                                     $mailer->setFrom('noreply@adserviceticketing.com');
-                                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket)));
+                                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                                     $mailer->sendMailToSpool();
                                     //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
@@ -1524,7 +1524,7 @@ class TicketController extends Controller {
         $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
         $ticket->setStatus($status);
-        $ticket->setPending($status);
+        $ticket->setPending(1);
         UtilController::saveEntity($em, $ticket, $user);
 
         $mail = $ticket->getWorkshop()->getEmail1();
@@ -1537,12 +1537,12 @@ class TicketController extends Controller {
             $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
             $request->setLocale($lang->getShortName());
 
-             /* MAILING */
+            /* MAILING */
             $mailer = $this->get('cms.mailer');
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.reopenTicket.subject').$id);
             $mailer->setFrom('noreply@adserviceticketing.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket)));
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_reopen_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:ticket_reopen_mailecho 'pasa';.html.twig', array('ticket' => $ticket));die;
 
