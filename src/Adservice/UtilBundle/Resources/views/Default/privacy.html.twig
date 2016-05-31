@@ -10,6 +10,10 @@
 	<h1 class="tc">{% trans %}privacy.title{% endtrans %}</h1>
 
     <div class="tc">{% trans %}privacy.text{% endtrans %}</div>
+    
+    <form class="tc" action="{{ path('privacy') }}" method="post" >
+        <button name="Return" class="btn btn-primary mt20" >{% trans %} volver {% endtrans %}</button>
+    </form>
 
 {% endblock %}
 

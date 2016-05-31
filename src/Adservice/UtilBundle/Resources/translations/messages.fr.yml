@@ -49,6 +49,7 @@ dataworkshop:			 "Données de l'atelier "
 datashop:				 "Données du distributeur"
 username:				 "Utilisateur"
 password:				 "Mot de passe"
+volver:                                  "Revenir"
 old_password:		     "Mot de passe actuel"
 new_password:		     "Nouveau mot de passe"
 repeat_password:		 "Confirmer le mot de passe"
@@ -411,6 +412,10 @@ numchecks:				 "Nombre de chéquiers"
 #USER
 user.delete:			 "Effacer utilisateur"
 user.delete.confirm:	 "Êtes-vous sûr de vouloir effacer cet utilisateur? "
+
+user.accept_privacy:     "¿Accepter la "
+user.policy_privacy:     "Politique de confidentialité"
+user.cancel:             "Annuler"
 select_user_type:		 "Sélectionner le type d'utilisateur"
 anonimo:				 "Anonyme"
 

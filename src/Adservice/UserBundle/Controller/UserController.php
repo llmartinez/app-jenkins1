@@ -41,6 +41,11 @@ class UserController extends Controller {
         $request  = $this->getRequest();
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user->getPrivacy() == 0){            
+             $currentPath = $this->generateUrl('accept_privacy');
+             return $this->redirect($currentPath);
+        }
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
@@ -659,5 +664,24 @@ class UserController extends Controller {
 
         $em->persist($user);
         $em->flush();
+    }
+    
+    public function acceptPrivacyAction() {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            if ($request->request->has('Accept')) {
+                $em = $this->getDoctrine()->getEntityManager();                    
+                $user->setPrivacy(1);
+                $em->persist($user);
+                $em->flush();
+            return $this->redirect($this->generateUrl('user_index'));
+            }
+            else  if ($request->request->has('Cancel')) {
+                return $this->redirect($this->generateUrl('user_logout'));
+            }
+        }
+        return $this->render('UserBundle:User:accept_privacy.html.twig');
+        
     }
 }

@@ -116,6 +116,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $workshop;
 
+    /**
+     * @var boolean $privacy
+     *
+     * @ORM\Column(name="privacy", type="boolean")
+     */
+    private $privacy;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -371,6 +377,23 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->partner = $partner;
     }
 
+    /**
+     * Set privacy
+     *
+     * @param boolean $privacy
+     */
+    public function setPrivacy($privacy) {
+        $this->privacy = $privacy;
+    }
+
+    /**
+     * Get privacy
+     *
+     * @return boolean
+     */
+    public function getPrivacy() {
+        return $this->privacy;
+    }
 
 
 

@@ -49,6 +49,7 @@ dataworkshop:			 "Dados da Oficina"
 datashop:				 "Dados da Loja"
 username:				 "Utilizador"
 password:				 "Palavra-passe"
+volver:                                  "Retorno"
 old_password:		     "Palavra-passe atual"
 new_password:		     "Nova palavra-passe"
 repeat_password:		 "Repetir palavra-passe"
@@ -408,6 +409,9 @@ reply_inactive: 		 "Não pode responder a este talão pois não está registado.
 #USER
 user.delete:			 "Apagar Utilizador"
 user.delete.confirm:	 "Tem a certeza de que pretende eliminar este utilizador?"
+user.accept_privacy:     "¿Aceitar a "
+user.policy_privacy:     "Política de privacidade"
+user.cancel:             "Cancelar"
 select_user_type:		 "Selecione o tipo de utilizador"
 anonimo:				 "Anónimo"
 
