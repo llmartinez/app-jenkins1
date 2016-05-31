@@ -235,9 +235,7 @@ class WorkshopController extends Controller {
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
-                // TO PROD!!!!!
-                    // $mail = $newUser->getEmail1();
-                    $mail = $this->container->getParameter('mail_db');
+                    $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 

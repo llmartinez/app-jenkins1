@@ -562,7 +562,7 @@ class ImportController extends Controller
         /* MAILING */
 	    // $mail = $this->container->getParameter('mail_test');
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo($mail);  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo($newUser->getEmail1());
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
