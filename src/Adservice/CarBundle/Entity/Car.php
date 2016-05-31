@@ -122,6 +122,15 @@ class Car
 //     */
     //private $ticket;
 
+
+    /**
+     * Set id
+     *
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     /**
      * Get id
      *
