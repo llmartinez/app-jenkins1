@@ -692,11 +692,11 @@ class TicketController extends Controller {
                                                 $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
                                                 OR
                                                 $exist_vin->getModel()->getId() != $car->getModel()->getId()
-                                                OR (
-                                                    ($exist_vin->getVersion() != null AND $car->getVersion() == null)
-                                                    OR
-                                                    ($exist_vin->getVersion() == null AND $car->getVersion() != null)
-                                                    )
+                                                // OR (
+                                                //     ($exist_vin->getVersion() != null AND $car->getVersion() == null)
+                                                //     OR
+                                                //     ($exist_vin->getVersion() == null AND $car->getVersion() != null)
+                                                //     )
                                                 OR (
                                                     $exist_vin->getVersion() != null
                                                     AND
@@ -722,11 +722,11 @@ class TicketController extends Controller {
                                                 $exist_num->getBrand()->getId() != $car->getBrand()->getId()
                                                 OR
                                                 $exist_num->getModel()->getId() != $car->getModel()->getId()
-                                                OR (
-                                                    ($exist_num->getVersion() != null AND $car->getVersion() == null)
-                                                    OR
-                                                    ($exist_num->getVersion() == null AND $car->getVersion() != null)
-                                                    )
+                                                // OR (
+                                                //     ($exist_num->getVersion() != null AND $car->getVersion() == null)
+                                                //     OR
+                                                //     ($exist_num->getVersion() == null AND $car->getVersion() != null)
+                                                //     )
                                                 OR (
                                                     $exist_num->getVersion() != null
                                                     AND
@@ -757,8 +757,22 @@ class TicketController extends Controller {
                                                     UtilController::saveEntity($em, $workshop, $user);
                                                 }
 
+                                                // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
                                                 if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
+
+                                                    $old_car = $car;
                                                     $car = $exist_vin;
+
+                                                    //VERSION
+                                                    if($car->getVersion() == null and $old_car->getVersion() != null) $car->setVersion($old_car->getVersion());
+                                                    //YEAR
+                                                    if($car->getYear() == null and $old_car->getYear() != null) $car->setYear($old_car->getYear());
+                                                    //MOTOR
+                                                    if($car->getMotor() == null and $old_car->getMotor() != null) $car->setMotor($old_car->getMotor());
+                                                    //KW
+                                                    if($car->getKw() == null and $old_car->getKw() != null) $car->setKw($old_car->getKw());
+                                                    //DISPLACEMENT
+                                                    if($car->getDisplacement() == null and $old_car->getDisplacement() != null) $car->setDisplacement($old_car->getDisplacement());
                                                 }
 
                                                 UtilController::saveEntity($em, $car, $user);
@@ -853,15 +867,15 @@ class TicketController extends Controller {
                             $mailer->sendMailToSpool();
                             //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                            // if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
-                            // {
-                            //     $mail_centralita = $this->container->getParameter('mail_centralita');
-                            //     $mailer->setTo($mail_centralita);
-                            //     $mailer->setSubject('ticket: '.$ticket->getId());
-                            //     $date = date("Y-m-d H:i:s");
-                            //     $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
-                            //     $mailer->sendMailToSpool();
-                            // }
+                            if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
+                            {
+                                $mail_centralita = $this->container->getParameter('mail_centralita');
+                                $mailer->setTo($mail_centralita);
+                                $mailer->setSubject('ticket: '.$ticket->getId());
+                                $date = date("Y-m-d H:i:s");
+                                $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
+                                $mailer->sendMailToSpool();
+                            }
 
                             // Dejamos el locale tal y como estaba
                             $request->setLocale($locale);

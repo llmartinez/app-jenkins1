@@ -227,13 +227,15 @@ class WorkshopController extends Controller {
                     $newUser->setPassword($password);
                     $newUser->setSalt($salt);
 
+                    //Asignamos un Token para AD360
+                    $token = UtilController::getRandomToken();
+                    $newUser->setToken($token);
+
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
-                // TO PROD!!!!!
-                    // $mail = $newUser->getEmail1();
-                    $mail = $this->container->getParameter('mail_db');
+                    $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 

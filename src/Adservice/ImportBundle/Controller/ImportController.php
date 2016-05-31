@@ -562,7 +562,7 @@ class ImportController extends Controller
         /* MAILING */
 	    // $mail = $this->container->getParameter('mail_test');
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo($mail);  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo($newUser->getEmail1());
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
@@ -1035,7 +1035,6 @@ class ImportController extends Controller
 	        $coded_pass = $encoder->encodePassword($password, $salt);
 	        $user->setPassword($coded_pass);
 	        $user->setSalt($salt);
-			$em->persist($user);
 
 			$this_array = array('Usuario' 	 => $user->getUsername(),
 							 	'Contraseña' => $password,
@@ -1056,14 +1055,14 @@ class ImportController extends Controller
 
 				//Asignamos un Token para AD360
 				$token = UtilController::getRandomToken();
-				$workshop->setToken($token);
-				$em->persist($workshop);
+				$user->setToken($token);
 			}
 			elseif($type == 'country_service') //ASESOR
 			{
 				$this_array['Nombre'] 		 = $user->getName();
 			}
 
+			$em->persist($user);
 			$em->flush();
 			$array[] = $this_array;
 	    }
