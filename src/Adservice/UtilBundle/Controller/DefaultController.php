@@ -15,9 +15,17 @@ class DefaultController extends Controller{
 
         return $this->render('UtilBundle:Default:help.html.twig');
     }
-
+    
     public function privacyAction(){
-
+        $request = $this->getRequest();
+        
+        if ($request->getMethod() == 'POST') {
+            if ($request->request->has('Return')) {                
+                return $this->redirect($this->generateUrl('user_index'));
+            }
+        }
         return $this->render('UtilBundle:Default:privacy.html.twig');
     }
+    
+    
 }

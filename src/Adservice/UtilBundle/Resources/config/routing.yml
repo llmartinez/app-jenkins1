@@ -14,6 +14,10 @@ ayuda:
     pattern: /ayuda/
     defaults: { _controller: UtilBundle:Default:help }
 
+accept_privacy:
+    pattern: /acceptPrivacy/
+    defaults: { _controller: UserBundle:User:acceptPrivacy }
+
 privacy:
     pattern: /privacy/
     defaults: { _controller: UtilBundle:Default:privacy }
