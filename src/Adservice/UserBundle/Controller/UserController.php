@@ -42,7 +42,7 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user->getPrivacy() == 0){            
+        if($user->getPrivacy() == 0 ||$user->getPrivacy() == null ){            
              $currentPath = $this->generateUrl('accept_privacy');
              return $this->redirect($currentPath);
         }
