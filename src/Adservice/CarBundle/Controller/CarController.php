@@ -24,6 +24,7 @@ class CarController extends Controller {
 
         $car = $ticket->getCar();
         $formC = $this->createForm(new CarType(), $car);
+        // Esto es Magia: por algun motivo sin esto no carga nombre de Version en edit_car
         $version_name = $ticket->getCar()->getVersion()->getName();
         if ($request->getMethod() == 'POST') {
 
