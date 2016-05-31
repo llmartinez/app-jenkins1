@@ -757,8 +757,21 @@ class TicketController extends Controller {
                                                     UtilController::saveEntity($em, $workshop, $user);
                                                 }
 
+                                                // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
                                                 if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
-                                                    $car = $exist_vin;
+
+                                                    $car->setId($exist_vin->getId());
+
+                                                    //VERSION
+                                                    if($car->getVersion() == null and $car->getVersion() != null) $car->setVersion($exist_vin->getVersion());
+                                                    //YEAR
+                                                    if($car->getYear() == null and $car->getYear() != null) $car->setYear($exist_vin->getYear());
+                                                    //MOTOR
+                                                    if($car->getMotor() == null and $car->getMotor() != null) $car->setMotor($exist_vin->getMotor());
+                                                    //KW
+                                                    if($car->getKw() == null and $car->getKw() != null) $car->setKw($exist_vin->getKw());
+                                                    //DISPLACEMENT
+                                                    if($car->getDisplacement() == null and $car->getDisplacement() != null) $car->setDisplacement($exist_vin->getDisplacement());
                                                 }
 
                                                 UtilController::saveEntity($em, $car, $user);
