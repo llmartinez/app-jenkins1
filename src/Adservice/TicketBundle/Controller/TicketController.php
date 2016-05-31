@@ -760,18 +760,19 @@ class TicketController extends Controller {
                                                 // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
                                                 if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
 
-                                                    $car->setId($exist_vin->getId());
+                                                    $old_car = $car;
+                                                    $car = $exist_vin;
 
                                                     //VERSION
-                                                    if($car->getVersion() == null and $car->getVersion() != null) $car->setVersion($exist_vin->getVersion());
+                                                    if($car->getVersion() == null and $old_car->getVersion() != null) $car->setVersion($old_car->getVersion());
                                                     //YEAR
-                                                    if($car->getYear() == null and $car->getYear() != null) $car->setYear($exist_vin->getYear());
+                                                    if($car->getYear() == null and $old_car->getYear() != null) $car->setYear($old_car->getYear());
                                                     //MOTOR
-                                                    if($car->getMotor() == null and $car->getMotor() != null) $car->setMotor($exist_vin->getMotor());
+                                                    if($car->getMotor() == null and $old_car->getMotor() != null) $car->setMotor($old_car->getMotor());
                                                     //KW
-                                                    if($car->getKw() == null and $car->getKw() != null) $car->setKw($exist_vin->getKw());
+                                                    if($car->getKw() == null and $old_car->getKw() != null) $car->setKw($old_car->getKw());
                                                     //DISPLACEMENT
-                                                    if($car->getDisplacement() == null and $car->getDisplacement() != null) $car->setDisplacement($exist_vin->getDisplacement());
+                                                    if($car->getDisplacement() == null and $old_car->getDisplacement() != null) $car->setDisplacement($old_car->getDisplacement());
                                                 }
 
                                                 UtilController::saveEntity($em, $car, $user);
