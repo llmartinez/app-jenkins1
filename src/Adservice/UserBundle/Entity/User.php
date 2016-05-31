@@ -79,6 +79,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $charge;
 
     /**
+     * @var boolean $token
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * se utilizó user_roles para no hacer conflicto al aplicar ->toArray en getRoles()
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="user_role",
@@ -228,6 +235,24 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getCharge() {
         return $this->charge;
+    }
+
+    /**
+     * Set token
+     *
+     * @param integer $token
+     */
+    public function setToken($token) {
+        $this->token = $token;
+    }
+
+    /**
+     * Get token
+     *
+     * @return integer
+     */
+    public function getToken() {
+        return $this->token;
     }
 
     /**

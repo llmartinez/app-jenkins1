@@ -6,11 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Adservice\UtilBundle\Controller\UtilController;
 
 class SecurityController extends Controller{
 
+    /**
+     * Autologin del taller a través de un token
+     * @throws AccessDeniedException
+     * @return url
+     */
     public function autologinAction(){
 
     	$em = $this->getDoctrine()->getEntityManager();
@@ -25,29 +31,22 @@ class SecurityController extends Controller{
                 if($valid_hash != "") $hash = $valid_hash;
             }
 
-            if($hash != null and $hash != "")
+            if(isset($hash) and $hash != null and $hash != "")
             {
-                $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneByToken($hash);
+    			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 
-        		if($workshop != null)
-        		{
-        			$user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop);
+				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+				$this->get("security.context")->setToken($key);
 
-    				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
-    				$this->get("security.context")->setToken($key);
+				// Fire the login event
+				$event = new InteractiveLoginEvent($request, $key);
+				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-    				// Fire the login event
-    				$event = new InteractiveLoginEvent($request, $key);
-    				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-
-                	return $this->redirect($this->generateUrl('user_index'));
-                }
-                else throw new AccessDeniedException();
+            	return $this->redirect($this->generateUrl('user_index'));
             }
             else throw new AccessDeniedException();
     	}
     	else throw new AccessDeniedException();
-
 
         return $this->render('UtilBundle:Default:help.html.twig');
     }

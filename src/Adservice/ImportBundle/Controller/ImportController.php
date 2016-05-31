@@ -1035,7 +1035,6 @@ class ImportController extends Controller
 	        $coded_pass = $encoder->encodePassword($password, $salt);
 	        $user->setPassword($coded_pass);
 	        $user->setSalt($salt);
-			$em->persist($user);
 
 			$this_array = array('Usuario' 	 => $user->getUsername(),
 							 	'Contraseña' => $password,
@@ -1056,14 +1055,14 @@ class ImportController extends Controller
 
 				//Asignamos un Token para AD360
 				$token = UtilController::getRandomToken();
-				$workshop->setToken($token);
-				$em->persist($workshop);
+				$user->setToken($token);
 			}
 			elseif($type == 'country_service') //ASESOR
 			{
 				$this_array['Nombre'] 		 = $user->getName();
 			}
 
+			$em->persist($user);
 			$em->flush();
 			$array[] = $this_array;
 	    }

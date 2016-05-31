@@ -692,11 +692,11 @@ class TicketController extends Controller {
                                                 $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
                                                 OR
                                                 $exist_vin->getModel()->getId() != $car->getModel()->getId()
-                                                OR (
-                                                    ($exist_vin->getVersion() != null AND $car->getVersion() == null)
-                                                    OR
-                                                    ($exist_vin->getVersion() == null AND $car->getVersion() != null)
-                                                    )
+                                                // OR (
+                                                //     ($exist_vin->getVersion() != null AND $car->getVersion() == null)
+                                                //     OR
+                                                //     ($exist_vin->getVersion() == null AND $car->getVersion() != null)
+                                                //     )
                                                 OR (
                                                     $exist_vin->getVersion() != null
                                                     AND
@@ -722,11 +722,11 @@ class TicketController extends Controller {
                                                 $exist_num->getBrand()->getId() != $car->getBrand()->getId()
                                                 OR
                                                 $exist_num->getModel()->getId() != $car->getModel()->getId()
-                                                OR (
-                                                    ($exist_num->getVersion() != null AND $car->getVersion() == null)
-                                                    OR
-                                                    ($exist_num->getVersion() == null AND $car->getVersion() != null)
-                                                    )
+                                                // OR (
+                                                //     ($exist_num->getVersion() != null AND $car->getVersion() == null)
+                                                //     OR
+                                                //     ($exist_num->getVersion() == null AND $car->getVersion() != null)
+                                                //     )
                                                 OR (
                                                     $exist_num->getVersion() != null
                                                     AND

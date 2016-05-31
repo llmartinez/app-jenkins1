@@ -19,7 +19,7 @@ privacy:
     defaults: { _controller: UtilBundle:Default:privacy }
 
 autologin:
-    pattern: /autologin
+    pattern: /autologin/
     defaults: { _controller: UtilBundle:Security:autologin }
 
 
