@@ -24,7 +24,7 @@ class CarController extends Controller {
 
         $car = $ticket->getCar();
         $formC = $this->createForm(new CarType(), $car);
-
+        $version_name = $ticket->getCar()->getVersion()->getName();
         if ($request->getMethod() == 'POST') {
 
             $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
