@@ -339,8 +339,12 @@ function fill_car_data() {
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
     var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[')[1].slice(0, -1);
+
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
+    if (motor = undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
+
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
+    if (year = undefined) year = $('form[id=contact]').find('input[id=new_car_form_year]').val();
 
     if (id_version != undefined && id_version != "" && id_version != "0") {
         var route  = 'car_data';

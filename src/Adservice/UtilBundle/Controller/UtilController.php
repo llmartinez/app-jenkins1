@@ -155,6 +155,13 @@ class UtilController extends Controller
             if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
             else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
         }
+        $unused = 1;
+        while($unused != 'unused') {
+            $find = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+
+            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
+            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+        }
         return $code;
     }
 
