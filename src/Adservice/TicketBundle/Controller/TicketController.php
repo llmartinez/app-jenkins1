@@ -155,8 +155,8 @@ class TicketController extends Controller {
             $params[] = array('status', ' = '.$open->getId());
 
             $country_service = $security->getToken()->getUser()->getCountryService()->getId();
-            if($country_service == '7') $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
-            else                        $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
+            if($country_service == '7') $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.'');// OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
+            else                        $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.'');// OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
         }
 
         elseif ($option == 'assessor_answered')
