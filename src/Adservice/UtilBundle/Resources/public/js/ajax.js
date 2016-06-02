@@ -346,6 +346,11 @@ function fill_car_data() {
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
     if (year = undefined) year = $('form[id=contact]').find('input[id=new_car_form_year]').val();
 
+    var kW           = $('form[id=contact]').find('input[id=new_car_form_kW]').val();
+    var displacement = $('form[id=contact]').find('input[id=new_car_form_displacement]').val();
+    var vin          = $('form[id=contact]').find('input[id=new_car_form_vin]').val();
+    var plateNumber  = $('form[id=contact]').find('input[id=new_car_form_plateNumber]').val();
+
     if (id_version != undefined && id_version != "" && id_version != "0") {
         var route  = 'car_data';
         var locale = $(document).find("#data_locale").val();
@@ -376,9 +381,18 @@ function fill_car_data() {
                                 $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
                             }
                         }
+
                         $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
-                        $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
-                        $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
+
+                        if(kW != undefined) $('form[id=contact]').find('#new_car_form_kW').val(kW);
+                        else                $('form[id=contact]').find('#new_car_form_kW').val(elm.kw);
+
+                        if(displacement != undefined) $('form[id=contact]').find('#new_car_form_displacement').val(displacement);
+                        else                          $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3     );
+
+                        if(vin          != undefined) $('form[id=contact]').find('#new_car_form_vin').val(vin);
+                        if(plateNumber  != undefined) $('form[id=contact]').find('#new_car_form_plateNumber').val(plateNumber);
+
                         var dis_url = $( "#dis-url" ).val();
                         var vts_url = $( "#vts-url" ).val();
 
