@@ -559,6 +559,12 @@ class UserController extends Controller {
             $mailerUser->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
+            /* MAILING */
+            $mail = $this->container->getParameter('mail_db');
+            $mailerUser->setTo($mail);
+            $mailerUser->sendMailToSpool();
+            //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
         }
