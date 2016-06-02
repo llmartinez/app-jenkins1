@@ -425,6 +425,7 @@ class TicketController extends Controller {
             }
 
             $params_inactive[] = array('assigned_to', ' = '.$security->getToken()->getUser()->getId());
+            $params_inactive[] = array('pending', ' = 1');
             $params_inactive[] = array('status', ' = '.$open->getId());
             $params_inactive[] = array('id', ' NOT IN ('.$ids_not.')');
 
@@ -1218,7 +1219,7 @@ class TicketController extends Controller {
                                     // if ($ticket->getBlockedBy() != null) {
                                     //     $ticket->setBlockedBy(null);
 
-                                        /*si assessor responde se le asigna y se amrca como respondido, si es el taller se marca como pendiente */
+                                        /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
                                         if ($security->isGranted('ROLE_ASSESSOR')) {
                                             $ticket->setAssignedTo($user);
                                             $ticket->setPending(0);
