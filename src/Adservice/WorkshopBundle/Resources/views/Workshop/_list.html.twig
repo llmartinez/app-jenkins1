@@ -31,7 +31,7 @@
 {#                              <a title="{% trans %} edit.delete {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
                                     <a href="{{ path('workshop_delete', { 'id': workshop.id }) }}" 
                                        onClick="javascript: return confirm(
-                                                   '{% trans %}ticket.delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                                                   '{% trans %}workshop.delete.confirm{% endtrans %}{{workshop.id}}\n\n\n{% trans %}workshop.delete.confirm2{% endtrans %}({{workshop.tickets | length}})');" title="{% trans %} workshop.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
                                 {% endif %}
               
                     {% endif %}

@@ -483,22 +483,32 @@ class WorkshopController extends Controller {
             foreach($workshops as $workshop){
                 $workshop->setModifiedBy($usertmp);
                 $workshop->setCreatedBy($usertmp);
+                $em->persist($workshop);
+                $em->flush();
             }
         }
         if(isset($user)){
            $cars = $em->getRepository("CarBundle:Car")->findBy(array('modified_by' => $user->getId()));
            if(isset($cars)){
-               foreach($cars as $car){
+               foreach($cars as $car){                  
                    $car->setModifiedBy($usertmp);
-                   $car->setCreatedBy($usertmp);
-               }
-               $em->remove($user);
-               $em->flush();
-           }
+                   $em->persist($car);
+                    $em->flush();
+                }
+            }
+            $cars = $em->getRepository("CarBundle:Car")->findBy(array('created_by' => $user->getId()));
+            if(isset($cars)){
+                foreach($cars as $car){  
+                    $car->setCreatedBy($usertmp);
+                    $em->persist($car);
+                    $em->flush();
+                }                
+                $em->remove($user);
+                $em->flush();
+            }
         }
         $em->remove($workshop);
         $em->flush();
-
         return $this->redirect($this->generateUrl('workshop_list'));
     }
 
