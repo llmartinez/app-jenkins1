@@ -814,7 +814,7 @@ class WorkshopOrderController extends Controller {
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
-                    $mailerUser->setTo('d_maya24@hotmail.com');
+                    $mailerUser->setTo($mail);
                     $mailerUser->sendMailToSpool();
                 }
                 // Dejamos el locale tal y como estaba
