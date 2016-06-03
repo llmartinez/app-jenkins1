@@ -23,7 +23,10 @@ class LoginController extends Controller {
             $bname = 'Internet Explorer';
             $ub = "MSIE";
         }
-
+var_dump($bname);
+var_dump($ub);
+var_dump(!$this->get('isMSIE')->isMSIE($request));
+die;
         if(!$this->get('isMSIE')->isMSIE($request)){
             // obtiene el error de inicio de sesión si lo hay
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
