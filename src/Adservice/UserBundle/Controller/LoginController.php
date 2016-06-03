@@ -36,8 +36,6 @@ var_dump('MSIE 10.0 => ');
 var_dump(strpos('MSIE 10.0', $u_agent) != false);
 var_dump('MSIE 9.0 => ');
 var_dump(strpos('MSIE 9.0;', $u_agent) != false);
-die;
-
 
         if(!$this->get('isMSIE')->isMSIE($request) or (strpos('Trident/7.0; rv:11') != false) or (strpos('Trident/6.0;') != false)){
             // obtiene el error de inicio de sesión si lo hay
