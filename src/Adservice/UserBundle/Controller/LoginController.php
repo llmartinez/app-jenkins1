@@ -18,7 +18,7 @@ class LoginController extends Controller {
         $_SESSION['lang'] = null;
 
         // Para controlar si es IE11 o superior...
-        if((preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) || (preg_match("/(Trident\/(\d{2,}|7|8|9)(.*)rv:(\d{2,}))|(MSIE\ (\d{2,}|8|9)(.*)Tablet\ PC)|(Trident\/(\d{2,}|7|8|9))/", $u_agent)))
+        if(preg_match("/(Trident\/(\d{2,}|7|8|9)(.*)rv:(\d{2,}))|(MSIE\ (\d{2,}|8|9)(.*)Tablet\ PC)|(Trident\/(\d{2,}|7|8|9))/", $u_agent))
         {
             $bname = 'Internet Explorer';
             $ub = "MSIE";
