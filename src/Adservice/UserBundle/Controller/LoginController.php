@@ -18,16 +18,13 @@ class LoginController extends Controller {
         $_SESSION['lang'] = null;
 
         // Para controlar si es IE11 o superior...
-        if(preg_match("/(Trident\/(\d{2,}|7|8|9)(.*)rv:(\d{2,}))|(MSIE\ (\d{2,}|8|9)(.*)Tablet\ PC)|(Trident\/(\d{2,}|7|8|9))/", $u_agent))
+        if(preg_match("/(Trident\/(7|8|9)(.*)rv:(\d{1,}))|(MSIE\ (8|9)(.*)Tablet\ PC)|(Trident\/(7|8|9))/", $u_agent))
         {
             $bname = 'Internet Explorer';
             $ub = "MSIE";
         }
-var_dump($u_agent);
-var_dump(isset($bname));
-var_dump(!$this->get('isMSIE')->isMSIE($request));
-die;
-        if(!$this->get('isMSIE')->isMSIE($request)){
+
+        if(!$this->get('isMSIE')->isMSIE($request)) {
             // obtiene el error de inicio de sesión si lo hay
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
