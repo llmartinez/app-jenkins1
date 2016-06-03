@@ -26,15 +26,15 @@ class LoginController extends Controller {
 
 var_dump($u_agent);
 var_dump(!$this->get('isMSIE')->isMSIE($request));
-var_dump('Trident/7.0; rv:11 => ');
+var_dump('<br>Trident/7.0; rv:11 => ');
 var_dump(strpos('Trident/7.0; rv:11', $u_agent) != false);
-var_dump('Trident/6.0; => ');
+var_dump('<br>Trident/6.0; => ');
 var_dump(strpos('Trident/6.0;', $u_agent) != false);
-var_dump('Trident/5.0; => ');
+var_dump('<br>Trident/5.0; => ');
 var_dump(strpos('Trident/5.0;', $u_agent) != false);
-var_dump('MSIE 10.0 => ');
+var_dump('<br>MSIE 10.0 => ');
 var_dump(strpos('MSIE 10.0', $u_agent) != false);
-var_dump('MSIE 9.0 => ');
+var_dump('<br>MSIE 9.0 => ');
 var_dump(strpos('MSIE 9.0;', $u_agent) != false);
 
         if(!$this->get('isMSIE')->isMSIE($request) or (strpos('Trident/7.0; rv:11') != false) or (strpos('Trident/6.0;') != false)){
