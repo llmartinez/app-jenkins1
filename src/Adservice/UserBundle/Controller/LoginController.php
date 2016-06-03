@@ -24,41 +24,10 @@ class LoginController extends Controller {
             $ub = "MSIE";
         }
 
-var_dump($u_agent);
-var_dump('<br>isMSIE => ');
-var_dump(!$this->get('isMSIE')->isMSIE($request));
-var_dump('<br>');
-var_dump('<br>');
-var_dump('<br>Trident/7.0 => ');
-var_dump(strpos($u_agent, 'Trident/7.0') != false);
-var_dump('<br>rv:11 => ');
-var_dump(strpos($u_agent, 'rv:11') != false);
-var_dump('<br>');
-var_dump('<br>');
-var_dump('<br>MSIE 10.0 => ');
-var_dump(strpos($u_agent, 'MSIE 10.0') != false);
-var_dump('<br>MSIE 10,0 => ');
-var_dump(strpos($u_agent, 'MSIE 10,0') != false);
-var_dump('<br>Trident/6.0; => ');
-var_dump(strpos($u_agent, 'Trident/6.0') != false);
-var_dump('<br>Trident/6,0; => ');
-var_dump(strpos($u_agent, 'Trident/6,0') != false);
-var_dump('<br>');
-var_dump('<br>');
-var_dump('<br>Trident/5.0; => ');
-var_dump(strpos($u_agent, 'Trident/5.0') != false);
-var_dump('<br>Trident/5,0; => ');
-var_dump(strpos($u_agent, 'Trident/5,0') != false);
-var_dump('<br>MSIE 9.0 => ');
-var_dump(strpos($u_agent, 'MSIE 9.0') != false);
-var_dump('<br>MSIE 9,0 => ');
-var_dump(strpos($u_agent, 'MSIE 9,0') != false);
-var_dump('<br>');
-var_dump('<br>');
-var_dump('<br>X11; Linux i686 => ');
-var_dump(strpos($u_agent,'X11; Linux i686') != false);
-
-        if(!$this->get('isMSIE')->isMSIE($request) or (strpos('Trident/7.0; rv:11') != false) or (strpos('Trident/6.0;') != false)){
+        if(!$this->get('isMSIE')->isMSIE($request)
+        or (strpos($u_agent,'Trident/7.0') != false and strpos($u_agent,' rv:11') != false)
+        or (strpos($u_agent,'Trident/6.0') != false and strpos($u_agent,' MSIE 10') != false)
+        ){
             // obtiene el error de inicio de sesión si lo hay
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
