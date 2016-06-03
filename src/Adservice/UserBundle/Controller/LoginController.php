@@ -24,7 +24,7 @@ class LoginController extends Controller {
             $ub = "MSIE";
         }
 
-        if(!$this->get('isMSIE')->isMSIE($request) or (strpos('Trident/7.0; rv:11') != false) or (strpos('Trident/6.0;') != false){
+        if(!$this->get('isMSIE')->isMSIE($request) or (strpos('Trident/7.0; rv:11') != false) or (strpos('Trident/6.0;') != false)){
             // obtiene el error de inicio de sesión si lo hay
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
