@@ -636,7 +636,16 @@ class WorkshopController extends Controller {
      * @param Workshop $workshop
      */
     private function saveWorkshop($em, $workshop) {
-
+        //var_dump($user);
+        $user = $em->getRepository('UserBundle:User')->findByWorkshop($workshop->getId());
+        $user->setPhoneNumber1($workshop->getPhoneNumber1());
+        $user->setPhoneNumber2($workshop->getPhoneNumber2());
+        $user->setMobileNumber1($workshop->getMobileNumber1());
+        $user->setMobileNumber2($workshop->getMobileNumber2());
+        $user->setFax($workshop->getFax());
+        $user->setEmail1($workshop->getEmail1());
+        $user->setEmail2($workshop->getEmail2());
+        //var_dump($user);die;
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
