@@ -23,8 +23,7 @@ class LoginController extends Controller {
             $bname = 'Internet Explorer';
             $ub = "MSIE";
         }
-var_dump($bname);
-var_dump($ub);
+var_dump(isset($bname));
 var_dump(!$this->get('isMSIE')->isMSIE($request));
 die;
         if(!$this->get('isMSIE')->isMSIE($request)){
