@@ -23,9 +23,28 @@ $(document).ready(function() {
         if(ticket_importance != '')
             $('#new_car_form_importance').val(ticket_importance);
     }
+
+    //UPPER VIN & PLATENUMBER
+    $('form').find('input[id*=vin]').focusout(function() {
+        var vin = $(this).val();
+        vin = normalizeForm(vin);
+        $(this).val(vin.toUpperCase());
+    });
+    $('form').find('input[id*=plateNumber]').focusout(function() {
+        var platenumber = $(this).val();
+        platenumber = normalizeForm(platenumber);
+        $(this).val(platenumber.toUpperCase());
+    });
 });
 
-    //vacia tbl_similar
+function normalizeForm(str) {
+    str = string_to_slug(str);
+    str = str.replace(/\ /g, '');
+    str = str.replace(/\-/g, '');
+    return str;
+}
+
+//vacia tbl_similar
     $(document).on('change','#new_car_form_brand'   ,function(){ clear_tbl_similar('brand' ); clear_tbl_repeated('brand' ); });
     $(document).on('change','#new_car_form_model'   ,function(){ clear_tbl_similar('model' ); clear_tbl_repeated('model' ); });
     $(document).on('change','#id_system'            ,function(){ clear_tbl_similar('system'); clear_tbl_repeated('system'); });
@@ -48,22 +67,22 @@ $(document).ready(function() {
     });
 
 // $('.sendTicket').click(function() {
-//     var model = $('#new_car_form_model').val();
+    //     var model = $('#new_car_form_model').val();
 
-//     var subsystem = $('#ticket_form_subsystem').val();
+    //     var subsystem = $('#ticket_form_subsystem').val();
 
-//     if (model == '' || model == "0") {
-//         var error_ticket = $('#error_ticket').val();
-//         var field = $("label[for='new_car_form_model']").text();
-//         alert(error_ticket+ ' ('+field+')');
-//         event.preventDefault();
-//     }
-//     if (subsystem == '' || subsystem == "0" ) {
-//         var error_ticket = $('#error_ticket').val();
-//         var field = $("label[for='new_ticket_form_subsystem']").text();
-//         alert(error_ticket+ ' ('+field+')');
-//         event.preventDefault();
-//     }
+    //     if (model == '' || model == "0") {
+    //         var error_ticket = $('#error_ticket').val();
+    //         var field = $("label[for='new_car_form_model']").text();
+    //         alert(error_ticket+ ' ('+field+')');
+    //         event.preventDefault();
+    //     }
+    //     if (subsystem == '' || subsystem == "0" ) {
+    //         var error_ticket = $('#error_ticket').val();
+    //         var field = $("label[for='new_ticket_form_subsystem']").text();
+    //         alert(error_ticket+ ' ('+field+')');
+    //         event.preventDefault();
+    //     }
 // });
 
 

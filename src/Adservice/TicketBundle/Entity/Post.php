@@ -60,19 +60,19 @@ class Post
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
      */
-    private $modified_by;   
-    
+    private $modified_by;
+
     /**
      * @var string $document
      *
      * @ORM\OneToOne(targetEntity="Adservice\UtilBundle\Entity\Document", mappedBy="post")
      */
-    private $document;  
+    private $document;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -92,13 +92,13 @@ class Post
     /**
      * Get ticket
      *
-     * @return string 
+     * @return string
      */
     public function getTicket()
     {
         return $this->ticket;
     }
-    
+
     /**
      * Set message
      *
@@ -112,13 +112,13 @@ class Post
     /**
      * Get message
      *
-     * @return text 
+     * @return text
      */
     public function getMessage()
     {
         return $this->message;
     }
-    
+
     /**
      * Set $created_by
      *
@@ -152,7 +152,7 @@ class Post
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getcreated_at()
     {
@@ -172,7 +172,7 @@ class Post
     /**
      * Get modified_by
      *
-     * @return string 
+     * @return string
      */
     public function getModifiedBy()
     {
@@ -192,7 +192,7 @@ class Post
     /**
      * Get modified_at
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getModifiedAt()
     {
@@ -202,7 +202,7 @@ class Post
     /**
      * Get created_at
      *
-     * @return date 
+     * @return date
      */
     public function getCreatedAt()
     {
@@ -222,7 +222,7 @@ class Post
     /**
      * Get document
      *
-     * @return Adservice\UtilBundle\Entity\Document 
+     * @return Adservice\UtilBundle\Entity\Document
      */
     public function getDocument()
     {

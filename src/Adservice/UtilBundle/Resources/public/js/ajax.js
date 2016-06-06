@@ -454,7 +454,6 @@ function fill_car_by_year() {
     });
 }
 
-
 /**
  * Rellena (fill) los combos segun el motor
  */
@@ -516,6 +515,7 @@ function fill_car_by_motor() {
         }
     });
 }
+
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
  */
@@ -566,6 +566,7 @@ function fill_subsystem(subsystem) {
         }
     });
 }
+
 /**
  * Rellena (fill) una tabla con tickets similares
  */

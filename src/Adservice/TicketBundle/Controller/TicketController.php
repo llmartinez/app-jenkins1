@@ -156,8 +156,8 @@ class TicketController extends Controller {
 
             $country_service = $security->getToken()->getUser()->getCountryService()->getId();
                                                                                                              // Esto hacía que se vieran los libres(rojo) además de los pendientes(naranja)
-            if($country_service == '7') $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.'');// OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
-            else                        $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.'');// OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
+            if($country_service == '7') $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' AND e.pending = 1 ');// OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
+            else                        $params[] = array('id'   , ' != 0 AND e.assigned_to = '.$id_user.' AND e.pending = 1 ');// OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
         }
 
         elseif ($option == 'assessor_answered')
@@ -193,8 +193,7 @@ class TicketController extends Controller {
             // Recupera la fecha del ultimo post de cada ticket del asesor
 
             if ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN')){
-
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t.id');
+                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1 GROUP BY t.id');
                 $ids = '0';
                 $ids_not = '0';
                 foreach ($consulta->getResult() as $row)
@@ -210,12 +209,12 @@ class TicketController extends Controller {
                     else             $ids_not = $ids_not.', '.$row['id'];
                 }
                 $params[] = array('status', ' = '.$open->getId());
-                $params[] = array('id', ' NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId());
+                $params[] = array('id', ' NOT IN ('.$ids_not.') AND e.assigned_to = '.$security->getToken()->getUser()->getId().' AND e.pending = 1 ');
             }
             // Recupera la fecha del ultimo post de cada ticket
             //  SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
             else{
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t GROUP BY t');
+                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1  GROUP BY t');
                 $ids = '0';
                 $ids_not = '0';
                 foreach ($consulta->getResult() as $row)
@@ -232,7 +231,7 @@ class TicketController extends Controller {
                 }
 
                 $params[] = array('status', ' = '.$open->getId());
-                $params[] = array('id', ' IN ('.$ids.') OR (e.id NOT IN ('.$ids_not.') AND e.assigned_to IS NOT NULL)');
+                $params[] = array('id', ' IN ('.$ids.') OR (e.id NOT IN ('.$ids_not.') AND e.assigned_to IS NOT NULL) AND e.pending = 1 ');
             }
         }
         else{
@@ -1046,7 +1045,13 @@ class TicketController extends Controller {
             }
             //borra todos los post del ticket
             foreach ($posts as $post) {
-                 $em->remove($post);
+
+                if($post->getDocument() != null) {
+                    $document = $post->getDocument();
+                    $document->setPath(null);
+                    $em->remove($document);
+                }
+                $em->remove($post);
             }
             //borra el ticket
             $em->remove($ticket);
