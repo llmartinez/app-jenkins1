@@ -414,8 +414,12 @@ class WorkshopOrderController extends Controller {
 
             }
         }
+
+        $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+        $token = $user->getToken();
         return $this->render('OrderBundle:WorkshopOrders:edit_order.html.twig', array( 'workshopOrder' => $workshopOrder,
                                                                                        'workshop'      => $workshop,
+                                                                                       'token'         => $token,
                                                                                        'id_partner'    => $id_partner,              //old values
                                                                                        'form_name'     => $form->getName(),         //new values
                                                                                        'form'          => $form->createView()));
