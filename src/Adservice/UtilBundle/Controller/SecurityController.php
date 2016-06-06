@@ -23,6 +23,19 @@ class SecurityController extends Controller{
     	$request = $this->getRequest();
         $token = $request->get("token");
 
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // Mostrar Token encriptado para test
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // $user = $em->getRepository('UserBundle:User')->findOneById(4165); //danisnachezripoll
+        // $tok = $user->getToken();
+        // $enc = $this->encryptADS($tok);
+        // $dec = $this->decryptADS($enc);
+        // var_dump('Token: '.$tok);
+        // var_dump('Encript: '.$enc);
+        // var_dump('Decript => ');
+        // var_dump($dec);die;
+        ///////////////////////////////////////////////////////////////////////////////////////
+
     	if($token != null)
     	{
             $valid_hashes = $this->decryptADS($token);
