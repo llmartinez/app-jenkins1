@@ -1045,7 +1045,13 @@ class TicketController extends Controller {
             }
             //borra todos los post del ticket
             foreach ($posts as $post) {
-                 $em->remove($post);
+
+                if($post->getDocument() != null) {
+                    $document = $post->getDocument();
+                    $document->setPath(null);
+                    $em->remove($document);
+                }
+                $em->remove($post);
             }
             //borra el ticket
             $em->remove($ticket);

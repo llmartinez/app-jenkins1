@@ -76,6 +76,14 @@ class Document {
         return $this->name;
     }
     /**
+     * Set path
+     *
+     * @param string $path
+     */
+    public function setPath($path) {
+        $this->path = $path;
+    }
+    /**
      * Sets file.
      *
      * @param UploadedFile $file
