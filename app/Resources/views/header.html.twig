@@ -1,5 +1,5 @@
 <div class="MainHeader">
-    <div class="span4 offset2" style="margin-top:15px;">
+    <div class="span4 offset2">
     </div>
     <div class="navbar">
         <div class="navbar-inner">
@@ -19,24 +19,6 @@
                             {# <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
                         </td>
                         <td align="right">
-                            <!-- Split button -->
-                            <div class="language">
-                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
-                                <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu" >
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"> {% trans %} english {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"> {% trans %} spanish {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
 
                             {% if app.user.username is defined %}
 
@@ -74,6 +56,24 @@
                                app.request.getPathInfo()
                                app.request.attributes.get('_route')
                             #}
+                            <!-- Split button -->
+                            <div class="language">
+                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
+                                <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" >
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"> {% trans %} english {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"> {% trans %} spanish {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </table>

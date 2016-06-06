@@ -418,6 +418,7 @@ user.policy_privacy:     "Politique de confidentialité"
 user.cancel:             "Annuler"
 select_user_type:		 "Sélectionner le type d'utilisateur"
 anonimo:				 "Anonyme"
+token:					 "Token"
 
 #CAR
 brand:					 "Marque"
