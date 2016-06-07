@@ -33,7 +33,7 @@ class SecurityController extends Controller{
         var_dump('Token: '.$tok);
         var_dump('Encript: '.$enc);
         var_dump('Decript => ');
-        var_dump($dec);die;
+        var_dump($dec);
         ///////////////////////////////////////////////////////////////////////////////////////
 
     	if($token != null)
