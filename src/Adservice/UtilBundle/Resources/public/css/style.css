@@ -718,6 +718,7 @@ textarea.form-control_ged {
 
 .asr_MainContent{
     padding: 0 0 20px 0!important;
+    margin-top: 23px;
     min-height: 85vh!important;
 }
 .asr_MainFooter{
