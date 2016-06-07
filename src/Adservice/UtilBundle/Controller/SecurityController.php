@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Controller\UtilController;
 
@@ -17,11 +18,20 @@ class SecurityController extends Controller{
      * @throws AccessDeniedException
      * @return url
      */
-    public function autologinAction(){
+    public function autologinAction(Request $request){
 
     	$em = $this->getDoctrine()->getEntityManager();
-    	$request = $this->getRequest();
+
         $token = $request->get("token");
+
+        $headers = $request->headers->all();
+var_dump($_POST);
+var_dump($_GET);
+var_dump($token);
+var_dump($headers);
+
+var_dump($request);
+die;
 
         ///////////////////////////////////////////////////////////////////////////////////////
         // Mostrar Token encriptado para test
