@@ -20,18 +20,8 @@ class SecurityController extends Controller{
      */
     public function autologinAction(Request $request){
 
-    	$em = $this->getDoctrine()->getEntityManager();
-
+        $em = $this->getDoctrine()->getEntityManager();
         $token = $request->get("token");
-
-        $headers = $request->headers->all();
-var_dump($_POST);
-var_dump($_GET);
-var_dump($token);
-var_dump($headers);
-
-var_dump($request);
-die;
 
         ///////////////////////////////////////////////////////////////////////////////////////
         // Mostrar Token encriptado para test

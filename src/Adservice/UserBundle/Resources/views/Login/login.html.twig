@@ -35,4 +35,57 @@
         </div>
     </div>
 </div>
+
+<?php
+class encryptTokenADS {
+
+    /**
+     * Method to encrypt a plain text string
+     * initialization vector(IV) has to be the same when encrypting and decrypting
+     * PHP 5.4.9
+     *
+     * @param string $string: string to encrypt or decrypt (the password)
+     *
+     * @return string
+     */
+    public function encryptADS($string){
+
+        $output = false;
+        //encryptiom method name
+        $encrypt_method = "AES-256-CBC";
+        //the current day "YYYYmmdd"
+        $secret_key = date_format(date_create('now'), 'Ymd');
+
+        //secret iv
+        $secret_iv = "TYDJbDYNYR4L19q6y5Eu";
+
+        // hash
+        $key = hash('sha256', $secret_key);
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
+
+        //encrypt with openssl
+        $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+
+        //encode with base64
+        $output = base64_encode($output);
+
+        return $output;
+    }
+}
+
+$encrypt = new encryptTokenADS();
+
+//encriptamos el token utilizando la función importada
+$encrypted_token = $encrypt->encryptADS('ueswxDosR0Twp4DG8r2K');
+var_dump("token encrypted: " . $encrypted_token);
+
+?>
+
+<div>
+    <form action="http://project.adservice/app_dev.php/es/autologin" method="post" name="submit_form" >
+        <!-- encrypted token -->
+        <input type="text" id="token" name="token" value="ueswxDosR0Twp4DG8r2K">
+        <button type="submit" id="submit" name="submit">Login</button>
+    </form>
+</div>
 {% endblock %}
