@@ -636,12 +636,17 @@ class WorkshopController extends Controller {
      * @param Workshop $workshop
      */
     private function saveWorkshop($em, $workshop) {
-
+        
+        $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+       
+        $user = UtilController::saveUserFromWorkshop($workshop,$user);
+        $user->setName($workshop->getContact());
+        $user->setActive($workshop->getActive());
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
         if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-
+        $em->persist($user);
         $em->persist($workshop);
         $em->flush();
     }
