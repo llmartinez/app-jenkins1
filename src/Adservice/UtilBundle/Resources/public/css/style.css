@@ -20,15 +20,17 @@ legend {
 
 #MainBody {
     background-color: transparent;
-    margin: 20px;
+    margin: 0px;
 }
 
 .MainHeader {
+    height: 5vh;
     background-color:  transparent;
     min-width: 800px;
 }
 
 #MainContent {
+    min-height: 91vh;
     background-color:  white;
     padding: 20px 20px 100px 20px;
     overflow: hidden;
@@ -36,11 +38,11 @@ legend {
 }
 
 #MainFooter {
+    min-height: 4vh;
     background-color: #428BCA;
     color: #fff;
-    padding: 10px 0;
+    padding: 12px 0;
     font-size: smaller;
-    margin-top: 20px;
     text-align: center;
     border-radius: 4px;
 }
@@ -111,7 +113,8 @@ legend {
 
 .navbar {
     background-color: #428bca;
-    height: 124px;
+    height: 50px;
+    margin-bottom: 0px!important;
     padding: 0 37px;
 }
 
@@ -603,15 +606,27 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
 textarea.form-control_ged {
     height: auto;
 }
+
+.dropdown-menu {
+    min-width: 100px!important;
+}
 .language {
-    margin-top: 18px;
+    float: right;
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 .user {
-    margin-top: 15px;
+    float: right;
+    margin-top: 5px;
+    margin-right: -17px;
 }
 
-.img_logo {margin-top: 30px;}
+.img_logo {
+    height: 35px;
+    margin-top: 5px;
+    margin-left: -15px;
+}
 
 .h65 {
     height: 65px !important;
@@ -703,6 +718,7 @@ textarea.form-control_ged {
 
 .asr_MainContent{
     padding: 0 0 20px 0!important;
+    margin-top: 23px;
     min-height: 85vh!important;
 }
 .asr_MainFooter{

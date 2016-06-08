@@ -7,11 +7,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Controller\UtilController;
 
 class SecurityController extends Controller{
 
+    public function pruebaAjaxAction(){
+        
+        var_dump($req = $this->getRequest());
+    }
     /**
      * Autologin del taller a través de un token
      * @throws AccessDeniedException
@@ -19,12 +24,25 @@ class SecurityController extends Controller{
      */
     public function autologinAction(){
 
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$request = $this->getRequest();
+        $request = $this->getRequest();
         $token = $request->get("token");
 
-    	if($token != null)
-    	{
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // Mostrar Token encriptado para test
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // $em = $this->getDoctrine()->getEntityManager();
+        // $user = $em->getRepository('UserBundle:User')->findOneById(3318); //adpruebas
+        // $tok = $user->getToken();
+        // $enc = $this->encryptADS($tok);
+        // $dec = $this->decryptADS($enc);
+        // var_dump('Token: '.$tok);
+        // var_dump('Encript: '.$enc);
+        // var_dump('Decript => ');
+        // var_dump($dec);die;
+        ///////////////////////////////////////////////////////////////////////////////////////
+
+        if($token != null)
+        {
             $valid_hashes = $this->decryptADS($token);
 
             foreach ($valid_hashes as $valid_hash) {
@@ -33,6 +51,7 @@ class SecurityController extends Controller{
 
             if(isset($hash) and $hash != null and $hash != "")
             {
+                $em = $this->getDoctrine()->getEntityManager();
     			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 
 				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());

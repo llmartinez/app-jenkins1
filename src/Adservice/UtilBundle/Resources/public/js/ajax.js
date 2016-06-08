@@ -252,6 +252,9 @@ function fill_version(version) {
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
     var id_model = $('form[id=contact]').find('select[id=new_car_form_model]').val();
 
+    var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
+    if (motor == undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
+
     if (id_model != undefined && id_model != "" && id_model != "0") {
         var route  = 'car_version';
         var locale = $(document).find("#data_locale").val();
@@ -300,8 +303,12 @@ function fill_version(version) {
                     $.each(data, function(idx, elm) {
                         // if (idx == 'id_mts') $('#id_mts').val(elm);
                         // else {
-                            if(version == elm.id )
-                                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                            if(version == elm.id ){
+                                var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
+
+                                if(motor == undefined || (motor == mt))
+                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                            }
                             else
                                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
 
@@ -346,11 +353,6 @@ function fill_car_data() {
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
     if (year = undefined) year = $('form[id=contact]').find('input[id=new_car_form_year]').val();
 
-    var kW           = $('form[id=contact]').find('input[id=new_car_form_kW]').val();
-    var displacement = $('form[id=contact]').find('input[id=new_car_form_displacement]').val();
-    var vin          = $('form[id=contact]').find('input[id=new_car_form_vin]').val();
-    var plateNumber  = $('form[id=contact]').find('input[id=new_car_form_plateNumber]').val();
-
     if (id_version != undefined && id_version != "" && id_version != "0") {
         var route  = 'car_data';
         var locale = $(document).find("#data_locale").val();
@@ -381,18 +383,9 @@ function fill_car_data() {
                                 $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
                             }
                         }
-
                         $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
-
-                        if(kW != undefined) $('form[id=contact]').find('#new_car_form_kW').val(kW);
-                        else                $('form[id=contact]').find('#new_car_form_kW').val(elm.kw);
-
-                        if(displacement != undefined) $('form[id=contact]').find('#new_car_form_displacement').val(displacement);
-                        else                          $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3     );
-
-                        if(vin          != undefined) $('form[id=contact]').find('#new_car_form_vin').val(vin);
-                        if(plateNumber  != undefined) $('form[id=contact]').find('#new_car_form_plateNumber').val(plateNumber);
-
+                        $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
+                        $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                         var dis_url = $( "#dis-url" ).val();
                         var vts_url = $( "#vts-url" ).val();
 
@@ -461,7 +454,6 @@ function fill_car_by_year() {
     });
 }
 
-
 /**
  * Rellena (fill) los combos segun el motor
  */
@@ -523,6 +515,7 @@ function fill_car_by_motor() {
         }
     });
 }
+
 /**
  * Rellena (fill) el combo de los subsistemas (subsystem) segun el sistema (system) seleccionado por el usuario
  */
@@ -573,6 +566,7 @@ function fill_subsystem(subsystem) {
         }
     });
 }
+
 /**
  * Rellena (fill) una tabla con tickets similares
  */
