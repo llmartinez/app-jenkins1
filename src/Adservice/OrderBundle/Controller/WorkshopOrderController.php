@@ -785,6 +785,10 @@ class WorkshopOrderController extends Controller {
 
                 $action = $workshopOrder->getWantedAction();
                 $em->remove($workshopOrder);
+                $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
+                $user_workshop->setActive($workshop->getActive());
+                $em->persist($user_workshop);
+                $em->flush();
                 UtilController::newEntity($workshop, $user);
                 UtilController::saveEntity($em, $workshop, $user);
 
@@ -827,6 +831,10 @@ class WorkshopOrderController extends Controller {
                 $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
 
                 $action = $workshopOrder->getWantedAction();
+                $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
+                $user_workshop->setActive($workshop->getActive());
+                $em->persist($user_workshop);
+                $em->flush();
                 $em->remove($workshopOrder);
                 UtilController::saveEntity($em, $workshop, $user);
 
@@ -868,6 +876,13 @@ class WorkshopOrderController extends Controller {
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
                 $action = $workshopOrder->getWantedAction();
                 $em->remove($workshopOrder);
+                $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
+                $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
+                      
+                $user_workshop->setName($workshop->getContact());
+                $user_workshop->setActive($workshop->getActive());
+                $em->persist($user_workshop);
+                $em->flush();
                 UtilController::saveEntity($em, $workshop, $user);
 
             }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){

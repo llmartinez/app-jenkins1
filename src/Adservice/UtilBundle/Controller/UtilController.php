@@ -445,5 +445,45 @@ class UtilController extends Controller
 
         return false;
     }
+    
+    public static function saveUserFromWorkshop($workshop,$user_workshop){
+        $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());
+        if($workshop->getPhoneNumber1() != null){           $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());        }
+        else{                                               $user_workshop->setPhoneNumber1(null);        }
+        
+        if($workshop->getPhoneNumber2() != null){           $user_workshop->setPhoneNumber2($workshop->getPhoneNumber2());        }
+        else{                                               $user_workshop->setPhoneNumber2(null);        }
 
+        if($workshop->getMobileNumber1() != null){          $user_workshop->setMobileNumber1($workshop->getMobileNumber1());      }
+        else{                                               $user_workshop->setMobileNumber1(null);        }
+
+        if($workshop->getMobileNumber2() != null){          $user_workshop->setMobileNumber2($workshop->getMobileNumber2());      }
+        else{                                               $user_workshop->setMobileNumber2(null);        }
+
+        if($workshop->getFax() != null){                    $user_workshop->setFax($workshop->getFax());                          }
+        else{                                               $user_workshop->setFax(null);        }
+
+        if($workshop->getEmail1() != null){                 $user_workshop->setEmail1($workshop->getEmail1());                    }
+        else{                                               $user_workshop->setEmail1(null);        }
+
+        if($workshop->getEmail2() != null){                 $user_workshop->setEmail2($workshop->getEmail2());                    }
+        else{                                               $user_workshop->setEmail2(null);        }
+
+        if($workshop->getCountry() != null){                $user_workshop->setCountry($workshop->getCountry());                  }
+        else{                                               $user_workshop->setCountry(null);        }
+
+        if($workshop->getRegion() != null){                 $user_workshop->setRegion($workshop->getRegion());                    }
+        else{                                               $user_workshop->setRegion(null);        }      
+
+        if($workshop->getCity() != null){                   $user_workshop->setCity($workshop->getCity());                        }
+        else{                                               $user_workshop->setCity(null);        }
+
+        if($workshop->getAddress() != null){                $user_workshop->setAddress($workshop->getAddress());                  }
+        else{                                               $user_workshop->setAddress(null);        }
+
+        if($workshop->getPostalCode() != null){             $user_workshop->setPostalCode($workshop->getPostalCode());            }
+        else{                                               $user_workshop->setPostalCode(null);        }
+        
+        return $user_workshop;
+    }
 }
