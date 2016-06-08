@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Controller\UtilController;
 
@@ -17,10 +18,9 @@ class SecurityController extends Controller{
      * @throws AccessDeniedException
      * @return url
      */
-    public function autologinAction(){
+    public function autologinAction(Request $request){
 
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$request = $this->getRequest();
+        $em = $this->getDoctrine()->getEntityManager();
         $token = $request->get("token");
 
         ///////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ class SecurityController extends Controller{
         // var_dump('Token: '.$tok);
         // var_dump('Encript: '.$enc);
         // var_dump('Decript => ');
-        // var_dump($dec);
+        // var_dump($dec);die;
         ///////////////////////////////////////////////////////////////////////////////////////
 
     	if($token != null)
