@@ -26,7 +26,6 @@ autologin:
     pattern: /autologin/
     defaults: { _controller: UtilBundle:Security:autologin }
 
-
 #############################
 #   APDO. FILE              #
 #############################

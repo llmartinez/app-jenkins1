@@ -13,19 +13,24 @@ use Adservice\UtilBundle\Controller\UtilController;
 
 class SecurityController extends Controller{
 
+    public function pruebaAjaxAction(){
+        
+        var_dump($req = $this->getRequest());
+    }
     /**
      * Autologin del taller a través de un token
      * @throws AccessDeniedException
      * @return url
      */
-    public function autologinAction(Request $request){
+    public function autologinAction(){
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
         $token = $request->get("token");
 
         ///////////////////////////////////////////////////////////////////////////////////////
         // Mostrar Token encriptado para test
         ///////////////////////////////////////////////////////////////////////////////////////
+        // $em = $this->getDoctrine()->getEntityManager();
         // $user = $em->getRepository('UserBundle:User')->findOneById(3318); //adpruebas
         // $tok = $user->getToken();
         // $enc = $this->encryptADS($tok);
@@ -36,8 +41,8 @@ class SecurityController extends Controller{
         // var_dump($dec);die;
         ///////////////////////////////////////////////////////////////////////////////////////
 
-    	if($token != null)
-    	{
+        if($token != null)
+        {
             $valid_hashes = $this->decryptADS($token);
 
             foreach ($valid_hashes as $valid_hash) {
@@ -46,6 +51,7 @@ class SecurityController extends Controller{
 
             if(isset($hash) and $hash != null and $hash != "")
             {
+                $em = $this->getDoctrine()->getEntityManager();
     			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 
 				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
