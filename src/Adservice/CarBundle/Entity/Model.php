@@ -7,23 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Adservice\CarBundle\Entity\Model
  *
- * @ORM\Table(name="model")
+ * @ORM\Table(name="Modelo_Vehiculo")
  * @ORM\Entity
  */
 class Model {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="Modelo", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="Descripcion", type="string", length=255)
      */
     private $name;
 
@@ -31,23 +30,55 @@ class Model {
      * @var integer $brand
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
      */
     private $brand;
+
+    /**
+     * @var string $inicio
+     *
+     * @ORM\Column(name="Inicio", type="string", length=6, nullable=true)
+     */
+    private $inicio;
+
+    /**
+     * @var string $fin
+     *
+     * @ORM\Column(name="Fin", type="string", length=6, nullable=true)
+     */
+    private $fin;
+
+    /**
+     * @var string $utilitario
+     *
+     * @ORM\Column(name="Utilitario", type="boolean")
+     */
+    private $utilitario;
+
+    /**
+     * @var string $comercial
+     *
+     * @ORM\Column(name="Comercial", type="boolean")
+     */
+    private $comercial;
 
     /**
      * @var string $version
      *
      * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Version", mappedBy="model")
+     * @ORM\JoinColumn(name="version", referencedColumnName="Version")
      */
     private $version;
 
-    /**
-     * @var integer $idTecDoc
-     *
-     * @ORM\Column(name="idTecDoc", type="integer")
-     */
-    private $idTecDoc;
 
+    public function __construct()
+    {
+        $this->version = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->name;
+    }
 
     /**
      * Get id
@@ -100,47 +131,104 @@ class Model {
     }
 
     /**
-     * Set idTecDoc
+     * Set inicio
      *
-     * @param integer $idTecDoc
+     * @param string $inicio
      */
-    public function setIdTecDoc($idTecDoc)
+    public function setInicio($inicio)
     {
-        $this->idTecDoc = $idTecDoc;
+        $this->inicio = $inicio;
     }
 
     /**
-     * Get idTecDoc
+     * Get inicio
      *
-     * @return integer
+     * @return string
      */
-    public function getIdTecDoc()
+    public function getInicio()
     {
-        return $this->idTecDoc;
+        return $this->inicio;
     }
 
-    public function __toString() {
-        return $this->name;
-    }
-
-//    public function jsonSerialize() {
-//        return [
-//            'id' => $this->getId(),
-//            'name' => $this->getName()
-//        ];
-//    }
-
-    public function to_json(){
-        $json = array('id'      => $this->getId(),
-                      'name'    => $this->getName(),
-                      'idTecDoc'=> $this->getIdTecDoc(),
-                      'brand'   => $this->getBrand()->getIdTecDoc());
-        return $json;
-    }
-
-    public function __construct()
+    /**
+     * Set fin
+     *
+     * @param string $fin
+     */
+    public function setFin($fin)
     {
-        $this->version = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fin = $fin;
+    }
+
+    /**
+     * Get fin
+     *
+     * @return string
+     */
+    public function getFin()
+    {
+        return $this->fin;
+    }
+
+    /**
+     * Get dateInicio
+     *
+     * @return string
+     */
+    public function getDateInicio()
+    {
+        $inicio = '01-'.substr ($this->inicio, -2).'-'.substr ($this->inicio, 0, -2); //ej. 01-01-2015
+        return $this->version;
+    }
+    /**
+     * Get dateFin
+     *
+     * @return string
+     */
+    public function getDateFin()
+    {
+        $fin    = '31-'.substr ($this->fin, -2).'-'.substr ($this->fin, 0, -2); //ej. 31-12-2015
+        return $this->version;
+    }
+
+    /**
+     * Set utilitario
+     *
+     * @param string $utilitario
+     */
+    public function setUtilitario($utilitario)
+    {
+        $this->utilitario = $utilitario;
+    }
+
+    /**
+     * Get utilitario
+     *
+     * @return string
+     */
+    public function getUtilitario()
+    {
+        return $this->utilitario;
+    }
+
+    /**
+     * Set comercial
+     *
+     * @param string $comercial
+     */
+    public function setComercial($comercial)
+    {
+        $this->comercial = $comercial;
+    }
+
+    /**
+     * Get comercial
+     *
+     * @return string
+     */
+    public function getComercial()
+    {
+        return $this->comercial;
     }
 
     /**
@@ -161,5 +249,16 @@ class Model {
     public function getVersion()
     {
         return $this->version;
+    }
+
+    public function to_json(){
+        $json = array('id'          => $this->getId(),
+                      'name'        => $this->getName(),
+                      'inicio'      => $this->getInicio(),
+                      'fin'         => $this->getFin(),
+                      'utilitario'  => $this->getUtilitario(),
+                      'comercial'   => $this->getComercial(),
+                      'brand'       => $this->getBrand()->getId());
+        return $json;
     }
 }

@@ -1,10 +1,10 @@
 
 ############################################################################
-# LINEA PARA IMPORTAR DATOS DE LA BBDD ANTIGUA: COMENTAR UNA VEZ EJECUTADO #
+# LINEA PARA IMPORTAR DATOS DE LA BBDD: COMENTAR UNA VEZ EN PROD           #
 ############################################################################
-ImportBundle:
-    resource: "@ImportBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/import/
+# ImportBundle:
+#    resource: "@ImportBundle/Resources/config/routing.yml"
+#    prefix:   /{_locale}/import/
 ############################################################################
 
 LockBundle:

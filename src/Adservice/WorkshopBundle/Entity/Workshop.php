@@ -168,6 +168,20 @@ class Workshop {
     private $conflictive;
 
     /**
+     * @var boolean $haschecks
+     *
+     * @ORM\Column(name="has_checks", type="boolean", nullable=true)
+     */
+    private $haschecks;
+
+    /**
+     * @var boolean $numchecks
+     *
+     * @ORM\Column(name="num_checks", type="integer", nullable=true)
+     */
+    private $numchecks;
+
+    /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosis_machine",
      *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
@@ -506,6 +520,42 @@ class Workshop {
     }
 
     /**
+     * Set haschecks
+     *
+     * @param boolean $haschecks
+     */
+    public function setHasChecks($haschecks) {
+        $this->haschecks = $haschecks;
+    }
+
+    /**
+     * Get haschecks
+     *
+     * @return boolean
+     */
+    public function getHasChecks() {
+        return $this->haschecks;
+    }
+
+    /**
+     * Set numchecks
+     *
+     * @param integer $numchecks
+     */
+    public function setNumChecks($numchecks) {
+        $this->numchecks = $numchecks;
+    }
+
+    /**
+     * Get numchecks
+     *
+     * @return integer
+     */
+    public function getNumChecks() {
+        return $this->numchecks;
+    }
+
+    /**
      * Add users
      *
      * @param Adservice\UserBundle\Entity\User $users
@@ -652,30 +702,30 @@ class Workshop {
     /**
      * @var integer $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="integer")
+     * @ORM\Column(name="phone_number_1", type="string", length=15)
      */
     private $phone_number_1;
 
     /**
      * @var integer $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="phone_number_2", type="string", nullable=true, length=15)
      */
     private $phone_number_2;
 
     /**
-     * @var integer $movile_number_1
+     * @var integer $mobile_number_1
      *
-     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1", type="string", nullable=true, length=15)
      */
-    private $movile_number_1;
+    private $mobile_number_1;
 
     /**
-     * @var integer $movile_number_2
+     * @var integer $mobile_number_2
      *
-     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="string", nullable=true, length=15)
      */
-    private $movile_number_2;
+    private $mobile_number_2;
 
     /**
      * @var integer $fax
@@ -828,39 +878,39 @@ class Workshop {
     }
 
     /**
-     * Set movile_number_1
+     * Set mobile_number_1
      *
-     * @param integer $movileNumber1
+     * @param integer $mobileNumber1
      */
-    public function setMovileNumber1($movileNumber1) {
-        $this->movile_number_1 = $movileNumber1;
+    public function setMobileNumber1($mobileNumber1) {
+        $this->mobile_number_1 = $mobileNumber1;
     }
 
     /**
-     * Get movile_number_1
+     * Get mobile_number_1
      *
      * @return integer
      */
-    public function getMovileNumber1() {
-        return $this->movile_number_1;
+    public function getMobileNumber1() {
+        return $this->mobile_number_1;
     }
 
     /**
-     * Set movile_number_2
+     * Set mobile_number_2
      *
-     * @param integer $movileNumber2
+     * @param integer $mobileNumber2
      */
-    public function setMovileNumber2($movileNumber2) {
-        $this->movile_number_2 = $movileNumber2;
+    public function setMobileNumber2($mobileNumber2) {
+        $this->mobile_number_2 = $mobileNumber2;
     }
 
     /**
-     * Get movile_number_2
+     * Get mobile_number_2
      *
      * @return integer
      */
-    public function getMovileNumber2() {
-        return $this->movile_number_2;
+    public function getMobileNumber2() {
+        return $this->mobile_number_2;
     }
 
     /**

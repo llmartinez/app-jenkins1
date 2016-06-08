@@ -11,10 +11,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Adservice\UserBundle\Form\UserAdminAssessorType;
+use Adservice\UserBundle\Form\UserAssessorType;
 use Adservice\UserBundle\Form\UserSuperPartnerType;
 use Adservice\UserBundle\Form\UserPartnerType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 use Adservice\UserBundle\Form\EditUserAdminAssessorType;
+use Adservice\UserBundle\Form\EditUserAssessorType;
 use Adservice\UserBundle\Form\EditUserSuperPartnerType;
 use Adservice\UserBundle\Form\EditUserPartnerType;
 use Adservice\UserBundle\Form\EditUserWorkshopType;
@@ -24,6 +26,7 @@ use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\StatisticBundle\Entity\StatisticRepository;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
+use Adservice\UtilBundle\Controller\LanguageController as LanguageController;
 
 class UserController extends Controller {
 
@@ -32,15 +35,97 @@ class UserController extends Controller {
      */
     public function indexAction() {
 
-//        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-//
-//        $session = $this->getRequest()->getSession();
-//        $session->set('id_logged_user', $id_logged_user);
-
+        //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
+        //  $session = $this->getRequest()->getSession();
+        //  $session->set('id_logged_user', $id_logged_user);
+        $request  = $this->getRequest();
+        $locale = $request->getLocale();
+        $currentLocale = $request->getLocale();
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user->getPrivacy() == 0 ||$user->getPrivacy() == null ){            
+             $currentPath = $this->generateUrl('accept_privacy');
+             return $this->redirect($currentPath);
+        }
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
+        // Se pondrá por defecto el idioma del usuario en el primer login
+
+        if(!isset($_SESSION['lang'])) {
+
+            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = substr($lang, 0, strrpos($lang, '_'));
+
+            $currentLocale = $request->getLocale();
+            $request->setLocale($lang);
+            if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
+            elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
+
+                if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
+                    $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
+                    $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
+                                                                      'num_rows' => 10,
+                                                                      'country'  => $country,
+                                                                      'option'   => 'assessor_pending'));
+                }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+
+                    $user = $this->get('security.context')->getToken()->getUser();
+                    $country = $user->getCountry()->getId();
+
+                    if($user->getWorkshop() != null){
+                        if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
+                            $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
+                                                                                  'country'  => $country));
+                        }
+                        else{
+                            $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
+                        }
+                    }
+                }else{
+                    $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
+                }
+            }
+
+            else    $currentPath = $this->generateUrl('user_index');
+
+
+            $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+            $_SESSION['lang'] = $lang;
+
+            return $this->redirect($currentPath);
+        }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+
+            $user= $this->get('security.context')->getToken()->getUser();
+            $country= $user->getCountry()->getId();
+
+            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = substr($lang, 0, strrpos($lang, '_'));
+
+            if($user->getWorkshop() != null){
+
+                if(($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ){
+                    $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),
+                                                                          'country'  => $country));
+
+                }
+                else{
+                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
+                                                                    'num_rows' => 10,
+                                                                    'country'  => $country));
+                }
+                $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+                $_SESSION['lang'] = $lang;
+
+                return $this->redirect($currentPath);
+            }
+        }
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+
     }
 
     /**
@@ -53,7 +138,6 @@ class UserController extends Controller {
 
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
-
         return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
     }
 
@@ -67,7 +151,7 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $country=0, $option=null) {
+    public function userListAction($page=1, $country=0, $option='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -93,7 +177,18 @@ class UserController extends Controller {
             }
         }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
-        if($option == null or $option == 'all' or $option == 'none'){
+        if ($term != '0' and $field != '0') {
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'mail') {
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'user') {
+                $params[] = array('username', " LIKE '%" . $field . "%'");
+            }
+        }
+
+        if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
                 $role_id  = 'none';
@@ -140,6 +235,8 @@ class UserController extends Controller {
                                                                         'countries'              => $countries,
                                                                         'country'                => $country,
                                                                         'option'                 => $role_id,
+                                                                        'term'                   => $term,
+                                                                        'field'                  => $field,
                                                                        ));
     }
 
@@ -201,23 +298,14 @@ class UserController extends Controller {
         } elseif ($type == 'assessor') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
+            $form = $this->createForm(new UserAssessorType(), $user);
         }
 
         $request = $this->getRequest();
 
         $form->bindRequest($request);
 
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-
-            if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
@@ -230,11 +318,13 @@ class UserController extends Controller {
 
                 $error_username = $this->get('translator')->trans('username_used').$username;
 
-                return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                                   'user_type'  => $type,
-                                                                                   'form_name'  => $form->getName(),
-                                                                                   'form'       => $form->createView(),
-                                                                                    'error_username' => $error_username));
+                $array = array('user'       => $user,
+                               'user_type'  => $type,
+                               'form_name'  => $form->getName(),
+                               'form'       => $form->createView(),
+                               'error_username' => $error_username);
+
+                return $this->render('UserBundle:User:new_user.html.twig', $array);
             }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -249,10 +339,12 @@ class UserController extends Controller {
             return $this->redirect($this->generateUrl('user_list'));
         }
 
-        return $this->render('UserBundle:User:new_user.html.twig', array(  'user'       => $user,
-                                                                           'user_type'  => $type,
-                                                                           'form_name'  => $form->getName(),
-                                                                           'form'       => $form->createView()));
+        $array = array('user'       => $user,
+                       'user_type'  => $type,
+                       'form_name'  => $form->getName(),
+                       'form'       => $form->createView());
+
+        return $this->render('UserBundle:User:new_user.html.twig', $array);
     }
 
     /**
@@ -309,10 +401,11 @@ class UserController extends Controller {
     	$role = $role[0];
     	$role = $role->getRole();
 
-        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN" or $role == "ROLE_ASSESSOR") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_SUPER_AD")                                                         $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")                                                               $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_USER")                                                             $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
+        elseif ($role == "ROLE_ASSESSOR")                             $form = $this->createForm(new EditUserAssessorType()     , $user);
+        elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")                                 $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
@@ -321,15 +414,7 @@ class UserController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-            if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -348,15 +433,25 @@ class UserController extends Controller {
                 }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
+                if($user->getWorkshop() !== null){
+                    $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
+                    $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
+                                                         
+        
+                    $workshop_user->setContact($user->getName());
+                    $workshop_user->setActive($user->getActive());
+                    $em->persist($workshop_user);
+                    $em->flush();
+                 }
                 $this->saveUser($em, $user, $original_password);
-
-                $flash =  $this->get('translator')->trans('edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
             }
             return $this->redirect($this->generateUrl('user_list'));
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                          'role'      => $role,
                                                                           'form_name' => $form->getName(),
                                                                           'form'      => $form->createView()));
     }
@@ -469,7 +564,13 @@ class UserController extends Controller {
             $mailerUser->setTo($mail);
             $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
             $mailerUser->setFrom('noreply@adserviceticketing.com');
-            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password, '__locale' => $locale)));
+            $mailerUser->sendMailToSpool();
+            //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
+
+            /* MAILING */
+            $mail = $this->container->getParameter('mail_db');
+            $mailerUser->setTo($mail);
             $mailerUser->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
@@ -508,7 +609,8 @@ class UserController extends Controller {
         $not_rejected = array('action' , " != 'rejected'");
 
 
-        if    ($role == "ROLE_SUPER_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+        if    ($role == "ROLE_SUPER_AD"
+            OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
                                             $workshop_rejected[] = $by_country;
                                             $workshop_rejected[] = $rejected;
                                             $shop_rejected[]     = $by_country;
@@ -577,5 +679,24 @@ class UserController extends Controller {
 
         $em->persist($user);
         $em->flush();
+    }
+    
+    public function acceptPrivacyAction() {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            if ($request->request->has('Accept')) {
+                $em = $this->getDoctrine()->getEntityManager();                    
+                $user->setPrivacy(1);
+                $em->persist($user);
+                $em->flush();
+            return $this->redirect($this->generateUrl('user_index'));
+            }
+            else  if ($request->request->has('Cancel')) {
+                return $this->redirect($this->generateUrl('user_logout'));
+            }
+        }
+        return $this->render('UserBundle:User:accept_privacy.html.twig');
+        
     }
 }

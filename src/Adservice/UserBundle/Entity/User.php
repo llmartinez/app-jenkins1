@@ -72,6 +72,20 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $active;
 
     /**
+     * @var integer $charge
+     *
+     * @ORM\Column(name="charge", type="integer", nullable=true)
+     */
+    private $charge;
+
+    /**
+     * @var boolean $token
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * se utilizó user_roles para no hacer conflicto al aplicar ->toArray en getRoles()
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="user_role",
@@ -89,6 +103,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $language;
 
     /**
+     * @var string $country_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\CountryService")
+     */
+    private $country_service;
+
+    /**
      *
      * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
@@ -102,6 +123,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     private $workshop;
 
+    /**
+     * @var boolean $privacy
+     *
+     * @ORM\Column(name="privacy", type="boolean")
+     */
+    private $privacy;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -199,6 +226,42 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     /**
+     * Set charge
+     *
+     * @param boolean $charge
+     */
+    public function setCharge($charge) {
+        $this->charge = $charge;
+    }
+
+    /**
+     * Get charge
+     *
+     * @return boolean
+     */
+    public function getCharge() {
+        return $this->charge;
+    }
+
+    /**
+     * Set token
+     *
+     * @param integer $token
+     */
+    public function setToken($token) {
+        $this->token = $token;
+    }
+
+    /**
+     * Get token
+     *
+     * @return integer
+     */
+    public function getToken() {
+        return $this->token;
+    }
+
+    /**
      * Set language
      *
      * @param string $language
@@ -214,6 +277,24 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getLanguage() {
         return $this->language;
+    }
+
+    /**
+     * Set country_service
+     *
+     * @param string $country_service
+     */
+    public function setCountryService(\Adservice\UtilBundle\Entity\CountryService $country_service) {
+        $this->country_service = $country_service;
+    }
+
+    /**
+     * Get country_service
+     *
+     * @return string
+     */
+    public function getCountryService() {
+        return $this->country_service;
     }
 
     public function getName() {
@@ -321,6 +402,23 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->partner = $partner;
     }
 
+    /**
+     * Set privacy
+     *
+     * @param boolean $privacy
+     */
+    public function setPrivacy($privacy) {
+        $this->privacy = $privacy;
+    }
+
+    /**
+     * Get privacy
+     *
+     * @return boolean
+     */
+    public function getPrivacy() {
+        return $this->privacy;
+    }
 
 
 
@@ -380,18 +478,18 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $phone_number_2;
 
     /**
-     * @var integer $movile_number_1
+     * @var integer $mobile_number_1
      *
-     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1", type="integer", nullable=true)
      */
-    private $movile_number_1;
+    private $mobile_number_1;
 
     /**
-     * @var integer $movile_number_2
+     * @var integer $mobile_number_2
      *
-     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="integer", nullable=true)
      */
-    private $movile_number_2;
+    private $mobile_number_2;
 
     /**
      * @var integer $fax
@@ -544,39 +642,39 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     /**
-     * Set movile_number_1
+     * Set mobile_number_1
      *
-     * @param integer $movileNumber1
+     * @param integer $mobileNumber1
      */
-    public function setMovileNumber1($movileNumber1) {
-        $this->movile_number_1 = $movileNumber1;
+    public function setMobileNumber1($mobileNumber1) {
+        $this->mobile_number_1 = $mobileNumber1;
     }
 
     /**
-     * Get movile_number_1
+     * Get mobile_number_1
      *
      * @return integer
      */
-    public function getMovileNumber1() {
-        return $this->movile_number_1;
+    public function getMobileNumber1() {
+        return $this->mobile_number_1;
     }
 
     /**
-     * Set movile_number_2
+     * Set mobile_number_2
      *
-     * @param integer $movileNumber2
+     * @param integer $mobileNumber2
      */
-    public function setMovileNumber2($movileNumber2) {
-        $this->movile_number_2 = $movileNumber2;
+    public function setMobileNumber2($mobileNumber2) {
+        $this->mobile_number_2 = $mobileNumber2;
     }
 
     /**
-     * Get movile_number_2
+     * Get mobile_number_2
      *
      * @return integer
      */
-    public function getMovileNumber2() {
-        return $this->movile_number_2;
+    public function getMobileNumber2() {
+        return $this->mobile_number_2;
     }
 
     /**

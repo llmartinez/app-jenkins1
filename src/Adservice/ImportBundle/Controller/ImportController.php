@@ -72,7 +72,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'shop' )
     	{
-			$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
+			//$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
 			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
 
 			// TIENDA POR DEFECTO
@@ -85,12 +85,13 @@ class ImportController extends Controller
 			$newShop->setActive('1');
 			$newShop->setPhoneNumber1  ('0');
 	        $newShop->setPhoneNumber2  ('0');
-	        $newShop->setMovileNumber1 ('0');
-	        $newShop->setMovileNumber2 ('0');
+	        $newShop->setMobileNumber1 ('0');
+	        $newShop->setMobileNumber2 ('0');
 	        $newShop->setFax           ('0');
 
-	        $newShop->setEmail1('test@ad-service.es');
-	        $newShop->setEmail2('test@ad-service.es');
+	        $mail = $this->container->getParameter('mail_test');
+	        $newShop->setEmail1($mail);
+	        $newShop->setEmail2($mail);
 
 	        $newShop->setCity  ('...');
 	        $newShop->setRegion('...');
@@ -98,21 +99,21 @@ class ImportController extends Controller
 	        $newShop->setCountry($locations['countries']['spain']);
 			UtilController::saveEntity($em, $newShop, $sa,false);
 
-			$partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
+			// $partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
 
-			foreach ($old_Tiendas as $old_Tienda)
-			{
-				$newShop = UtilController::newEntity(new Shop(), $sa);
-				$name = $old_Tienda->getNombre();
-				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-				$newShop->setName($name);
-				$newShop->setPartner($partner);
-				$newShop->setActive('1');
-				$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
-				UtilController::saveEntity($em, $newShop, $sa,false);
-			}
-			$em->flush();
+			// foreach ($old_Tiendas as $old_Tienda)
+			// {
+			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
+			// 	$name = $old_Tienda->getNombre();
+			// 	$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+			// 	$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+			// 	$newShop->setName($name);
+			// 	$newShop->setPartner($partner);
+			// 	$newShop->setActive('1');
+			// 	$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+			// 	UtilController::saveEntity($em, $newShop, $sa,false);
+			// }
+			// $em->flush();
 			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
 			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
 			$session->set('next',  	'ad');
@@ -226,7 +227,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'workshop' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findAll();	    // WORKSHOP	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findBy(array('active' => 1)); // WORKSHOP	//
             $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
 
             $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
@@ -243,7 +244,12 @@ class ImportController extends Controller
             {
 
                     $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-                    $newWorkshop->setName 					($old_Taller->getNombre());
+
+		            $buscar=array(chr(13).chr(10), chr(9), "\r\n", "\n", "\r");
+		            $reemplazar=array("", "", "", "");
+		            $name=str_ireplace($buscar,$reemplazar,$old_Taller->getNombre());
+                    $newWorkshop->setName($name);
+
                     $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
                     $newWorkshop->setAddress 				($old_Taller->getDireccion());
                     $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
@@ -307,7 +313,7 @@ class ImportController extends Controller
 
     	elseif( $bbdd == 'user' )
     	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findAll();		// USER 	//
+    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findBy(array('active' => 1)); // USER 	//
 
 			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
 			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
@@ -530,8 +536,8 @@ class ImportController extends Controller
     {
         $entity->setPhoneNumber1  ($old_entity->getTfno());
         $entity->setPhoneNumber2  ($old_entity->getTfno2());
-        $entity->setMovileNumber1 ($old_entity->getMovil());
-        $entity->setMovileNumber2 ($old_entity->getMovil2());
+        $entity->setMobileNumber1 ($old_entity->getMovil());
+        $entity->setMobileNumber2 ($old_entity->getMovil2());
         $entity->setFax           ($old_entity->getFax());
 
         $email = $old_entity->getEmail();
@@ -554,11 +560,12 @@ class ImportController extends Controller
         else $entity->setCountry($locations['countries']['spain']);
 
         /* MAILING */
+	    // $mail = $this->container->getParameter('mail_test');
         // $mailerUser = $this->get('cms.mailer');
-        // $mailerUser->setTo('test@ad-service.es');  /* COLOCAR EN PROD -> *//* $mailerUser->setTo($newUser->getEmail1()); */
+        // $mailerUser->setTo($newUser->getEmail1());
         // $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$newUser->getWorkshop());
         // $mailerUser->setFrom('noreply@adserviceticketing.com');
-        // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass)));
+        // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
         // $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
@@ -674,8 +681,8 @@ class ImportController extends Controller
             $excel.=$row[0]->getEmail2().';';
             $excel.=$row[0]->getPhoneNumber1().';';
             $excel.=$row[0]->getPhoneNumber2().';';
-            $excel.=$row[0]->getMovileNumber1().';';
-            $excel.=$row[0]->getMovileNumber2().';';
+            $excel.=$row[0]->getMobileNumber1().';';
+            $excel.=$row[0]->getMobileNumber2().';';
             $excel.=$row[0]->getRegion().';';
             $excel.=$row[0]->getCity().';';
             $excel.=$row[0]->getAddress().';';
@@ -768,8 +775,8 @@ class ImportController extends Controller
 		$postal_code = '08080';
 		$phoneNumber1 = '931112233';
 		$phoneNumber2 = '931112233';
-		$movileNumber1 = '655112233';
-		$movileNumber2 = '655112233';
+		$mobileNumber1 = '655112233';
+		$mobileNumber2 = '655112233';
 		$fax = '931112233';
         $email1 = 'test@test.es';
         $email2 = 'test@test.es';
@@ -784,15 +791,15 @@ class ImportController extends Controller
        	$user->setCity($city);
        	$user->setPhoneNumber1($phoneNumber1);
         $user->setPhoneNumber2($phoneNumber2);
-        $user->setMovileNumber1($movileNumber1);
-        $user->setMovileNumber2($movileNumber2);
+        $user->setMobileNumber1($mobileNumber1);
+        $user->setMobileNumber2($mobileNumber2);
         $user->setFax($fax);
         $user->setEmail1($email1);
         $user->setEmail2($email1);
-        $user->addRole 		($role);
-        $user->setRegion 	($region);
-        $user->setWorkshop 	($workshop);
-        $user->setCountry 	($country);
+        $user->addRole ($role);
+        $user->setRegion ($region);
+        $user->setWorkshop ($workshop);
+        $user->setCountry ($country);
         $user->setCreatedAt(new \DateTime('today'));
         $user->setModifiedAt(new \DateTime('today'));
         $user->setModifiedBy($admin);
@@ -812,8 +819,8 @@ class ImportController extends Controller
         $shopOrder->setPostalCode($postal_code);
         $shopOrder->setPhoneNumber1($phoneNumber1);
         $shopOrder->setPhoneNumber2($phoneNumber2);
-        $shopOrder->setMovileNumber1($movileNumber1);
-        $shopOrder->setMovileNumber2($movileNumber2);
+        $shopOrder->setMobileNumber1($mobileNumber1);
+        $shopOrder->setMobileNumber2($mobileNumber2);
         $shopOrder->setFax($fax);
         $shopOrder->setEmail1($email1);
         $shopOrder->setEmail2($email1);
@@ -855,8 +862,8 @@ class ImportController extends Controller
 		$workshopOrder->setPostalCode($postal_code);
 		$workshopOrder->setPhoneNumber1($phoneNumber1);
 		$workshopOrder->setPhoneNumber2($phoneNumber2);
-		$workshopOrder->setMovileNumber1($movileNumber1);
-		$workshopOrder->setMovileNumber2($movileNumber2);
+		$workshopOrder->setMobileNumber1($mobileNumber1);
+		$workshopOrder->setMobileNumber2($mobileNumber2);
 		$workshopOrder->setFax($fax);
 		$workshopOrder->setEmail1($email1);
 		$workshopOrder->setEmail2($email2);
@@ -871,7 +878,7 @@ class ImportController extends Controller
         $car = new Car();
 		$car->setBrand($em->getRepository('CarBundle:Brand'  )->find(1));
 		$car->setModel($em->getRepository('CarBundle:Model'  )->find(1));
-		$car->setVersion($em->getRepository('CarBundle:Version')->find(1));
+		$car->setVersion($em->getRepository('CarBundle:Version')->findById(1));
 		$car->setCreatedAt(new \DateTime('today'));
 		$car->setCreatedBy($admin);
 		$car->setModifiedAt(new \DateTime('today'));
@@ -1006,4 +1013,127 @@ class ImportController extends Controller
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
+
+    public function sendUserCredentialsAction($type)
+    {
+        $em      = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+
+        $users = $em->createQuery('SELECT u FROM UserBundle:User u WHERE u.'.$type.' IS NOT NULL' )->getResult();
+        $array = array();
+
+        foreach ($users as $user) {
+
+	        /*CREAR PASSWORD AUTOMATICAMENTE*/
+	        $password = substr( md5(microtime()), 1, 8);
+	        // Los passwords que acaban en 'e' y 3 numeros (e051) se malinterpretan por el csv
+	        $password = str_replace('e', 'd', $password);
+
+	        //password nuevo, se codifica con el nuevo salt
+	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+	        $salt = md5(time());
+	        $coded_pass = $encoder->encodePassword($password, $salt);
+	        $user->setPassword($coded_pass);
+	        $user->setSalt($salt);
+
+			$this_array = array('Usuario' 	 => $user->getUsername(),
+							 	'Contraseña' => $password,
+							 	'Email' 	 => $user->getEmail1(),
+							   );
+			if($type == 'partner')
+			{
+				$this_array['Codigo_Socio']  = $user->getPartner()->getCodePartner();
+			 	$this_array['Nombre'] 		 = $user->getPartner()->getName();
+			}
+			elseif($type == 'workshop')
+			{
+				$workshop = $user->getWorkshop();
+
+				$this_array['Codigo_Socio']  = $workshop->getCodePartner();
+				$this_array['Codigo_Taller'] = $workshop->getCodeWorkshop();
+				$this_array['Nombre'] 		 = $workshop->getName();
+
+				//Asignamos un Token para AD360
+				$token = UtilController::getRandomToken();
+				$user->setToken($token);
+			}
+			elseif($type == 'country_service') //ASESOR
+			{
+				$this_array['Nombre'] 		 = $user->getName();
+			}
+
+			$em->persist($user);
+			$em->flush();
+			$array[] = $this_array;
+	    }
+		if(sizeof($users) != 0) {
+
+    		$session = $this->get('session');
+
+			// Generarando excel usuarios
+			$response = $this->doExcelCredentialsAction($type, $array);
+			$session->set('response', $response);
+
+ 			if(isset($response)) {
+ 				return $response;
+			}
+		}
+
+		$session->set('msg' , 'Credenciales de talleres generados correctamente!');
+
+		return $this->render('ImportBundle:Import:import.html.twig');
+
+    }
+
+    private function doExcelCredentialsAction($type, $array) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security = $this->get('security.context');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+        $response->headers->set('Pragma', 'public');
+        $date    = new \DateTime();
+        $response->setLastModified($date);
+
+        $response->headers->set('Content-Disposition', 'attachment;filename="credenciales_'.date("d-m-Y").'.csv"');
+        $excel   = $this->createExcelCredentials($type, $array);
+
+        $response->setContent($excel);
+        return $response;
+    }
+
+    public function createExcelCredentials($type, $array){
+        //Creación de cabecera
+        if($type == 'partner')      $excel ='Codigo Socio;Socio;Usuario;Password;Email;';
+    	elseif($type == 'workshop') $excel ='Codigo Socio;Codigo Taller;Taller;Usuario;Password;Email;';
+    	elseif($type == 'country_service') $excel ='Asesor;Usuario;Password;Email;';
+        $excel.="\n";
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($array as $row) {
+            if(isset($row['Codigo_Socio'])) $excel.=$row['Codigo_Socio'].';';
+            if(isset($row['Codigo_Taller'])) $excel.=$row['Codigo_Taller'].';';
+
+	        // Reemplazar caracteres especiales
+	        $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+	        $reemplazar=array("");
+	        $name = str_ireplace($buscar,$reemplazar,$row['Nombre']);
+        	$name = str_replace(',', '.', $name);
+	        $name = UtilController::sinAcentos($name);
+            $excel.=$name.';';
+
+            $excel.=$row['Usuario'].';';
+            $excel.=$row['Contraseña'].';';
+            $excel.=$row['Email'].';';
+            $excel.="\n";
+
+        }
+
+        return($excel);
+    }
 }

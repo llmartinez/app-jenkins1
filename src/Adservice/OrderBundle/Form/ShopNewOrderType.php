@@ -15,6 +15,7 @@ class ShopNewOrderType extends AbstractType
 
         $builder
             ->add('name')
+            ->add('code_shop')
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
@@ -26,8 +27,11 @@ class ShopNewOrderType extends AbstractType
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
                                                           ->andWhere('s.id'.$id_partner); }))
+            ->add('cif')
+            ->add('active', 'checkbox', array('required' => false))
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT
+            ->add('contact', 'text', array('required' => false))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
@@ -43,8 +47,8 @@ class ShopNewOrderType extends AbstractType
             ->add('postal_code')
             ->add('phone_number_1', 'text')
             ->add('phone_number_2', 'text', array('required' => false))
-            ->add('movile_number_1', 'text', array('required' => false))
-            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('mobile_number_1', 'text', array('required' => false))
+            ->add('mobile_number_2', 'text', array('required' => false))
             ->add('fax', 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))

@@ -1,0 +1,19 @@
+
+    <legend>{% trans %} ticket_info {% endtrans %}</legend>
+
+        {% if is_granted('ROLE_ASSESSOR') %}
+
+            {% if ticket.assignedTo != "" %}    <p><b>{% trans %} assigned_to {% endtrans %}: </b> {{ ticket.assignedTo }} </p>{% endif %}
+
+            <div class="col-xs-12 col-md-12 margined">
+
+        {% else %} <div>
+        {% endif %}
+
+            <legend>{% trans %} description {% endtrans %}</legend>
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control asr_form-textarea', 'rows': '5', 'placeholder': "description" | trans }})}}
+        </div>
+
+        {{ form_rest(form) }}
+
+        <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.close {% endtrans %} </button>

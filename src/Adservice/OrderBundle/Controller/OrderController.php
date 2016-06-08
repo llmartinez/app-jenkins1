@@ -15,7 +15,7 @@ class OrderController extends Controller
      * @return type
      * @throws AccessDeniedException
      */
-    public function listOrdersAction($page=1, $option='workshop_pending', $country='none'){
+    public function listOrdersAction($page=1, $option='workshop_pending', $country='0', $w_idpartner='0', $w_id='0', $partner='0', $status='0', $term='0', $field='0'){
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
@@ -71,7 +71,7 @@ class OrderController extends Controller
                                             $shop_rejected[]     = $rejected;
                                         }
 
-        if ($country != 'none') {
+        if ($country != '0' ) {
             $workshop_pending[] = array('country' , " = ".$country);
             $workshop_rejected[] = array('country' , " = ".$country);
             $shop_pending[] = array('country' , " = ".$country);

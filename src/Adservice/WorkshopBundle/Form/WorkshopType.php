@@ -29,17 +29,18 @@ class WorkshopType extends AbstractType
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
             ->add('shop', 'entity', array(
-                  'required' => false,
+                  'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
+                  'empty_value' => false,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 0'); }))
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('typology', 'entity', array(
-                  'required' => false,
+                  'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',
@@ -65,6 +66,9 @@ class WorkshopType extends AbstractType
             ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('endtest_at', 'date', array('format' => 'dd-MM-yyyy'))
+            //CHECKS
+            // ->add('haschecks', 'checkbox', array('required' => false))
+            // ->add('numchecks', 'integer', array('required' => false))
             ->add('observation_workshop', 'textarea', array('required' => false))
             ->add('observation_assessor', 'textarea', array('required' => false))
             ->add('observation_admin', 'textarea', array('required' => false))
@@ -85,8 +89,8 @@ class WorkshopType extends AbstractType
             ->add('postal_code')
             ->add('phone_number_1', 'text')
             ->add('phone_number_2', 'text', array('required' => false))
-            ->add('movile_number_1', 'text', array('required' => false))
-            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('mobile_number_1', 'text', array('required' => false))
+            ->add('mobile_number_2', 'text', array('required' => false))
             ->add('fax', 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))

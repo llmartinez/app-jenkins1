@@ -3,6 +3,11 @@
 
     	//REDIRIGE A LA PRIMERA PAGINA
 	    $('#firstpage').click(function() {
+	        var workshop = '0';
+	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
+	        var shop = '0';
 
             var type        = $(document).find("#type").val();
 			if(type == 'all') $(document).find("#type").val(0);
@@ -17,6 +22,8 @@
 		    	var partner = $('#flt_tck_partner').val();
 	        	var country = $('#flt_tck_country').val();
 	        	var status  = $('#flt_tck_status').val();
+	        	var workshop  = $('#flt_tck_workshop').val();
+	        	var created_by  = $('#flt_tck_created_by').val();
 	        }else{
         		if(type == 'workshop') {
 			        var from_y  = $('#wks_from_y').val();
@@ -28,6 +35,8 @@
 			    	var partner = $('#flt_wks_partner').val();
 		        	var country = $('#flt_wks_country').val();
 		        	var status  = $('#flt_wks_status').val();
+		        	var typology= $('#flt_wks_typology').val();
+		        	var shop    = $('#flt_wks_shop').val();
 		        }
 		        else{
 		        	if(type == 'no-ticket') {
@@ -62,15 +71,24 @@
 	        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
 	        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
+	        if(workshop == "" || workshop == 0 ) workshop = '0';
+	        if(typology == "" || typology == 0 ) typology = '0';
+	        if(shop     == "" || shop     == 0 ) shop     = '0';
+
             var route  = 'listStatistics';
 	        var locale = $(document).find("#data_locale").val();
-	        var url    = Routing.generate(route, {_locale: locale, type: type, page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+	        var url    = Routing.generate(route, {_locale: locale, type: type, page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA ANTERIOR PAGINA
 	    $('#btn_anterior').click(function() {
+	        var workshop = '0';
+	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
+	        var shop = '0';
 
 	    	var prev_page = parseFloat($('#page').val()) - parseFloat(1);
 
@@ -89,6 +107,8 @@
 			    	var partner = $('#flt_tck_partner').val();
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
+	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -100,6 +120,8 @@
 				    	var partner = $('#flt_wks_partner').val();
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
+			        	var typology= $('#flt_wks_typology').val();
+			        	var shop    = $('#flt_wks_shop').val();
 			        }
 			        else{
 			        	if(type == 'no-ticket') {
@@ -134,10 +156,14 @@
 		        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
 		        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
+	        	if(workshop == "" || workshop == 0 ) workshop = '0';
+		        if(typology == "" || typology == 0 ) typology = '0';
+		        if(shop     == "" || shop     == 0 ) shop     = '0';
+
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 	        	var page   = 1;
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 		    	window.open(url, "_self");
 		    }
@@ -145,9 +171,13 @@
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
 	    $('.change_page').click(function() {
+	        var workshop = '0';
+	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
+	        var shop = '0';
 
 	    	var type        = $(document).find("#type").val();
-
 			if(type == 'all') { $(document).find("#type").val(0); }
 
 			if(type == 'ticket')
@@ -161,6 +191,8 @@
 		    	var partner = $('#flt_tck_partner').val();
 	        	var country = $('#flt_tck_country').val();
 	        	var status  = $('#flt_tck_status').val();
+	        	var workshop  = $('#flt_tck_workshop').val();
+	        	var created_by  = $('#flt_tck_created_by').val();
 	        }
 	        else{
         		if(type == 'workshop') {
@@ -173,6 +205,8 @@
 			    	var partner = $('#flt_wks_partner').val();
 		        	var country = $('#flt_wks_country').val();
 		        	var status  = $('#flt_wks_status').val();
+		        	var typology= $('#flt_wks_typology').val();
+		        	var shop    = $('#flt_wks_shop').val();
 		        }
 		        else{
 		        	if(type == 'no-ticket') {
@@ -207,16 +241,25 @@
 	        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
 	        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
+	        if(workshop == "" || workshop == 0 ) workshop = '0';
+	        if(typology == "" || typology == 0 ) typology = '0';
+	        if(shop     == "" || shop     == 0 ) shop     = '0';
+
             var route  = 'listStatistics';
 	        var locale = $(document).find("#data_locale").val();
 	        var page   = $(this).text();
-	        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+	        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 	    	window.open(url, "_self");
 	    });
 
 	    //REDIRIGE A LA SIGUIENTE PAGINA
 	    $('#btn_siguiente').click(function() {
+	        var workshop = '0';
+	        var typology = '0';
+	        var assessor = '0';
+	        var created_by = '0';
+	        var shop = '0';
 
 	    	var next_page = parseFloat($('#page').val()) + parseFloat(1);
 	        var total     = $('#total').val();
@@ -236,6 +279,8 @@
 			    	var partner = $('#flt_tck_partner').val();
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
+	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -247,6 +292,8 @@
 				    	var partner = $('#flt_wks_partner').val();
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
+			        	var typology= $('#flt_wks_typology').val();
+			        	var shop    = $('#flt_wks_shop').val();
 			        }
 			        else{
 			        	if(type == 'no-ticket') {
@@ -281,10 +328,14 @@
 		        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
 		        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
+	        	if(workshop == "" || workshop == 0 ) workshop = '0';
+		        if(typology == "" || typology == 0 ) typology = '0';
+		        if(shop     == "" || shop     == 0 ) shop     = '0';
+
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 		        var page   = next_page;
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 		    	window.open(url, "_self");
 		    }
@@ -292,6 +343,12 @@
 
 	    //REDIRIGE A LA ULTIMA PAGINA
 	    $('#totalpage').click(function() {
+	        	var workshop = '0';
+		        var typology = '0';
+	        	var assessor = '0';
+	        	var created_by = '0';
+		        var shop = '0';
+
 				var type        = $(document).find("#type").val();
 				if(type == 'all') $(document).find("#type").val(0);
 
@@ -305,6 +362,8 @@
 			    	var partner = $('#flt_tck_partner').val();
 		        	var country = $('#flt_tck_country').val();
 		        	var status  = $('#flt_tck_status').val();
+	        		var workshop  = $('#flt_tck_workshop').val();
+	        		var created_by  = $('#flt_tck_created_by').val();
 		        }else{
         			if(type == 'workshop') {
 				        var from_y  = $('#wks_from_y').val();
@@ -316,6 +375,8 @@
 				    	var partner = $('#flt_wks_partner').val();
 			        	var country = $('#flt_wks_country').val();
 			        	var status  = $('#flt_wks_status').val();
+			        	var typology= $('#flt_wks_typology').val();
+			        	var shop    = $('#flt_wks_shop').val();
 			        }
 			        else{
 			        	if(type == 'no-ticket') {
@@ -350,10 +411,14 @@
 		        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
 		        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
 
+	        	if(workshop == "" || workshop == 0 ) workshop = '0';
+		        if(typology == "" || typology == 0 ) typology = '0';
+		        if(shop     == "" || shop     == 0 ) shop     = '0';
+
 	            var route  = 'listStatistics';
 		        var locale = $(document).find("#data_locale").val();
 		        var page   = $('#total').val();
-		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, status: status, country: country });
+		        var url    = Routing.generate(route, {_locale: locale, type: type, page: page, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, assessor: assessor, created_by: created_by});
 
 
 	    	window.open(url, "_self");

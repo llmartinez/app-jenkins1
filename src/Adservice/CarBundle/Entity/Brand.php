@@ -7,37 +7,30 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Adservice\CarBundle\Entity\Brand
  *
- * @ORM\Table(name="brand")
+ * @ORM\Table(name="Marca_Vehiculo")
  * @ORM\Entity
  */
 class Brand {
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="Marca", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="Descripcion", type="string", length=255)
      */
     private $name;
-
-    /**
-     * @var integer $idTecDoc
-     *
-     * @ORM\Column(name="idTecDoc", type="integer")
-     */
-    private $idTecDoc;
 
     /**
      * @var string $models
      *
      * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Model", mappedBy="brand")
+     * @ORM\JoinColumn(name="id", referencedColumnName="Modelo")
      */
     private $models;
 
@@ -72,25 +65,6 @@ class Brand {
         return $this->name;
     }
 
-    /**
-     * Set idTecDoc
-     *
-     * @param integer $idTecDoc
-     */
-    public function setIdTecDoc($idTecDoc)
-    {
-        $this->idTecDoc = $idTecDoc;
-    }
-
-    /**
-     * Get idTecDoc
-     *
-     * @return integer
-     */
-    public function getIdTecDoc()
-    {
-        return $this->idTecDoc;
-    }
     public function __construct()
     {
         $this->models = new \Doctrine\Common\Collections\ArrayCollection();
@@ -123,6 +97,7 @@ class Brand {
     }
 
     public function __toString() {
+
         return $this->name;
     }
 }

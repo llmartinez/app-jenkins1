@@ -25,6 +25,7 @@ class Car
      * @var integer $brand
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     * @ORM\JoinColumn(name="brand_id", referencedColumnName="Marca")
      */
     private $brand;
 
@@ -32,12 +33,14 @@ class Car
      * @var integer $model
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     * @ORM\JoinColumn(name="model_id", referencedColumnName="Modelo")
      */
     private $model;
 
     /**
      * @var integer $version
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
+     * @ORM\JoinColumn(name="version_id", referencedColumnName="Version")
      */
     private $version;
 
@@ -111,13 +114,23 @@ class Car
      */
     private $modified_by;
 
-    /**
-     * @var integer $ticket
-     *
-     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="car")
-     */
-    private $ticket;
+//    /**
+//     * @var integer $ticket
+//     *
+//     * @ORM\OneToMany(targetEntity="\Adservice\TicketBundle\Entity\Ticket", mappedBy="car")
+//     * @ORM\JoinColumn(name="car_id", referencedColumnName="Car")
+//     */
+    //private $ticket;
 
+
+    /**
+     * Set id
+     *
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     /**
      * Get id
      *
@@ -390,24 +403,25 @@ class Car
      *
      * @param \Adservice\TicketBundle\Entity\Ticket $ticket
      */
-    public function setTicket(\Adservice\TicketBundle\Entity\Ticket $ticket) {
-        $this->ticket = $ticket;
-    }
+    // public function setTicket(\Adservice\TicketBundle\Entity\Ticket $ticket) {
+    //     $this->ticket = $ticket;
+    // }
 
     /**
      * Get ticket
      *
      * @return integer
      */
-    public function getTicket() {
-        return $this->ticket;
-    }
+    // public function getTicket() {
+    //     return $this->ticket;
+    // }
 
     public function __toString() {
 
-        $model   = $this->getModel();
-        $brand   = $this->getBrand();
-        $version = $this->getVersion();
+        $model   = $this->getModel()->getName();
+        $brand   = $this->getBrand()->getName();
+        if (isset($version)) $version = $this->getVersion()->getName();
+        else $version = '';
         return $brand.' '.$model.' '.$version;
     }
 

@@ -6,6 +6,26 @@ changeLanguage:
     pattern: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
 
+help:
+    pattern: /help/
+    defaults: { _controller: UtilBundle:Default:help }
+
+ayuda:
+    pattern: /ayuda/
+    defaults: { _controller: UtilBundle:Default:help }
+
+accept_privacy:
+    pattern: /acceptPrivacy/
+    defaults: { _controller: UserBundle:User:acceptPrivacy }
+
+privacy:
+    pattern: /privacy/
+    defaults: { _controller: UtilBundle:Default:privacy }
+
+autologin:
+    pattern: /autologin/
+    defaults: { _controller: UtilBundle:Security:autologin }
+
 #############################
 #   APDO. FILE              #
 #############################
@@ -33,6 +53,30 @@ cities_from_region:
 shops_from_partner:
     pattern: /shopsFromPartner
     defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
+    options:
+        expose: true
+
+get_code_partner:
+    pattern: /codePartnerFromPartner
+    defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
+    options:
+        expose: true
+
+get_code_workshop:
+    pattern: /codeWorkshopFromPartner
+    defaults: { _controller: UtilBundle:Ajax:codeWorkshopFromPartner }
+    options:
+        expose: true
+
+get_id_from_code_partner:
+    pattern: /getIdFromCodePartner/{code}
+    defaults: { _controller: UtilBundle:Ajax:getIdFromCodePartner, code: 0 }
+    options:
+        expose: true
+
+get_country_partner:
+    pattern: /getCountryPartner/{id_partner}
+    defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
     options:
         expose: true
 
@@ -87,5 +131,11 @@ tickets_from_workshop:
 tbl_similar:
     pattern: /tbl_similar
     defaults: { _controller: UtilBundle:Ajax:tblSimilar }
+    options:
+        expose: true
+
+tbl_repeated:
+    pattern: /tbl_repeated
+    defaults: { _controller: UtilBundle:Ajax:tblRepeated }
     options:
         expose: true

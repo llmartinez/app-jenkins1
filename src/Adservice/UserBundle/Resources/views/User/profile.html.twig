@@ -7,10 +7,12 @@
     <li class="active">{% trans %} menu.profile {% endtrans %}</li>
 </ol>
 
-<h1>{% trans %} profile_of {% endtrans %} {{ app.user }}
+<h1>{% trans %} profile_of {% endtrans %}: {% if user.workshop is defined %}{{user.workshop}}{% else %}{{ app.user }}{% endif %}
 
     <button class="btn btn-primary pull-right ml15" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">
     <img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} change_password {% endtrans %}</button>
+    <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
+    <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
 
     {# TODO: Solicitud de edición de datos #}
     {#
@@ -25,6 +27,14 @@
 
 <table class="table" style="width: 90%; margin-left: 5%;">
     <tbody>
+        {% if user.workshop is defined and user.workshop.codePartner is defined and user.workshop.codeWorkshop is defined %}
+        <tr>
+            <td><b>{% trans %} code {% endtrans %}</b></td><td>{{ user.workshop.codePartner}} - {{user.workshop.codeWorkshop}}</td>
+        </tr>
+        {# <tr>
+            <td><b>{% trans %} workshop {% endtrans %}</b></td><td>{{user.workshop    }}</td>
+        </tr> #}
+        {% endif %}
         <tr>
             <td><b>{% trans %} username {% endtrans %}</b></td><td>{{ user.username    }}</td>
         </tr>
@@ -38,7 +48,7 @@
             <td><b>{% trans %} tel      {% endtrans %}</b></td><td>{{ user.phoneNumber1  }} / {{ user.phoneNumber2  }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} mobile   {% endtrans %}</b></td><td>{{ user.movileNumber1 }} / {{ user.movileNumber2 }}</td>
+            <td><b>{% trans %} mobile   {% endtrans %}</b></td><td>{{ user.mobileNumber1 }} / {{ user.mobileNumber2 }}</td>
         </tr>
 {#         <tr>
             <td><b>{% trans %} fax      {% endtrans %}</b></td><td>{{ user.fax         }}</td>
@@ -61,10 +71,6 @@
         <tr>
             <td><b>{% trans %} city     {% endtrans %}</b></td><td>{{ user.city        }}</td>
         </tr>
-        <tr>
-            <td><b>{% trans %} workshop {% endtrans %}</b></td><td>{{ user.workshop    }}</td>
-        </tr>
-
     </tbody>
 </table>
 

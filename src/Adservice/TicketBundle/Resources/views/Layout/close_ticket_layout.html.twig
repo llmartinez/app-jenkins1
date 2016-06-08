@@ -4,7 +4,8 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{{ path('listTicket') }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
       <li class="active">{% trans %} ticket {% endtrans %} #{{ ticket.id }}</li>
     </ol>
 
@@ -28,6 +29,14 @@
 
     <div class="form-group">
         <form action="{{ path('closeTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+          {% if close == '0' %}
+            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" onclick="window.close()">
+          {% else %}
+            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
+          {% endif  %}
+              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
+              {% trans %} ticket_return {% endtrans %}
+            </a>
 
             {% include 'TicketBundle:Ticket:close_ticket.html.twig'  %}
 

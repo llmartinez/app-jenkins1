@@ -58,7 +58,7 @@ class ShopOrderController extends Controller {
 
         if($security->isGranted('ROLE_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country);
+            $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
         }
         else $partners = array();
 
@@ -119,15 +119,7 @@ class ShopOrderController extends Controller {
 
             $form->bindRequest($request);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-	    $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $user = $security->getToken()->getUser();
 
@@ -154,14 +146,21 @@ class ShopOrderController extends Controller {
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_new_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
 
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
+
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
-                }
 
+                }
                 return $this->redirect($this->generateUrl('list_orders'));
             }
         }
@@ -234,15 +233,7 @@ class ShopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
 
-             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $user = $security->getToken()->getUser();
 
@@ -275,10 +266,18 @@ class ShopOrderController extends Controller {
                     $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
                     $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                                  'shop'  => $shop )));
+                                                                                                                  'shop'  => $shop,
+                                                                                                                  '__locale' => $locale )));
                     $mailer->sendMailToSpool();
                     // echo $this->renderView('UtilBundle:Mailing:order_edit_shop_mail.html.twig', array('shopOrder' => $shopOrder,
                     //                                                                                   'shop'      => $shop));die;
+
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
 
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
@@ -288,6 +287,7 @@ class ShopOrderController extends Controller {
 
             }
         }
+
         return $this->render('OrderBundle:ShopOrders:edit_order.html.twig', array('shopOrder' => $shopOrder,
                                                                                   'shop'      => $shop,
                                                                                   'form_name' => $form->getName(),
@@ -357,9 +357,16 @@ class ShopOrderController extends Controller {
             $mailer->setTo($mail);
             $mailer->setSubject($this->get('translator')->trans('mail.changeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
-            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
             $mailer->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:order_change_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -395,15 +402,7 @@ class ShopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
 
-             //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $shopOrder->setAction('rejected');
                 $shopOrder->setRejectionReason($form->get('rejection_reason')->getData());     //recogemos del formulario el motivo de rechazo...
@@ -425,9 +424,16 @@ class ShopOrderController extends Controller {
                     $mailer->setTo($mail);
                     $mailer->setSubject($this->get('translator')->trans('mail.rejectOrder.subject').$shopOrder->getId());
                     $mailer->setFrom('noreply@adserviceticketing.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder)));
+                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder, '__locale' => $locale)));
                     $mailer->sendMailToSpool();
                     //echo $this->renderView('UtilBundle:Mailing:order_reject_shop_mail.html.twig', array('shopOrder' => $shopOrder));die;
+
+                    // Copia del mail de confirmacion a modo de backup
+                    //
+                    $mail = $this->container->getParameter('mail_report');
+                    $request->setLocale('es_ES');
+                    $mailer->setTo($mail);
+                    $mailer->sendMailToSpool();
 
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
@@ -487,10 +493,18 @@ class ShopOrderController extends Controller {
                 $mailer->setSubject($this->get('translator')->trans('mail.resendOrder.subject').$shopOrder->getId());
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_shop_resend_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                                'action'    => $action)));
+                                                                                                                'action'    => $action,
+                                                                                                                '__locale' => $locale)));
                 $mailer->sendMailToSpool();
                 // echo $this->renderView('UtilBundle:Mailing:order_resend_mail.html.twig', array('shopOrder' => $shopOrder,
                 //                                                                                'action'   => $action));die;
+
+                // Copia del mail de confirmacion a modo de backup
+                //
+                $mail = $this->container->getParameter('mail_report');
+                $request->setLocale('es_ES');
+                $mailer->setTo($mail);
+                $mailer->sendMailToSpool();
 
                 // Dejamos el locale tal y como estaba
                 $request->setLocale($locale);
@@ -540,10 +554,18 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                            'action'    => $action)));
+                                                                                                            'action'    => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -600,10 +622,18 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.removeOrder.subject').$shopOrder->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
-                                                                                                            'action'    => $action)));
+                                                                                                            'action'    => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_remove_shop_mail.html.twig', array('shopOrder' => $shopOrder,
             //                                                                                     'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -633,7 +663,6 @@ class ShopOrderController extends Controller {
         $request = $this->getRequest();
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-
         $em = $this->getDoctrine()->getEntityManager();
 
         // activate   + accepted = setActive a TRUE  and delete shopOrder
@@ -683,6 +712,8 @@ class ShopOrderController extends Controller {
 
         }
 
+        // MAIL DE CONFIRMACION
+
         $mail = $shopOrder->getCreatedBy()->getEmail1();
         $pos = strpos($mail, '@');
         if ($pos != 0) {
@@ -699,10 +730,18 @@ class ShopOrderController extends Controller {
             $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.shop.subject').$shop->getId());
             $mailer->setFrom('noreply@adserviceticketing.com');
             $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop'   => $shop,
-                                                                                                            'action' => $action)));
+                                                                                                            'action' => $action,
+                                                                                                            '__locale' => $locale)));
             $mailer->sendMailToSpool();
             // echo $this->renderView('UtilBundle:Mailing:order_accept_shop_mail.html.twig', array('shop' => $shop,
             //                                                                                     'action'   => $action));die;
+
+            // Copia del mail de confirmacion a modo de backup
+            //
+            $mail = $this->container->getParameter('mail_report');
+            $request->setLocale('es_ES');
+            $mailer->setTo($mail);
+            $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -739,6 +778,9 @@ class ShopOrderController extends Controller {
         $shopOrder->setFax           ($shop->getFax());
         $shopOrder->setEmail1        ($shop->getEmail1());
         $shopOrder->setEmail2        ($shop->getEmail2());
+        $shopOrder->setCodeShop      ($shop->getCodeShop());
+        $shopOrder->setCif           ($shop->getCif());
+        $shopOrder->setContact       ($shop->getContact());
 
         if ($shop->getCreatedBy() != null ) {
             $shopOrder->setCreatedBy($shop->getCreatedBy());
@@ -777,6 +819,9 @@ class ShopOrderController extends Controller {
         $shop->setFax           ($shopOrder->getFax());
         $shop->setEmail1        ($shopOrder->getEmail1());
         $shop->setEmail2        ($shopOrder->getEmail2());
+        $shop->setCodeShop      ($shopOrder->getCodeShop());
+        $shop->setCif           ($shopOrder->getCif());
+        $shop->setContact       ($shopOrder->getContact());
 
         if ($shopOrder->getCreatedBy() != null ) {
             $shop->setCreatedBy($shopOrder->getCreatedBy());
@@ -795,14 +840,12 @@ class ShopOrderController extends Controller {
         return $shop;
     }
 
-        //
     /**
      * crea un array con los valores anteriores a la modificacion/rechazo de la solicitud
      * @param  Array $shopsOrders
      * @return Array
      */
     public static function getShopOrdersBefore($em, $shopOrders) {
-
         $ordersBefore = array();
 
         foreach ($shopOrders as $shopOrder) {

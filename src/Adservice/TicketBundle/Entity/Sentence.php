@@ -109,6 +109,6 @@ class Sentence
     }
 
     public function __toString() {
-        return $this->sentence;
+        return $this->name;
     }
 }

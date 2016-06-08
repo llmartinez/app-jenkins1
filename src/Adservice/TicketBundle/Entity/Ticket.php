@@ -59,6 +59,13 @@ class Ticket {
     private $status;
 
     /**
+     * @var integer $pending
+     *
+     * @ORM\Column(name="pending", type="integer")
+     */
+    private $pending;
+
+    /**
      * @var integer $importance
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
@@ -74,8 +81,9 @@ class Ticket {
 
     /**
      * @var integer $car
-     *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="ticket")
+     * 
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="Car")
+     * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true)
      */
     private $car;
 
@@ -121,12 +129,12 @@ class Ticket {
      */
     private $posts;
 
-    /**
-     * @var string $cars
-     *
-     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
-     */
-    private $cars;
+//    /**
+//     * @var string $cars
+//     *
+//     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Car", mappedBy="ticket")
+//     */
+    //private $cars;
 
     /**
      * Get id
@@ -229,6 +237,24 @@ class Ticket {
      */
     public function getStatus() {
         return $this->status;
+    }
+
+    /**
+     * Set pending
+     *
+     * @param integer $pending
+     */
+    public function setPending($pending) {
+        $this->pending = $pending;
+    }
+
+    /**
+     * Get pending
+     *
+     * @return integer
+     */
+    public function getPending() {
+        return $this->pending;
     }
 
     /**

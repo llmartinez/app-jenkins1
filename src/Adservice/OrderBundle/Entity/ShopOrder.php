@@ -51,6 +51,18 @@ class ShopOrder {
      */
     private $rejection_reason;
 
+    /**
+    * @var integer $code_shop
+    *
+    * @ORM\Column(name="code_shop", type="integer")
+    */
+    private $code_shop;
+    
+    /**
+     * @var string $cif
+     * @ORM\Column(name="cif", type="string", length=255, nullable=true)
+     */
+    private $cif;
 //  _____ _  __
 // |  ___| |/ /
 // | |_  | ' /
@@ -124,7 +136,25 @@ class ShopOrder {
     public function setIdShop($id_shop) {
         $this->id_shop = $id_shop;
     }
+    
+    /**
+     * Set code_shop
+     *
+     * @param string $code_shop
+     */
+    public function setCodeShop($code_shop) {
+        $this->code_shop = $code_shop;
+    }
 
+    /**
+     * Get code_shop
+     *
+     * @return string
+     */
+    public function getCodeShop() {
+        return $this->code_shop;
+    }
+    
     public function getAction() {
         return $this->action;
     }
@@ -147,6 +177,14 @@ class ShopOrder {
 
     public function setWantedAction($wanted_action) {
         $this->wanted_action = $wanted_action;
+    }
+    
+    public function getCif() {
+        return $this->cif;
+    }
+
+    public function setCif($cif) {
+        $this->cif = $cif;
     }
 
 //  ________________________________________________________________________________
@@ -267,6 +305,13 @@ class ShopOrder {
 //  \____\___/|_| \_| |_/_/   \_\____| |_|
 
     /**
+     * @var string $contact
+     *
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     */
+    private $contact;
+    
+    /**
      * @var string $country
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
@@ -316,18 +361,18 @@ class ShopOrder {
     private $phone_number_2;
 
     /**
-     * @var integer $movile_number_1
+     * @var integer $mobile_number_1
      *
-     * @ORM\Column(name="movile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1", type="integer", nullable=true)
      */
-    private $movile_number_1;
+    private $mobile_number_1;
 
     /**
-     * @var integer $movile_number_2
+     * @var integer $mobile_number_2
      *
-     * @ORM\Column(name="movile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="integer", nullable=true)
      */
-    private $movile_number_2;
+    private $mobile_number_2;
 
     /**
      * @var integer $fax
@@ -352,6 +397,25 @@ class ShopOrder {
 
 //  ___________________________________________________________________
 // |___________________________________________________________________|
+
+    
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     */
+    public function setContact($contact) {
+        $this->contact = $contact;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact() {
+        return $this->contact;
+    }
 
     /**
      * Set country
@@ -480,39 +544,39 @@ class ShopOrder {
     }
 
     /**
-     * Set movile_number_1
+     * Set mobile_number_1
      *
-     * @param integer $movileNumber1
+     * @param integer $mobileNumber1
      */
-    public function setMovileNumber1($movileNumber1) {
-        $this->movile_number_1 = $movileNumber1;
+    public function setMobileNumber1($mobileNumber1) {
+        $this->mobile_number_1 = $mobileNumber1;
     }
 
     /**
-     * Get movile_number_1
+     * Get mobile_number_1
      *
      * @return integer
      */
-    public function getMovileNumber1() {
-        return $this->movile_number_1;
+    public function getMobileNumber1() {
+        return $this->mobile_number_1;
     }
 
     /**
-     * Set movile_number_2
+     * Set mobile_number_2
      *
-     * @param integer $movileNumber2
+     * @param integer $mobileNumber2
      */
-    public function setMovileNumber2($movileNumber2) {
-        $this->movile_number_2 = $movileNumber2;
+    public function setMobileNumber2($mobileNumber2) {
+        $this->mobile_number_2 = $mobileNumber2;
     }
 
     /**
-     * Get movile_number_2
+     * Get mobile_number_2
      *
      * @return integer
      */
-    public function getMovileNumber2() {
-        return $this->movile_number_2;
+    public function getMobileNumber2() {
+        return $this->mobile_number_2;
     }
 
     /**

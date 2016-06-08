@@ -4,10 +4,13 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{{ path('listTicket') }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
       <li class="active">#{{ ticket.id }}</li>
     </ol>
 
+{% if app.session.hasFlash('ticket_created') %}
+  <p class="alert_created">{{'ticket_created'|trans}}</p>{% endif %}
 {% endblock  %}
 
 {% block info %}
@@ -29,8 +32,11 @@
     <div class="form-group">
         <form action="{{ path('showTicket', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
+            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
+              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
+              {% trans %} ticket_return {% endtrans %}
+            </a>
             {% include 'TicketBundle:Ticket:show_ticket.html.twig'  %}
-
         </form>
     </div>
 {% endblock  %}

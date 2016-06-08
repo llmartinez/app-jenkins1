@@ -11,10 +11,10 @@
         {% block favicon %}<link rel="shortcut icon" href="{{ asset('bundles/cms/images/error/mygarageweb.ico') }}" type="image/x-icon"/>{% endblock %}
     </head>
   <body id="MainBody">
-      
+
         {% block header %}
             <div class="MainHeader">
-                <div class="span4 offset2" style="margin-top:15px;">
+                <div class="span4 offset2">
                 </div>
                 <div class="navbar">
                     <div class="navbar-inner">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         {% endblock %}
-        
+
         <div id="MainContent" style="text-align: center">
             {% block titleException %}{% endblock %}
             {% block exception %}{% endblock %}

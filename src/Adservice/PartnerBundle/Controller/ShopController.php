@@ -23,26 +23,39 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none', $partner='none') {
+    public function listAction($page=1, $country='0', $partner='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
-
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
+        
+        if ($term != '0' and $field != '0'){
 
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.mobile_number_1 LIKE '%".$field."%' OR e.mobile_number_2 LIKE '%".$field."%') ");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+        }
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
+            if ($country != '0' && $country != 'none') $params[] = array('country', ' = '.$country);
+            if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
         }
         else {
             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
         }
-
         $pagination = new Pagination($page);
-
+        
         $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
 
         $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Shop', $params);
@@ -61,6 +74,8 @@ class ShopController extends Controller {
                                                                                 'country'      => $country,
                                                                                 'partners'     => $partners,
                                                                                 'partner'      => $partner,
+                                                                                'term'         => $term,
+                                                                                'field'        => $field
                                                                                 ));
     }
 
@@ -107,15 +122,7 @@ class ShopController extends Controller {
 
             $form->bindRequest($request);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $user = $security->getToken()->getUser();
                 $shop = UtilController::newEntity($shop, $user );
@@ -178,15 +185,7 @@ class ShopController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
 
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 $shop = UtilController::settersContact($shop, $shop, $actual_region, $actual_city);
                 UtilController::saveEntity($em, $shop, $security->getToken()->getUser());

@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
         <li><a href="{{ path('showTicket', { 'id': ticket.id }) }}">{% trans %} ticket.show {% endtrans %}</a></li>
-        <li class="active">{% trans %} edit.post {% endtrans %}</li>
+        <li class="active">{% trans %} post {% endtrans %}</li>
     </ol>
 
     <form action="{{ path("post_edit", { 'id': post.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
@@ -21,7 +21,7 @@
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="post_form">{% trans %} message {% endtrans %}</label>
+                    <label for="post_form">{% trans %} post {% endtrans %}</label>
                     {{ form_widget(form.message, { 'attr': {'class': 'form-control' } }) }}
                 </div>
             {{ form_rest(form) }}

@@ -44,8 +44,8 @@
 		{% if workshop.phoneNumber2  != "" %} 	 - {{ workshop.phoneNumber2  }} {% endif %}
 	</div>
 	<div class="form-group">
-		{% if workshop.movileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.movileNumber1 }} {% endif %}
-		{% if workshop.movileNumber2 != "" %}    - {{ workshop.movileNumber2 }} {% endif %}
+		{% if workshop.mobileNumber1 != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_mobile.png') }}'> {{ workshop.mobileNumber1 }} {% endif %}
+		{% if workshop.mobileNumber2 != "" %}    - {{ workshop.mobileNumber2 }} {% endif %}
 	</div>
 	<div class="form-group">
 		{% if workshop.fax           != "" %}    <img class='img_icon' src='{{ asset('bundles/util/images/icon/phone_fax.png'   ) }}'> {{ workshop.fax           }} {% endif %}
@@ -61,22 +61,30 @@
 
 	{# OBERVATIONS #}
 	<div class="form-group">
+		{# OBERVATIONS #}
+	{% if is_granted('ROLE_ADMIN') %}
+		{% set observation = workshop.observationAdmin %}
+	{% elseif is_granted('ROLE_ASSESSOR') %}
+		{% set observation = workshop.observationAssessor %}
+	{% elseif is_granted('ROLE_USER') %}
+		{% set observation = workshop.observationWorkshop %}
+	{% endif %}
+
+	<div class="form-group" title="{{observation}}">
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
+
 			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+
+		{% else %}
+
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{% trans %} observations {% endtrans %}" alt="{% trans %} observations {% endtrans %}">
+
 		{% endif %}
-		{% if is_granted('ROLE_ADMIN') %}
-			{% if workshop.observationAdmin      != "" %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationAdmin|length > 15 ? workshop.observationAdmin|slice(0, 15) ~ '...' : workshop.observationAdmin  }} {% endif %}
-		{% elseif is_granted('ROLE_ASSESSOR') %}
-			{% if workshop.observationAssessor   != "" %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				</b>: {{ workshop.observationAssessor|length > 15 ? workshop.observationAssessor|slice(0, 15) ~ '...' : workshop.observationAssessor  }} {% endif %}
-		{% elseif is_granted('ROLE_USER') %}
-			{% if workshop.observationWorkshop   != "" %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}'>
-				<b>{% trans %} observations {% endtrans %}</b>: {{ workshop.observationWorkshop|length > 15 ? workshop.observationWorkshop|slice(0, 15) ~ '...' : workshop.observationWorkshop  }} {% endif %}
+
+		{% if observation != "" %}
+			<b>{% trans %} observations {% endtrans %}</b>: {{ observation|length > 15 ? observation|slice(0, 15) ~ '...' : observation  }}
+		{% else %}
+			{% trans %} any_observation {% endtrans %}
 		{% endif %}
 	</div>
+</div>

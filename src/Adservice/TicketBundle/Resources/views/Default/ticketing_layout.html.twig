@@ -4,14 +4,19 @@
 
     {% block breadcrumb %}{% endblock  %}
 
-<div class="info">
-	{% block info %}{% endblock  %}
-</div>
+<div class="main">
+    {% block main %}
 
-<!-- CONTENIDO PAGINA TICKETS -->
+		<div class="info">
+			{% block info %}{% endblock  %}
+		</div>
 
-<div class="content">
-    {% block content %}{% endblock  %}
+		<!-- CONTENIDO PAGINA TICKETS -->
+
+		<div class="content">
+		    {% block content %}{% endblock  %}
+		</div>
+	{% endblock  %}
 </div>
 
 

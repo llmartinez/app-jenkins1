@@ -4,10 +4,18 @@
         {# New Ticket #}
         {% if workshop.active == 1 %}
 
-            {% if is_granted('ROLE_SUPER_ADMIN')%}
+            {% if workshop.haschecks == true and workshop.numchecks < 1 %}
+                <button class="btn btn-disabled pull-right mb15" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+            {% elseif is_granted('ROLE_SUPER_ADMIN')%}
                 <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
             {% elseif workshop.country == app.security.getToken().getUser().getCountry() %}
-                <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+                <a class="btn btn-primary fr asr_btn" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+            {% endif %}
+
+            {% if workshop.haschecks == true %}
+            <div class="grid w15 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+            </div>
             {% endif %}
 
         {% else %}
@@ -16,7 +24,7 @@
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
     {% else  %}
 
-        <form action="{{ path('findTicketById') }}" id="findTicketById" class="form" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('findTicketById') }}" id="findTicketById" class="form grid-33" role="form" method="post" enctype="multipart/form-data">
 
             <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p>
             <div class="col-xs-8 col-md-8 form-group pdl0">
@@ -28,46 +36,13 @@
             </div>
         </form>
 
-        <form id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
-
-            <div class="col-xs-12 col-md-12 form-group pdl0">{% trans %} ticket.flt.searchBy.car {% endtrans %}: </div>
-
-            <div class="col-xs-8 col-md-8 form-group  pdl0">
-                <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
-                <select id="new_car_form_brand" name="new_car_form_brand" class="form-control h65" multiple="multiple", required>
-                    {% for brand in brands %}
-                        <option value={{ brand.id }}>{{ brand.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-xs-8 col-md-8 form-group  pdl0">
-                <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
-                <select id="new_car_form_model" name="new_car_form_model" class="form-control h65" multiple="multiple", required></select>
-            </div>
-
-            <div class="col-xs-8 col-md-8 form-group  pdl0">
-                <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
-                <select id="new_car_form_version" name="new_car_form_version" class="form-control h65" multiple="multiple" >
-                </select>
-            </div>
-
-            <div class="col-xs-12 col-md-12 form-group pdl0">
-                <div class="col-xs-8 col-md-8 form-group pdl0"></div>
-                <div class="col-xs-3 col-md-3 form-group pdl0">
-                        <button type="button" class="btn btn-primary" id="btn_search_by_bmv" name="btn_search_by_bmv">
-                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
-                        <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
-                </div>
-            </div>
-        </form>
         <br>
 
-        <div class="col-xs-12 col-md-12 form-group pdl0">{% trans %} ticket.history.check {% endtrans %}:</div>
     {% endif %}
     {###  HISTORICO  ###}
     {% if is_granted('ROLE_ASSESSOR') %}
-        <div class="col-xs-12 col-md-12 form-group pdl0">
+        <p>{% trans %} ticket.history.check {% endtrans %}:</p>
+        <div class="grid-33">
         {% if workshop.id is defined and workshop.id != "" %}
             <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
         {% else %}

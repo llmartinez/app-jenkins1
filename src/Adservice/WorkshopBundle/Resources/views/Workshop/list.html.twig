@@ -55,11 +55,23 @@
              </select>
         </div>
 
-        <div class="col-xs-3 col-md-3 form-group">
-            <label> {% trans %} name {% endtrans %} </label>
-            <input type="text" id="flt_name" name="flt_name" class='form-control' placeholder="{% trans %} name {% endtrans %}" value="{% if name != '0' %}{{ name }}{% endif %}">
+        <div class="col-xs-4 col-md-4 form-group">
+            <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
+                <label> {% trans %} find_by {% endtrans %} </label>
+                <select id="flt_search_term" name="flt_search_term" class='form-control'>
+                    <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+                    <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                    <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+                    <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+                 </select>
+            </div>
+            <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
+                <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+            </div>
+            <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
+                <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
+            </div>
         </div>
-        <div class="col-xs-1 col-md-1 form-group"><a type="button" id="btn_name" name="btn_name" class='btn btn-primary' style="margin-top:20px;margin-left:-77px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a></div>
 
         {% endif %}
     </div>

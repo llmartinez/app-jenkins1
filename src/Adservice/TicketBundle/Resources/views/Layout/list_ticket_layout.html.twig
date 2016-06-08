@@ -9,14 +9,16 @@
 
 {% endblock  %}
 
-{% block info %}
+{% block main %}
+
+<div>
 
     {% if is_granted('ROLE_ASSESSOR') %}
 
         {% if workshop.id != "" %}
-            {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+            {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
         {% else %}
-            {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}
+            {% include 'TicketBundle:Workshop:assessor_workshop.html.twig' %}
         {% endif %}
 
     {% else %}
@@ -25,20 +27,20 @@
 
     {% include 'TicketBundle:Includes:_filters_ticket.html.twig' %}
 
-{% endblock  %}
-
-{% block content %}
+</div>
+<div class="content">
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'listTicket' %}
 
     {% if is_granted('ROLE_ASSESSOR') %}
-        {% if workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
+        {% if workshop is defined and workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
         {% else %}                  {% include 'TicketBundle:Ticket:history_ticket.html.twig' %}  {% endif %}
     {% else %}
         {% set workshop = app.security.getToken().getUser().getWorkshop() %}
         {% include 'TicketBundle:Ticket:list_ticket.html.twig' %}
     {% endif %}
 
+</div>
 {% endblock  %}
 
 {% block additionalJavascripts %}{% endblock %}

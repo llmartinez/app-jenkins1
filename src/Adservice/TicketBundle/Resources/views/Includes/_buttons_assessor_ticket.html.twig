@@ -1,0 +1,70 @@
+    <div id="botones" class="grid-full w100" >
+        {# FIN BY ID #}
+
+            {# <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p> #}
+            {# <div class="col-xs-2 col-md-2 form-group pdl0">
+                    <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+            </div> #}
+
+        {###  HISTORICO  ###}
+        {% if is_granted('ROLE_ASSESSOR') %}
+            <div class="grid-33">
+            {% if workshop.id is defined and workshop.id != "" %}
+                <button class="btn btn-primary w100 asr_form-control asr_btn" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+            {% else %}
+                <button class="btn btn-primary w100 asr_form-control asr_btn" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+            {% endif %}
+            </div>
+        {% endif %}
+
+        {###  NEW TICKET  ###}
+        {% if workshop.id is defined and workshop.id != "" %}
+
+            {% if workshop.active == 1 %}
+                {% if workshop.haschecks == false or (workshop.haschecks == true and workshop.numchecks > 0) %}
+                    <div class="grid-33">
+                    {% if is_granted('ROLE_ASSESSOR') or workshop.country == app.security.getToken().getUser().getCountry() %}
+                        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="form-newTicket" role="form" method="post">
+                            <input type="hidden" id="open_newTicket" name="open_newTicket" value="0">
+                            <input type="hidden" id="n_id_brand" name="n_id_brand">
+                            <input type="hidden" id="n_id_model" name="n_id_model">
+                            <input type="hidden" id="n_id_version" name="n_id_version">
+                            <input type="hidden" id="n_id_year" name="n_id_year">
+                            <input type="hidden" id="n_id_motor" name="n_id_motor">
+                            <input type="hidden" id="n_id_kw" name="n_id_kw">
+                            <input type="hidden" id="n_id_subsystem" name="n_id_subsystem">
+                            <input type="hidden" id="n_id_importance" name="n_id_importance">
+                            <input type="hidden" id="n_id_displacement" name="n_id_displacement">
+                            <input type="hidden" id="n_id_vin" name="n_id_vin">
+                            <input type="hidden" id="n_id_plateNumber" name="n_id_plateNumber">
+                            <button class="btn btn-primary mb15 w100 asr_form-control asr_btn" id="newTicket"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <div class="grid-33">
+                        <button class="btn btn-disabled mb15 w100 asr_form-control asr_btn"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+                {% endif %}
+                </div>
+
+                {% if workshop.haschecks == true %}
+                <div class="grid w20 {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                </div>
+                {% endif %}
+
+            {% else %}
+                {# <a class="btn btn-primary btn-disabled " id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
+            {% endif %}
+                <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
+        {% endif  %}
+
+        {###  INACTIVE TICKETS ###}
+        {% set route = 'listTicket' %}
+        {% if inactive != 0 %}
+            <div class="grid w30 fr">
+                <div class="asr_pending_application2">{{ inactive }}</div>
+                <h4><a href="{{ path(route, {'page': '1', 'country': 0, 'num_rows': 10, 'option': 'inactive' }) }}" class="pull-right">{% trans %}ticket.inactive{% endtrans %}: </a></h4>
+            </div>
+        {% endif %}
+    </div>

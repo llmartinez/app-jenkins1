@@ -11,18 +11,25 @@
     <legend>{% trans %} edit.shop {% endtrans %}</legend>
 
     <form action="{{ path("shop_edit", { 'id':shop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        {% if app.session.hasFlash('info') %}
+            <div class="col-xs-12 col-md-12 form-group">{{ app.session.getFlash('info' ) }}</div>
+        {% elseif app.session.hasFlash('error') %}
+            <div class="col-xs-12 col-md-12 form-group"><p style="color:red">{{ app.session.getFlash('error') }}</p></div>
+        {% endif %}
         <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-6 col-md-6 form-group">
+            <div class="col-xs-4 col-md-4 form-group">
                 <label for="new_ticket_form_importance">{% trans %} name        {% endtrans %} *</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label for="new_ticket_form_importance">{% trans %} code_partner {% endtrans %} * </label>
+                <label for="new_ticket_form_importance">{% trans %} partner {% endtrans %} * </label>
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
             </div>
-            <div class="col-xs-4 col-md-4 form-group">
-                 {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
-                  {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} code_shop {% endtrans %}</label> {{ form_widget(form.code_shop,{ 'attr': {'class': 'form-control', 'min': 1 } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} cif         {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
                 <label for="new_ticket_form_importance">{% trans %} active {% endtrans %}</label>
@@ -32,11 +39,16 @@
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 
-        <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-12 col-md-12 form-group">
-            {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+            <div class="col-xs-2 col-md-2 form-group">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label>{% trans %} contact {% endtrans %}</label>
+                    {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                </div>
+            </div>
+            <div>
+                {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 
-            {{ form_rest(form) }}
+                {{ form_rest(form) }}
 
             <div class="col-xs-10 col-md-10 form-group">
                 <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>

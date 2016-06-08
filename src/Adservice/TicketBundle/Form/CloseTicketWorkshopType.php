@@ -25,7 +25,7 @@ class CloseTicketWorkshopType extends AbstractType
      */
     public static function getSolutions()
     {
-        $validity = array( '0' => 'ticket.close_as_instructions', '1' => 'ticket.close_irreparable car', '2' => 'ticket.close_other');
+        $validity = array( '0' => 'ticket.close_as_instructions', '1' => 'ticket.close_irreparable_car', '2' => 'ticket.close_other');
         return $validity;
     }
 }

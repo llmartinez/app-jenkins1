@@ -14,7 +14,7 @@ class UserWorkshopType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',
@@ -54,8 +54,8 @@ class UserWorkshopType extends AbstractType {
             ->add('postal_code')
             ->add('phone_number_1' , 'text')
             ->add('phone_number_2' , 'text', array('required' => false))
-            ->add('movile_number_1', 'text', array('required' => false))
-            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('mobile_number_1', 'text', array('required' => false))
+            ->add('mobile_number_2', 'text', array('required' => false))
             ->add('fax'            , 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))

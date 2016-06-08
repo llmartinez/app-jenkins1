@@ -47,10 +47,13 @@
                                                    <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ orderBefore.name          }}</td><td>{{ shopOrder.name          }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ orderBefore.codeShop      }}</td><td>{{ shopOrder.codeShop      }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif           }}</td><td>{{ shopOrder.cif           }}</td></tr>
+                                                        <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ orderBefore.contact       }}</td><td>{{ shopOrder.contact       }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ orderBefore.phoneNumber1  }}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ orderBefore.phoneNumber2  }}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
-                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ orderBefore.movileNumber1 }}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
-                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ orderBefore.movileNumber2 }}</td><td>{{ shopOrder.movileNumber2 }}</td></tr>
+                                                        <tr><td>{% trans %} mobile_number_1 {% endtrans %}</td><td>{{ orderBefore.mobileNumber1 }}</td><td>{{ shopOrder.mobileNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} mobile_number_2 {% endtrans %}</td><td>{{ orderBefore.mobileNumber2 }}</td><td>{{ shopOrder.mobileNumber2 }}</td></tr>
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ orderBefore.fax           }}</td><td>{{ shopOrder.fax           }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ orderBefore.email1        }}</td><td>{{ shopOrder.email1        }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ orderBefore.email2        }}</td><td>{{ shopOrder.email2        }}</td></tr>
@@ -63,10 +66,13 @@
                                                     <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ shopOrder.name          }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
+                                                        <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ shopOrder.codeShop      }}</td></tr>
+                                                        <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ shopOrder.cif           }}</td></tr>
+                                                        <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ shopOrder.contact       }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ shopOrder.phoneNumber1  }}</td></tr>
                                                         <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ shopOrder.phoneNumber2  }}</td></tr>
-                                                        <tr><td>{% trans %} movile_number_1 {% endtrans %}</td><td>{{ shopOrder.movileNumber1 }}</td></tr>
-                                                        <tr><td>{% trans %} movile_number_2 {% endtrans %}</td><td>{{ shopOrder.movileNumber2 }}</td></tr>
+                                                        <tr><td>{% trans %} mobile_number_1 {% endtrans %}</td><td>{{ shopOrder.mobileNumber1 }}</td></tr>
+                                                        <tr><td>{% trans %} mobile_number_2 {% endtrans %}</td><td>{{ shopOrder.mobileNumber2 }}</td></tr>
                                                         <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ shopOrder.fax           }}</td></tr>
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ shopOrder.email1        }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ shopOrder.email2        }}</td></tr>
@@ -140,8 +146,12 @@
             {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 
         {% else %}
-            {% trans %} any.order.rejected {% endtrans %}
+     <div class="grid w100">
+        <p class="alert">{% trans %} not_found {% endtrans %}</p>
+    </div>
         {% endif %}
     {% else %}
-        {% trans %} any.order.rejected {% endtrans %}
+     <div class="grid w100">
+        <p class="alert">{% trans %} not_found {% endtrans %}</p>
+    </div>
     {% endif %}

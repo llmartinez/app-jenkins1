@@ -24,7 +24,8 @@ class CarController extends Controller {
 
         $car = $ticket->getCar();
         $formC = $this->createForm(new CarType(), $car);
-
+        // Esto es Magia: por algun motivo sin esto no carga nombre de Version en edit_car
+        if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();
         if ($request->getMethod() == 'POST') {
 
             $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
@@ -32,15 +33,7 @@ class CarController extends Controller {
             $formC->bindRequest($request);
 
             //Define CAR
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $formC_errors = $formC->getErrors();
-	    if(isset($formC_errors[0])) {
-                $formC_errors = $formC_errors[0];
-                $formC_errors = $formC_errors->getMessageTemplate();
-            }else{
-                $formC_errors = 'none';
-            }
-            if ($formC->isValid() or $formC_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($formC->isValid()) {
 
                 // if ($car->getVersion() != "") {
 
@@ -48,28 +41,33 @@ class CarController extends Controller {
                     $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
                     $id_model = $request->request->get('new_car_form_model');
                     $model = $em->getRepository('CarBundle:Model')->find($id_model);
-
-                    $car->setBrand($brand);
-                    $car->setModel($model);
-
-                    //SI NO HA ESCOGIDO VERSION DE DEJA NULL
-                    $id_version = $request->request->get('new_car_form_version');
-                    if (isset($id_version)){
-                        $version = $em->getRepository('CarBundle:Version')->find($id_version);
+                    if(empty($model)){
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
-                    else{
-                        $id_version = null;
-                    }
-                    if (isset($version)){
-                        $car->setVersion($version);
-                    }
-                    else{
-                        $car->setVersion(null);
-                    }
-                    UtilController::saveEntity($em, $car, $user);
+                    else {
+                        $car->setBrand($brand);
+                        $car->setModel($model);
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                        //SI NO HA ESCOGIDO VERSION DE DEJA NULL
+                        $id_version = $request->request->get('new_car_form_version');
+                        if (isset($id_version)){
+                            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
+                        }
+                        else{
+                            $id_version = null;
+                        }
 
+                        if (isset($version) and isset($version[0])){
+
+                            $car->setVersion($version[0]);
+                        }
+                        else{
+                            $car->setVersion(null);
+                        }
+                        UtilController::saveEntity($em, $car, $user);
+
+                        return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                    }
                 // } else { $this->get('session')->setFlash('error', '¡Error! No has introducido un vehiculo correctamente'); }
 
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }

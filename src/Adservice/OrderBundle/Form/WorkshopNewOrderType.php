@@ -26,7 +26,7 @@ class WorkshopNewOrderType extends AbstractType
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 0'); }))
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                   'required' => true,
@@ -38,9 +38,12 @@ class WorkshopNewOrderType extends AbstractType
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.country'.$id_country); }))
-            ->add('test')
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
+
+            // CHECK
+            // ->add('haschecks', 'checkbox', array('required' => false))
+            // ->add('numchecks', 'integer', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
              //CONTACT
@@ -59,8 +62,8 @@ class WorkshopNewOrderType extends AbstractType
             ->add('postal_code')
             ->add('phone_number_1', 'text')
             ->add('phone_number_2', 'text', array('required' => false))
-            ->add('movile_number_1', 'text', array('required' => false))
-            ->add('movile_number_2', 'text', array('required' => false))
+            ->add('mobile_number_1', 'text', array('required' => false))
+            ->add('mobile_number_2', 'text', array('required' => false))
             ->add('fax', 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))

@@ -55,15 +55,15 @@
     {% endif %}
 
     {# se borran los tickets solo si no tienen respuesta (1 post) #}
-    {% if ticket.posts | length <= 1 %}
+{#     {% if ticket.posts | length <= 1 %} #}
         {# puede borrarlo el usuario si el ticket no esta assignado aun #}
-        {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
+{#        {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
             <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{% trans %} ticket.delete {% endtrans %}"></span></a>
         {% endif %}
     {% endif %}
-
+ #}
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{# <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -75,20 +75,17 @@
             </div>
             <div class="modal-footer">
                 <a href="{{ path('deleteTicket', {'id': ticket.id}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/cross.png') }}"> {% trans %} no {% endtrans %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> {% trans %} no {% endtrans %}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- /.modal --> #}
 
     <script>
-        $(document).ready(function() {
-            $('#MainContent').find('.glyphicon-trash').click(function() {
-                var id = {{ ticket.id }};
-                confirm_delete_ticket_modal(id);
-            })
-
-            //util.js
-            //table_filter();
-        });
+        // $(document).ready(function() {
+        //     $('#MainContent').find('.glyphicon-trash').click(function() {
+        //         var id = {{ ticket.id }};
+        //         confirm_delete_ticket_modal(id);
+        //     })
+        // });
     </script>

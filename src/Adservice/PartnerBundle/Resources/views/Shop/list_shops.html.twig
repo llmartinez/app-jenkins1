@@ -3,6 +3,7 @@
 {% block body %}
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'shop_list' %}
+    <input type="hidden" id="route" name="route" value="{{ route }}">
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -34,6 +35,24 @@
     </select></div>
     {% endif %}
 
+    <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
+            <label> {% trans %} find_by {% endtrans %} </label>
+            <select id="flt_search_term" name="flt_search_term" class='form-control'>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+             </select>
+        </div>
+        <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+        </div>
+        <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
+            <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
+        </div>
+    </div>
+
     {% if shops|length > 0  %}
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
@@ -52,7 +71,7 @@
             {% for shop in shops %}
             <tr>
                 <td>{{ shop.id           }}</td>
-                <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
+                <td>{{ shop.codeShop}} - {{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
                 <td>{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ shop.partner.codePartner }} - {{ shop.partner.name|length > 15 ? shop.partner.name|slice(0, 15) ~ '...' : shop.partner.name  }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
@@ -60,11 +79,11 @@
                 <td>{{ shop.region|length > 15 ? shop.region|slice(0, 15) ~ '...' : shop.region  }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                        <a title="{% trans %} edit.shop {% endtrans %}" id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                     </td>
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                        <a title="{% trans %} edit.shop {% endtrans %}" id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>
@@ -73,7 +92,7 @@
     </table>
     {% include 'UtilBundle:Pagination:pagination_shop.html.twig' %}
 {% else %}
-{% trans %} any.shop {% endtrans %}
+    <p class="alert"> {% trans %} any.shop {% endtrans %} </p>
 {% endif %}
 
 
@@ -81,7 +100,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_order.js') }}"></script>
     <script src="{{ asset('bundles/partner/js/shop.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 

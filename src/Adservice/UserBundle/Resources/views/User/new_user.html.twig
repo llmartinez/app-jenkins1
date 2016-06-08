@@ -34,8 +34,17 @@
                 <label>{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
+
+                {% if user_type == "assessor" %}
+                    <label> {% trans %} service_country {% endtrans %} *</label> {{ form_widget(form.country_service,  { 'attr': {'class': 'form-control'} }) }}
+                {% endif %}
+
                 <label>{% trans %} language {% endtrans %} *</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
+
+                {% if form.charge is defined %} {# DEPRECATED #}
+                <label>{% trans %} charge {% endtrans %} *</label> {{ form_widget(form.charge, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                {% endif %}
             </div>
         </div>
 

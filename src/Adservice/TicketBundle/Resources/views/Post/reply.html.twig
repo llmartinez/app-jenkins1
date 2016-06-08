@@ -3,15 +3,16 @@
     {% if ticket.status != 'closed' %}
 
     {# se define bloqued_by_assessor para no repetir la comprovacion if en el codigo  #}
-        {% if ( is_granted('ROLE_ASSESSOR')
+        {# {% if ( is_granted('ROLE_ASSESSOR')
             and ticket.blockedBy is not null
             and ticket.blockedBy == app.security.getToken().getUser()) %}
 
                 {% set bloqued_by_assessor = 0 %}
         {% else %}
                 {% set bloqued_by_assessor = 1 %}
-        {% endif %}
+        {% endif %} #}
 
+    {% set bloqued_by_assessor = 0 %}
 
     {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
         {% if ( bloqued_by_assessor == 0 )
@@ -37,22 +38,27 @@
             </legend>
 
             <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
-            <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
-            {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
-            <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}{% if is_granted('ROLE_ASSESSOR') %}15Mb{% else %}4Mb{% endif %}</label>
+            {% if ticket.workshop.active != 0 %}
+                <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
-            <button class="btn btn-primary pull-right btn100 sendTicket" type="submit">
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
-            {% if app.session.hasFlash('error') %}
+                {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+                <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}4Mb</label>
+
+                <button class="btn btn-primary pull-right btn100 sendTicket" type="submit">
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+                {% if app.session.hasFlash('error') %}
+                {% endif %}
+                {{ form_rest(formP) }}
+                {{ form_rest(formD) }}
+
+                <a class="btn btn-primary pull-right btn100 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}">
+                    {% trans %} ticket.close {% endtrans %}</a>
+
+            {% else %}
+                {% trans %} reply_inactive {% endtrans %}
             {% endif %}
-            {{ form_rest(formP) }}
-            {{ form_rest(formD) }}
-
-
-            <a class="btn btn-primary pull-right btn100 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}">
-                {% trans %} ticket.close {% endtrans %}</a>
 
         {% endif %}
 

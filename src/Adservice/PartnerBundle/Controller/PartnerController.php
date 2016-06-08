@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\PartnerBundle\Entity\Shop;
+use Adservice\UserBundle\Entity\User;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -22,35 +23,51 @@ class PartnerController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='none') {
+    public function listAction($page=1, $country='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
+        $params = array();
+        if ($term != '0' and $field != '0'){
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.mobile_number_1 LIKE '%".$field."%' OR e.mobile_number_2 LIKE '%".$field."%') ");
+            }
+            elseif($term == 'mail'){
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
+            }
+            elseif($term == 'name'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
+            elseif($term == 'cif'){
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
         }
+        
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($country != '0') $params[] = array('country', ' = '.$country);
+                             
+            }
         else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-
+        
         $pagination = new Pagination($page);
 
         $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
-
         $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
 
         $pagination->setTotalPagByLength($length);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
-
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
                                                                                     'country'      => $country,
+                                                                                    'term'         => $term,
+                                                                                    'field'        => $field
                                                                                     ));
     }
     /**
@@ -65,7 +82,7 @@ class PartnerController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $partner = new Partner();
         $request = $this->getRequest();
-       
+
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
@@ -77,7 +94,7 @@ class PartnerController extends Controller {
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {
@@ -85,15 +102,7 @@ class PartnerController extends Controller {
             $form->bindRequest($request);
             $code = UtilController::getCodePartnerUnused($em);
 
-            //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	    if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
@@ -101,7 +110,44 @@ class PartnerController extends Controller {
                 {
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
                     $partner = UtilController::settersContact($partner, $partner);
+
+                    /*CREAR USERNAME Y EVITAR REPETICIONES*/
+                    $username = UtilController::getUsernameUnused($em, $partner->getName());
+
+                    /*CREAR PASSWORD AUTOMATICAMENTE*/
+                    $pass = substr( md5(microtime()), 1, 8);
+
+                    $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_AD');
+                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($partner->getCountry()->getLang());
+
+                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                    $newUser->setUsername      ($username);
+                    $newUser->setPassword      ($pass);
+                    $newUser->setName          ($partner->getContact());
+                    $newUser->setSurname       ($this->get('translator')->trans('partner'));
+                    $newUser->setActive        ('1');
+                    $newUser->setCreatedBy     ($partner->getCreatedBy());
+                    $newUser->setCreatedAt     (new \DateTime());
+                    $newUser->setModifiedBy    ($partner->getCreatedBy());
+                    $newUser->setModifiedAt    (new \DateTime());
+                    $newUser->setLanguage      ($lang);
+                    $newUser->setPartner       ($partner);
+                    $newUser->addRole          ($role);
+
+                    $newUser = UtilController::settersContact($newUser, $partner);
+
+                    //password nuevo, se codifica con el nuevo salt
+                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
+                    $salt = md5(time());
+                    $password = $encoder->encodePassword($newUser->getPassword(), $salt);
+                    $newUser->setPassword($password);
+                    $newUser->setSalt($salt);
+
                     UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
+                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
+                    $this->get('session')->setFlash('alert', $flash);
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
@@ -167,15 +213,7 @@ class PartnerController extends Controller {
             $last_code = $partner->getCodePartner();
             $form->bindRequest($petition);
 
-        //La segunda comparacion ($form->getErrors()...) se hizo porque el request que reciber $form puede ser demasiado largo y hace que la funcion isValid() devuelva false
-            $form_errors = $form->getErrors();
-	   if(isset($form_errors[0])) {
-                $form_errors = $form_errors[0];
-                $form_errors = $form_errors->getMessageTemplate();
-            }else{
-                $form_errors = 'none';
-            }
-            if ($form->isValid() or $form_errors == 'The uploaded file was too large. Please try to upload a smaller file') {
+            if ($form->isValid()) {
 
                 /*CHECK CODE PARTNER NO SE REPITA*/
                 $code = UtilController::getCodePartnerUnused($em, $partner->getCodePartner());
