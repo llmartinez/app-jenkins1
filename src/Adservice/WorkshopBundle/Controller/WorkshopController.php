@@ -450,17 +450,65 @@ class WorkshopController extends Controller {
 
     public function deleteWorkshopAction($id) {
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
         if (!$workshop)
             throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
-
+        $user= $workshop->getUsers()[0];
+        $tickets = $workshop->getTickets();
+        if(isset($tickets)){
+            foreach ($tickets as $ticket) {
+                $posts = $ticket->getPosts();
+                if(isset($posts)){
+                    foreach ($posts as $post) {
+                        $document = $em->getRepository("UtilBundle:Document")->findOneById($post->getDocument());
+                        if(isset($document)){
+                                $em->remove($document);
+                                $em->flush();
+                        }
+                        $em->remove($post);
+                        $em->flush();
+                    }
+                }                
+                $em->remove($ticket);
+                $em->flush();
+            }
+        }
+        $usertmp = $em->getRepository("UserBundle:User")->findOneById(1);
+        $workshops = $em->getRepository("WorkshopBundle:Workshop")->findBy(array('modified_by' => $user->getId()));
+        if(isset($workshops)){
+            foreach($workshops as $workshop){
+                $workshop->setModifiedBy($usertmp);
+                $workshop->setCreatedBy($usertmp);
+                $em->persist($workshop);
+                $em->flush();
+            }
+        }
+        if(isset($user)){
+           $cars = $em->getRepository("CarBundle:Car")->findBy(array('modified_by' => $user->getId()));
+           if(isset($cars)){
+               foreach($cars as $car){                  
+                   $car->setModifiedBy($usertmp);
+                   $em->persist($car);
+                    $em->flush();
+                }
+            }
+            $cars = $em->getRepository("CarBundle:Car")->findBy(array('created_by' => $user->getId()));
+            if(isset($cars)){
+                foreach($cars as $car){  
+                    $car->setCreatedBy($usertmp);
+                    $em->persist($car);
+                    $em->flush();
+                }                
+                $em->remove($user);
+                $em->flush();
+            }
+        }
         $em->remove($workshop);
         $em->flush();
-
         return $this->redirect($this->generateUrl('workshop_list'));
     }
 
@@ -588,12 +636,17 @@ class WorkshopController extends Controller {
      * @param Workshop $workshop
      */
     private function saveWorkshop($em, $workshop) {
-
+        
+        $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+       
+        $user = UtilController::saveUserFromWorkshop($workshop,$user);
+        $user->setName($workshop->getContact());
+        $user->setActive($workshop->getActive());
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
         if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-
+        $em->persist($user);
         $em->persist($workshop);
         $em->flush();
     }

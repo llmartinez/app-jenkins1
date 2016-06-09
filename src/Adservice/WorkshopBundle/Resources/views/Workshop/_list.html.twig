@@ -13,27 +13,33 @@
             </tr>
         </thead>
         <tbody>
-                {% for workshop in workshops %}
-            <tr>
-                <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
-                <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</td>
-                <td>{% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                <td>{{ workshop.partner      }}</td>
-                {% set shop = workshop.shop %}
-                {% if shop.name is defined %} <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
-                {% else %}               <td></td>{% endif %}
-                <td>{{ workshop.email1|length > 15 ? workshop.email1|slice(0, 15) ~ '...' : workshop.email1  }}</td>
-                <td>{{ workshop.phoneNumber1 }}</td>
-                {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}
-                    <td>
-                        <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                    </td>
-                {% endif %}
-            </tr>
-                {% endfor %}
+            {% for workshop in workshops %}
+                <tr>
+                    <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
+                    <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</td>
+                    <td>{% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                    <td>{{ workshop.partner      }}</td>
+                    {% set shop = workshop.shop %}
+                    {% if shop.name is defined %} <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
+                    {% else %}               <td></td>{% endif %}
+                    <td>{{ workshop.email1|length > 15 ? workshop.email1|slice(0, 15) ~ '...' : workshop.email1  }}</td>
+                    <td>{{ workshop.phoneNumber1 }}</td>
+                    {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}
+                        <td>
+                            <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                                {% if is_granted('ROLE_SUPER_ADMIN')%}
+{#                              <a title="{% trans %} edit.delete {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
+                                    <a href="{{ path('workshop_delete', { 'id': workshop.id }) }}" 
+                                       onClick="javascript: return confirm(
+                                                   '{% trans %}workshop.delete.confirm{% endtrans %}{{workshop.id}}\n\n\n{% trans %}workshop.delete.confirm2{% endtrans %}({{workshop.tickets | length}})');" title="{% trans %} workshop.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                                {% endif %}
+              
+                    {% endif %}
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-        {% include 'UtilBundle:Pagination:pagination_workshop.html.twig' %}
+{% include 'UtilBundle:Pagination:pagination_workshop.html.twig' %}
 {% else %}
     <div class="col-xs-12 col-md-12 form-group">
         <p class="alert">{% trans %} any.workshop {% endtrans %}</p>

@@ -433,8 +433,17 @@ class UserController extends Controller {
                 }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
+                if($user->getWorkshop() !== null){
+                    $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
+                    $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
+                                                         
+        
+                    $workshop_user->setContact($user->getName());
+                    $workshop_user->setActive($user->getActive());
+                    $em->persist($workshop_user);
+                    $em->flush();
+                 }
                 $this->saveUser($em, $user, $original_password);
-
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
             }
