@@ -13,10 +13,6 @@ use Adservice\UtilBundle\Controller\UtilController;
 
 class SecurityController extends Controller{
 
-    public function pruebaAjaxAction(){
-        
-        var_dump($req = $this->getRequest());
-    }
     /**
      * Autologin del taller a través de un token
      * @throws AccessDeniedException
@@ -38,7 +34,8 @@ class SecurityController extends Controller{
         // var_dump('Token: '.$tok);
         // var_dump('Encript: '.$enc);
         // var_dump('Decript => ');
-        // var_dump($dec);die;
+        // var_dump($dec);
+        // die;
         ///////////////////////////////////////////////////////////////////////////////////////
 
         if($token != null)

@@ -601,9 +601,11 @@ class TicketController extends Controller {
                         else { $id_version = null; }
 
                         // Controla si ya existe el mismo ticket
+                        $desc = $ticket->getDescription();
+                        $desc = $this->fixWrongCharacters($desc);
                         $select = "SELECT t FROM TicketBundle:Ticket t
                                         WHERE t.workshop = ".$workshop->getId()."
-                                        AND t.description LIKE '".$ticket->getDescription()."'
+                                        AND t.description LIKE '".$desc."'
                                         AND t.car IN (
                                             SELECT c FROM CarBundle:Car c
                                             WHERE c.brand = ".$id_brand."
@@ -680,7 +682,7 @@ class TicketController extends Controller {
                                                 if($exist_num != null) {
                                                     $str .=' ('.$trans->trans('plate_number').' '.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion();
+                                                        $str .= ' '.$exist_num->getVersion()->getName();
                                                         if($exist_num->getMotor() != null){
                                                             $str .= ' ['.$exist_num->getMotor().']';
                                                         }
@@ -2106,6 +2108,18 @@ class TicketController extends Controller {
                 $tickets_filtered[] = $ticket;
         }
         return $tickets_filtered;
+    }
+
+    /**
+     * Elimina los caracteres extraños de una consulta (afectan a la ejecucion del SQL)
+     * @param  String $str
+     * @return string
+     */
+    private function fixWrongCharacters($str) {
+
+        $str = str_replace("'", '"', $str);
+
+        return $str;
     }
 
 // /**
