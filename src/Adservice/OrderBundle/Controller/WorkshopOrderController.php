@@ -818,7 +818,7 @@ class WorkshopOrderController extends Controller {
 
                 }
                 // Enviamos un mail con la solicitud a modo de backup
-                $mail = $this->container->getParameter('mail_db');
+                $mail = $this->container->getParameter('mail_report');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
@@ -864,7 +864,7 @@ class WorkshopOrderController extends Controller {
 
                 }
                 // Enviamos un mail con la solicitud a modo de backup
-                $mail = $this->container->getParameter('mail_db');
+                $mail = $this->container->getParameter('mail_report');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
@@ -882,7 +882,7 @@ class WorkshopOrderController extends Controller {
                 $em->remove($workshopOrder);
                 $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
                 $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
-                      
+
                 $user_workshop->setName($workshop->getContact());
                 $user_workshop->setActive($workshop->getActive());
                 $em->persist($user_workshop);
@@ -960,7 +960,7 @@ class WorkshopOrderController extends Controller {
                     UtilController::saveEntity($em, $newUser, $user);
 
                     // Enviamos un mail con credenciales de usuario a modo de backup
-                    $mail = $this->container->getParameter('mail_db');
+                    $mail = $this->container->getParameter('mail_report');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 
