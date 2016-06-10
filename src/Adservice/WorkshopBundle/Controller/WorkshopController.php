@@ -254,6 +254,15 @@ class WorkshopController extends Controller {
                         $mailerUser->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
+                        // Enviamos un mail con la solicitud a modo de backup
+                        $mail = $this->container->getParameter('mail_db');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+
+                            $mailerUser->setTo($mail);
+                            $mailerUser->sendMailToSpool();
+                        }
+
                         /* Dejamos el locale tal y como estaba */
                         $request->setLocale($locale);
                     }
