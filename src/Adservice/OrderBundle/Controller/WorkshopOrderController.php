@@ -319,7 +319,7 @@ class WorkshopOrderController extends Controller {
         if (!$security->isGranted('ROLE_SUPERADMIN'))
         {
             if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
-            return $this->render('TwigBundle:Exception:exception_access.html.twig');
+            throw new AccessDeniedException();
         }
 
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
