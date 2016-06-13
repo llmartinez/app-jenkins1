@@ -305,7 +305,7 @@ class WorkshopOrderController extends Controller {
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
-        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id'     => $id,
+        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id,
                                                                                              'action' => 'rejected'));
         if ($workshopOrder) $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($workshopOrder->getIdWorkshop());
         else {
