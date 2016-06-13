@@ -316,10 +316,19 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
-        if (!$security->isGranted('ROLE_SUPERADMIN') AND !$security->isGranted('ROLE_SUPERAD'))
+        if (!$security->isGranted('ROLE_SUPERADMIN'))
         {
-            if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
-            throw new AccessDeniedException();
+            // SUPER_AD
+            if ($security->isGranted('ROLE_SUPER_AD'))
+            {
+                if($security->getToken()->getUser()->getCountry()->getId() != $workshopOrder->getCountry()->getId())
+                throw new AccessDeniedException();
+            }
+            // AD
+            else{
+                if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
+                throw new AccessDeniedException();
+            }
         }
 
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
