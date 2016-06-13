@@ -300,13 +300,12 @@ class WorkshopOrderController extends Controller {
      */
     public function editAction($id) {
         $security = $this->get('security.context');
-
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
         $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id,
-                                                                                             'action' => 'rejected'));
+                                                                                          'action' => 'rejected'));
         if ($workshopOrder) $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($workshopOrder->getIdWorkshop());
         else {
             $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
@@ -315,6 +314,12 @@ class WorkshopOrderController extends Controller {
 
             //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
+        }
+
+        if (!$security->isGranted('ROLE_SUPERADMIN'))
+        {
+            if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
+            return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
