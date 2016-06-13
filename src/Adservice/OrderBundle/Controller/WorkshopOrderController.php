@@ -316,7 +316,7 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
-        if (!$security->isGranted('ROLE_SUPERADMIN'))
+        if (!$security->isGranted('ROLE_SUPERADMIN') AND !$security->isGranted('ROLE_SUPERAD'))
         {
             if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
             throw new AccessDeniedException();
