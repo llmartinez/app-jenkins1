@@ -1,83 +1,16 @@
 {% extends '::layout.html.twig' %}
 
-{% block header %}
-    <div class="MainHeader">
-    <div class="span4 offset2">
-    </div>
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="span4 offset2">
-                <!-- header -->
-                <table width="100%" border="0">
-                    <tr>
-                        <td align="left">
-                            <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}">
-                        </td>
-                        <td align="right">
-                            <!-- Split button -->
-                            <div class="language">
-                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
-                                <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
-                                <div class="btn-group" >
-                                    <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu" >
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}">   {% trans %} english         {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}">   {% trans %} spanish {% endtrans %}</a></li>
-
-                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
-
-                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {% if app.user.username is defined %}
-
-                            <!-- Split button -->
-                            <div class="user">
-                                <img src="{{ asset('bundles/util/images/icon/user_icon.png') }}">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default">{{ app.security.getToken().getUser().getUsername() }}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}logout       {% endtrans %}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                           {# {% else %}
-                                <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>#}
-                            {% endif %}
-                            {#
-                               app.request.getPathInfo()
-                               app.request.attributes.get('_route')
-                            #}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
 {% block body %}
     {# Definicion de la ruta al listado para usar en paginacion #}
-    
+
     <ol class="breadcrumb">
       <li><a href="{{ path('accept_privacy') }}">{% trans %} home {% endtrans %}</a></li>
     </ol>
-    
+
     <div style="width: 90%; margin-left: 5%;">
-        
+
             <legend>{% trans %} user.policy_privacy {% endtrans %}</legend>
-            
+
             <label style="width: 100%;">{% trans %} user.accept_privacy {% endtrans %} <a href="{{ path('privacy') }}">{% trans %} user.policy_privacy {% endtrans %}</a> ?</label>
             {% if app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             <form action="{{ path('accept_privacy') }}" method="post" >
@@ -92,5 +25,5 @@
     {{ parent() }}
 {#    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>#}
 {#    <script src="{{ asset('bundles/workshop/js/workshop_filter.js') }}"></script>#}
-    
+
 {% endblock %}

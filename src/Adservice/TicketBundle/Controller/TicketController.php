@@ -570,7 +570,7 @@ class TicketController extends Controller {
             /*Validacion Ticket*/
             $str_len = strlen($ticket->getDescription());
             if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-            else { $max_len = 500; }
+            else { $max_len = 1000; }
 
             if ($str_len <= $max_len ) {
 
@@ -601,9 +601,11 @@ class TicketController extends Controller {
                         else { $id_version = null; }
 
                         // Controla si ya existe el mismo ticket
+                        $desc = $ticket->getDescription();
+                        $desc = $this->fixWrongCharacters($desc);
                         $select = "SELECT t FROM TicketBundle:Ticket t
                                         WHERE t.workshop = ".$workshop->getId()."
-                                        AND t.description LIKE '".$ticket->getDescription()."'
+                                        AND t.description LIKE '".$desc."'
                                         AND t.car IN (
                                             SELECT c FROM CarBundle:Car c
                                             WHERE c.brand = ".$id_brand."
@@ -664,7 +666,6 @@ class TicketController extends Controller {
                                                 ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
                                             ){
                                                 $str = $trans->trans('error.vin_platenumber_not_match');
-
                                                 if($exist_vin != null) {
                                                     $str .=' ('.$trans->trans('vin').' '.$exist_vin->getVin().' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
@@ -680,7 +681,7 @@ class TicketController extends Controller {
                                                 if($exist_num != null) {
                                                     $str .=' ('.$trans->trans('plate_number').' '.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion();
+                                                        $str .= ' '.$exist_num->getVersion()->getName();
                                                         if($exist_num->getMotor() != null){
                                                             $str .= ' ['.$exist_num->getMotor().']';
                                                         }
@@ -703,7 +704,7 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
+                                                    $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_vin');
@@ -733,7 +734,7 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+                                                    $exist_num->getVersion()->getName() != $car->getVersion()->getName()
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_platenumber');
@@ -751,7 +752,6 @@ class TicketController extends Controller {
                                             }
 
                                             if($exist_car == '0') {
-
                                                 if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null) {
                                                     $numchecks = $workshop->getNumChecks();
                                                     $workshop->setNumChecks($numchecks - 1);
@@ -956,7 +956,7 @@ class TicketController extends Controller {
                 /*Validacion Ticket*/
                 $str_len = strlen($ticket->getDescription());
                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 500; }
+                else { $max_len = 1000; }
 
                 if ($str_len <= $max_len ) {
                     //Define CAR
@@ -1207,7 +1207,7 @@ class TicketController extends Controller {
                             if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                                 $str_len = strlen($post->getMessage());
                                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                                else { $max_len = 500; }
+                                else { $max_len = 1000; }
                                 if ($str_len <= $max_len ) {
                                     //Define Post
                                     $post = UtilController::newEntity($post, $user);
@@ -1362,7 +1362,7 @@ class TicketController extends Controller {
                 /*Validacion Ticket*/
                 $str_len = strlen($ticket->getSolution());
                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 500; }
+                else { $max_len = 1000; }
 
                 if ($str_len <= $max_len ) {
 
@@ -2116,7 +2116,20 @@ class TicketController extends Controller {
         return $tickets_filtered;
     }
     
-    
+
+    /**
+     * Elimina los caracteres extraños de una consulta (afectan a la ejecucion del SQL)
+     * @param  String $str
+     * @return string
+     */
+    private function fixWrongCharacters($str) {
+
+        $str = str_replace("'", '"', $str);
+
+        return $str;
+    }
+
+
 // /**
     //  * Devuelve todos los tickets realizados
     //  * @return url

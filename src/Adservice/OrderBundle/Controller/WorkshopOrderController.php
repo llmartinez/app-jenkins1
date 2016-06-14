@@ -300,13 +300,12 @@ class WorkshopOrderController extends Controller {
      */
     public function editAction($id) {
         $security = $this->get('security.context');
-
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
-        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id'     => $id,
-                                                                                             'action' => 'rejected'));
+        $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id,
+                                                                                          'action' => 'rejected'));
         if ($workshopOrder) $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($workshopOrder->getIdWorkshop());
         else {
             $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
@@ -316,7 +315,22 @@ class WorkshopOrderController extends Controller {
             //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
-        
+
+        if (!$security->isGranted('ROLE_SUPERADMIN'))
+        {
+            // SUPER_AD
+            if ($security->isGranted('ROLE_SUPER_AD'))
+            {
+                if($security->getToken()->getUser()->getCountry()->getId() != $workshopOrder->getCountry()->getId())
+                throw new AccessDeniedException();
+            }
+            // AD
+            else{
+                if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
+                throw new AccessDeniedException();
+            }
+        }
+
         if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -822,7 +836,7 @@ class WorkshopOrderController extends Controller {
 
                 }
                 // Enviamos un mail con la solicitud a modo de backup
-                $mail = $this->container->getParameter('mail_db');
+                $mail = $this->container->getParameter('mail_report');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
@@ -868,7 +882,7 @@ class WorkshopOrderController extends Controller {
 
                 }
                 // Enviamos un mail con la solicitud a modo de backup
-                $mail = $this->container->getParameter('mail_db');
+                $mail = $this->container->getParameter('mail_report');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
@@ -886,7 +900,7 @@ class WorkshopOrderController extends Controller {
                 $em->remove($workshopOrder);
                 $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
                 $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
-                      
+
                 $user_workshop->setName($workshop->getContact());
                 $user_workshop->setActive($workshop->getActive());
                 $em->persist($user_workshop);
@@ -964,7 +978,7 @@ class WorkshopOrderController extends Controller {
                     UtilController::saveEntity($em, $newUser, $user);
 
                     // Enviamos un mail con credenciales de usuario a modo de backup
-                    $mail = $this->container->getParameter('mail_db');
+                    $mail = $this->container->getParameter('mail_report');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 

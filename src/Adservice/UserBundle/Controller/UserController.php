@@ -42,7 +42,7 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user->getPrivacy() == 0 ||$user->getPrivacy() == null ){            
+        if($user->getPrivacy() == 0 ||$user->getPrivacy() == null ){
              $currentPath = $this->generateUrl('accept_privacy');
              return $this->redirect($currentPath);
         }
@@ -436,8 +436,8 @@ class UserController extends Controller {
                 if($user->getWorkshop() !== null){
                     $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
                     $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
-                                                         
-        
+
+
                     $workshop_user->setContact($user->getName());
                     $workshop_user->setActive($user->getActive());
                     $em->persist($workshop_user);
@@ -680,13 +680,13 @@ class UserController extends Controller {
         $em->persist($user);
         $em->flush();
     }
-    
+
     public function acceptPrivacyAction() {
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             if ($request->request->has('Accept')) {
-                $em = $this->getDoctrine()->getEntityManager();                    
+                $em = $this->getDoctrine()->getEntityManager();
                 $user->setPrivacy(1);
                 $em->persist($user);
                 $em->flush();
@@ -697,6 +697,6 @@ class UserController extends Controller {
             }
         }
         return $this->render('UserBundle:User:accept_privacy.html.twig');
-        
+
     }
 }

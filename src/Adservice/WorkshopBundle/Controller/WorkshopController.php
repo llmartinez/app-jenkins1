@@ -254,6 +254,15 @@ class WorkshopController extends Controller {
                         $mailerUser->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
+                        // Enviamos un mail con la solicitud a modo de backup
+                        $mail = $this->container->getParameter('mail_db');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+
+                            $mailerUser->setTo($mail);
+                            $mailerUser->sendMailToSpool();
+                        }
+
                         /* Dejamos el locale tal y como estaba */
                         $request->setLocale($locale);
                     }
@@ -636,19 +645,24 @@ class WorkshopController extends Controller {
      * @param Workshop $workshop
      */
     private function saveWorkshop($em, $workshop) {
-        
-        $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
-       
-        $user = UtilController::saveUserFromWorkshop($workshop,$user);
-        $user->setName($workshop->getContact());
-        $user->setActive($workshop->getActive());
+
+        if($workshop->getId() != null) {
+            $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+
+            $user = UtilController::saveUserFromWorkshop($workshop,$user);
+            $user->setName($workshop->getContact());
+            $user->setActive($workshop->getActive());
+
+            $em->persist($user);
+        }
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
         if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $em->persist($user);
         $em->persist($workshop);
         $em->flush();
     }
+
+
 
 }

@@ -24,7 +24,7 @@
         </div>
 
 {% else %}
-        <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
+        <div {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
 
