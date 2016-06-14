@@ -64,9 +64,9 @@ class WorkshopOrderController extends Controller {
             else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
             if ($status != 'none') {
-                if     ($status == 'active')   $params[] = array('active', ' = 1');
+                if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
                 elseif ($status == 'deactive') $params[] = array('active', ' = 0');
-                elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
+                elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
             }
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
@@ -99,8 +99,9 @@ class WorkshopOrderController extends Controller {
                                                                                            'partners'   => $partners,
                                                                                            'partner'    => $partner,
                                                                                            'term'       => $term,
-                                                                                           'field'       => $field,
-                                                                                           'status'     => $status));
+                                                                                           'field'      => $field,
+                                                                                           'status'     => $status,
+                                                                                           'length'     => $length));
     }
 
 //  _   _ _______        __
@@ -906,6 +907,38 @@ class WorkshopOrderController extends Controller {
                 $em->persist($user_workshop);
                 $em->flush();
                 UtilController::saveEntity($em, $workshop, $user);
+
+                // Cambiamos el locale para enviar el mail en el idioma del taller
+                $locale = $request->getLocale();
+                $lang_w = $workshop->getCountry()->getLang();
+                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                $request->setLocale($lang->getShortName());
+
+                // Enviamos un mail con la solicitud al taller
+                $mail = $workshop->getEmail1();
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    /* MAILING */
+                    $mailerUser = $this->get('cms.mailer');
+                    $mailerUser->setTo($mail);
+                    $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
+                    $mailerUser->setFrom('noreply@adserviceticketing.com');
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'modify', '__locale' => $locale)));
+                    $mailerUser->sendMailToSpool();
+                    // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
+
+                }
+                // Enviamos un mail con la solicitud a modo de backup
+                $mail = $this->container->getParameter('mail_report');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
+                // Dejamos el locale tal y como estaba
+                $request->setLocale($locale);
 
             }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
 

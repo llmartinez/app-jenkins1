@@ -16,6 +16,7 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.workshop {% endtrans %}</a></td>
             {% endif %}
+            <span class="pull-right mr15">{% trans %}menu.list_workshops{% endtrans %}: {{length}}</span>
         </legend>
 
         {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
@@ -52,6 +53,7 @@
                 <option value="0"        >{% trans %} all      {% endtrans %}</option>
                 <option value="active"   >{% trans %} active   {% endtrans %}</option>
                 <option value="deactive" >{% trans %} inactive {% endtrans %}</option>
+                <option value="test"     >{% trans %} test     {% endtrans %}</option>
              </select>
         </div>
 
