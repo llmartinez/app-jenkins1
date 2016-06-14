@@ -28,10 +28,11 @@
                         <td>
                             <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                                 {% if is_granted('ROLE_SUPER_ADMIN')%}
-{#                              <a title="{% trans %} edit.delete {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
+{#                                  <a title="{% trans %} edit.delete {% endtrans %}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
                                     <a href="{{ path('workshop_delete', { 'id': workshop.id }) }}" 
                                        onClick="javascript: return confirm(
                                                    '{% trans %}workshop.delete.confirm{% endtrans %}{{workshop.id}}\n\n\n{% trans %}workshop.delete.confirm2{% endtrans %}({{workshop.tickets | length}})');" title="{% trans %} workshop.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                                    <a title="{% trans %} edit.user {% endtrans %}" href="{{ path("user_edit", { 'id':workshop.users[0].id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/user.png') }}"></a>
                                 {% endif %}
               
                     {% endif %}
