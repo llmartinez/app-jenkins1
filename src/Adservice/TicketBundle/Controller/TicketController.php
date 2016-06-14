@@ -1222,17 +1222,17 @@ class TicketController extends Controller {
                                     }
 
                                     //Se desbloquea el ticket una vez respondido
-                                    // if ($ticket->getBlockedBy() != null) {
-                                    //     $ticket->setBlockedBy(null);
+                                    if ($ticket->getBlockedBy() != null) {
+                                        $ticket->setBlockedBy(null);
+                                    }
 
-                                        /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
-                                        if ($security->isGranted('ROLE_ASSESSOR')) {
-                                            $ticket->setAssignedTo($user);
-                                            $ticket->setPending(0);
-                                        }else{
-                                            $ticket->setPending(1);
-                                        }
-                                    // }
+                                    /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
+                                    if ($security->isGranted('ROLE_ASSESSOR')) {
+                                        $ticket->setAssignedTo($user);
+                                        $ticket->setPending(0);
+                                    }else{
+                                        $ticket->setPending(1);
+                                    }
 
                                     UtilController::saveEntity($em, $ticket, $user);
 
