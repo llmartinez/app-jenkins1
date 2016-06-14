@@ -64,9 +64,9 @@ class WorkshopOrderController extends Controller {
             else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
             if ($status != 'none') {
-                if     ($status == 'active')   $params[] = array('active', ' = 1');
+                if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
                 elseif ($status == 'deactive') $params[] = array('active', ' = 0');
-                elseif ($status == 'test')     $params[] = array('active', ' = 0 AND e.test = 1');
+                elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
             }
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
@@ -99,8 +99,9 @@ class WorkshopOrderController extends Controller {
                                                                                            'partners'   => $partners,
                                                                                            'partner'    => $partner,
                                                                                            'term'       => $term,
-                                                                                           'field'       => $field,
-                                                                                           'status'     => $status));
+                                                                                           'field'      => $field,
+                                                                                           'status'     => $status,
+                                                                                           'length'     => $length));
     }
 
 //  _   _ _______        __
