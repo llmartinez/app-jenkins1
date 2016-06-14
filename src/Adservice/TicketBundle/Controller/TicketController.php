@@ -1807,7 +1807,7 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, $plateNumber=0,
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, 
                                                    $system=0, $subsystem=0, $importance=0,
                                                    $year=0, $motor=0, $kw=0, $num_rows=10)
     {
