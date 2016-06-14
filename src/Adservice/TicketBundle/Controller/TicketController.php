@@ -1807,7 +1807,7 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0,
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, 
                                                    $system=0, $subsystem=0, $importance=0,
                                                    $year=0, $motor=0, $kw=0, $num_rows=10)
     {
@@ -1818,7 +1818,7 @@ class TicketController extends Controller {
         if($brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if($model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if($version != '0' and $version != '') $params[] = array('version',' = '.$version);
-
+       
         if($year    != '0' and $year    != '') $params[] = array('year'," LIKE '%".$year."%' ");
         if($motor   != '0' and $motor   != '') $params[] = array('motor'," LIKE '%".$motor."%' ");
         if($kw      != '0' and $kw      != '') $params[] = array('kw',' = '.$kw);
@@ -1959,16 +1959,14 @@ class TicketController extends Controller {
         if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
-
+        if(isset($plateNumber) and $plateNumber != '0' and $plateNumber != '') $params[] = array('plateNumber'.' LIKE ','\''.$plateNumber.'\'');
         $pagination = new Pagination($page);
-
         // Seteamos el numero de resultados que se mostraran
         $max_rows = 100;
         $pagination->setMaxRows($max_rows);
         $ordered = array('e.modified_at', 'DESC');
 
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
-
         $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
 
         $pagination->setTotalPagByLength($length);
@@ -1977,7 +1975,6 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
-
         if($length > $max_rows) $more_results = $length-$max_rows;
         else $more_results = 0;
 
@@ -2010,7 +2007,6 @@ class TicketController extends Controller {
                 }
             }
         }
-
         $b_query     = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands      = $b_query->getResult();
         $countries   = $em->getRepository('UtilBundle:Country')->findAll();
@@ -2020,11 +2016,24 @@ class TicketController extends Controller {
         if(isset($model)   and $model   != '0') $model   = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
-        if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
-            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
-
+        if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
+       
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
-
+        if($plateNumber != ''){
+            if($cars != null) {
+                $brand = $cars[0]->getBrand()->getId();
+                $model = $cars[0]->getModel();
+                $vin     = $cars[0]->getVin();
+                $year    = $cars[0]->getYear();
+                $motor   = $cars[0]->getMotor();
+                $kw      = $cars[0]->getKw();
+                $displacement = $cars[0]->getDisplacement();
+                if($cars[0]->getVersion() != null){
+                    $version = $cars[0]->getVersion();
+                }
+                else $version = null;
+            }
+        }
         $array = array('workshop'     => $workshop,
                        'pagination'   => $pagination,
                        'codepartner'  => $codepartner,
@@ -2055,7 +2064,6 @@ class TicketController extends Controller {
                        'country'      => 0,
                        'inactive'     => 0,
                        'disablePag'   => 0);
-
         if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -2107,6 +2115,7 @@ class TicketController extends Controller {
         }
         return $tickets_filtered;
     }
+    
 
     /**
      * Elimina los caracteres extraños de una consulta (afectan a la ejecucion del SQL)
@@ -2119,6 +2128,7 @@ class TicketController extends Controller {
 
         return $str;
     }
+
 
 // /**
     //  * Devuelve todos los tickets realizados

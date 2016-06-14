@@ -2,6 +2,9 @@
     <form action="{{ path('findAssessorTicketByBMV', { 'page' : '1' })}}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
         <input type="hidden" id='ftbmv_codepartner' name='ftbmv_codepartner' value={{ workshop.codepartner }}>
         <input type="hidden" id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value={{ workshop.codeworkshop }}>
+        <input type="hidden" id='ticket_model' name='ticket_model' value="">
+        <input type="hidden" id='ticket_version' name='ticket_version' value="">
+        <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
 
             <div class="grid w20">
                 <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
@@ -26,7 +29,14 @@
                     {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
                 </select>
             </div>
-            <div class="grid w30">
+            <div class="grid w10">
+                <label class="lbl_lgray" for="new_car_form_plate_number">{% trans %} plate_number {% endtrans %}</label>
+                <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
+                <input type="text" id="new_car_form_plate_number" name="new_car_form_plate_number" class="form-control asr_form-control"
+                    {% if plateNumber is defined %}value=""{% endif %}>
+                </input>
+            </div>
+            <div class="grid w20">
                 <label class="w100">
                     <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
                 </label>
