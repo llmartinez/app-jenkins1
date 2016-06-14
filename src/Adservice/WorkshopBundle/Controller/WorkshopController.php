@@ -67,8 +67,12 @@ class WorkshopController extends Controller {
 
             if ($status == "active") {
                 $params[] = array('active', ' = 1');
+                $params[] = array('test', ' = 0');
             } elseif ($status == "deactive") {
                 $params[] = array('active', ' != 1');
+            } elseif ($status == "test") {
+                $params[] = array('active', ' = 1');
+                $params[] = array('test', ' = 1');
             }
         }
 
@@ -100,7 +104,8 @@ class WorkshopController extends Controller {
                     'partner' => $partner,
                     'status' => $status,
                     'term' => $term,
-                    'field' => $field));
+                    'field' => $field,
+                    'length' => $length));
     }
 
     public function newWorkshopAction() {
