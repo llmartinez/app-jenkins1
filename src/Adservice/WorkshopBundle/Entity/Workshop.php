@@ -180,6 +180,12 @@ class Workshop {
      * @ORM\Column(name="num_checks", type="integer", nullable=true)
      */
     private $numchecks;
+    /**
+     * @var boolean $infotech
+     *
+     * @ORM\Column(name="infotech", type="boolean", nullable=true)
+     */
+    private $infotech;
 
     /**
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
@@ -553,6 +559,24 @@ class Workshop {
      */
     public function getNumChecks() {
         return $this->numchecks;
+    }
+
+    /**
+     * Set infotech
+     *
+     * @param boolean $infotech
+     */
+    public function setInfotech($infotech) {
+        $this->infotech = $infotech;
+    }
+
+    /**
+     * Get infotech
+     *
+     * @return boolean
+     */
+    public function getInfotech() {
+        return $this->infotech;
     }
 
     /**
