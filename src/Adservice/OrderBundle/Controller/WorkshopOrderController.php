@@ -337,7 +337,7 @@ class WorkshopOrderController extends Controller {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
         $user = $security->getToken()->getUser();
-      
+
         if($user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner()){
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -751,7 +751,7 @@ class WorkshopOrderController extends Controller {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
@@ -761,7 +761,7 @@ class WorkshopOrderController extends Controller {
         // create     + accepted = new workshop and delete workshopOrder
 
         $user = $security->getToken()->getUser();
-        
+
         /*COMPROBAR CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
                                                                                'code_workshop' => $workshopOrder->getCodeWorkshop()));
