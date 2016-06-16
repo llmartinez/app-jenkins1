@@ -73,7 +73,13 @@ class WorkshopController extends Controller {
             } elseif ($status == "test") {
                 $params[] = array('active', ' = 1');
                 $params[] = array('test', ' = 1');
+            } elseif ($status == "check") {
+                $params[] = array('haschecks', ' = 1');
+            } elseif ($status == "infotech"){
+                $params[] = array('infotech', ' = 1');
             }
+            
+            
         }
 
         if (!isset($params))
