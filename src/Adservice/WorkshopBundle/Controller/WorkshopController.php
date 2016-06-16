@@ -73,7 +73,13 @@ class WorkshopController extends Controller {
             } elseif ($status == "test") {
                 $params[] = array('active', ' = 1');
                 $params[] = array('test', ' = 1');
+            } elseif ($status == "check") {
+                $params[] = array('haschecks', ' = 1');
+            } elseif ($status == "infotech"){
+                $params[] = array('infotech', ' = 1');
             }
+            
+            
         }
 
         if (!isset($params))
@@ -177,9 +183,8 @@ class WorkshopController extends Controller {
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
 
-                    // CHECK
-                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
-                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
 
@@ -406,9 +411,8 @@ class WorkshopController extends Controller {
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
-                    // CHECK
-                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
-                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
 

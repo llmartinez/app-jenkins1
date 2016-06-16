@@ -410,6 +410,8 @@ numTickets:				 "Nombre de tickets"
 reply_inactive: 		 "Vous ne pouvez pas répondre à ce ticket, vous n'êtes pas inscrit."
 haschecks:				 "Avec chéquiers"
 numchecks:				 "Nombre de chéquiers"
+infotech:				 "InfoTech"
+infotech_only:			 "Information techniques seulement"
 
 #USER
 user.delete:			 "Effacer utilisateur"
