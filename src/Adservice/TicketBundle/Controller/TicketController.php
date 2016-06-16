@@ -508,6 +508,7 @@ class TicketController extends Controller {
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '' and $id_version != '0') {
+            
             $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
         }
@@ -1976,7 +1977,7 @@ class TicketController extends Controller {
         if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
-
+        if(isset($plateNumber) and $plateNumber != '0' and $plateNumber != '') $params[] = array('plateNumber'.' LIKE ','\''.$plateNumber.'\'');
         $pagination = new Pagination($page);
 
         // Seteamos el numero de resultados que se mostraran
@@ -2043,7 +2044,21 @@ class TicketController extends Controller {
 
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
-
+        if($plateNumber != ''){
+            if($cars != null) {
+                $brand = $cars[0]->getBrand()->getId();
+                $model = $cars[0]->getModel();
+                $vin     = $cars[0]->getVin();
+                $year    = $cars[0]->getYear();
+                $motor   = $cars[0]->getMotor();
+                $kw      = $cars[0]->getKw();
+                $displacement = $cars[0]->getDisplacement();
+                if($cars[0]->getVersion() != null){
+                    $version = $cars[0]->getVersion();
+                }
+                else $version = null;
+            }
+        }
         $array = array('workshop'     => $workshop,
                        'pagination'   => $pagination,
                        'codepartner'  => $codepartner,

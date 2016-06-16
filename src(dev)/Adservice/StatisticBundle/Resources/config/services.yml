@@ -1,7 +1,0 @@
-parameters:
-#    statistic.example.class: Adservice\StatisticBundle\Example
-
-services:
-#    statistic.example:
-#        class: %statistic.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
