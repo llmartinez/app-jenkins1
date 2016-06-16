@@ -54,6 +54,7 @@ class UserController extends Controller {
 
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
+
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
@@ -69,7 +70,7 @@ class UserController extends Controller {
 
                     $user = $this->get('security.context')->getToken()->getUser();
                     $country = $user->getCountry()->getId();
-                   
+
                     if($user->getWorkshop() != null){
                         if((($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ) && $country == 1 ){
                             $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),

@@ -177,9 +177,8 @@ class WorkshopController extends Controller {
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
 
-                    // CHECK
-                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
-                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
 
@@ -406,9 +405,8 @@ class WorkshopController extends Controller {
 
                     $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
-                    // CHECK
-                    // if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
-                    // if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
 

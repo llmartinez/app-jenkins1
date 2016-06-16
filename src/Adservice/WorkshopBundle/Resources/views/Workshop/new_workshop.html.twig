@@ -89,15 +89,22 @@
                     {{ form_widget(form.endtest_at) }}
                 </div>
 
-                {# //CHECKS #}
-                {# <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
-                    {{ form_widget(form.haschecks) }}
+                <div class="col-xs-4 col-md-4 form-group">
+                    <div class="grid-full w80 mt20">
+                        <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
+                    </div>
+                    <div class="grid-full w20 mt20">
+                        {{ form_widget(form.haschecks) }}
+                    </div>
                 </div>
                 <div class="col-xs-8 col-md-8 form-group">
                     <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
                     {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
-                </div> #}
+                </div>
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
+                    {{ form_widget(form.infotech) }}
+                </div>
             </div>
         </div>
 
