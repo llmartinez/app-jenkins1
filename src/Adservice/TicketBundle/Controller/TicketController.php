@@ -666,6 +666,7 @@ class TicketController extends Controller {
                                                 ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
                                             ){
                                                 $str = $trans->trans('error.vin_platenumber_not_match');
+
                                                 if($exist_vin != null) {
                                                     $str .=' ('.$trans->trans('vin').' '.$exist_vin->getVin().' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
@@ -704,11 +705,15 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_vin->getVersion()->getName() != null
-                                                    AND
-                                                    $car->getVersion()->getName() != null
-                                                    AND
-                                                    $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
+//<<<<<<< HEAD
+                                                    // $exist_vin->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
+//=======
+                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
+//>>>>>>> fr
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_vin');
@@ -738,11 +743,15 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_num->getVersion()->getName() != null
-                                                    AND
-                                                    $car->getVersion()->getName() != null
-                                                    AND
-                                                    $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+//<<<<<<< HEAD
+                                                    // $exist_num->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+//=======
+                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+//>>>>>>> fr
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_platenumber');
@@ -760,6 +769,7 @@ class TicketController extends Controller {
                                             }
 
                                             if($exist_car == '0') {
+
                                                 if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null) {
                                                     $numchecks = $workshop->getNumChecks();
                                                     $workshop->setNumChecks($numchecks - 1);
@@ -1967,14 +1977,16 @@ class TicketController extends Controller {
         if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if(isset($version) and $version != '0' and $version != '') $params[] = array('version',' = '.$version);
-        if(isset($plateNumber) and $plateNumber != '0' and $plateNumber != '') $params[] = array('plateNumber'.' LIKE ','\''.$plateNumber.'\'');
+
         $pagination = new Pagination($page);
+
         // Seteamos el numero de resultados que se mostraran
         $max_rows = 100;
         $pagination->setMaxRows($max_rows);
         $ordered = array('e.modified_at', 'DESC');
 
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
+
         $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
 
         $pagination->setTotalPagByLength($length);
@@ -1983,6 +1995,7 @@ class TicketController extends Controller {
 
         $key = array_keys($cars);
         $size = sizeOf($key);
+
         if($length > $max_rows) $more_results = $length-$max_rows;
         else $more_results = 0;
 
@@ -2015,6 +2028,7 @@ class TicketController extends Controller {
                 }
             }
         }
+
         $b_query     = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands      = $b_query->getResult();
         $countries   = $em->getRepository('UtilBundle:Country')->findAll();
@@ -2026,22 +2040,9 @@ class TicketController extends Controller {
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
+
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
-        if($plateNumber != ''){
-            if($cars != null) {
-                $brand = $cars[0]->getBrand()->getId();
-                $model = $cars[0]->getModel();
-                $vin     = $cars[0]->getVin();
-                $year    = $cars[0]->getYear();
-                $motor   = $cars[0]->getMotor();
-                $kw      = $cars[0]->getKw();
-                $displacement = $cars[0]->getDisplacement();
-                if($cars[0]->getVersion() != null){
-                    $version = $cars[0]->getVersion();
-                }
-                else $version = null;
-            }
-        }
+
         $array = array('workshop'     => $workshop,
                        'pagination'   => $pagination,
                        'codepartner'  => $codepartner,
@@ -2072,6 +2073,7 @@ class TicketController extends Controller {
                        'country'      => 0,
                        'inactive'     => 0,
                        'disablePag'   => 0);
+
         if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -2124,7 +2126,6 @@ class TicketController extends Controller {
         return $tickets_filtered;
     }
 
-
     /**
      * Elimina los caracteres extraños de una consulta (afectan a la ejecucion del SQL)
      * @param  String $str
@@ -2136,7 +2137,6 @@ class TicketController extends Controller {
 
         return $str;
     }
-
 
 // /**
     //  * Devuelve todos los tickets realizados
