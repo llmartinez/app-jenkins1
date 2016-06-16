@@ -508,6 +508,7 @@ class TicketController extends Controller {
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '' and $id_version != '0') {
+
             $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
         }
@@ -570,7 +571,7 @@ class TicketController extends Controller {
             /*Validacion Ticket*/
             $str_len = strlen($ticket->getDescription());
             if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-            else { $max_len = 1000; }
+            else { $max_len = 500; }
 
             if ($str_len <= $max_len ) {
 
@@ -654,29 +655,7 @@ class TicketController extends Controller {
                                             $exist_car = '0';
                                             $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
                                             $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
-var_dump($vin);
-var_dump($exist_vin->getId());
-var_dump($exist_vin->getVersion()->getName());
-echo '---';
-    $consulta = $em->createQuery("SELECT c FROM CarBundle:Car c WHERE c.vin = '".$vin."' ");
-var_dump($consulta->getResult()[0]->getVersion()->getName());
 
-    $consulta = $em->createQuery("SELECT c FROM CarBundle:Car c WHERE c.id = 4000 ");
-var_dump($consulta->getResult()[0]->getVersion()->getName());
-
-    $consulta = $em->createQuery("SELECT c FROM CarBundle:Car c WHERE c.id = 4520 ");
-var_dump($consulta->getResult()[0]->getVersion()->getName());
-
-echo '---';
-    $exist_vin = $em->getRepository('CarBundle:Car')->find(4000);
-var_dump($vin);
-var_dump($exist_vin->getId());
-var_dump($exist_vin->getVersion()->getName());
-    $exist_vin = $em->getRepository('CarBundle:Car')->find(4520);
-var_dump($vin);
-var_dump($exist_vin->getId());
-var_dump($exist_vin->getVersion()->getName());
-die;
                                             if($exist_vin == null AND $exist_num == null) {
                                                 $exist_car = '0';
                                             }
@@ -726,12 +705,15 @@ die;
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_vin->getVersion()->getName() != null
-                                                    AND
-                                                    $car->getVersion()->getName() != null
-                                                    AND
-                                                    $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
-                                                    )
+
+                                                    // $exist_vin->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
+
+                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
+                  )
                                             ){
                                                 $str = $trans->trans('error.same_vin');
                                                 if($exist_vin != null) {
@@ -760,11 +742,14 @@ die;
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
-                                                    $exist_num->getVersion()->getName() != null
-                                                    AND
-                                                    $car->getVersion()->getName() != null
-                                                    AND
-                                                    $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+
+                                                    // $exist_num->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+
+                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_platenumber');
@@ -986,7 +971,7 @@ die;
                 /*Validacion Ticket*/
                 $str_len = strlen($ticket->getDescription());
                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 1000; }
+                else { $max_len = 500; }
 
                 if ($str_len <= $max_len ) {
                     //Define CAR
@@ -1237,7 +1222,7 @@ die;
                             if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
                                 $str_len = strlen($post->getMessage());
                                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                                else { $max_len = 1000; }
+                                else { $max_len = 500; }
                                 if ($str_len <= $max_len ) {
                                     //Define Post
                                     $post = UtilController::newEntity($post, $user);
@@ -1252,17 +1237,17 @@ die;
                                     }
 
                                     //Se desbloquea el ticket una vez respondido
-                                    if ($ticket->getBlockedBy() != null) {
-                                        $ticket->setBlockedBy(null);
-                                    }
+                                    // if ($ticket->getBlockedBy() != null) {
+                                    //     $ticket->setBlockedBy(null);
 
-                                    /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
-                                    if ($security->isGranted('ROLE_ASSESSOR')) {
-                                        $ticket->setAssignedTo($user);
-                                        $ticket->setPending(0);
-                                    }else{
-                                        $ticket->setPending(1);
-                                    }
+                                        /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
+                                        if ($security->isGranted('ROLE_ASSESSOR')) {
+                                            $ticket->setAssignedTo($user);
+                                            $ticket->setPending(0);
+                                        }else{
+                                            $ticket->setPending(1);
+                                        }
+                                    // }
 
                                     UtilController::saveEntity($em, $ticket, $user);
 
@@ -1392,7 +1377,7 @@ die;
                 /*Validacion Ticket*/
                 $str_len = strlen($ticket->getSolution());
                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 1000; }
+                else { $max_len = 500; }
 
                 if ($str_len <= $max_len ) {
 
@@ -2051,8 +2036,8 @@ die;
         if(isset($model)   and $model   != '0') $model   = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
-        if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
+        if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
         if($plateNumber != ''){
