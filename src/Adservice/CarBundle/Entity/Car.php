@@ -425,4 +425,19 @@ class Car
         return $brand.' '.$model.' '.$version;
     }
 
+    public function to_json(){
+         $ajax_version = null;
+         if($this->getVersion() != null and $this->getVersion()->getName() != null){
+             $ajax_version = $this->getVersion()->getId();
+         }
+        $json = array('brandId'             => $this->getModel()->getBrand()->getId(),
+                      'modelId'             => $this->getModel()->getId(),
+                      'versionId'           => $ajax_version,
+                      'year'                => $this->getYear(),
+                      'motor'               => $this->getMotor(),
+                      'kw'                  => $this->getKw(),
+                      'cm3'                 => $this->getDisplacement(),
+                      'vin'                 => $this->getVin());
+        return $json;
+    }
 }

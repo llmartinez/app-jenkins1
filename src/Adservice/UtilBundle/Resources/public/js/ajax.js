@@ -234,7 +234,9 @@ function fill_model(model) {
                 }
                 if(model != undefined && model != '' ) {
                     var version = $("#ticket_version").val();
-                    fill_version(version);
+                    if(version != undefined && version != "" && version != "0"){
+                        fill_version(version);
+                    }
                 }
             },
             error: function() {
@@ -730,3 +732,45 @@ function get_country_partner(id_partner){
         }
     });
 }
+
+ $("#filter_plate_number").on('click', function () {
+        var route     = 'get_car_from_plate_number';
+        
+        var idPlateNumber = $(document).find('#new_car_form_plate_number').val(); 
+        if(idPlateNumber == undefined) idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
+        var locale    = $(document).find("#data_locale").val();
+        
+        $.ajax({
+            type: "POST",
+            url: Routing.generate(route, {_locale: locale, idPlateNumber: idPlateNumber}),
+            dataType: "json",
+            beforeSend: function () {
+                $("body").css("cursor", "progress");
+            },
+            complete: function () {
+                $("body").css("cursor", "default");
+            },
+            success: function (data) {
+               if (data['error'] !== "No hay coincidencias") {
+                    var versionId = data.versionId;
+                    $("#ticket_version").val(versionId);
+                    $('select#new_car_form_brand' ).val(data.brandId);
+                    $("#new_car_form_year").val(data.year);
+                    $("#new_car_form_motor").val(data.motor);
+                    $("#new_car_form_kW").val(data.kw);
+                    $("#new_car_form_displacement").val(data.cm3);
+                    $("#new_car_form_vin").val(data.vin);
+                    $("#ticket_model").val(data.modelId);
+
+                    setTimeout(fill_model(data.modelId), 1000);
+               }
+               else {
+                   alert($("#msg_plate_number_not_found").val());
+               }
+              
+            },
+            error: function () {
+                console.log("Error loading models...");
+            }
+        });
+    });
