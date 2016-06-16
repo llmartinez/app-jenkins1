@@ -79,12 +79,6 @@ get_country_partner:
     defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
     options:
         expose: true
-   
-get_car_from_plate_number:
-    pattern: /getCarFromPlateNumber/{idPlateNumber}
-    defaults: {_controller: UtilBundle:Ajax:getCarFromPlateNumber, idPlateNumber: 0}
-    options:
-        expose: true
 
 car_model:
     pattern: /carModel/{id_brand}/{filter}/{filter_value}

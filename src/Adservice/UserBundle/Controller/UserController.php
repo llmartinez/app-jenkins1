@@ -70,7 +70,7 @@ class UserController extends Controller {
 
                     $user = $this->get('security.context')->getToken()->getUser();
                     $country = $user->getCountry()->getId();
-                   
+
                     if($user->getWorkshop() != null){
                         if((($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0" ) && $country == 1 ){
                             $currentPath = $this->generateUrl('insert_cif', array('workshop_id'=> $user->getWorkshop()->getId(),

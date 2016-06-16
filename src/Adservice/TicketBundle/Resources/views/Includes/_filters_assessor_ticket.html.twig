@@ -6,7 +6,6 @@
             <input type="hidden" id="funnel"          value="{{ asset('bundles/util/images/icon/funnel.png') }}">
             <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
             <input type="hidden" id="msg_bad_filter"  value="{% trans %} msg_bad_filter {% endtrans %}">
-            <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
             {% if workshop is defined and workshop.id != "" %}
                 <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.partner.codepartner}}">
                 <input type='hidden' id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value="{{workshop.codeworkshop}}">

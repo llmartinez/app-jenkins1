@@ -59,9 +59,7 @@
             <div class="w35 fr mb15">
                 {{ form_widget(form.test) }}
             </div>
-
-            {# // CHECK #}
-            {# <div class="w65 fl ">
+            <div class="w65 fl ">
                 <label for="workshopOrder_newOrder_haschecks">{% trans %} haschecks {% endtrans %}</label>
             </div>
             <div class="w35 fr ">
@@ -72,7 +70,13 @@
             </div>
             <div class="w35 fr mb15">
                 {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
-            </div> #}
+            </div>
+            <div class="w65 fl ">
+                <label for="workshopOrder_newOrder_infotech">{% trans %} infotech {% endtrans %}</label>
+            </div>
+            <div class="w35 fr ">
+                {{ form_widget(form.infotech) }}
+            </div>
         </div>
         <div class="col-xs-10 col-md-10 form-group fl">
             <div class="col-xs-3 col-md-3">

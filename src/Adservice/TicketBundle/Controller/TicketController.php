@@ -652,7 +652,7 @@ class TicketController extends Controller {
                                             }
 
                                             $exist_car = '0';
-                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($car->getVin());
+                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
                                             $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
 
                                             if($exist_vin == null AND $exist_num == null) {
@@ -705,14 +705,21 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
+
+                                                    // $exist_vin->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
+
                                                     $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
-                                                    )
+                  )
                                             ){
                                                 $str = $trans->trans('error.same_vin');
                                                 if($exist_vin != null) {
                                                     $str .=' ('.$exist_vin->getVin().' -> '.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion();
+                                                        $str .= ' '.$exist_vin->getVersion()->getName();
                                                         if($exist_vin->getMotor() != null){
                                                             $str .= ' ['.$exist_vin->getMotor().']';
                                                         }
@@ -735,14 +742,22 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
+
+                                                    // $exist_num->getVersion()->getName() != null
+                                                    // AND
+                                                    // $car->getVersion()->getName() != null
+                                                    // AND
+                                                    // $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+
                                                     $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+
                                                     )
                                             ){
                                                 $str = $trans->trans('error.same_platenumber');
                                                 if($exist_num != null) {
                                                     $str .=' ('.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion();
+                                                        $str .= ' '.$exist_num->getVersion()->getName();
                                                         if($exist_num->getMotor() != null){
                                                             $str .= ' ['.$exist_num->getMotor().']';
                                                         }
@@ -2022,8 +2037,10 @@ class TicketController extends Controller {
         if(isset($model)   and $model   != '0') $model   = $em->getRepository('CarBundle:Model'  )->find($model);
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
-        if(isset($subsystem) and $subsystem != '0' and $subsystem != '')
-            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
+
+        if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
+
+
 
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
 
