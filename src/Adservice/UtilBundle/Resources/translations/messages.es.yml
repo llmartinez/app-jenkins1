@@ -409,6 +409,8 @@ numTickets:				 "Núm. Tickets"
 reply_inactive: 		 "No puedes responder este ticket, no estás dado de alta."
 haschecks:				 "Con cheques"
 numchecks:				 "Núm. cheques"
+infotech:				 "InfoTech"
+infotech_only:			 "Sólo información técnica"
 
 #USER
 user.delete:			 "Borrar Usuario"

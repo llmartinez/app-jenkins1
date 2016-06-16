@@ -407,6 +407,10 @@ workshop.cif_exist: 	 "O NIF já existe"
 reactivation-request:    "Request Workshop reactivation"
 numTickets:				 "Núm. talões"
 reply_inactive: 		 "Não pode responder a este talão pois não está registado."
+haschecks:				 "Cheques"
+numchecks:				 "Núm. cheques"
+infotech:				 "InfoTech"
+infotech:				 "Só informação técnica"
 
 #USER
 user.delete:			 "Apagar Utilizador"

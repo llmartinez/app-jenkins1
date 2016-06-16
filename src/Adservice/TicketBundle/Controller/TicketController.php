@@ -652,7 +652,7 @@ class TicketController extends Controller {
                                             }
 
                                             $exist_car = '0';
-                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($car->getVin());
+                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
                                             $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
 
                                             if($exist_vin == null AND $exist_num == null) {
@@ -704,6 +704,10 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
+                                                    $exist_vin->getVersion()->getName() != null
+                                                    AND
+                                                    $car->getVersion()->getName() != null
+                                                    AND
                                                     $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
                                                     )
                                             ){
@@ -711,7 +715,7 @@ class TicketController extends Controller {
                                                 if($exist_vin != null) {
                                                     $str .=' ('.$exist_vin->getVin().' -> '.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion();
+                                                        $str .= ' '.$exist_vin->getVersion()->getName();
                                                         if($exist_vin->getMotor() != null){
                                                             $str .= ' ['.$exist_vin->getMotor().']';
                                                         }
@@ -734,6 +738,10 @@ class TicketController extends Controller {
                                                     AND
                                                     $car->getVersion() != null
                                                     AND
+                                                    $exist_num->getVersion()->getName() != null
+                                                    AND
+                                                    $car->getVersion()->getName() != null
+                                                    AND
                                                     $exist_num->getVersion()->getName() != $car->getVersion()->getName()
                                                     )
                                             ){
@@ -741,7 +749,7 @@ class TicketController extends Controller {
                                                 if($exist_num != null) {
                                                     $str .=' ('.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion();
+                                                        $str .= ' '.$exist_num->getVersion()->getName();
                                                         if($exist_num->getMotor() != null){
                                                             $str .= ' ['.$exist_num->getMotor().']';
                                                         }
@@ -1807,7 +1815,7 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0, 
+    public function findTicketByBMVAction($page=1, $brand=0, $model=0, $version=0,
                                                    $system=0, $subsystem=0, $importance=0,
                                                    $year=0, $motor=0, $kw=0, $num_rows=10)
     {
@@ -1818,7 +1826,7 @@ class TicketController extends Controller {
         if($brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if($model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
         if($version != '0' and $version != '') $params[] = array('version',' = '.$version);
-       
+
         if($year    != '0' and $year    != '') $params[] = array('year'," LIKE '%".$year."%' ");
         if($motor   != '0' and $motor   != '') $params[] = array('motor'," LIKE '%".$motor."%' ");
         if($kw      != '0' and $kw      != '') $params[] = array('kw',' = '.$kw);
@@ -2017,7 +2025,7 @@ class TicketController extends Controller {
         if(isset($version) and $version != '0') $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
         if(isset($subsystem) and $subsystem != '0' and $subsystem != '') $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
-       
+
         if (sizeof($tickets) == 0) $pagination = new Pagination(0);
         if($plateNumber != ''){
             if($cars != null) {
@@ -2115,7 +2123,7 @@ class TicketController extends Controller {
         }
         return $tickets_filtered;
     }
-    
+
 
     /**
      * Elimina los caracteres extraños de una consulta (afectan a la ejecucion del SQL)

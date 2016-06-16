@@ -71,6 +71,11 @@
                     {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
                 </div>
               {% endif %}
+              {% if workshop.infotech == true %}
+                <div class="grid w20 pull-right error">
+                    {% trans %}infotech_only{% endtrans %}
+                </div>
+              {% endif %}
             </div>
           </form>
 

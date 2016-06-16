@@ -213,6 +213,13 @@ class WorkshopOrder {
     private $numchecks;
 
     /**
+     * @var boolean $infotech
+     *
+     * @ORM\Column(name="infotech", type="boolean", nullable=true)
+     */
+    private $infotech;
+
+    /**
      * Get id
      *
      * @return integer
@@ -585,6 +592,24 @@ class WorkshopOrder {
      */
     public function getHasChecks() {
         return $this->haschecks;
+    }
+
+    /**
+     * Set infotech
+     *
+     * @param boolean $infotech
+     */
+    public function setInfotech($infotech) {
+        $this->infotech = $infotech;
+    }
+
+    /**
+     * Get infotech
+     *
+     * @return boolean
+     */
+    public function getInfotech() {
+        return $this->infotech;
     }
 
     /**

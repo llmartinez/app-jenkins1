@@ -208,9 +208,8 @@ class WorkshopOrderController extends Controller {
                     $shop = $form['shop']->getClientData();
                     if($shop == 0) { $workshopOrder->setShop(null); }
 
-                    //CHECKS
-                    // if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
-                    // if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+                    if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                    if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
 
                     UtilController::saveEntity($em, $workshopOrder, $user);
 
@@ -390,9 +389,8 @@ class WorkshopOrderController extends Controller {
                 $shop = $form['shop']->getClientData();
                 if($shop == 0) { $workshopOrder->setShop(null); }
 
-                //CHECKS
-                // if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
-                // if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+                if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
 
                 UtilController::saveEntity($em, $workshopOrder, $user);
 
@@ -1111,9 +1109,9 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setAddress       ($workshop->getAddress());
         $workshopOrder->setPostalCode    ($workshop->getPostalCode());
         $workshopOrder->setAdServicePlus ($workshop->getAdServicePlus());
-        //CHECKS
-        // $workshopOrder->setHasChecks     ($workshop->getHasChecks());
-        // $workshopOrder->setNumChecks     ($workshop->getNumChecks());
+        $workshopOrder->setHasChecks     ($workshop->getHasChecks());
+        $workshopOrder->setNumChecks     ($workshop->getNumChecks());
+        $workshopOrder->setInfotech      ($workshop->getInfotech());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshopOrder->setCreatedBy($workshopOrder->getCreatedBy());
@@ -1166,9 +1164,9 @@ class WorkshopOrderController extends Controller {
         $workshop->setAddress       ($workshopOrder->getAddress());
         $workshop->setPostalCode    ($workshopOrder->getPostalCode());
         $workshop->setAdServicePlus ($workshopOrder->getAdServicePlus());
-        //CHECKS
-        // $workshop->setHasChecks     ($workshopOrder->getHasChecks());
-        // $workshop->setNumChecks     ($workshopOrder->getNumChecks());
+        $workshop->setHasChecks     ($workshopOrder->getHasChecks());
+        $workshop->setNumChecks     ($workshopOrder->getNumChecks());
+        $workshop->setInfotech      ($workshopOrder->getInfotech());
 
         if ($workshopOrder->getCreatedBy() != null ) {
             $workshop->setCreatedBy($workshopOrder->getCreatedBy());
