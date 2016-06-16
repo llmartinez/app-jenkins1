@@ -46,14 +46,18 @@
                 <td style="width:40%;"><b>{% trans %} test            {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.test          == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
             </tr>
-            {# //CHECKS #}
-            {# <tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} haschecks       {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.haschecks     == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} numchecks       {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.numchecks    != '' %}{{ workshop.numchecks      }}{% else %} ... {% endif %}</td>
-            </tr> #}
+            </tr>
+            <tr>
+                <td style="width:40%;"><b>{% trans %} infotech       {% endtrans %}</b></td>
+                <td style="width:60%;">{% if workshop.infotech     == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
+            </tr>
             <tr>
                 <td style="width:40%;"><b>{% trans %} subscribed      {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.createdAt|date("d-m-Y") != ''%}{{workshop.createdAt|date("d-m-Y")}}{% else %}...{% endif %}</td>

@@ -2,7 +2,6 @@
     <input type="hidden" id="funnel"          value="{{ asset('bundles/util/images/icon/funnel.png') }}">
     <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
     <input type="hidden" id="msg_bad_filter"  value="{% trans %} msg_bad_filter {% endtrans %}">
-    <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
 
     <div class="grid-full w100">
         <div class="grid-33">
@@ -38,7 +37,6 @@
 
         <div class="grid-33">
                 <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %} *<a id="txt_plateNumber"></a></label>
-                <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 {{ form_widget(formC.plateNumber, { 'attr': { 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number' | trans } }) }}
         </div>
     </div>

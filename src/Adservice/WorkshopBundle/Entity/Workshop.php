@@ -180,6 +180,7 @@ class Workshop {
      * @ORM\Column(name="num_checks", type="integer", nullable=true)
      */
     private $numchecks;
+
     /**
      * @var boolean $infotech
      *
