@@ -1,0 +1,12 @@
+{% extends "::layout.html.twig" %}
+
+{% block colDer %}
+
+    <form action="{{ path('upload') }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+
+        {{ form_widget(form.file, { 'attr': {'class': 'ac-message'} })  }}
+
+        <button class="btn btn-primary pull-right btn100" type="submit">{% trans %} btn.send {% endtrans %}</button>
+    </form>
+
+{% endblock %}

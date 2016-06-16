@@ -431,7 +431,7 @@ motor:					 "Moteur"
 kw:						 "kW"
 displacement:			 "Cylindrée"
 vin:					 "Châssis"
-plate_number:			 "Immatriculation"
+plate_number:			 "Plaque d'immatriculation"
 
 #APP
 app:					 "Applications"

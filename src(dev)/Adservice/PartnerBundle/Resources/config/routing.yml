@@ -1,0 +1,42 @@
+##############################
+#   APDO. RUTAS PARTNER      #
+##############################
+partner_list:
+    pattern:  /list/partner/{page}/{country}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
+    defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: '0', partner: 'none', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
+    options:
+        expose: true
+
+partner_new:
+    pattern: /new/partner
+    defaults: { _controller: PartnerBundle:Partner:newPartner }
+
+partner_edit:
+    pattern: /edit/partner/{id}
+    defaults: { _controller: PartnerBundle:Partner:editPartner }
+
+partner_delete:
+    pattern: /delete/partner/{id}
+    defaults: { _controller: PartnerBundle:Partner:deletePartner }
+
+
+##############################
+#   APDO. RUTAS SHOP         #
+##############################
+shop_list:
+    pattern:  /list/shop/{page}/{country}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
+    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: '0', partner: 'none', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
+    options:
+        expose: true
+
+shop_new:
+    pattern: /new/shop
+    defaults: { _controller: PartnerBundle:Shop:newShop }
+
+shop_edit:
+    pattern: /edit/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:editShop }
+
+shop_delete:
+    pattern: /delete/shop/{id}
+    defaults: { _controller: PartnerBundle:Shop:deleteShop }

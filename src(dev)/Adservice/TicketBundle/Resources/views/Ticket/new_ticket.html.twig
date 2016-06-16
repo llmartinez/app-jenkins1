@@ -1,0 +1,63 @@
+
+    {% if id_version  is defined %}
+        <input type="hidden" id="ticket_version" value="{{id_version }}">
+    {% else %}
+        <input type="hidden" id="ticket_version" value="0">
+    {% endif %}
+    {% if id_system  is defined %}
+        <input type="hidden" id="ticket_system" value="{{id_system }}">
+    {% else %}
+        <input type="hidden" id="ticket_system" value="0">
+    {% endif %}
+    {% if id_subsystem  is defined %}
+        <input type="hidden" id="ticket_subsystem" value="{{id_subsystem }}">
+    {% else %}
+        <input type="hidden" id="ticket_subsystem" value="0">
+    {% endif %}
+
+    {% if (is_granted('ROLE_ASSESSOR')) %}
+        <div class="grid-full w100">
+            <legend>{% trans %} ticket_info {% endtrans %}</legend>
+
+            <input id="error_ticket" type="hidden" value="{{'error.bad_introduction.ticket'|trans}}">
+
+            {% if app.session.hasFlash('error_ticket') %}
+                <p class="grid-full w100 error">{{ app.session.getFlash('error_ticket') }}</p>
+            {% endif %}
+            <div class="grid-33 form-group">
+                <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
+                {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+            </div>
+
+            <div class="grid-33 form-group">
+                <label for="id_system">{% trans %} system {% endtrans %} *</label>
+                <select class="form-control asr_form-control" id="id_system" {# multiple="multiple" #} required>
+                <option></option>
+                    {% for system in systems %}
+                        <option value="{{ system.id }}"> {{ system.name | trans }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grid-33 form-group">
+                <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %} *</label>
+                {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+            </div>
+        </div>
+
+    {% endif %}
+        <div class="grid-full w100">
+            <label for="new_ticket_form_description">{% trans %} description {% endtrans %} *</label>
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control asr_form-textarea', 'rows': '5', 'placeholder': "description" | trans  } }) }}
+        </div>
+
+        <div class="grid-full w100">
+            <label for="new_ticket_form_image">{% trans %} image {% endtrans %}</label>
+            {{ form_widget(formD.file, { 'attr': {'class': 'ac-message asr_form-textarea'} })  }}
+        </div>
+
+        <label class="error grid-full w100" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}4Mb</label>
+
+        {{ form_rest(formD) }}
+
+    {{ form_widget(form._token) }}

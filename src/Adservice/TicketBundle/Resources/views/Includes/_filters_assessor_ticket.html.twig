@@ -87,7 +87,7 @@
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
+                <label class="lbl_lgray" for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
                 <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
                     {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %} >
                 </input>

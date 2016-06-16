@@ -1,0 +1,27 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans %}error.access.IE{% endtrans %}</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="login_form" name="login_form" action="{{ path('user_login_check') }}" method="post">
+                        <fieldset>
+
+                            <div class="title_graphic">{% trans %}error.access.IE2{% endtrans %}</div>
+
+                            <div class="txt_graphic">{% trans %}error.access.IE3{% endtrans %}</div>
+
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

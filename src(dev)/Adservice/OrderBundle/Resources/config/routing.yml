@@ -1,0 +1,108 @@
+##############################
+#   APDO. RUTAS ORDER        #
+##############################
+
+list_orders:
+    pattern: /orders/list/{page}/{option}/{country}/{w_idpartner}/{w_id}/{partner}/{status}/{term}/{field}
+    defaults: { _controller: OrderBundle:Order:listOrders, page: 1 ,option: 'workshop_pending' ,w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0', term: '0', field: '0'  } 
+    options:
+        expose: true
+
+##############################
+#   APDO. RUTAS SHOP ORDER   #
+##############################
+shopOrder_listShops:
+    pattern: /shop/listShops/{page}/{partner}
+    defaults: { _controller: OrderBundle:ShopOrder:listShops, page: 1 , partner: 'none' }
+    options:
+        expose: true
+
+shopOrder_new:
+    pattern: /shop/new
+    defaults: { _controller: OrderBundle:ShopOrder:new }
+
+shopOrder_edit:
+    pattern: /shop/edit/{id}
+    defaults: { _controller: OrderBundle:ShopOrder:edit }
+
+shopOrder_change_status:
+    pattern: /shop/change_status/{id}/{status}
+    defaults: { _controller: OrderBundle:ShopOrder:changeStatus }
+
+shopOrder_remove:
+    pattern: /shop/remove/{id}
+    defaults: { _controller: OrderBundle:ShopOrder:remove }
+
+shopOrder_delete:
+    pattern: /shop/delete/{id}
+    defaults: { _controller: OrderBundle:ShopOrder:delete }
+
+# shopOrder_list_orders:
+#     pattern: /shop/list/listWorkshopOrders
+#     defaults: { _controller: OrderBundle:ShopOrder:listWorkshopOrders }
+
+shopOrder_accept:
+    pattern: /shop/accept/{id}/{status}
+    defaults: { _controller: OrderBundle:ShopOrder:accept }
+
+shopOrder_resendOrder:
+    pattern: /shop/resend/{id}/
+    defaults: { _controller: OrderBundle:ShopOrder:resendOrder }
+
+shopOrder_reject:
+    pattern: /shop/reject/{id}
+    defaults: { _controller: OrderBundle:ShopOrder:reject }
+
+
+###################################
+#   APDO. RUTAS WORKSHOPORDER     #
+###################################
+
+workshopOrder_listWorkshops:
+    pattern: /workshop/listWorkshops/{page}/{w_idpartner}/{w_id}/{country}/{partner}/{status}/{term}/{field}
+    defaults: { _controller: OrderBundle:WorkshopOrder:listWorkshops, page: 1 , w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0', term: '0', field: '0'  }
+    options:
+        expose: true
+
+workshopOrder_new:
+    pattern: /workshop/new
+    defaults: { _controller: OrderBundle:WorkshopOrder:new }
+
+workshopOrder_edit:
+    pattern: /workshop/edit/{id}
+    defaults: { _controller: OrderBundle:WorkshopOrder:edit }
+
+workshopOrder_change_status:
+    pattern: /workshop/change_status/{id}/{status}
+    defaults: { _controller: OrderBundle:WorkshopOrder:changeStatus }
+
+workshopOrder_remove:
+    pattern: /workshop/remove/{id}
+    defaults: { _controller: OrderBundle:WorkshopOrder:remove }
+
+workshopOrder_accept:
+    pattern: /workshop/accept/{id}/{status}
+    defaults: { _controller: OrderBundle:WorkshopOrder:accept }
+
+workshopOrder_resendOrder:
+    pattern: /workshop/resend/{id}/
+    defaults: { _controller: OrderBundle:WorkshopOrder:resend }
+
+workshopOrder_reject:
+    pattern: /workshop/reject/{id}
+    defaults: { _controller: OrderBundle:WorkshopOrder:reject }
+
+doPdfWorkshop:
+    pattern: /workshop/doPdfWorkshop/{id}
+    defaults: { _controller: OrderBundle:WorkshopOrder:doPdfWorkshop }
+
+
+##############################
+#       RUTAS AJAX           #
+##############################
+
+search_cif:
+    pattern: /new/{cif}
+    defaults: { _controller: OrderBundle:WorkshopOrder:findCif }
+    options:
+        expose: true

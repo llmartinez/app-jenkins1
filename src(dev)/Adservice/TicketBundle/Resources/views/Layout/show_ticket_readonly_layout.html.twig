@@ -1,0 +1,21 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block info %}
+
+	{% if is_granted('ROLE_ASSESSOR') %}
+
+        {% set workshop = ticket.workshop %}
+        {% include 'TicketBundle:Workshop:show_workshop_readonly.html.twig'  %}
+
+    {% endif %}
+
+        {% set car      = ticket.car      %}
+        {% include 'TicketBundle:Car:show_car.html.twig'            %}
+
+{% endblock  %}
+
+{% block content %}
+
+    <div class="form-group"> {% include 'TicketBundle:Ticket:show_ticket_readonly.html.twig'  %} </div>
+
+{% endblock  %}

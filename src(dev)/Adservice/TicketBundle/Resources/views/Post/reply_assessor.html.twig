@@ -1,0 +1,65 @@
+{# muestra el estado del ticket y permite responder y cerrarlo #}
+
+    {% if ticket.status != 'closed' %}
+
+    {% set bloqued_by_assessor = 0 %}
+
+    {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
+        {% if ( bloqued_by_assessor == 0 )
+           or ( not is_granted('ROLE_ASSESSOR')
+                and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+
+        {# formulario de respuesta de POST #}
+
+            <legend> {% trans %} reply {% endtrans %}:
+
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <div class="grid-33 prl0 fr">
+                    <select class="form-control asr_form-control" id="default_sentences">
+                        <option value="0">{% trans %} sentence.default {% endtrans %}</option>
+                        <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
+
+                        {% for sentence in sentences %}
+                            <option value="{{sentence.name}}">{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            </legend>
+
+            <div class="grid-full w100 error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
+
+            {% if ticket.workshop.active != 0 %}
+                <div class="grid-full w100">{{ form_widget(formP.message, { 'attr': {'class': 'ac-message asr_form-textarea pd_txt', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
+
+                {{ form_widget(formD.file, { 'attr': {'class': 'ac-message asr_form-textarea'} })  }}
+                <label class="grid-full w100 error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}4Mb</label>
+
+                {% if app.session.hasFlash('error') %}
+                {% endif %}
+                {{ form_rest(formP) }}
+                {{ form_rest(formD) }}
+
+                <div class="grid-full w100 mt20">
+                {% if close is defined and close == '0' %}
+                    <a class="btn btn-primary fr grid-33 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id, 'close': '0' }) }}">
+                {% else %}
+                    <a class="btn btn-primary fr grid-33 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
+                {% endif %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}
+                    </a>
+                    <button class="btn btn-primary fr grid-33 sendTicket" type="submit">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}
+                    </button>
+                </div>
+
+            {% else %}
+                <div class="grid-full w100 alert">{% trans %} reply_inactive {% endtrans %}</div>
+            {% endif %}
+
+        {% endif %}
+
+    {% else %}
+       <div class="grid-full w100 btn-disabled alert"> {% trans %} ticket.closed {% endtrans %} </div>
+    {% endif %}
+</div>

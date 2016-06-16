@@ -1,0 +1,147 @@
+#############################
+#   APDO. RUTAS GENÉRICAS   #
+#############################
+
+changeLanguage:
+    pattern: /lang/{lang}/
+    defaults: { _controller: UtilBundle:Language:changeLanguage }
+
+help:
+    pattern: /help/
+    defaults: { _controller: UtilBundle:Default:help }
+
+ayuda:
+    pattern: /ayuda/
+    defaults: { _controller: UtilBundle:Default:help }
+
+accept_privacy:
+    pattern: /acceptPrivacy/
+    defaults: { _controller: UserBundle:User:acceptPrivacy }
+
+privacy:
+    pattern: /privacy/
+    defaults: { _controller: UtilBundle:Default:privacy }
+
+autologin:
+    pattern: /autologin/
+    defaults: { _controller: UtilBundle:Security:autologin }
+
+#############################
+#   APDO. FILE              #
+#############################
+
+upload:
+    pattern: /upload
+    defaults: { _controller: UtilBundle:Document:upload }
+
+###########################
+#   APDO. AJAX   #
+###########################
+
+regions_from_country:
+    pattern: /regionsFromCountry
+    defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
+    options:
+        expose: true
+
+cities_from_region:
+    pattern: /citiesFromRegion
+    defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
+    options:
+        expose: true
+
+shops_from_partner:
+    pattern: /shopsFromPartner
+    defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
+    options:
+        expose: true
+
+get_code_partner:
+    pattern: /codePartnerFromPartner
+    defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
+    options:
+        expose: true
+
+get_code_workshop:
+    pattern: /codeWorkshopFromPartner
+    defaults: { _controller: UtilBundle:Ajax:codeWorkshopFromPartner }
+    options:
+        expose: true
+
+get_id_from_code_partner:
+    pattern: /getIdFromCodePartner/{code}
+    defaults: { _controller: UtilBundle:Ajax:getIdFromCodePartner, code: 0 }
+    options:
+        expose: true
+
+get_country_partner:
+    pattern: /getCountryPartner/{id_partner}
+    defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
+    options:
+        expose: true
+   
+get_car_from_plate_number:
+    pattern: /getCarFromPlateNumber/{idPlateNumber}
+    defaults: {_controller: UtilBundle:Ajax:getCarFromPlateNumber, idPlateNumber: 0}
+    options:
+        expose: true
+
+car_model:
+    pattern: /carModel/{id_brand}/{filter}/{filter_value}
+    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}
+    options:
+        expose: true
+
+car_version:
+    pattern: /carVersion/{id_model}/{filter}/{filter_value}
+    defaults: { _controller: UtilBundle:Ajax:carVersion, id_model: 0, filter: '', filter_value: '' }
+    options:
+        expose: true
+
+car_data:
+    pattern: /carData
+    defaults: { _controller: UtilBundle:Ajax:carData }
+    options:
+        expose: true
+
+car_by_year:
+    pattern: /carByYear
+    defaults: { _controller: UtilBundle:Ajax:carByYear }
+    options:
+        expose: true
+
+car_by_motor:
+    pattern: /carByMotor
+    defaults: { _controller: UtilBundle:Ajax:carByMotor }
+    options:
+        expose: true
+
+showTicketReadonly:
+    pattern:  /show_ticket_readonly/{id}
+    defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }
+    options:
+        expose: true
+
+ticket_system:
+    pattern: /ticketSystem
+    defaults: { _controller: UtilBundle:Ajax:ticketSystem }
+    options:
+        expose: true
+
+tickets_from_workshop:
+    pattern: /ticket/tickets_from_workshop
+    defaults: { _controller: UtilBundle:Ajax:fill_ticketsFromWorkshop }
+    options:
+        expose: true
+
+tbl_similar:
+    pattern: /tbl_similar
+    defaults: { _controller: UtilBundle:Ajax:tblSimilar }
+    options:
+        expose: true
+
+tbl_repeated:
+    pattern: /tbl_repeated
+    defaults: { _controller: UtilBundle:Ajax:tblRepeated }
+    options:
+        expose: true

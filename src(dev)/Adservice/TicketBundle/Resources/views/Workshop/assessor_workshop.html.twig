@@ -1,0 +1,48 @@
+
+<form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
+    <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
+
+    {% if app.session.hasFlash('error' ) %}
+        <div class="grid100"> <p class="error">{{ app.session.getFlash('error' ) }}</p></div>
+    {% endif %}
+
+    <div class="grid-full w100">
+        <div class="grid w15">
+            <label class="w100">    {% trans %} code  {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
+            <input type="text" id="w_idpartner" name="w_idpartner" class="w50 fl form-control asr_form-control" placeholder="{% trans %} partner  {% endtrans %}"
+                {% if workshop.id != "" %}value="{{workshop.partner.codepartner}}"
+                {% elseif codepartner is defined %}value="{{codepartner}}"
+                {% endif %}>
+            <input type="text" id="w_id"        name="w_id"        class="w50 fl form-control asr_form-control" placeholder="{% trans %} workshop {% endtrans %}"
+                {% if workshop.id != "" %}value="{{workshop.codeworkshop}}"
+                {% elseif codeworkshop is defined %}value="{{codeworkshop}}"
+                {% endif %}>
+        </div>
+        <div class="grid w25">
+            <label class="lbl_lgray">    {% trans %} workshop_name  {% endtrans %}</label>
+            <input type="text" id="w_name"      name="w_name"      class="form-control asr_form-control" placeholder="{% trans %} name     {% endtrans %}"
+                {% if workshop.id != "" %}value="{{workshop.name}}"{% endif %} disabled>
+        </div>
+        <div class="grid w15">
+            <label>    {% trans %} tel   {% endtrans %}</label>
+            <input type="text" id="w_tel"       name="w_tel"       class="form-control asr_form-control" placeholder="{% trans %} tel      {% endtrans %}"
+                {% if workshop.id != "" %}value="{{workshop.phoneNumber1}}"
+                {% elseif phone is defined %}value="{{phone}}"{% endif %}>
+        </div>
+        <div class="grid w25">
+            <label>    {% trans %} email {% endtrans %}</label>
+            <input type="text" id="w_email"     name="w_email"     class="form-control asr_form-control" placeholder="{% trans %} email    {% endtrans %}"
+                {% if workshop.id != "" %}value="{{workshop.email1}}"
+                {% elseif email is defined %}value="{{email}}"{% endif %}>
+        </div>
+        <div class="grid w15">
+
+            <label class="lbl_lgray">{% trans %} contact {% endtrans %}: </label>
+            <input type="text" id="w_contact" class="form-control asr_form-control" placeholder="{% trans %} contact {% endtrans %}" {% if workshop.id != "" %}value="{{workshop.contact}}"{% endif %} disabled>
+
+            <button type="submit" class="btn btn-primary fl" id="btn_check" name="btn_search" style="display: none;">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} workshop {% endtrans %}</button>
+        </div>
+    </div>
+</form>

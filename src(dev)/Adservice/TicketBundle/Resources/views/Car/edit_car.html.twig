@@ -1,0 +1,40 @@
+
+<div class="grid-full w100">
+   <div class="grid-33">
+        <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
+        <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
+            <option></option>
+            {% for brand in brands %}
+                <option value={{ brand.id }}
+                {% if ticket.car is defined and ticket.car.brand == brand.name %} selected {% endif %}
+                >{{ brand.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="grid-33">
+        <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
+        <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_version") }}">
+            <option></option>
+            {% for model in models %}
+                <option value={{ model.id }}
+                {% if ticket.car is defined and ticket.car.model == model.name %} selected {% endif %}
+                >{{ model.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="grid-33">
+        <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
+        <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" {# multiple="multiple" #} >
+            <option></option>
+            {% for version in versions %}
+                <option value={{ version.id }}
+                {% if ticket.car is defined and ticket.car.version is defined and ticket.car.version.name is defined and ticket.car.version.name == version.name %} selected {% endif %}
+                >{{ version.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% include 'TicketBundle:Includes:_rest_car.html.twig' %}

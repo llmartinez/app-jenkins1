@@ -1,0 +1,86 @@
+
+    <legend class="grid w100" style="clear: both;"> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
+
+        <input type="hidden" id='slct_historyTickets' value={{ option }}>
+
+        {% include 'TicketBundle:Includes:_filters_workshop_ticket.html.twig' %}
+
+        <table id="tbl_tickets_from_workshop" class="table table-hover table-list-search">
+            <thead>
+                <tr>
+                    <th> #                                           </th>
+                    <th>{% trans %} status             {% endtrans %}</th>
+
+                    {% if is_granted('ROLE_ASSESSOR') %} <th>{% trans %} ticket.assigned_to {% endtrans %}</th> {% endif %}
+
+                    <th>{% trans %} car                {% endtrans %}</th>
+                    <th>{% trans %} description        {% endtrans %}</th>
+                    <th></th>
+                    <th>{% trans %} date               {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                {% for ticket in tickets %}
+                    {% set ticket_info = '' %}
+
+                    <tr id="ticketRow" title="{{ticket_info}}">
+                        <td id="id_ticket">{{ ticket.id         }}</td>
+
+                        {% if ticket.status == 'open' %}
+                            {% if ticket.assignedTo == null %}
+                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                            {% else %}
+                                {% if ticket.pending == 1 %}
+                                    {% if is_granted('ROLE_ASSESSOR') %}
+                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                    {% else %}
+                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                    {% endif %}
+                                {% else %}
+                                    {% if is_granted('ROLE_ASSESSOR') %}
+                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                    {% else %}
+                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% elseif ticket.status == 'closed' %}
+                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}"></td>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ASSESSOR') %}
+
+                            <td title="{{ticket.assignedTo}}" >   {{ ticket.assignedTo|length > 15 ? ticket.assignedTo|slice(0, 15) ~ '...' : ticket.assignedTo  }}</td>
+
+                            {% set len = 25 %}
+                        {% else %}
+                            {% set len = 100 %}
+                        {% endif %}
+
+                        {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version.name %}
+                        {% elseif ticket.car.model.id  is defined %}
+                            {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
+                        {% else %}
+                            {% set car = ticket.car.brand %}
+                        {% endif %}
+                        <td title="{{car}}">{{ car|length > 30 ? car|slice(0, 30) ~ '...' : car  }}</td>
+
+                        <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
+
+                        <td>
+                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}" {% if is_granted('ROLE_ASSESSOR') %}target="_blank"{% endif %}></a>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{% trans %}ticket.delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ ticket.createdAt | date("d/m/y") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'UtilBundle:Pagination:tickets_history_pagination.html.twig' %}
+        <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>

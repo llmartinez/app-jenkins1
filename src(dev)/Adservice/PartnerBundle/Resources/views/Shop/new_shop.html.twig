@@ -1,0 +1,65 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('shop_list') }}">{% trans %} menu.list_shops {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.shop {% endtrans %}</li>
+    </ol>
+
+    <legend>{% trans %} new.shop {% endtrans %}</legend>
+
+    <form action="{{ path('shop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        {% if app.session.hasFlash('info') %}
+            <div class="col-xs-12 col-md-12 form-group">{{ app.session.getFlash('info' ) }}</div>
+        {% elseif app.session.hasFlash('error') %}
+            <div class="col-xs-12 col-md-12 form-group"><p style="color:red">{{ app.session.getFlash('error') }}</p></div>
+        {% endif %}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-4 col-md-4 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} name {% endtrans %} *</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} code_shop {% endtrans %} *</label> {{ form_widget(form.code_shop, { 'attr': {'class': 'form-control', 'min': 1, 'value': shop.codeShop } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} cif         {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="adservice_partnerbundle_shoptype">{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active, { 'attr': {'checked': 'checked' } }) }}
+            </div>
+        </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-12 col-md-12 form-group">
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} contact {% endtrans %} *</label>
+                    {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                </div>
+                {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="col-xs-10 col-md-10 form-group">
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#  Se deberia tener un partner.js con la misma funcion que user.js?????  #}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,11 @@
+parameters:
+#    ticket.example.class: Adservice\TicketBundle\Example
+
+services:
+    cms.mailer:
+        class: Adservice\UtilBundle\Entity\Mailer
+        arguments: ["@mailer","@swiftmailer.transport.real","@templating"]
+
+    instant_mailer:
+        class: %swiftmailer.class%
+        arguments: ["@?swiftmailer.transport.real"]

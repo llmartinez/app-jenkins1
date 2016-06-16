@@ -1,0 +1,126 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'shopOrder_listShops' %}
+    <input type="hidden" id="route" value="{{ route }}">
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_shops {% endtrans %}</li>
+    </ol>
+<legend> {% trans %} menu.list_shops {% endtrans %}
+         <a class="btn btn-primary" href="{{ path("shopOrder_new") }}">
+         <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_new.png') }}">
+         {% trans %} menu.new_shop_order {% endtrans %}</a>
+</legend>
+
+    {% if is_granted('ROLE_SUPER_AD') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
+        <select id="flt_partner_s" class='form-control'>
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for _partner in partners %}
+                <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner }}</option>
+            {% endfor %}
+    </select></div>
+    {% endif %}
+
+    {% if shops|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>#           </th>
+                <th>{% trans %} shop    {% endtrans %}</th>
+                <th>{% trans %} partner {% endtrans %}</th>
+                <th>{% trans %} tel     {% endtrans %}</th>
+                <th>{% trans %} email   {% endtrans %}</th>
+                <th>{% trans %} address {% endtrans %}</th>
+                <th>{% trans %} actions {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for shop in shops %}
+            <tr>
+                <td>{{ shop.id       }}</td>
+                <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ shop.partner  }}</td>
+                <td>{{ shop.phoneNumber1 }}</td>
+                <td>{{ shop.email1       }}</td>
+                <td>{{ shop.address      }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        {% if shop.workshops|length == 0 %}
+                            <a id="delete{{ shop.name }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_rejected.png') }}" data-toggle="modal" data-target="#myModal" data-id="{{ shop.id }}"></span></a>
+                        {% else %}
+                            <a style="color:gray"><img class="img_icon" src="{{ asset('bundles/util/images/icon/order_shop_rejected.png') }}" title="{% trans %} shop.is_assigned {% endtrans %}" onclick="alert('{% trans %} shop.is_assigned {% endtrans %}')"></span></a>
+                        {% endif %}
+                    </td>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">{% trans %} shop.delete {% endtrans %}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {% trans %} shop.delete.confirm {% endtrans %}
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ path('shop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                {% elseif is_granted('ROLE_AD') %}
+                    <td>
+                        <a title="{% trans %} edit.shop {% endtrans %}" id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                        {% if shop.active == 1 %}
+                            <a title="{% trans %} shop.deactivate {% endtrans %}"   href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"></span></a>
+                        {% else %}
+                            <a title="{% trans %} shop.activate {% endtrans %}"      href="{{ path('shopOrder_change_status', {'id':shop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"></a>
+                        {% endif %}
+                    </td>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">{% trans %} shop.delete {% endtrans %}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {% trans %} shop.delete.confirm {% endtrans %}
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ path('shopOrder_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    {% endif %}
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    {% include 'UtilBundle:Pagination:pagination_shop_order.html.twig' %}
+{% else %}
+     <div class="grid w100">
+        <p class="alert">{% trans %} not_found {% endtrans %}</p>
+    </div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination_by_partner.js') }}"></script>
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/order/js/order.js') }}"></script>
+
+{% endblock %}

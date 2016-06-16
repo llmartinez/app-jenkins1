@@ -1,0 +1,31 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('insert_cif', { 'workshop_id' : workshop_id, 'country' : country }) }}">{% trans %} home {% endtrans %}</a></li>
+    </ol>
+
+    <div style="width: 90%; margin-left: 5%;">
+
+            <legend>{% trans %} workshop.insert_cif {% endtrans %}</legend>
+
+            <label style="width: 100%;">{% trans %} workshop.cif {% endtrans %}</label>
+            {% if app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <form action="{{ path('insert_cif', { 'workshop_id' : workshop_id, 'country' : country }) }}" method="post" >
+                <div class="grid w10">
+                    <input type="text" id="new_car_form_CIF" name="new_car_form_CIF" class="form-control asr_form-control">
+                </div>
+                <button class="btn btn-primary pull-left ml15" >{% trans %} accept {% endtrans %}</button>
+            </form>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/workshop/js/workshop_filter.js') }}"></script>
+
+{% endblock %}

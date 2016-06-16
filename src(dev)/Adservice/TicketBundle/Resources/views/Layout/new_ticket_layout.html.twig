@@ -1,0 +1,69 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
+                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+      <li class="active">{% trans %} new.ticket {% endtrans %}</li>
+    </ol>
+
+{% endblock  %}
+
+{% block info %}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+
+        {% if workshop.id != "" %}  {% include 'TicketBundle:Workshop:show_workshop.html.twig'   %}
+                                    {% include 'TicketBundle:Includes:_tbl_similar.html.twig'    %}
+        {% else %}                  {% include 'TicketBundle:Workshop:search_workshop.html.twig' %}  {% endif %}
+
+    {% else %}
+
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% include 'TicketBundle:Workshop:show_workshop.html.twig' %}
+
+    {% endif %}
+
+    {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}
+
+{% endblock  %}
+
+{% block content %}
+    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
+    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
+    {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
+
+    {% if workshop.id != "" %}
+        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+            <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
+              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
+              {% trans %} ticket_return {% endtrans %}
+            </a>
+
+          <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
+
+          {% include 'TicketBundle:Car:new_car.html.twig'        %}
+
+          {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
+
+          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+              {% if workshop.haschecks == true %}
+                <div class="grid w20 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                </div>
+              {% endif %}
+            </div>
+        </form>
+
+    {% endif %}
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket_workshop.js') }}"></script>
+  {% if is_granted('ROLE_ASSESSOR') %} <script src="{{ asset('bundles/ticket/js/ticket_subsystem.js') }}"></script> {% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('shop_list') }}">{% trans %} menu.list_shops {% endtrans %}</a></li>
+      <li class="active">{% trans %} edit.shop {% endtrans %} ({{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }})</li>
+    </ol>
+
+    <legend>{% trans %} edit.shop {% endtrans %}</legend>
+
+    <form action="{{ path("shop_edit", { 'id':shop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        {% if app.session.hasFlash('info') %}
+            <div class="col-xs-12 col-md-12 form-group">{{ app.session.getFlash('info' ) }}</div>
+        {% elseif app.session.hasFlash('error') %}
+            <div class="col-xs-12 col-md-12 form-group"><p style="color:red">{{ app.session.getFlash('error') }}</p></div>
+        {% endif %}
+        <div class="col-xs-12 col-md-12 form-group">
+            <div class="col-xs-4 col-md-4 form-group">
+                <label for="new_ticket_form_importance">{% trans %} name        {% endtrans %} *</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="new_ticket_form_importance">{% trans %} partner {% endtrans %} * </label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} code_shop {% endtrans %}</label> {{ form_widget(form.code_shop,{ 'attr': {'class': 'form-control', 'min': 1 } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} cif         {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
+                <label for="new_ticket_form_importance">{% trans %} active {% endtrans %}</label>
+                {{ form_widget(form.active) }}
+            </div>
+        </div>
+
+        <legend>{% trans %} contact {% endtrans %}</legend>
+
+            <div class="col-xs-2 col-md-2 form-group">
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label>{% trans %} contact {% endtrans %}</label>
+                    {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                </div>
+            </div>
+            <div>
+                {% include 'UtilBundle:Default:contact_fields.html.twig' %}
+
+                {{ form_rest(form) }}
+
+            <div class="col-xs-10 col-md-10 form-group">
+                <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>
+            </div>
+        </div>
+    </form>
+
+{#    WORKSHOPS ZONE#}
+    {# {% include 'WorkshopBundle:Partner:_list.html.twig' with {'workshops' : partner.workshops} %} #}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+{% endblock %}

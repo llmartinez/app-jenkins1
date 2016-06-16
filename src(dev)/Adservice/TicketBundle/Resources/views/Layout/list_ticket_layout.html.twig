@@ -1,0 +1,57 @@
+{% extends 'TicketBundle:Default:ticketing_layout.html.twig' %}
+
+{% block breadcrumb %}
+
+    <ol class="breadcrumb" id="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_tickets {% endtrans %}</li>
+    </ol>
+
+{% endblock  %}
+
+{% block main %}
+
+<div>
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+
+        {% if workshop.id != "" %}
+            {% include 'TicketBundle:Workshop:show_assessor_workshop.html.twig'   %}
+        {% else %}
+            {% include 'TicketBundle:Workshop:assessor_workshop.html.twig' %}
+        {% endif %}
+
+    {% else %}
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+    {% endif %}
+
+    {% include 'TicketBundle:Includes:_filters_ticket.html.twig' %}
+
+</div>
+<div class="content">
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'listTicket' %}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+        {% if workshop is defined and workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
+        {% else %}                  {% include 'TicketBundle:Ticket:history_ticket.html.twig' %}  {% endif %}
+    {% else %}
+        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% include 'TicketBundle:Ticket:list_ticket.html.twig' %}
+    {% endif %}
+
+</div>
+{% endblock  %}
+
+{% block additionalJavascripts %}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket_history.js') }}"></script>
+    <script src="{{ asset('bundles/ticket/js/ticket_workshop.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {% if option != '' %} $('#slct_historyTickets').val("{{ option }}"); {% else %} $('#slct_historyTickets').val('all'); {% endif %}
+        });
+    </script>
+{% endblock %}
