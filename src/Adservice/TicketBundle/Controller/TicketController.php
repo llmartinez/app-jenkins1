@@ -889,7 +889,9 @@ class TicketController extends Controller {
                             if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
                             {
                                 $mail_centralita = $this->container->getParameter('mail_centralita');
-                                $mailer->setTo($mail_centralita);
+                                //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
+                                $mailName = $this->get('translator')->trans($mail_centralita);
+                                $mailer->setTo($this->get('translator')->trans($mail_centralita));
                                 $mailer->setSubject('ticket: '.$ticket->getId());
                                 $date = date("Y-m-d H:i:s");
                                 $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
