@@ -727,7 +727,7 @@ mail.textDisclaimer:  "AVISO LEGAL. A informação contida nesta mensagem de cor
 _mail.textDisclaimer: "AVISO LEGAL. A informação contida nesta mensagem de correio eletrónico é confidencial e poderá ter carácter reservado, destinando-se exclusivamente ao seu destinatário. O acesso ou utilização desta mensagem por parte de qualquer outra pessoa que não esteja autorizada pode ser ilegal. Se não é o destinatário, por favor elimine o conteúdo da mesma. <b>soporte@ad-service.com</b>"
 
 mail.centralita_test: "test@adserviceticketing.com"
-mail.centralita:      "ticketfr@adserviceticketing.com"
+mail.centralita:      "ticketpt@adserviceticketing.com"
 
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidências"
