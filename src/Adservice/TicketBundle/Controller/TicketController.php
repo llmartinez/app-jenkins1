@@ -890,7 +890,6 @@ class TicketController extends Controller {
                             {
                                 $mail_centralita = $this->container->getParameter('mail_centralita');
                                 //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
-                                $mailName = $this->get('translator')->trans($mail_centralita);
                                 $mailer->setTo($this->get('translator')->trans($mail_centralita));
                                 $mailer->setSubject('ticket: '.$ticket->getId());
                                 $date = date("Y-m-d H:i:s");
