@@ -3,7 +3,7 @@
 
         {# New Ticket #}
         {% if workshop.active == 1 %}
-
+            <br>
             {% if workshop.haschecks == true and workshop.numchecks < 1 %}
                 <button class="btn btn-disabled pull-right mb15" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
             {% elseif is_granted('ROLE_SUPER_ADMIN')%}
