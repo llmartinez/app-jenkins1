@@ -726,6 +726,8 @@ mail.changePassword.info.password:		"Para modificar tu contraseña entra en <a h
 mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido."
 _mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>"
 
+mail.centralita_test: "test@adserviceticketing.com"
+mail.centralita:      "ticketes@adserviceticketing.com"
 
 #HISTORICO
 lock.list_incidences: 	"Histórico de Incidencias"
