@@ -482,7 +482,7 @@ class AjaxController extends Controller
 
         return new Response(json_encode($json), $status = 200);
     }
-    
+
     public function getCarFromPlateNumberAction($idPlateNumber){
         $em = $this->getDoctrine();
 
@@ -492,15 +492,14 @@ class AjaxController extends Controller
         }
         else{
             $json = $car->to_json();
-        
+
             $version = null;
             if($car->getVersion() != null){
                 $version = $car->getVersion()->getId();
-            }        
+            }
         }
         return new Response(json_encode($json), $status = 200);
     }
-
 
     /**
      * Devuelve un array de ids de motores que coinciden con una cadena con un slug
