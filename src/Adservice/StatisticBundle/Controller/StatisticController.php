@@ -851,11 +851,13 @@ class StatisticController extends Controller {
             if(isset($shop)) $name_shop = $shop->getName();
             else $name_shop = '-';
             $excel.=$name_shop.';';
+            if(isset($shop)) unset($shop);
 
             $excel.=$workshop->getRegion().';';
 
             $typology = $workshop->getTypology();
             $excel.=$this->get('translator')->trans($typology).';';
+            if(isset($typology)) unset($typology);
 
             $car = $row->getCar();
             $excel.=$car->getBrand().';';
@@ -873,6 +875,7 @@ class StatisticController extends Controller {
             }else{
                 $excel.=$system.'- ; - ;';
             }
+            if(isset($system)) unset($system);
 
             $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
@@ -887,13 +890,16 @@ class StatisticController extends Controller {
             $status = $row->getStatus();
 
             $excel.=$this->get('translator')->trans($status).';';
+            if(isset($status)) unset($status);
 
             $created = $row->getCreatedAt();
             $excel.=$created->format("d/m/Y").';';
+            if(isset($created)) unset($created);
             $excel.=$row->getAssignedTo().';';
 
             $importance = $row->getImportance();
             $excel.=$this->get('translator')->trans($importance).';';
+            if(isset($importance)) unset($importance);
 
             $excel.="\n";
         }
