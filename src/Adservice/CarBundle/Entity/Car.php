@@ -424,7 +424,7 @@ class Car
         else $version = '';
         return $brand.' '.$model.' '.$version;
     }
-    
+
      public function to_json(){
          $version = null;
          if($this->getVersion() != null){
