@@ -30,7 +30,7 @@
                 </select>
             </div>
             <div class="grid w15">
-                <label class="lbl_lgray" for="new_car_form_plate_number">{% trans %} plate_number {% endtrans %}</label>
+                <label for="new_car_form_plate_number">{% trans %} plate_number {% endtrans %}</label>
                 <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 <input type="text" id="new_car_form_plate_number" name="new_car_form_plate_number" class="form-control asr_form-control"
                     {% if plateNumber is defined %}value=""{% endif %}>
