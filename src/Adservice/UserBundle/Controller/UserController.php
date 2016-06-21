@@ -54,8 +54,11 @@ class UserController extends Controller {
 
         if(!isset($_SESSION['lang'])) {
 
-            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
-            $lang   = substr($lang, 0, strrpos($lang, '_'));
+            if(isset($user)) {
+                $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+                $lang   = substr($lang, 0, strrpos($lang, '_'));
+            }
+            else{ $lang   = 'es'; }
 
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
