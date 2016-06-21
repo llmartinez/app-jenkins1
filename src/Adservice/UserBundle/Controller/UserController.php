@@ -42,9 +42,11 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user->getPrivacy() == 0 ||$user->getPrivacy() == null ){
-             $currentPath = $this->generateUrl('accept_privacy');
-             return $this->redirect($currentPath);
+        if(isset($user)) {
+            if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
+                 $currentPath = $this->generateUrl('accept_privacy');
+                 return $this->redirect($currentPath);
+            }
         }
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
@@ -52,8 +54,11 @@ class UserController extends Controller {
 
         if(!isset($_SESSION['lang'])) {
 
-            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
-            $lang   = substr($lang, 0, strrpos($lang, '_'));
+            if(isset($user)) {
+                $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+                $lang   = substr($lang, 0, strrpos($lang, '_'));
+            }
+            else{ $lang   = 'es'; }
 
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
