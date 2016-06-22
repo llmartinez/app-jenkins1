@@ -234,10 +234,10 @@ class WorkshopOrderController extends Controller {
 
                         // Copia del mail de confirmacion a modo de backup
                         //
-                        $mail = $this->container->getParameter('mail_report');
-                        $request->setLocale('es_ES');
-                        $mailer->setTo($mail);
-                        $mailer->sendMailToSpool();
+                        // $mail = $this->container->getParameter('mail_report');
+                        // $request->setLocale('es_ES');
+                        // $mailer->setTo($mail);
+                        // $mailer->sendMailToSpool();
 
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
@@ -418,10 +418,10 @@ class WorkshopOrderController extends Controller {
 
                     // Copia del mail de confirmacion a modo de backup
                     //
-                    $mail = $this->container->getParameter('mail_report');
-                    $request->setLocale('es_ES');
-                    $mailer->setTo($mail);
-                    $mailer->sendMailToSpool();
+                    // $mail = $this->container->getParameter('mail_report');
+                    // $request->setLocale('es_ES');
+                    // $mailer->setTo($mail);
+                    // $mailer->sendMailToSpool();
 
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
@@ -512,10 +512,10 @@ class WorkshopOrderController extends Controller {
 
             // Copia del mail de confirmacion a modo de backup
             //
-            $mail = $this->container->getParameter('mail_report');
-            $request->setLocale('es_ES');
-            $mailer->setTo($mail);
-            $mailer->sendMailToSpool();
+            // $mail = $this->container->getParameter('mail_report');
+            // $request->setLocale('es_ES');
+            // $mailer->setTo($mail);
+            // $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -651,10 +651,10 @@ class WorkshopOrderController extends Controller {
 
                 // Copia del mail de confirmacion a modo de backup
                 //
-                $mail = $this->container->getParameter('mail_report');
-                $request->setLocale('es_ES');
-                $mailer->setTo($mail);
-                $mailer->sendMailToSpool();
+                // $mail = $this->container->getParameter('mail_report');
+                // $request->setLocale('es_ES');
+                // $mailer->setTo($mail);
+                // $mailer->sendMailToSpool();
 
                 // Dejamos el locale tal y como estaba
                 $request->setLocale($locale);
@@ -713,10 +713,10 @@ class WorkshopOrderController extends Controller {
 
             // Copia del mail de confirmacion a modo de backup
             //
-            $mail = $this->container->getParameter('mail_report');
-            $request->setLocale('es_ES');
-            $mailer->setTo($mail);
-            $mailer->sendMailToSpool();
+            // $mail = $this->container->getParameter('mail_report');
+            // $request->setLocale('es_ES');
+            // $mailer->setTo($mail);
+            // $mailer->sendMailToSpool();
 
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
