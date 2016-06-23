@@ -339,13 +339,13 @@ class StatisticController extends Controller {
 
                 if (isset($from_date)) {
 
-                    $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                    $qb = $qb->andWhere('w.created_at >= :created_at_from')
                         ->setParameter('created_at_from', $from_date);
                 }
 
                 if (isset($to_date)) {
 
-                    $qb = $qb->andWhere('e.created_at <= :created_at_to')
+                    $qb = $qb->andWhere('w.created_at <= :created_at_to')
                         ->setParameter('created_at_to', $to_date);
                 }
 
@@ -425,13 +425,13 @@ class StatisticController extends Controller {
 
                 if (isset($from_date)) {
 
-                    $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                    $qb = $qb->andWhere('w.created_at >= :created_at_from')
                         ->setParameter('created_at_from', $from_date);
                 }
 
                 if (isset($to_date)) {
 
-                    $qb = $qb->andWhere('e.created_at <= :created_at_to')
+                    $qb = $qb->andWhere('w.created_at <= :created_at_to')
                         ->setParameter('created_at_to', $to_date);
                 }
 
