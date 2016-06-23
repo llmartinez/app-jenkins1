@@ -1099,6 +1099,7 @@ class StatisticController extends Controller {
             if(isset($row['status'])) $status = $row['status'];
             else $status = ' ';
             $excel.=$this->get('translator')->trans($status).';';
+            if(isset($status)) unset($status);
 
             if(isset($row['created_at'])) $created = $row['created_at']->format("d/m/Y");
             else $created = '';
@@ -1110,6 +1111,7 @@ class StatisticController extends Controller {
             if(isset($row['importance'])) $importance = $row['importance'];
             else $importance = ' ';
             $excel.=$this->get('translator')->trans($importance).';';
+            if(isset($importance)) unset($importance);
 
             $excel.="\n";
         }
