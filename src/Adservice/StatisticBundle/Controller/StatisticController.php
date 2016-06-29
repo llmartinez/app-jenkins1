@@ -179,76 +179,228 @@ class StatisticController extends Controller {
         }
 
         if($type != '0'){
-            if ($from_y != '0' and $from_m != '0' and $from_d != '0') { $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'"; }
-            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') { $where .= "AND e.created_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'"; }
 
-            if     ($type == 'ticket'  ){
+            if ($from_y != '0' and $from_m != '0' and $from_d != '0') {
 
-                if     ($status == "open"  ) {  $open = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-                                                $where .= 'AND e.status = '.$open->getId().' ';
-                }
-                elseif ($status == "closed") {  $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                                                $where .= 'AND e.status = '.$closed->getId().' ';
-                }
-                if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
-                                                $where .= 'AND p.id = '.$partner.' ';
-                                                $join  = ' JOIN w.partner p ';
-                }
-                if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
-                }
-                if    ($created_by != '0'  ) {
-                                                if ($created_by == 'tel'){
-                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
-                                                    $where .= 'AND ur.id != 4';
-                                                }
-                                                elseif($created_by == 'app'){
-                                                    $join .= 'JOIN e.created_by u JOIN u.user_role ur';
-                                                    $where .= 'AND ur.id = 4';
-                                                }
-                }
-                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
-                }else{
-                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
-                }
-
-                $qt = $em->createQuery("SELECT partial e.{id, created_at, description, solution } FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
-                $results   = $qt->getResult();
-
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelTicket($results);
+                $from_date = $from_y.'-'.$from_m.'-'.$from_d.' 00:00:00';
+                $where .= "AND e.created_at >= '".$from_y.'-'.$from_m.'-'.$from_d." 00:00:00'";
             }
-            elseif ($type == 'workshop'){
+            if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') {
 
-                if     ($partner!= "0"       ) { $where .= 'AND e.partner = '.$partner.' '; }
-                if     ($status == "active"  ) { $where .= 'AND e.active = 1 ' ; }
-                elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
-                elseif ($status == "test"    ) { $where .= 'AND e.test = 1 '; }
-                elseif ($status == "adsplus" ) { $where .= 'AND e.ad_service_plus = 1 '; }
+                $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 23:59:59';
+                $where .= "AND e.created_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'";
+            }
+
+            if ($type == 'ticket'  ){
+
+                //Realizamos una query deshydratada con los datos ya montados
+                $qb = $em->getRepository('TicketBundle:Ticket')
+                    ->createQueryBuilder('e')
+                    ->select(
+                        'e.id',
+                        'e.created_at',
+                        'e.description',
+                        'e.solution',
+                        's.name as status',
+                        'w.name as nameWorkshop',
+                        'w.region as regionWorkshop',
+                        'p.name as namePartner',
+                        'p.code_partner as codePartner',
+                        'w.code_workshop as codeWorkshop',
+                        'w.internal_code as internalCodeWorkshop',
+                        'sh.code_shop as codeShop',
+                        'sh.name as nameShop',
+                        'sy.name as system',
+                        'ss.name as subsystem',
+                        'ty.name as typologyWorkshop',
+                        'br.name as brandCar',
+                        'mo.name as modelCar',
+                        've.name as versionCar',
+                        'c.year as yearCar',
+                        'c.vin as vinCar',
+                        'c.motor as motorCar',
+                        'im.importance'
+                    )
+                    ->addSelect("concat(concat(ass.name,' '), ass.surname) as assignedTo")//Concatenamos nombre y apellido
+                    ->leftJoin('e.workshop', 'w')
+                    ->leftJoin('e.status', 's')
+                    ->leftJoin('e.importance', 'im')
+                    ->leftJoin('e.car', 'c')
+                    ->leftJoin('e.subsystem', 'ss')
+                    ->leftJoin('e.assigned_to', 'ass')
+                    ->leftJoin('c.brand', 'br')
+                    ->leftJoin('c.model', 'mo')
+                    ->leftJoin('c.version', 've')
+                    ->leftJoin('w.partner', 'p')
+                    ->leftJoin('w.shop', 'sh')
+                    ->leftJoin('w.typology', 'ty')
+                    ->leftJoin('ss.system', 'sy')
+                    ->groupBy('e.id')
+                    ->orderBy('e.id');
+
+                if (isset($from_date)) {
+                    $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                        ->setParameter('created_at_from', $from_date);
+                }
+
+                if (isset($to_date)) {
+                    $qb = $qb->andWhere('e.created_at <= :created_at_to')
+                        ->setParameter('created_at_to', $to_date);
+
+                }
+
+                if ($status == "open"  ) {
+                    $qb = $qb->andWhere('s.name = :status')
+                        ->setParameter('status', 'open');
+                } elseif ($status == "closed") {
+
+                    $qb = $qb->andWhere('s.name = :status')
+                        ->setParameter('status', 'closed');
+                }
+
+                if ($partner != "0") {
+
+                    $qb = $qb->andWhere('w.id != 0')
+                        ->andWhere('p.id = :partner')
+                        ->setParameter('partner', $partner);
+                }
+
+                if ($workshop != "0") {
+                    $qb = $qb->andWhere('w.id = :workshop')
+                        ->setParameter('workshop', $workshop);
+                }
+
+                if ($assessor != '0'    ) {
+
+                    $qb = $qb->andWhere('e.assigned_to = :assessor')
+                        ->setParameter('assessor', $assessor);
+                }
+                if ($created_by != '0'  ) {
+
+                    if ($created_by == 'tel'){
+                        $qb = $qb
+                            ->leftJoin('e.created_by', 'u')
+                            ->leftJoin('u.user_role', 'ur')
+                            ->andWhere('ur.id != :role')
+                            ->setParameter('role', 4);
+                    } elseif($created_by == 'app'){
+
+                        $qb = $qb
+                            ->leftJoin('e.created_by', 'u')
+                            ->leftJoin('u.user_role', 'ur')
+                            ->andWhere('ur.id = :role')
+                            ->setParameter('role', 4);
+                    }
+                }
+
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+
+                    $qb = $qb->andWhere('w.country = :country')
+                        ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
                 }else{
-                    if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
+
+                    if ($country != "0"  ) {
+                        $qb = $qb->andWhere('w.country = :country')
+                            ->setParameter('country', $country);
+                    }
                 }
-                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
-                                                $where .= 'AND tp.id = e.typology ';
-                                                $where .= 'AND tp.id = '.$typology.' ';
-                }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, created_at, lowdate_at, ad_service_plus, test } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
-                $results   = $qw->getResult();
+                /********************************** Revisar tiempos de ejecución **************************************/
+                //$start = microtime(true);
+                //echo (microtime(true)-$start). ' s';
+                /******************************************************************************************************/
 
-                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p ");
-                $res_partners   = $qp->getResult();
-
-                foreach ($res_partners as $partner) {
-                     $partners[$partner->getCodePartner()] = $partner->getName();
-                 }
-                 unset($res_partners);
-                 unset($partner);
+                /******************************** Memoria actual usada ************************************************/
+                //$mem_usage = memory_get_usage(true);
+                //if ($mem_usage < 1024)
+                //    echo $mem_usage." bytes";
+                //elseif ($mem_usage < 1048576)
+                //    echo round($mem_usage/1024,2)." kilobytes";
+                //else
+                //    echo round($mem_usage/1048576,2)." megabytes";
+                //echo "<br/>";
+                /******************************************************************************************************/
+                $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results, $partners);
+                $excel = $this->createExcelTicket($resultsDehydrated);
+            } elseif ($type == 'workshop'){
+
+                //Realizamos una query deshydratada con los datos ya montados
+                $qb = $em->getRepository('WorkshopBundle:Workshop')
+                    ->createQueryBuilder('w')
+                    ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                        'w.active', 'w.created_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
+                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner')
+                    ->leftJoin('w.shop', 'sh')
+                    ->leftJoin('w.partner', 'p')
+                    ->groupBy('w.id')
+                    ->orderBy('w.id');
+
+                if (isset($from_date)) {
+
+                    $qb = $qb->andWhere('w.created_at >= :created_at_from')
+                        ->setParameter('created_at_from', $from_date);
+                }
+
+                if (isset($to_date)) {
+
+                    $qb = $qb->andWhere('w.created_at <= :created_at_to')
+                        ->setParameter('created_at_to', $to_date);
+                }
+
+                if ($partner!= "0") {
+
+                    $qb = $qb->andWhere('p.id = :partner')
+                            ->setParameter('partner', $partner);
+                }
+
+                if ($shop != "0") {
+
+                    $qb = $qb->andWhere('sh.id = :shop')
+                            ->setParameter('shop', $shop);
+                }
+
+                if ($status == "active") {
+
+                    $qb = $qb->andWhere('w.active = 1');
+
+                } elseif ($status == "deactive") {
+
+                    $qb = $qb->andWhere('w.active != 1');
+
+                } elseif ($status == "test") {
+
+                    $qb = $qb->andWhere('w.test = 1');
+
+                } elseif ($status == "adsplus") {
+
+                    $qb = $qb->andWhere('w.ad_service_plus = 1');
+
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+
+                    $qb = $qb->andWhere('w.country = :country')
+                        ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
+                }else{
+
+                    if ($country != "0") {
+
+                        $qb = $qb->andWhere('w.country = :country')
+                            ->setParameter('country', $country);
+                    }
+                }
+                if ($typology != "0") {
+
+                    $qb = $qb->join('w.typology', 't')
+                            ->andWhere('t.id = :typology')
+                            ->setParameter('typology', $typology);
+                }
+
+                $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.csv"');
+                $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'no-ticket'){
 
@@ -258,38 +410,87 @@ class StatisticController extends Controller {
                 $workshop_query = '0';
                 foreach ( $consulta->getResult() as $row) { $workshop_query = $workshop_query.', '.$row['id']; }
 
-                $where = 'e.id NOT IN ('.$workshop_query.') ';
-                if     ($partner  != '0') { $where .= 'AND e.partner = '.$partner.' '; }
-                if     ($status == "active"  ) { $where .= 'AND e.active = 1 '; }
-                elseif ($status == "deactive") { $where .= 'AND e.active != 1 '; }
-                elseif ($status == "test"    ) { $where .= 'AND e.test = 1 '; }
-                elseif ($status == "adsplus" ) { $where .= 'AND e.ad_service_plus = 1 '; }
-                if($security->isGranted('ROLE_SUPER_ADMIN')){
-                    if    ($country != '0'     ) { $where .= 'AND e.country = '.$country.' '; }
+                //Realizamos una query deshydratada con los datos ya montados
+                $qb = $em->getRepository('WorkshopBundle:Workshop')
+                    ->createQueryBuilder('w');
+
+                $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                        'w.active', 'w.created_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
+                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner')
+                    ->leftJoin('w.shop', 'sh')
+                    ->leftJoin('w.partner', 'p')
+                    ->groupBy('w.id')
+                    ->orderBy('w.id')
+                    ->where($qb->expr()->notIn('w.id', $workshop_query));
+
+                if (isset($from_date)) {
+
+                    $qb = $qb->andWhere('w.created_at >= :created_at_from')
+                        ->setParameter('created_at_from', $from_date);
+                }
+
+                if (isset($to_date)) {
+
+                    $qb = $qb->andWhere('w.created_at <= :created_at_to')
+                        ->setParameter('created_at_to', $to_date);
+                }
+
+                if ($partner!= "0") {
+
+                    $qb = $qb->andWhere('p.id = :partner')
+                        ->setParameter('partner', $partner);
+                }
+
+                if ($shop != "0") {
+
+                    $qb = $qb->andWhere('sh.id = :shop')
+                        ->setParameter('shop', $shop);
+                }
+
+                if ($status == "active") {
+
+                    $qb = $qb->andWhere('w.active = 1');
+
+                } elseif ($status == "deactive") {
+
+                    $qb = $qb->andWhere('w.active != 1');
+
+                } elseif ($status == "test") {
+
+                    $qb = $qb->andWhere('w.test = 1');
+
+                } elseif ($status == "adsplus") {
+
+                    $qb = $qb->andWhere('w.ad_service_plus = 1');
+
+                }
+
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+
+                    $qb = $qb->andWhere('w.country = :country')
+                        ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
                 }else{
-                    $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+
+                    if ($country != "0") {
+
+                        $qb = $qb->andWhere('w.country = :country')
+                            ->setParameter('country', $country);
+                    }
                 }
-                if    ($typology != "0"    ) {  $join  = ' JOIN e.typology tp ';
-                                                $where .= 'AND tp.id = e.typology ';
-                                                $where .= 'AND tp.id = '.$typology.' ';
+
+                if ($typology != "0") {
+
+                    $qb = $qb->join('w.typology', 't')
+                        ->andWhere('t.id = :typology')
+                        ->setParameter('typology', $typology);
                 }
 
-                $qw = $em->createQuery("SELECT partial e.{id, code_partner, code_workshop, name, email_1, phone_number_1, active, ad_service_plus, test, created_at, lowdate_at } FROM WorkshopBundle:Workshop e ".$join." WHERE ".$where);
-                $results   = $qw->getResult();
-
-                $qp = $em->createQuery("SELECT partial p.{id, code_partner, name } FROM PartnerBundle:Partner p");
-                $res_partners   = $qp->getResult();
-
-                foreach ($res_partners as $partner) {
-                     $partners[$partner->getCodePartner()] = $partner->getName();
-                 }
-                 unset($res_partners);
-                 unset($partner);
+                $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $trans     = $this->get('translator');
                 $informe   = UtilController::sinAcentos($trans->trans('statistic.no_ticket'));
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
-                $excel = $this->createExcelWorkshop($results, $partners);
+                $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'numworkshopbypartner'){
 
@@ -787,6 +988,7 @@ class StatisticController extends Controller {
             $informe   = UtilController::sinAcentos($trans->trans('statistic.last_tickets' ));
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
+
         }
 
         $excel = UtilController::sinAcentos($excel);
@@ -830,80 +1032,97 @@ class StatisticController extends Controller {
             $trans->trans('importance').';';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
-
         foreach ($results as $row) {
-            $excel.=$row->getId().';';
 
-            $workshop = $row->getWorkshop();
-            $excel.=$workshop->getPartner()->getCodePartner().';';
+            //Recorremos el array deshidratado, revisando casos que esten vacios
+            $excel.=$row['id'].';';
 
-            $shop = $workshop->getShop();
-            if(isset($shop)) $code_shop = $shop->getCodeShop();
-            else $code_shop = '-';
-            $excel.=$code_shop.';';
+            if(isset($row['codePartner'])) $excel.=$row['codePartner'].';';
+            else $excel.=' ;';
+            if(isset($row['codeShop'])) $excel.=$row['codeShop'].';';
+            else $excel.=' ;';
+            if(isset($row['codeWorkshop'])) $excel.=$row['codeWorkshop'].';';
+            else $excel.=' ;';
+            if(isset($row['internalCodeWorkshop'])) $excel.=$row['internalCodeWorkshop'].';';
+            else $excel.=' ;';
+            if(isset($row['nameWorkshop'])) $excel.=$row['nameWorkshop'].';';
+            else $excel.=' ;';
+            if(isset($row['namePartner'])) $excel.=$row['namePartner'].';';
+            if(isset($row['nameShop'])) $excel.=$row['nameShop'].';';
+            else $excel.=' ;';
 
-            $excel.=$workshop->getCodeWorkshop().';';
-            $excel.=$workshop->getInternalCode().';';
-            $excel.=$workshop->getName().';';
-            $excel.=$workshop->getPartner()->getName().';';
+            if(isset($row['regionWorkshop'])) $excel.=$row['regionWorkshop'].';';
+            else $excel.='-;';
 
-            if(isset($shop)) $name_shop = $shop->getName();
-            else $name_shop = '-';
-            $excel.=$name_shop.';';
-
-            $excel.=$workshop->getRegion().';';
-
-            $typology = $workshop->getTypology();
+            if(isset($row['typologyWorkshop'])) $typology = $row['typologyWorkshop'];
+            else $typology = '';
             $excel.=$this->get('translator')->trans($typology).';';
 
-            $car = $row->getCar();
-            $excel.=$car->getBrand().';';
-            $excel.=$car->getModel().';';
-            $excel.=$car->getVersion().';';
-            $excel.=$car->getYear().';';
-            $excel.=$car->getVin().';';
-            $excel.=$car->getMotor().';';
 
-            // Ticket
-            $system = $row->getSubsystem();
-            if(isset($system)) {
-                $excel.=$system->getSystem().';';
-                $excel.=$system.';';
-            }else{
-                $excel.=$system.'- ; - ;';
-            }
+            if(isset($row['brandCar'])) $excel.=$row['brandCar'].';';
+            else $excel.=' ;';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
-            $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
+            if(isset($row['modelCar'])) $excel.=$row['modelCar'].';';
+            else $excel.=' ;';
+
+            if(isset($row['versionCar'])) $excel.=$row['versionCar'].';';
+            else $excel.=' ;';
+
+            if(isset($row['yearCar'])) $excel.=$row['yearCar'].';';
+            else $excel.=' ;';
+
+            if(isset($row['vinCar'])) $excel.=$row['vinCar'].';';
+            else $excel.=' ;';
+
+            if(isset($row['motorCar'])) $excel.=$row['motorCar'].';';
+            else $excel.=' ;';
+
+            if(isset($row['system'])) $excel.=$row['system'].';';
+            else $excel.=' ;';
+            if(isset($row['subsystem'])) $excel.=$row['subsystem'].';';
+            else $excel.=' ;';
+
+            if(isset($row['description'])) $description = $row['description'];
+            else $description = '';
+            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array("", "", "", "");
+            $description = str_ireplace($buscar,$reemplazar,$description);
             $excel.=$description.';';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
-            $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
-            $excel.=$solution.';';
+            if(isset($row['solution'])) $solution = $row['solution'];
+            else $solution='';
+            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array("", "", "", "");
+            $solution = str_ireplace($buscar,$reemplazar,$solution);
+            $excel.= $solution.';';
 
-            $status = $row->getStatus();
-
+            if(isset($row['status'])) $status = $row['status'];
+            else $status = ' ';
             $excel.=$this->get('translator')->trans($status).';';
+            if(isset($status)) unset($status);
 
-            $created = $row->getCreatedAt();
-            $excel.=$created->format("d/m/Y").';';
-            $excel.=$row->getAssignedTo().';';
+            if(isset($row['created_at'])) $created = $row['created_at']->format("d/m/Y");
+            else $created = '';
+            $excel.=$created.';';
 
-            $importance = $row->getImportance();
+            if(isset($row['assignedTo'])) $excel.=$row['assignedTo'].';';
+            else $excel.=' ;';
+
+            if(isset($row['importance'])) $importance = $row['importance'];
+            else $importance = ' ';
             $excel.=$this->get('translator')->trans($importance).';';
+            if(isset($importance)) unset($importance);
 
             $excel.="\n";
         }
         $excel = nl2br($excel);
         $excel = str_replace('<br />', '.', $excel);
         $excel = str_replace(',', '.', $excel);
+
         return($excel);
     }
 
-    public function createExcelWorkshop($results, $partners){
+    public function createExcelWorkshop($results){
         $trans = $this->get('translator');
         //Creación de cabecera
         $excel =$trans->trans('code_partner').';'.
@@ -919,25 +1138,32 @@ class StatisticController extends Controller {
                 $trans->trans('subscribed').';'.
                 $trans->trans('unsubscribed').';'.
                 $trans->trans('testing').';'.
-                $trans->trans('adsplus').';';
+                $trans->trans('adsplus').';'.
+                $trans->trans('haschecks').';'.
+                $trans->trans('numchecks').';'.
+                $trans->trans('infotech').';';
+
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
-
         foreach ($results as $row) {
-            $excel.=$row->getCodePartner().';';
 
-            $shop = $row->getShop();
-            if(isset($shop)) $code_shop = $shop->getCodeShop();
-            else $code_shop = '-';
-            $excel.=$code_shop.';';
+            if(isset($row['code_partner'])) $excel.=$row['code_partner'].';';
+            else $excel.=' ;';
 
-            $excel.=$row->getCodeWorkshop().';';
-            $excel.=$row->getInternalCode().';';
+            if(isset($row['code_shop'])) $excel.=$row['code_shop'].';';
+            else $excel.=' ;';
 
-            $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
-            $name=str_ireplace($buscar,$reemplazar,$row->getName());
+            if(isset($row['code_workshop'])) $excel.=$row['code_workshop'].';';
+            else $excel.=' ;';
+
+            if(isset($row['internal_code'])) $excel.=$row['internal_code'].';';
+            else $excel.=' ;';
+
+            if(isset($row['name'])) $name = $row['name'];
+            else $name = '';
+            $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array("", "", "", "");
+            $name = str_ireplace($buscar,$reemplazar,$name);
 
             // Problema con caracteres especiales
             $buscar=array("ª", "´", "·");
@@ -946,39 +1172,55 @@ class StatisticController extends Controller {
 
             $excel.=$name.';';
 
-            $excel.=$partners[$row->getCodePartner()].';';
+            if(isset($row['partner'])) $excel.=$row['partner'].';';
+            else $excel.=' ;';
+
+            if(isset($row['shop'])) $shop = $row['shop'];
 
             if(isset($shop)) {
-                $name_shop = $shop->getName();
-                $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar=array("", "", "", "");
-                $name_shop=str_ireplace($buscar,$reemplazar,$name_shop);
+                $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
+                $reemplazar = array("", "", "", "");
+                $shop = str_ireplace($buscar, $reemplazar, $shop);
             }
-            else $name_shop = '-';
-            $excel.=$name_shop.';';
+            else $shop = '-';
+            $excel.= $shop.';';
 
-            $excel.=$row->getEmail1().';';
-            $excel.=$row->getPhoneNumber1().';';
+            if(isset($row['email_1'])) $excel.=$row['email_1'].';';
+            else $excel.=' ;';
 
-            if ($row->getActive() == 0) $active = $this->get('translator')->trans('no');
-            else $active = " "; //$this->get('translator')->trans('no');
+            if(isset($row['phone_number_1'])) $excel.=$row['phone_number_1'].';';
+            else $excel.=' ;';
+
+            if(isset($row['active']) && $row['active'] == 0) $active = $this->get('translator')->trans('no');
+            else $active = '';
             $excel.=strtoupper($active).';';
 
-            if ($row->getCreatedAt() == NULL) $created = '--';
-            else $created = $row->getCreatedAt()->format("d-m-Y"); //$this->get('translator')->trans('no');
+            if(isset($row['created_at']) && $row['created_at'] != NULL) $created = $row['created_at']->format("d-m-Y");
+            else $created = '--';
             $excel.=strtoupper($created).';';
 
-            if ($row->getLowdateAt() == NULL) $lowdated = '--';
-            else $lowdated = $row->getLowdateAt()->format("d-m-Y"); //$this->get('translator')->trans('no');
+            if(isset($row['lowdate_at']) && $row['lowdate_at'] != NULL) $lowdated= $row['lowdate_at']->format("d-m-Y");
+            else $lowdated = '--';
             $excel.=strtoupper($lowdated).';';
 
-            if ($row->getTest() == 1) $test = $this->get('translator')->trans('yes');
-            else $test = " "; //$this->get('translator')->trans('no');
+            if(isset($row['test']) && $row['test'] == 1) $test = $this->get('translator')->trans('yes');
+            else $test = '';
             $excel.=strtoupper($test).';';
 
-            if ($row->getAdServicePlus() == 1) $adsplus = $this->get('translator')->trans('yes');
-            else $adsplus = " "; //$this->get('translator')->trans('no');
+            if(isset($row['ad_service_plus']) && $row['ad_service_plus'] == 1) $adsplus = $this->get('translator')->trans('yes');
+            else $adsplus = '';
             $excel.=strtoupper($adsplus).';';
+
+            if(isset($row['has_checks']) && $row['has_checks'] == 1) $hasChecks = $this->get('translator')->trans('yes');
+            else $hasChecks = '';
+            $excel.=strtoupper($hasChecks).';';
+
+            if(isset($row['num_checks'])) $excel.= $row['num_checks'].';';
+            else $excel.= '0;';
+
+            if(isset($row['infotech']) && $row['infotech'] == 1) $infotech = $this->get('translator')->trans('yes');
+            else $infotech = '';
+            $excel.=strtoupper($infotech).';';
 
             $excel.="\n";
         }
