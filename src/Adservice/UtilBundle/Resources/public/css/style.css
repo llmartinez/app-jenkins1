@@ -759,6 +759,10 @@ fieldset[disabled] .asr_form-control {
     padding-top: 4px!important;
 }
 
+.asr_btn_search {
+    padding-top: 4px!important;
+}
+
 .asr_pending_application2 {
     font-size: 20px;
     line-height: 24px;

@@ -21,11 +21,17 @@ findTicket:
 showTicket:
     pattern:  /ticket/show/{id}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
-
+    options:
+        expose: true
+        
 findTicketById:
     pattern:  /ticket/findTicketById/
     defaults: { _controller: TicketBundle:Ticket:findTicketById }
-
+    
+findTicketByIdAndWorkshop:
+    pattern:  /ticket/findTicketByIdAndWorkshop/
+    defaults: { _controller: TicketBundle:Ticket:findTicketByIdAndWorkshop }
+    
 findTicketByBMV:
     pattern:  /ticket/findTicketByBMV/{page}/{brand}/{model}/{version}/{system}/{subsystem}/{num_rows}
     defaults: { _controller: TicketBundle:Ticket:findTicketByBMV, page: 1, brand: 0, model: 0, version: 0, system: 0, subsystem: 0, num_rows: 10 }

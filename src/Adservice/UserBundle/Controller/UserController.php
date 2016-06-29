@@ -448,6 +448,16 @@ class UserController extends Controller {
                     $em->persist($workshop_user);
                     $em->flush();
                  }
+                 elseif($user->getPartner() !== null){
+                    $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
+                    $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
+
+
+                    $partner_user->setContact($user->getName());
+                    $partner_user->setActive($user->getActive());
+                    $em->persist($partner_user);
+                    $em->flush();
+                 }
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
