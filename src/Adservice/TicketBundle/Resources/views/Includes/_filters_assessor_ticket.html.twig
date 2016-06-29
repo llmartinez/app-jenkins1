@@ -113,14 +113,16 @@
                 </select>
             </div>
 
-            <div class="grid w15">
+            <div class="grid w10">
                 <label for="new_car_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
                 <select id="new_car_form_subsystem" name="new_car_form_subsystem" class="form-control asr_form-control" >
                     {% if subsystem.id is defined %}<option value="{{subsystem.id}}">{{subsystem.name|trans}}{% endif %}</option>
                 </select>
             </div>
+                
+            
 
-            <div class="grid w15">
+            <div class="grid w10">
                 <label class="w100">
                     <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
                 </label>
@@ -132,5 +134,24 @@
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
                 </a>
             </div>
-        </div>
+        
     </form>
+    <div class="grid w15">
+           
+
+
+                <div class="grid w100">
+                    <label class="w100">Id</label>
+                </div>
+                <div class="w50 fl">
+                    <input type='text' class="form-control asr_form-control " id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                </div>
+                <div class="w25 fl">
+                    <a href="" class="btn btn-primary asr_form-control asr_btn_search" id="btn_search_ticket" name="btn_search_ticket">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
+                    </a>
+                </div>
+         
+
+    </div>
+   </div>
