@@ -331,9 +331,10 @@ class StatisticController extends Controller {
                     ->createQueryBuilder('w')
                     ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
-                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner')
+                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner', 't.name')
                     ->leftJoin('w.shop', 'sh')
                     ->leftJoin('w.partner', 'p')
+                    ->leftJoin('w.typology', 't')
                     ->groupBy('w.id')
                     ->orderBy('w.id');
 
@@ -392,8 +393,7 @@ class StatisticController extends Controller {
                 }
                 if ($typology != "0") {
 
-                    $qb = $qb->join('w.typology', 't')
-                            ->andWhere('t.id = :typology')
+                    $qb = $qb->andWhere('t.id = :typology')
                             ->setParameter('typology', $typology);
                 }
 
