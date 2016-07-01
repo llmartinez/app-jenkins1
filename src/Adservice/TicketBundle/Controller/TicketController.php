@@ -91,6 +91,7 @@ class TicketController extends Controller {
             $workshops  = array('0' => new Workshop());
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
+        $this->get('session')->setFlash('error', null);
         if($option == null){
             $params[] = array();
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
@@ -1785,7 +1786,6 @@ class TicketController extends Controller {
         $security   = $this->get('security.context');
         $request  = $this->getRequest();
         $id       = $request->get('flt_id');
-
         $ticket   = $em->getRepository('TicketBundle:Ticket')->find($id);
 
         if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
@@ -1816,6 +1816,34 @@ class TicketController extends Controller {
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
     }
+    
+    /**
+     * Devuelve un ticket segun la id enviada por parametro y el taller
+     * @return url
+     */
+    public function findTicketByIdAndWorkshopAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $security   = $this->get('security.context');
+        $request  = $this->getRequest();
+        $id       = $request->get('flt_id');
+        $workshop = $security->getToken()->getUser()->getWorkshop();
+        $ticket   = $em->getRepository('TicketBundle:Ticket')->find($id);
+        if($workshop != null and $ticket){
+            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId()) ));          
+        }
+        else{
+            if($ticket and ($ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+              return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId()) ));
+            
+        }
+        if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+            return $this->redirect($this->generateUrl('listTicket', array('option' => "assessor_pending" )));
+        else{
+            return $this->redirect($this->generateUrl('listTicket' ));
+         }
+    }
+         
 
     /**
      * Devuelve un ticket segun la id enviada por parametro
@@ -1919,8 +1947,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function findAssessorTicketByBMVAction($page=null)
-    {
-
+    {        
         /***********************************************************************************************************************
          * TODO:
          * En una nueva version (2.8) habría que separar esta funcion en otras 2,
@@ -1967,8 +1994,10 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin          = $request->request->get('new_car_form_vin');
         $plateNumber  = $request->request->get('new_car_form_plateNumber');
+      
+        if($plateNumber == null)
+            $plateNumber  = $request->request->get('new_car_form_plate_number');
         $num_rows     = $request->request->get('slct_numRows');
-
         if(!isset($num_rows)) $num_rows = 10;
         if(isset($brand)   and $brand   != '0' and $brand   != '') $params[] = array('brand',' = '.$brand);
         if(isset($model)   and $model   != '0' and $model   != '') $params[] = array('model',' = '.$model);
@@ -2049,7 +2078,7 @@ class TicketController extends Controller {
                 $kw      = $cars[0]->getKw();
                 $displacement = $cars[0]->getDisplacement();
                 if($cars[0]->getVersion() != null){
-                    $version = $cars[0]->getVersion();
+                    $version = $em->getRepository('CarBundle:Version')->findOneById($cars[0]->getVersion());
                 }
                 else $version = null;
             }
@@ -2084,7 +2113,6 @@ class TicketController extends Controller {
                        'country'      => 0,
                        'inactive'     => 0,
                        'disablePag'   => 0);
-
         if($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
                 return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else    return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);

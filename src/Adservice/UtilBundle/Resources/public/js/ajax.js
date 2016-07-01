@@ -736,8 +736,7 @@ function get_country_partner(id_partner){
  $("#filter_plate_number").on('click', function () {
         var route     = 'get_car_from_plate_number';
         
-        var idPlateNumber = $(document).find('#new_car_form_plate_number').val(); 
-        if(idPlateNumber == undefined) idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
+        var idPlateNumber = $(document).find('#new_car_form_plateNumber').val(); 
         var locale    = $(document).find("#data_locale").val();
         
         $.ajax({
@@ -773,4 +772,15 @@ function get_country_partner(id_partner){
                 console.log("Error loading models...");
             }
         });
+    });
+    
+$("#btn_search_ticket").on('click', function () {
+    var idTicket = $(document).find('#flt_id').val(); 
+    var locale    = $(document).find("#data_locale").val();
+    
+     var  url=  Routing.generate('showTicket', {_locale: locale, id: idTicket});
+       window.open(url, "_blank");
+    
+          
+       
     });
