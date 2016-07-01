@@ -667,28 +667,26 @@ class TicketController extends Controller {
                                                 OR
                                                 ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
                                             ){
-                                                $str = $trans->trans('error.vin_platenumber_not_match');
+                                                $str = $trans->trans('error.vin_platenumber_not_match').': ';
                                                 if($exist_vin != null) {
-                                                    $str .=' ('.$trans->trans('vin').' '.$exist_vin->getVin().' ->'.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                    $str .=' **'.$trans->trans('vin').'** '.$exist_vin->getVin().' -> '.$trans->trans('plate_number').' '.$exist_vin->getPlateNumber().': '.$exist_vin->getBrand().' '.$exist_vin->getModel();
                                                     if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion()->getName();
+                                                        $str .= ' '.$exist_vin->getVersion()->getName().' ';
                                                         if($exist_vin->getMotor() != null){
-                                                            $str .= ' ['.$exist_vin->getMotor().']';
+                                                            $str .= ' ['.$exist_vin->getMotor().'] ';
                                                         }
                                                     }
-                                                    $str .= ' )';
                                                 }
                                                 if($exist_vin != null and $exist_num != null) $str .= ', ';
 
                                                 if($exist_num != null) {
-                                                    $str .=' ('.$trans->trans('plate_number').' '.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                    $str .=' **'.$trans->trans('plate_number').'** '.$exist_num->getPlateNumber().' -> '.$trans->trans('vin').' '.$exist_num->getVin().': '.$exist_num->getBrand().' '.$exist_num->getModel();
                                                     if($exist_num->getVersion() != null){
                                                         $str .= ' '.$exist_num->getVersion()->getName();
                                                         if($exist_num->getMotor() != null){
                                                             $str .= ' ['.$exist_num->getMotor().']';
                                                         }
                                                     }
-                                                    $str .= ' )';
                                                 }
                                                 $exist_car = $str;
                                             }
@@ -714,7 +712,7 @@ class TicketController extends Controller {
                                                     // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
 
                                                     $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
-                  )
+                                                )
                                             ){
                                                 $str = $trans->trans('error.same_vin');
                                                 if($exist_vin != null) {
@@ -768,15 +766,16 @@ class TicketController extends Controller {
                                             }
 
                                             if($exist_car == '0') {
-                                                if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null) {
+                                                if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null)
+                                                {
                                                     $numchecks = $workshop->getNumChecks();
                                                     $workshop->setNumChecks($numchecks - 1);
                                                     UtilController::saveEntity($em, $workshop, $user);
                                                 }
 
                                                 // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
-                                                if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId()){
-
+                                                if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId())
+                                                {
                                                     $old_car = $car;
                                                     $car = $exist_vin;
 
@@ -810,8 +809,8 @@ class TicketController extends Controller {
                                                 UtilController::saveEntity($em, $ticket, $user);
 
                                                 //Define Document
-                                                if ($file != "") {
-
+                                                if ($file != "")
+                                                {
                                                     //Define Post
                                                     $post = new Post();
                                                     $post = UtilController::newEntity($post, $user);
@@ -829,7 +828,6 @@ class TicketController extends Controller {
                                                     $em->flush();
                                                 }
                                             } else {
-                                                // ERROR tipo de fichero
                                                 $this->get('session')->setFlash('error', $exist_car);
 
                                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
