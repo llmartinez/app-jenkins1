@@ -22,6 +22,10 @@ workshop_new:
 workshop_observation:
     pattern: /observation/{id}/{id_ticket}
     defaults: { _controller: WorkshopBundle:Workshop:workshopObservation }
+   
+workshop_activate_deactivate:
+    pattern: /activateDeactive/{workshop_id}
+    defaults: { _controller: WorkshopBundle:Workshop:deactivateActivateWorkshop, workshop_id: 0 }
 
 ##############################
 #   APDO. RUTAS DIAGNOSIS    #

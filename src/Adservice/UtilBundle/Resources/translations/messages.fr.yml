@@ -725,6 +725,9 @@ mail.changePassword.user:				"Votre nom d'utilisateur est :"
 mail.changePassword.password:			"Votre nouveau mot de passe est :"
 mail.changePassword.info.password:		"Pour modifier votre mot de passe, entrez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 
+mail.activateWorkshop.subject:                          "ADService | Atelier activation "
+mail.deactivateWorkshop.subject:                        "ADService | Atelier deactivation "
+
 mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu."
 _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu. <b>soporte@ad-service.com</b>"
 
