@@ -571,20 +571,25 @@ class WorkshopController extends Controller {
         $em->flush();
         
          /* MAILING */
+        //Mail to workshop
         $mail = $workshop->getEmail1();
         $action = 'deactivate';
+        $locale = $this->getRequest()->getLocale();
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setSubject($this->get('translator')->trans('mail.deactivateWorkshop.subject').$workshop->getName());
         if($workshop->getActive()== true){
             $action = 'activate';
             $mailerUser->setSubject($this->get('translator')->trans('mail.activateWorkshop.subject').$workshop->getName());
-        }
-        $locale = $this->getRequest()->getLocale();
-        
+        }       
         $mailerUser->setTo($mail);
         $mailerUser->setFrom('noreply@adserviceticketing.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
         $mailerUser->sendMailToSpool();
+        //Mail to Report
+        $mailerUser->setTo($this->container->getParameter('mail_report'));
+        $mailerUser->sendMailToSpool();
+        
+        
         return $this->redirect($this->generateUrl('workshop_list'));
     }
     public function insertCifAction($workshop_id, $country) {
