@@ -361,23 +361,29 @@ class StatisticController extends Controller {
                             ->setParameter('shop', $shop);
                 }
 
-                if ($status == "active") {
+                switch ($status) {
 
-                    $qb = $qb->andWhere('w.active = 1');
-
-                } elseif ($status == "deactive") {
-
-                    $qb = $qb->andWhere('w.active != 1');
-
-                } elseif ($status == "test") {
-
-                    $qb = $qb->andWhere('w.test = 1');
-
-                } elseif ($status == "adsplus") {
-
-                    $qb = $qb->andWhere('w.ad_service_plus = 1');
-
+                    case "active":
+                        $qb = $qb->andWhere('w.active = 1')
+                            ->andWhere('w.test != 1');
+                        break;
+                    case "deactive":
+                        $qb = $qb->andWhere('w.active != 1');
+                        breaK;
+                    case "test":
+                        $qb = $qb->andWhere('w.test = 1');
+                        break;
+                    case "adsplus":
+                        $qb = $qb->andWhere('w.ad_service_plus = 1');
+                        break;
+                    case "check":
+                        $qb = $qb->andWhere('w.haschecks = 1');
+                        break;
+                    case "infotech":
+                        $qb = $qb->andWhere('w.infotech = 1');
+                        break;
                 }
+
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
 
                     $qb = $qb->andWhere('w.country = :country')
@@ -447,22 +453,27 @@ class StatisticController extends Controller {
                         ->setParameter('shop', $shop);
                 }
 
-                if ($status == "active") {
+                switch ($status) {
 
-                    $qb = $qb->andWhere('w.active = 1');
-
-                } elseif ($status == "deactive") {
-
-                    $qb = $qb->andWhere('w.active != 1');
-
-                } elseif ($status == "test") {
-
-                    $qb = $qb->andWhere('w.test = 1');
-
-                } elseif ($status == "adsplus") {
-
-                    $qb = $qb->andWhere('w.ad_service_plus = 1');
-
+                    case "active":
+                        $qb = $qb->andWhere('w.active = 1')
+                            ->andWhere('w.test != 1');
+                        break;
+                    case "deactive":
+                        $qb = $qb->andWhere('w.active != 1');
+                        breaK;
+                    case "test":
+                        $qb = $qb->andWhere('w.test = 1');
+                        break;
+                    case "adsplus":
+                        $qb = $qb->andWhere('w.ad_service_plus = 1');
+                        break;
+                    case "check":
+                        $qb = $qb->andWhere('w.haschecks = 1');
+                        break;
+                    case "infotech":
+                        $qb = $qb->andWhere('w.infotech = 1');
+                        break;
                 }
 
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
@@ -504,10 +515,27 @@ class StatisticController extends Controller {
                 $join  = ' JOIN e.partner p ';
 
                 if ($status != '0') {
-                    if     ($status == "active"  ) {  $where .= 'AND e.active = 1 '; }
-                    elseif ($status == "deactive") {  $where .= 'AND e.active = 0 '; }
-                    elseif ($status == "test"    ) {  $where .= 'AND e.test = 1 '; }
-                    elseif ($status == "adsplus" ) {  $where .= 'AND e.ad_service_plus = 0 '; }
+                    switch ($status) {
+                        case "active":
+                            $where .= 'AND e.active = 1 ';
+                            $where .= 'AND e.test != 1 ';
+                            break;
+                        case "deactive":
+                            $where .= 'AND e.active = 0 ';
+                            breaK;
+                        case "test":
+                            $where .= 'AND e.test = 1 ';
+                            break;
+                        case "adsplus":
+                            $where .= 'AND e.ad_service_plus = 1 ';
+                            break;
+                        case "check":
+                            $where .= 'AND e.haschecks = 1 ';
+                            break;
+                        case "infotech":
+                            $where .= 'AND e.infotech = 1 ';
+                            break;
+                    }
                 }
                 if    ($partner != "0"     ) {  $where .= 'AND e.id != 0 ';
                                                 $where .= 'AND p.id = '.$partner.' ';
@@ -546,10 +574,27 @@ class StatisticController extends Controller {
                 $join  = ' JOIN w.partner p ';
 
                 if ($status != '0') {
-                    if     ($status == "active"  ) {  $where .= 'AND w.active = 1 '; }
-                    elseif ($status == "deactive") {  $where .= 'AND w.active = 0 '; }
-                    elseif ($status == "test"    ) {  $where .= 'AND w.test = 1 '; }
-                    elseif ($status == "adsplus" ) {  $where .= 'AND w.ad_service_plus = 0 '; }
+                    switch ($status) {
+                        case "active":
+                            $where .= 'AND w.active = 1 ';
+                            $where .= 'AND w.test != 1 ';
+                            break;
+                        case "deactive":
+                            $where .= 'AND w.active = 0 ';
+                            breaK;
+                        case "test":
+                            $where .= 'AND w.test = 1 ';
+                            break;
+                        case "adsplus":
+                            $where .= 'AND w.ad_service_plus = 1 ';
+                            break;
+                        case "check":
+                            $where .= 'AND w.haschecks = 1 ';
+                            break;
+                        case "infotech":
+                            $where .= 'AND w.infotech = 1 ';
+                            break;
+                    }
                 }
                 if    ($partner != "0"     ) {  $where .= 'AND w.id != 0 ';
                                                 $where .= 'AND p.id = '.$partner.' ';
@@ -909,10 +954,27 @@ class StatisticController extends Controller {
                 $join  = ' JOIN w.partner p ';
 
                 if ($status != '0') {
-                    if     ($status == "active"  ) {  $where .= 'AND w.active = 1 '; }
-                    elseif ($status == "deactive") {  $where .= 'AND w.active = 0 '; }
-                    elseif ($status == "test"    ) {  $where .= 'AND w.test = 1 '; }
-                    elseif ($status == "adsplus" ) {  $where .= 'AND w.ad_service_plus = 0 '; }
+                    switch ($status) {
+                        case "active":
+                            $where .= 'AND w.active = 1 ';
+                            $where .= 'AND w.test != 1 ';
+                            break;
+                        case "deactive":
+                            $where .= 'AND w.active = 0 ';
+                            breaK;
+                        case "test":
+                            $where .= 'AND w.test = 1 ';
+                            break;
+                        case "adsplus":
+                            $where .= 'AND w.ad_service_plus = 1 ';
+                            break;
+                        case "check":
+                            $where .= 'AND w.haschecks = 1 ';
+                            break;
+                        case "infotech":
+                            $where .= 'AND w.infotech = 1 ';
+                            break;
+                    }
                 }
                 if    ($assessor != '0'    ) {  $where .= 'AND e.assigned_to = '.$assessor;
                 }
