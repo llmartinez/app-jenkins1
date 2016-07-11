@@ -774,6 +774,7 @@ function get_country_partner(id_partner){
         });
     });
     
+
 $("#btn_search_ticket_id").on('click', function () {
     var idTicket = $(document).find('#flt_id').val(); 
     var locale    = $(document).find("#data_locale").val();

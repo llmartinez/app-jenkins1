@@ -1129,8 +1129,10 @@ class TicketController extends Controller {
 
             if ($security->isGranted('ROLE_SUPER_ADMIN')) $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
             else $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
-
+           
             $post     = new Post();
+            $message= $request->getSession()->get('message');
+            $post->setMessage($message);
             $document = new Document();
             $systems  = $em->getRepository('TicketBundle:System')->findAll();
             $block    = null;
@@ -1153,7 +1155,7 @@ class TicketController extends Controller {
             //Define Forms
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
-
+            
             if($ticket->getSubsystem() != null) {
                 $id_subsystem = $ticket->getSubsystem()->getId();
                 $id_system = $ticket->getSubsystem()->getSystem()->getId();
@@ -1199,7 +1201,7 @@ class TicketController extends Controller {
 
                     $formP->bindRequest($request);
                     $formD->bindRequest($request);
-
+                    
                     if ($formP->isValid() and $formD->isValid()) {
 
                         if($security->isGranted('ROLE_ASSESSOR')){
@@ -1278,8 +1280,12 @@ class TicketController extends Controller {
 
                                         // Dejamos el locale tal y como estaba
                                         $request->setLocale($locale);
+                                        $request->getSession()->set('message', '');
                                     }
-                                } else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                                } else{ 
+                                    $request->getSession()->set('message', $post->getMessage());
+                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.');                                    
+                                }
                             } else {
                                 // ERROR tamaño
                                 $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
@@ -1294,13 +1300,12 @@ class TicketController extends Controller {
                         }
                     }
                 }
-
-                return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),
+                
+                return $this->redirect($this->generateUrl('showTicket', array(  'id'        => $ticket->getId(),  
                                                                                 'form_name' => $formP->getName(),
                                                                                 'action'    => 'showTicket',
                                                                                 'ticket'    => $ticket,
                                                                                 'systems'   => $systems,
-                                                                                'form_name' => $formP->getName(),
                                                                                 'brand'     => $brand,
                                                                                 'model'     => $model,
                                                                                 'version'   => $version )));
@@ -1359,7 +1364,8 @@ class TicketController extends Controller {
      * @return url
      */
     public function closeTicketAction($id, $ticket, $close='1')
-    {
+    {   
+        $message = '';
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_SUPER_ADMIN')
         or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
@@ -1373,20 +1379,26 @@ class TicketController extends Controller {
 
             if ($request->getMethod() == 'POST') {
                 $form->bindRequest($request);
-
+                if($request->request->get('sol_other_txt') != ''){
+                    $message = $request->request->get('sol_other_txt');
+                }
+                else{
+                    $message= $request->getSession()->get('message');
+                }
+                    
                 /*Validacion Ticket*/
-                $str_len = strlen($ticket->getSolution());
+                $str_len = strlen($message);
                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
                 else { $max_len = 500; }
 
                 if ($str_len <= $max_len ) {
-
+                    
                     if ($form->isValid()) {
 
                         if ($security->isGranted('ROLE_ASSESSOR') === false) {
                             if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
                             elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
-                            elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$request->get('sol_other_txt'));
+                            elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$message);
                         }
 
                         if($ticket->getSolution() != ""){
@@ -1455,12 +1467,17 @@ class TicketController extends Controller {
                     }else{
                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
-                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                }else{ 
+                    $request->getSession()->set('message', $message);
+                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); 
+                    
+                }
             }
 
             $systems = $em->getRepository('TicketBundle:System')->findAll();
 
             return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+                                                                                            'message'   => $message,
                                                                                             'systems'   => $systems,
                                                                                             'form'      => $form->createView(),
                                                                                             'form_name' => $form->getName(),
