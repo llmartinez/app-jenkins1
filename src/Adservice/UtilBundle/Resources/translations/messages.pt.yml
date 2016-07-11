@@ -723,6 +723,9 @@ mail.changePassword.user:				"O seu nome de utilizador é:"
 mail.changePassword.password:			"A sua nova palavra-passe é:"
 mail.changePassword.info.password:		"Para alterar a sua palavra-passe entre em <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> na secção "
 
+mail.activateWorkshop.subject:                          "ADService | workshop de activação "
+mail.deactivateWorkshop.subject:                        "ADService | Desactivar o workshop "
+
 mail.textDisclaimer:  "AVISO LEGAL. A informação contida nesta mensagem de correio eletrónico é confidencial e poderá ter carácter reservado, destinando-se exclusivamente ao seu destinatário. O acesso ou utilização desta mensagem por parte de qualquer outra pessoa que não esteja autorizada pode ser ilegal. Se não é o destinatário, por favor elimine o conteúdo da mesma."
 _mail.textDisclaimer: "AVISO LEGAL. A informação contida nesta mensagem de correio eletrónico é confidencial e poderá ter carácter reservado, destinando-se exclusivamente ao seu destinatário. O acesso ou utilização desta mensagem por parte de qualquer outra pessoa que não esteja autorizada pode ser ilegal. Se não é o destinatário, por favor elimine o conteúdo da mesma. <b>soporte@ad-service.com</b>"
 

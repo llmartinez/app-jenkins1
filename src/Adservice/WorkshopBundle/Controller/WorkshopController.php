@@ -159,7 +159,7 @@ class WorkshopController extends Controller {
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             if ($form->isValid()) {
-
+                $workshop->setActive(1);
                 /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
                     'code_workshop' => $workshop->getCodeWorkshop()));
@@ -559,8 +559,39 @@ class WorkshopController extends Controller {
                     'id_ticket' => $id_ticket,
                     'form_name' => $form->getName(),
                     'form' => $form->createView()));
+    }   
+    
+    public function deactivateActivateWorkshopAction($workshop_id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
+        if($workshop){
+            $workshop->setActive(!$workshop->getActive());
+        }
+        $em->persist($workshop);
+        $em->flush();
+        
+         /* MAILING */
+        //Mail to workshop
+        $mail = $workshop->getEmail1();
+        $action = 'deactivate';
+        $locale = $this->getRequest()->getLocale();
+        $mailerUser = $this->get('cms.mailer');
+        $mailerUser->setSubject($this->get('translator')->trans('mail.deactivateWorkshop.subject').$workshop->getName());
+        if($workshop->getActive()== true){
+            $action = 'activate';
+            $mailerUser->setSubject($this->get('translator')->trans('mail.activateWorkshop.subject').$workshop->getName());
+        }       
+        $mailerUser->setTo($mail);
+        $mailerUser->setFrom('noreply@adserviceticketing.com');
+        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
+        $mailerUser->sendMailToSpool();
+        //Mail to Report
+        $mailerUser->setTo($this->container->getParameter('mail_report'));
+        $mailerUser->sendMailToSpool();
+        
+        
+        return $this->redirect($this->generateUrl('workshop_list'));
     }
-
     public function insertCifAction($workshop_id, $country) {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {

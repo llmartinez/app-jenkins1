@@ -63,7 +63,7 @@ class WorkshopType extends AbstractType
             ->add('contact', 'text', array('required' => true))
             ->add('internal_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
-            ->add('active', 'checkbox', array('required' => false))
+//            ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
             ->add('endtest_at', 'date', array('format' => 'dd-MM-yyyy'))
             ->add('haschecks', 'checkbox', array('required' => false))
