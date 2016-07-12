@@ -588,7 +588,6 @@ class TicketController extends Controller {
                 }
 
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
-
                     if ($formC->isValid() && $formD->isValid()) {
 
                         $id_brand   = $request->request->get('new_car_form_brand');
@@ -629,8 +628,7 @@ class TicketController extends Controller {
 
                             if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
                              or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
-
-                                if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                                if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000 ){
                                     //Define CAR
                                     $car = UtilController::newEntity($car, $user);
 
@@ -844,6 +842,7 @@ class TicketController extends Controller {
                                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                     }
                                 } else {
+                                    var_dump('ERROR TMÑ');die;
                                     // ERROR tamaño
                                     $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
 
@@ -1221,7 +1220,7 @@ class TicketController extends Controller {
                         if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
                          or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
 
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000 ){
                                 $str_len = strlen($post->getMessage());
                                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
                                 else { $max_len = 500; }
