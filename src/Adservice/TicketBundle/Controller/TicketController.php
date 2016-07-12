@@ -559,357 +559,364 @@ class TicketController extends Controller {
             $formC->bindRequest($request);
             $formD->bindRequest($request);
 
-            $array = array( 'ticket' => $ticket,
-                            'form' => $form->createView(),
-                            'formC' => $formC->createView(),
-                            'formD' => $formD->createView(),
-                            'brands' => $brands,
-                            'systems' => $systems,
-                            'adsplus' => $adsplus,
-                            'workshop' => $workshop,
-                            'form_name' => $form->getName());
+            if ($ticket->getDescription() != null and $car->getBrand() != null and $car->getBrand()->getId() != null
+                and $car->getModel() != null and $car->getModel()->getId() != null and $car->getVin() != null and $car->getPlateNumber() != null)
+            {
+                $array = array( 'ticket' => $ticket,
+                                'form' => $form->createView(),
+                                'formC' => $formC->createView(),
+                                'formD' => $formD->createView(),
+                                'brands' => $brands,
+                                'systems' => $systems,
+                                'adsplus' => $adsplus,
+                                'workshop' => $workshop,
+                                'form_name' => $form->getName());
 
-            /*Validacion Ticket*/
-            $str_len = strlen($ticket->getDescription());
-            if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-            else { $max_len = 500; }
+                /*Validacion Ticket*/
+                $str_len = strlen($ticket->getDescription());
+                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                else { $max_len = 500; }
 
-            if ($str_len <= $max_len ) {
+                if ($str_len <= $max_len ) {
 
-                $ticket_form = $request->request->get('ticket_form');
-                if (isset($ticket_form['subsystem'])) {
-                    $id_subsystem = $ticket_form['subsystem'];
-                }else{
-                    $id_subsystem = '0';
-                }
-                if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
-                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
-                    $ticket->setSubsystem($subsystem);
-                }
+                    $ticket_form = $request->request->get('ticket_form');
+                    if (isset($ticket_form['subsystem'])) {
+                        $id_subsystem = $ticket_form['subsystem'];
+                    }else{
+                        $id_subsystem = '0';
+                    }
+                    if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
+                        $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
+                        $ticket->setSubsystem($subsystem);
+                    }
 
-                if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
+                    if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
 
-                    if ($formC->isValid() && $formD->isValid()) {
+                        if ($formC->isValid() && $formD->isValid()) {
 
-                        $id_brand   = $request->request->get('new_car_form_brand');
-                        $id_model   = $request->request->get('new_car_form_model');
-                        $id_version = $request->request->get('new_car_form_version');
+                            $id_brand   = $request->request->get('new_car_form_brand');
+                            $id_model   = $request->request->get('new_car_form_model');
+                            $id_version = $request->request->get('new_car_form_version');
 
-                        $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                        $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
+                            $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
+                            $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
 
-                        //SI NO HA ESCOGIDO VERSION SE DEJA NULL
-                        if (isset($id_version)) { $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version)); }
-                        else { $id_version = null; }
+                            //SI NO HA ESCOGIDO VERSION SE DEJA NULL
+                            if (isset($id_version)) { $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version)); }
+                            else { $id_version = null; }
 
-                        // Controla si ya existe el mismo ticket
-                        $desc = $ticket->getDescription();
-                        $desc = $this->fixWrongCharacters($desc);
-                        $select = "SELECT t FROM TicketBundle:Ticket t
-                                        WHERE t.workshop = ".$workshop->getId()."
-                                        AND t.description LIKE '".$desc."'
-                                        AND t.car IN (
-                                            SELECT c FROM CarBundle:Car c
-                                            WHERE c.brand = ".$id_brand."
-                                            AND c.model = ".$id_model." ";
+                            // Controla si ya existe el mismo ticket
+                            $desc = $ticket->getDescription();
+                            $desc = $this->fixWrongCharacters($desc);
+                            $select = "SELECT t FROM TicketBundle:Ticket t
+                                            WHERE t.workshop = ".$workshop->getId()."
+                                            AND t.description LIKE '".$desc."'
+                                            AND t.car IN (
+                                                SELECT c FROM CarBundle:Car c
+                                                WHERE c.brand = ".$id_brand."
+                                                AND c.model = ".$id_model." ";
 
-                        if($id_version != null){
-                            $select .= "AND c.version = ".$id_version; }
-                        $select .= ')';
+                            if($id_version != null){
+                                $select .= "AND c.version = ".$id_version; }
+                            $select .= ')';
 
-                        $query = $em->createQuery($select);
-                        $existTicket = $query->getResult();
+                            $query = $em->createQuery($select);
+                            $existTicket = $query->getResult();
 
-                        if($existTicket == null) {
+                            if($existTicket == null) {
 
-                            // Controla si se ha subido un fichero erroneo
-                            $file = $document->getFile();
-                            if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
-                            if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
+                                // Controla si se ha subido un fichero erroneo
+                                $file = $document->getFile();
+                                if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                                if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
 
-                            if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                             or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+                                if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                                 or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
 
-                                if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                                    //Define CAR
-                                    $car = UtilController::newEntity($car, $user);
+                                    if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                                        //Define CAR
+                                        $car = UtilController::newEntity($car, $user);
 
-                                    $car->setBrand($brand);
-                                    $car->setModel($model);
-                                    $vin = $car->getVin();
-                                    //SI VIN TIENE LONGITUD 17
-                                    if(strlen($vin) == 17){
-                                        //SI VIN NO CONTIENE 'O'
-                                        if(!strpos(strtolower($vin),'o')){
-                                            if (isset($version))
-                                            {
-                                                $sizeV = sizeof($version);
+                                        $car->setBrand($brand);
+                                        $car->setModel($model);
+                                        $vin = $car->getVin();
+                                        //SI VIN TIENE LONGITUD 17
+                                        if(strlen($vin) == 17){
+                                            //SI VIN NO CONTIENE 'O'
+                                            if(!strpos(strtolower($vin),'o')){
+                                                if (isset($version))
+                                                {
+                                                    $sizeV = sizeof($version);
 
-                                                if ($sizeV > 0) {
-                                                    $car->setVersion($version);
+                                                    if ($sizeV > 0) {
+                                                        $car->setVersion($version);
+                                                    }
                                                 }
-                                            }
-                                            else{
-                                                $car->setVersion(null);
-                                            }
+                                                else{
+                                                    $car->setVersion(null);
+                                                }
 
-                                            $exist_car = '0';
-                                            $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
-                                            $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
-
-                                            if($exist_vin == null AND $exist_num == null) {
                                                 $exist_car = '0';
-                                            }
-                                            elseif(
-                                                ($exist_vin != null AND $exist_num == null)
-                                                OR
-                                                ($exist_vin == null AND $exist_num != null)
-                                                OR
-                                                ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
-                                            ){
-                                                $str = $trans->trans('error.vin_platenumber_not_match').': ';
-                                                if($exist_vin != null) {
-                                                    $str .=' **'.$trans->trans('vin').'** '.$exist_vin->getVin().' -> '.$trans->trans('plate_number').' '.$exist_vin->getPlateNumber().': '.$exist_vin->getBrand().' '.$exist_vin->getModel();
-                                                    if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion()->getName().' ';
-                                                        if($exist_vin->getMotor() != null){
-                                                            $str .= ' ['.$exist_vin->getMotor().'] ';
+                                                $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
+                                                $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
+
+                                                if($exist_vin == null AND $exist_num == null) {
+                                                    $exist_car = '0';
+                                                }
+                                                elseif(
+                                                    ($exist_vin != null AND $exist_num == null)
+                                                    OR
+                                                    ($exist_vin == null AND $exist_num != null)
+                                                    OR
+                                                    ($exist_vin != null AND $exist_num != null AND $exist_vin->getId() != $exist_num->getId())
+                                                ){
+                                                    $str = $trans->trans('error.vin_platenumber_not_match').': ';
+                                                    if($exist_vin != null) {
+                                                        $str .=' **'.$trans->trans('vin').'** '.$exist_vin->getVin().' -> '.$trans->trans('plate_number').' '.$exist_vin->getPlateNumber().': '.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                        if($exist_vin->getVersion() != null){
+                                                            $str .= ' '.$exist_vin->getVersion()->getName().' ';
+                                                            if($exist_vin->getMotor() != null){
+                                                                $str .= ' ['.$exist_vin->getMotor().'] ';
+                                                            }
                                                         }
                                                     }
-                                                }
-                                                if($exist_vin != null and $exist_num != null) $str .= ', ';
+                                                    if($exist_vin != null and $exist_num != null) $str .= ', ';
 
-                                                if($exist_num != null) {
-                                                    $str .=' **'.$trans->trans('plate_number').'** '.$exist_num->getPlateNumber().' -> '.$trans->trans('vin').' '.$exist_num->getVin().': '.$exist_num->getBrand().' '.$exist_num->getModel();
-                                                    if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion()->getName();
-                                                        if($exist_num->getMotor() != null){
-                                                            $str .= ' ['.$exist_num->getMotor().']';
+                                                    if($exist_num != null) {
+                                                        $str .=' **'.$trans->trans('plate_number').'** '.$exist_num->getPlateNumber().' -> '.$trans->trans('vin').' '.$exist_num->getVin().': '.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                        if($exist_num->getVersion() != null){
+                                                            $str .= ' '.$exist_num->getVersion()->getName();
+                                                            if($exist_num->getMotor() != null){
+                                                                $str .= ' ['.$exist_num->getMotor().']';
+                                                            }
                                                         }
                                                     }
+                                                    $exist_car = $str;
                                                 }
-                                                $exist_car = $str;
-                                            }
-                                            elseif(
-                                                $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
-                                                OR
-                                                $exist_vin->getModel()->getId() != $car->getModel()->getId()
-                                                // OR (
-                                                //     ($exist_vin->getVersion() != null AND $car->getVersion() == null)
-                                                //     OR
-                                                //     ($exist_vin->getVersion() == null AND $car->getVersion() != null)
-                                                //     )
-                                                OR (
-                                                    $exist_vin->getVersion() != null
-                                                    AND
-                                                    $car->getVersion() != null
-                                                    AND
+                                                elseif(
+                                                    $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
+                                                    OR
+                                                    $exist_vin->getModel()->getId() != $car->getModel()->getId()
+                                                    // OR (
+                                                    //     ($exist_vin->getVersion() != null AND $car->getVersion() == null)
+                                                    //     OR
+                                                    //     ($exist_vin->getVersion() == null AND $car->getVersion() != null)
+                                                    //     )
+                                                    OR (
+                                                        $exist_vin->getVersion() != null
+                                                        AND
+                                                        $car->getVersion() != null
+                                                        AND
 
-                                                    // $exist_vin->getVersion()->getName() != null
-                                                    // AND
-                                                    // $car->getVersion()->getName() != null
-                                                    // AND
-                                                    // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
+                                                        // $exist_vin->getVersion()->getName() != null
+                                                        // AND
+                                                        // $car->getVersion()->getName() != null
+                                                        // AND
+                                                        // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
 
-                                                    $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
-                                                )
-                                            ){
-                                                $str = $trans->trans('error.same_vin');
-                                                if($exist_vin != null) {
-                                                    $str .=' ('.$exist_vin->getVin().' -> '.$exist_vin->getBrand().' '.$exist_vin->getModel();
-                                                    if($exist_vin->getVersion() != null){
-                                                        $str .= ' '.$exist_vin->getVersion()->getName();
-                                                        if($exist_vin->getMotor() != null){
-                                                            $str .= ' ['.$exist_vin->getMotor().']';
-                                                        }
-                                                    }
-                                                    $str .= ' )';
-                                                }
-                                                $exist_car = $str;
-                                            }
-                                            elseif(
-                                                $exist_num->getBrand()->getId() != $car->getBrand()->getId()
-                                                OR
-                                                $exist_num->getModel()->getId() != $car->getModel()->getId()
-                                                // OR (
-                                                //     ($exist_num->getVersion() != null AND $car->getVersion() == null)
-                                                //     OR
-                                                //     ($exist_num->getVersion() == null AND $car->getVersion() != null)
-                                                //     )
-                                                OR (
-                                                    $exist_num->getVersion() != null
-                                                    AND
-                                                    $car->getVersion() != null
-                                                    AND
-
-                                                    // $exist_num->getVersion()->getName() != null
-                                                    // AND
-                                                    // $car->getVersion()->getName() != null
-                                                    // AND
-                                                    // $exist_num->getVersion()->getName() != $car->getVersion()->getName()
-
-                                                    $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+                                                        $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
                                                     )
-                                            ){
-                                                $str = $trans->trans('error.same_platenumber');
-                                                if($exist_num != null) {
-                                                    $str .=' ('.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
-                                                    if($exist_num->getVersion() != null){
-                                                        $str .= ' '.$exist_num->getVersion()->getName();
-                                                        if($exist_num->getMotor() != null){
-                                                            $str .= ' ['.$exist_num->getMotor().']';
+                                                ){
+                                                    $str = $trans->trans('error.same_vin');
+                                                    if($exist_vin != null) {
+                                                        $str .=' ('.$exist_vin->getVin().' -> '.$exist_vin->getBrand().' '.$exist_vin->getModel();
+                                                        if($exist_vin->getVersion() != null){
+                                                            $str .= ' '.$exist_vin->getVersion()->getName();
+                                                            if($exist_vin->getMotor() != null){
+                                                                $str .= ' ['.$exist_vin->getMotor().']';
+                                                            }
                                                         }
+                                                        $str .= ' )';
                                                     }
-                                                    $str .= ' )';
+                                                    $exist_car = $str;
                                                 }
-                                                $exist_car = $str;
-                                            }
+                                                elseif(
+                                                    $exist_num->getBrand()->getId() != $car->getBrand()->getId()
+                                                    OR
+                                                    $exist_num->getModel()->getId() != $car->getModel()->getId()
+                                                    // OR (
+                                                    //     ($exist_num->getVersion() != null AND $car->getVersion() == null)
+                                                    //     OR
+                                                    //     ($exist_num->getVersion() == null AND $car->getVersion() != null)
+                                                    //     )
+                                                    OR (
+                                                        $exist_num->getVersion() != null
+                                                        AND
+                                                        $car->getVersion() != null
+                                                        AND
 
-                                            if($exist_car == '0') {
-                                                if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null)
-                                                {
-                                                    $numchecks = $workshop->getNumChecks();
-                                                    $workshop->setNumChecks($numchecks - 1);
-                                                    UtilController::saveEntity($em, $workshop, $user);
+                                                        // $exist_num->getVersion()->getName() != null
+                                                        // AND
+                                                        // $car->getVersion()->getName() != null
+                                                        // AND
+                                                        // $exist_num->getVersion()->getName() != $car->getVersion()->getName()
+
+                                                        $exist_num->getVersion()->getId() != $car->getVersion()->getId()
+                                                        )
+                                                ){
+                                                    $str = $trans->trans('error.same_platenumber');
+                                                    if($exist_num != null) {
+                                                        $str .=' ('.$exist_num->getPlateNumber().' -> '.$exist_num->getBrand().' '.$exist_num->getModel();
+                                                        if($exist_num->getVersion() != null){
+                                                            $str .= ' '.$exist_num->getVersion()->getName();
+                                                            if($exist_num->getMotor() != null){
+                                                                $str .= ' ['.$exist_num->getMotor().']';
+                                                            }
+                                                        }
+                                                        $str .= ' )';
+                                                    }
+                                                    $exist_car = $str;
                                                 }
 
-                                                // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
-                                                if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId())
-                                                {
-                                                    $old_car = $car;
-                                                    $car = $exist_vin;
-
-                                                    //VERSION
-                                                    if($car->getVersion() == null and $old_car->getVersion() != null and $old_car->getVersion()->getName() != null) $car->setVersion($old_car->getVersion());
-                                                    //YEAR
-                                                    if($car->getYear() == null and $old_car->getYear() != null) $car->setYear($old_car->getYear());
-                                                    //MOTOR
-                                                    if($car->getMotor() == null and $old_car->getMotor() != null) $car->setMotor($old_car->getMotor());
-                                                    //KW
-                                                    if($car->getKw() == null and $old_car->getKw() != null) $car->setKw($old_car->getKw());
-                                                    //DISPLACEMENT
-                                                    if($car->getDisplacement() == null and $old_car->getDisplacement() != null) $car->setDisplacement($old_car->getDisplacement());
-                                                }
-
-                                                UtilController::saveEntity($em, $car, $user);
-
-                                                //Define TICKET
-                                                $ticket = UtilController::newEntity($ticket, $user);
-                                                if ($security->isGranted('ROLE_ASSESSOR'))
-                                                {
-                                                    $ticket->setWorkshop($workshop);
-                                                    $ticket->setAssignedTo($user);
-                                                    $ticket->setPending(0);
-                                                }else{
-                                                    $ticket->setWorkshop($user->getWorkshop());
-                                                    $ticket->setPending(1);
-                                                }
-                                                $ticket->setStatus($status);
-                                                $ticket->setCar($car);
-                                                UtilController::saveEntity($em, $ticket, $user);
-
-                                                //Define Document
-                                                if ($file != "")
-                                                {
-                                                    //Define Post
-                                                    $post = new Post();
-                                                    $post = UtilController::newEntity($post, $user);
-                                                    $post->setTicket($ticket);
-                                                    $post->setMessage(" ");
-                                                    UtilController::saveEntity($em, $post, $user, false);
-
-                                                    $document->setPost($post);
-                                                    $dir = $document->getUploadRootDir();
-                                                    if (!file_exists($dir) && !is_dir($dir)) {
-                                                        mkdir($dir, 0775);
+                                                if($exist_car == '0') {
+                                                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() != null)
+                                                    {
+                                                        $numchecks = $workshop->getNumChecks();
+                                                        $workshop->setNumChecks($numchecks - 1);
+                                                        UtilController::saveEntity($em, $workshop, $user);
                                                     }
 
-                                                    $em->persist($document);
-                                                    $em->flush();
+                                                    // Si el coche ya existe sobreescribimos los datos nuevos (si los hay)
+                                                    if($exist_vin != null AND $exist_num != null AND $exist_vin->getId() == $exist_num->getId())
+                                                    {
+                                                        $old_car = $car;
+                                                        $car = $exist_vin;
+
+                                                        //VERSION
+                                                        if($car->getVersion() == null and $old_car->getVersion() != null and $old_car->getVersion()->getName() != null) $car->setVersion($old_car->getVersion());
+                                                        //YEAR
+                                                        if($car->getYear() == null and $old_car->getYear() != null) $car->setYear($old_car->getYear());
+                                                        //MOTOR
+                                                        if($car->getMotor() == null and $old_car->getMotor() != null) $car->setMotor($old_car->getMotor());
+                                                        //KW
+                                                        if($car->getKw() == null and $old_car->getKw() != null) $car->setKw($old_car->getKw());
+                                                        //DISPLACEMENT
+                                                        if($car->getDisplacement() == null and $old_car->getDisplacement() != null) $car->setDisplacement($old_car->getDisplacement());
+                                                    }
+
+                                                    UtilController::saveEntity($em, $car, $user);
+
+                                                    //Define TICKET
+                                                    $ticket = UtilController::newEntity($ticket, $user);
+                                                    if ($security->isGranted('ROLE_ASSESSOR'))
+                                                    {
+                                                        $ticket->setWorkshop($workshop);
+                                                        $ticket->setAssignedTo($user);
+                                                        $ticket->setPending(0);
+                                                    }else{
+                                                        $ticket->setWorkshop($user->getWorkshop());
+                                                        $ticket->setPending(1);
+                                                    }
+                                                    $ticket->setStatus($status);
+                                                    $ticket->setCar($car);
+                                                    UtilController::saveEntity($em, $ticket, $user);
+
+                                                    //Define Document
+                                                    if ($file != "")
+                                                    {
+                                                        //Define Post
+                                                        $post = new Post();
+                                                        $post = UtilController::newEntity($post, $user);
+                                                        $post->setTicket($ticket);
+                                                        $post->setMessage(" ");
+                                                        UtilController::saveEntity($em, $post, $user, false);
+
+                                                        $document->setPost($post);
+                                                        $dir = $document->getUploadRootDir();
+                                                        if (!file_exists($dir) && !is_dir($dir)) {
+                                                            mkdir($dir, 0775);
+                                                        }
+
+                                                        $em->persist($document);
+                                                        $em->flush();
+                                                    }
+                                                } else {
+                                                    $this->get('session')->setFlash('error', $exist_car);
+
+                                                    return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                                 }
                                             } else {
-                                                $this->get('session')->setFlash('error', $exist_car);
+                                                $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_o'));
 
                                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                             }
-                                        } else {
-                                            $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_o'));
 
-                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
+                                        }else {
+                                            $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_length'));
+
+                                                return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                         }
+                                    } else {
+                                        // ERROR tamaño
+                                        $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
 
-                                    }else {
-                                        $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_length'));
-
-                                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
+                                        return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                     }
                                 } else {
-                                    // ERROR tamaño
-                                    $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
+                                    // ERROR tipo de fichero
+                                    $this->get('session')->setFlash('error', $trans->trans('error.file'));
 
                                     return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                 }
                             } else {
                                 // ERROR tipo de fichero
-                                $this->get('session')->setFlash('error', $trans->trans('error.file'));
+                                $this->get('session')->setFlash('error', $trans->trans('error.same_ticket')
+                                                                        .' ('.$trans->trans('ticket').' #'.$existTicket[0]->getId().')');
 
                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                             }
-                        } else {
-                            // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $trans->trans('error.same_ticket')
-                                                                    .' ('.$trans->trans('ticket').' #'.$existTicket[0]->getId().')');
 
-                            return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
-                        }
+                            $mail = $ticket->getWorkshop()->getEmail1();
+                            $pos = strpos($mail, '@');
+                            if ($pos != 0) {
 
-                        $mail = $ticket->getWorkshop()->getEmail1();
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
+                                // Cambiamos el locale para enviar el mail en el idioma del taller
+                                $locale = $request->getLocale();
+                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                $request->setLocale($lang->getShortName());
 
-                            // Cambiamos el locale para enviar el mail en el idioma del taller
-                            $locale = $request->getLocale();
-                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                            $request->setLocale($lang->getShortName());
-
-                            /* MAILING */
-                            $mailer = $this->get('cms.mailer');
-                            $mailer->setTo($mail);
-                            $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
-                            $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-                            $mailer->sendMailToSpool();
-                            //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
-
-                            if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
-                            {
-                                $mail_centralita = $this->container->getParameter('mail_centralita');
-                                //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
-                                $mailer->setTo($this->get('translator')->trans($mail_centralita));
-                                $mailer->setSubject('ticket: '.$ticket->getId());
-                                $date = date("Y-m-d H:i:s");
-                                $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
+                                /* MAILING */
+                                $mailer = $this->get('cms.mailer');
+                                $mailer->setTo($mail);
+                                $mailer->setSubject($this->get('translator')->trans('mail.newTicket.subject').$ticket->getId());
+                                $mailer->setFrom('noreply@adserviceticketing.com');
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                                 $mailer->sendMailToSpool();
+                                //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+
+                                if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER'))
+                                {
+                                    $mail_centralita = $this->container->getParameter('mail_centralita');
+                                    //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
+                                    $mailer->setTo($this->get('translator')->trans($mail_centralita));
+                                    $mailer->setSubject('ticket: '.$ticket->getId());
+                                    $date = date("Y-m-d H:i:s");
+                                    $mailer->setBody('ticket: '.$ticket->getId().' - '.$date);
+                                    $mailer->sendMailToSpool();
+                                }
+
+                                // Dejamos el locale tal y como estaba
+                                $request->setLocale($locale);
+
+                                $this->get('session')->setFlash('ticket_created', $this->get('translator')->trans('ticket_created'));
                             }
 
-                            // Dejamos el locale tal y como estaba
-                            $request->setLocale($locale);
+                            if (isset($_POST['save_close'])){
+                                return $this->redirect($this->generateUrl('closeTicket', array( 'id' => $ticket->getId())));
+                            }else{
+                                return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
+                            }
 
-                            $this->get('session')->setFlash('ticket_created', $this->get('translator')->trans('ticket_created'));
-                        }
+                        } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
 
-                        if (isset($_POST['save_close'])){
-                            return $this->redirect($this->generateUrl('closeTicket', array( 'id' => $ticket->getId())));
-                        }else{
-                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
-                        }
+                    } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
 
-                    } else { $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
-
-                } else { $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket')); }
-
-            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+            }else{
+                $flash = $this->get('translator')->trans('error.bad_introduction');
+                $this->get('session')->setFlash('error', $flash);
+            }
         }
 
         if($id_subsystem != '' and $id_subsystem != '0') {
@@ -968,56 +975,66 @@ class TicketController extends Controller {
 
                 $form->bindRequest($request);
 
-                /*Validacion Ticket*/
-                $str_len = strlen($ticket->getDescription());
-                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 500; }
+                $car = $ticket->getCar();
 
-                if ($str_len <= $max_len ) {
-                    //Define CAR
-                    if ($form->isValid()) {
+                if ($ticket->getDescription() != null and $car->getBrand() != null and $car->getBrand()->getId() != null
+                    and $car->getModel() != null and $car->getModel()->getId() != null and $car->getVin() != null and $car->getPlateNumber() != null)
+                {
+                    /*Validacion Ticket*/
+                    $str_len = strlen($ticket->getDescription());
+                    if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+                    else { $max_len = 500; }
 
-                        UtilController::saveEntity($em, $ticket, $user);
+                    if ($str_len <= $max_len ) {
+                        //Define CAR
+                        if ($form->isValid()) {
 
-                        $mail = $ticket->getWorkshop()->getEmail1();
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
+                            UtilController::saveEntity($em, $ticket, $user);
 
-                        // Cambiamos el locale para enviar el mail en el idioma del taller
-                            $locale = $request->getLocale();
-                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                            $request->setLocale($lang->getShortName());
+                            $mail = $ticket->getWorkshop()->getEmail1();
+                            $pos = strpos($mail, '@');
+                            if ($pos != 0) {
 
-                            /* MAILING */
-                            $mailer = $this->get('cms.mailer');
-                            $mailer->setTo($mail);
-                            $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
-                            $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-                            $mailer->sendMailToSpool();
-                            //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                                $locale = $request->getLocale();
+                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                $request->setLocale($lang->getShortName());
 
-                            // Dejamos el locale tal y como estaba
-                            $request->setLocale($locale);
-                        }
+                                /* MAILING */
+                                $mailer = $this->get('cms.mailer');
+                                $mailer->setTo($mail);
+                                $mailer->setSubject($this->get('translator')->trans('mail.editTicket.subject').$id);
+                                $mailer->setFrom('noreply@adserviceticketing.com');
+                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_edit_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                                $mailer->sendMailToSpool();
+                                //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
 
-                        return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
+                                // Dejamos el locale tal y como estaba
+                                $request->setLocale($locale);
+                            }
 
-                    }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
 
-            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
-            }
-            $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
+                        }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
 
-            $array = array(
-                            'action'    => 'showTicket',
-                            'form'      => $form->createView(),
-                            'form_name' => $form->getName(),
-                            'ticket'    => $ticket,
-                            'systems'   => $systems,
-                            'form_name' => $form->getName(),
+                    }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); }
+                    }
+
+                    $systems     = $em->getRepository('TicketBundle:System'    )->findAll();
+
+                    $array = array(
+                                    'action'    => 'showTicket',
+                                    'form'      => $form->createView(),
+                                    'form_name' => $form->getName(),
+                                    'ticket'    => $ticket,
+                                    'systems'   => $systems,
+                                    'form_name' => $form->getName(),
                         );
+                }else{
+                    $flash = $this->get('translator')->trans('error.bad_introduction');
+                    $this->get('session')->setFlash('error', $flash);
+                }
             if ($security->isGranted('ROLE_ASSESSOR'))  return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
             else                                        return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
         }else{

@@ -170,97 +170,109 @@ class WorkshopOrderController extends Controller {
 
             if ($form->isValid()) {
 
-                /*CHECK CODE WORKSHOP NO SE REPITA*/
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
-                                                                                 'code_workshop' => $workshopOrder->getCodeWorkshop()));
-                $findPhone = array(0,0,0,0);
-                if($workshopOrder->getPhoneNumber1() !=null){
-                    $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber1());
-                }
-                if($workshopOrder->getPhoneNumber2() !=null){
-                    $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
-                }
-                if($workshopOrder->getMobileNumber1() !=null){
-                    $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber1());
-                }
-                if($workshopOrder->getMobileNumber2() !=null){
-                    $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber2());
-                }
-                if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
+                if ($workshopOrder->getName() != null and $workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null
+                    and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
+                    and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
+                    and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
+                    and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                    and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
                 {
-                    $user = $security->getToken()->getUser();
-                    $workshopOrder = UtilController::newEntity($workshopOrder, $user);
-                    $workshopOrder->setPartner($partner);
-                    $workshopOrder->setCodePartner($partner->getCodePartner());
-                    $workshopOrder->setCountry($user->getCountry());
-                    $roles=$user->getRoles();
-		            $roles = $roles[0];
-                    if($roles != 'ROLE_SUPER_AD') {
-                        $workshopOrder->setPartner($user->getPartner());
-                        $workshopOrder->setCountry($user->getPartner()->getCountry());
-                        $workshopOrder->setRegion($user->getPartner()->getRegion());
+                    /*CHECK CODE WORKSHOP NO SE REPITA*/
+                    $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
+                                                                                     'code_workshop' => $workshopOrder->getCodeWorkshop()));
+                    $findPhone = array(0,0,0,0);
+                    if($workshopOrder->getPhoneNumber1() !=null){
+                        $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber1());
                     }
-                    $workshopOrder->setActive(false);
-                    $workshopOrder->setAction('create');
-                    $workshopOrder->setWantedAction('create');
-
-                    // Set default shop to NULL
-                    $shop = $form['shop']->getClientData();
-                    if($shop == 0) { $workshopOrder->setShop(null); }
-
-                    if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
-                    if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
-
-                    UtilController::saveEntity($em, $workshopOrder, $user);
-
-                    $mail = $workshopOrder->getCreatedBy()->getEmail1();
-                    $pos = strpos($mail, '@');
-                    if ($pos != 0) {
-
-                        // Cambiamos el locale para enviar el mail en el idioma del taller
-                        $locale = $request->getLocale();
-                        $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
-                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                        $request->setLocale($lang->getShortName());
-
-                        /* MAILING */
-                        $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($mail);
-                        $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
-                        $mailer->setFrom('noreply@adserviceticketing.com');
-                        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder, '__locale' => $locale)));
-                        $mailer->sendMailToSpool();
-                        //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
-
-                        // Copia del mail de confirmacion a modo de backup
-                        //
-                        // $mail = $this->container->getParameter('mail_report');
-                        // $request->setLocale('es_ES');
-                        // $mailer->setTo($mail);
-                        // $mailer->sendMailToSpool();
-
-                        // Dejamos el locale tal y como estaba
-                        $request->setLocale($locale);
+                    if($workshopOrder->getPhoneNumber2() !=null){
+                        $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getPhoneNumber2());
                     }
+                    if($workshopOrder->getMobileNumber1() !=null){
+                        $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber1());
+                    }
+                    if($workshopOrder->getMobileNumber2() !=null){
+                        $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshopOrder->getMobileNumber2());
+                    }
+                    if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
+                    {
+                        $user = $security->getToken()->getUser();
+                        $workshopOrder = UtilController::newEntity($workshopOrder, $user);
+                        $workshopOrder->setPartner($partner);
+                        $workshopOrder->setCodePartner($partner->getCodePartner());
+                        $workshopOrder->setCountry($user->getCountry());
+                        $roles=$user->getRoles();
+    		            $roles = $roles[0];
+                        if($roles != 'ROLE_SUPER_AD') {
+                            $workshopOrder->setPartner($user->getPartner());
+                            $workshopOrder->setCountry($user->getPartner()->getCountry());
+                            $workshopOrder->setRegion($user->getPartner()->getRegion());
+                        }
+                        $workshopOrder->setActive(false);
+                        $workshopOrder->setAction('create');
+                        $workshopOrder->setWantedAction('create');
 
-                    return $this->redirect($this->generateUrl('list_orders'));
+                        // Set default shop to NULL
+                        $shop = $form['shop']->getClientData();
+                        if($shop == 0) { $workshopOrder->setShop(null); }
 
-                }else{
-                    if($findPhone[0]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber1();
+                        if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                        if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+
+                        UtilController::saveEntity($em, $workshopOrder, $user);
+
+                        $mail = $workshopOrder->getCreatedBy()->getEmail1();
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+
+                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                            $locale = $request->getLocale();
+                            $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
+                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                            $request->setLocale($lang->getShortName());
+
+                            /* MAILING */
+                            $mailer = $this->get('cms.mailer');
+                            $mailer->setTo($mail);
+                            $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
+                            $mailer->setFrom('noreply@adserviceticketing.com');
+                            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder, '__locale' => $locale)));
+                            $mailer->sendMailToSpool();
+                            //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
+
+                            // Copia del mail de confirmacion a modo de backup
+                            //
+                            // $mail = $this->container->getParameter('mail_report');
+                            // $request->setLocale('es_ES');
+                            // $mailer->setTo($mail);
+                            // $mailer->sendMailToSpool();
+
+                            // Dejamos el locale tal y como estaba
+                            $request->setLocale($locale);
+                        }
+
+                        return $this->redirect($this->generateUrl('list_orders'));
+
+                    }else{
+                        if($findPhone[0]['1']>0){
+                            $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber1();
+                        }
+                        else if($findPhone[1]['1']>0){
+                            $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
+                        }
+                        else if($findPhone[2]['1']>0){
+                            $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber1();
+                        }
+                        else if($findPhone[3]['1']>0){
+                            $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
+                        }
+                        else {
+                            $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
+                        }
+                        $this->get('session')->setFlash('error', $flash);
                     }
-                    else if($findPhone[1]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getPhoneNumber2();
-                    }
-                    else if($findPhone[2]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber1();
-                    }
-                    else if($findPhone[3]['1']>0){
-                        $flash = $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
-                    }
-                    else {
-                        $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
-                    }
+                }else
+                {
+                    $flash = $this->get('translator')->trans('error.bad_introduction');
                     $this->get('session')->setFlash('error', $flash);
                 }
             }else{
@@ -371,60 +383,72 @@ class WorkshopOrderController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-                $user = $security->getToken()->getUser();
+                if ($workshopOrder->getName() != null and $workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null
+                    and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
+                    and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
+                    and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
+                    and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                    and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
+                {
+                    $user = $security->getToken()->getUser();
 
-                $workshopOrder = UtilController::newEntity($workshopOrder, $user);
+                    $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
-                if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
-                    $workshopOrder->setAction('re_modify');
-                }
-                elseif ($workshopOrder->getAction() == 'rejected') {
-                    $workshopOrder->setAction('re_modify');
-                }else{
-                    $workshopOrder->setAction('modify');
-                    $workshopOrder->setWantedAction('modify');
-                }
+                    if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
+                        $workshopOrder->setAction('re_modify');
+                    }
+                    elseif ($workshopOrder->getAction() == 'rejected') {
+                        $workshopOrder->setAction('re_modify');
+                    }else{
+                        $workshopOrder->setAction('modify');
+                        $workshopOrder->setWantedAction('modify');
+                    }
 
-                // Set default shop to NULL
-                $shop = $form['shop']->getClientData();
-                if($shop == 0) { $workshopOrder->setShop(null); }
+                    // Set default shop to NULL
+                    $shop = $form['shop']->getClientData();
+                    if($shop == 0) { $workshopOrder->setShop(null); }
 
-                if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
-                if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+                    if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                    if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
 
-                UtilController::saveEntity($em, $workshopOrder, $user);
+                    UtilController::saveEntity($em, $workshopOrder, $user);
 
-                $mail = $workshopOrder->getCreatedBy()->getEmail1();
-                $pos = strpos($mail, '@');
-                if ($pos != 0) {
+                    $mail = $workshopOrder->getCreatedBy()->getEmail1();
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
 
-                    // Cambiamos el locale para enviar el mail en el idioma del taller
-                    $locale = $request->getLocale();
-                    $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
-                    $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                    $request->setLocale($lang->getShortName());
+                        // Cambiamos el locale para enviar el mail en el idioma del taller
+                        $locale = $request->getLocale();
+                        $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
+                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                        $request->setLocale($lang->getShortName());
 
-                    /* MAILING */
-                    $mailer = $this->get('cms.mailer');
-                    $mailer->setTo($mail);
-                    $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
-                    $mailer->setFrom('noreply@adserviceticketing.com');
-                    $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
-                                                                                                             'workshop'      => $workshop,
-                                                                                                             '__locale' => $locale )));
-                    $mailer->sendMailToSpool();
-                    // echo $this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
-                    //                                                                              'workshop'      => $workshop));die;
+                        /* MAILING */
+                        $mailer = $this->get('cms.mailer');
+                        $mailer->setTo($mail);
+                        $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
+                        $mailer->setFrom('noreply@adserviceticketing.com');
+                        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
+                                                                                                                 'workshop'      => $workshop,
+                                                                                                                 '__locale' => $locale )));
+                        $mailer->sendMailToSpool();
+                        // echo $this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
+                        //                                                                              'workshop'      => $workshop));die;
 
-                    // Copia del mail de confirmacion a modo de backup
-                    //
-                    // $mail = $this->container->getParameter('mail_report');
-                    // $request->setLocale('es_ES');
-                    // $mailer->setTo($mail);
-                    // $mailer->sendMailToSpool();
+                        // Copia del mail de confirmacion a modo de backup
+                        //
+                        // $mail = $this->container->getParameter('mail_report');
+                        // $request->setLocale('es_ES');
+                        // $mailer->setTo($mail);
+                        // $mailer->sendMailToSpool();
 
-                    // Dejamos el locale tal y como estaba
-                    $request->setLocale($locale);
+                        // Dejamos el locale tal y como estaba
+                        $request->setLocale($locale);
+                    }
+                }else
+                {
+                    $flash = $this->get('translator')->trans('error.bad_introduction');
+                    $this->get('session')->setFlash('error', $flash);
                 }
 
                 return $this->redirect($this->generateUrl('list_orders'));
