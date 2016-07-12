@@ -91,7 +91,7 @@ $('#new_file_form_file').bind('change', function() {
     var size = this.files[0].size;
     var role = $('#role').val();
 
-    var max_size = '4000000';
+    var max_size = '10240000';
 
     if(size > max_size) {
 
