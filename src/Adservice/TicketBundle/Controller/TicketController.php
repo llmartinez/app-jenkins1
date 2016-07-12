@@ -842,7 +842,6 @@ class TicketController extends Controller {
                                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                     }
                                 } else {
-                                    var_dump('ERROR TMÑ');die;
                                     // ERROR tamaño
                                     $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
 
