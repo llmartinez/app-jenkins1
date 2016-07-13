@@ -281,7 +281,6 @@ class AjaxController extends Controller
 
             $consulta = $em->createQuery($query);
             $versions = $consulta->getResult();
-
             // $size = sizeOf($versions);
             // if($size == 0) {
 
@@ -308,8 +307,7 @@ class AjaxController extends Controller
         }
         else{
             $q_version = $em->createQuery("SELECT v FROM CarBundle:Motor m, CarBundle:Version v
-                                           WHERE v.model = ".$id_model." AND v.motor = m.id
-                                           group by m.id ORDER BY v.name ASC");
+                                           WHERE v.model = ".$id_model." AND v.motor = m.id ORDER BY v.name ASC");
             $versions = $q_version->getResult();
         }
 
