@@ -59,6 +59,7 @@ change_password.confirm: "Souhaitez-vous générer un nouveau mot de passe pour 
 change_password.correct: "Mot de passe modifié avec succès. Un mail contenant les nouvelles données sera envoyé à l'utilisateur."
 change_password.error:   "Mot de passe incorrect. Veuillez introduire correctement le mot de passe actuel."
 error:                   "Une erreur s’est produite"
+error.maintenance:		 "Nous apportons des améliorations à notre service, les tickets créés aujourd'hui seront répondues lundi. Désolé pour le désagrément."
 error.same_password:	 "Les mots de passes ne correspondent pas"
 error.bad_password:	     "Le mot de passe introduit doit être d'au moins 8 caractères et contenir des lettres et des chiffres majuscules et minuscules"
 error.length_password:	 "Le mot de passe doit contenir au moins 8 caractères"
