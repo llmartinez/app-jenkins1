@@ -475,6 +475,7 @@ class TicketController extends Controller {
      */
     public function newTicketAction($id_workshop=null)
     {
+        
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
