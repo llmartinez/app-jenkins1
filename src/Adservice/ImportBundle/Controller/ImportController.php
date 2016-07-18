@@ -581,6 +581,7 @@ class ImportController extends Controller
 
 		return $result;
 	}
+
     private function getLocations($em)
     {
 		//MAPPING LOCATIONS

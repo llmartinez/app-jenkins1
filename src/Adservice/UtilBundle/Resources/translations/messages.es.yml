@@ -59,6 +59,7 @@ change_password.confirm: "¿Deseas generar una nueva contraseña para el usuario
 change_password.correct: "Contraseña cambiada correctamente. Se enviará un mail al usuario con sus nuevas credenciales."
 change_password.error:   "Contraseña incorrecta. Introduce correctamente la contraseña actual."
 error:                   "Se ha producido un error"
+error.maintenance:		 "Estamos haciendo mejoras en nuestro servicio, los tickets creados durante el día de hoy serán contestados el próximo lunes. Disculpen las molestias."
 error.same_password:	 "Las contraseñas no coinciden"
 error.bad_password:	     "Las contraseña introducida debe tener al menos 8 caracteres y contener mayúsculas, minúsculas y números"
 error.length_password:	 "La contraseña debe tener 8 caracteres como mínimo"
