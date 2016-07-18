@@ -896,7 +896,6 @@ class TicketController extends Controller {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
                 $this->get('session')->setFlash('error', $flash);
             }
-        }
 
         if($id_subsystem != '' and $id_subsystem != '0') {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
