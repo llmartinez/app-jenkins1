@@ -572,90 +572,69 @@ class TicketController extends Controller {
                                 'workshop' => $workshop,
                                 'form_name' => $form->getName());
 
-                /*Validacion Ticket*/
-                $str_len = strlen($ticket->getDescription());
-                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-                else { $max_len = 500; }
+                if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
+                    if ($formC->isValid() && $formD->isValid()) {
 
-                if ($str_len <= $max_len ) {
+                        $id_brand   = $request->request->get('new_car_form_brand');
+                        $id_model   = $request->request->get('new_car_form_model');
+                        $id_version = $request->request->get('new_car_form_version');
 
-                    $ticket_form = $request->request->get('ticket_form');
-                    if (isset($ticket_form['subsystem'])) {
-                        $id_subsystem = $ticket_form['subsystem'];
-                    }else{
-                        $id_subsystem = '0';
-                    }
-                    if($id_subsystem != null and $id_subsystem != '' and $id_subsystem != '0') {
-                        $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
-                        $ticket->setSubsystem($subsystem);
-                    }
+                        $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
+                        $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
 
-                    if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
+                        //SI NO HA ESCOGIDO VERSION SE DEJA NULL
+                        if (isset($id_version)) { $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version)); }
+                        else { $id_version = null; }
 
-                        if ($formC->isValid() && $formD->isValid()) {
+                        // Controla si ya existe el mismo ticket
+                        $desc = $ticket->getDescription();
+                        $desc = $this->fixWrongCharacters($desc);
+                        $select = "SELECT t FROM TicketBundle:Ticket t
+                                        WHERE t.workshop = ".$workshop->getId()."
+                                        AND t.description LIKE '".$desc."'
+                                        AND t.car IN (
+                                            SELECT c FROM CarBundle:Car c
+                                            WHERE c.brand = ".$id_brand."
+                                            AND c.model = ".$id_model." ";
 
-                            $id_brand   = $request->request->get('new_car_form_brand');
-                            $id_model   = $request->request->get('new_car_form_model');
-                            $id_version = $request->request->get('new_car_form_version');
+                        if($id_version != null){
+                            $select .= "AND c.version = ".$id_version; }
+                        $select .= ')';
 
-                            $brand   = $em->getRepository('CarBundle:Brand'  )->find($id_brand  );
-                            $model   = $em->getRepository('CarBundle:Model'  )->find($id_model  );
+                        $query = $em->createQuery($select);
+                        $existTicket = $query->getResult();
 
-                            //SI NO HA ESCOGIDO VERSION SE DEJA NULL
-                            if (isset($id_version)) { $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version)); }
-                            else { $id_version = null; }
+                        if($existTicket == null) {
 
-                            // Controla si ya existe el mismo ticket
-                            $desc = $ticket->getDescription();
-                            $desc = $this->fixWrongCharacters($desc);
-                            $select = "SELECT t FROM TicketBundle:Ticket t
-                                            WHERE t.workshop = ".$workshop->getId()."
-                                            AND t.description LIKE '".$desc."'
-                                            AND t.car IN (
-                                                SELECT c FROM CarBundle:Car c
-                                                WHERE c.brand = ".$id_brand."
-                                                AND c.model = ".$id_model." ";
+                            // Controla si se ha subido un fichero erroneo
+                            $file = $document->getFile();
+                            if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
+                            if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
 
-                            if($id_version != null){
-                                $select .= "AND c.version = ".$id_version; }
-                            $select .= ')';
+                            if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
+                             or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
+                                if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000 ){
+                                    //Define CAR
+                                    $car = UtilController::newEntity($car, $user);
 
-                            $query = $em->createQuery($select);
-                            $existTicket = $query->getResult();
+                                    $car->setBrand($brand);
+                                    $car->setModel($model);
+                                    $vin = $car->getVin();
+                                    //SI VIN TIENE LONGITUD 17
+                                    if(strlen($vin) == 17){
+                                        //SI VIN NO CONTIENE 'O'
+                                        if(!strpos(strtolower($vin),'o')){
+                                            if (isset($version))
+                                            {
+                                                $sizeV = sizeof($version);
 
-                            if($existTicket == null) {
-
-                                // Controla si se ha subido un fichero erroneo
-                                $file = $document->getFile();
-                                if (isset($file)) $extension = $file->getMimeType(); else { $extension = '0'; }
-                                if (isset($file)) $size      = $file->getSize();     else { $size      = '0'; }
-
-                                if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
-                                 or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
-
-                                    if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
-                                        //Define CAR
-                                        $car = UtilController::newEntity($car, $user);
-
-                                        $car->setBrand($brand);
-                                        $car->setModel($model);
-                                        $vin = $car->getVin();
-                                        //SI VIN TIENE LONGITUD 17
-                                        if(strlen($vin) == 17){
-                                            //SI VIN NO CONTIENE 'O'
-                                            if(!strpos(strtolower($vin),'o')){
-                                                if (isset($version))
-                                                {
-                                                    $sizeV = sizeof($version);
-
-                                                    if ($sizeV > 0) {
-                                                        $car->setVersion($version);
-                                                    }
+                                                if ($sizeV > 0) {
+                                                    $car->setVersion($version);
                                                 }
-                                                else{
-                                                    $car->setVersion(null);
-                                                }
-
+                                            }
+                                            else{
+                                                $car->setVersion(null);
+                                            }
                                                 $exist_car = '0';
                                                 $exist_vin = $em->getRepository('CarBundle:Car')->findOneByVin($vin);
                                                 $exist_num = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($car->getPlateNumber());
@@ -1238,7 +1217,7 @@ class TicketController extends Controller {
                         if ($extension  == "application/pdf" or $extension  == "application/x-pdf" or $extension  == "image/bmp" or $extension  == "image/jpeg"
                          or $extension  == "image/png" or $extension  == "image/gif" or $extension  == "application/mspowerpoint" or $extension  == "0") {
 
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 4096000 ){
+                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000 ){
                                 $str_len = strlen($post->getMessage());
                                 if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
                                 else { $max_len = 500; }
