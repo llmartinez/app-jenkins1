@@ -492,7 +492,9 @@ class TicketController extends Controller {
         $id_brand = $request->request->get('new_car_form_brand');
         $id_model = $request->request->get('new_car_form_model');
         $id_version = $request->request->get('new_car_form_version');
-        $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+        if(isset($request->request->get('ticket_form')['subsystem'])){
+            $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+        }
 
         if (isset($id_brand) and $id_brand != '' and $id_brand != '0') {
             $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
