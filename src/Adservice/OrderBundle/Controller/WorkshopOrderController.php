@@ -826,6 +826,7 @@ class WorkshopOrderController extends Controller {
             if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
+                $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                 $workshop->setActive(true);
 
                 $action = $workshopOrder->getWantedAction();
@@ -872,8 +873,8 @@ class WorkshopOrderController extends Controller {
             }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
                 $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
-                $workshop->setActive(false);
                 $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $workshop->setActive(false);
 
                 $action = $workshopOrder->getWantedAction();
                 $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
@@ -1137,17 +1138,18 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setNumChecks     ($workshop->getNumChecks());
         $workshopOrder->setInfotech      ($workshop->getInfotech());
 
-        if ($workshopOrder->getCreatedBy() != null ) {
-            $workshopOrder->setCreatedBy($workshopOrder->getCreatedBy());
+        if ($workshop->getCreatedBy() != null ) {
+            $workshopOrder->setCreatedBy($workshop->getCreatedBy());
         }
-        if ($workshopOrder->getCreatedAt() != null ) {
-            $workshopOrder->setCreatedAt($workshopOrder->getCreatedAt());
+        if ($workshop->getCreatedAt() != null ) {
+            $workshopOrder->setCreatedAt($workshop->getCreatedAt());
+            $workshopOrder->setUpdateAt($workshop->getCreatedAt());
         }
-        if ($workshopOrder->getModifiedBy() != null ) {
-            $workshopOrder->setModifiedBy($workshopOrder->getModifiedBy());
+        if ($workshop->getModifiedBy() != null ) {
+            $workshopOrder->setModifiedBy($workshop->getModifiedBy());
         }
-        if ($workshopOrder->getModifiedAt() != null ) {
-            $workshopOrder->setModifiedAt($workshopOrder->getModifiedAt());
+        if ($workshop->getModifiedAt() != null ) {
+            $workshopOrder->setModifiedAt($workshop->getModifiedAt());
         }
         $workshopOrder->setActive(false);
 
@@ -1204,7 +1206,7 @@ class WorkshopOrderController extends Controller {
         if ($workshopOrder->getModifiedAt() != null ) {
             $workshop->setModifiedAt($workshopOrder->getModifiedAt());
         }
-        $workshop->setActive             (true);
+        $workshop->setActive(true);
 
         return $workshop;
     }
