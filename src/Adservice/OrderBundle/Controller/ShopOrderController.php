@@ -125,7 +125,7 @@ class ShopOrderController extends Controller {
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
-                $shopOrder->setPartner($user->getPartner());
+                $shopOrder->setPartner($shop->getPartner());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
