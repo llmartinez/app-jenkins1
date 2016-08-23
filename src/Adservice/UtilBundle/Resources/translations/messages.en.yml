@@ -624,6 +624,7 @@ mail.deleteTicket.info.id:				"The reference code of the deleted ticket is:"
 
 mail.closeTicket.subject:				"ADService | Ticket closed with id #"
 mail.closeTicket.title:					"A ticket has been closed"
+mail.inactiveTicket.title:				"A ticket has been closed for inactivity"
 mail.closeTicket.createdby:				"This ticket has been closed by a consultant:"
 mail.closeTicket.createdby.user:		"You have closed this ticket through the AD-Service Platform."
 mail.closeTicket.info:					"To access this ticket enter the ticket reference code in <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> section "

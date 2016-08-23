@@ -624,6 +624,7 @@ mail.deleteTicket.info.id:				"O código do talão apagado é:"
 
 mail.closeTicket.subject:				"ADService | Talão fechado com o ID #"
 mail.closeTicket.title:					"Foi fechado um talão"
+mail.inactiveTicket.title:				"Foi fechado um talão inativo"
 mail.closeTicket.createdby:				"Este talão foi fechado por um assistente."
 mail.closeTicket.createdby.user:		"Fechou o talão através da plataforma AD-Service."
 mail.closeTicket.info:					"Para aceder a este talão introduza o código de referência do mesmo em <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> na secção "
