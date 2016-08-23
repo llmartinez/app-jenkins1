@@ -246,14 +246,13 @@ class StatisticController extends Controller {
                 if (isset($to_date)) {
                     $qb = $qb->andWhere('e.created_at <= :created_at_to')
                         ->setParameter('created_at_to', $to_date);
-
                 }
 
                 if ($status == "open"  ) {
                     $qb = $qb->andWhere('s.name = :status')
                         ->setParameter('status', 'open');
-                } elseif ($status == "closed") {
-
+                }
+                elseif ($status == "closed") {
                     $qb = $qb->andWhere('s.name = :status')
                         ->setParameter('status', 'closed');
                 }
@@ -283,8 +282,8 @@ class StatisticController extends Controller {
                             ->leftJoin('u.user_role', 'ur')
                             ->andWhere('ur.id != :role')
                             ->setParameter('role', 4);
-                    } elseif($created_by == 'app'){
-
+                    }
+                    elseif($created_by == 'app'){
                         $qb = $qb
                             ->leftJoin('e.created_by', 'u')
                             ->leftJoin('u.user_role', 'ur')

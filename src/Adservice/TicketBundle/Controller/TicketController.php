@@ -1189,15 +1189,16 @@ class TicketController extends Controller {
             $formP = $this->createForm(new PostType(), $post);
             $formD = $this->createForm(new DocumentType(), $document);
 
-            if ($ticket->getSubsystem() != null) {
-                $id_subsystem = $ticket->getSubsystem()->getId();
-                $id_system = $ticket->getSubsystem()->getSystem()->getId();
+            $new_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
+            if ($new_subsystem != null) {
+                $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($new_subsystem);
+                $id_system = $subsystem->getSystem()->getId();
+                $id_subsystem = $new_subsystem;
             } else {
-                $new_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
-                if ($new_subsystem != null) {
-                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($new_subsystem);
-                    $id_system = $subsystem->getSystem()->getId();
-                    $id_subsystem = $new_subsystem;
+
+                if ($ticket->getSubsystem() != null) {
+                    $id_subsystem = $ticket->getSubsystem()->getId();
+                    $id_system = $ticket->getSubsystem()->getSystem()->getId();
                 } else {
                     $id_system = '';
                     $id_subsystem = '';
