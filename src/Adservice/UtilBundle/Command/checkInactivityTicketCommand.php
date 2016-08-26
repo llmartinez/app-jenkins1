@@ -32,7 +32,10 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1));
         $closed_tickets = array();
+        $pending_tickets = array();
         $count = 0;
+        $count_closed = 0;
+        $count_pending = 0;
 
         foreach ($tickets as $ticket) {
 
@@ -42,51 +45,49 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                 $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
                 $close = false;
 
-                if(
-                    ($importance == 'information'          and $diff->days > 10)
-                 or ($importance == 'advanced_diagnostics' and $diff->m    >= 2)
-                ) {
-                    $close = true;
-                }
-
-                if($close) {
+                if( $importance == 'information' and $diff->days > 10)
+                {
                     $closed_tickets[] = $ticket->getId();
                     $count++;
+                    $count_closed++;
 
                     $closed = $em->getRepository('TicketBundle:Status')->find(2);
                     $ticket->setStatus($closed);
                     $ticket->setModifiedAt(new \DateTime());
-                    //$em->persist($ticket);
-                    //$em->flush();
+                    $em->persist($ticket);
+                }
+                elseif ($importance == 'advanced_diagnostics' and $diff->m >= 2)
+                {
+                    $pending_tickets[] = $ticket->getId();
+                    $count++;
+                    $count_pending++;
 
-                    //$mail = $ticket->getWorkshop()->getEmail1();
-
-                    // $message = \Swift_Message::newInstance()
-                    //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
-                    //     ->setFrom('noreply@adserviceticketing.com')
-                    //     ->setTo($mail)
-                    //     ->setCharset('UTF-8')
-                    //     ->setContentType('text/html')
-                    //     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:end_test_workshop.html.twig', array('workshop' => $workshop)));
-
-                    // $this->getContainer()->get('mailer')->send($message);
+                    $ticket->setPending(1);
+                    $ticket->setModifiedAt(new \DateTime());
+                    $em->persist($ticket);
                 }
             }
         }
+        $em->flush();
 
-        // $mail   = 'info@adserviceticketing.com';
-        $mail   = 'dmaya@grupeina.com';
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Se han cerrado '.$count.' tickets por inactividad.')
-            ->setFrom('noreply@adserviceticketing.com')
-            ->setTo($mail)
-            ->setCharset('UTF-8')
-            ->setContentType('text/html')
-            ->setBody($this->getContainer()->get('templating')
-                        ->render('UtilBundle:Mailing:admin_inactivity_tickets.html.twig', array('count' => $count, 'closed_tickets' => $closed_tickets)));
+        if($count > 0) {
+            // $mail   = 'info@adserviceticketing.com';
+            $mail   = 'dmaya@grupeina.com';
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Se han modificado '.$count.' tickets por inactividad.')
+                ->setFrom('noreply@adserviceticketing.com')
+                ->setTo($mail)
+                ->setCharset('UTF-8')
+                ->setContentType('text/html')
+                ->setBody($this->getContainer()->get('templating')
+                            ->render('UtilBundle:Mailing:admin_inactivity_tickets.html.twig', array('count' => $count,
+                                                                                                    'count_closed' => $count_closed,
+                                                                                                    'count_pending' => $count_pending,
+                                                                                                    'closed_tickets' => $closed_tickets,
+                                                                                                    'pending_tickets' => $pending_tickets)));
+            $this->getContainer()->get('mailer')->send($message);
+        }
 
-        $this->getContainer()->get('mailer')->send($message);
-
-        $output->writeln('Se han cerrado '.$count.' tickets por inactividad.');
+        $output->writeln('Se han modificado '.$count.' tickets por inactividad.');
     }
 }
