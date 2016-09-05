@@ -349,7 +349,7 @@ class WorkshopOrderController extends Controller {
         }
         $user = $security->getToken()->getUser();
 
-        if($user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner()){
+        if($user->getPartner() != null AND $user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner()){
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
         if ($security->isGranted('ROLE_SUPER_AD')) {
