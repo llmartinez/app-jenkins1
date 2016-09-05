@@ -363,6 +363,9 @@ class StatisticController extends Controller {
 
                     case "active":
 
+                        // $qb = $qb->andWhere("w.created_at <= '2016-08-15 23:59:59'")
+                        //          ->andWhere("(w.active = 1 AND (w.lowdate_at IS NULL OR w.modified_at > w.lowdate_at)) OR ( w.active = 0 AND w.lowdate_at  >= '2016-08-15 23:59:59' )");
+
                         if(!isset($from_date) and !isset($to_date))
                         {
                             $qb = $qb->andWhere('w.active = 1')
