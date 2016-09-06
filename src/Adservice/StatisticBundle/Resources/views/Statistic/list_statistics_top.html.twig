@@ -43,46 +43,16 @@
             </select>
         </div>
         {% endif %}
-        <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} raport {% endtrans %}</label>
+        <div  style="display: none" class="col-xs-12 col-md-12 form-group"> <label> {% trans %} raport {% endtrans %}</label>
             <select id="flt_raport" class='form-control'>
                 <option value="0"                             >{% trans %} any                            {% endtrans %}</option>
-
-                {# Talleres sin tickets #}
-                <option value="no-ticket"                     >{% trans %} statistic.no_ticket            {% endtrans %}</option>
-
-                {# Últimos tickets de los talleres #}
-                <option value="last-tickets"                  >{% trans %} statistic.last_tickets         {% endtrans %}</option>
-
-                {# TOP TEN de talleres por socio #}
-                <option value="numworkshopbypartner"          >{% trans %} numworkshopbypartner  {% endtrans %}</option>
-
-                {# TOP TEN de tickets de talleres por socio #}
-                <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner  {% endtrans %}</option>
-
-                {# TOP TEN de tickets por socio #}
-                <option value="numticketsbypartner"           >{% trans %} numticketsbypartner     {% endtrans %}</option>
-
-                {# TOP TEN de tickets por sistema/subsistema #}
-                <option value="numticketsbysystem"            >{% trans %} numticketsbysystem      {% endtrans %}</option>
-
-                {# TOP TEN de tickets por marca #}
-                <option value="numticketsbybrand"             >{% trans %} numticketsbybrand       {% endtrans %}</option>
-
-                {# TOP TEN de tickets por modelo #}
-                <option value="numticketsbymodel"             >{% trans %} numticketsbymodel       {% endtrans %}</option>
-
-                {# TOP TEN de tickets por año de fabricacion #}
-                <option value="numticketsbyfabyear"           >{% trans %} numticketsbyfabyear  {% endtrans %}</option>
-
-                {# Numero de tickets por meses de un taller #}
-                <option value="numticketsbymonth"           >{% trans %} numticketsbymonth  {% endtrans %}</option>
-             </select>
+            </select>
         </div>
     </div>
 
     <div class="col-xs-7 col-md-7 form-group">
 {# FILTROS DE TICKET #}
-        <div class="col-xs-6 col-md-6 form-group">
+       {# <div class="col-xs-6 col-md-6 form-group">
             <legend>{% trans %} filter_ticket {% endtrans %}</legend>
             <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} workshop {% endtrans %}</label>
                 <select id="flt_tck_workshop" class='form-control'>
@@ -118,7 +88,7 @@
                 <button class="btn btn-primary btn100" id="btn_search_ticket" style="margin-top: 4px;">
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.ticket {% endtrans %}</button>
             </div>
-        </div>
+        </div>#}
 
 {# FILTROS DE TALLER #}
         <div class="col-xs-6 col-md-6 form-group">

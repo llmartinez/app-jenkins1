@@ -257,7 +257,7 @@ function fill_version(version) {
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
     if (motor == undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
 
-    if (id_model != undefined && id_model != "" && id_model != "0") {
+    if (id_model != undefined && id_model != "") {
         var route  = 'car_version';
         var locale = $(document).find("#data_locale").val();
         var filter = '';
