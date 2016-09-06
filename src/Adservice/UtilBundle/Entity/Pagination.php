@@ -16,9 +16,9 @@ class Pagination
     private $total_pag;      //Numero total de paginas
 
     public function __construct($page=1) {
+        $this->setPage($page);
         $this->setMaxRows(10);
         $this->setNumSidePages(5);
-        $this->setPage($page);
         $this->setLastRow($this->getMaxRows() * $page);
         $this->setFirstRow($this->getLastRow() - $this->getMaxRows()  );
     }
@@ -35,6 +35,8 @@ class Pagination
     public function setMaxRows($max_rows)
     {
         $this->max_rows = $max_rows;
+        $this->last_row = $this->max_rows * $this->page;
+        $this->first_row = $this->last_row - $this->max_rows;
     }
     /**
      * Get max_rows
