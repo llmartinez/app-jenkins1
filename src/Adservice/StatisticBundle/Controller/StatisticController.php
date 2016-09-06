@@ -28,7 +28,7 @@ class StatisticController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
             $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 and a.active = 1 ");
             $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.active = 1 ");
             $partners   = $qp->getResult();
@@ -40,7 +40,7 @@ class StatisticController extends Controller {
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." AND s.active = 1 ");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
             $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." AND a.active = 1 ");
             $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." AND t.active = 1 ");
             $partners   = $qp->getResult();
@@ -246,14 +246,13 @@ class StatisticController extends Controller {
                 if (isset($to_date)) {
                     $qb = $qb->andWhere('e.created_at <= :created_at_to')
                         ->setParameter('created_at_to', $to_date);
-
                 }
 
                 if ($status == "open"  ) {
                     $qb = $qb->andWhere('s.name = :status')
                         ->setParameter('status', 'open');
-                } elseif ($status == "closed") {
-
+                }
+                elseif ($status == "closed") {
                     $qb = $qb->andWhere('s.name = :status')
                         ->setParameter('status', 'closed');
                 }
@@ -283,8 +282,8 @@ class StatisticController extends Controller {
                             ->leftJoin('u.user_role', 'ur')
                             ->andWhere('ur.id != :role')
                             ->setParameter('role', 4);
-                    } elseif($created_by == 'app'){
-
+                    }
+                    elseif($created_by == 'app'){
                         $qb = $qb
                             ->leftJoin('e.created_by', 'u')
                             ->leftJoin('u.user_role', 'ur')
