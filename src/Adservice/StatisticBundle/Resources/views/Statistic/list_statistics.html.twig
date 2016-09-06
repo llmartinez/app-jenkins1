@@ -85,7 +85,7 @@
                 <select id="flt_tck_workshop" class='form-control'>
                         <option value="0">{% trans %} all {% endtrans %}</option>
                      {% for workshop in workshops %}
-                        <option value="{{ workshop.id }}">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</option>
+                        <option value="{{ workshop.id }}">{{ workshop.codePartner }}-{{ workshop.codeWorkshop }}: {{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</option>
                     {% endfor %}
                 </select>
             </div>

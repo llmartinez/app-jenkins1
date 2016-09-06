@@ -29,35 +29,46 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('test' => 1));
-        //$count = 0;
+        $count = 0;
 
         foreach ($workshops as $workshop) {
 
-            $diff = date_diff(new \DateTime(), $workshop->getEndtestAt());
+            if($workshop->getEndtestAt() != null ){
 
-            if(($diff->invert == 1 and $diff->days >= 0)) {
+                $diff = date_diff(new \DateTime(), $workshop->getEndtestAt());
 
-                // $mail   = 'info@adserviceticketing.com';
-                // $mail   = 'dmaya@grupeina.com';
+                if(($diff->invert == 1 and $diff->days >= 0))
+                {
+                    // $mail   = 'info@adserviceticketing.com';
+                    // $mail   = 'dmaya@grupeina.com';
 
-                // $message = \Swift_Message::newInstance()
-                //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
-                //     ->setFrom('noreply@adserviceticketing.com')
-                //     ->setTo($mail)
-                //     ->setCharset('UTF-8')
-                //     ->setContentType('text/html')
-                //     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:end_test_workshop.html.twig', array('workshop' => $workshop)));
+                    // $message = \Swift_Message::newInstance()
+                    //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
+                    //     ->setFrom('noreply@adserviceticketing.com')
+                    //     ->setTo($mail)
+                    //     ->setCharset('UTF-8')
+                    //     ->setContentType('text/html')
+                    //     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:end_test_workshop.html.twig', array('workshop' => $workshop)));
 
-                // $this->getContainer()->get('mailer')->send($message);
+                    // $this->getContainer()->get('mailer')->send($message);
 
-                $workshop->setEndtestAt(null);
+                    $workshop->setEndtestAt(null);
+                    $workshop->setTest(0);
+                    $em->persist($workshop);
+                    $em->flush();
+
+                    $count++;
+                }
+            }
+            else
+            {
                 $workshop->setTest(0);
                 $em->persist($workshop);
                 $em->flush();
 
-                //$count++;
+                $count++;
             }
-            // $output->writeln('Se han modificado '.$count.' talleres.');
         }
+        $output->writeln('Se han modificado '.$count.' talleres.');
     }
 }
