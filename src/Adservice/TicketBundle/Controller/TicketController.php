@@ -1224,7 +1224,7 @@ class TicketController extends Controller {
                 $array['form'] = $form->createView();
             }
             if ($request->getMethod() == 'POST') {
-
+                 
                 //Define Ticket
                 if ($security->isGranted('ROLE_ASSESSOR')) {
 
@@ -1272,60 +1272,121 @@ class TicketController extends Controller {
                                     $max_len = 500;
                                 }
                                 if ($str_len <= $max_len) {
-                                    //Define Post
-                                    $post = UtilController::newEntity($post, $user);
-                                    $post->setTicket($ticket);
-                                    UtilController::saveEntity($em, $post, $user, false);
+                                    if($request->request->has("sendTicket")){
+                                        //Define Post
+                                        $post = UtilController::newEntity($post, $user);
+                                        $post->setTicket($ticket);
+                                        UtilController::saveEntity($em, $post, $user, false);
 
-                                    //Define Document
-                                    $document->setPost($post);
+                                        //Define Document
+                                        $document->setPost($post);
 
-                                    if ($file != "") {
-                                        $em->persist($document);
-                                    }
-
-                                    //Se desbloquea el ticket una vez respondido
-                                    if ($ticket->getBlockedBy() != null) {
-                                        $ticket->setBlockedBy(null);
-                                    }
-
-                                    /* si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
-                                    if ($security->isGranted('ROLE_ASSESSOR')) {
-                                        $ticket->setAssignedTo($user);
-                                        $ticket->setPending(0);
-                                    } else {
-                                        $ticket->setPending(1);
-                                    }
-
-                                    UtilController::saveEntity($em, $ticket, $user);
-
-                                    $mail = $ticket->getWorkshop()->getEmail1();
-                                    $pos = strpos($mail, '@');
-
-                                    if ($pos != 0) {
-
-                                        // Cambiamos el locale para enviar el mail en el idioma del taller
-                                        $locale = $request->getLocale();
-                                        $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                                        $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                                        $request->setLocale($lang->getShortName());
-
-                                        /* MAILING */
-                                        $mailer = $this->get('cms.mailer');
-                                        $mailer->setTo($mail);
-                                        $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject') . $ticket->getId());
-                                        $mailer->setFrom('noreply@adserviceticketing.com');
-                                        $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-                                        $mailer->sendMailToSpool();
-
-                                        if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
-                                            $mailer->setTo($ticket->getAssignedTo()->getEmail1());
-                                            $mailer->sendMailToSpool();
+                                        if ($file != "") {
+                                                $em->persist($document);
                                         }
-                                        //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
-                                        // Dejamos el locale tal y como estaba
-                                        $request->setLocale($locale);
-                                        $request->getSession()->set('message', '');
+
+                                        //Se desbloquea el ticket una vez respondido
+                                        if ($ticket->getBlockedBy() != null) {
+                                            $ticket->setBlockedBy(null);
+                                        }
+
+                                        /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
+                                        if ($security->isGranted('ROLE_ASSESSOR')) {
+                                            $ticket->setAssignedTo($user);
+                                            $ticket->setPending(0);
+                                        }else{
+                                            $ticket->setPending(1);
+                                        }
+
+                                        UtilController::saveEntity($em, $ticket, $user);
+
+                                        $mail = $ticket->getWorkshop()->getEmail1();
+                                        $pos = strpos($mail, '@');
+
+                                        if ($pos != 0) {
+
+                                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                                            $locale = $request->getLocale();
+                                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                            $request->setLocale($lang->getShortName());
+
+                                            /* MAILING */
+                                            $mailer = $this->get('cms.mailer');
+                                            $mailer->setTo($mail);
+                                            $mailer->setSubject($this->get('translator')->trans('mail.answerTicket.subject').$ticket->getId());
+                                            $mailer->setFrom('noreply@adserviceticketing.com');
+                                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                                            $mailer->sendMailToSpool();
+
+                                            if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
+                                                $mailer->setTo($ticket->getAssignedTo()->getEmail1());
+                                                $mailer->sendMailToSpool();
+                                            }
+                                            //echo $this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket));die;
+
+                                            // Dejamos el locale tal y como estaba
+                                            $request->setLocale($locale);
+                                            $request->getSession()->set('message', '');
+                                        }
+                                    } elseif ($request->request->has("closeTicket")){
+                                        //Define Post
+                                        $post = UtilController::newEntity($post, $user);
+                                        $post->setTicket($ticket);
+                                        $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                                        $ticket->setStatus($closed);
+                                        $ticket->setSolution($post->getMessage());
+                                        $ticket->setPending(0);
+                                        $ticket->setBlockedBy(null);
+                                        UtilController::saveEntity($em, $ticket, $user);
+                                        
+                                        $mail = $ticket->getWorkshop()->getEmail1();
+                                        $pos = strpos($mail, '@');
+                                        if ($pos != 0) {
+
+                                            // Cambiamos el locale para enviar el mail en el idioma del taller
+                                            $locale = $request->getLocale();
+                                            $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                            $request->setLocale($lang->getShortName());
+
+                                            /* MAILING */
+                                            $mailer = $this->get('cms.mailer');
+                                            $mailer->setTo($mail);
+                                            $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
+                                            $mailer->setFrom('noreply@adserviceticketing.com');
+                                            $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                                            $mailer->sendMailToSpool();
+                                            //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+
+                                            // Dejamos el locale tal y como estaba
+                                            $request->setLocale($locale);
+                                        }
+                                        //Si es el taller el que cierra, se le envia un mail al asesor asignado
+                                        if ($ticket->getAssignedTo() != null) {
+                                            $mail = $ticket->getAssignedTo()->getEmail1();
+                                            $pos = strpos($mail, '@');
+                                            if ($pos != 0) {
+
+                                                // Cambiamos el locale para enviar el mail en el idioma del taller
+                                                $locale = $request->getLocale();
+                                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                                $request->setLocale($lang->getShortName());
+
+                                                /* MAILING */
+                                                $mailer = $this->get('cms.mailer');
+                                                $mailer->setTo($mail);
+                                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$ticket->getId());
+                                                $mailer->setFrom('noreply@adserviceticketing.com');
+                                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                                                $mailer->sendMailToSpool();
+                                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+
+                                                // Dejamos el locale tal y como estaba
+                                                $request->setLocale($locale);
+                                            }
+                                        }                                        
                                     }
                                 } else {
                                     $request->getSession()->set('message', $post->getMessage());
@@ -1406,131 +1467,130 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function closeTicketAction($id, $ticket, $close = '1') {
-        $message = '';
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_SUPER_ADMIN')
-                or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
-        ) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $request = $this->getRequest();
-
-            if ($security->isGranted('ROLE_ASSESSOR') === false)
-                $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
-            else
-                $form = $this->createForm(new CloseTicketType(), $ticket);
-
-            if ($request->getMethod() == 'POST') {
-                $form->bindRequest($request);
-                if ($request->request->get('sol_other_txt') != '') {
-                    $message = $request->request->get('sol_other_txt');
-                } else {
-                    $message = $request->getSession()->get('message');
-                }
-
-                /* Validacion Ticket */
-                $str_len = strlen($message);
-                if ($security->isGranted('ROLE_ASSESSOR')) {
-                    $max_len = 10000;
-                } else {
-                    $max_len = 500;
-                }
-
-                if ($str_len <= $max_len) {
-
-                    if ($form->isValid()) {
-
-                        if ($security->isGranted('ROLE_ASSESSOR') === false) {
-                            if ($ticket->getSolution() == "0")
-                                $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
-                            elseif ($ticket->getSolution() == "1")
-                                $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
-                            elseif ($ticket->getSolution() == "2")
-                                $ticket->setSolution($this->get('translator')->trans('ticket.close_other') . ': ' . $message);
-                        }
-
-                        if ($ticket->getSolution() != "") {
-
-                            $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                            $user = $security->getToken()->getUser();
-                            $ticket->setStatus($closed);
-                            $ticket->setPending(0);
-                            $ticket->setBlockedBy(null);
-
-                            UtilController::saveEntity($em, $ticket, $user);
-
-                            $mail = $ticket->getWorkshop()->getEmail1();
-                            $pos = strpos($mail, '@');
-                            if ($pos != 0) {
-
-                                // Cambiamos el locale para enviar el mail en el idioma del taller
-                                $locale = $request->getLocale();
-                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                                $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                                $request->setLocale($lang->getShortName());
-
-                                /* MAILING */
-                                $mailer = $this->get('cms.mailer');
-                                $mailer->setTo($mail);
-                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject') . $id);
-                                $mailer->setFrom('noreply@adserviceticketing.com');
-                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-                                $mailer->sendMailToSpool();
-                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
-                                // Dejamos el locale tal y como estaba
-                                $request->setLocale($locale);
-                            }
-                            //Si es el taller el que cierra, se le envia un mail al asesor asignado
-                            if ($ticket->getAssignedTo() != null) {
-                                $mail = $ticket->getAssignedTo()->getEmail1();
-                                $pos = strpos($mail, '@');
-                                if ($pos != 0) {
-
-                                    // Cambiamos el locale para enviar el mail en el idioma del taller
-                                    $locale = $request->getLocale();
-                                    $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-                                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                                    $request->setLocale($lang->getShortName());
-
-                                    /* MAILING */
-                                    $mailer = $this->get('cms.mailer');
-                                    $mailer->setTo($mail);
-                                    $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject') . $id);
-                                    $mailer->setFrom('noreply@adserviceticketing.com');
-                                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-                                    $mailer->sendMailToSpool();
-                                    //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
-                                    // Dejamos el locale tal y como estaba
-                                    $request->setLocale($locale);
-                                }
-                            }
-
-                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
-                        } else {
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
-                        }
-                    } else {
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
-                    }
-                } else {
-                    $request->getSession()->set('message', $message);
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length') . ' ' . $max_len . ' ' . $this->get('translator')->trans('error.txt_chars') . '.');
-                }
-            }
-
-            $systems = $em->getRepository('TicketBundle:System')->findAll();
-
-            return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket' => $ticket,
-                        'message' => $message,
-                        'systems' => $systems,
-                        'form' => $form->createView(),
-                        'form_name' => $form->getName(),
-                        'close' => $close));
-        } else {
-            return $this->render('TwigBundle:Exception:exception_access.html.twig');
-        }
-    }
+//    public function closeTicketAction($id, $ticket, $close='1')
+//    {   
+//        $message = '';
+//        $security = $this->get('security.context');
+//        if ($security->isGranted('ROLE_SUPER_ADMIN')
+//        or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
+//        or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+//        ){
+//            $em = $this->getDoctrine()->getEntityManager();
+//            $request  = $this->getRequest();
+//
+//            if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+//            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
+//
+//            if ($request->getMethod() == 'POST') {
+//                $form->bindRequest($request);
+//                if($request->request->get('sol_other_txt') != ''){
+//                    $message = $request->request->get('sol_other_txt');
+//                }
+//                else{
+//                    $message= $request->getSession()->get('message');
+//                }
+//                    
+//                /*Validacion Ticket*/
+//                $str_len = strlen($message);
+//                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+//                else { $max_len = 500; }
+//
+//                if ($str_len <= $max_len ) {
+//                    
+//                    if ($form->isValid()) {
+//
+//                        if ($security->isGranted('ROLE_ASSESSOR') === false) {
+//                            if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
+//                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
+//                            elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$message);
+//                        }
+//
+//                        if($ticket->getSolution() != ""){
+//
+//                            $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+//                            $user   = $security->getToken()->getUser();
+//                            $ticket->setStatus($closed);
+//                            $ticket->setPending(0);
+//                            $ticket->setBlockedBy(null);
+//
+//                            UtilController::saveEntity($em, $ticket, $user);
+//
+//                            $mail = $ticket->getWorkshop()->getEmail1();
+//                            $pos = strpos($mail, '@');
+//                            if ($pos != 0) {
+//
+//                                // Cambiamos el locale para enviar el mail en el idioma del taller
+//                                $locale = $request->getLocale();
+//                                $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+//                                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+//                                $request->setLocale($lang->getShortName());
+//
+//                                /* MAILING */
+//                                $mailer = $this->get('cms.mailer');
+//                                $mailer->setTo($mail);
+//                                $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+//                                $mailer->setFrom('noreply@adserviceticketing.com');
+//                                $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+//                                $mailer->sendMailToSpool();
+//                                //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+//
+//                                // Dejamos el locale tal y como estaba
+//                                $request->setLocale($locale);
+//                            }
+//                            //Si es el taller el que cierra, se le envia un mail al asesor asignado
+//                            if ($ticket->getAssignedTo() != null) {
+//                                $mail = $ticket->getAssignedTo()->getEmail1();
+//                                $pos = strpos($mail, '@');
+//                                if ($pos != 0) {
+//
+//                                    // Cambiamos el locale para enviar el mail en el idioma del taller
+//                                    $locale = $request->getLocale();
+//                                    $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+//                                    $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+//                                    $request->setLocale($lang->getShortName());
+//
+//                                    /* MAILING */
+//                                    $mailer = $this->get('cms.mailer');
+//                                    $mailer->setTo($mail);
+//                                    $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+//                                    $mailer->setFrom('noreply@adserviceticketing.com');
+//                                    $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+//                                    $mailer->sendMailToSpool();
+//                                    //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+//
+//                                    // Dejamos el locale tal y como estaba
+//                                    $request->setLocale($locale);
+//                                }
+//                            }
+//
+//                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+//                        }
+//                        else{
+//                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+//                        }
+//                    }else{
+//                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+//                    }
+//                }else{ 
+//                    $request->getSession()->set('message', $message);
+//                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); 
+//                    
+//                }
+//            }
+//
+//            $systems = $em->getRepository('TicketBundle:System')->findAll();
+//
+//            return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+//                                                                                            'message'   => $message,
+//                                                                                            'systems'   => $systems,
+//                                                                                            'form'      => $form->createView(),
+//                                                                                            'form_name' => $form->getName(),
+//                                                                                            'close'     => $close ));
+//        }
+//        else{
+//            return $this->render('TwigBundle:Exception:exception_access.html.twig');
+//        }
+//    }
 
     /**
      * Edita la descripcion del ticket
