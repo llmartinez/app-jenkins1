@@ -37,7 +37,7 @@ class WorkshopType extends AbstractType
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country)
+                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
                                                           ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('typology', 'entity', array(
                   'required' => true,
