@@ -112,7 +112,7 @@ class ShopOrderController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-
+       
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -120,12 +120,13 @@ class ShopOrderController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
+                $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
+                $partner = $em->getRepository("PartnerBundle:Partner")->find($partner_id);
                 $user = $security->getToken()->getUser();
-
+                
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
-                $shopOrder->setPartner($user->getPartner());
+                $shopOrder->setPartner($partner);
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
