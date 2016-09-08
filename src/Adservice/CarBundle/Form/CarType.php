@@ -18,8 +18,8 @@ class CarType extends AbstractType
                 ->add('motor', 'text', array('required'=>false))
                 ->add('kW', 'text', array('required'=>'0'))
                 ->add('displacement', 'text', array('required'=>'0'))
-                ->add('vin', 'text', array('required'=>'true'))
-                ->add('plateNumber', 'text', array('required'=>'true'))
+                ->add('vin', 'text', array('required'=>'true', 'attr'=>array( 'maxlength'=>'17')))
+                ->add('plateNumber', 'text', array('required'=>'true'))                
                 ;
     }
     public function getName()
