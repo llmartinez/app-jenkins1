@@ -451,14 +451,24 @@ class StatisticController extends Controller {
                     default:
                         if (isset($from_date))
                         {
-                            $qb = $qb->andWhere('w.created_at >= :created_at_from')
-                                ->setParameter('created_at_from', $from_date);
+                            if (!isset($to_date))
+                            {
+                                $qb = $qb->andWhere('w.created_at >= :created_at_from')
+                                         ->setParameter('created_at_from', $from_date);
+                            }
+                            $qb = $qb->andWhere('w.lowdate_at > :from_date OR w.lowdate_at IS NULL')
+                                     ->setParameter('from_date', $from_date);
                         }
 
                         if (isset($to_date))
                         {
+                            if (!isset($from_date))
+                            {
+                                $qb = $qb->andWhere('w.lowdate_at > :from_date')
+                                     ->setParameter('from_date', $to_date);
+                            }
                             $qb = $qb->andWhere('w.created_at <= :created_at_to')
-                                ->setParameter('created_at_to', $to_date);
+                                     ->setParameter('created_at_to', $to_date);
                         }
                         break;
                 }
