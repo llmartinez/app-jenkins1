@@ -392,7 +392,12 @@ class TicketController extends Controller {
         if ($option == null)
             $option = 'all';
 
-        $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        }
+        else{
+            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
+        }
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
@@ -495,16 +500,15 @@ class TicketController extends Controller {
         if(isset($request->request->get('ticket_form')['subsystem'])){
             $id_subsystem = $request->request->get('ticket_form')['subsystem'];
         }
-
-        if (isset($id_brand) and $id_brand != '' and $id_brand != '0') {
+        if (isset($id_brand) and $id_brand != '') {
             $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
             $car->setBrand($brand);
         }
-        if (isset($id_model) and $id_model != '' and $id_model != '0') {
+        if (isset($id_model) and $id_model != '') {
             $model = $em->getRepository('CarBundle:Model')->find($id_model);
             $car->setModel($model);
         }
-        if (isset($id_version) and $id_version != '' and $id_version != '0') {
+        if (isset($id_version) and $id_version != '') {
 
             $version = $em->getRepository('CarBundle:Version')->findById($id_version);
             $car->setVersion($version);
@@ -568,7 +572,12 @@ class TicketController extends Controller {
         }
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        }
+        else{
+            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
+        }
         $brands = $b_query->getResult();
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshop->getId()));
 
@@ -585,9 +594,9 @@ class TicketController extends Controller {
             $form->bindRequest($request);
             $formC->bindRequest($request);
             $formD->bindRequest($request);
-
-            if ($ticket->getDescription() != null and $car->getBrand() != null and $car->getBrand()->getId() != null
-                    and $car->getModel() != null and $car->getModel()->getId() != null and $car->getVin() != null and $car->getPlateNumber() != null) {
+            
+            if ($ticket->getDescription() != null and $car->getBrand() != null and ($car->getBrand()->getId() == 0 || $car->getBrand()->getId() != null)
+                    and $car->getModel() != null and ($car->getModel()->getId() == 0 || $car->getModel()->getId() != null) and $car->getVin() != null and $car->getPlateNumber() != null) {
                 $array = array('ticket' => $ticket,
                     'form' => $form->createView(),
                     'formC' => $formC->createView(),
@@ -1926,7 +1935,12 @@ class TicketController extends Controller {
         else
             $tickets = array();
 
-        $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        }
+        else{
+            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
+        }
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();

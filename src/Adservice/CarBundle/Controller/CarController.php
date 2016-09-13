@@ -21,7 +21,7 @@ class CarController extends Controller {
     public function editCarAction($id, $ticket) {
         $em        = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
+        $security   = $this->get('security.context');
         $car = $ticket->getCar();
         $formC = $this->createForm(new CarType(), $car);
         // Esto es Magia: por algun motivo sin esto no carga nombre de Version en edit_car
@@ -72,8 +72,14 @@ class CarController extends Controller {
 
             }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
-
-        $brands      = $em->getRepository('CarBundle:Brand'        )->findBy(array(), array('name' => 'ASC'));
+        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        }
+        else{
+           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
+        }
+        $brands    = $b_query->getResult();
+        //$brands      = $em->getRepository('CarBundle:Brand'        )->findBy(array(), array('name' => 'ASC'));
         $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getBrand()->getId());
         $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getModel()->getId());
 

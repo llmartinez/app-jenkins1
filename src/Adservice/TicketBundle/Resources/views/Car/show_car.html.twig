@@ -3,9 +3,11 @@
 
         {% if is_granted('ROLE_ADMIN') or ticket.blockedBy == app.security.getToken().getUser() or (ticket.workshop == app.security.getToken().getUser().getWorkshop() and ticket.assignedTo == NULL and ticket.pending == 1 ) and ticket.status != 'closed' %}
             {# editar Ticket #}
-            <a href="{{ path('editCar', { 'id': ticket.id }) }}">
-            	<img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{% trans %} edit.car {% endtrans %}"></span>
-            </a>
+            {% if car.brand.id  != "0" or is_granted('ROLE_ADMIN') %}                         
+                <a href="{{ path('editCar', { 'id': ticket.id }) }}">
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{% trans %} edit.car {% endtrans %}"></span>
+                </a>
+            {% endif %}    
         {% endif %}
     </legend>
 

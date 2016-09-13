@@ -189,7 +189,7 @@ function fill_model(model) {
 
     var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
 
-    if (id_brand != undefined && id_brand != "" && id_brand != "0") {
+    if (id_brand != undefined && id_brand != "") {
 
         var route  = 'car_model';
         var locale = $(document).find("#data_locale").val();
@@ -232,9 +232,25 @@ function fill_model(model) {
                         // }
                     });
                 }
-                if(model != undefined && model != '' ) {
+                if(id_brand == 0){
+                    $('#new_car_form_model').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
+                    $('#new_car_form_version').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
+                    $("#new_car_form_year").val("2000 - 2017");
+                    $("#new_car_form_motor").val("0");
+                    $("#new_car_form_kW").val("0");
+                    $("#new_car_form_displacement").val("0");
+                    $("#new_car_form_vin").val("99999999999999999");
+                    $("#new_car_form_plateNumber").val("OTHER");
+//                    var version = $("#ticket_version").val();
+//                    if(version != undefined && version != ""){
+//                        fill_version(version);
+//                    }
+                }
+                else if(model != undefined && model != '' ) {
                     var version = $("#ticket_version").val();
-                    if(version != undefined && version != "" && version != "0"){
+                    if(version != undefined && version != ""){
                         fill_version(version);
                     }
                 }
@@ -355,7 +371,7 @@ function fill_car_data() {
     var year = $('form[id=contact]').find('input[id=flt_year]').val();
     if (year = undefined) year = $('form[id=contact]').find('input[id=new_car_form_year]').val();
 
-    if (id_version != undefined && id_version != "" && id_version != "0") {
+    if (id_version != undefined && id_version != "") {
         var route  = 'car_data';
         var locale = $(document).find("#data_locale").val();
 
@@ -752,16 +768,28 @@ function get_country_partner(id_partner){
             success: function (data) {
                if (data['error'] !== "No hay coincidencias") {
                     var versionId = data.versionId;
-                    $("#ticket_version").val(versionId);
-                    $('select#new_car_form_brand' ).val(data.brandId);
-                    $("#new_car_form_year").val(data.year);
-                    $("#new_car_form_motor").val(data.motor);
-                    $("#new_car_form_kW").val(data.kw);
-                    $("#new_car_form_displacement").val(data.cm3);
-                    $("#new_car_form_vin").val(data.vin);
-                    $("#ticket_model").val(data.modelId);
+//                    $("#ticket_version").val(versionId);
+//                    $('select#new_car_form_brand' ).val(data.brandId);
+//                    $("#new_car_form_year").val(data.year);
+//                    $("#new_car_form_motor").val(data.motor);
+//                    $("#new_car_form_kW").val(data.kw);
+//                    $("#new_car_form_displacement").val(data.cm3);
+//                    $("#new_car_form_vin").val(data.vin);
+//                    $("#ticket_model").val(data.modelId);
+//
+//                    setTimeout(fill_model(data.modelId), 1000);
 
-                    setTimeout(fill_model(data.modelId), 1000);
+                   $('select#new_car_form_brand' ).val(data.brandId)
+                   $("#ticket_model").val(data.modelId);
+                   $("#ticket_version").val(versionId);
+                   
+                   setTimeout(fill_model(data.modelId), 500);
+                   setTimeout($("#new_car_form_year").val(data.year), 1000);
+                   setTimeout($("#new_car_form_motor").val(data.motor), 1000);
+                   $("#new_car_form_kW").val(data.kw);
+                   $("#new_car_form_displacement").val(data.cm3);
+                   $("#new_car_form_vin").val(data.vin);
+
                }
                else {
                    alert($("#msg_plate_number_not_found").val());
