@@ -678,7 +678,6 @@ class ShopOrderController extends Controller {
             $shop->setActive(true);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            UtilController::newEntity($shop, $user);
             UtilController::saveEntity($em, $shop, $user);
 
         }elseif (( $shopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
