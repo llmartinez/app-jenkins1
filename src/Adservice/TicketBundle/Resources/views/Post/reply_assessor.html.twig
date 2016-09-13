@@ -41,14 +41,18 @@
                 {{ form_rest(formD) }}
 
                 <div class="grid-full w100 mt20">
-                {% if close is defined and close == '0' %}
+                {#{% if close is defined and close == '0' %}
                     <a class="btn btn-primary fr grid-33 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id, 'close': '0' }) }}">
                 {% else %}
                     <a class="btn btn-primary fr grid-33 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
                 {% endif %}
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}
-                    </a>
-                    <button class="btn btn-primary fr grid-33 sendTicket" type="submit">
+                    </a>#}
+                    
+                    <button class="btn btn-primary fr grid-33 closeTicket" name="closeTicket" type="submit">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}
+                    </button>
+                    <button class="btn btn-primary fr grid-33 sendTicket" name="sendTicket" type="submit">
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}
                     </button>
                 </div>

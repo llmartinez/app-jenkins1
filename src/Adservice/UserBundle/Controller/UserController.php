@@ -42,12 +42,7 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-        if(isset($user)) {
-            if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
-                 $currentPath = $this->generateUrl('accept_privacy');
-                 return $this->redirect($currentPath);
-            }
-        }
+       
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
@@ -59,9 +54,17 @@ class UserController extends Controller {
                 $lang   = substr($lang, 0, strrpos($lang, '_'));
             }
             else{ $lang   = 'es'; }
-
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
+            if(isset($user)) {
+                if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
+                     $currentPath = $this->generateUrl('accept_privacy');
+                     $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+                     $_SESSION['lang'] = $lang;
+                     return $this->redirect($currentPath);
+                }
+            }
+           
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
             elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
 
