@@ -35,7 +35,7 @@ class OrderController extends Controller
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
-        if    ($role == "ROLE_SUPER_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
+        if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
                                             $workshop_pending[]  = $by_country;
                                             $workshop_pending[]  = $not_rejected;
                                             $workshop_rejected[] = $by_country;
