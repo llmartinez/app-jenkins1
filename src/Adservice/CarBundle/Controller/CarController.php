@@ -50,6 +50,9 @@ class CarController extends Controller {
 
                         //SI NO HA ESCOGIDO VERSION DE DEJA NULL
                         $id_version = $request->request->get('new_car_form_version');
+                        if($id_version == 0 && $id_brand != 0){
+                            $id_version = null;
+                        }    
                         if (isset($id_version)){
                             $version = $em->getRepository('CarBundle:Version')->findById($id_version);
                         }
@@ -64,6 +67,7 @@ class CarController extends Controller {
                         else{
                             $car->setVersion(null);
                         }
+                       
                         UtilController::saveEntity($em, $car, $user);
 
                         return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));

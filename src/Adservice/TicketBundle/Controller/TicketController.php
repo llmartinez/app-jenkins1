@@ -613,11 +613,13 @@ class TicketController extends Controller {
                         $id_brand = $request->request->get('new_car_form_brand');
                         $id_model = $request->request->get('new_car_form_model');
                         $id_version = $request->request->get('new_car_form_version');
-
+                        if($id_version == 0 && $id_brand != 0){
+                            $id_version = null;
+                        }    
                         $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
                         $model = $em->getRepository('CarBundle:Model')->find($id_model);
 
-                        //SI NO HA ESCOGIDO VERSION SE DEJA NULL
+                        //SI NO HA ESCOGIDO VERSION SE DEJA NULL                        
                         if (isset($id_version)) {
                             $version = $em->getRepository('CarBundle:Version')->findOneBy(array('id' => $id_version));
                         } else {
@@ -642,7 +644,7 @@ class TicketController extends Controller {
 
                         $query = $em->createQuery($select);
                         $existTicket = $query->getResult();
-
+                      
                         if ($existTicket == null) {
 
                             // Controla si se ha subido un fichero erroneo
