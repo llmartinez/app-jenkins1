@@ -225,10 +225,12 @@ class PartnerController extends Controller {
                 else{
                     $partner = UtilController::settersContact($partner, $partner, $actual_region, $actual_city);
                     $user_partner = $em->getRepository('UserBundle:User')->findOneByPartner($partner);
-                    $user_partner = UtilController::saveUserFromWorkshop($partner,$user_partner);
-                    $user_partner->setName($partner->getContact());
-                    $user_partner->setActive($partner->getActive());
-                    UtilController::saveEntity($em, $user_partner, $this->get('security.context')->getToken()->getUser());
+                    if($user_partner != null) {
+                        $user_partner = UtilController::saveUserFromWorkshop($partner,$user_partner);
+                        $user_partner->setName($partner->getContact());
+                        $user_partner->setActive($partner->getActive());
+                        UtilController::saveEntity($em, $user_partner, $this->get('security.context')->getToken()->getUser());
+                    }
                     UtilController::saveEntity($em, $partner, $this->get('security.context')->getToken()->getUser());
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
