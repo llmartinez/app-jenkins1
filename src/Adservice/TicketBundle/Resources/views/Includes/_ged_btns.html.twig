@@ -11,7 +11,7 @@
                 {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
                     <a id="dis" href="{% trans %}dis-url{% endtrans %}/{{id}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6' %}
                     <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{id}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
                 {% endif %}    
         </div>
@@ -23,7 +23,7 @@
                 {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
                     <a id="dis" href="{% trans %}dis-url{% endtrans %}/model-{{model}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6'  %}
                     <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
                 {% endif %}  
         </div>
@@ -35,7 +35,7 @@
                 {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
                     <a id="dis" href="{% trans %}dis-url{% endtrans %}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6'  %}
                     <a id="vts" href="http://einavts.com/{{app.session.locale}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
                     {% endif %}  
         </div>
