@@ -92,7 +92,7 @@
             {% endif %}>
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right.png') }}">
         </a>
-        <a id="totalpag"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
+        <a id="totalpage"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
             {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{totalpag}})"
             {% else                                       %}href="{{ path(route, { page: totalpag, num_rows: num_rows, country: country, option: option }) }}"
             {% endif %}>

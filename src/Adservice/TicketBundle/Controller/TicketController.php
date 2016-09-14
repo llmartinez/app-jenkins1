@@ -1099,6 +1099,17 @@ class TicketController extends Controller {
                 throw $this->createNotFoundException('Este ticket solo puede ser borrado por un asesor');
             }
 
+            //Si este ticket es el unico que apunta a un coche, al boorarlo borramos tambien el coche
+            $car_id = $ticket->getCar()->getId();
+            $query = $em->createQuery(' SELECT t FROM TicketBundle:Ticket t
+                                        WHERE t.car = '.$car_id);
+
+            if(sizeof($query->getResult()) == 1)
+            {
+                $car = $ticket->getCar();
+                $em->remove($car);
+            }
+
             //si el ticket esta cerrado no se puede borrar
             // if($ticket->getStatus()->getName() == 'closed'){
             //    throw $this->createNotFoundException('Este ticket ya esta cerrado');
@@ -1235,7 +1246,7 @@ class TicketController extends Controller {
                 $array['form'] = $form->createView();
             }
             if ($request->getMethod() == 'POST') {
-                 
+
                 //Define Ticket
                 if ($security->isGranted('ROLE_ASSESSOR')) {
 
@@ -1350,7 +1361,7 @@ class TicketController extends Controller {
                                         $ticket->setPending(0);
                                         $ticket->setBlockedBy(null);
                                         UtilController::saveEntity($em, $ticket, $user);
-                                        
+
                                         $mail = $ticket->getWorkshop()->getEmail1();
                                         $pos = strpos($mail, '@');
                                         if ($pos != 0) {
@@ -1397,7 +1408,7 @@ class TicketController extends Controller {
                                                 // Dejamos el locale tal y como estaba
                                                 $request->setLocale($locale);
                                             }
-                                        }                                        
+                                        }
                                     }
                                 } else {
                                     $request->getSession()->set('message', $post->getMessage());
@@ -1479,7 +1490,7 @@ class TicketController extends Controller {
      * @return url
      */
 //    public function closeTicketAction($id, $ticket, $close='1')
-//    {   
+//    {
 //        $message = '';
 //        $security = $this->get('security.context');
 //        if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -1500,14 +1511,14 @@ class TicketController extends Controller {
 //                else{
 //                    $message= $request->getSession()->get('message');
 //                }
-//                    
+//
 //                /*Validacion Ticket*/
 //                $str_len = strlen($message);
 //                if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
 //                else { $max_len = 500; }
 //
 //                if ($str_len <= $max_len ) {
-//                    
+//
 //                    if ($form->isValid()) {
 //
 //                        if ($security->isGranted('ROLE_ASSESSOR') === false) {
@@ -1582,10 +1593,10 @@ class TicketController extends Controller {
 //                    }else{
 //                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
 //                    }
-//                }else{ 
+//                }else{
 //                    $request->getSession()->set('message', $message);
-//                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.'); 
-//                    
+//                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.');
+//
 //                }
 //            }
 //

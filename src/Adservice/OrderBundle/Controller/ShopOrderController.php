@@ -112,7 +112,7 @@ class ShopOrderController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-       
+
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -123,9 +123,10 @@ class ShopOrderController extends Controller {
                 $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
                 $partner = $em->getRepository("PartnerBundle:Partner")->find($partner_id);
                 $user = $security->getToken()->getUser();
-                
+
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
+
                 $shopOrder->setPartner($partner);
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
@@ -679,7 +680,6 @@ class ShopOrderController extends Controller {
             $shop->setActive(true);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            UtilController::newEntity($shop, $user);
             UtilController::saveEntity($em, $shop, $user);
 
         }elseif (( $shopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){

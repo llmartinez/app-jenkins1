@@ -78,8 +78,8 @@ class WorkshopController extends Controller {
             } elseif ($status == "infotech"){
                 $params[] = array('infotech', ' = 1');
             }
-            
-            
+
+
         }
 
         if (!isset($params))
@@ -186,6 +186,11 @@ class WorkshopController extends Controller {
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
+                    if($workshop->getActive() == true) {
+                        $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                    }else{
+                        $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                    }
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -490,7 +495,7 @@ class WorkshopController extends Controller {
                         $em->remove($post);
                         $em->flush();
                     }
-                }                
+                }
                 $em->remove($ticket);
                 $em->flush();
             }
@@ -508,7 +513,7 @@ class WorkshopController extends Controller {
         if(isset($user)){
            $cars = $em->getRepository("CarBundle:Car")->findBy(array('modified_by' => $user->getId()));
            if(isset($cars)){
-               foreach($cars as $car){                  
+               foreach($cars as $car){
                    $car->setModifiedBy($usertmp);
                    $em->persist($car);
                     $em->flush();
@@ -516,11 +521,11 @@ class WorkshopController extends Controller {
             }
             $cars = $em->getRepository("CarBundle:Car")->findBy(array('created_by' => $user->getId()));
             if(isset($cars)){
-                foreach($cars as $car){  
+                foreach($cars as $car){
                     $car->setCreatedBy($usertmp);
                     $em->persist($car);
                     $em->flush();
-                }                
+                }
                 $em->remove($user);
                 $em->flush();
             }
@@ -559,17 +564,25 @@ class WorkshopController extends Controller {
                     'id_ticket' => $id_ticket,
                     'form_name' => $form->getName(),
                     'form' => $form->createView()));
-    }   
-    
+    }
+
     public function deactivateActivateWorkshopAction($workshop_id){
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop){
             $workshop->setActive(!$workshop->getActive());
+
+            if($workshop->getActive() == true) {
+                $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            }else{
+                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            }
+            $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
         $em->persist($workshop);
         $em->flush();
-        
+
          /* MAILING */
         //Mail to workshop
         $mail = $workshop->getEmail1();
@@ -580,7 +593,7 @@ class WorkshopController extends Controller {
         if($workshop->getActive()== true){
             $action = 'activate';
             $mailerUser->setSubject($this->get('translator')->trans('mail.activateWorkshop.subject').$workshop->getName());
-        }       
+        }
         $mailerUser->setTo($mail);
         $mailerUser->setFrom('noreply@adserviceticketing.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
@@ -588,10 +601,11 @@ class WorkshopController extends Controller {
         //Mail to Report
         $mailerUser->setTo($this->container->getParameter('mail_report'));
         $mailerUser->sendMailToSpool();
-        
-        
+
+
         return $this->redirect($this->generateUrl('workshop_list'));
     }
+
     public function insertCifAction($workshop_id, $country) {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -695,10 +709,10 @@ class WorkshopController extends Controller {
 
             $em->persist($user);
         }
+
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
-        if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
         $em->persist($workshop);
         $em->flush();
     }
