@@ -7,30 +7,37 @@
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %} #}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-
-                <a id="dis" href="{% trans %}dis-url{% endtrans %}/{{id}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
-
-                <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{id}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                
+                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
+                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/{{id}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% endif %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                    <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{id}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% endif %}    
         </div>
 
 {% elseif model is defined %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-
-                <a id="dis" href="{% trans %}dis-url{% endtrans %}/model-{{model}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
-
-                <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
+                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/model-{{model}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% endif %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                    <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% endif %}  
         </div>
 
 {% else %}
-        <div {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
+        <div {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-
-                <a id="dis" href="{% trans %}dis-url{% endtrans %}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
-
-                <a id="vts" href="http://einavts.com/{{app.session.locale}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
+                    <a id="dis" href="{% trans %}dis-url{% endtrans %}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% endif %}
+                {% if app.security.getToken().getUser().getCountry().getId() == '3' %}
+                    <a id="vts" href="http://einavts.com/{{app.session.locale}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                    {% endif %}  
         </div>
 
 {% endif %}
