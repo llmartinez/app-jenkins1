@@ -29,7 +29,7 @@ class UserSuperPartnerType extends AbstractType {
             ->add('active' , 'checkbox', array('required' => false))
             ->add('language')
             ->add('partner', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
                   'empty_value' => '',
