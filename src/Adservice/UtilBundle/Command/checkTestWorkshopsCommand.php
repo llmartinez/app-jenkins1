@@ -52,7 +52,6 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
 
                     // $this->getContainer()->get('mailer')->send($message);
 
-                    $workshop->setEndtestAt(null);
                     $workshop->setTest(0);
                     $em->persist($workshop);
                     $em->flush();
