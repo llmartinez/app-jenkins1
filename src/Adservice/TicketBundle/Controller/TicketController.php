@@ -2084,7 +2084,6 @@ class TicketController extends Controller {
             'country' => 0,
             'inactive' => 0,
             'disablePag' => 0);
-
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
@@ -2144,7 +2143,7 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
-
+        
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
         $num_rows = $request->request->get('slct_numRows');
@@ -2219,20 +2218,20 @@ class TicketController extends Controller {
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
-
-        if (isset($model) and $model != '0')
+        
+        if (isset($model) and $model != '0' and $model != null){
             $model = $em->getRepository('CarBundle:Model')->find($model);
-        if (isset($version) and $version != '0')
+        }
+        
+        if (isset($version) and $version != '0' and $version != null)
             $version = $em->getRepository('CarBundle:Version')->findOneById($version);
-
-
         if (isset($subsystem) and $subsystem != '0' and $subsystem != '')
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
 
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
         if ($plateNumber != '') {
-            if ($cars != null) {
+            if ($cars != null) {                
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
                 $vin = $cars[0]->getVin();
@@ -2240,11 +2239,14 @@ class TicketController extends Controller {
                 $motor = $cars[0]->getMotor();
                 $kw = $cars[0]->getKw();
                 $displacement = $cars[0]->getDisplacement();
-                if ($cars[0]->getVersion() != null) {
-                    $version = $em->getRepository('CarBundle:Version')->findOneById($cars[0]->getVersion());
-                } else
-                    $version = null;
-            }
+                if($cars[0]->getVersion() != null){
+                    if($cars[0]->getVersion()->getId() > 0){
+                        $version = $em->getRepository('CarBundle:Version')->findOneById($cars[0]->getVersion());
+                    }   
+                    else
+                        $version = null;
+                }
+            }        
         }
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,

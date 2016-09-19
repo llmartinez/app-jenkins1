@@ -567,8 +567,8 @@ class WorkshopController extends Controller {
         if($workshop){
             $workshop->setActive(!$workshop->getActive());
         }
-        $em->persist($workshop);
-        $em->flush();
+       $this->saveWorkshop($em, $workshop);
+        
         
          /* MAILING */
         //Mail to workshop
