@@ -445,12 +445,12 @@ class UtilController extends Controller
 
         return false;
     }
-    
+
     public static function saveUserFromWorkshop($workshop,$user_workshop){
         $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());
         if($workshop->getPhoneNumber1() != null){           $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());        }
         else{                                               $user_workshop->setPhoneNumber1(null);        }
-        
+
         if($workshop->getPhoneNumber2() != null){           $user_workshop->setPhoneNumber2($workshop->getPhoneNumber2());        }
         else{                                               $user_workshop->setPhoneNumber2(null);        }
 
@@ -473,7 +473,7 @@ class UtilController extends Controller
         else{                                               $user_workshop->setCountry(null);        }
 
         if($workshop->getRegion() != null){                 $user_workshop->setRegion($workshop->getRegion());                    }
-        else{                                               $user_workshop->setRegion(null);        }      
+        else{                                               $user_workshop->setRegion(null);        }
 
         if($workshop->getCity() != null){                   $user_workshop->setCity($workshop->getCity());                        }
         else{                                               $user_workshop->setCity(null);        }
@@ -483,7 +483,7 @@ class UtilController extends Controller
 
         if($workshop->getPostalCode() != null){             $user_workshop->setPostalCode($workshop->getPostalCode());            }
         else{                                               $user_workshop->setPostalCode(null);        }
-        
+
         return $user_workshop;
     }
 }

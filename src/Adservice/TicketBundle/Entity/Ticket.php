@@ -81,7 +81,7 @@ class Ticket {
 
     /**
      * @var integer $car
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="Car")
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true)
      */

@@ -14,7 +14,7 @@
 
         <div class="col-xs-12 col-md-12 form-group">
              <div class="col-xs-4 col-md-4 form-group">
-                <label>{% trans %} username {% endtrans %} *</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
+                <label>{% trans %} username {% endtrans %}</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
             </div>
              <div class="col-xs-4 col-md-4 form-group">
                 <input type="hidden" id="pass_field1" value="{% trans %} password {% endtrans %}">
@@ -23,7 +23,11 @@
             </div>
              <div class="col-xs-4 col-md-4 form-group">
             {% if form.partner is defined %}
-                <label>{% trans %} partner {% endtrans %} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                {% if user_type == "super_ad" %}
+                    <label>{% trans %} partner {% endtrans %}</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                {% else %}
+                    <label>{% trans %} partner {% endtrans %} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                {% endif %}
             {% endif %}
             {% if form.workshop is defined %} {# DEPRECATED #}
                 <label>{% trans %} workshop {% endtrans %} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
