@@ -580,9 +580,9 @@ class WorkshopController extends Controller {
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
-        $em->persist($workshop);
-        $em->flush();
-
+       $this->saveWorkshop($em, $workshop);
+        
+        
          /* MAILING */
         //Mail to workshop
         $mail = $workshop->getEmail1();
