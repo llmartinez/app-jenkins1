@@ -626,6 +626,7 @@ mail.deleteTicket.info.id:				"Le code du ticket effacé est :"
 
 mail.closeTicket.subject:				"ADService | Ticket effacé avec l'id #"
 mail.closeTicket.title:					"Un ticket a été fermé"
+mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.closeTicket.createdby:				"Ce ticket a été fermé par un conseiller."
 mail.closeTicket.createdby.user:		"Vous avez fermé un ticket via la plate-forme AD-Service."
 mail.closeTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
