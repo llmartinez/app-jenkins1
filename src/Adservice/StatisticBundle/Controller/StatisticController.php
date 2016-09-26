@@ -61,31 +61,33 @@ class StatisticController extends Controller {
         $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
         $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
 
-        return $this->render('StatisticBundle:Statistic:list_statistics.html.twig', array('page'      => $page,
-                                                                                          'statistic' => $statistic,
-                                                                                          'from_y'    => $from_y,
-                                                                                          'from_m'    => $from_m,
-                                                                                          'from_d'    => $from_d,
-                                                                                          'to_y'      => $to_y  ,
-                                                                                          'to_m'      => $to_m ,
-                                                                                          'to_d'      => $to_d  ,
-                                                                                          'partners'  => $partners,
-                                                                                          'shops'     => $shops,
-                                                                                          'workshops' => $workshops,
-                                                                                          'assessors' => $assessors,
-                                                                                          'typologies'=> $typologies,
-                                                                                          'countries' => $countries,
-                                                                                          'pagination'=> $pagination,
-                                                                                          'type'      => $type,
-                                                                                          'partner'   => $partner,
-                                                                                          'shop'      => $shop,
-                                                                                          'wks'       => $workshop,
-                                                                                          'assessor'  => $assessor,
+        return $this->render('StatisticBundle:Statistic:list_statistics.html.twig', array('page'        => $page,
+                                                                                          'statistic'   => $statistic,
+                                                                                          'from_y'      => $from_y,
+                                                                                          'from_m'      => $from_m,
+                                                                                          'from_d'      => $from_d,
+                                                                                          'to_y'        => $to_y  ,
+                                                                                          'to_m'        => $to_m ,
+                                                                                          'to_d'        => $to_d  ,
+                                                                                          'partners'    => $partners,
+                                                                                          'shops'       => $shops,
+                                                                                          'workshops'   => $workshops,
+                                                                                          'assessors'   => $assessors,
+                                                                                          'typologies'  => $typologies,
+                                                                                          'countries'   => $countries,
+                                                                                          'catservices' => $catservices,
+                                                                                          'pagination'  => $pagination,
+                                                                                          'type'        => $type,
+                                                                                          'partner'     => $partner,
+                                                                                          'shop'        => $shop,
+                                                                                          'wks'         => $workshop,
+                                                                                          'assessor'    => $assessor,
                                                                                           'created_by'  => $created_by,
-                                                                                          'typology'  => $typology,
-                                                                                          'status'    => $status,
-                                                                                          'country'   => $country,
+                                                                                          'typology'    => $typology,
+                                                                                          'status'      => $status,
+                                                                                          'country'     => $country,
                                                                                           //'length'    => $length,
                                                                             ));
     }
@@ -154,7 +156,7 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
-    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0'){
+    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0'){
 
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
@@ -207,7 +209,8 @@ class StatisticController extends Controller {
                         'w.name as nameWorkshop',
                         'w.region as regionWorkshop',
                         'p.name as namePartner',
-                        'p.code_partner as codePartner',
+                        'cs.category_service as categoryService',
+                        'w.code_partner as codePartner',
                         'w.code_workshop as codeWorkshop',
                         'w.internal_code as internalCodeWorkshop',
                         'sh.code_shop as codeShop',
@@ -225,6 +228,7 @@ class StatisticController extends Controller {
                     )
                     ->addSelect("concat(concat(ass.name,' '), ass.surname) as assignedTo")//Concatenamos nombre y apellido
                     ->leftJoin('e.workshop', 'w')
+                    ->leftJoin('w.category_service', 'cs')
                     ->leftJoin('e.status', 's')
                     ->leftJoin('e.importance', 'im')
                     ->leftJoin('e.car', 'c')
@@ -318,6 +322,12 @@ class StatisticController extends Controller {
                     }
                 }
 
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
+
                 /********************************** Revisar tiempos de ejecución **************************************/
                 //$start = microtime(true);
                 //echo (microtime(true)-$start). ' s';
@@ -345,9 +355,10 @@ class StatisticController extends Controller {
                     ->createQueryBuilder('w')
                     ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
-                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner', 't.name as tipology')
+                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'cs.category_service', 'w.code_partner', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
                     ->leftJoin('w.partner', 'p')
+                    ->leftJoin('w.category_service', 'cs')
                     ->leftJoin('w.typology', 't')
                     ->groupBy('w.id')
                     ->orderBy('w.id');
@@ -490,6 +501,11 @@ class StatisticController extends Controller {
                             ->setParameter('country', $country);
                     }
                 }
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('cs.id = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 if ($typology != "0") {
 
                     $qb = $qb->andWhere('t.id = :typology')
@@ -515,9 +531,10 @@ class StatisticController extends Controller {
 
                 $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
-                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'p.code_partner', 't.name as tipology')
+                        'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'w.code_partner', 'cs.category_service', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
                     ->leftJoin('w.partner', 'p')
+                    ->leftJoin('w.category_service', 'cs')
                     ->leftJoin('w.typology', 't')
                     ->groupBy('w.id')
                     ->orderBy('w.id')
@@ -582,7 +599,11 @@ class StatisticController extends Controller {
                             ->setParameter('country', $country);
                     }
                 }
-
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 if ($typology != "0") {
 
                     $qb = $qb->andWhere('t.id = :typology')
@@ -646,7 +667,11 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
-
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTalleres.' DESC');
                 $results   = $qt->getResult();
 
@@ -705,7 +730,11 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY '.$nTickets.' DESC');
                 $results   = $qt->getResult();
 
@@ -749,6 +778,11 @@ class StatisticController extends Controller {
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
                 }
                 if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
                                                 $where .= 'AND tp.id = w.typology ';
@@ -812,6 +846,11 @@ class StatisticController extends Controller {
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY '.$nTickets.' DESC, s.name, ss.name');
@@ -884,6 +923,11 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 $select .= "FROM TicketBundle:Ticket e ";
 
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY '.$nTickets.' DESC, b.name');
@@ -945,6 +989,12 @@ class StatisticController extends Controller {
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
 
@@ -1014,6 +1064,12 @@ class StatisticController extends Controller {
                     $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
                 }
                 $select .= "FROM TicketBundle:Ticket e ";
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio ORDER BY v.inicio DESC, '.$nTickets.' DESC ');
@@ -1098,6 +1154,11 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
+                if ($catserv != "0")
+                {
+                    $qb = $qb->andWhere('w.category_service = :catserv')
+                        ->setParameter('catserv', $catserv);
+                }
                 $qt = $em->createQuery($select.$join." WHERE ".$where.' ORDER BY w.id, e.created_at');
                 $results   = $qt->getResult();
 
@@ -1125,6 +1186,11 @@ class StatisticController extends Controller {
                 $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
             }
 
+            if ($catserv != "0")
+            {
+                $qb = $qb->andWhere('w.category_service = :catserv')
+                    ->setParameter('catserv', $catserv);
+            }
             $where .= 'GROUP BY w.id ';
             $where .= 'ORDER BY e.id DESC ';
 
@@ -1163,6 +1229,7 @@ class StatisticController extends Controller {
             $trans->trans('code_workshop').';'.
             $trans->trans('internal_code').';'.
             $trans->trans('name').';'.
+            $trans->trans('category_service').';'.
             $trans->trans('partner').';'.
             $trans->trans('shop').';'.
             $trans->trans('region').';'.
@@ -1201,6 +1268,8 @@ class StatisticController extends Controller {
             if(isset($row['internalCodeWorkshop'])) $excel.=$row['internalCodeWorkshop'].';';
             else $excel.=' ;';
             if(isset($row['nameWorkshop'])) $excel.=$row['nameWorkshop'].';';
+            else $excel.=' ;';
+            if(isset($row['categoryService'])) $excel.=$row['categoryService'].';';
             else $excel.=' ;';
             if(isset($row['namePartner'])) $excel.=$row['namePartner'].';';
             if(isset($row['nameShop'])) $excel.=$row['nameShop'].';';
@@ -1285,6 +1354,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('name').';'.
+                $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.
                 $trans->trans('typology').';'.
@@ -1329,6 +1399,9 @@ class StatisticController extends Controller {
             $name=str_ireplace($buscar,$reemplazar,$name);
 
             $excel.=$name.';';
+
+            if(isset($row['category_service'])) $excel.=$row['category_service'].';';
+            else $excel.=' ;';
 
             if(isset($row['partner'])) $excel.=$row['partner'].';';
             else $excel.=' ;';
@@ -1408,6 +1481,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('name').';'.
+                $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.
                 $trans->trans('ticket').';'.
@@ -1436,6 +1510,7 @@ class StatisticController extends Controller {
             $name=str_ireplace($buscar,$reemplazar,$row->getWorkshop()->getName());
             $excel.=$name.';';
 
+            $excel.=$row->getWorkshop()->getCategoryService().';';
             $excel.=$row->getWorkshop()->getPartner().';';
 
             if(isset($shop)) {

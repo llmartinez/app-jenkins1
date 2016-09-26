@@ -16,7 +16,7 @@
     {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-3 col-md-3 form-group">
+    <div class="col-xs-2 col-md-2 form-group">
         <label> {% trans %} country {% endtrans %} </label>
         <select id="slct_country" class="form-control"> <option value="0">...</option>
             {% for country_ in countries %} <option value="{{ country_.id }}"
@@ -25,12 +25,20 @@
         </select>
     </div>
     {% endif %}
-    <div class="col-xs-3 col-md-3 form-group">
+    <div class="col-xs-2 col-md-2 form-group">
         <label> {% trans %} role {% endtrans %} </label>
         <select id="slct_role" class="form-control"> <option value="all">...</option>
             {% for role in roles %} <option value="{{ role.id }}"
                                         {% if option is defined and option == role.id %} selected {% endif %}
                                     >{{ role.name | trans }}</option> {% endfor %}
+        </select>
+    </div>
+    <div class="col-xs-2 col-md-2 form-group">
+        <label> {% trans %} category_service {% endtrans %} </label>
+        <select id="slct_catserv" class="form-control"> <option value="0">...</option>
+            {% for _catserv in cat_services %}
+                <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+            {% endfor %}
         </select>
     </div>
 

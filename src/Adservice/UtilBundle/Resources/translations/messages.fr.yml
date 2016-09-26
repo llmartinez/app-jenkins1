@@ -123,6 +123,8 @@ order:					 "Demande"
 incidence:				 "Occurrence"
 info:				 	 "Information"
 charge:					 "Charge"
+category_service:		 "Catégorie du service"
+btn.confirm_catservice:	 "L'utilisateur sera créé avec la catégorie du service"
 
 #CONTACT
 name:					 "Prénom"
