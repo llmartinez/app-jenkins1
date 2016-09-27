@@ -231,7 +231,10 @@ class Pagination
                                     }
         }
         if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
+            foreach ($params as $param) {
+                if($param != null)
+                    $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+            }
         }
 
         ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
@@ -254,7 +257,12 @@ class Pagination
 
         /* PRUEBAS */
             // echo $query.$from.$where.$group_by.$order.'<br>';
+            //
             // var_dump($consulta->getResult());
+            //
+            // foreach ($consulta->getResult() as $key) {
+            //     var_dump($key->getId());
+            // }
             // die;
         return $consulta->getResult();
     }
@@ -277,7 +285,10 @@ class Pagination
                                     }
         }
         if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
+            foreach ($params as $param) {
+                if($param != null)
+                    $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+            }
         }
 
         ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
@@ -292,7 +303,10 @@ class Pagination
 
         $consulta = $em ->createQuery($query.$from.$where.$group_by.$order);
 
-        //echo $query.$from.$where.$group_by.$order.'<br>';
+        /* PRUEBAS */
+            // echo $query.$from.$where.$group_by.$order.'<br>';
+            // var_dump($consulta->getResult());
+            // die;
 
         $result = $consulta->getResult();
 

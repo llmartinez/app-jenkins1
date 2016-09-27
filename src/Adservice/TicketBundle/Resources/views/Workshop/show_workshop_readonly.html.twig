@@ -15,7 +15,7 @@
 
 	{# WORKSHOP #}
 	<div class="form-group">
-		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>
+		<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>
 	</div>
 
 	{# CIF #}

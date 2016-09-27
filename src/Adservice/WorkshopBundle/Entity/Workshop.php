@@ -105,6 +105,13 @@ class Workshop {
     private $users;
 
     /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
      * @var string $internal_code
      *
      * @ORM\Column(name="internal_code", type="string", length=255, nullable=true)
@@ -596,6 +603,24 @@ class Workshop {
      */
     public function getUsers() {
         return $this->users;
+    }
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     /**

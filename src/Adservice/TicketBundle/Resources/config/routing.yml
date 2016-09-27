@@ -23,15 +23,15 @@ showTicket:
     defaults: { _controller: TicketBundle:Ticket:showTicket }
     options:
         expose: true
-        
+
 findTicketById:
     pattern:  /ticket/findTicketById/
     defaults: { _controller: TicketBundle:Ticket:findTicketById }
-    
+
 findTicketByIdAndWorkshop:
     pattern:  /ticket/findTicketByIdAndWorkshop/
     defaults: { _controller: TicketBundle:Ticket:findTicketByIdAndWorkshop }
-    
+
 findTicketByBMV:
     pattern:  /ticket/findTicketByBMV/{page}/{brand}/{model}/{version}/{system}/{subsystem}/{num_rows}
     defaults: { _controller: TicketBundle:Ticket:findTicketByBMV, page: 1, brand: 0, model: 0, version: 0, system: 0, subsystem: 0, num_rows: 10 }
@@ -85,8 +85,8 @@ reopenTicket:
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 listTicket:
-    pattern:  /ticket/{page}/{num_rows}/{country}/{option}/{workshop_id}
-    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1 , num_rows: 10 , country: 0, option: null, workshop_id: null  }
+    pattern:  /ticket/{page}/{num_rows}/{country}/{lang}/{catserv}/{option}/{workshop_id}
+    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1, num_rows: 10, country: 0, lang: 0, catserv: 0, option: null, workshop_id: null  }
 
 callTicket:
     pattern:  /call/{code_partner}/{code_workshop}

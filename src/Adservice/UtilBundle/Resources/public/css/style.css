@@ -625,7 +625,6 @@ textarea.form-control_ged {
 .img_logo {
     height: 35px;
     margin-top: 5px;
-    margin-left: -15px;
 }
 
 .h65 {
@@ -817,6 +816,15 @@ fieldset[disabled] .asr_form-control {
 .mt20 {
     margin-top: 20px;
 }
+.mt5 {
+    margin-top: 5px;
+}
+.pd0 {
+    padding: 0!important;
+}
+.pd_form {
+    padding: 0 5px 0 0!important;
+}
 
 .pd_txt {
     padding: 10px 15px;;
@@ -843,6 +851,12 @@ fieldset[disabled] .asr_form-control {
 .w90  { width:  90%!important; }
 .w95  { width:  95%!important; }
 .w100 { width: 100%!important; }
+
+.grid-20  {
+    width:  19%!important;
+    margin-right: 1%;
+    float: left;
+}
 .grid-33  {
     width:  30%!important;
     margin-right: 3.3%;

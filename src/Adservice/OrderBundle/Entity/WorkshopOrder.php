@@ -137,6 +137,13 @@ class WorkshopOrder {
     private $users;
 
     /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
@@ -556,6 +563,23 @@ class WorkshopOrder {
      */
     public function getUsers() {
         return $this->users;
+    }
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     /**
