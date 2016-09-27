@@ -216,6 +216,7 @@ function fill_model(model) {
             complete: function(){ $("body").css("cursor", "default"); },
             success: function(data) {
                 // Limpiamos y llenamos el combo con las opciones del json
+                $('#new_car_form_model').empty();
                 if($('#new_car_form_plateNumber').val() != ""){
                     $('#new_car_form_model').empty();
                     $('#new_car_form_version').empty();
@@ -239,12 +240,7 @@ function fill_model(model) {
                     $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
                     $('#new_car_form_version').empty();
                     $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
-                    $("#new_car_form_year").val("2000 - 2017");
-                    $("#new_car_form_motor").val("0");
-                    $("#new_car_form_kW").val("0");
-                    $("#new_car_form_displacement").val("0");
-                    $("#new_car_form_vin").val("99999999999999999");
-                    $("#new_car_form_plateNumber").val("OTHER");
+                   
 //                    var version = $("#ticket_version").val();
 //                    if(version != undefined && version != ""){
 //                        fill_version(version);
@@ -848,12 +844,8 @@ function fill_model_by_PlateNumber(dataPN) {
                     $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
                     $('#new_car_form_version').empty();
                     $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
-                    $("#new_car_form_year").val("2000 - 2017");
-                    $("#new_car_form_motor").val("0");
-                    $("#new_car_form_kW").val("0");
-                    $("#new_car_form_displacement").val("0");
-                    $("#new_car_form_vin").val("99999999999999999");
-                    $("#new_car_form_plateNumber").val("OTHER");
+                    
+                    $("#new_car_form_plateNumber").val("");
 //                    var version = $("#ticket_version").val();
 //                    if(version != undefined && version != ""){
 //                        fill_version(version);
