@@ -66,7 +66,14 @@
             </tr>
             <tr>
                 <td style="width:40%;"><b>{% trans %} subscribed      {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.createdAt|date("d-m-Y") != ''%}{{workshop.createdAt|date("d-m-Y")}}{% else %}...{% endif %}</td>
+                <td style="width:60%;">{% if     workshop.updateAt != null %}{{workshop.updateAt|date("d-m-Y")}}
+                                       {% elseif workshop.createdAt != null %}{{workshop.createdAt|date("d-m-Y")}}
+                                       {% else %}...{% endif %}</td>
+            </tr>
+            <tr>
+                <td style="width:40%;"><b>{% trans %} unsubscribed      {% endtrans %}</b></td>
+                <td style="width:60%;">{% if     workshop.lowdateAt != null %}{{workshop.lowdateAt|date("d-m-Y")}}
+                                       {% else %}...{% endif %}</td>
             </tr>
         </table>
         <h3>{% trans %} contact {% endtrans %}</h3>

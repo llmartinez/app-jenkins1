@@ -257,7 +257,12 @@ class Pagination
 
         /* PRUEBAS */
             // echo $query.$from.$where.$group_by.$order.'<br>';
+            //
             // var_dump($consulta->getResult());
+            //
+            // foreach ($consulta->getResult() as $key) {
+            //     var_dump($key->getId());
+            // }
             // die;
         return $consulta->getResult();
     }

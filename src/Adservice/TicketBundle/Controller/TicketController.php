@@ -113,7 +113,7 @@ class TicketController extends Controller {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $user->getWorkshop()->getId()));
 
                 if ($workshops[0]->getId() != "") {
-                    $joins[] = array('e.workshop w ', 'w.code_workshop = ' . $workshops[0]->getCodeWorkshop() . " AND w.partner = " . $workshops[0]->getCodepartner() . " ");
+                    $joins[] = array('e.workshop w ', 'w.code_workshop = ' . $workshops[0]->getCodeWorkshop() . " AND w.code_partner = " . $workshops[0]->getCodepartner() . " ");
                     $option = $workshops[0]->getCodeWorkshop();
                 }
             }
@@ -2177,8 +2177,7 @@ class TicketController extends Controller {
 
         if (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != '') {
 
-            $partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => $codepartner));
-            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'partner' => $partner->getId()));
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'code_partner' => $codepartner));
         }
 
         // CAR
@@ -2252,14 +2251,15 @@ class TicketController extends Controller {
 
                 if (sizeof($ticket) >= 1) {
                     foreach ($ticket as $tck) {
-
                         if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))) {
                             if($workshop != null){
                                 $w_id = $workshop->getId();
                             }
                             // Si esta definido el taller añadimos al array solo las que coinciden con el taller
                             if (isset($w_id)) {
+
                                 if ($workshop->getId() == $tck->getWorkshop()->getId()) {
+
                                     $tickets[] = $tck;
                                 }
                             }
@@ -2285,6 +2285,8 @@ class TicketController extends Controller {
             }else{
                 $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
             }
+        }else{
+            $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         }
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
 
@@ -2294,7 +2296,6 @@ class TicketController extends Controller {
             $model = $em->getRepository('CarBundle:Model')->find($model);
         if (isset($version) and $version != '0')
             $version = $em->getRepository('CarBundle:Version')->findOneById($version);
-
 
         if (isset($subsystem) and $subsystem != '0' and $subsystem != '')
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
