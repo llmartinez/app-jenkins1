@@ -18,8 +18,8 @@
         {% set url_logo = route_logo ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 70px;">
 
-        {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
-            {% set url_logo_catserv = route_logo ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
+        {% if app.security.getToken().getUser() != "anon." and workshopOrder.categoryService != null %}
+            {% set url_logo_catserv = route_logo ~ '_' ~ workshopOrder.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 70px;">
         {% endif %}
     </td></tr>
