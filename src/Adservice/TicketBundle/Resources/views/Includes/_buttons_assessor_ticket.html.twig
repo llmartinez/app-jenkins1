@@ -46,12 +46,18 @@
                         <button class="btn btn-disabled mb15 w100 asr_form-control asr_btn"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
                 {% endif %}
                 </div>
+                <div class="grid-33 mt5">
 
-                {% if workshop.haschecks == true %}
-                <div class="grid w20 {% if workshop.numchecks <= 1 %}error{% endif %} ">
-                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                    <div class="w50 fl">
+                        <input type='text' class="form-control asr_form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                    </div>
+                    <div class="w25 fl">
+                        <a href="" class="btn btn-primary asr_form-control asr_btn_search" id="btn_search_ticket_id" name="btn_search_ticket_id">
+                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
+                        </a>
+                    </div>
+
                 </div>
-                {% endif %}
 
             {% else %}
                 {# <a class="btn btn-primary btn-disabled " id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}

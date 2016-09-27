@@ -19,6 +19,15 @@
                 <label>{% trans %} code_partner {% endtrans %} *</label> {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 1, 'value': partner.codePartner } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
+                <label>{% trans %} category_service {% endtrans %} *</label>
+                <select class="form-control" id="id_catserv" name="id_catserv" required>
+                    <option value=>{% trans %} ... {% endtrans %}</option>
+                    {% for catserv in cat_services %}
+                        <option value={{ catserv.id }}>{{ catserv }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} cif          {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             <div class="col-xs-4 col-md-4 form-group">

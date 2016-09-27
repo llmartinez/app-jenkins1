@@ -110,6 +110,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $country_service;
 
     /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
      *
      * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner", inversedBy="users")
@@ -295,6 +302,24 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getCountryService() {
         return $this->country_service;
+    }
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     public function getName() {

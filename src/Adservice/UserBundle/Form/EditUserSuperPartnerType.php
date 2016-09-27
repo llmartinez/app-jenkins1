@@ -23,15 +23,6 @@ class EditUserSuperPartnerType extends AbstractType {
             ->add('surname')
             ->add('active' , 'checkbox', array('required' => false))
             ->add('language')
-            ->add('partner', 'entity', array(
-                  'required' => true,
-                  'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
 
             //CONTACT
             ->add('country', 'entity', array(
