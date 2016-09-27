@@ -123,6 +123,8 @@ order:					 "Solicitud"
 incidence:				 "Incidencia"
 info:				 	 "Información"
 charge:					 "Carga"
+category_service:		 "Categoría de servicio"
+btn.confirm_catservice:	 "Se creará el usuario con la siguiente categoría de servicio"
 
 #CONTACT
 name:					 "Nombre"
@@ -595,7 +597,7 @@ page.last:						"Última página"
 
 #MAIL
 mail.welcome:							"Bienvenido a la plataforma AD Service"
-mail.image:								"http://adserviceticketing.com/logo_adservice.png"
+mail.image:								"http://adserviceticketing.com/logo"
 mail.info.tel:							"97 267 77 70"
 mail.info.more:							"Más información:"
 mail.testing:		                	"En fase de pruebas hasta "

@@ -42,7 +42,7 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findByOption($em, $security, $country, $option, $pagination)
+    public function findByOption($em, $security, $country, $catserv, $option, $pagination)
     {
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
@@ -53,6 +53,9 @@ class UserRepository extends EntityRepository
             if ($country != 0 ) {
                 $query = $query.' AND u.country = '.$country;
             }
+        }
+        if ($catserv != 0 ) {
+            $query = $query.' AND u.category_service = '.$catserv;
         }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option)
@@ -66,7 +69,7 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findLengthOption($em, $security, $country, $option)
+    public function findLengthOption($em, $security, $country, $catserv, $option)
     {
         $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
@@ -78,11 +81,15 @@ class UserRepository extends EntityRepository
                 $query = $query.' AND u.country = '.$country;
             }
         }
+        if ($catserv != 0 ) {
+            $query = $query.' AND u.category_service = '.$catserv;
+        }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option);
-	$result = $consulta->getResult();
-	$result = $result[0];
-	$result = $result[1];
+
+    	$result = $consulta->getResult();
+    	$result = $result[0];
+    	$result = $result[1];
         return $result;
     }
 }

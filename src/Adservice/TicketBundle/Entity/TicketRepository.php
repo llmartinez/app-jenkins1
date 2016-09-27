@@ -230,7 +230,6 @@ class TicketRepository extends EntityRepository
                 $query = 'SELECT w ';
                 $from  = 'FROM WorkshopBundle:Workshop w ';
                 $where = 'WHERE w.active = 1 ';
-
                 if ($w_id          != "") {  $where .= "AND w.code_workshop = ".$w_id." "; }
                 if ($w_idpartner   != "") {  $query .= ", p ";
                                              $from  .= "JOIN w.partner p ";

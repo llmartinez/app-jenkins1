@@ -5,6 +5,9 @@
     {% set nextpages = pagination.nextpages %}
     {% set totalpag  = pagination.totalpag  %}
 
+    {% if catserv.id is defined %} {% set id_catserv  = catserv.id %}
+    {% else %} {% set id_catserv  = 0 %} {% endif %}
+
     {# PAGINACION #}
 {% if page != 0 %}
     <input type="hidden" id="totalpag" value="{{ totalpag }}">
@@ -35,7 +38,7 @@
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<a id="firstpage"    class="page_number" title="{% trans %} page.first {% endtrans %}"
             {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV(1)"
-            {% else                                       %}href="{{ path(route, { page: 1, num_rows: num_rows, country: country, option: option }) }}"
+            {% else                                       %}href="{{ path(route, { page: 1, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
             {% endif %}>
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left_double.png') }}">
         </a>
@@ -44,7 +47,7 @@
 
     	<a id="btn_anterior" class="page_number" title="{% trans %} page.prev {% endtrans %}"
             {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{this_prev_page}})"
-            {% else                                       %}href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option }) }}"
+            {% else                                       %}href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
             {% endif %}>
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left.png') }}">
         </a>
@@ -57,7 +60,7 @@
 
                 <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}"
                 {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{this_prev_page}})"
-                {% else                                       %}href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option }) }}"
+                {% else                                       %}href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
                 {% endif %}> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
                     {{ this_prev_page }}
                 </a>
@@ -75,7 +78,7 @@
 
                 <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}"
                 {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{this_next_page}})"
-                {% else                                       %}href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option }) }}"
+                {% else                                       %}href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
                 {% endif %}>
                     {{ this_next_page }}
                 </a>
@@ -88,13 +91,13 @@
 
         <a id="btn_siguiente" class="page_number" title="{% trans %} page.next {% endtrans %}"
             {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{this_next_page}})"
-            {% else                                       %}href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option }) }}"
+            {% else                                       %}href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
             {% endif %}>
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right.png') }}">
         </a>
         <a id="totalpage"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
             {% if findByBMV is defined and findByBMV == 1 %}onclick="updatePageAndFindByBMV({{totalpag}})"
-            {% else                                       %}href="{{ path(route, { page: totalpag, num_rows: num_rows, country: country, option: option }) }}"
+            {% else                                       %}href="{{ path(route, { page: totalpag, num_rows: num_rows, country: country, catserv: id_catserv, option: option }) }}"
             {% endif %}>
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right_double.png') }}">
         </a>
