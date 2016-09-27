@@ -2232,7 +2232,6 @@ class TicketController extends Controller {
         else
             $more_results = 0;
 
-
         if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
             $catserv = $user->getCategoryService()->getId();
         }
@@ -2288,6 +2287,9 @@ class TicketController extends Controller {
             }
         }
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
+
+        $lang = $request->get('lang');
+
         if (isset($model) and $model != '0')
             $model = $em->getRepository('CarBundle:Model')->find($model);
         if (isset($version) and $version != '0')
@@ -2338,6 +2340,7 @@ class TicketController extends Controller {
             'countries' => $countries,
             'catservices' => $catservices,
             'languages' => $languages,
+            'lang' => $lang,
             'importances' => $importances,
             'option' => 'all',
             'page' => $page,

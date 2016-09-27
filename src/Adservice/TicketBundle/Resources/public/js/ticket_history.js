@@ -8,7 +8,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $('#catserv').val();
-            var lang     = $('#lang').val();
+            var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $(this).val();
 
@@ -19,7 +19,6 @@
             var url = url.replace('plc_option', option);
 
             window.open(url, "_self");
-
         });
 
         $("#slct_numRows").change(function() {
@@ -27,7 +26,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $('#catserv').val();
-            var lang     = $('#lang').val();
+            var lang     = $('#flt_language').val();
             var num_rows = $(this).val();
             var option   = $('#option').val();
 
@@ -38,7 +37,6 @@
             var url = url.replace('plc_option', option);
 
             window.open(url, "_self");
-
         });
 
         $("#flt_catserv").change(function() {
@@ -46,7 +44,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $(this).val();
-            var lang     = $('#lang').val();
+            var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
 
@@ -57,7 +55,6 @@
             var url = url.replace('plc_option', option);
 
             window.open(url, "_self");
-
         });
 
         $('#flt_country').change(function() {
@@ -65,7 +62,7 @@
             var str      = $('#href_tickets').val();
             var country  = $(this).val();
             var catserv  = $('#catserv').val();
-            var lang     = $('#lang').val();
+            var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
 

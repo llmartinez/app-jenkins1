@@ -667,12 +667,11 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                 }
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTalleres.' DESC');
+
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY p.id ORDER BY '.$nTalleres.' DESC ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -730,12 +729,10 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY w.id ORDER BY '.$nTickets.' DESC');
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -779,17 +776,15 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
                 if    ($typology != "0"    ) {  $join  .= ' JOIN w.typology tp ';
                                                 $where .= 'AND tp.id = w.typology ';
                                                 $where .= 'AND tp.id = '.$typology.' ';
                 }
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY p.id ORDER BY '.$nTickets.' DESC');
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY p.id ORDER BY '.$nTickets.' DESC ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -847,13 +842,11 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
                 $select .= "FROM TicketBundle:Ticket e ";
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY ss.id ORDER BY '.$nTickets.' DESC, s.name, ss.name');
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY ss.id ORDER BY '.$nTickets.' DESC, s.name, ss.name ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 // Traducción al idioma del administrador
@@ -923,14 +916,12 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
-                $select .= "FROM TicketBundle:Ticket e ";
 
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY b.id ORDER BY '.$nTickets.' DESC, b.name');
+                $select .= "FROM TicketBundle:Ticket e ";
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY b.id ORDER BY '.$nTickets.' DESC, b.name ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -991,14 +982,11 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
                 $select .= "FROM TicketBundle:Ticket e ";
-
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY m.id ORDER BY '.$nTickets.' DESC, m.name');
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY m.id ORDER BY '.$nTickets.' DESC, m.name ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -1066,14 +1054,13 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
                 $select .= "FROM TicketBundle:Ticket e ";
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' GROUP BY v.inicio ORDER BY v.inicio DESC, '.$nTickets.' DESC ');
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY v.inicio ORDER BY v.inicio DESC, '.$nTickets.' DESC ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
+
                 $years = array();
                 foreach ($results as $res) {
 
@@ -1154,15 +1141,16 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
 
-                if ($catserv != "0")
-                {
-                    $qb = $qb->andWhere('w.category_service = :catserv')
-                        ->setParameter('catserv', $catserv);
-                }
-                $qt = $em->createQuery($select.$join." WHERE ".$where.' ORDER BY w.id, e.created_at');
+                $select .= "FROM TicketBundle:Ticket e ";
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' ORDER BY w.id, e.created_at ';
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $queryF = "SELECT e.created_at as ".$date." FROM TicketBundle:Ticket e ORDER BY e.created_at";
+                $queryF = "SELECT e.created_at as ".$date." FROM TicketBundle:Ticket e ";
+                if ($catserv != "0") $sql .= ' WHERE e.category_service = '.$catserv.' ';
+                $queryF .= " ORDER BY e.created_at";
                 $qF = $em->createQuery($queryF);
                 $resultsF = $qF->getResult();
 
@@ -1186,23 +1174,21 @@ class StatisticController extends Controller {
                 $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
             }
 
-            if ($catserv != "0")
-            {
-                $qb = $qb->andWhere('w.category_service = :catserv')
-                    ->setParameter('catserv', $catserv);
-            }
-            $where .= 'GROUP BY w.id ';
-            $where .= 'ORDER BY e.id DESC ';
 
-            $qid = $em->createQuery("select MAX(e.id) as t_id, w.id as w_id from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where);
-            $resultsid = $qid->getResult();
+            $sql = "SELECT MAX(e.id) as t_id, w.id as w_id FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE ".$where;
+            if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+            $sql .= 'GROUP BY w.id ORDER BY e.id DESC ';
+            $qid = $em->createQuery($sql);
+            $resultsid   = $qid->getResult();
 
             $ids = '0';
             foreach ($resultsid as $rid) {
                 $ids .= ', '.$rid['t_id'];
             }
 
-            $qt = $em->createQuery("select partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } from TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE e.id IN (".$ids.")");
+            $sql = "SELECT partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE e.id IN (".$ids.") ";
+            if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+            $qt = $em->createQuery($sql);
             $results   = $qt->getResult();
 
             $trans     = $this->get('translator');
