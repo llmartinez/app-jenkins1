@@ -86,12 +86,16 @@
                                                      'required':'required' } }) }}
             </div>
             <div class="col-xs-3 col-md-3">
+                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
+                {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
+            </div>
+            <div class="col-xs-3 col-md-3">
                 <label>{% trans %} internal_code {% endtrans %}</label>
                 {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
             </div>
             <div class="col-xs-3 col-md-3">
-                <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
-                {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
+                <label>{% trans %} commercial_code {% endtrans %}</label>
+                {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control', 'placeholder': 'commercial_code' | trans } }) }}
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">

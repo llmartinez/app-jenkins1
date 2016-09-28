@@ -384,7 +384,6 @@ class WorkshopOrderController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
                 // Si hay diferencias crea la solicitud de modificación, sino no hace nada
                 if( $this::existsDiffInOrder($workshop, $workshopOrder) )
                 {
@@ -1127,6 +1126,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setCodeWorkshop  ($workshop->getCodeWorkshop());
         $workshopOrder->setCif           ($workshop->getCif());
         $workshopOrder->setInternalCode  ($workshop->getInternalCode());
+        $workshopOrder->setCommercialCode($workshop->getCommercialCode());
         $workshopOrder->setPartner       ($workshop->getPartner());
         $shop = $workshop->getShop();
         if(isset($shop)) { $workshopOrder->setShop($shop); }
@@ -1183,6 +1183,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
         $workshop->setCif           ($workshopOrder->getCif());
         $workshop->setInternalCode  ($workshopOrder->getInternalCode());
+        $workshop->setCommercialCode($workshopOrder->getCommercialCode());
         $workshop->setCodePartner   ($workshopOrder->getPartner()->getCodePartner());
         $workshop->setPartner       ($workshopOrder->getPartner());
         $shop = $workshopOrder->getShop();
@@ -1235,6 +1236,7 @@ class WorkshopOrderController extends Controller {
             and ($workshop->getCodeWorkshop()  == $workshopOrder->getCodeWorkshop()  )
             and ($workshop->getCif()           == $workshopOrder->getCif()           )
             and ($workshop->getInternalCode()  == $workshopOrder->getInternalCode()  )
+            and ($workshop->getCommercialCode()== $workshopOrder->getCommercialCode())
             and ($workshop->getCodePartner()   == $workshopOrder->getCodePartner()   )
             and ($workshop->getPartner()       == $workshopOrder->getPartner()       )
             and ($workshop->getShop()          == $workshopOrder->getShop()          )

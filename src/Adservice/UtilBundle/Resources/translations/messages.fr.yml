@@ -373,6 +373,7 @@ code_workshop:			 "Code Atelier"
 typology:				 "Type d'atelier"
 cif:					 "Code réseau"
 internal_code:			 "Code client boutique"
+commercial_code:		 "Code de commerce"
 
 subscribed:				 "Inscrit"
 unsubscribed:			 "Désinscrit"

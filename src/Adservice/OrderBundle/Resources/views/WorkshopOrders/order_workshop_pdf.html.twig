@@ -40,6 +40,9 @@
                 <td style="width:40%;"><b>{% trans %} internal_code   {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.InternalCode  != '' %}{{ workshop.InternalCode   }} {% else %} ... {% endif %}</td>
             </tr><tr>
+                <td style="width:40%;"><b>{% trans %} commercial_code   {% endtrans %}</b></td>
+                <td style="width:60%;">{% if workshop.CommercialCode != '' %}{{ workshop.CommercialCode }} {% else %} ... {% endif %}</td>
+            </tr><tr>
                 <td style="width:40%;"><b>{% trans %} ad_service_plus {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.adServicePlus == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
             </tr><tr>

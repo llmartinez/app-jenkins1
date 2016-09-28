@@ -112,6 +112,13 @@ class Workshop {
     private $internal_code;
 
     /**
+     * @var string $commercial_code
+     *
+     * @ORM\Column(name="commercial_code", type="string", length=255, nullable=true)
+     */
+    private $commercial_code;
+
+    /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
@@ -380,6 +387,24 @@ class Workshop {
      */
     public function getInternalCode() {
         return $this->internal_code;
+    }
+
+    /**
+     * Set commercial_code
+     *
+     * @param boolean $commercial_code
+     */
+    public function setCommercialCode($commercial_code) {
+        $this->commercial_code = $commercial_code;
+    }
+
+    /**
+     * Get commercial_code
+     *
+     * @return boolean
+     */
+    public function getCommercialCode() {
+        return $this->commercial_code;
     }
 
     /**

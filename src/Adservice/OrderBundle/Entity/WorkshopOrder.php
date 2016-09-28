@@ -93,6 +93,13 @@ class WorkshopOrder {
     private $internal_code;
 
     /**
+     * @var string $commercial_code
+     *
+     * @ORM\Column(name="commercial_code", type="string", length=255, nullable=true)
+     */
+    private $commercial_code;
+
+    /**
      *
      * @var string $observation_workshop
      * @ORM\Column(name="observation_workshop", type="string", length=255, nullable=true)
@@ -349,6 +356,24 @@ class WorkshopOrder {
      */
     public function getInternalCode() {
         return $this->internal_code;
+    }
+
+    /**
+     * Set commercial_code
+     *
+     * @param boolean $commercial_code
+     */
+    public function setCommercialCode($commercial_code) {
+        $this->commercial_code = $commercial_code;
+    }
+
+    /**
+     * Get commercial_code
+     *
+     * @return boolean
+     */
+    public function getCommercialCode() {
+        return $this->commercial_code;
     }
 
     /**
