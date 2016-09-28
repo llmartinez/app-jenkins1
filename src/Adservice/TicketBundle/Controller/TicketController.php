@@ -1978,7 +1978,12 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $request = $this->getRequest();
         $id = $request->get('flt_id');
-        $ticket = $em->getRepository('TicketBundle:Ticket')->find($id);
+        $catserv = $security->getToken()->getUser()->getCategoryService();
+
+        if($catserv != null)
+            $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('id' => $id, 'category_service' => $catserv->getId()));
+        else
+            $ticket = $em->getRepository('TicketBundle:Ticket')->find($id);
 
         if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
             $tickets = array($ticket);
@@ -1995,14 +2000,19 @@ class TicketController extends Controller {
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
+        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+        $languages = $em->getRepository('UtilBundle:Language')->findAll();
 
         $array = array('workshop' => new Workshop(),
-            'pagination' => new Pagination(),
+            'pagination' => new Pagination(0),
             'tickets' => $tickets,
             'brands' => $brands,
             'systems' => $systems,
             'countries' => $countries,
             'importances' => $importances,
+            'catservices' => $catservices,
+            'languages' => $languages,
+            'lang' => '0',
             'option' => 'all',
             'page' => 0,
             'num_rows' => 10,
