@@ -48,8 +48,8 @@ diagnosis_machine_edit:
 #   APDO. RUTAS TYPOLOGY     #
 ##############################
 typology_list:
-    pattern:  /typo_list/{page}/{country}
-    defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1 , country: 'none'  }
+    pattern:  /typo_list/{page}/{country}/{catserv}
+    defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1, country: 'none', catserv: 0  }
     options:
         expose: true
 

@@ -18,10 +18,10 @@
         {% set url_logo = route_logo ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 70px;">
 
-        {% if app.security.getToken().getUser() != "anon." and shopOrder.categoryService != null %}
+      {#   {% if app.security.getToken().getUser() != "anon." and shopOrder.categoryService != null %}
             {% set url_logo_catserv = route_logo ~ '_' ~ shopOrder.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 70px;">
-        {% endif %}
+        {% endif %} #}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">

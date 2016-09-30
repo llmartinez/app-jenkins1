@@ -7,14 +7,14 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{% trans %} workshop {% endtrans %}</th>
-                        <th>{% trans %} partner  {% endtrans %}</th>
-                        <th>{% trans %} shop     {% endtrans %}</th>
-                        <th>{% trans %} tel      {% endtrans %}</th>
-                        <th>{% trans %} region   {% endtrans %}</th>
-                        <th>{% trans %} test     {% endtrans %}</th>
-                        <th>{% trans %} order    {% endtrans %}</th>
-                        <th>{% trans %} actions  {% endtrans %}</th>
+                        <th>{% trans %} workshop        {% endtrans %}</th>
+                        <th>{% trans %} partner         {% endtrans %}</th>
+                        <th>{% trans %} category_service{% endtrans %}</th>
+                        <th>{% trans %} tel             {% endtrans %}</th>
+                        <th>{% trans %} region          {% endtrans %}</th>
+                        <th>{% trans %} test            {% endtrans %}</th>
+                        <th>{% trans %} order           {% endtrans %}</th>
+                        <th>{% trans %} actions         {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,12 +24,12 @@
                         {% set orderBefore = ordersBefore[workshopOrder.id] %}
                     {% endif %}
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != workshopOrder.name         %} *{% endif %} #}
-                            <td> {{ workshopOrder.id           }} </td>
+                            <td> {{ workshopOrder.id              }} </td>
                             <td> {{ workshopOrder.name|length > 15 ? workshopOrder.name|slice(0, 15) ~ '...' : workshopOrder.name  }} </td>
-                            <td> {{ workshopOrder.partner      }} </td>
-                            <td> {{ workshopOrder.shop         }} </td>
-                            <td> {{ workshopOrder.phoneNumber1 }} </td>
-                            <td> {{ workshopOrder.region       }} </td>
+                            <td> {{ workshopOrder.partner         }} </td>
+                            <td> {{ workshopOrder.categoryService }} </td>
+                            <td> {{ workshopOrder.phoneNumber1    }} </td>
+                            <td> {{ workshopOrder.region          }} </td>
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>

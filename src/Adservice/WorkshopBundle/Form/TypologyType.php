@@ -11,7 +11,7 @@ class TypologyType extends AbstractType
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        
+
         $builder
             ->add('name')
             ->add('country', 'entity', array(
@@ -23,6 +23,15 @@ class TypologyType extends AbstractType
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
                                                           ->where('c.id'.$id_country); }))
+            ->add('category_service', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ; }))
             ->add('active', 'checkbox', array(
                   'required' => false,
                   'attr'     => array('checked'   => 'checked')
