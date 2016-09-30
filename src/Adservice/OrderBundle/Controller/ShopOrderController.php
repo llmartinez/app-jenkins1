@@ -35,7 +35,8 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $security->getToken()->getUser();
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
@@ -56,11 +57,22 @@ class ShopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_AD')) {
-            $country = $security->getToken()->getUser()->getCountry();
+        if($security->isGranted('ROLE_SUPER_AD') and $user->getCategoryService() != null)
+        {
+            $consulta = $em->createQuery("SELECT p FROM PartnerBundle:Partner p JOIN p.users u
+                                          WHERE p.country = '".$user->getCountry()->getId()."'
+                                          AND u.category_service = ".$user->getCategoryService()->getId()."
+                                          ORDER BY p.name ASC");
+
+            $partners = $consulta->getResult();
+        }
+        elseif($security->isGranted('ROLE_AD')) {
+            $country = $user->getCountry();
             $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
         }
-        else $partners = array();
+        else {
+            $partners = array();
+        }
 
         return $this->render('OrderBundle:ShopOrders:list_shops.html.twig', array( 'shops'      => $shops,
                                                                                    'pagination' => $pagination,
@@ -82,8 +94,8 @@ class ShopOrderController extends Controller {
      */
     public function newAction(){
         $request = $this->getRequest();
-
         $security = $this->get('security.context');
+        $user = $security->getToken()->getUser();
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
@@ -93,10 +105,10 @@ class ShopOrderController extends Controller {
         $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
@@ -107,10 +119,14 @@ class ShopOrderController extends Controller {
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }
 
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
@@ -122,7 +138,6 @@ class ShopOrderController extends Controller {
             if ($form->isValid()) {
                 $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
                 $partner = $em->getRepository("PartnerBundle:Partner")->find($partner_id);
-                $user = $security->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
@@ -187,6 +202,7 @@ class ShopOrderController extends Controller {
      */
     public function editAction($id) {
         $security = $this->get('security.context');
+        $user = $security->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
@@ -203,18 +219,18 @@ class ShopOrderController extends Controller {
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
 
-        if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
-        and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
+        if (($security->isGranted('ROLE_AD') and ($user->getPartner() != null and $user->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
+        and ($security->isGranted('ROLE_SUPER_AD') and ($user->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         if (!$shopOrder) $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
 
@@ -225,9 +241,13 @@ class ShopOrderController extends Controller {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }
 
         $form = $this->createForm(new ShopEditOrderType(), $shopOrder);
@@ -236,8 +256,6 @@ class ShopOrderController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
-                $user = $security->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
 

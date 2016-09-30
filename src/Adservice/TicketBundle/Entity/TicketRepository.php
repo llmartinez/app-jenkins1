@@ -175,7 +175,7 @@ class TicketRepository extends EntityRepository
         return $tickets;
     }
 
-    public function findSimilar($status, $model=null, $subsystem=null)
+    public function findSimilar($status, $model=null, $subsystem=null, $country_id=0, $catserv_id=0)
     {
         $em = $this->getEntityManager();
 
@@ -193,6 +193,13 @@ class TicketRepository extends EntityRepository
         {
             $where .=  ' AND t.subsystem = '.$subsystem->getId().' ';
         }
+        if ($country_id != 0)
+        {
+            $where .=  ' AND t.country = '.$country_id.' ';
+        }
+
+        if($catserv_id != 0) $where .=  ' AND t.category_service = '.$catserv_id.' ';
+
         //Crea la consulta
         $consulta = $em->createQuery($query.$joins.$where.' ORDER BY t.id ');
 

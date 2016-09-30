@@ -12,6 +12,7 @@ class WorkshopNewOrderType extends AbstractType
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
 
         $builder
             ->add('name')
@@ -33,11 +34,12 @@ class WorkshopNewOrderType extends AbstractType
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
+                                                return $er->createQueryBuilder('t')
+                                                          ->orderBy('t.name', 'ASC')
+                                                          ->where('t.active = 1')
+                                                          ->andWhere('t.country'.$id_country)
+                                                          ->andWhere('t.category_service'.$id_catserv); }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
             ->add('haschecks', 'checkbox', array('required' => false))
