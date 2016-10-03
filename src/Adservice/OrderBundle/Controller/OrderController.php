@@ -81,8 +81,8 @@ class OrderController extends Controller
         if($user->getCategoryService() != null) {
             $workshop_pending[] = array('category_service' , " = ".$user->getCategoryService()->getId());
             $workshop_rejected[] = array('category_service' , " = ".$user->getCategoryService()->getId());
-            // $shop_pending[] = array('category_service' , " = ".$user->getCategoryService()->getId());
-            // $shop_rejected[] = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $shop_pending[] = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $shop_rejected[] = array('category_service' , " = ".$user->getCategoryService()->getId());
         }
 
         $pagination = new Pagination($page);
