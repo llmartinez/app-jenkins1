@@ -328,42 +328,6 @@ class TicketController extends Controller {
             elseif (($option == 'assessor_answered') or ( $option == 'other_answered'))
                 $query = $query . ' AND t.pending != 1';
 
-            $consulta = $em->createQuery($query);
-            $query_posts = '';
-            foreach ($consulta->getResult() as $ticket) {
-                $query2 = 'SELECT p FROM TicketBundle:Post p WHERE p.ticket = ' . $ticket->getId();
-                $consulta2 = $em->createQuery($query2);
-                $result = $consulta2->getResult();
-                $last_post = end($result);
-
-                if ($last_post != null) {
-                    $last_post_role = $last_post->getCreatedBy();
-                    $last_post_role = $last_post_role->getRoles();
-                    $last_post_role = $last_post_role[0];
-                }
-
-                if (count($result) != 0 and $last_post != null
-                        and ( $last_post_role == 'ROLE_ASSESSOR'
-                        or $last_post_role == 'ROLE_ADMIN'
-                        or $last_post_role == 'ROLE_SUPER_ADMIN')
-                        and ( $option == 'assessor_answered' or $option == 'other_answered')) {
-                    if ($query_posts == '')
-                        $query_posts = ' e.id = ' . $ticket->getId();
-                    else
-                        $query_posts = $query_posts . ' OR e.id = ' . $ticket->getId();
-                }
-                elseif ((($option == 'assessor_pending' or $option == 'other_pending') and count($result) == 0)
-                        or ( ($option == 'assessor_pending' or $option == 'other_pending') and $last_post->getCreatedBy()->getId() != $id_user
-                        and $last_post->getCreatedBy()->getId() != $ticket->getAssignedTo()->getId() )) {
-                    if ($query_posts == '')
-                        $query_posts = ' e.id = ' . $ticket->getId();
-                    else
-                        $query_posts = $query_posts . ' OR e.id = ' . $ticket->getId();
-                }
-            }
-            if ($query_posts != '')
-                $joins[] = array('e.status s', $query_posts);
-
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
         }
