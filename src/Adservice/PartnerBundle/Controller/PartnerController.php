@@ -257,8 +257,10 @@ class PartnerController extends Controller {
                 }
             }
         }
+        $catserv = $partner->getUsers()[0]->getCategoryService()->getCategoryService();
 
         return $this->render('PartnerBundle:Partner:edit_partner.html.twig', array('partner'    => $partner,
+                                                                                   'catserv'    => $catserv,
                                                                                    'form_name'  => $form->getName(),
                                                                                    'form'       => $form->createView()));
     }
