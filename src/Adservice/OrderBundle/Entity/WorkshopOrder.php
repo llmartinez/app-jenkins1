@@ -564,6 +564,7 @@ class WorkshopOrder {
     public function getUsers() {
         return $this->users;
     }
+
     /**
      * Set category_service
      *

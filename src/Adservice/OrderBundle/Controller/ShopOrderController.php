@@ -49,6 +49,10 @@ class ShopOrderController extends Controller {
 
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
+        if($user->getCategoryService() != null) {
+            $params[] = array('category_service', ' = '.$user->getCategoryService()->getId());
+        }
+
         $pagination = new Pagination($page);
 
         $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
@@ -143,6 +147,7 @@ class ShopOrderController extends Controller {
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
 
                 $shopOrder->setPartner($partner);
+                $shopOrder->setCategoryService($user->getCategoryService());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
@@ -784,22 +789,23 @@ class ShopOrderController extends Controller {
 
         $shopOrder = new ShopOrder();
 
-        $shopOrder->setIdShop        ($shop->getId());
-        $shopOrder->setName          ($shop->getName());
-        $shopOrder->setPartner       ($shop->getPartner());
-        $shopOrder->setCountry       ($shop->getCountry());
-        $shopOrder->setRegion        ($shop->getRegion());
-        $shopOrder->setCity          ($shop->getCity());
-        $shopOrder->setAddress       ($shop->getAddress());
-        $shopOrder->setPostalCode    ($shop->getPostalCode());
-        $shopOrder->setPhoneNumber1  ($shop->getPhoneNumber1());
-        $shopOrder->setPhoneNumber2  ($shop->getPhoneNumber2());
-        $shopOrder->setFax           ($shop->getFax());
-        $shopOrder->setEmail1        ($shop->getEmail1());
-        $shopOrder->setEmail2        ($shop->getEmail2());
-        $shopOrder->setCodeShop      ($shop->getCodeShop());
-        $shopOrder->setCif           ($shop->getCif());
-        $shopOrder->setContact       ($shop->getContact());
+        $shopOrder->setIdShop         ($shop->getId());
+        $shopOrder->setName           ($shop->getName());
+        $shopOrder->setPartner        ($shop->getPartner());
+        $shopOrder->setCategoryService($shop->getCategoryService());
+        $shopOrder->setCountry        ($shop->getCountry());
+        $shopOrder->setRegion         ($shop->getRegion());
+        $shopOrder->setCity           ($shop->getCity());
+        $shopOrder->setAddress        ($shop->getAddress());
+        $shopOrder->setPostalCode     ($shop->getPostalCode());
+        $shopOrder->setPhoneNumber1   ($shop->getPhoneNumber1());
+        $shopOrder->setPhoneNumber2   ($shop->getPhoneNumber2());
+        $shopOrder->setFax            ($shop->getFax());
+        $shopOrder->setEmail1         ($shop->getEmail1());
+        $shopOrder->setEmail2         ($shop->getEmail2());
+        $shopOrder->setCodeShop       ($shop->getCodeShop());
+        $shopOrder->setCif            ($shop->getCif());
+        $shopOrder->setContact        ($shop->getContact());
 
         if ($shop->getCreatedBy() != null ) {
             $shopOrder->setCreatedBy($shop->getCreatedBy());
@@ -826,21 +832,22 @@ class ShopOrderController extends Controller {
      */
     private function shopOrder_to_shop($shop, $shopOrder){
 
-        $shop->setName          ($shopOrder->getName());
-        $shop->setPartner       ($shopOrder->getPartner());
-        $shop->setCountry       ($shopOrder->getCountry());
-        $shop->setRegion        ($shopOrder->getRegion());
-        $shop->setCity          ($shopOrder->getCity());
-        $shop->setAddress       ($shopOrder->getAddress());
-        $shop->setPostalCode    ($shopOrder->getPostalCode());
-        $shop->setPhoneNumber1  ($shopOrder->getPhoneNumber1());
-        $shop->setPhoneNumber2  ($shopOrder->getPhoneNumber2());
-        $shop->setFax           ($shopOrder->getFax());
-        $shop->setEmail1        ($shopOrder->getEmail1());
-        $shop->setEmail2        ($shopOrder->getEmail2());
-        $shop->setCodeShop      ($shopOrder->getCodeShop());
-        $shop->setCif           ($shopOrder->getCif());
-        $shop->setContact       ($shopOrder->getContact());
+        $shop->setName           ($shopOrder->getName());
+        $shop->setPartner        ($shopOrder->getPartner());
+        $shop->setCategoryService($shopOrder->getCategoryService());
+        $shop->setCountry        ($shopOrder->getCountry());
+        $shop->setRegion         ($shopOrder->getRegion());
+        $shop->setCity           ($shopOrder->getCity());
+        $shop->setAddress        ($shopOrder->getAddress());
+        $shop->setPostalCode     ($shopOrder->getPostalCode());
+        $shop->setPhoneNumber1   ($shopOrder->getPhoneNumber1());
+        $shop->setPhoneNumber2   ($shopOrder->getPhoneNumber2());
+        $shop->setFax            ($shopOrder->getFax());
+        $shop->setEmail1         ($shopOrder->getEmail1());
+        $shop->setEmail2         ($shopOrder->getEmail2());
+        $shop->setCodeShop       ($shopOrder->getCodeShop());
+        $shop->setCif            ($shopOrder->getCif());
+        $shop->setContact        ($shopOrder->getContact());
 
         if ($shopOrder->getCreatedBy() != null ) {
             $shop->setCreatedBy($shopOrder->getCreatedBy());

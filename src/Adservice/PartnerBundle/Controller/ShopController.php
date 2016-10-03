@@ -23,7 +23,7 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='0', $partner='0', $term='0', $field='0') {
+    public function listAction($page=1, $country='0', $catserv=0, $partner='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false) {
@@ -31,7 +31,7 @@ class ShopController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
-        
+
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
@@ -54,8 +54,11 @@ class ShopController extends Controller {
         else {
             $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
         }
+        if($catserv != 0){
+            $params[] = array('category_service', ' = '.$catserv);
+        }
         $pagination = new Pagination($page);
-        
+
         $shops  = $pagination->getRows($em, 'PartnerBundle', 'Shop', $params, $pagination);
 
         $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Shop', $params);
@@ -68,12 +71,16 @@ class ShopController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         else $partners = array();
 
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
+
         return $this->render('PartnerBundle:Shop:list_shops.html.twig', array(  'shops'        => $shops,
                                                                                 'pagination'   => $pagination,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
                                                                                 'partners'     => $partners,
                                                                                 'partner'      => $partner,
+                                                                                'cat_services' => $cat_services,
+                                                                                'catserv'      => $catserv,
                                                                                 'term'         => $term,
                                                                                 'field'        => $field
                                                                                 ));
@@ -90,10 +97,10 @@ class ShopController extends Controller {
         }
         $em      = $this->getDoctrine()->getEntityManager();
         $shop    = new Shop();
-        $request = $this->getRequest();   
-        
+        $request = $this->getRequest();
+
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
@@ -154,7 +161,7 @@ class ShopController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
         if ($security->isGranted('ROLE_SUPER_AD')) {
-            
+
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }

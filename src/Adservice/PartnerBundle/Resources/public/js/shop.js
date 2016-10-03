@@ -11,25 +11,43 @@
 
                 var country = $('#flt_country').val();
                 var partner = $('#flt_partner').val();
+                var catserv = $('#flt_catserv').val();
                 if(country == null) var country = '0';
-                if(partner == null) var partner = 'none';
+                if(partner == null) var partner = '0';
+                if(catserv == null) var catserv = '0';
 
                 var route = 'shop_list';
                 var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, partner: partner });
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, catserv: catserv, partner: partner });
 
+                window.open(url, "_self");
+            });
+            $('#flt_catserv').change(function() {
+
+                var country = $('#flt_country').val();
+                var partner = $('#flt_partner').val();
+                var catserv = $(this).val();
+                if(country == null) var country = '0';
+                if(partner == null) var partner = '0';
+                if(catserv == null) var catserv = '0';
+
+                var route = 'shop_list';
+                var locale = $(document).find("#data_locale").val();
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, catserv: catserv, partner: partner });
                 window.open(url, "_self");
             });
             $('#flt_partner').change(function() {
 
                 var partner = $('#flt_partner').val();
                 var country = $('#flt_country').val();
-                if(partner == null) var partner = 'none';
+                var catserv = $('#flt_catserv').val();
+                if(partner == null) var partner = '0';
                 if(country == null) var country = '0';
+                if(catserv == null) var catserv = '0';
 
                 var route = 'shop_list';
                 var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, partner: partner });
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, catserv: catserv, partner: partner });
 
                 window.open(url, "_self");
             });
