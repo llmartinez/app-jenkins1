@@ -20,6 +20,8 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        route_logo: '%route.logo%'
 
 # Assetic Configuration
 assetic:
@@ -121,6 +123,8 @@ services:
 
 parameters:
     adservice.post.uploadpath: 'web/uploads/tickets'
+    route.logo: 'bundles/util/images/icon/logo'
+    # route.logo: 'http://adserviceticketing.com/logo'
 
 knp_snappy:
     pdf:

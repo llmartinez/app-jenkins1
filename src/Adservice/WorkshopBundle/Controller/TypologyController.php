@@ -17,7 +17,7 @@ class TypologyController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listTypologyAction($page=1, $country='none') {
+    public function listTypologyAction($page=1, $country='none', $catserv=0) {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
 
@@ -27,9 +27,12 @@ class TypologyController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
         }
         else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
+        if ($catserv != 0) $params[] = array('category_service', ' = '.$catserv);
+
+        if(!isset($params)) $params = array();
 
         $pagination = new Pagination($page);
 
@@ -42,10 +45,14 @@ class TypologyController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        return $this->render('WorkshopBundle:Typology:list_typology.html.twig', array('typologies' => $typologies,
-                                                                                      'pagination' => $pagination,
-                                                                                      'countries'  => $countries,
-                                                                                      'country'    => $country,));
+        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+
+        return $this->render('WorkshopBundle:Typology:list_typology.html.twig', array('typologies'  => $typologies,
+                                                                                      'pagination'  => $pagination,
+                                                                                      'countries'   => $countries,
+                                                                                      'country'     => $country,
+                                                                                      'catservices' => $catservices,
+                                                                                      'catserv'     => $catserv,));
     }
 
     /**
@@ -67,7 +74,7 @@ class TypologyController extends Controller {
                           $typology = $em->getRepository("WorkshopBundle:Typology")->find($id);
                           if (!$typology) throw $this->createNotFoundException('Tipologia no encontrado en la BBDD');
         }
-        
+
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
@@ -79,7 +86,7 @@ class TypologyController extends Controller {
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         $form = $this->createForm(new TypologyType(), $typology);
 
         if ($petition->getMethod() == 'POST') {

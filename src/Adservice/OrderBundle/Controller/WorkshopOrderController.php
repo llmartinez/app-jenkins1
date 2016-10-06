@@ -41,6 +41,10 @@ class WorkshopOrderController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $params   = array();
+
+        if($user->getCategoryService() != null) {
+            $params[] = array('category_service', ' = '.$user->getCategoryService()->getId());
+        }
         if ($term != '0' and $field != '0'){
 
             if ($term == 'tel') {
@@ -57,17 +61,17 @@ class WorkshopOrderController extends Controller {
             }
         }
 
-            if($security->isGranted('ROLE_SUPER_AD')) {
-                if ($partner != '0') $params[] = array('partner', ' = '.$partner);
-                $params[] = array('country', ' = '.$user->getCountry()->getId());
-            }
-            else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
+        if($security->isGranted('ROLE_SUPER_AD')) {
+            if ($partner != '0') $params[] = array('partner', ' = '.$partner);
+            $params[] = array('country', ' = '.$user->getCountry()->getId());
+        }
+        else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
-            if ($status != 'none') {
-                if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
-                elseif ($status == 'deactive') $params[] = array('active', ' = 0');
-                elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
-            }
+        if ($status != 'none') {
+            if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
+            elseif ($status == 'deactive') $params[] = array('active', ' = 0');
+            elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
+        }
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
@@ -78,16 +82,40 @@ class WorkshopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD')) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId()),array('name'=>'ASC'));
+        if($security->isGranted('ROLE_SUPER_AD'))
+        {
+            if($user->getCategoryService() != null)
+            {
+                $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
+                                              WHERE p.country = '.$user->getCountry()->getId().'
+                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                                              ORDER BY p.name ASC');
+                $partners = $consulta->getResult();
+            }
+            else{
+                $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $user->getCountry()->getId(), array('name'=>'ASC')));
+            }
+
+        }
         else $partners = array();
 
         $numTickets = 0;
 
         if($security->isGranted('ROLE_SUPER_AD')){
-            if ($partner != '0')
-                $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
+            if ($partner != '0'){
+                if($user->getCategoryService() != null) {
+                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByCategoryServicePartner($user->getCategoryService()->getId(),
+                                                                                                                       $partner);
+                }else{
+                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
+                }
+            }
             elseif ($security->isGranted('ROLE_SUPER_AD'))
-                $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
+                if($user->getCategoryService() != null) {
+                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByCategoryServicePartner($user->getCategoryService()->getId(), '');
+                }else{
+                    $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
+                }
         }
         elseif ($security->isGranted('ROLE_AD')){
             $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerId($user->getPartner()->getId());
@@ -124,6 +152,8 @@ class WorkshopOrderController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
+        $user = $security->getToken()->getUser();
+
         $workshopOrder = new WorkshopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -132,13 +162,22 @@ class WorkshopOrderController extends Controller {
             else
                 $id_partner = '0';
 
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'),array('name'=>'ASC'));
+            if($user->getCategoryService() != null)
+            {
+                $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
+                                              WHERE p.country = '.$user->getCountry()->getId().'
+                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                                              ORDER BY p.name ASC');
+                $partners = $consulta->getResult();
+            }
+            else{
+                $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),'active' => '1'),array('name'=>'ASC'));
+            }
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
-        
+
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
         if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
         else                  $code = 0;
@@ -152,11 +191,15 @@ class WorkshopOrderController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }
 
         $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
@@ -194,10 +237,10 @@ class WorkshopOrderController extends Controller {
                 }
                 if($find == null and $findPhone[0]['1']<1 and $findPhone[1]['1']<1 and $findPhone[2]['1']<1 and $findPhone[3]['1']<1)
                 {
-                    $user = $security->getToken()->getUser();
                     $workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setPartner($partner);
                     $workshopOrder->setCodePartner($partner->getCodePartner());
+                    $workshopOrder->setCategoryService($user->getCategoryService());
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
                         $roles = $roles[0];
@@ -274,10 +317,10 @@ class WorkshopOrderController extends Controller {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
                 $this->get('session')->setFlash('error', $flash);
             }
-           
+
         }
 
-        // $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        // $id_partner = $user->getPartner()->getId();
 
         // $shops[] = $em->getRepository("PartnerBundle:Shop")->find(1);
 
@@ -311,6 +354,7 @@ class WorkshopOrderController extends Controller {
         $security = $this->get('security.context');
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
+        $user = $security->getToken()->getUser();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
         $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id,
@@ -325,37 +369,53 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
+        if($user->getCategoryService() != null) {
+            if($user->getCategoryService()->getId() != $workshop->getCategoryService()->getId()) {
+                throw new AccessDeniedException();
+            }
+        }
+
         if (!$security->isGranted('ROLE_SUPERADMIN'))
         {
             // SUPER_AD
             if ($security->isGranted('ROLE_SUPER_AD'))
             {
-                if($security->getToken()->getUser()->getCountry()->getId() != $workshopOrder->getCountry()->getId())
+                if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
                 throw new AccessDeniedException();
             }
             // AD
             else{
-                if($security->getToken()->getUser()->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
+                if($user->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
                 throw new AccessDeniedException();
             }
         }
 
-        if ((($security->isGranted('ROLE_AD') and $security->getToken()->getUser()->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
+        if ((($security->isGranted('ROLE_AD') and $user->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-        $user = $security->getToken()->getUser();
 
         if(!$security->isGranted('ROLE_SUPER_AD') AND $user->getPartner() != null AND $user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner())
         {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_SUPER_AD'))
+        {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+
+            if($user->getCategoryService() != null)
+            {
+                $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
+                                              WHERE p.country = '.$user->getCountry()->getId().'
+                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                                              ORDER BY p.name ASC');
+                $partners = $consulta->getResult();
+            }
+            else{
+                $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),'active' => '1'),array('name'=>'ASC'));
+            }
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
 
@@ -368,12 +428,17 @@ class WorkshopOrderController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+        }
+
         $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -409,6 +474,8 @@ class WorkshopOrderController extends Controller {
                         // Set default shop to NULL
                         $shop = $form['shop']->getClientData();
                         if($shop == 0) { $workshopOrder->setShop(null); }
+
+                        $workshopOrder->setCategoryService($user->getCategoryService());
 
                         if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
                         if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
@@ -1019,6 +1086,7 @@ class WorkshopOrderController extends Controller {
                 $newUser->setEmail1        ($workshop->getEmail1());
                 $newUser->setEmail2        ($workshop->getEmail2());
                 $newUser->setActive        ('1');
+                $newUser->setCategoryService($workshop->getCategoryService());
                 $newUser->setCountry       ($workshop->getCountry());
                 $newUser->setRegion        ($workshop->getRegion());
                 $newUser->setCity          ($workshop->getCity());
@@ -1125,6 +1193,7 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setCif           ($workshop->getCif());
         $workshopOrder->setInternalCode  ($workshop->getInternalCode());
         $workshopOrder->setPartner       ($workshop->getPartner());
+        $workshopOrder->setCategoryService($workshop->getCategoryService());
         $shop = $workshop->getShop();
         if(isset($shop)) { $workshopOrder->setShop($shop); }
         $tipology = $workshop->getTypology();
@@ -1182,6 +1251,7 @@ class WorkshopOrderController extends Controller {
         $workshop->setInternalCode  ($workshopOrder->getInternalCode());
         $workshop->setCodePartner   ($workshopOrder->getPartner()->getCodePartner());
         $workshop->setPartner       ($workshopOrder->getPartner());
+        $workshop->setCategoryService($workshopOrder->getCategoryService());
         $shop = $workshopOrder->getShop();
         if(isset($shop)) { $workshop->setShop($shop); }
         $workshop->setTypology      ($workshopOrder->getTypology());
@@ -1228,6 +1298,7 @@ class WorkshopOrderController extends Controller {
 
         if(
                 ($workshop->getName()          == $workshopOrder->getName()          )
+            and ($workshop->getCategoryService()== $workshopOrder->getCategoryService()   )
             and ($workshop->getCodePartner()   == $workshopOrder->getCodePartner()   )
             and ($workshop->getCodeWorkshop()  == $workshopOrder->getCodeWorkshop()  )
             and ($workshop->getCif()           == $workshopOrder->getCif()           )
@@ -1311,6 +1382,7 @@ class WorkshopOrderController extends Controller {
         $html = $this->renderView('OrderBundle:WorkshopOrders:order_workshop_pdf.html.twig', array(
             'workshop'  => $workshop
         ));
+        // echo $html;die;
 
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html),

@@ -57,7 +57,7 @@ class ShopOrder {
     * @ORM\Column(name="code_shop", type="integer")
     */
     private $code_shop;
-    
+
     /**
      * @var string $cif
      * @ORM\Column(name="cif", type="string", length=255, nullable=true)
@@ -75,6 +75,13 @@ class ShopOrder {
      * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Partner")
      */
     private $partner;
+
+    /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
 
 //   ____    _    __  __ ____   ___  ____
 //  / ___|  / \  |  \/  |  _ \ / _ \/ ___|
@@ -206,6 +213,24 @@ class ShopOrder {
      */
     public function getPartner() {
         return $this->partner;
+    }
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
 //  ________________________________________________________________________________

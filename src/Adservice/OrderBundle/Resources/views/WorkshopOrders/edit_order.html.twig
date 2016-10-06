@@ -2,6 +2,13 @@
 
 {% block body %}
 
+    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if id_catserv == 1 or id_catserv == 2 or id_catserv == 3 %}
+        {% set is_hidden = '' %}
+    {% else %}
+        {% set is_hidden = 'hidden' %}
+    {% endif %}
+
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
         <li class="active">{% trans %} edit.order.workshop {% endtrans %}</li>
@@ -47,10 +54,10 @@
             </div>
         </div>
         <div class="col-xs-2 col-md-2 form-group fr">
-            <div class="w65 fl mb15">
+            <div class="w65 fl mb15 {{is_hidden}}">
                 <label>{% trans %} ad_service_plus {% endtrans %}</label>
             </div>
-            <div class="w35 fr mb15">
+            <div class="w35 fr mb15 {{is_hidden}}">
                 {{ form_widget(form.ad_service_plus) }}
             </div>
             <div class="w65 fl mb15">
@@ -71,10 +78,10 @@
             <div class="w35 fr mb15">
                 {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
             </div>
-            <div class="w65 fl ">
+            <div class="w65 fl {{is_hidden}}">
                 <label for="workshopOrder_newOrder_infotech">{% trans %} infotech {% endtrans %}</label>
             </div>
-            <div class="w35 fr ">
+            <div class="w35 fr {{is_hidden}}">
                 {{ form_widget(form.infotech) }}
             </div>
         </div>
@@ -92,6 +99,9 @@
             <div class="col-xs-3 col-md-3">
                 <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
                 {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
+            </div>
+            <div class="col-xs-3 col-md-3">
+                <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="category_service" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">

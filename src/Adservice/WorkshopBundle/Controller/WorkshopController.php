@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
+    public function listAction($page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $catserv = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
 
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -54,6 +54,11 @@ class WorkshopController extends Controller {
         } else
             $params[] = array('country', ' = ' . $security->getToken()->getUser()->getCountry()->getId());
 
+        if($catserv != 0)
+        {
+            $joins[] = array('e.users u ', 'u.category_service = '.$catserv);
+        }
+
         if ($security->isGranted('ROLE_ADMIN')) {
 
             if ($partner != '0')
@@ -78,8 +83,6 @@ class WorkshopController extends Controller {
             } elseif ($status == "infotech"){
                 $params[] = array('infotech', ' = 1');
             }
-
-
         }
 
         if (!isset($params))
@@ -100,18 +103,22 @@ class WorkshopController extends Controller {
             $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
         }
 
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
+
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops' => $workshops,
-                    'pagination' => $pagination,
-                    'countries' => $countries,
-                    'partners' => $partners,
-                    'w_idpartner' => $w_idpartner,
-                    'w_id' => $w_id,
-                    'country' => $country,
-                    'partner' => $partner,
-                    'status' => $status,
-                    'term' => $term,
-                    'field' => $field,
-                    'length' => $length));
+                    'pagination'    => $pagination,
+                    'w_idpartner'   => $w_idpartner,
+                    'w_id'          => $w_id,
+                    'countries'     => $countries,
+                    'country'       => $country,
+                    'cat_services'  => $cat_services,
+                    'catserv'       => $catserv,
+                    'partner'       => $partner,
+                    'partners'      => $partners,
+                    'status'        => $status,
+                    'term'          => $term,
+                    'field'         => $field,
+                    'length'        => $length));
     }
 
     public function newWorkshopAction() {
@@ -156,6 +163,7 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
+            $user_partner = $em->getRepository("UserBundle:User")->findOneByPartner($partner);
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             if ($form->isValid()) {
@@ -182,6 +190,7 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
+                    $workshop->setCategoryService($user_partner->getCategoryService());
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
@@ -231,6 +240,7 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage($lang);
                     $newUser->setWorkshop($workshop);
                     $newUser->addRole($role);
+                    $newUser->setCategoryService($user_partner->getCategoryService());
 
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
@@ -598,6 +608,7 @@ class WorkshopController extends Controller {
         $mailerUser->setFrom('noreply@adserviceticketing.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
         $mailerUser->sendMailToSpool();
+        // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
         //Mail to Report
         $mailerUser->setTo($this->container->getParameter('mail_report'));
         $mailerUser->sendMailToSpool();

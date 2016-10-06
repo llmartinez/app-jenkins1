@@ -596,7 +596,10 @@ class AjaxController extends Controller
             if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
             if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country);
+            $catserv = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            if($catserv != null) $catserv_id = $catserv->getId().' '; else $catserv_id = 0;
+
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country, $catserv_id);
 
             if(count($tickets) > 0) {
                 foreach ($tickets as $ticket) {

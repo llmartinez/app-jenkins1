@@ -23,7 +23,7 @@ class PartnerController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='0', $term='0', $field='0') {
+    public function listAction($page=1, $country='0', $catserv=0, $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false) {
@@ -46,26 +46,40 @@ class PartnerController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
-        
+
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-                if ($country != '0') $params[] = array('country', ' = '.$country);
-                             
-            }
+            if ($country != '0') $params[] = array('country', ' = '.$country);
+        }
         else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-        
+
         $pagination = new Pagination($page);
 
-        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
-        $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
+        if($catserv != 0)
+        {
+            $joins[] = array('e.users u ', 'u.category_service = '.$catserv);
+
+            $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination, null, $joins);
+            $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params, null, $joins);
+        }
+        else
+        {
+            $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
+            $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
+        }
 
         $pagination->setTotalPagByLength($length);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
+
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
+
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
                                                                                     'countries'    => $countries,
                                                                                     'country'      => $country,
+                                                                                    'cat_services' => $cat_services,
+                                                                                    'catserv'      => $catserv,
                                                                                     'term'         => $term,
                                                                                     'field'        => $field
                                                                                     ));
@@ -120,6 +134,9 @@ class PartnerController extends Controller {
                     $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_AD');
                     $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($partner->getCountry()->getLang());
 
+                    $id_catserv = $request->request->get('id_catserv');
+                    $catserv = $em->getRepository('UserBundle:CategoryService')->find($id_catserv);
+
                     $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
@@ -133,6 +150,8 @@ class PartnerController extends Controller {
                     $newUser->setLanguage      ($lang);
                     $newUser->setPartner       ($partner);
                     $newUser->addRole          ($role);
+
+                    if($catserv != null) $newUser->setCategoryService($catserv);
 
                     $newUser = UtilController::settersContact($newUser, $partner);
 
@@ -163,14 +182,16 @@ class PartnerController extends Controller {
             $this->get('session')->setFlash('info', $flash);
         }
 
-        $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
-        $cities  = $em->getRepository("UtilBundle:City"  )->findAll();
+        $regions      = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
+        $cities       = $em->getRepository("UtilBundle:City"  )->findAll();
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
 
-        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'   => $partner,
-                                                                                  'form_name' => $form->getName(),
-                                                                                  'form'      => $form->createView(),
-                                                                                  'regions'   => $regions,
-                                                                                  'cities'    => $cities,
+        return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'      => $partner,
+                                                                                  'form_name'    => $form->getName(),
+                                                                                  'form'         => $form->createView(),
+                                                                                  'regions'      => $regions,
+                                                                                  'cities'       => $cities,
+                                                                                  'cat_services' => $cat_services,
                                                                                  ));
     }
 
@@ -236,8 +257,10 @@ class PartnerController extends Controller {
                 }
             }
         }
+        $catserv = $partner->getUsers()[0]->getCategoryService()->getCategoryService();
 
         return $this->render('PartnerBundle:Partner:edit_partner.html.twig', array('partner'    => $partner,
+                                                                                   'catserv'    => $catserv,
                                                                                    'form_name'  => $form->getName(),
                                                                                    'form'       => $form->createView()));
     }

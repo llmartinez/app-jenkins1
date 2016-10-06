@@ -20,7 +20,16 @@ class EditUserWorkshopType extends AbstractType {
             ->add('surname')
             ->add('active', 'checkbox', array('required' => false))
             ->add('language')
-
+            ->add('partner', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\PartnerBundle\Entity\Partner',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.country'.$id_country); }))
             //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
