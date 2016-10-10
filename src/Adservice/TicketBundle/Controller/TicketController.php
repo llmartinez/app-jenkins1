@@ -1490,130 +1490,130 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-//    public function closeTicketAction($id, $ticket, $close='1')
-   // {
-   //     $message = '';
-   //     $security = $this->get('security.context');
-   //     if ($security->isGranted('ROLE_SUPER_ADMIN')
-   //     or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-   //     or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
-   //     ){
-   //         $em = $this->getDoctrine()->getEntityManager();
-   //         $request  = $this->getRequest();
+   public function closeTicketAction($id, $ticket, $close='1')
+   {
+       $message = '';
+       $security = $this->get('security.context');
+       if ($security->isGranted('ROLE_SUPER_ADMIN')
+       or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
+       or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+       ){
+           $em = $this->getDoctrine()->getEntityManager();
+           $request  = $this->getRequest();
 
-   //         if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
-   //         else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
+           if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+           else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
-   //         if ($request->getMethod() == 'POST') {
-   //             $form->bindRequest($request);
-   //             if($request->request->get('sol_other_txt') != ''){
-   //                 $message = $request->request->get('sol_other_txt');
-   //             }
-   //             else{
-   //                 $message= $request->getSession()->get('message');
-   //             }
+           if ($request->getMethod() == 'POST') {
+               $form->bindRequest($request);
+               if($request->request->get('sol_other_txt') != ''){
+                   $message = $request->request->get('sol_other_txt');
+               }
+               else{
+                   $message= $request->getSession()->get('message');
+               }
 
-   //             /*Validacion Ticket*/
-   //             $str_len = strlen($message);
-   //             if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
-   //             else { $max_len = 500; }
+               /*Validacion Ticket*/
+               $str_len = strlen($message);
+               if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+               else { $max_len = 500; }
 
-   //             if ($str_len <= $max_len ) {
+               if ($str_len <= $max_len ) {
 
-   //                 if ($form->isValid()) {
+                   if ($form->isValid()) {
 
-   //                     if ($security->isGranted('ROLE_ASSESSOR') === false) {
-   //                         if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
-   //                         elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
-   //                         elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$message);
-   //                     }
+                       if ($security->isGranted('ROLE_ASSESSOR') === false) {
+                           if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
+                           elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
+                           elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$message);
+                       }
 
-   //                     if($ticket->getSolution() != ""){
+                       if($ticket->getSolution() != ""){
 
-   //                         $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-   //                         $user   = $security->getToken()->getUser();
-   //                         $ticket->setStatus($closed);
-   //                         $ticket->setPending(0);
-   //                         $ticket->setBlockedBy(null);
+                           $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
+                           $user   = $security->getToken()->getUser();
+                           $ticket->setStatus($closed);
+                           $ticket->setPending(0);
+                           $ticket->setBlockedBy(null);
 
-   //                         UtilController::saveEntity($em, $ticket, $user);
+                           UtilController::saveEntity($em, $ticket, $user);
 
-   //                         $mail = $ticket->getWorkshop()->getEmail1();
-   //                         $pos = strpos($mail, '@');
-   //                         if ($pos != 0) {
+                           $mail = $ticket->getWorkshop()->getEmail1();
+                           $pos = strpos($mail, '@');
+                           if ($pos != 0) {
 
-   //                             // Cambiamos el locale para enviar el mail en el idioma del taller
-   //                             $locale = $request->getLocale();
-   //                             $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-   //                             $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-   //                             $request->setLocale($lang->getShortName());
+                               // Cambiamos el locale para enviar el mail en el idioma del taller
+                               $locale = $request->getLocale();
+                               $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                               $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                               $request->setLocale($lang->getShortName());
 
-   //                             /* MAILING */
-   //                             $mailer = $this->get('cms.mailer');
-   //                             $mailer->setTo($mail);
-   //                             $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-   //                             $mailer->setFrom('noreply@adserviceticketing.com');
-   //                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-   //                             $mailer->sendMailToSpool();
-   //                             //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+                               /* MAILING */
+                               $mailer = $this->get('cms.mailer');
+                               $mailer->setTo($mail);
+                               $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                               $mailer->setFrom('noreply@adserviceticketing.com');
+                               $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                               $mailer->sendMailToSpool();
+                               //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
-   //                             // Dejamos el locale tal y como estaba
-   //                             $request->setLocale($locale);
-   //                         }
-   //                         //Si es el taller el que cierra, se le envia un mail al asesor asignado
-   //                         if ($ticket->getAssignedTo() != null) {
-   //                             $mail = $ticket->getAssignedTo()->getEmail1();
-   //                             $pos = strpos($mail, '@');
-   //                             if ($pos != 0) {
+                               // Dejamos el locale tal y como estaba
+                               $request->setLocale($locale);
+                           }
+                           //Si es el taller el que cierra, se le envia un mail al asesor asignado
+                           if ($ticket->getAssignedTo() != null) {
+                               $mail = $ticket->getAssignedTo()->getEmail1();
+                               $pos = strpos($mail, '@');
+                               if ($pos != 0) {
 
-   //                                 // Cambiamos el locale para enviar el mail en el idioma del taller
-   //                                 $locale = $request->getLocale();
-   //                                 $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
-   //                                 $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-   //                                 $request->setLocale($lang->getShortName());
+                                   // Cambiamos el locale para enviar el mail en el idioma del taller
+                                   $locale = $request->getLocale();
+                                   $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
+                                   $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                                   $request->setLocale($lang->getShortName());
 
-   //                                 /* MAILING */
-   //                                 $mailer = $this->get('cms.mailer');
-   //                                 $mailer->setTo($mail);
-   //                                 $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
-   //                                 $mailer->setFrom('noreply@adserviceticketing.com');
-   //                                 $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
-   //                                 $mailer->sendMailToSpool();
-   //                                 //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
+                                   /* MAILING */
+                                   $mailer = $this->get('cms.mailer');
+                                   $mailer->setTo($mail);
+                                   $mailer->setSubject($this->get('translator')->trans('mail.closeTicket.subject').$id);
+                                   $mailer->setFrom('noreply@adserviceticketing.com');
+                                   $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
+                                   $mailer->sendMailToSpool();
+                                   //echo $this->renderView('UtilBundle:Mailing:ticket_close_mail.html.twig', array('ticket' => $ticket));die;
 
-   //                                 // Dejamos el locale tal y como estaba
-   //                                 $request->setLocale($locale);
-   //                             }
-   //                         }
+                                   // Dejamos el locale tal y como estaba
+                                   $request->setLocale($locale);
+                               }
+                           }
 
-   //                         return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
-   //                     }
-   //                     else{
-   //                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
-   //                     }
-   //                 }else{
-   //                     $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
-   //                 }
-   //             }else{
-   //                 $request->getSession()->set('message', $message);
-   //                 $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.');
+                           return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
+                       }
+                       else{
+                           $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                       }
+                   }else{
+                       $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                   }
+               }else{
+                   $request->getSession()->set('message', $message);
+                   $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.');
 
-   //             }
-   //         }
+               }
+           }
 
-   //         $systems = $em->getRepository('TicketBundle:System')->findAll();
+           $systems = $em->getRepository('TicketBundle:System')->findAll();
 
-   //         return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
-   //                                                                                         'message'   => $message,
-   //                                                                                         'systems'   => $systems,
-   //                                                                                         'form'      => $form->createView(),
-   //                                                                                         'form_name' => $form->getName(),
-   //                                                                                         'close'     => $close ));
-   //     }
-   //     else{
-   //         return $this->render('TwigBundle:Exception:exception_access.html.twig');
-   //     }
-//    }
+           return $this->render('TicketBundle:Layout:close_ticket_layout.html.twig', array('ticket'    => $ticket,
+                                                                                           'message'   => $message,
+                                                                                           'systems'   => $systems,
+                                                                                           'form'      => $form->createView(),
+                                                                                           'form_name' => $form->getName(),
+                                                                                           'close'     => $close ));
+       }
+       else{
+           return $this->render('TwigBundle:Exception:exception_access.html.twig');
+       }
+   }
 
     /**
      * Edita la descripcion del ticket
@@ -1807,7 +1807,7 @@ class TicketController extends Controller {
      */
     public function assignTicketSelectUserAction($ticket) {
         $em = $this->getDoctrine()->getEntityManager();
-        $users = $this->getUsersToAssingFromTicket();
+        $users = $this->getUsersToAssingFromTicket($ticket);
 
         return $this->render('TicketBundle:Ticket:assign_ticket.html.twig', array('ticket' => $ticket,
                     'users' => $users
@@ -2339,10 +2339,16 @@ class TicketController extends Controller {
      * Devuelve todos los usuarios que podran ser asignados a un ticket (admins i asesores has nuevo aviso)
      * @param type $id_ticket
      */
-    private function getUsersToAssingFromTicket() {
+    private function getUsersToAssingFromTicket($ticket=null) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $query = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ASSESSOR' AND u.active = 1 ORDER BY u.name ASC";
+        $query = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ASSESSOR' AND u.active = 1";
+
+        if($ticket != null AND $ticket->getCategoryService() != NULL) {
+            $query .=" AND (u.category_service IS NULL OR u.category_service = ".$ticket->getCategoryService()->getId().") ";
+        }
+        $query .= " ORDER BY u.name ASC";
+
         $consulta = $em->createQuery($query);
         return $consulta->getResult();
     }
