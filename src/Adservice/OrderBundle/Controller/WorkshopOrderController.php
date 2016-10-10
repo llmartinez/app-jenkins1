@@ -1230,7 +1230,8 @@ class WorkshopOrderController extends Controller {
         if ($workshop->getModifiedAt() != null ) {
             $workshopOrder->setModifiedAt($workshop->getModifiedAt());
         }
-        $workshopOrder->setActive(false);
+        $workshopOrder->setActive($workshop->getActive());
+        // $workshopOrder->setActive(false);
 
 
         return $workshopOrder;
@@ -1286,7 +1287,8 @@ class WorkshopOrderController extends Controller {
         if ($workshopOrder->getModifiedAt() != null ) {
             $workshop->setModifiedAt($workshopOrder->getModifiedAt());
         }
-        $workshop->setActive(true);
+        $workshop->setActive($workshopOrder->getActive());
+        // $workshop->setActive(true);
 
         return $workshop;
     }
