@@ -95,8 +95,7 @@ $(document).ready(function() {
             if(country == null) country = '0';
             var catserv = $('#slct_catserv').val();
             if(catserv == null) catserv = '0';
-            var partner = $('#flt_partner').val();
-            if(partner == null) partner = '0';
+            var partner = 0;
             var status = $('#flt_status').val();
             if(status == null) status = '0';
 

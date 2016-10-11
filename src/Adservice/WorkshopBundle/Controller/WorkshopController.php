@@ -56,7 +56,7 @@ class WorkshopController extends Controller {
 
         if($catserv != 0)
         {
-            $joins[] = array('e.users u ', 'u.category_service = '.$catserv);
+            $params[] = array('category_service', ' = '.$catserv.' ');
         }
 
         if ($security->isGranted('ROLE_ADMIN')) {

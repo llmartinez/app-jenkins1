@@ -25,10 +25,9 @@ $(document).ready(function() {
     $('#flt_catserv').change(function() {
 
         var country = $('#flt_country').val();
-        var partner = $('#flt_partner').val();
+        var partner = 0;
         var catserv = $(this).val();
         if(country == null) var country = '0';
-        if(partner == null) var partner = '0';
         if(catserv == null) var catserv = '0';
 
         var route = 'shop_list';
