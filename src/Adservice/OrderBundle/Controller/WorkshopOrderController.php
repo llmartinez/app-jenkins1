@@ -1098,6 +1098,10 @@ class WorkshopOrderController extends Controller {
                 $newUser->setWorkshop      ($workshop);
                 $newUser->addRole          ($role);
 
+                //Asignamos un Token para AD360
+                $token = UtilController::getRandomToken();
+                $newUser->setToken($token);
+
                 //password nuevo, se codifica con el nuevo salt
                 $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
                 $salt = md5(time());

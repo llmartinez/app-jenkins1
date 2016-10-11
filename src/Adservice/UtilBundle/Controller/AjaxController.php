@@ -72,11 +72,37 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    //  ____
-    // |  _ \
-    // | |_) |
-    // |  __/
-    // |_|artner
+    //  ____   _    ____ _____ _   _ _____ ____
+    // |  _ \ / \  |  _ \_   _| \ | | ____|  _ \
+    // | |_) / _ \ | |_) || | |  \| |  _| | |_) |
+    // |  __/ ___ \|  _ < | | | |\  | |___|  _ <
+    // |_| /_/   \_\_| \_\|_| |_| \_|_____|_| \_\
+
+    /**
+     * Funcion Ajax para obtener los socios de una Cateogria de Servicio
+     * @return json
+     */
+    public function partnersFromCatServAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition   = $this->getRequest();
+        $id_catserv = $petition->request->get('id_catserv');
+
+        $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
+        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ";
+
+        $consulta = $em->createQuery($query);
+        $partners   = $consulta->getResult();
+
+        $size = sizeOf($partners);
+        if($size > 0) {
+            foreach ($partners as $partner) {
+                $json[] = $partner->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
 
     /**
      * Funcion Ajax para obtener las tiendas de un socio
