@@ -16,7 +16,7 @@
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
     <tr><td height="150" valign="middle" align="center">
         {% set url_logo = route_logo_mail ~ '.png' %}
-        <img src="{{ asset(url_logo) }}" style="height: 70px;">
+        <img src="{{ asset(url_logo) }}" style="height: 70px;margin-right: 20px;">
 
         {% if app.security.getToken().getUser() != "anon." and shopOrder.categoryService != null %}
             {% set url_logo_catserv = route_logo_mail ~ '_' ~ shopOrder.categoryService.slug ~ '.png' %}
