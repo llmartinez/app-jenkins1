@@ -23,11 +23,10 @@ class WorkshopEditOrderType extends AbstractType
                   'property' => 'name',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
                                                 return $er->createQueryBuilder('s')
-                                                          ->leftJoin('s.users ', 'u')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country)
-                                                          ->andWhere('u.category_service'.$id_catserv); }))
+                                                          ->andWhere('s.category_service'.$id_catserv)
+                                                          ->andWhere('s.country'.$id_country); }))
             ->add('shop', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
