@@ -16,7 +16,7 @@ class DiagnosisMachineRepository extends EntityRepository
         $query = 'SELECT t ';
         $from  = 'FROM WorkshopBundle:DiagnosisMachine t ';
         $where = 'WHERE t.active = 1 ';
-        if($country != null) $where = $where.' AND t.country = '.$country.' ';
+//        if($country != null) $where = $where.' AND t.country = '.$country.' ';
 
         //Crea la consulta
         // echo $query.$where.' ORDER BY t.name ';die;
