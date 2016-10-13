@@ -2024,7 +2024,6 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $params = array();
-
         if ($brand != '0' and $brand != '')
             $params[] = array('brand', ' = ' . $brand);
         if ($model != '0' and $model != '')
