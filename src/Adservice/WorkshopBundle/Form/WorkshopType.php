@@ -18,6 +18,15 @@ class WorkshopType extends AbstractType
             ->add('name')
             ->add('code_workshop', 'number')
             ->add('cif', 'text', array('required' => true))
+            ->add('category_service', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ; }))
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',

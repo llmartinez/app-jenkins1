@@ -95,6 +95,8 @@ function populate_partner(){
     var route  = 'partners_from_catserv';
     var locale = $(document).find("#data_locale").val();
 
+    $('form').find('select[id$=partner]').empty();
+
     $.ajax({
         type        : "POST",
         url         : Routing.generate(route, {_locale: locale }),
@@ -105,7 +107,6 @@ function populate_partner(){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                $('form').find('select[id$=partner]').empty();
                 // $('form').find('select[id*=_shop]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
