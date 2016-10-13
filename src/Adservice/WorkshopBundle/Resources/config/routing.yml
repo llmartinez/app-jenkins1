@@ -31,8 +31,8 @@ workshop_activate_deactivate:
 #   APDO. RUTAS DIAGNOSIS    #
 ##############################
 diagnosis_machine_list:
-    pattern:  /diag_list/{page}/{country}
-    defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none'  }
+    pattern:  /diag_list/{page}/{country}/{catserv}
+    defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none', catserv: 0   }
     options:
         expose: true
 

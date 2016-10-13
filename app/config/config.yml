@@ -22,6 +22,7 @@ twig:
     strict_variables: %kernel.debug%
     globals:
         route_logo: '%route_logo%'
+        route_logo_mail: '%route_logo_mail%'
 
 # Assetic Configuration
 assetic:

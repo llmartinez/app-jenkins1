@@ -7,7 +7,7 @@
                 <th>{% trans %} name             {% endtrans %}</th>
                 <th>{% trans %}                  {% endtrans %}</th>
                 <th>{% trans %} category_service {% endtrans %}</th>
-                <th>{% trans %} country          {% endtrans %}</th>
+                {#<th>{% trans %} country          {% endtrans %}</th>#}
                 <th>{% trans %} actions          {% endtrans %}</th>
             </tr>
         </thead>
@@ -18,7 +18,7 @@
                 <td>{{ typology.name|length > 15 ? typology.name|slice(0, 15) ~ '...' : typology.name  }}</td>
                 <td>{% if typology.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ typology.categoryService }}</td>
-                <td>{{ typology.country | trans }}</td>
+               {# <td>{{ typology.country | trans }}</td>#}
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path("typology_edit", { 'id':typology.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>

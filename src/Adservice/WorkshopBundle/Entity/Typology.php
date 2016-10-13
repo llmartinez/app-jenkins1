@@ -35,12 +35,12 @@ class Typology {
      */
     private $active;
 
-    /**
-     * @var string $country
-     *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
-     */
-    private $country;
+//    /**
+//     * @var string $country
+//     *
+//     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+//     */
+//    private $country;
 
     /**
      * @var string $category_service
@@ -93,24 +93,24 @@ class Typology {
     public function getActive() {
         return $this->active;
     }
-
-    /**
-     * Set country
-     *
-     * @param string $country
-     */
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
-        $this->country = $country;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     */
-    public function getCountry() {
-        return $this->country;
-    }
+//
+//    /**
+//     * Set country
+//     *
+//     * @param string $country
+//     */
+//    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+//        $this->country = $country;
+//    }
+//
+//    /**
+//     * Get country
+//     *
+//     * @return string
+//     */
+//    public function getCountry() {
+//        return $this->country;
+//    }
 
 
     /**
