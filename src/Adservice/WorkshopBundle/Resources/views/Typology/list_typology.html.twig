@@ -24,7 +24,7 @@
                 {% endfor %}
         </select></div>
 
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {#{% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
             <select id="flt_country" class='form-control'>
                     <option value="none">{% trans %} all {% endtrans %}</option>
@@ -32,7 +32,7 @@
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}
         </select></div>
-        {% endif %}
+        {% endif %}#}
     </div>
     {% include 'WorkshopBundle:Typology:_list.html.twig'  %}
 

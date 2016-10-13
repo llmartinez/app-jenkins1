@@ -17,19 +17,23 @@ class DiagnosisMachineController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listDiagnosisMachineAction($page=1, $country='none') {
+    public function listDiagnosisMachineAction($page=1, $country='none', $catserv=0) {
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
-        }
-        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+//        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+//            if ($country != 'none') $params[] = array('country', ' = '.$country);
+//            else                    $params[] = array();
+//        }
+//        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
+        
+        if ($catserv != 0) $params[] = array('category_service', ' = '.$catserv);
 
+        if(!isset($params)) $params = array();
+         
         $pagination = new Pagination($page);
 
         $diagnosis_machines = $pagination->getRows($em, 'WorkshopBundle', 'DiagnosisMachine', $params, $pagination);
@@ -38,13 +42,18 @@ class DiagnosisMachineController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
-        else $countries = array();
+//        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+//        else $countries = array();
+
+        
+        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
 
         return $this->render('WorkshopBundle:DiagnosisMachine:list_diagnosis_machine.html.twig', array('diagnosis_machines' => $diagnosis_machines,
-                                                                                                       'pagination'         => $pagination,
-                                                                                                       'countries'          => $countries,
-                                                                                                       'country'            => $country,));
+                                                                                                        'pagination'  => $pagination,
+                  //                                                                                      'countries'   => $countries,
+                                                                                                        'country'     => $country,
+                                                                                                        'catservices' => $catservices,
+                                                                                                        'catserv'     => $catserv,));
     }
 
     /**
@@ -68,16 +77,16 @@ class DiagnosisMachineController extends Controller {
         }
         
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-
-            $_SESSION['id_country'] = ' != 0 ';
-
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
-
-        }else {
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
-        }
+//        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+//
+//            $_SESSION['id_country'] = ' != 0 ';
+//
+//        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+//            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+//
+//        }else {
+//            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+//        }
 
         $form = $this->createForm(new DiagnosisMachineType(), $diagnosis_machine);
 
