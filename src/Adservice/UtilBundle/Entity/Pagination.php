@@ -246,7 +246,7 @@ class Pagination
     {
         $query = 'SELECT e '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
-        $where = 'WHERE e.id > 0 ';
+        $where = 'WHERE e.id >= 0 ';
 
         if($joins != null and $joins[0] != null) {
             foreach ($joins as $join) {
