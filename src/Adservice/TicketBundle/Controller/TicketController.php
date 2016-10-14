@@ -370,13 +370,8 @@ class TicketController extends Controller {
 
         if ($option == null)
             $option = 'all';
-
-        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
-            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
-        }
-        else{
-            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
-        }
+        
+        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
@@ -1955,13 +1950,13 @@ class TicketController extends Controller {
             $tickets = array($ticket);
         else
             $tickets = array();
-
-        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
-           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
-        }
-        else{
-            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
-        }
+        $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+//        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+//           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+//        }
+//        else{
+//            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
+//        }
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
@@ -2167,7 +2162,7 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
-
+       
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
         $num_rows = $request->request->get('slct_numRows');
@@ -2188,15 +2183,13 @@ class TicketController extends Controller {
         $max_rows = 100;
         $pagination->setMaxRows($max_rows);
         $ordered = array('e.modified_at', 'DESC');
-
+       
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
-
         $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
 
         $pagination->setTotalPagByLength($length);
 
         $tickets = array();
-
         $key = array_keys($cars);
         $size = sizeOf($key);
 
@@ -2266,12 +2259,11 @@ class TicketController extends Controller {
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
 
         $lang = $request->get('lang');
-
-        if (isset($model) and $model != '0') {
+        if (isset($model) and $model != null and $model !='') {
             $model = $em->getRepository('CarBundle:Model')->find($model);
         }
 
-        if (isset($version) and $version != '0' and $version != null)
+        if (isset($version) and $version != '' and $version != null)
             $version = $em->getRepository('CarBundle:Version')->findOneById($version);
 
         if (isset($subsystem) and $subsystem != '0' and $subsystem != '')
