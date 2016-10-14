@@ -558,9 +558,11 @@ class TicketController extends Controller {
             $car->setDisplacement($id_displacement);
         }
         if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
+            $id_vin = strtoupper($id_vin);
             $car->setVin($id_vin);
         }
         if (isset($id_plateNumber) and $id_plateNumber != '' and $id_plateNumber != '0') {
+            $id_plateNumber = strtoupper($id_plateNumber);
             $car->setPlateNumber($id_plateNumber);
         }
 
@@ -906,7 +908,7 @@ class TicketController extends Controller {
                             $mailer->setFrom('noreply@adserviceticketing.com');
                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                             $mailer->sendMailToSpool();
-                            //echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket));die;
+                            // echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale));die;
 
                             if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER')) {
                                 $mail_centralita = $this->container->getParameter('mail_centralita');

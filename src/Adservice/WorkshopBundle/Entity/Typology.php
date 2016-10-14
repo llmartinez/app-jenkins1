@@ -134,5 +134,10 @@ class Typology {
     public function __toString() {
         return $this->name;
     }
+    public function to_json(){
+        $json = array('id'           => $this->getId(),
+                      'name'         => $this->getName());
+        return $json;
+    }
 
 }
