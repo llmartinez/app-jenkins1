@@ -100,7 +100,7 @@
 
                 },
                 error: function () {
-                    console.log("Error loading versions...");
+                    console.log("Error loading cifs...");
                 }
             });
         });
@@ -125,7 +125,7 @@
 
                 },
                 error: function () {
-                    console.log("Error loading versions...");
+                    console.log("Error loading cifs...");
                 }
             });
         });

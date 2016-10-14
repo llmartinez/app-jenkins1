@@ -164,9 +164,8 @@ class WorkshopOrderController extends Controller {
 
             if($user->getCategoryService() != null)
             {
-                $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
-                                              WHERE p.country = '.$user->getCountry()->getId().'
-                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p
+                                              WHERE p.category_service = '.$user->getCategoryService()->getId().'
                                               ORDER BY p.name ASC');
                 $partners = $consulta->getResult();
             }
@@ -200,6 +199,7 @@ class WorkshopOrderController extends Controller {
         if($user->getCategoryService() != null)
         {
             $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+            unset($_SESSION['id_country']);
         }
 
         $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
@@ -1097,6 +1097,10 @@ class WorkshopOrderController extends Controller {
                 $newUser->setLanguage      ($lang);
                 $newUser->setWorkshop      ($workshop);
                 $newUser->addRole          ($role);
+
+                //Asignamos un Token para AD360
+                $token = UtilController::getRandomToken();
+                $newUser->setToken($token);
 
                 //password nuevo, se codifica con el nuevo salt
                 $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);

@@ -109,8 +109,12 @@ class ShopOrderController extends Controller {
         $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),
-                                                                                    'active' => '1'));
+            $params_partners['active'] = '1';
+
+            if($user->getCategoryService() != null) $params_partners['category_service'] = $user->getCategoryService()->getId();
+            else                                    $params_partners['country'] = $user->getCountry()->getId();
+
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy($params_partners);
         }
         else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
@@ -131,6 +135,7 @@ class ShopOrderController extends Controller {
         if($user->getCategoryService() != null)
         {
             $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+            unset($_SESSION['id_country']);
         }
 
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);

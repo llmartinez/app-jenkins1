@@ -56,7 +56,7 @@ class WorkshopController extends Controller {
 
         if($catserv != 0)
         {
-            $joins[] = array('e.users u ', 'u.category_service = '.$catserv);
+            $params[] = array('category_service', ' = '.$catserv.' ');
         }
 
         if ($security->isGranted('ROLE_ADMIN')) {
@@ -97,10 +97,14 @@ class WorkshopController extends Controller {
 
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
             $countries = $em->getRepository('UtilBundle:Country')->findAll();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         } else {
             $countries = array();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $country_id = $security->getToken()->getUser()->getCountry()->getId();
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country_id);
         }
 
         $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();

@@ -68,7 +68,10 @@ class ShopController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+        }
         else $partners = array();
 
         $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();

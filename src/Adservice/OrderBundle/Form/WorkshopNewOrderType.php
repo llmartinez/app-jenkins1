@@ -22,10 +22,11 @@ class WorkshopNewOrderType extends AbstractType
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv)
                                                           ->andWhere('s.country'.$id_country.' OR s.id = 1')
                                                           ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('code_workshop')
@@ -34,11 +35,10 @@ class WorkshopNewOrderType extends AbstractType
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('t')
                                                           ->orderBy('t.name', 'ASC')
                                                           ->where('t.active = 1')
-                                                          ->andWhere('t.country'.$id_country)
                                                           ->andWhere('t.category_service'.$id_catserv); }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
