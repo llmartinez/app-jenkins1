@@ -35,11 +35,10 @@ class WorkshopNewOrderType extends AbstractType
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('t')
                                                           ->orderBy('t.name', 'ASC')
                                                           ->where('t.active = 1')
-                                                          ->andWhere('t.country'.$id_country)
                                                           ->andWhere('t.category_service'.$id_catserv); }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))

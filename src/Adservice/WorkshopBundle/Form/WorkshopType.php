@@ -57,7 +57,8 @@ class WorkshopType extends AbstractType
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          // ->andWhere('s.country'.$id_country)
+                                                          ; }))
             ->add('diagnosis_machines', 'entity', array(
                   'required' => false,
                   'multiple' => true,
@@ -68,7 +69,8 @@ class WorkshopType extends AbstractType
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          // ->andWhere('s.country'.$id_country)
+                                                          ; }))
             ->add('contact', 'text', array('required' => true))
             ->add('internal_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))

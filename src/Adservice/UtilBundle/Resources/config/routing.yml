@@ -56,6 +56,18 @@ partners_from_catserv:
     options:
         expose: true
 
+typologies_from_catserv:
+    pattern: /typologiesFromCatServ
+    defaults: { _controller: UtilBundle:Ajax:typologiesFromCatServ }
+    options:
+        expose: true
+
+diag_machines_from_catserv:
+    pattern: /diagMachinesFromCatServ
+    defaults: { _controller: UtilBundle:Ajax:diagMachinesFromCatServ }
+    options:
+        expose: true
+
 shops_from_partner:
     pattern: /shopsFromPartner
     defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }

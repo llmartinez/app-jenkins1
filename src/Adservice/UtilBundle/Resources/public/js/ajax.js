@@ -107,7 +107,7 @@ function populate_partner(){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                // $('form').find('select[id*=_shop]').append("<option value=0></option>");
+                // $('form').find('select[id*=_partner]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
                     $('form').find('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
@@ -116,6 +116,75 @@ function populate_partner(){
         },
         error : function(){
             console.log("Error al cargar los socios...");
+        }
+    });
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_typology(){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+
+    var route  = 'typologies_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('form').find('select[id$=typology]').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                $('form').find('select[id$=typology]').append("<option></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('form').find('select[id$=typology]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+            }
+        },
+        error : function(){
+            console.log("Error al cargar las tipologias...");
+        }
+    });
+}
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_diagmachine(){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+
+    var route  = 'diag_machines_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('form').find('select[id$=diagnosis_machines]').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                // $('form').find('select[id*=diagnosis_machines]').append("<option value></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('form').find('select[id$=diagnosis_machines]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+            }
+        },
+        error : function(){
+            console.log("Error al cargar las maquinas de diagnosis...");
         }
     });
 }

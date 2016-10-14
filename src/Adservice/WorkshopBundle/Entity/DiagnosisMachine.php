@@ -41,7 +41,7 @@ class DiagnosisMachine {
 //     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
 //     */
 //    private $country;
-    
+
      /**
      * @var string $category_service
      *
@@ -111,8 +111,8 @@ class DiagnosisMachine {
 //    public function getCountry() {
 //        return $this->country;
 //    }
-    
-    
+
+
     /**
      * Set category_service
      *
@@ -135,4 +135,9 @@ class DiagnosisMachine {
         return $this->name;
     }
 
+    public function to_json(){
+        $json = array('id'           => $this->getId(),
+                      'name'         => $this->getName());
+        return $json;
+    }
 }
