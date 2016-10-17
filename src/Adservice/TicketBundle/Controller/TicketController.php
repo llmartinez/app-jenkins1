@@ -2168,11 +2168,11 @@ class TicketController extends Controller {
         $num_rows = $request->request->get('slct_numRows');
         if (!isset($num_rows))
             $num_rows = 10;
-        if (isset($brand) and $brand != '0' and $brand != '')
+        if (isset($brand) and $brand != null and $brand != '')
             $params[] = array('brand', ' = ' . $brand);
-        if (isset($model) and $model != '0' and $model != '')
+        if (isset($model) and $model != null and $model != '')
             $params[] = array('model', ' = ' . $model);
-        if (isset($version) and $version != '0' and $version != '')
+        if (isset($version) and $version != null and $version != '')
             $params[] = array('version', ' = ' . $version);
 
         if (isset($plateNumber) and $plateNumber != '0' and $plateNumber != '')
@@ -2201,6 +2201,9 @@ class TicketController extends Controller {
         if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
             $catserv = $user->getCategoryService()->getId();
         }
+        else{
+            $catserv = null;
+        }
 
         if ($size > 0) {
 
@@ -2208,11 +2211,11 @@ class TicketController extends Controller {
 
                 $id = $cars[$key[$i]]->getId();
                 if ($subsystem == 0 or $subsystem == ''){
-                    if(isset($catserv)) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'category_service' => $catserv));
+                    if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'category_service' => $catserv));
                     else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
                 }
                 else{
-                    if(isset($catserv)) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem, 'category_service' => $catserv));
+                    if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem, 'category_service' => $catserv));
                     else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem));
                 }
 
@@ -2311,6 +2314,7 @@ class TicketController extends Controller {
             'brands' => $brands,
             'systems' => $systems,
             'countries' => $countries,
+            'catserv' => $catserv,
             'catservices' => $catservices,
             'languages' => $languages,
             'lang' => $lang,
