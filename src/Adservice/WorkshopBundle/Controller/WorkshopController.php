@@ -26,7 +26,7 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
+    public function listAction($page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $catserv = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
 
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -54,6 +54,11 @@ class WorkshopController extends Controller {
         } else
             $params[] = array('country', ' = ' . $security->getToken()->getUser()->getCountry()->getId());
 
+        if($catserv != 0)
+        {
+            $params[] = array('category_service', ' = '.$catserv.' ');
+        }
+
         if ($security->isGranted('ROLE_ADMIN')) {
 
             if ($partner != '0')
@@ -78,8 +83,6 @@ class WorkshopController extends Controller {
             } elseif ($status == "infotech"){
                 $params[] = array('infotech', ' = 1');
             }
-            
-            
         }
 
         if (!isset($params))
@@ -94,24 +97,32 @@ class WorkshopController extends Controller {
 
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
             $countries = $em->getRepository('UtilBundle:Country')->findAll();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         } else {
             $countries = array();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($security->getToken()->getUser()->getCountry()->getId());
+            $country_id = $security->getToken()->getUser()->getCountry()->getId();
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country_id);
         }
 
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
+
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops' => $workshops,
-                    'pagination' => $pagination,
-                    'countries' => $countries,
-                    'partners' => $partners,
-                    'w_idpartner' => $w_idpartner,
-                    'w_id' => $w_id,
-                    'country' => $country,
-                    'partner' => $partner,
-                    'status' => $status,
-                    'term' => $term,
-                    'field' => $field,
-                    'length' => $length));
+                    'pagination'    => $pagination,
+                    'w_idpartner'   => $w_idpartner,
+                    'w_id'          => $w_id,
+                    'countries'     => $countries,
+                    'country'       => $country,
+                    'cat_services'  => $cat_services,
+                    'catserv'       => $catserv,
+                    'partner'       => $partner,
+                    'partners'      => $partners,
+                    'status'        => $status,
+                    'term'          => $term,
+                    'field'         => $field,
+                    'length'        => $length));
     }
 
     public function newWorkshopAction() {
@@ -156,6 +167,7 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
+            $user_partner = $em->getRepository("UserBundle:User")->findOneByPartner($partner);
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             if ($form->isValid()) {
@@ -182,10 +194,16 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
+                    $workshop->setCategoryService($user_partner->getCategoryService());
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
+                    if($workshop->getActive() == true) {
+                        $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                    }else{
+                        $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                    }
                     $this->saveWorkshop($em, $workshop);
 
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
@@ -226,6 +244,7 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage($lang);
                     $newUser->setWorkshop($workshop);
                     $newUser->addRole($role);
+                    $newUser->setCategoryService($user_partner->getCategoryService());
 
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
@@ -490,7 +509,7 @@ class WorkshopController extends Controller {
                         $em->remove($post);
                         $em->flush();
                     }
-                }                
+                }
                 $em->remove($ticket);
                 $em->flush();
             }
@@ -508,7 +527,7 @@ class WorkshopController extends Controller {
         if(isset($user)){
            $cars = $em->getRepository("CarBundle:Car")->findBy(array('modified_by' => $user->getId()));
            if(isset($cars)){
-               foreach($cars as $car){                  
+               foreach($cars as $car){
                    $car->setModifiedBy($usertmp);
                    $em->persist($car);
                     $em->flush();
@@ -516,11 +535,11 @@ class WorkshopController extends Controller {
             }
             $cars = $em->getRepository("CarBundle:Car")->findBy(array('created_by' => $user->getId()));
             if(isset($cars)){
-                foreach($cars as $car){  
+                foreach($cars as $car){
                     $car->setCreatedBy($usertmp);
                     $em->persist($car);
                     $em->flush();
-                }                
+                }
                 $em->remove($user);
                 $em->flush();
             }
@@ -559,16 +578,24 @@ class WorkshopController extends Controller {
                     'id_ticket' => $id_ticket,
                     'form_name' => $form->getName(),
                     'form' => $form->createView()));
-    }   
-    
+    }
+
     public function deactivateActivateWorkshopAction($workshop_id){
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop){
             $workshop->setActive(!$workshop->getActive());
+
+            if($workshop->getActive() == true) {
+                $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            }else{
+                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            }
+            $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
-        $em->persist($workshop);
-        $em->flush();
+       $this->saveWorkshop($em, $workshop);
+        
         
          /* MAILING */
         //Mail to workshop
@@ -580,18 +607,20 @@ class WorkshopController extends Controller {
         if($workshop->getActive()== true){
             $action = 'activate';
             $mailerUser->setSubject($this->get('translator')->trans('mail.activateWorkshop.subject').$workshop->getName());
-        }       
+        }
         $mailerUser->setTo($mail);
         $mailerUser->setFrom('noreply@adserviceticketing.com');
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
         $mailerUser->sendMailToSpool();
+        // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
         //Mail to Report
         $mailerUser->setTo($this->container->getParameter('mail_report'));
         $mailerUser->sendMailToSpool();
-        
-        
+
+
         return $this->redirect($this->generateUrl('workshop_list'));
     }
+
     public function insertCifAction($workshop_id, $country) {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -695,10 +724,10 @@ class WorkshopController extends Controller {
 
             $em->persist($user);
         }
+
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
 
-        if($workshop->getActive() == 0) $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
         $em->persist($workshop);
         $em->flush();
     }

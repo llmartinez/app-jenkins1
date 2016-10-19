@@ -72,11 +72,94 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    //  ____
-    // |  _ \
-    // | |_) |
-    // |  __/
-    // |_|artner
+    //   ____    _  _____ ____  _____ ______     __
+    //  / ___|  / \|_   _/ ___|| ____|  _ \ \   / /
+    // | |     / _ \ | | \___ \|  _| | |_) \ \ / /
+    // | |___ / ___ \| |  ___) | |___|  _ < \ V /
+    //  \____/_/   \_\_| |____/|_____|_| \_\ \_/
+
+
+    /**
+     * Funcion Ajax para obtener los socios de una Cateogria de Servicio
+     * @return json
+     */
+    public function partnersFromCatServAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition   = $this->getRequest();
+        $id_catserv = $petition->request->get('id_catserv');
+
+        $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
+        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ";
+
+        $consulta = $em->createQuery($query);
+        $partners   = $consulta->getResult();
+
+        $size = sizeOf($partners);
+        if($size > 0) {
+            foreach ($partners as $partner) {
+                $json[] = $partner->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+    /**
+     * Funcion Ajax para obtener las tipologias de una Cateogria de Servicio
+     * @return json
+     */
+    public function typologiesFromCatServAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition   = $this->getRequest();
+        $id_catserv = $petition->request->get('id_catserv');
+
+        $query = "SELECT t FROM WorkshopBundle:Typology t WHERE t.id != 0 ";
+        if($id_catserv != '') $query .= "AND t.category_service = ".$id_catserv." ";
+
+        $consulta = $em->createQuery($query);
+        $result   = $consulta->getResult();
+
+        $size = sizeOf($result);
+        if($size > 0) {
+            foreach ($result as $row) {
+                $json[] = $row->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+    /**
+     * Funcion Ajax para obtener las maquinas de diagnosis de una Cateogria de Servicio
+     * @return json
+     */
+    public function diagMachinesFromCatServAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition   = $this->getRequest();
+        $id_catserv = $petition->request->get('id_catserv');
+
+        $query = "SELECT d FROM WorkshopBundle:DiagnosisMachine d WHERE d.id != 0 ";
+        if($id_catserv != '') $query .= "AND d.category_service = ".$id_catserv." OR d.id = 1 ";
+
+        $consulta = $em->createQuery($query);
+        $result   = $consulta->getResult();
+
+        $size = sizeOf($result);
+        if($size > 0) {
+            foreach ($result as $row) {
+                $json[] = $row->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+
+    //  ____   _    ____ _____ _   _ _____ ____
+    // |  _ \ / \  |  _ \_   _| \ | | ____|  _ \
+    // | |_) / _ \ | |_) || | |  \| |  _| | |_) |
+    // |  __/ ___ \|  _ < | | | |\  | |___|  _ <
+    // |_| /_/   \_\_| \_\|_| |_| \_|_____|_| \_\
 
     /**
      * Funcion Ajax para obtener las tiendas de un socio
@@ -596,7 +679,10 @@ class AjaxController extends Controller
             if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
             if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country);
+            $catserv = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            if($catserv != null) $catserv_id = $catserv->getId().' '; else $catserv_id = 0;
+
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country, $catserv_id);
 
             if(count($tickets) > 0) {
                 foreach ($tickets as $ticket) {

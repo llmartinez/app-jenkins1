@@ -35,12 +35,19 @@ class Typology {
      */
     private $active;
 
+//    /**
+//     * @var string $country
+//     *
+//     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+//     */
+//    private $country;
+
     /**
-     * @var string $country
+     * @var string $category_service
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
      */
-    private $country;
+    private $category_service;
 
     /**
      * Get id
@@ -86,27 +93,51 @@ class Typology {
     public function getActive() {
         return $this->active;
     }
+//
+//    /**
+//     * Set country
+//     *
+//     * @param string $country
+//     */
+//    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+//        $this->country = $country;
+//    }
+//
+//    /**
+//     * Get country
+//     *
+//     * @return string
+//     */
+//    public function getCountry() {
+//        return $this->country;
+//    }
+
 
     /**
-     * Set country
+     * Set category_service
      *
-     * @param string $country
+     * @param string $category_service
      */
-    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
-        $this->country = $country;
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
     }
 
     /**
-     * Get country
+     * Get category_service
      *
      * @return string
      */
-    public function getCountry() {
-        return $this->country;
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     public function __toString() {
         return $this->name;
+    }
+    public function to_json(){
+        $json = array('id'           => $this->getId(),
+                      'name'         => $this->getName());
+        return $json;
     }
 
 }

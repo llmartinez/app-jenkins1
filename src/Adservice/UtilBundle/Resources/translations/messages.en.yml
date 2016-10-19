@@ -101,6 +101,7 @@ ROLE_SUPER_ADMIN: 		 "Super Admin"
 ROLE_ADMIN: 			 "Admin"
 ROLE_ASSESSOR: 			 "Technical adviser"
 ROLE_USER: 				 "User"
+ROLE_TOP_AD:  		 	 "Top"
 ROLE_SUPER_AD:  		 "Super Partner"
 ROLE_AD:  				 "Partner"
 super_admin: 			 "Super Admin"
@@ -123,6 +124,8 @@ order:					 "Order"
 incidence:				 "Incidence"
 info:				 	 "Information"
 charge:					 "Charge"
+category_service:		 "Category service"
+btn.confirm_catservice:	 "The user will be created with the following category service"
 
 #CONTACT
 name:					 "Name"
@@ -148,6 +151,10 @@ created_at:				 "Created at"
 modified_by:			 "Modified by"
 modified_at:			 "Modified at"
 with_password:			 "With password"
+
+date.day:				 "Day"
+date.month:				 "Month"
+date.year:				 "Year"
 
 service_country: 		 "Service Country"
 
@@ -372,6 +379,7 @@ code_workshop:			 "Workshop Code"
 typology:				 "Customer"
 cif:					 "Corporate tax ID number"
 internal_code:			 "Internal Code"
+commercial_code:		 "Commercial Code"
 
 subscribed:				 "Subscribed"
 unsubscribed:			 "Unsubscribed"
@@ -540,6 +548,7 @@ filter_ticket: 				  "Ticket filters"
 filter_workshop: 			  "Workshop filters"
 raport: 					  "Report type"
 numworkshopbypartner:  		  "Number of workshop by partner"
+ticketbyworkshop:	  		  "Number of workshop tickets"
 ticketbyworkshopforpartner:	  "Number of workshop tickets by partner"
 numticketsbypartner: 		  "Number of tickets by partner"
 numticketsbysystem: 		  "Number of tickets by system/subsystem"
@@ -624,6 +633,7 @@ mail.deleteTicket.info.id:				"The reference code of the deleted ticket is:"
 
 mail.closeTicket.subject:				"ADService | Ticket closed with id #"
 mail.closeTicket.title:					"A ticket has been closed"
+mail.inactiveTicket.title:				"A ticket has been closed for inactivity"
 mail.closeTicket.createdby:				"This ticket has been closed by a technical adviser:"
 mail.closeTicket.createdby.user:		"You have closed this ticket through the AD-Service Platform."
 mail.closeTicket.info:					"To access this ticket enter the ticket reference code in <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> section "
@@ -732,7 +742,7 @@ _mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is 
 
 mail.centralita_test: "test@adserviceticketing.com"
 mail.centralita:      "ticketen@adserviceticketing.com"
-                 
+
 #HISTORICO
 lock.list_incidences: 	"Incidences History"
 

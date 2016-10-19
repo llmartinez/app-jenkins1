@@ -7,8 +7,8 @@
             <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
             <input type="hidden" id="msg_bad_filter"  value="{% trans %} msg_bad_filter {% endtrans %}">
             <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
-            {% if workshop is defined and workshop.id != "" %}
-                <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.partner.codepartner}}">
+            {% if workshop is defined and workshop != null and workshop.id != "" %}
+                <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.codepartner}}">
                 <input type='hidden' id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value="{{workshop.codeworkshop}}">
                 <input type='hidden' id='ftbmv_email' name='ftbmv_email' value="{{workshop.email1}}">
                 <input type='hidden' id='ftbmv_phone' name='ftbmv_phone' value="{{workshop.phoneNumber1}}">
@@ -17,7 +17,7 @@
             <div class="grid w20">
                 <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
                 <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# required #}>
-                        <option value="0"></option>
+                        <option></option>
                     {% for _brand in brands %}
                         <option value={{ _brand.id }} {% if brand is defined and brand == _brand.id %}selected{% endif %}>{{ _brand.name }}</option>
                     {% endfor %}
@@ -113,16 +113,14 @@
                 </select>
             </div>
 
-            <div class="grid w10">
+            <div class="grid w15">
                 <label for="new_car_form_subsystem">{% trans %} subsystem {% endtrans %}</label>
                 <select id="new_car_form_subsystem" name="new_car_form_subsystem" class="form-control asr_form-control" >
                     {% if subsystem.id is defined %}<option value="{{subsystem.id}}">{{subsystem.name|trans}}{% endif %}</option>
                 </select>
             </div>
-                
-            
 
-            <div class="grid w10">
+            <div class="grid w15">
                 <label class="w100">
                     <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
                 </label>
@@ -134,24 +132,6 @@
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
                 </a>
             </div>
-        
+
     </form>
-    <div class="grid w15">
-           
-
-
-                <div class="grid w100">
-                    <label class="w100">Id</label>
-                </div>
-                <div class="w50 fl">
-                    <input type='text' class="form-control asr_form-control " id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
-                </div>
-                <div class="w25 fl">
-                    <a href="" class="btn btn-primary asr_form-control asr_btn_search" id="btn_search_ticket_id" name="btn_search_ticket_id">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
-                    </a>
-                </div>
-         
-
-    </div>
    </div>

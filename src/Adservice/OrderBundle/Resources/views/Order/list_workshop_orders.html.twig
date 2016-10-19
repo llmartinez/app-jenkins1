@@ -7,14 +7,14 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{% trans %} workshop {% endtrans %}</th>
-                        <th>{% trans %} partner  {% endtrans %}</th>
-                        <th>{% trans %} shop     {% endtrans %}</th>
-                        <th>{% trans %} tel      {% endtrans %}</th>
-                        <th>{% trans %} region   {% endtrans %}</th>
-                        <th>{% trans %} test     {% endtrans %}</th>
-                        <th>{% trans %} order    {% endtrans %}</th>
-                        <th>{% trans %} actions  {% endtrans %}</th>
+                        <th>{% trans %} workshop        {% endtrans %}</th>
+                        <th>{% trans %} partner         {% endtrans %}</th>
+                        <th>{% trans %} category_service{% endtrans %}</th>
+                        <th>{% trans %} tel             {% endtrans %}</th>
+                        <th>{% trans %} region          {% endtrans %}</th>
+                        <th>{% trans %} test            {% endtrans %}</th>
+                        <th>{% trans %} order           {% endtrans %}</th>
+                        <th>{% trans %} actions         {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,12 +24,12 @@
                         {% set orderBefore = ordersBefore[workshopOrder.id] %}
                     {% endif %}
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != workshopOrder.name         %} *{% endif %} #}
-                            <td> {{ workshopOrder.id           }} </td>
+                            <td> {{ workshopOrder.id              }} </td>
                             <td> {{ workshopOrder.name|length > 15 ? workshopOrder.name|slice(0, 15) ~ '...' : workshopOrder.name  }} </td>
-                            <td> {{ workshopOrder.partner      }} </td>
-                            <td> {{ workshopOrder.shop         }} </td>
-                            <td> {{ workshopOrder.phoneNumber1 }} </td>
-                            <td> {{ workshopOrder.region       }} </td>
+                            <td> {{ workshopOrder.partner         }} </td>
+                            <td> {{ workshopOrder.categoryService }} </td>
+                            <td> {{ workshopOrder.phoneNumber1    }} </td>
+                            <td> {{ workshopOrder.region          }} </td>
                             <td> {% if workshopOrder.test == 1 %}{% trans %} yes {% endtrans %}
                                  {% else %}                      {% trans %} no  {% endtrans %}{% endif %}</td>
                             <td>
@@ -73,10 +73,14 @@
                                                                                                            <td>{{ workshopOrder.codeWorkshop  }}</td></tr>
                                                     <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner         }}</td>
                                                                                                            <td>{{ workshopOrder.partner       }}</td></tr>
+                                                    <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ orderBefore.categoryService  }}</td>
+                                                                                                           <td>{{ workshopOrder.categoryService}}</td></tr>
                                                     <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif             }}</td>
                                                                                                            <td>{{ workshopOrder.cif           }}</td></tr>
-                                                    <tr><td>{% trans %} internal_code   {% endtrans %}</td><td>{{ orderBefore.internalCode   }}</td>
-                                                                                                           <td>{{ workshopOrder.internalCode }}</td></tr>
+                                                    <tr><td>{% trans %} internal_code   {% endtrans %}</td><td>{{ orderBefore.internalCode    }}</td>
+                                                                                                           <td>{{ workshopOrder.internalCode  }}</td></tr>
+                                                    <tr><td>{% trans %} commercial_code {% endtrans %}</td><td>{{ orderBefore.commercialCode  }}</td>
+                                                                                                           <td>{{ workshopOrder.commercialCode}}</td></tr>
                                                     <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ orderBefore.typology        }}</td>
                                                                                                            <td>{{ workshopOrder.typology      }}</td></tr>
                                                     <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ orderBefore.contact         }}</td>
@@ -144,8 +148,10 @@
                                                     <tr><td>{% trans %} name             {% endtrans %}</td><td>{{ workshopOrder.name          }}</td></tr>
                                                     <tr><td>{% trans %} code_workshop    {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop  }}</td></tr>
                                                     <tr><td>{% trans %} partner          {% endtrans %}</td><td>{{ workshopOrder.partner       }}</td></tr>
+                                                    <tr><td>{% trans %} category_service {% endtrans %}</td><td>{{ workshopOrder.categoryService}}</td></tr>
                                                     <tr><td>{% trans %} cif              {% endtrans %}</td><td>{{ workshopOrder.cif           }}</td></tr>
                                                     <tr><td>{% trans %} internal_code    {% endtrans %}</td><td>{{ workshopOrder.internalCode  }}</td></tr>
+                                                    <tr><td>{% trans %} commercial_code  {% endtrans %}</td><td>{{ workshopOrder.commercialCode}}</td></tr>
                                                     <tr><td>{% trans %} typology         {% endtrans %}</td><td>{{ workshopOrder.typology      }}</td></tr>
                                                     <tr><td>{% trans %} contact          {% endtrans %}</td><td>{{ workshopOrder.contact       }}</td></tr>
                                                     <tr><td>{% trans %} phone_number_1   {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1  }}</td></tr>

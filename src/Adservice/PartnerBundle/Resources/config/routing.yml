@@ -2,8 +2,8 @@
 #   APDO. RUTAS PARTNER      #
 ##############################
 partner_list:
-    pattern:  /list/partner/{page}/{country}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
-    defaults: { _controller: PartnerBundle:Partner:list, page: 1 , country: '0', partner: 'none', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
+    pattern:  /list/partner/{page}/{country}/{catserv}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
+    defaults: { _controller: PartnerBundle:Partner:list, page: 1, country: '0', catserv: '0', partner: '0', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
     options:
         expose: true
 
@@ -24,8 +24,8 @@ partner_delete:
 #   APDO. RUTAS SHOP         #
 ##############################
 shop_list:
-    pattern:  /list/shop/{page}/{country}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
-    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: '0', partner: 'none', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
+    pattern:  /list/shop/{page}/{country}/{catserv}/{partner}/{term}/{field}/{w_idpartner}/{w_id}/{status}/{option}
+    defaults: { _controller: PartnerBundle:Shop:list, page: 1 , country: '0', catserv: '0', partner: '0', term: '0', field: '0', w_idpartner: '0', w_id: '0', status: '0', option: '0' }
     options:
         expose: true
 

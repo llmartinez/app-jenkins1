@@ -257,7 +257,13 @@ function search_by_bmv() {
             $('#w_email'    ).val(mail);
             $('#w_contact'  ).val(contact);
 
-            $('#new_car_form_brand'     ).val(id_brand);
+            if(id_brand == 0){
+                $('#new_car_form_brand'     ).empty();
+                $('#new_car_form_brand'     ).append('<option value="0" selected>OTHER</option>');
+            }
+            else {
+                $('#new_car_form_brand'     ).val(id_brand);
+            }
             $('#new_car_form_model'     ).empty();
             $('#new_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
             $('#new_car_form_version'   ).empty();

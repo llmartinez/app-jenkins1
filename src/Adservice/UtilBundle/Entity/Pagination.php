@@ -4,10 +4,12 @@ namespace Adservice\UtilBundle\Entity;
 
 /**
  * Adservice\UtilBundle\Entity\Pagination
+ *
+ * @author Daniel Maya
  */
 class Pagination
 {
-    private $max_rows; //Maximo de registros por pagina
+    private $max_rows;       //Maximo de registros por pagina
     private $num_side_pages; //Numero de paginas a cada lado de la pagina actual
 
     private $page;           //Numero de la pagina actual
@@ -209,15 +211,42 @@ class Pagination
     }
 
     /**
-     * Get rows
+     * Obtiene de manera modular los resultados de una query a través de los valores que se le pasan por parametro.
      *
-     * @return string
+     * @param  EntityManager $em
+     *
+     * @param  String $bundle     - El bundle principal de la consulta
+     *                              (ej. TicketBundle)
+     *
+     * @param  String $entity     - La entidad principal de la consulta
+     *                              (ej. Ticket)
+     *
+     * @param  Array  $params     - Parametros de la consulta (WHERE / AND)
+     *                              (ej. $params[] = array("id", " = 1"); =Se_traduce_en=> " AND e.id = 1")
+     *
+     * @param  Entity $pagination - La entidad Pagination que estas utilizando
+     *
+     * @param  Array  $ordered    - Parametros de la ordenacion (ORDER BY)
+     *                              (ej. $ordered = array('e.id', 'DESC'); =Se_traduce_en=> " ORDER BY e.id DESC")
+     *
+     * @param  Array  $joins      - Campos en los que se hace JOIN a una entidad con FK definida y parametros relacionados
+     *                            - Si el array es de tres parametros pasará a ser un "JOIN ON" a una entidad con FK no definida en Doctrine
+     *                              (ej. $joins[] = array('e.workshop w ', 'w.country != 0'); =Se_traduce_en=> " JOIN w.workshop w...AND w.country != 0" )
+     *
+     * @param  String $add        - Campos a mostrar que no pertenecen a la entidad principal de la consulta
+     *                              (ej. $add=', w.name as name'; =Se_traduce_en=> "SELECT e, w.name as name FROM..."  )
+     *
+     * @param  String $group_by   - Campos a agrupar en la consulta (GROUP BY)
+     *                              (ej. $group_by="w.name"; =Se_traduce_en=> "GROUP BY w.name")
+     *
+     * @return Array              - Devuelve un array con el resultado de la consulta
+     *
      */
     public function getRows($em, $bundle, $entity, $params=null, $pagination=null, $ordered=null, $joins=null, $add='', $group_by=null)
     {
         $query = 'SELECT e '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
-        $where = 'WHERE e.id > 0 ';
+        $where = 'WHERE e.id >= 0 ';
 
         if($joins != null and $joins[0] != null) {
             foreach ($joins as $join) {
@@ -231,7 +260,10 @@ class Pagination
                                     }
         }
         if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
+            foreach ($params as $param) {
+                if($param != null)
+                    $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+            }
         }
 
         ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
@@ -252,9 +284,14 @@ class Pagination
             $consulta = $em->createQuery($query.$from.$where.$group_by.$order);
         }
 
-        /* PRUEBAS */
+        /* PARA DEBUG */
             // echo $query.$from.$where.$group_by.$order.'<br>';
+            //
             // var_dump($consulta->getResult());
+            //
+            // foreach ($consulta->getResult() as $key) {
+            //     var_dump($key->getId());
+            // }
             // die;
         return $consulta->getResult();
     }
@@ -277,7 +314,10 @@ class Pagination
                                     }
         }
         if($params != null and $params[0] != null) {
-            foreach ($params as $param) { $where = $where.'AND e.'.$param[0].' '.$param[1].' '; }
+            foreach ($params as $param) {
+                if($param != null)
+                    $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+            }
         }
 
         ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
@@ -292,7 +332,10 @@ class Pagination
 
         $consulta = $em ->createQuery($query.$from.$where.$group_by.$order);
 
-        //echo $query.$from.$where.$group_by.$order.'<br>';
+        /* PRUEBAS */
+            // echo $query.$from.$where.$group_by.$order.'<br>';
+            // var_dump($consulta->getResult());
+            // die;
 
         $result = $consulta->getResult();
 

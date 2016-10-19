@@ -42,7 +42,7 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-       
+
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
@@ -64,7 +64,7 @@ class UserController extends Controller {
                      return $this->redirect($currentPath);
                 }
             }
-           
+
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
             elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
 
@@ -122,8 +122,8 @@ class UserController extends Controller {
                 }
                 else{
                     $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
-                                                                    'num_rows' => 10,
-                                                                    'country'  => $country));
+                                                                            'num_rows' => 10,
+                                                                            'country'  => $country));
                 }
                 $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
                 $_SESSION['lang'] = $lang;
@@ -159,7 +159,7 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $country=0, $option='0', $term='0', $field='0') {
+    public function userListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -180,10 +180,12 @@ class UserController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if($country != 0){
                 $params[] = array('country', ' = '.$country);
-            }else{
-                $params[] = array();
             }
         }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
+        if($catserv != 0){
+            $params[] = array('category_service', ' = '.$catserv);
+        }
 
         if ($term != '0' and $field != '0') {
 
@@ -196,6 +198,8 @@ class UserController extends Controller {
             }
         }
 
+        if(!isset($params)) $params[] = array();
+
         if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
@@ -204,8 +208,8 @@ class UserController extends Controller {
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
                 $role     = $role->getName();
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $role, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $role);
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $catserv, $role, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $catserv, $role);
         }
 
         //separamos los tipos de usuario...
@@ -231,6 +235,7 @@ class UserController extends Controller {
 
         $roles = $em->getRepository("UserBundle:Role")->findAll();
         $countries = $em->getRepository("UtilBundle:Country")->findAll();
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
 
         return $this->render('UserBundle:User:list.html.twig', array(   'users_role_super_admin' => $users_role_super_admin,
                                                                         'users_role_admin'       => $users_role_admin,
@@ -240,14 +245,16 @@ class UserController extends Controller {
                                                                         'users_role_ad'          => $users_role_ad,
                                                                         'pagination'             => $pagination,
                                                                         'roles'                  => $roles,
+                                                                        'cat_services'           => $cat_services,
+                                                                        'catserv'                => $catserv,
                                                                         'countries'              => $countries,
                                                                         'country'                => $country,
                                                                         'option'                 => $role_id,
                                                                         'term'                   => $term,
                                                                         'field'                  => $field,
-                                                                       ));
+                                                                    )
+        );
     }
-
 
     /**
      * Crea un nuevo usuario en la bbdd
@@ -337,7 +344,7 @@ class UserController extends Controller {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
-//            $partner = $form->getData('partner');
+           // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
@@ -626,6 +633,13 @@ class UserController extends Controller {
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
+        if($user->getCategoryService() != null) {
+            $id_catserv = $user->getCategoryService()->getId();
+            $workshop_pending[] = array('category_service', ' = '.$id_catserv);
+            $workshop_rejected[] = array('category_service', ' = '.$id_catserv);
+            // $shop_pending[] = array('category_service', ' = '.$id_catserv);
+            // $shop_rejected[] = array('category_service', ' = '.$id_catserv);
+        }
 
         if    ($role == "ROLE_SUPER_AD"
             OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());

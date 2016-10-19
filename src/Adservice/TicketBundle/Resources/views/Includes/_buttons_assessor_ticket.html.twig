@@ -47,17 +47,27 @@
                 {% endif %}
                 </div>
 
-                {% if workshop.haschecks == true %}
-                <div class="grid w20 {% if workshop.numchecks <= 1 %}error{% endif %} ">
-                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
-                </div>
-                {% endif %}
-
             {% else %}
                 {# <a class="btn btn-primary btn-disabled " id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
             {% endif %}
                 <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
         {% endif  %}
+
+        {% if is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCategoryService() == null%}
+        <div class="grid-33 mt5">
+            <form action="{{ path('findTicketById') }}" id="findTicketById" role="form" method="post" enctype="multipart/form-data">
+
+                <div class="w50 fl">
+                    <input type='text' class="form-control asr_form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                </div>
+                <div class="w25 fl">
+                    <button type="submit" class="btn btn-primary asr_form-control asr_btn_search" id="btn_search" name="btn_search">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
+                    </a>
+                </div>
+            </form>
+        </div>
+        {% endif %}
 
         {###  INACTIVE TICKETS ###}
         {% set route = 'listTicket' %}

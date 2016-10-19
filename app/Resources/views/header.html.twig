@@ -9,13 +9,20 @@
                     <tr>
                         <td align="left">
 
-                            {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
+                            {% set url_logo = route_logo ~ '.png' %}
+                            <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 20px;">
+
+                            {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
+                                {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                                <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
+                            {% endif %}
+
+                        {#  {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
                             {% elseif app.session.locale == 'pt' %}{% set url_logo = 'bundles/util/images/icon/logo_PT.png' %}
                             {% elseif app.session.locale == 'en' %}{% set url_logo = 'bundles/util/images/icon/logo_EN.png' %}
                             {% elseif app.session.locale == 'fr' %}{% set url_logo = 'bundles/util/images/icon/logo_FR.png' %}
-                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %}
+                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %} #}
 
-                            <img class="img_logo" src="{{ asset(url_logo) }}">
                             {# <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
                         </td>
                         <td align="right">

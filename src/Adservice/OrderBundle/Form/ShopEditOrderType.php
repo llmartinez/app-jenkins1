@@ -11,6 +11,7 @@ class ShopEditOrderType extends AbstractType
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
 
         $builder
             ->add('name')
@@ -19,11 +20,13 @@ class ShopEditOrderType extends AbstractType
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
                                                 return $er->createQueryBuilder('s')
+                                                          ->leftJoin('s.users ', 'u')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.country'.$id_country)
+                                                          ->andWhere('u.category_service'.$id_catserv); }))
             ->add('cif')
             ->add('active', 'checkbox', array('required' => false))
              //CONTACT

@@ -3,11 +3,12 @@
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
             <tr>
-                <th>{% trans %} code    {% endtrans %}</th>
-                <th>{% trans %} name    {% endtrans %}</th>
-                <th>{% trans %}         {% endtrans %}</th>
-                {% if country == 'none' %}<th>{% trans %} country {% endtrans %}</th>{% endif %}
-                <th>{% trans %} actions {% endtrans %}</th>
+                <th>{% trans %} code             {% endtrans %}</th>
+                <th>{% trans %} name             {% endtrans %}</th>
+                <th>{% trans %}                  {% endtrans %}</th>
+                <th>{% trans %} category_service {% endtrans %}</th>
+                {#<th>{% trans %} country          {% endtrans %}</th>#}
+                <th>{% trans %} actions          {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -16,7 +17,8 @@
                 <td>{{ typology.id       }}</td>
                 <td>{{ typology.name|length > 15 ? typology.name|slice(0, 15) ~ '...' : typology.name  }}</td>
                 <td>{% if typology.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                {% if country == 'none' %}<td>{{ typology.country | trans }}</td>{% endif %}
+                <td>{{ typology.categoryService }}</td>
+               {# <td>{{ typology.country | trans }}</td>#}
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path("typology_edit", { 'id':typology.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
@@ -26,7 +28,7 @@
             {% endfor %}
         </tbody>
     </table>
-        {% include 'UtilBundle:Pagination:pagination.html.twig' %}
+        {% include 'UtilBundle:Pagination:pagination_catserv.html.twig' %}
 {% else %}
     {% trans %} any.typology {% endtrans %}
 {% endif %}

@@ -7,7 +7,7 @@
         <div class="grid-33">
             <label for="new_car_form_brand">{% trans %} brand {% endtrans %} *</label>
             <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" required>
-                <option value="0" ></option>
+                <option ></option>
                 {% for brand in brands %}
                     <option value={{ brand.id }}>{{ brand.name }}</option>
                 {% endfor %}

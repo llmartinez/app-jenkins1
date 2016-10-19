@@ -35,6 +35,7 @@ class Document {
     public $path;
 
     /**
+     * El tamaño maximo también está definido en TicketBundle: Controller(New y Show) y public/js/ticket.js
      * @Assert\File(maxSize="10240000")
      */
     private $file;

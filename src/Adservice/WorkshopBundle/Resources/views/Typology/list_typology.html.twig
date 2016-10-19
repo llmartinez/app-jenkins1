@@ -16,7 +16,15 @@
             <a id="newTypology" href="{{ path('typology_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.typology {% endtrans %}</a></td>
         </legend>
 
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} category_service {% endtrans %} </label>
+            <select id="flt_catserv" class='form-control'>
+                    <option value='0'>{% trans %} all {% endtrans %}</option>
+                {% for _catserv in catservices %}
+                    <option value="{{ _catserv.id }}">{{ _catserv }}</option>
+                {% endfor %}
+        </select></div>
+
+        {#{% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
             <select id="flt_country" class='form-control'>
                     <option value="none">{% trans %} all {% endtrans %}</option>
@@ -24,7 +32,7 @@
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}
         </select></div>
-        {% endif %}
+        {% endif %}#}
     </div>
     {% include 'WorkshopBundle:Typology:_list.html.twig'  %}
 
@@ -36,6 +44,7 @@
     <script>
         $(document).ready(function() {
             {% if country != 'none' %} $("#flt_country").val('{{ country }}');{% endif %}
+            {% if catserv != '0' %} $("#flt_catserv").val('{{ catserv }}');{% endif %}
         });
     </script>
 {% endblock %}

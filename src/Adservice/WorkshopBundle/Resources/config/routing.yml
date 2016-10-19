@@ -2,8 +2,8 @@
 #   APDO. RUTAS WORKSHOP     #
 ##############################
 workshop_list:
-    pattern:  /list/{page}/{w_idpartner}/{w_id}/{country}/{partner}/{status}/{term}/{field}
-    defaults: { _controller: WorkshopBundle:Workshop:list, page: 1 , w_idpartner: '0', w_id: '0', country: '0', partner: '0', status: '0', term: '0', field: '0'  }
+    pattern:  /list/{page}/{w_idpartner}/{w_id}/{country}/{catserv}/{partner}/{status}/{term}/{field}
+    defaults: { _controller: WorkshopBundle:Workshop:list, page: 1 , w_idpartner: '0', w_id: '0', country: '0', catserv: '0', partner: '0', status: '0', term: '0', field: '0'  }
     options:
         expose: true
 
@@ -22,7 +22,7 @@ workshop_new:
 workshop_observation:
     pattern: /observation/{id}/{id_ticket}
     defaults: { _controller: WorkshopBundle:Workshop:workshopObservation }
-   
+
 workshop_activate_deactivate:
     pattern: /activateDeactive/{workshop_id}
     defaults: { _controller: WorkshopBundle:Workshop:deactivateActivateWorkshop, workshop_id: 0 }
@@ -31,8 +31,8 @@ workshop_activate_deactivate:
 #   APDO. RUTAS DIAGNOSIS    #
 ##############################
 diagnosis_machine_list:
-    pattern:  /diag_list/{page}/{country}
-    defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none'  }
+    pattern:  /diag_list/{page}/{country}/{catserv}
+    defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none', catserv: 0   }
     options:
         expose: true
 
@@ -48,8 +48,8 @@ diagnosis_machine_edit:
 #   APDO. RUTAS TYPOLOGY     #
 ##############################
 typology_list:
-    pattern:  /typo_list/{page}/{country}
-    defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1 , country: 'none'  }
+    pattern:  /typo_list/{page}/{country}/{catserv}
+    defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1, country: 'none', catserv: 0  }
     options:
         expose: true
 

@@ -6,10 +6,16 @@
     </head>
 
     <body>
-
-        <h1 style="color:#fff;background-color:#428bca;padding: 5px 15px;">
+        <h1 style="color:#fff;background-color:#428bca;padding: 10px 15px;">
             <a style="width: 35%;">{% trans %} workshop {% endtrans %} {{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</a>
-            <img style="width: 60%;float:right;" src="{% trans %} mail.image {% endtrans %}">
+
+            {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
+                {% set url_logo_catserv = route_logo ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
+                <img src="{{ asset(url_logo_catserv) }}" style="height: 40px;float:right;">
+            {% endif %}
+
+            {% set url_logo = route_logo ~ '.png' %}
+            <img src="{{ asset(url_logo) }}" style="height: 40px;float:right;margin-right: 10px;">
         </h1>
         {#
         <h2>{% trans %} mail.welcome {% endtrans %}!!</h2>
@@ -40,6 +46,9 @@
                 <td style="width:40%;"><b>{% trans %} internal_code   {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.InternalCode  != '' %}{{ workshop.InternalCode   }} {% else %} ... {% endif %}</td>
             </tr><tr>
+                <td style="width:40%;"><b>{% trans %} commercial_code   {% endtrans %}</b></td>
+                <td style="width:60%;">{% if workshop.CommercialCode != '' %}{{ workshop.CommercialCode }} {% else %} ... {% endif %}</td>
+            </tr><tr>
                 <td style="width:40%;"><b>{% trans %} ad_service_plus {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.adServicePlus == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
             </tr><tr>
@@ -60,7 +69,14 @@
             </tr>
             <tr>
                 <td style="width:40%;"><b>{% trans %} subscribed      {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.createdAt|date("d-m-Y") != ''%}{{workshop.createdAt|date("d-m-Y")}}{% else %}...{% endif %}</td>
+                <td style="width:60%;">{% if     workshop.updateAt != null %}{{workshop.updateAt|date("d-m-Y")}}
+                                       {% elseif workshop.createdAt != null %}{{workshop.createdAt|date("d-m-Y")}}
+                                       {% else %}...{% endif %}</td>
+            </tr>
+            <tr>
+                <td style="width:40%;"><b>{% trans %} unsubscribed      {% endtrans %}</b></td>
+                <td style="width:60%;">{% if     workshop.lowdateAt != null %}{{workshop.lowdateAt|date("d-m-Y")}}
+                                       {% else %}...{% endif %}</td>
             </tr>
         </table>
         <h3>{% trans %} contact {% endtrans %}</h3>

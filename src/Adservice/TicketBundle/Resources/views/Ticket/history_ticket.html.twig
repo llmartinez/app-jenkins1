@@ -1,12 +1,12 @@
 
     <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
-    <div class="col-xs-6 col-md-6 form-group">
+    <div class="col-xs-3 col-md-3 form-group">
 
         <input type="hidden" id="route"    value= {{ route    }}>
         <input type="hidden" id="country"  value= {{ country  }}>
         <input type="hidden" id="num_rows" value= {{ num_rows }}>
         <input type="hidden" id="option"   value= {{ option   }}>
-        <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
+        <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'catserv': 'plc_catserv', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
 
 
         <label>{% trans %} filter_by_type {% endtrans %}</label>
@@ -35,6 +35,14 @@
             {% endif %}
         </select>
     </div>
+    <div class="col-xs-3 col-md-3 form-group">
+        <label>{% trans %} category_service {% endtrans %}</label>
+        <select id="flt_catserv" class='form-control'>
+                <option value="0">{% trans %} category_service {% endtrans %}</option>
+            {% for _catserv in catservices %}
+                <option value="{{ _catserv.id }}" {% if catserv.id is defined and catserv.id == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+            {% endfor %}
+    </select></div>
     <div class="col-xs-3 col-md-3 form-group">
         <label>{% trans %} filter_by_rows {% endtrans %}</label>
         <select id="slct_numRows" class="form-control">
