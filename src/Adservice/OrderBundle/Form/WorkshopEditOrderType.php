@@ -53,6 +53,7 @@ class WorkshopEditOrderType extends AbstractType
             ->add('numchecks', 'integer', array('required' => false))
             ->add('infotech', 'checkbox', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
+            ->add('commercial_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(

@@ -117,6 +117,10 @@
                 <label>{% trans %} internal_code {% endtrans %}</label>
                 {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
             </div>
+            <div class="col-xs-3 col-md-3">
+                <label>{% trans %} commercial_code {% endtrans %}</label>
+                {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control', 'placeholder': 'commercial_code' | trans } }) }}
+            </div>
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>

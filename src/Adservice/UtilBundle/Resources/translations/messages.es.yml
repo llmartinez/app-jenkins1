@@ -379,6 +379,7 @@ code_workshop:			 "Código de Taller"
 typology:				 "Tipología"
 cif:					 "CIF"
 internal_code:			 "Código Interno"
+commercial_code:		 "Código Comercial"
 
 subscribed:				 "Dado de alta"
 unsubscribed:			 "Dado de baja"

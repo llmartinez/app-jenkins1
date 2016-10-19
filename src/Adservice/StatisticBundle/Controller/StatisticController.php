@@ -352,7 +352,7 @@ class StatisticController extends Controller {
                 //Realizamos una query deshydratada con los datos ya montados
                 $qb = $em->getRepository('WorkshopBundle:Workshop')
                     ->createQueryBuilder('w')
-                    ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                    ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.commercial_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
                         'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'cs.category_service', 'w.code_partner', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
@@ -528,7 +528,7 @@ class StatisticController extends Controller {
                 $qb = $em->getRepository('WorkshopBundle:Workshop')
                     ->createQueryBuilder('w');
 
-                $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.commercial_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
                         'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'w.code_partner', 'cs.category_service', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
@@ -1423,6 +1423,7 @@ die;
                 $trans->trans('code_shop').';'.
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
+                $trans->trans('commercial_code').';'.
                 $trans->trans('name').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
@@ -1455,6 +1456,9 @@ die;
             else $excel.=' ;';
 
             if(isset($row['internal_code'])) $excel.=$row['internal_code'].';';
+            else $excel.=' ;';
+
+            if(isset($row['commercial_code'])) $excel.=$row['commercial_code'].';';
             else $excel.=' ;';
 
             if(isset($row['name'])) $name = $row['name'];
@@ -1550,6 +1554,7 @@ die;
                 $trans->trans('code_shop').';'.
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
+                $trans->trans('commercial_code').';'.
                 $trans->trans('name').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
@@ -1574,6 +1579,7 @@ die;
 
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
             $excel.=$row->getWorkshop()->getInternalCode().';';
+            $excel.=$row->getWorkshop()->getCommercialCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");

@@ -379,6 +379,7 @@ code_workshop:			 "Workshop Code"
 typology:				 "Customer"
 cif:					 "Corporate tax ID number"
 internal_code:			 "Internal Code"
+commercial_code:		 "Commercial Code"
 
 subscribed:				 "Subscribed"
 unsubscribed:			 "Unsubscribed"

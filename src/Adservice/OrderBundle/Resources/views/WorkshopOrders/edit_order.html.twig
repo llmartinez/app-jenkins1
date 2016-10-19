@@ -97,16 +97,22 @@
                                                      'required':'required' } }) }}
             </div>
             <div class="col-xs-3 col-md-3">
-                <label>{% trans %} internal_code {% endtrans %}</label>
-                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
-            </div>
-            <div class="col-xs-3 col-md-3">
                 <label>{% trans %} code_workshop {% endtrans %}</label> {{ form_widget(form.code_workshop,   { 'attr': {'class': 'form-control', 'min': '1', 'required':'required' } }) }}
                 {# <input type="hidden" id="code" name="code" value="{{ code }}"> #}
             </div>
             <div class="col-xs-3 col-md-3">
-                <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="category_service" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
+                <label>{% trans %} internal_code {% endtrans %}</label>
+                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
             </div>
+            <div class="col-xs-3 col-md-3">
+                <label>{% trans %} commercial_code {% endtrans %}</label>
+                {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control', 'placeholder': 'commercial_code' | trans } }) }}
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-xs-3 col-md-3">
+                    <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="category_service" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
+                </div>
+            {% endif %}
         </div>
         <div class="col-xs-12 col-md-12 form-group">
             {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}

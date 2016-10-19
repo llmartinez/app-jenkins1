@@ -379,6 +379,7 @@ code_workshop:			 "Código de Oficina"
 typology:				 "Tipologia"
 cif:					 "NIF"
 internal_code:			 "Código Interno"
+commercial_code:		 "Código Comercial"
 
 subscribed:				 "Suscribed"
 unsubscribed:			 "Unsubscribed"
