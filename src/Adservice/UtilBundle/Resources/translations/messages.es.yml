@@ -152,6 +152,10 @@ modified_by:			 "Modificado por"
 modified_at:			 "Modificado en"
 with_password:			 "Con contraseña"
 
+date.day:				 "día"
+date.month:				 "mes"
+date.year:				 "año"
+
 service_country: 		 "País de servicio"
 
 #FIELDS
@@ -543,6 +547,7 @@ filter_ticket: 				  "Filtros de ticket"
 filter_workshop: 			  "Filtros de taller"
 raport: 					  "Tipo de rapport"
 numworkshopbypartner:  		  "Número de talleres por socio"
+ticketbyworkshop:	  		  "Número de tickets de talleres"
 ticketbyworkshopforpartner:	  "Número de tickets de talleres por socio"
 numticketsbypartner: 		  "Número de tickets por socio"
 numticketsbysystem: 		  "Número de tickets por sistema/subsistema"

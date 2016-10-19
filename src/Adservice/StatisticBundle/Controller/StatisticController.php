@@ -38,11 +38,11 @@ class StatisticController extends Controller {
             $typologies = $qt->getResult();
         }else{
             $country = $security->getToken()->getUser()->getCountry()->getId();
-            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." AND p.active = 1 ");
-            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." AND s.active = 1 ");
-            $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
-            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." AND a.active = 1 ");
-            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." AND t.active = 1 ");
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.category_service = ".$catserv." AND w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.category_service = ".$catserv." AND a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.category_service = ".$catserv." AND t.active = 1 ");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
@@ -116,12 +116,12 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
-            $country = $security->getToken()->getUser()->getCountry()->getId();
-            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.country = ".$country." AND p.active = 1 ");
-            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.country = ".$country." AND s.active = 1 ");
-            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.country = ".$country." AND w.active = 1 ");
-            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.country = ".$country." AND a.active = 1 ");
-            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.country = ".$country." AND t.active = 1 ");
+            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+            $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
+            $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
+            $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.category_service = ".$catserv." AND w.active = 1 ");
+            $qa = $em->createQuery("select partial a.{id,username} from UserBundle:User a JOIN a.user_role r WHERE r = 3 AND a.category_service = ".$catserv." AND a.active = 1 ");
+            $qt = $em->createQuery("select partial t.{id,name} from WorkshopBundle:Typology t WHERE t.category_service = ".$catserv." AND t.active = 1 ");
             $partners   = $qp->getResult();
             $shops      = $qs->getResult();
             $workshops  = $qw->getResult();
@@ -181,7 +181,6 @@ class StatisticController extends Controller {
             $type = $raport;
             if ($raport == 'last-tickets') { $type = '0'; }
         }
-
         if($type != '0'){
 
             if ($from_y != '0' and $from_m != '0' and $from_d != '0') {
@@ -669,9 +668,14 @@ class StatisticController extends Controller {
                 }
 
                 $sql = $select.$join." WHERE ".$where.' ';
-                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+
+                if(!$security->isGranted('ROLE_ADMIN')) $sql .= ' AND e.category_service = '.$security->getToken()->getUser()->getCategoryService()->getId().' ';
+
+                elseif ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+
                 $sql .= ' GROUP BY p.id ORDER BY '.$nTalleres.' DESC ';
                 $qt = $em->createQuery($sql);
+
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -1156,6 +1160,86 @@ class StatisticController extends Controller {
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
                 $excel = $this->createExcelByMonth($results, $resultsF);
+            }
+            elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
+            {
+                $trans           = $this->get('translator');
+                $code            = UtilController::sinAcentos($trans->trans('_code'));
+                $nTickets        = UtilController::sinAcentos($trans->trans('tickets'));
+                $nTaller         = UtilController::sinAcentos($trans->trans('workshop'));
+                $nSocio          = UtilController::sinAcentos($trans->trans('partner'));
+                $shop            = UtilController::sinAcentos($trans->trans('shop'));
+                $typology        = UtilController::sinAcentos($trans->trans('typology'));
+                $country         = UtilController::sinAcentos($trans->trans('country'));
+                $contact         = UtilController::sinAcentos($trans->trans('contact'));
+                $internal_code   = UtilController::sinAcentos($trans->trans('internal_code'));
+
+                $commercial_code = UtilController::sinAcentos($trans->trans('commercial_code'));
+
+                $update_at       = UtilController::sinAcentos($trans->trans('update_at'));
+
+                $lowdate_at      = UtilController::sinAcentos($trans->trans('lowdate_at'));
+
+                $region          = UtilController::sinAcentos($trans->trans('region'));
+                $city            = UtilController::sinAcentos($trans->trans('city'));
+                $address         = UtilController::sinAcentos($trans->trans('address'));
+                $postal_code     = UtilController::sinAcentos($trans->trans('postal_code'));
+
+                $phone_number_1  = UtilController::sinAcentos($trans->trans('phone_number_1'));
+                $fax             = UtilController::sinAcentos($trans->trans('fax'));
+                $email_1         = UtilController::sinAcentos($trans->trans('email_1'));
+                $informe         = UtilController::sinAcentos($trans->trans('ticketbyworkshop'));
+
+                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$typology.", s.name as ".$shop.", c.name as ".$country.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $where .= 'AND p.id = w.partner ';
+                $join   = ' JOIN w.partner p JOIN w.shop s JOIN w.typology tp JOIN w.country c ';
+                $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
+
+                if ($status != '0') {
+                    switch ($status) {
+                        case "active":
+                            $where .= 'AND w.active = 1 ';
+                            $where .= 'AND w.test != 1 ';
+                            break;
+                        case "deactive":
+                            $where .= 'AND w.active = 0 ';
+                            breaK;
+                        case "test":
+                            $where .= 'AND w.test = 1 ';
+                            break;
+                        case "adsplus":
+                            $where .= 'AND w.ad_service_plus = 1 ';
+                            break;
+                        case "check":
+                            $where .= 'AND w.haschecks = 1 ';
+                            break;
+                        case "infotech":
+                            $where .= 'AND w.infotech = 1 ';
+                            break;
+                    }
+                }
+                if    ($partner != "0"     ) { $where .= 'AND w.id != 0 ';
+                                               $where .= 'AND p.id = '.$partner.' ';
+                }
+                if    ($shop != "0"        ) { $where .= 'AND s.id = '.$shop.' ';
+                }
+                if    ($typology != "0"    ) { $where .= 'AND tp.id = '.$typology.' ';
+                }
+                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                }else{
+                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
+                }
+                $sql = $select.$join." WHERE ".$where.' ';
+                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
+                $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
+                $qt = $em->createQuery($sql);
+var_dump($sql);
+die;
+                $results   = $qt->getResult();
+
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $excel = $this->createExcelStatistics($results);
             }
         }
         else{
