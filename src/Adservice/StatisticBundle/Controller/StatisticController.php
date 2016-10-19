@@ -1168,9 +1168,9 @@ class StatisticController extends Controller {
                 $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
                 $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
                 $nSocio          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('partner')));
-                $shop            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
-                $typology        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('typology')));
-                $country         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
+                $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
+                $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
+                $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
                 $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
                 $internal_code   = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('internal_code')));
                 $commercial_code = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('commercial_code')));
@@ -1182,10 +1182,12 @@ class StatisticController extends Controller {
                 $postal_code     = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('postal_code')));
                 $phone_number_1  = UtilController::sinAcentos(str_ireplace(array(" ", "."), array("", ""), $trans->trans('phone_number_1')));
                 $fax             = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('fax')));
-                $email_1         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('email_1')));
+                $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
 
-                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$typology.", s.name as ".$shop.", c.country as ".$country.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", s.name as ".$nShop.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                // $select = "SELECT count(w.id) as ".$nTickets.", w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+
                 $where .= 'AND p.id = w.partner ';
                 $join   = ' JOIN w.partner p JOIN w.shop s JOIN w.typology tp JOIN w.country c ';
                 $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
@@ -1230,7 +1232,6 @@ class StatisticController extends Controller {
                 if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
                 $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
                 $qt = $em->createQuery($sql);
-echo('<div id="content" class="sf-exceptionreset"><h1>'.$sql.'</h1></di>');
 
                 $results   = $qt->getResult();
 
@@ -1269,6 +1270,7 @@ echo('<div id="content" class="sf-exceptionreset"><h1>'.$sql.'</h1></di>');
             $sql = "SELECT partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE e.id IN (".$ids.") ";
             if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
             $qt = $em->createQuery($sql);
+
             $results   = $qt->getResult();
 
             $trans     = $this->get('translator');
@@ -1633,6 +1635,8 @@ echo('<div id="content" class="sf-exceptionreset"><h1>'.$sql.'</h1></di>');
                 foreach ($res as $key => $value)
                 {
                     if($firstKey == $key) $excel.="\n";
+
+                    if ($value instanceof \DateTime) { $value = $value->format('Y-m-d H:i:s'); }
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
                     $reemplazar=array("", "", "", "");
