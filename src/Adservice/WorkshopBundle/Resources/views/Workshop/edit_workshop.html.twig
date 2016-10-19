@@ -82,6 +82,11 @@
                 </div>
             </div>
             <div class="col-xs-4 col-md-4 form-group">
+
+                <div class="grid w45 fl">
+                    <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
+                    {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+                </div>
                 <div class="grid w45 fl">
                     <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
                     {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
@@ -91,8 +96,9 @@
                 </div>
                 {#<div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
-                    {{ form_widget(form.active) }}
+                    {{ form_widget(form.active, { 'attr': {'checked': 'checked' }}) }}
                 </div>#}
+
                 <div class="grid w100 fl mt20">
                     <div class="grid w45 fl">
                         <div class="grid-full w80">
@@ -135,10 +141,54 @@
                     </div>
                     <div class="grid-full w20">
                         {{ form_widget(form.ad_service_plus) }}
+
+                <div class="grid w100">
+                    <div class="grid w45 fl form-group">
+                        <div class="grid-full w80 mt20">
+                            <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
+                        </div>
+                        <div class="grid-full w20 mt20">
+                            {{ form_widget(form.test) }}
+                        </div>
+                    </div>
+                    <div class="grid w45 fl form-group">
+                        <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
+                        {{ form_widget(form.endtest_at) }}
+                    </div>
+                </div>
+
+                <div class="grid w100">
+                    <div class="grid w45 fl form-group">
+                        <div class="grid-full w80 mt20">
+                            <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
+                        </div>
+                        <div class="grid-full w20 mt20">
+                            {{ form_widget(form.haschecks) }}
+                        </div>
+                    </div>
+                    <div class="grid w45 fl form-group">
+                        <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
+                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                    </div>
+                </div>
+
+                <div class="grid w45 fl form-group">
+                    <div class="grid-full w80 mt20">
+                        <label for="adservice_workshopbundle_workshoptype_ad_service_plus">{% trans %} ad_service_plus {% endtrans %}</label>
+                    </div>
+                    <div class="grid-full w20 mt20">
+                        {{ form_widget(form.ad_service_plus) }}
+                    </div>
+                </div>
+                <div class="grid w45 fl form-group">
+                    <div class="grid-full w80 mt20">
+                        <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
+                    </div>
+                    <div class="grid-full w20 mt20">
+                         {{ form_widget(form.infotech) }}
                     </div>
                 </div>
             </div>
-        </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
 

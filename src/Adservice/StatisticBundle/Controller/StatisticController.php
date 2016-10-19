@@ -352,7 +352,7 @@ class StatisticController extends Controller {
                 //Realizamos una query deshydratada con los datos ya montados
                 $qb = $em->getRepository('WorkshopBundle:Workshop')
                     ->createQueryBuilder('w')
-                    ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                    ->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.commercial_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
                         'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'cs.category_service', 'w.code_partner', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
@@ -528,7 +528,7 @@ class StatisticController extends Controller {
                 $qb = $em->getRepository('WorkshopBundle:Workshop')
                     ->createQueryBuilder('w');
 
-                $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.name', 'w.email_1', 'w.phone_number_1',
+                $qb->select( 'w.id', 'w.code_workshop', 'w.internal_code', 'w.commercial_code', 'w.name', 'w.email_1', 'w.phone_number_1',
                         'w.active', 'w.created_at', 'w.modified_at', 'w.update_at', 'w.lowdate_at', 'w.ad_service_plus', 'w.test', 'w.haschecks',
                         'w.numchecks', 'w.infotech','sh.code_shop', 'sh.name as shop', 'p.name as partner', 'w.code_partner', 'cs.category_service', 't.name as tipology')
                     ->leftJoin('w.shop', 'sh')
@@ -1164,33 +1164,28 @@ class StatisticController extends Controller {
             elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
             {
                 $trans           = $this->get('translator');
-                $code            = UtilController::sinAcentos($trans->trans('_code'));
-                $nTickets        = UtilController::sinAcentos($trans->trans('tickets'));
-                $nTaller         = UtilController::sinAcentos($trans->trans('workshop'));
-                $nSocio          = UtilController::sinAcentos($trans->trans('partner'));
-                $shop            = UtilController::sinAcentos($trans->trans('shop'));
-                $typology        = UtilController::sinAcentos($trans->trans('typology'));
-                $country         = UtilController::sinAcentos($trans->trans('country'));
-                $contact         = UtilController::sinAcentos($trans->trans('contact'));
-                $internal_code   = UtilController::sinAcentos($trans->trans('internal_code'));
+                $code            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('_code')));
+                $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
+                $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
+                $nSocio          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('partner')));
+                $shop            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
+                $typology        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('typology')));
+                $country         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
+                $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
+                $internal_code   = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('internal_code')));
+                $commercial_code = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('commercial_code')));
+                $update_at       = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('subscribed')));
+                $lowdate_at      = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('unsubscribed')));
+                $region          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('region')));
+                $city            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('city')));
+                $address         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('address')));
+                $postal_code     = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('postal_code')));
+                $phone_number_1  = UtilController::sinAcentos(str_ireplace(array(" ", "."), array("", ""), $trans->trans('phone_number_1')));
+                $fax             = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('fax')));
+                $email_1         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('email_1')));
+                $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
 
-                $commercial_code = UtilController::sinAcentos($trans->trans('commercial_code'));
-
-                $update_at       = UtilController::sinAcentos($trans->trans('update_at'));
-
-                $lowdate_at      = UtilController::sinAcentos($trans->trans('lowdate_at'));
-
-                $region          = UtilController::sinAcentos($trans->trans('region'));
-                $city            = UtilController::sinAcentos($trans->trans('city'));
-                $address         = UtilController::sinAcentos($trans->trans('address'));
-                $postal_code     = UtilController::sinAcentos($trans->trans('postal_code'));
-
-                $phone_number_1  = UtilController::sinAcentos($trans->trans('phone_number_1'));
-                $fax             = UtilController::sinAcentos($trans->trans('fax'));
-                $email_1         = UtilController::sinAcentos($trans->trans('email_1'));
-                $informe         = UtilController::sinAcentos($trans->trans('ticketbyworkshop'));
-
-                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$typology.", s.name as ".$shop.", c.name as ".$country.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$typology.", s.name as ".$shop.", c.country as ".$country.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
                 $where .= 'AND p.id = w.partner ';
                 $join   = ' JOIN w.partner p JOIN w.shop s JOIN w.typology tp JOIN w.country c ';
                 $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
@@ -1231,11 +1226,12 @@ class StatisticController extends Controller {
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
                 $sql = $select.$join." WHERE ".$where.' ';
+                $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
                 if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
                 $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
                 $qt = $em->createQuery($sql);
-var_dump($sql);
-die;
+echo('<div id="content" class="sf-exceptionreset"><h1>'.$sql.'</h1></di>');
+
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
@@ -1423,6 +1419,7 @@ die;
                 $trans->trans('code_shop').';'.
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
+                $trans->trans('commercial_code').';'.
                 $trans->trans('name').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
@@ -1455,6 +1452,9 @@ die;
             else $excel.=' ;';
 
             if(isset($row['internal_code'])) $excel.=$row['internal_code'].';';
+            else $excel.=' ;';
+
+            if(isset($row['commercial_code'])) $excel.=$row['commercial_code'].';';
             else $excel.=' ;';
 
             if(isset($row['name'])) $name = $row['name'];
@@ -1550,6 +1550,7 @@ die;
                 $trans->trans('code_shop').';'.
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
+                $trans->trans('commercial_code').';'.
                 $trans->trans('name').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
@@ -1574,6 +1575,7 @@ die;
 
             $excel.=$row->getWorkshop()->getCodeWorkshop().';';
             $excel.=$row->getWorkshop()->getInternalCode().';';
+            $excel.=$row->getWorkshop()->getCommercialCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
             $reemplazar=array("", "", "", "");
