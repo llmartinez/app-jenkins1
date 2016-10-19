@@ -53,6 +53,7 @@
                 <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
         {% endif  %}
 
+        {% if is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCategoryService() == null%}
         <div class="grid-33 mt5">
             <form action="{{ path('findTicketById') }}" id="findTicketById" role="form" method="post" enctype="multipart/form-data">
 
@@ -66,6 +67,7 @@
                 </div>
             </form>
         </div>
+        {% endif %}
 
         {###  INACTIVE TICKETS ###}
         {% set route = 'listTicket' %}

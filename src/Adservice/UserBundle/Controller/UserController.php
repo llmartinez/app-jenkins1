@@ -344,7 +344,7 @@ class UserController extends Controller {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
-//            $partner = $form->getData('partner');
+           // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
@@ -633,6 +633,13 @@ class UserController extends Controller {
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
+        if($user->getCategoryService() != null) {
+            $id_catserv = $user->getCategoryService()->getId();
+            $workshop_pending[] = array('category_service', ' = '.$id_catserv);
+            $workshop_rejected[] = array('category_service', ' = '.$id_catserv);
+            // $shop_pending[] = array('category_service', ' = '.$id_catserv);
+            // $shop_rejected[] = array('category_service', ' = '.$id_catserv);
+        }
 
         if    ($role == "ROLE_SUPER_AD"
             OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());

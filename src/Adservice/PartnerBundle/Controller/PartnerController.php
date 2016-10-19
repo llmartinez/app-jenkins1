@@ -54,18 +54,12 @@ class PartnerController extends Controller {
 
         $pagination = new Pagination($page);
 
-        if($catserv != 0)
-        {
-            $joins[] = array('e.users u ', 'u.category_service = '.$catserv);
+        if($catserv != 0) {
+            $params[] = array('category_service', ' = '.$catserv);
+        }
 
-            $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination, null, $joins);
-            $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params, null, $joins);
-        }
-        else
-        {
-            $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
-            $length = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
-        }
+        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
+        $length   = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
 
         $pagination->setTotalPagByLength($length);
 
@@ -151,7 +145,11 @@ class PartnerController extends Controller {
                     $newUser->setPartner       ($partner);
                     $newUser->addRole          ($role);
 
-                    if($catserv != null) $newUser->setCategoryService($catserv);
+                    if($catserv != null){
+                        $partner->setCategoryService($catserv);
+                        $newUser->setCategoryService($catserv);
+                    }
+
 
                     $newUser = UtilController::settersContact($newUser, $partner);
 
@@ -257,8 +255,10 @@ class PartnerController extends Controller {
                 }
             }
         }
+        $catserv = $partner->getCategoryService()->getCategoryService();
 
         return $this->render('PartnerBundle:Partner:edit_partner.html.twig', array('partner'    => $partner,
+                                                                                   'catserv'    => $catserv,
                                                                                    'form_name'  => $form->getName(),
                                                                                    'form'       => $form->createView()));
     }

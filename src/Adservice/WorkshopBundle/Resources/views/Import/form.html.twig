@@ -1,0 +1,46 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} import {% endtrans %}</li>
+    </ol>
+
+    <div style="width: 90%; margin-left: 5%;">
+
+        <legend>{% trans %} import {% endtrans %}</legend>
+
+        <div><p>
+            {% trans %} import {% endtrans %}:
+                Introduce un csv para importar talleres. Para que la importación se realice correctamente, los campos del fichero deben ser:<br>
+                - Codigo de Socio
+                - Tipologia
+                - Nombre
+                - CIF
+                - Contacto
+                - codigo interno
+                - codigo comercial
+                - poblacion
+                - ciudad
+                - direccion
+                - codigo postal
+                - numero de telefono
+                - email
+        </p></div>
+
+        {% if app.session.hasFlash('error') %}
+            <p class="error">{{ app.session.getFlash('error') }}</p>
+        {% endif %}
+
+        <form action="" method="post" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+
+            <input type="submit" />
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

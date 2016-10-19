@@ -627,20 +627,29 @@ textarea.form-control_ged {
     margin-top: 5px;
 }
 
+.h100 {
+    height: 100px !important;
+}
 .h65 {
     height: 65px !important;
 }
 .mb15 {
     margin-bottom: 15px !important;
 }
+.ml15 {
+    margin-left: 15px !important;
+}
 .mr15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
+}
+.mb20 {
+    margin-bottom: 20px !important;
+}
+.mr20 {
+    margin-right: 20px !important;
 }
 .mr40 {
-    margin-right: 40px;
-}
-.ml15 {
-    margin-left: 15px;
+    margin-right: 40px !important;
 }
 .change_page {
     padding-left: 10px;

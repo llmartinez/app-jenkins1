@@ -8,6 +8,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $('#catserv').val();
+            if(catserv == undefined) var catserv  = $('#flt_catserv').val();
             var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $(this).val();
@@ -26,6 +27,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $('#catserv').val();
+            if(catserv == undefined) var catserv  = $('#flt_catserv').val();
             var lang     = $('#flt_language').val();
             var num_rows = $(this).val();
             var option   = $('#option').val();
@@ -62,6 +64,7 @@
             var str      = $('#href_tickets').val();
             var country  = $(this).val();
             var catserv  = $('#catserv').val();
+            if(catserv == undefined) var catserv  = $('#flt_catserv').val();
             var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
@@ -80,6 +83,7 @@
             var str      = $('#href_tickets').val();
             var country  = $('#country').val();
             var catserv  = $('#catserv').val();
+            if(catserv == undefined) var catserv  = $('#flt_catserv').val();
             var lang     = $(this).val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();

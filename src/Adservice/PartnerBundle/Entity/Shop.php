@@ -69,6 +69,13 @@ class Shop {
      */
     private $workshops;
 
+    /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -201,8 +208,23 @@ class Shop {
         return $this->workshops;
     }
 
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
 
-
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
+    }
 
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
