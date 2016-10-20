@@ -60,8 +60,7 @@ class WorkshopOrderController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
-
-        if($security->isGranted('ROLE_SUPER_AD')) {
+        if($security->isGranted('ROLE_SUPER_AD') OR $security->isGranted('ROLE_TOP_AD')) {
             if ($partner != '0') $params[] = array('partner', ' = '.$partner);
             $params[] = array('country', ' = '.$user->getCountry()->getId());
         }
@@ -1043,6 +1042,8 @@ class WorkshopOrderController extends Controller {
             if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
             {
                 $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
+                //El taller devuelto antes, tiene campo activo false, ya que si modificaban un taller inactivo pasaba a ser activo , al compartir la misma funcion workshopOrder_to_workshop
+                $workshop->setActive(true);
                 if ($workshopOrder->getTest() != null) {
                     $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                 }

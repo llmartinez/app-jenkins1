@@ -119,6 +119,88 @@ function populate_partner(){
         }
     });
 }
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_partner2(partner){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+    
+    var route  = 'partners_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('form').find('select[id$=_partner]').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                // $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+                $('form').find('select[id$=e_partner]').val(partner);
+                var typology = $('#slct_typology').val();
+                if(typology != undefined) {
+                    // DIAG. MACHINE
+                        $('#slct_typology').empty();
+
+                    populate_typology2(typology);
+                }
+            }
+        },
+        error : function(){
+            console.log("Error al cargar los socios...");
+        }
+    });
+    
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_partner3(partner){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+
+    var route  = 'partners_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('form').find('select[id$=_partner]').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                // $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('#adservice_partnerbundle_shoptype_partner').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+                
+                
+                $('#adservice_partnerbundle_shoptype_partner').val(partner);
+            }
+        },
+        error : function(){
+            console.log("Error al cargar los socios...");
+        }
+    });
+    
+}
 
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
@@ -154,6 +236,52 @@ function populate_typology(){
         }
     });
 }
+
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_typology2(typology){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+
+    var route  = 'typologies_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('#slct_typology').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                $('#slct_typology').append("<option></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('#slct_typology').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+                
+                 $('#slct_typology').val(typology);
+                var diag_machine =  $('form').find('select[id$=diagnosis_machines]').val();
+
+                // TIPOLOGY
+                    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').empty();
+
+                populate_diagmachine2(diag_machine);
+
+            }
+        },
+        error : function(){
+            console.log("Error al cargar las tipologias...");
+        }
+    });
+    
+   
+}
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -187,6 +315,46 @@ function populate_diagmachine(){
             console.log("Error al cargar las maquinas de diagnosis...");
         }
     });
+}
+
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_diagmachine2(diag_machine){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
+
+    var route  = 'diag_machines_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+                // $('form').find('select[id*=diagnosis_machines]').append("<option value></option>");
+                $.each(data, function(idx, elm) {
+
+                    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+                
+                
+                $('#adservice_workshopbundle_workshoptype_diagnosis_machines').val(diag_machine);
+            }
+        },
+        error : function(){
+            console.log("Error al cargar las maquinas de diagnosis...");
+        }
+    });
+    
+    
 }
 
 /**
