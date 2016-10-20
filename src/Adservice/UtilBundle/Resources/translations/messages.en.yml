@@ -152,6 +152,10 @@ modified_by:			 "Modified by"
 modified_at:			 "Modified at"
 with_password:			 "With password"
 
+date.day:				 "Day"
+date.month:				 "Month"
+date.year:				 "Year"
+
 service_country: 		 "Service Country"
 
 #FIELDS
@@ -375,6 +379,7 @@ code_workshop:			 "Workshop Code"
 typology:				 "Customer"
 cif:					 "Corporate tax ID number"
 internal_code:			 "Internal Code"
+commercial_code:		 "Commercial Code"
 
 subscribed:				 "Subscribed"
 unsubscribed:			 "Unsubscribed"
@@ -543,6 +548,7 @@ filter_ticket: 				  "Ticket filters"
 filter_workshop: 			  "Workshop filters"
 raport: 					  "Report type"
 numworkshopbypartner:  		  "Number of workshop by partner"
+ticketbyworkshop:	  		  "Number of workshop tickets"
 ticketbyworkshopforpartner:	  "Number of workshop tickets by partner"
 numticketsbypartner: 		  "Number of tickets by partner"
 numticketsbysystem: 		  "Number of tickets by system/subsystem"

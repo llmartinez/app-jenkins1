@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+
+{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+           {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% else %} {% set id_catserv = '0' %}
+{% endif %}
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -27,28 +33,44 @@
             <tr>
                 <td style="width:40%;"><b>{% trans %} name {% endtrans %}</b></td>
                 <td style="width:60%;">{{ workshop.name }}</td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} code {% endtrans %}</b></td>
                 <td style="width:60%;">{{ workshop.codePartner }}, {{ workshop.codeWorkshop }}</td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} partner {% endtrans %}</b></td>
                 <td style="width:60%;">{{ workshop.partner }}</td>
-            </tr><tr>
-                <td style="width:40%;"><b>{% trans %} shop            {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.shop          != '' %}{{ workshop.shop           }} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            {% if id_catserv != 3 %}
+            <tr>
+                <td style="width:40%;"><b>{% trans %} shop {% endtrans %}</b></td>
+                <td style="width:60%;">{% if workshop.shop != '' %}{{ workshop.shop }} {% else %} ... {% endif %}</td>
+            </tr>
+            {% endif %}
+            <tr>
                 <td style="width:40%;"><b>{% trans %} typology        {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.typology      != '' %}{{ workshop.typology       }} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} cif             {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.cif           != '' %}{{ workshop.cif            }} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td style="width:40%;"><b>{% trans %} internal_code   {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.InternalCode  != '' %}{{ workshop.InternalCode   }} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            <tr>
+                <td style="width:40%;"><b>{% trans %} commercial_code   {% endtrans %}</b></td>
+                <td style="width:60%;">{% if workshop.CommercialCode != '' %}{{ workshop.CommercialCode }} {% else %} ... {% endif %}</td>
+            </tr>
+            {% if id_catserv != 3 %}
+            <tr>
                 <td style="width:40%;"><b>{% trans %} ad_service_plus {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.adServicePlus == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
-            </tr><tr>
+            </tr>
+            {% endif %}
+            <tr>
                 <td style="width:40%;"><b>{% trans %} test            {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.test          == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
             </tr>
@@ -60,10 +82,12 @@
                 <td style="width:40%;"><b>{% trans %} numchecks       {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.numchecks    != '' %}{{ workshop.numchecks      }}{% else %} ... {% endif %}</td>
             </tr>
+            {% if id_catserv != 3 %}
             <tr>
                 <td style="width:40%;"><b>{% trans %} infotech       {% endtrans %}</b></td>
                 <td style="width:60%;">{% if workshop.infotech     == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td style="width:40%;"><b>{% trans %} subscribed      {% endtrans %}</b></td>
                 <td style="width:60%;">{% if     workshop.updateAt != null %}{{workshop.updateAt|date("d-m-Y")}}
