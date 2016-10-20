@@ -18,17 +18,6 @@ class WorkshopNewOrderType extends AbstractType
             ->add('name')
             ->add('cif','text', array('required' => true))
             // ->add('partner', 'choice' , array('required' => true, 'empty_value' => 'Selecciona un socio'))
-            ->add('shop', 'entity', array(
-                  'required' => false,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.category_service'.$id_catserv)
-                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                   'required' => true,
@@ -44,9 +33,8 @@ class WorkshopNewOrderType extends AbstractType
             ->add('test', 'checkbox', array('required' => false))
             ->add('haschecks', 'checkbox', array('required' => false))
             ->add('numchecks', 'integer', array('required' => false))
-            ->add('infotech', 'checkbox', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
-            ->add('ad_service_plus', 'checkbox', array('required' => false))
+            ->add('commercial_code', 'text', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
@@ -69,6 +57,24 @@ class WorkshopNewOrderType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
         ;
+
+        if($id_catserv != ' = 3'){
+          $builder
+              ->add('infotech', 'checkbox', array('required' => false))
+              ->add('ad_service_plus', 'checkbox', array('required' => false))
+              ->add('shop', 'entity', array(
+                    'required' => false,
+                    'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                    'property' => 'name',
+                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner) {
+                                                  return $er->createQueryBuilder('s')
+                                                            ->orderBy('s.name', 'ASC')
+                                                            ->where('s.active = 1')
+                                                            ->andWhere('s.category_service'.$id_catserv)
+                                                            ->andWhere('s.country'.$id_country.' OR s.id = 1')
+                                                            ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
+              ;
+        }
     }
 
     public function getName()

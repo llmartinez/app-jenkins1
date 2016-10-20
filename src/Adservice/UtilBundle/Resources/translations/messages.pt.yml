@@ -152,6 +152,10 @@ modified_by:			 "Alterado por"
 modified_at:			 "Alterado em"
 with_password:			 "Com palavra-passe"
 
+date.day:				 "dia"
+date.month:				 "mês"
+date.year:				 "ano"
+
 service_country: 		 "País de serviço"
 
 #FIELDS
@@ -375,6 +379,7 @@ code_workshop:			 "Código de Oficina"
 typology:				 "Tipologia"
 cif:					 "NIF"
 internal_code:			 "Código Interno"
+commercial_code:		 "Código Comercial"
 
 subscribed:				 "Suscribed"
 unsubscribed:			 "Unsubscribed"
@@ -543,6 +548,7 @@ filter_ticket: 				  "Filtros de talões"
 filter_workshop: 			  "Filtros de oficinas"
 raport: 					  "Tipo de relatório"
 numworkshopbypartner:  		  "Número de oficinas por sócio"
+ticketbyworkshop:	  		  "Número de talões de oficinas"
 ticketbyworkshopforpartner:	  "Número de talões de oficinas por sócio"
 numticketsbypartner: 		  "Número de talões por sócio"
 numticketsbysystem: 		  "Número de talões por sistema/subsistema"
