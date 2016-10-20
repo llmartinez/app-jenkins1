@@ -198,7 +198,8 @@ class WorkshopOrderController extends Controller {
         }
         if($user->getCategoryService() != null)
         {
-            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+            $catserv = $user->getCategoryService()->getId();
+            $_SESSION['id_catserv'] = ' = '.$catserv;
             unset($_SESSION['id_country']);
         }
 
@@ -212,7 +213,7 @@ class WorkshopOrderController extends Controller {
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
 
-            if ($workshopOrder->getName() != null and $workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null
+            if ($workshopOrder->getName() != null and ($catserv == 3 OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                 and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
                 and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
                 and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
@@ -244,7 +245,7 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder->setCountry($user->getCountry());
                     $roles=$user->getRoles();
                         $roles = $roles[0];
-                    if($roles != 'ROLE_SUPER_AD') {
+                    if($roles != 'ROLE_SUPER_AD' and $roles != 'ROLE_TOP_AD') {
                         $workshopOrder->setPartner($user->getPartner());
                         $workshopOrder->setCountry($user->getPartner()->getCountry());
                         $workshopOrder->setRegion($user->getPartner()->getRegion());
@@ -253,9 +254,12 @@ class WorkshopOrderController extends Controller {
                     $workshopOrder->setAction('create');
                     $workshopOrder->setWantedAction('create');
 
-                    // Set default shop to NULL
-                    $shop = $form['shop']->getClientData();
-                    if($shop == 0) { $workshopOrder->setShop(null); }
+                    if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
+
+                    if ($catserv != 3 ) $shop = $form['shop']->getClientData();
+                    else                $shop = 0;
+
+                    if($shop == 0) $workshopOrder->setShop(null);
 
                     if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
                     if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
@@ -428,7 +432,6 @@ class WorkshopOrderController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
@@ -469,6 +472,7 @@ class WorkshopOrderController extends Controller {
                             $workshopOrder->setAction('modify');
                             $workshopOrder->setWantedAction('modify');
                         }
+                        if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
                         // Set default shop to NULL
                         $shop = $form['shop']->getClientData();
