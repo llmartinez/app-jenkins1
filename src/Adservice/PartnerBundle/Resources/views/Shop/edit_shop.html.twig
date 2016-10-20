@@ -25,7 +25,7 @@
              <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} category_service {% endtrans %} *</label>
                 {{ form_widget(form.category_service, { 'attr': {'class': 'form-control hidden'} }) }}
-                <input type="text" class="form-control" value="{{shop.CategoryService}}" disabled>
+                <input id="adservice_workshopbundle_workshoptype_partner" type="text" class="form-control" value="{{shop.CategoryService}}" disabled>
             </div>
             {% endif %}
             <div class="col-xs-2 col-md-2 form-group">
@@ -71,4 +71,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 {% endblock %}

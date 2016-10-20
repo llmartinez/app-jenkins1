@@ -87,7 +87,7 @@
                     {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
                 </div>
                 <div class="grid w45 fl">
-                    <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="category_service" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
+                    <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="flt_catserv" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
                 </div>
                 {#<div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
@@ -170,8 +170,9 @@
             <label for="adservice_workshopbundle_workshoptype_observation_admin">{% trans %} observations_admin {% endtrans %}</label>
             {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_admin' | trans } }) }}
         </div>
-
-    {{ form_rest(form) }}
+        <div hidden='hidden'>    
+            {{ form_rest(form) }}
+        </div>
             <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
@@ -186,4 +187,5 @@
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
     <script src="{{ asset('bundles/workshop/js/workshop_shop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 {% endblock %}
