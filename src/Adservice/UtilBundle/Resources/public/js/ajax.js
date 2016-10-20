@@ -125,7 +125,7 @@ function populate_partner(){
 function populate_partner2(partner){
     var id_catserv = $('form').find('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
-
+    
     var route  = 'partners_from_catserv';
     var locale = $(document).find("#data_locale").val();
 
@@ -144,11 +144,9 @@ function populate_partner2(partner){
                 // $('form').find('select[id*=_partner]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
-                    $('form').find('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
-                
-                
-                $('#adservice_workshopbundle_workshoptype_partner').val(partner);
+                $('form').find('select[id$=e_partner]').val(partner);
                 var typology = $('#slct_typology').val();
                 if(typology != undefined) {
                     // DIAG. MACHINE

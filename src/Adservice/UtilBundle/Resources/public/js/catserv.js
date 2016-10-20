@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    var partner = $('#adservice_workshopbundle_workshoptype_partner').val();
+    var partner = $('#adservice_partnerbundle_shoptype_partner').val();
+    if (partner == undefined) partner =  $('form').find('select[id*=_partner]').val();
                     
     // PARTNER
         $('#adservice_workshopbundle_workshoptype_partner').empty();
@@ -8,7 +9,7 @@ $(document).ready(function() {
         populate_partner2(partner);
 
     }
-    else if($('form').find('select[name*=category_service]') != undefined ){
+    else if($('form').find('select[name*=category_service]') != undefined &&  $('form').find('select[name*=category_service]').val() != ""  ){
         populate_partner2(partner);
 
     }
