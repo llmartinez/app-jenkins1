@@ -245,16 +245,14 @@ class StatisticController extends Controller {
 
                 if (isset($from_date)) {
 
-                    $qb = $qb->andWhere('e.update_at >= :update_at_from')
-                        ->setParameter('update_at_from', $from_date);
+                    $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                        ->setParameter('created_at_from', $from_date);
                 }
 
                 if (isset($to_date)) {
 
-                    // $qb = $qb->andWhere('e.created_at <= :created_at_to')
-                    //     ->setParameter('created_at_to', $to_date);
-                    $qb = $qb->andWhere('e.lowdate_at <= :lowdate_at_to')
-                        ->setParameter('lowdate_at_to', $to_date);
+                    $qb = $qb->andWhere('e.created_at <= :created_at_to')
+                        ->setParameter('created_at_to', $to_date);
                 }
 
                 if ($status == "open" )
@@ -1231,8 +1229,8 @@ class StatisticController extends Controller {
                 $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
                 if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
                 $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
-                $qt = $em->createQuery($sql);
 
+                $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');

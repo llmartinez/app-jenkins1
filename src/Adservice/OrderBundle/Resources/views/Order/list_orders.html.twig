@@ -1,6 +1,12 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'list_orders' %}
     <input type="hidden" id="route" value="{{ route }}">
@@ -31,6 +37,7 @@
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br>
         {% if length_workshop_rejected > 0 %} <div class="pending_application3">{{ length_workshop_rejected }}</div>{% endif %}
     </button>
+    {% if id_catserv != 3 %}
     <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br>
@@ -41,6 +48,7 @@
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br>
         {% if length_shop_rejected > 0 %} <div class="pending_application3">{{ length_shop_rejected }}</div>{% endif %}
     </button>
+    {% endif %}
 </div>
 
 <div class='colDer85'>

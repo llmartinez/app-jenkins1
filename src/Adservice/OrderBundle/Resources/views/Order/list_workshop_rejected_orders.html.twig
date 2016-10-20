@@ -1,6 +1,11 @@
 
     <legend>{% trans %} list.workshop.rejected {% endtrans %}</legend>
 
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+
     {% if orders is defined %}
         {% if orders|length > 0  %}
             <table class="table table-hover" style="width: 95%; margin-left: 5%;">

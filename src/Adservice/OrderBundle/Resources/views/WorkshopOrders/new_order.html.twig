@@ -2,7 +2,10 @@
 
 {% block body %}
 
-    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
     {% if id_catserv == 1 or id_catserv == 2 or id_catserv == 3 %}
         {% set is_hidden = '' %}
     {% else %}
@@ -48,34 +51,25 @@
             {# {% else %} {{ form_widget(form.partner, { 'attr': {'hidden': 'hidden' } }) }} #}
             {% endif %}
 
-            <div class="col-xs-3 col-md-3">
-                <label>{% trans %} shop {% endtrans %} * </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
-            {#  <input type="hidden" id="id_partner" value="{{ id_partner }}">
-                <label for="workshopOrder_newOrder_shop">{% trans %} shop {% endtrans %} * </label>
-                {% if shops is iterable %}
-                    <select id="shop" name="shop" required="required" class="form-control">
-                        <option value></option>
-                        {% for shop in shops %}
-                            <option value={{ shop.id }}>{{ shop.name }}</option>
-                        {% endfor %}
-                    </select>
-                {% else %}
-                    <select id="partners"><option value=0>0</option></select>
-                {% endif %}
-            #}
-            </div>
+            {% if id_catserv != 3 %}
+                <div class="col-xs-3 col-md-3">
+                    <label>{% trans %} shop {% endtrans %} * </label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control', 'required': 'false'} }) }}
+                </div>
+            {% endif %}
 
             <div class="col-xs-3 col-md-3">
                 <label>{% trans %} typology {% endtrans %} *</label> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
             </div>
         </div>
         <div class="col-xs-2 col-md-2 form-group fr">
+            {% if id_catserv != 3 %}
             <div class="w65 fl mb15 {{is_hidden}}">
                 <label>{% trans %} ad_service_plus {% endtrans %}</label>
             </div>
             <div class="w35 fr mb15 {{is_hidden}}">
                 {{ form_widget(form.ad_service_plus) }}
             </div>
+            {% endif %}
             <div class="w65 fl mb15">
                 <label>{% trans %} test {% endtrans %}</label>
             </div>
@@ -94,12 +88,14 @@
             <div class="w35 fr mb15">
                 {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
             </div>
+            {% if id_catserv != 3 %}
             <div class="w65 fl {{is_hidden}}">
                 <label for="workshopOrder_newOrder_infotech">{% trans %} infotech {% endtrans %}</label>
             </div>
             <div class="w35 fr {{is_hidden}}">
                 {{ form_widget(form.infotech) }}
             </div>
+            {% endif %}
         </div>
         <div class="col-xs-10 col-md-10 form-group fl">
             <div class="col-xs-3 col-md-3">
