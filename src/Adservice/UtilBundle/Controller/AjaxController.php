@@ -138,7 +138,7 @@ class AjaxController extends Controller
         $petition   = $this->getRequest();
         $id_catserv = $petition->request->get('id_catserv');
 
-        $query = "SELECT d FROM WorkshopBundle:DiagnosisMachine d WHERE d.id != 0 ";
+        $query = "SELECT d FROM WorkshopBundle:DiagnosisMachine d WHERE d.id != 0 and d.active = 1 ";
         if($id_catserv != '') $query .= "AND d.category_service = ".$id_catserv." OR d.id = 1 ";
 
         $consulta = $em->createQuery($query);

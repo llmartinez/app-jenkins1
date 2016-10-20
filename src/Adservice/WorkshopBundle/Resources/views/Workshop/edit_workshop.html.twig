@@ -86,13 +86,9 @@
                 <div class="grid w45 fl">
                     <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
                     {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
-                </div>
+                </div>               
                 <div class="grid w45 fl">
-                    <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
-                    {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
-                </div>
-                <div class="grid w45 fl">
-                    <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="category_service" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
+                    <label>{% trans %} category_service {% endtrans %} *</label> <input type="text" id="flt_catserv" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
                 </div>
                 {#<div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
@@ -141,51 +137,6 @@
                     </div>
                     <div class="grid-full w20">
                         {{ form_widget(form.ad_service_plus) }}
-
-                <div class="grid w100">
-                    <div class="grid w45 fl form-group">
-                        <div class="grid-full w80 mt20">
-                            <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
-                        </div>
-                        <div class="grid-full w20 mt20">
-                            {{ form_widget(form.test) }}
-                        </div>
-                    </div>
-                    <div class="grid w45 fl form-group">
-                        <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
-                        {{ form_widget(form.endtest_at) }}
-                    </div>
-                </div>
-
-                <div class="grid w100">
-                    <div class="grid w45 fl form-group">
-                        <div class="grid-full w80 mt20">
-                            <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
-                        </div>
-                        <div class="grid-full w20 mt20">
-                            {{ form_widget(form.haschecks) }}
-                        </div>
-                    </div>
-                    <div class="grid w45 fl form-group">
-                        <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
-                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
-                    </div>
-                </div>
-
-                <div class="grid w45 fl form-group">
-                    <div class="grid-full w80 mt20">
-                        <label for="adservice_workshopbundle_workshoptype_ad_service_plus">{% trans %} ad_service_plus {% endtrans %}</label>
-                    </div>
-                    <div class="grid-full w20 mt20">
-                        {{ form_widget(form.ad_service_plus) }}
-                    </div>
-                </div>
-                <div class="grid w45 fl form-group">
-                    <div class="grid-full w80 mt20">
-                        <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
-                    </div>
-                    <div class="grid-full w20 mt20">
-                         {{ form_widget(form.infotech) }}
                     </div>
                 </div>
             </div>
@@ -220,8 +171,9 @@
             <label for="adservice_workshopbundle_workshoptype_observation_admin">{% trans %} observations_admin {% endtrans %}</label>
             {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_admin' | trans } }) }}
         </div>
-
-    {{ form_rest(form) }}
+        <div hidden='hidden'>    
+            {{ form_rest(form) }}
+        </div>
             <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>
         </div>
     </form>
@@ -236,4 +188,5 @@
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
     <script src="{{ asset('bundles/workshop/js/workshop_shop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 {% endblock %}

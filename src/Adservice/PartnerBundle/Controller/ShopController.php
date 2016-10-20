@@ -202,8 +202,9 @@ class ShopController extends Controller {
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }
-
+        $catserv = $shop->getCategoryService();
         return $this->render('PartnerBundle:Shop:edit_shop.html.twig', array('shop'       => $shop,
+                                                                             'catserv'    => $catserv,
                                                                              'form_name'  => $form->getName(),
                                                                              'form'       => $form->createView()));
     }
