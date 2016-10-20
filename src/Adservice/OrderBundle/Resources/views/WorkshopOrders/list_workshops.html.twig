@@ -2,6 +2,8 @@
 
 {% block body %}
 
+    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+
     <input type="hidden" id="route" value="workshopOrder_listWorkshops">
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -66,7 +68,9 @@
                 <th>{% trans %} internal_code {% endtrans %}</th>
                 <th>{% trans %} cif      {% endtrans %}</th>
                 <th>{% trans %} tel     {% endtrans %}</th>
+                {% if id_catserv != 3 %}
                 <th>{% trans %} shop      {% endtrans %}</th>
+                {% endif %}
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
                 {# <th>{% trans %}numTickets{% endtrans %}</th> #}
                 <th>{% trans %} actions  {% endtrans %}</th>
@@ -84,7 +88,9 @@
                 <td>{{ workshop.internalCode }}       </td>
                 <td>{{ workshop.cif }}</td>
                 <td>{{ workshop.phoneNumber1 }} </td>
+                {% if id_catserv != 3 %}
                 <td>{{ workshop.shop }} </td>
+                {% endif %}
                 {# <td>{{ workshop.active }}       </td> #}
                 {# <td>{{ numTickets[workshop.id]}}</td> #}
                 {% if is_granted('ROLE_ADMIN') %}
