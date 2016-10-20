@@ -19,7 +19,7 @@
                 <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# required #}>
                         <option></option>
                     {% for _brand in brands %}
-                        <option value={{ _brand.id }} {% if brand is defined and brand == _brand.id %}selected{% endif %}>{{ _brand.name }}</option>
+                        <option value={{ _brand.id }} {% if brand is defined and brand != "" and brand == _brand.id %}selected{% endif %}>{{ _brand.name }}</option>
                     {% endfor %}
                 </select>
             </div>
