@@ -551,6 +551,7 @@ class ImportController extends Controller
 		$num_checks 			= null;
 		$infotech 				= null;
 		$country_service		= null;
+		$default_mail 			= $this->container->getParameter('mail_test');
 
 		// Campos variables
 		$region 				= 0;
@@ -587,10 +588,31 @@ class ImportController extends Controller
 				$phone_number_1 = '00 00 00 00 00';
 			}
 
-			$email_1 				= trim($columns[15]); // Dirigeant : Email
-			if ($email_1 == '') {
+			$email_1 = $default_mail;
+			$email_2 = '';
+			$columns[15] = trim($columns[15]); // Dirigeant : Email
+			if ($columns[15] != '') {
 
-				$email_1 = $this->container->getParameter('mail_test');
+				//Por alguna razón no sabe encontrar los \n, por eso haremos varios explodes
+				//$output = preg_split('/(\\n|\s;\s|;)/', $columns[15]);
+
+				$output = explode( "\\n", $columns[15] );
+				if (isset($output[1])) {
+
+					$email_1 = $output[0];
+					$email_2 = $output[1];
+				} else {
+
+					$output = explode( " ; ", $columns[15] );
+					if (isset($output[1])) {
+
+						$email_1 = $output[0];
+						$email_2 = $output[1];
+					} else {
+
+						$email_1 = $columns[15];
+					}
+				}
 			}
 
 			$user = new User();
@@ -628,6 +650,7 @@ class ImportController extends Controller
 			$user->setPhoneNumber1($phone_number_1);
 			$user->setFax($fax);
 			$user->setEmail1($email_1);
+			$user->setEmail2($email_2);
 
 			$excel .= $email_1.';';
 
@@ -656,6 +679,7 @@ class ImportController extends Controller
 				$partner->setPhoneNumber1($phone_number_1);
 				$partner->setFax($fax);
 				$partner->setEmail1($email_1);
+				$partner->setEmail2($email_2);
 				$partner->setCreatedAt($created_at);
 				$partner->setModifiedAt($modified_at);
 				$partner->setContact($contact);
@@ -699,6 +723,7 @@ class ImportController extends Controller
 				$workshop->setPhoneNumber1($phone_number_1);
 				$workshop->setFax($fax);
 				$workshop->setEmail1($email_1);
+				$workshop->setEmail2($email_2);
 				$workshop->setTest($test);
 				$workshop->setCreatedAt($created_at);
 				$workshop->setModifiedAt($modified_at);
