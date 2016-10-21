@@ -734,10 +734,10 @@ mail.changePassword.user:				"Your username is:"
 mail.changePassword.password:			"Your new password is:"
 mail.changePassword.info.password:		"To modify your password go to <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> section "
 
-mail.activateWorkshop.subject:                          "ADService | Activation workshop "
-mail.deactivateWorkshop.subject:                        "ADService | Deactivating the workshop "
+mail.activateWorkshop.subject:          "ADService | Activation workshop "
+mail.deactivateWorkshop.subject:        "ADService | Deactivating the workshop "
 
-mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be of a reserved nature. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized and may be illegal. If you are not the addressee, please delete its contents."
+mail.textDisclaimer:  "LEGAL NOTICE. The information contained in this email is confidential and may be of a reserved nature. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized and may be illegal. If you are not the addressee, please delete its contents."
 _mail.textDisclaimer: "LEGAL NOTICE. The information contained in this email is confidential and may be of a reserved nature. It is intended solely for the addressee. Access or use of this message by anyone else is unauthorized and may be illegal. If you are not the addressee, please delete its contents. <b>soporte@ad-service.com</b>"
 
 mail.centralita_test: "test@adserviceticketing.com"
