@@ -193,7 +193,6 @@ class StatisticController extends Controller {
                 $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 23:59:59';
                 $where .= "AND e.update_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'";
             }
-
             if ($type == 'ticket'  )
             {
                 //Realizamos una query deshydratada con los datos ya montados
@@ -1183,13 +1182,24 @@ class StatisticController extends Controller {
                 $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
 
-                // $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", s.name as ".$nShop.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
-                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
-   
+                if($shop    == 'undefined') $shop = '0';
+                if($country == 'undefined') $country = '0';
+                if($raport  == 'undefined') $raport = '0';
+
+                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology." , c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." ";
+
+                $from = " FROM TicketBundle:Ticket e JOIN e.workshop w ";
+
                 $where .= 'AND p.id = w.partner ';
-                $join   = ' JOIN w.partner p JOIN w.shop s JOIN w.typology tp JOIN w.country c ';
-                // $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
+                $join   = ' JOIN w.partner p JOIN w.typology tp JOIN w.country c ';
                 $where .= ' AND tp.id = w.typology AND c.id = w.country ';
+
+                if ($shop != "0" and $shop != "undefined") {
+                    $select .= " , s.name as ".$nShop." ";
+                    $join   .= ' JOIN w.shop s ';
+                    $where .= ' AND s.id = w.shop ';
+                    $where .= 'AND s.id = '.$shop.' ';
+                }
 
                 if ($status != '0') {
                     switch ($status) {
@@ -1217,8 +1227,6 @@ class StatisticController extends Controller {
                 if    ($partner != "0"     ) { $where .= 'AND w.id != 0 ';
                                                $where .= 'AND p.id = '.$partner.' ';
                 }
-                if    ($shop != "0" and $shop != "undefined") { $where .= 'AND s.id = '.$shop.' ';
-                }
                 if    ($typology != "0"    ) { $where .= 'AND tp.id = '.$typology.' ';
                 }
                 if(!$security->isGranted('ROLE_SUPER_ADMIN')){
@@ -1226,13 +1234,14 @@ class StatisticController extends Controller {
                 }else{
                     if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                 }
-                $sql = $select.$join." WHERE ".$where.' ';
+                $sql = $select.$from.$join." WHERE ".$where.' ';
                 $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
                 if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
                 $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
 
                 $qt = $em->createQuery($sql);
-                $results   = $qt->getResult();
+                $results = $qt->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                // $results   = $qt->getResult();
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
                 $excel = $this->createExcelStatistics($results);
