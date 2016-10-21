@@ -311,6 +311,7 @@ class UserController extends Controller {
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserPartnerType(), $user);
         } elseif ($type == 'assessor') {
+            $_SESSION['all'] = $this->get('translator')->trans('all');
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserAssessorType(), $user);
