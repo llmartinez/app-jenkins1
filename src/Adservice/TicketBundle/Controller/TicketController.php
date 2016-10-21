@@ -370,7 +370,7 @@ class TicketController extends Controller {
 
         if ($option == null)
             $option = 'all';
-        
+
         $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
@@ -2142,12 +2142,6 @@ class TicketController extends Controller {
         $email = $request->get('ftbmv_email');
         $phone = $request->get('ftbmv_phone');
 
-        $workshop = new Workshop();
-
-        if (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != '') {
-
-            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'code_partner' => $codepartner));
-        }
 
         // CAR
         $brand = $request->request->get('new_car_form_brand');
@@ -2162,81 +2156,159 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
-       
+
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
-        $num_rows = $request->request->get('slct_numRows');
-        if (!isset($num_rows))
-            $num_rows = 10;
-        if (isset($brand) and $brand != null and $brand != '')
-            $params[] = array('brand', ' = ' . $brand);
-        if (isset($model) and $model != null and $model != '')
-            $params[] = array('model', ' = ' . $model);
-        if (isset($version) and $version != null and $version != '')
-            $params[] = array('version', ' = ' . $version);
 
-        if (isset($plateNumber) and $plateNumber != '0' and $plateNumber != '')
-            $params[] = array('plateNumber' . ' LIKE ', '\'' . $plateNumber . '\'');
-        $pagination = new Pagination($page);
+        $workshop = new Workshop();
 
-        // Seteamos el numero de resultados que se mostraran
-        $max_rows = 100;
-        $pagination->setMaxRows($max_rows);
-        $ordered = array('e.modified_at', 'DESC');
-       
-        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
-        $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
+        if(!$security->isGranted('ROLE_ASSESSOR'))
+            $workshop = $user->getWorkshop();
 
-        $pagination->setTotalPagByLength($length);
+        elseif (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != '')
+            $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'code_partner' => $codepartner));
 
-        $tickets = array();
-        $key = array_keys($cars);
-        $size = sizeOf($key);
+        if($workshop->getId() == null) {
 
-        if ($length > $max_rows)
-            $more_results = $length - $max_rows;
-        else
-            $more_results = 0;
+            $num_rows = $request->request->get('slct_numRows');
+            if (!isset($num_rows))
+                $num_rows = 10;
+            if (isset($brand) and $brand != null and $brand != '')
+                $params[] = array('brand', ' = ' . $brand);
+            if (isset($model) and $model != null and $model != '')
+                $params[] = array('model', ' = ' . $model);
+            if (isset($version) and $version != null and $version != '')
+                $params[] = array('version', ' = ' . $version);
 
-        if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
-            $catserv = $user->getCategoryService()->getId();
-        }
-        else{
-            $catserv = null;
-        }
+            if (isset($plateNumber) and $plateNumber != '0' and $plateNumber != '')
+                $params[] = array('plateNumber' . ' LIKE ', '\'' . $plateNumber . '\'');
+            $pagination = new Pagination($page);
 
-        if ($size > 0) {
+            // Seteamos el numero de resultados que se mostraran
+            $max_rows = 100;
+            $pagination->setMaxRows($max_rows);
+            $ordered = array('e.modified_at', 'DESC');
 
-            for ($i = 0; $i < $size; $i++) {
+            $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
+            $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
 
-                $id = $cars[$key[$i]]->getId();
-                if ($subsystem == 0 or $subsystem == ''){
-                    if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'category_service' => $catserv));
-                    else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
-                }
-                else{
-                    if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem, 'category_service' => $catserv));
-                    else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem));
-                }
+            $pagination->setTotalPagByLength($length);
 
-                if (sizeof($ticket) >= 1) {
-                    foreach ($ticket as $tck) {
-                        if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))) {
-                            if($workshop != null){
-                                $w_id = $workshop->getId();
-                            }
-                            // Si esta definido el taller añadimos al array solo las que coinciden con el taller
-                            if (isset($w_id)) {
+            $tickets = array();
+            $key = array_keys($cars);
+            $size = sizeOf($key);
 
-                                if ($workshop->getId() == $tck->getWorkshop()->getId()) {
+            if ($length > $max_rows)
+                $more_results = $length - $max_rows;
+            else
+                $more_results = 0;
 
+            if(!$security->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
+                $catserv = $user->getCategoryService()->getId();
+            }
+            else{
+                $catserv = null;
+            }
+
+            if ($size > 0) {
+
+                for ($i = 0; $i < $size; $i++) {
+
+                    $id = $cars[$key[$i]]->getId();
+                    if ($subsystem == 0 or $subsystem == ''){
+                        if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'category_service' => $catserv));
+                        else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
+                    }
+                    else{
+                        if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem, 'category_service' => $catserv));
+                        else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem));
+                    }
+
+                    if (sizeof($ticket) >= 1) {
+                        foreach ($ticket as $tck) {
+                            if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))) {
+                                if($workshop != null){
+                                    $w_id = $workshop->getId();
+                                }
+                                // Si esta definido el taller añadimos al array solo las que coinciden con el taller
+                                if (isset($w_id)) {
+
+                                    if ($workshop->getId() == $tck->getWorkshop()->getId()) {
+
+                                        $tickets[] = $tck;
+                                    }
+                                }
+                                // Sino añadimos todos los tickets independientemente del taller que sean
+                                else {
                                     $tickets[] = $tck;
                                 }
                             }
-                            // Sino añadimos todos los tickets independientemente del taller que sean
-                            else {
+                        }
+                    }
+                }
+            }
+        }else{
+
+            if(!$security->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
+                $catserv = $user->getCategoryService()->getId();
+            }
+            else $catserv = null;
+
+            if($workshop->getId() != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findByWorkshop($workshop);
+            else                           $ticket = $em->getRepository('TicketBundle:Ticket')->findByCategoryService($catserv);
+            $pagination = new Pagination();
+            $num_rows = $request->request->get('slct_numRows');
+            if (!isset($num_rows))
+                $num_rows = 10;
+            $more_results = 0;
+
+            $tickets = array();
+
+            foreach ($ticket as $tck) {
+                $car = $tck->getCar();
+
+                // Si se esta buscando algun campo y no lo encuentra, deja de buscar coincidencias entre ese ticket y el coche buscado
+                $search = true;
+
+                if($subsystem != null and $subsystem != '' and $subsystem != '0'){
+                    if($car->getSubsystem() == null or $subsystem != $car->getSubsystem()->getId()) $search = false;
+                }
+                if($plateNumber != null and $plateNumber != '' and $plateNumber != '0'){
+                    if($car->getPlateNumber() == null or $plateNumber != $car->getPlateNumber())    $search = false;
+                }
+
+                if($search){
+                    if($version != null and $version != '' and $version != '0'){
+                        if($car->getVersion() != null and $version == $car->getVersion()->getId()) {
+                            $tickets[] = $tck;
+                        }
+                    }
+                    elseif($model != null and $model != '' and $model != '0'){
+                        if($car->getModel() != null and $model == $car->getModel()->getId()) {
+                            $tickets[] = $tck;
+                        }
+                    }
+                    elseif($brand != null and $brand != '' and $brand != '0'){
+                        if($car->getBrand() != null and $brand == $car->getBrand()->getId()) {
+                            $tickets[] = $tck;
+                        }
+                    }else{
+                        if($subsystem != null and $subsystem != '' and $subsystem != '0' and $plateNumber != null and $plateNumber != '' and $plateNumber != '0')
+                        {
+                            if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId()
+                              and $car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber()->getId()) {
                                 $tickets[] = $tck;
                             }
+                        }elseif($subsystem != null and $subsystem != '' and $subsystem != '0')
+                        {
+                            if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId())
+                                $tickets[] = $tck;
+
+                        }elseif($plateNumber != null and $plateNumber != '' and $plateNumber != '0')
+                        {
+                            if ($car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber())
+                                $tickets[] = $tck;
+
                         }
                     }
                 }
@@ -2274,8 +2346,9 @@ class TicketController extends Controller {
 
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
+
         if ($plateNumber != '') {
-            if ($cars != null) {
+            if (isset($cars) and $cars != null) {
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
                 $vin = $cars[0]->getVin();
@@ -2292,6 +2365,8 @@ class TicketController extends Controller {
                 }
             }
         }
+        if($brand == '') $brand = null;
+
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,
             'codepartner' => $codepartner,

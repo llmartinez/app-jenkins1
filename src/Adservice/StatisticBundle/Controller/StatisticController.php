@@ -1166,7 +1166,7 @@ class StatisticController extends Controller {
                 $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
                 $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
                 $nSocio          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('partner')));
-                $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
+                // $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
                 $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
                 $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
                 $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
@@ -1183,12 +1183,13 @@ class StatisticController extends Controller {
                 $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
 
-                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", s.name as ".$nShop.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
-                // $select = "SELECT count(w.id) as ".$nTickets.", w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller." FROM TicketBundle:Ticket e JOIN e.workshop w ";
-
+                // $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", s.name as ".$nShop.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology.", c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." FROM TicketBundle:Ticket e JOIN e.workshop w ";
+   
                 $where .= 'AND p.id = w.partner ';
                 $join   = ' JOIN w.partner p JOIN w.shop s JOIN w.typology tp JOIN w.country c ';
-                $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
+                // $where .= ' AND s.id = w.shop AND tp.id = w.typology AND c.id = w.country ';
+                $where .= ' AND tp.id = w.typology AND c.id = w.country ';
 
                 if ($status != '0') {
                     switch ($status) {
@@ -1216,7 +1217,7 @@ class StatisticController extends Controller {
                 if    ($partner != "0"     ) { $where .= 'AND w.id != 0 ';
                                                $where .= 'AND p.id = '.$partner.' ';
                 }
-                if    ($shop != "0"        ) { $where .= 'AND s.id = '.$shop.' ';
+                if    ($shop != "0" and $shop != "undefined") { $where .= 'AND s.id = '.$shop.' ';
                 }
                 if    ($typology != "0"    ) { $where .= 'AND tp.id = '.$typology.' ';
                 }
