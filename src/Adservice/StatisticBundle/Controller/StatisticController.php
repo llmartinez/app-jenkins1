@@ -97,6 +97,7 @@ class StatisticController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false){
             throw new AccessDeniedException();
         }
+
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
