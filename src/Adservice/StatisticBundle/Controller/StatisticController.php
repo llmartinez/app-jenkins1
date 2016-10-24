@@ -381,27 +381,39 @@ class StatisticController extends Controller {
 
                         if(!isset($from_date) and !isset($to_date))
                         {
-                            $qb = $qb->andWhere('w.active = 1')
-                                     ->andWhere('w.test != 1');
+                            $qb = $qb->andWhere('e.active = 1')
+                                     ->andWhere('e.test != 1');
                         }
-                        else
-                        {
+                        elseif (isset($from_date) and isset($to_date)){
+
+                            $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
+
+                            $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                     ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
+                                     ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at OR e.lowdate_at >= :lowdate_at_from)')
+                                     ->setParameter('update_at_to', $to_date)
+                                     ->setParameter('endtest_at_from', $from_date)
+                                     ->setParameter('endtest_at_to', $to_date)
+                                     ->setParameter('lowdate_at_from', $from_date);
+                        }
+                        else{
                             if (isset($from_date))
                             {
-                                $qb = $qb->andWhere('w.update_at >= :update_at_from')
-                                         ->setParameter('update_at_from', $from_date);
-                                $qb = $qb->andWhere('w.endtest_at >= :endtest_at_from')
+                                $qb = $qb->andWhere('e.update_at >= :update_at_from')
+                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from)')
+                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at)')
+                                         ->setParameter('update_at_from', $from_date)
                                          ->setParameter('endtest_at_from', $from_date);
                             }
 
                             if (isset($to_date))
                             {
-                                $qb = $qb->andWhere('w.update_at <= :update_at_from')
-                                         ->setParameter('update_at_from', $to_date);
-                                $qb = $qb->andWhere('w.lowdate_at >= :lowdate_at_to')
+                                $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_to)')
+                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at >= :lowdate_at_to)')
+                                         ->setParameter('update_at_to', $to_date)
+                                         ->setParameter('endtest_at_to', $to_date)
                                          ->setParameter('lowdate_at_to', $to_date);
-                                $qb = $qb->andWhere('w.endtest_at >= :endtest_at_from')
-                                         ->setParameter('endtest_at_from', $to_date);
                             }
                         }
                         break;
