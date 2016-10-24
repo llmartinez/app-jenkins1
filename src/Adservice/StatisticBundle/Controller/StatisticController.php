@@ -381,27 +381,39 @@ class StatisticController extends Controller {
 
                         if(!isset($from_date) and !isset($to_date))
                         {
-                            $qb = $qb->andWhere('w.active = 1')
-                                     ->andWhere('w.test != 1');
+                            $qb = $qb->andWhere('e.active = 1')
+                                     ->andWhere('e.test != 1');
                         }
-                        else
-                        {
+                        elseif (isset($from_date) and isset($to_date)){
+
+                            $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
+
+                            $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                     ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
+                                     ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at OR e.lowdate_at >= :lowdate_at_from)')
+                                     ->setParameter('update_at_to', $to_date)
+                                     ->setParameter('endtest_at_from', $from_date)
+                                     ->setParameter('endtest_at_to', $to_date)
+                                     ->setParameter('lowdate_at_from', $from_date);
+                        }
+                        else{
                             if (isset($from_date))
                             {
-                                $qb = $qb->andWhere('w.update_at >= :update_at_from')
-                                         ->setParameter('update_at_from', $from_date);
-                                $qb = $qb->andWhere('w.endtest_at >= :endtest_at_from')
+                                $qb = $qb->andWhere('e.update_at >= :update_at_from')
+                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from)')
+                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at)')
+                                         ->setParameter('update_at_from', $from_date)
                                          ->setParameter('endtest_at_from', $from_date);
                             }
 
                             if (isset($to_date))
                             {
-                                $qb = $qb->andWhere('w.update_at <= :update_at_from')
-                                         ->setParameter('update_at_from', $to_date);
-                                $qb = $qb->andWhere('w.lowdate_at >= :lowdate_at_to')
+                                $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_to)')
+                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at >= :lowdate_at_to)')
+                                         ->setParameter('update_at_to', $to_date)
+                                         ->setParameter('endtest_at_to', $to_date)
                                          ->setParameter('lowdate_at_to', $to_date);
-                                $qb = $qb->andWhere('w.endtest_at >= :endtest_at_from')
-                                         ->setParameter('endtest_at_from', $to_date);
                             }
                         }
                         break;
@@ -1161,12 +1173,17 @@ class StatisticController extends Controller {
             }
             elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
             {
-                $trans           = $this->get('translator');
+                $trans  = $this->get('translator');
+                $catserv = $security->getToken()->getUser()->getCategoryService();
+
+                if($catserv->getId() != null) $catserv = $catserv->getId();
+                else $catserv = 0;
+
                 $code            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('_code')));
                 $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
                 $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
                 $nSocio          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('partner')));
-                // $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
+                $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
                 $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
                 $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
                 $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
@@ -1187,65 +1204,166 @@ class StatisticController extends Controller {
                 if($country == 'undefined') $country = '0';
                 if($raport  == 'undefined') $raport = '0';
 
-                $select = "SELECT w.name as ".$nTaller.", p.name as ".$nSocio.", p.code_partner as ".$code.$nSocio.", w.code_workshop as ".$code.$nTaller.", tp.name as ".$nTypology." , c.country as ".$nCountry.", w.contact as ".$contact.", w.internal_code as ".$internal_code.", w.commercial_code as ".$commercial_code.", w.update_at as ".$update_at.", w.lowdate_at as ".$lowdate_at.", w.region as ".$region.", w.city as ".$city.", w.address as ".$address.", w.postal_code as ".$postal_code.", w.phone_number_1 as ".$phone_number_1.", w.fax as ".$fax.", w.email_1 as ".$email_1.", count(w.id) as ".$nTickets." ";
+                //Realizamos una query deshydratada con los datos ya montados
+                $qb = $em->getRepository('TicketBundle:Ticket')
+                    ->createQueryBuilder('t')
+                    ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
+                                    'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
+                                    'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
+                                    'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
+                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'count(t.id) as '.$nTickets.'')
 
-                $from = " FROM TicketBundle:Ticket e JOIN e.workshop w ";
+                    ->leftJoin('t.workshop', 'e')
+                    ->leftJoin('e.partner', 'p')
+                    ->leftJoin('e.typology', 'tp')
+                    ->leftJoin('e.country', 'c')
 
-                $where .= 'AND p.id = w.partner ';
-                $join   = ' JOIN w.partner p JOIN w.typology tp JOIN w.country c ';
-                $where .= ' AND tp.id = w.typology AND c.id = w.country ';
+                    ->andWhere('p.id = e.partner')
+                    ->andWhere('tp.id = e.typology')
+                    ->andWhere('c.id = e.country')
+
+                    ->groupBy('e.id')
+                    ->orderBy('e.id');
 
                 if ($shop != "0" and $shop != "undefined") {
-                    $select .= " , s.name as ".$nShop." ";
-                    $join   .= ' JOIN w.shop s ';
-                    $where .= ' AND s.id = w.shop ';
-                    $where .= 'AND s.id = '.$shop.' ';
+
+                  $qb = $qb->addSelect('s.name as ":nShop"')
+                           ->setParameter('nShop', $nShop)
+                           ->leftJoin('e.shop', 's')
+                           ->andWhere('t.id = :typology')
+                           ->setParameter('typology', $typology);
                 }
+                if($partner != "0") $qb = $qb->andWhere('p.id = :partner')
+                                             ->setParameter('partner', $partner);
+
+                if($typology != "0") $qb = $qb->andWhere('tp.id = :typology')
+                                             ->setParameter('typology', $typology);
+
+                if($catserv != "0") $qb = $qb->andWhere('e.category_service = :catserv')
+                                             ->setParameter('catserv', $catserv);
+
+                if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
 
                 if ($status != '0') {
                     switch ($status) {
                         case "active":
-                            $where .= 'AND w.active = 1 ';
-                            $where .= 'AND w.test != 1 ';
+
+                            // $qb = $qb->andWhere("e.created_at <= '2016-08-15 23:59:59'")
+                            //          ->andWhere("(e.active = 1 AND (e.lowdate_at IS NULL OR e.modified_at > e.lowdate_at)) OR ( e.active = 0 AND e.lowdate_at  >= '2016-08-15 23:59:59' )");
+
+                            if(!isset($from_date) and !isset($to_date))
+                            {
+                                $qb = $qb->andWhere('e.active = 1')
+                                         ->andWhere('e.test != 1');
+                            }
+                            elseif (isset($from_date) and isset($to_date)){
+
+                                $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
+
+                                $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
+                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at OR e.lowdate_at >= :lowdate_at_from)')
+                                         ->setParameter('update_at_to', $to_date)
+                                         ->setParameter('endtest_at_from', $from_date)
+                                         ->setParameter('endtest_at_to', $to_date)
+                                         ->setParameter('lowdate_at_from', $from_date);
+                            }
+                            else{
+                                if (isset($from_date))
+                                {
+                                    $qb = $qb->andWhere('e.update_at >= :update_at_from')
+                                             ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from)')
+                                             ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at)')
+                                             ->setParameter('update_at_from', $from_date)
+                                             ->setParameter('endtest_at_from', $from_date);
+                                }
+
+                                if (isset($to_date))
+                                {
+                                    $qb = $qb->andWhere('e.update_at <= :update_at_to')
+                                             ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_to)')
+                                             ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at >= :lowdate_at_to)')
+                                             ->setParameter('update_at_to', $to_date)
+                                             ->setParameter('endtest_at_to', $to_date)
+                                             ->setParameter('lowdate_at_to', $to_date);
+                                }
+                            }
                             break;
+
                         case "deactive":
-                            $where .= 'AND w.active = 0 ';
-                            breaK;
+                            if(!isset($from_date) and !isset($to_date))
+                            {
+                                $qb = $qb->andWhere('e.active != 1');
+                            }
+                            else
+                            {
+                                if (isset($from_date))
+                                {
+                                    $qb = $qb->andWhere('e.lowdate_at >= :lowdate_at_from')
+                                             ->setParameter('lowdate_at_from', $from_date);
+                                }
+                                if (isset($to_date))
+                                {
+                                    $qb = $qb->andWhere('e.lowdate_at <= :lowdate_at')
+                                             ->setParameter('lowdate_at', $to_date);
+                                }
+                            }
+                            break;
+
                         case "test":
-                            $where .= 'AND w.test = 1 ';
+
+                            if(!isset($from_date) and !isset($to_date))
+                            {
+                                $qb = $qb->andWhere('e.test = 1');
+                            }
+                            else
+                            {
+                                if (isset($from_date))
+                                {
+                                    $qb = $qb->andWhere('e.endtest_at >= :endtest_at_from')
+                                             ->setParameter('endtest_at_from', $from_date);
+                                }
+
+                                if (isset($to_date))
+                                {
+                                    $qb = $qb->andWhere('e.endtest_at >= :endtest_at_to')
+                                             ->setParameter('endtest_at_to', $to_date);
+                                }
+                            }
                             break;
+
                         case "adsplus":
-                            $where .= 'AND w.ad_service_plus = 1 ';
+                            $qb = $qb->andWhere('e.ad_service_plus = 1');
                             break;
+
                         case "check":
-                            $where .= 'AND w.haschecks = 1 ';
+                            $qb = $qb->andWhere('e.haschecks = 1');
                             break;
+
                         case "infotech":
-                            $where .= 'AND w.infotech = 1 ';
+                            $qb = $qb->andWhere('e.infotech = 1');
+                            break;
+
+                        default:
+                            if (isset($from_date))
+                            {
+                                $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                                         ->setParameter('created_at_from', $from_date);
+                            }
+
+                            if (isset($to_date))
+                            {
+                                $qb = $qb->andWhere('e.created_at <= :created_at_to')
+                                         ->setParameter('created_at_to', $to_date);
+                            }
                             break;
                     }
                 }
-                if    ($partner != "0"     ) { $where .= 'AND w.id != 0 ';
-                                               $where .= 'AND p.id = '.$partner.' ';
-                }
-                if    ($typology != "0"    ) { $where .= 'AND tp.id = '.$typology.' ';
-                }
-                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                    $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
-                }else{
-                    if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
-                }
-                $sql = $select.$from.$join." WHERE ".$where.' ';
-                $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
-                if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
-                $sql .= ' GROUP BY w.id ORDER BY '.$nTickets.' DESC ';
 
-                $qt = $em->createQuery($sql);
-                $results = $qt->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                // $results   = $qt->getResult();
+                $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
-                $excel = $this->createExcelStatistics($results);
+                $excel = $this->createExcelStatistics($resultsDehydrated);
             }
         }
         else{
