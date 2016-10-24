@@ -1298,6 +1298,7 @@ class WorkshopOrderController extends Controller {
         }
         if ($workshopOrder->getCreatedAt() != null ) {
             $workshop->setCreatedAt($workshopOrder->getCreatedAt());
+            $workshop->setUpdateAt ($workshopOrder->getCreatedAt());
         }
         if ($workshopOrder->getModifiedBy() != null ) {
             $workshop->setModifiedBy($workshopOrder->getModifiedBy());

@@ -1161,9 +1161,12 @@ class StatisticController extends Controller {
             }
             elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
             {
-                $trans           = $this->get('translator');
-                $user_country    = $security->getToken()->getUser()->getCountry()->getId();
-                $catserv         = $security->getToken()->getUser()->getCategoryService()->getId();
+                $trans  = $this->get('translator');
+                $catserv = $security->getToken()->getUser()->getCategoryService();
+
+                if($catserv->getId() != null) $catserv = $catserv->getId();
+                else $catserv = 0;
+
                 $code            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('_code')));
                 $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
                 $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
@@ -1224,11 +1227,10 @@ class StatisticController extends Controller {
                 if($typology != "0") $qb = $qb->andWhere('tp.id = :typology')
                                              ->setParameter('typology', $typology);
 
-                if($catserv != "0") $qb = $qb->andWhere('t.category_service = :catserv')
+                if($catserv != "0") $qb = $qb->andWhere('e.category_service = :catserv')
                                              ->setParameter('catserv', $catserv);
 
-                if(!$security->isGranted('ROLE_SUPER_ADMIN') OR $user_country != "0") $qb = $qb->andWhere('e.country = :country')
-                                                                                      ->setParameter('country', $user_country);
+                if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
 
                 if ($status != '0') {
                     switch ($status) {
@@ -1333,22 +1335,12 @@ class StatisticController extends Controller {
                         default:
                             if (isset($from_date))
                             {
-                                if (!isset($to_date))
-                                {
-                                    $qb = $qb->andWhere('e.created_at >= :created_at_from')
-                                             ->setParameter('created_at_from', $from_date);
-                                }
-                                $qb = $qb->andWhere('e.lowdate_at > :from_date OR e.lowdate_at IS NULL')
-                                         ->setParameter('from_date', $from_date);
+                                $qb = $qb->andWhere('e.created_at >= :created_at_from')
+                                         ->setParameter('created_at_from', $from_date);
                             }
 
                             if (isset($to_date))
                             {
-                                if (!isset($from_date))
-                                {
-                                    $qb = $qb->andWhere('e.lowdate_at > :from_date')
-                                         ->setParameter('from_date', $to_date);
-                                }
                                 $qb = $qb->andWhere('e.created_at <= :created_at_to')
                                          ->setParameter('created_at_to', $to_date);
                             }
