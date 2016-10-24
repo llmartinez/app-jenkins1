@@ -34,7 +34,7 @@
                 {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
                 {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             </div>
-            
+
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
