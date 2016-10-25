@@ -107,7 +107,7 @@ function populate_partner(){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                // $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                 $('form').find('select[id*=_partner]').append("<option value=0></option>");
                 $.each(data, function(idx, elm) {
 
                     $('form').find('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
@@ -147,10 +147,10 @@ function populate_partner2(partner){
                     $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
                 $('form').find('select[id$=e_partner]').val(partner);
-                var typology = $('#slct_typology').val();
+                var typology = $('form').find('select[id$=typology]').val();
                 if(typology != undefined) {
                     // DIAG. MACHINE
-                        $('#slct_typology').empty();
+                        $('form').find('select[id$=typology]').empty();
 
                     populate_typology2(typology);
                 }
@@ -220,17 +220,17 @@ function populate_typology2(typology){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                $('#slct_typology').append("<option></option>");
+                $('form').find('select[id$=typology]').append("<option></option>");
                 $.each(data, function(idx, elm) {
 
-                    $('#slct_typology').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    $('form').find('select[id$=typology]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
                 
-                 $('#slct_typology').val(typology);
+                 $('form').find('select[id$=typology]').val(typology);
                 var diag_machine =  $('form').find('select[id$=diagnosis_machines]').val();
 
                 // TIPOLOGY
-                    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').empty();
+                    $('form').find('select[id$=diagnosis_machines]').empty();
 
                 populate_diagmachine2(diag_machine);
 
@@ -288,7 +288,7 @@ function populate_diagmachine2(diag_machine){
     var route  = 'diag_machines_from_catserv';
     var locale = $(document).find("#data_locale").val();
 
-    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').empty();
+    $('form').find('select[id$=diagnosis_machines]').empty();
 
     $.ajax({
         type        : "POST",
@@ -303,11 +303,11 @@ function populate_diagmachine2(diag_machine){
                 // $('form').find('select[id*=diagnosis_machines]').append("<option value></option>");
                 $.each(data, function(idx, elm) {
 
-                    $('#adservice_workshopbundle_workshoptype_diagnosis_machines').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    $('form').find('select[id$=diagnosis_machines]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
                 
                 
-                $('#adservice_workshopbundle_workshoptype_diagnosis_machines').val(diag_machine);
+                $('form').find('select[id$=diagnosis_machines]').val(diag_machine);
             }
         },
         error : function(){
