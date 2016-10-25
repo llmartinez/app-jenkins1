@@ -372,7 +372,7 @@ class StatisticController extends Controller {
                             ->setParameter('shop', $shop);
                 }
 
-                $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
+                if (isset($to_date)) $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
                 switch ($status) {
 
@@ -1360,6 +1360,7 @@ class StatisticController extends Controller {
                     }
                 }
 
+                // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
