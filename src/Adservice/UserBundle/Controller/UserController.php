@@ -34,7 +34,7 @@ class UserController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-
+        
         //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         //  $session = $this->getRequest()->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
@@ -48,7 +48,6 @@ class UserController extends Controller {
         // Se pondrá por defecto el idioma del usuario en el primer login
 
         if(!isset($_SESSION['lang'])) {
-
             if(isset($user)) {
                 $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
                 $lang   = substr($lang, 0, strrpos($lang, '_'));
@@ -106,13 +105,22 @@ class UserController extends Controller {
 
             return $this->redirect($currentPath);
         }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-
+            
             $user= $this->get('security.context')->getToken()->getUser();
+            
             $country= $user->getCountry()->getId();
 
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
-
+            
+            if(isset($user)) {
+                if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
+                     $currentPath = $this->generateUrl('accept_privacy');
+                     $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
+                     $_SESSION['lang'] = $lang;
+                     return $this->redirect($currentPath);
+                }
+            }
             if($user->getWorkshop() != null){
 
                 if((($user->getWorkshop()->getCIF() == null ) || $user->getWorkshop()->getCIF() == "0"  ) && $country == 1 ){
