@@ -84,6 +84,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function partnersFromCatServAction() {
+
         $em = $this->getDoctrine()->getEntityManager();
         $petition   = $this->getRequest();
         $id_catserv = $petition->request->get('id_catserv');
