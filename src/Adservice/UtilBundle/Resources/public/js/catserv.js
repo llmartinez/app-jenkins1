@@ -27,7 +27,7 @@ $(document).ready(function() {
     // EN STATISTICS
 
     //si clickamos el combobox de categoria de servicio rellenamos los relacionados
-    $('form').find('select[name$=category_service_statistics]').change(function() {
+    $('select[name$=category_service_statistics]').change(function() {
         populate_partner3();
     });
 });

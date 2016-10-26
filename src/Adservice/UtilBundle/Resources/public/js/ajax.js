@@ -162,13 +162,13 @@ function populate_partner2(partner){
     });
 }
 function populate_partner3(){
-    var id_catserv = $('form').find('select[name*=category_service]').val();
+    var id_catserv = $('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
     var route  = 'partners_from_catserv';
     var locale = $(document).find("#data_locale").val();
 
-    $('form').find('select[id$=_partner]').empty();
+    $('select[id$=_partner]').empty();
 
     $.ajax({
         type        : "POST",
@@ -182,15 +182,15 @@ function populate_partner3(){
             if (data['error'] != "No hay coincidencias") {
 
                 var all = $('#lbl_all').val();
-                $('form').find('select[id*=_partner]').append("<option value=0>"+all+"</option>");
+                $('select[id*=_partner]').append("<option value=0>"+all+"</option>");
 
                 $.each(data, function(idx, elm) {
-                    $('form').find('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    $('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
-                var typology = $('form').find('select[id$=typology]').val();
+                var typology = $('select[id$=typology]').val();
                 if(typology != undefined) {
                     // DIAG. MACHINE
-                        $('form').find('select[id$=typology]').empty();
+                        $('select[id$=typology]').empty();
 
                     populate_typology3(typology);
                 }
@@ -305,12 +305,12 @@ function populate_typology3(typology){
             if (data['error'] != "No hay coincidencias") {
 
                 var all = $('#lbl_all').val();
-                $('form').find('select[id$=typology]').append("<option value='0'>"+all+"</option>");
+                $('select[id$=typology]').append("<option value='0'>"+all+"</option>");
 
                 $.each(data, function(idx, elm) {
-                    $('form').find('select[id$=typology]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    $('select[id$=typology]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
-                $('form').find('select[id$=typology]').val(typology);
+                $('select[id$=typology]').val(typology);
 
             }
         },

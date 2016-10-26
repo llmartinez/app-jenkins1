@@ -37,6 +37,7 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
+            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -194,6 +195,7 @@ class StatisticController extends Controller {
                 $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 23:59:59';
                 $where .= "AND e.update_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'";
             }
+
             if ($type == 'ticket'  )
             {
                 //Realizamos una query deshydratada con los datos ya montados
