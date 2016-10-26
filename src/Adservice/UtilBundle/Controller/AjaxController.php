@@ -266,6 +266,38 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
+    // __        _____  ____  _  ______  _   _  ___  ____
+    // \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
+    //  \ \ /\ / / | | | |_) | ' /\___ \| |_| | | | | |_) |
+    //   \ V  V /| |_| |  _ <| . \ ___) |  _  | |_| |  __/
+    //    \_/\_/  \___/|_| \_\_|\_\____/|_| |_|\___/|_|    T
+
+    /**
+     * Funcion Ajax para obtener los talleres de un socio
+     * @return json
+     */
+    public function workshopsFromPartnerAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        $id_partner = $petition->request->get('id_partner');
+
+        $query = "SELECT w FROM WorkshopBundle:Workshop w WHERE w.id = 0 ";
+        if($id_partner != '') $query .= "OR w.partner = ".$id_partner." ";
+
+        $consulta = $em->createQuery($query);
+        $workshops   = $consulta->getResult();
+
+        $size = sizeOf($workshops);
+        if($size > 0) {
+            foreach ($workshops as $workshop) {
+                $json[] = $workshop->to_json();
+            }
+        }else{
+                $json = array( 'error' => 'No hay coincidencias');
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+
     //   ____    _    ____
     //  / ___|  / \  |  _ \
     // | |     / _ \ | |_) |
