@@ -74,6 +74,12 @@ shops_from_partner:
     options:
         expose: true
 
+workshops_from_partner:
+    pattern: /workshopsFromPartner
+    defaults: { _controller: UtilBundle:Ajax:workshopsFromPartner }
+    options:
+        expose: true
+
 get_code_partner:
     pattern: /codePartnerFromPartner
     defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
