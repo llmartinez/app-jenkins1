@@ -233,6 +233,14 @@ class Workshop {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->diagnosis_machines = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    public function to_json(){
+        $json = array('id'            => $this->getId(),
+                      'code_partner'  => $this->getCodePartner(),
+                      'code_workshop' => $this->getCodeWorkshop(),
+                      'name'          => $this->getName());
+        return $json;
+    }
    /**
      * Get id
      *

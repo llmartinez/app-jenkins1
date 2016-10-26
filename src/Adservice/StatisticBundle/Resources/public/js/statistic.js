@@ -7,6 +7,8 @@ $(document).ready(function() {
 
         if (id_partner != undefined) {
 
+            populate_workshop(id_partner);
+
             var route  = 'shops_from_partner';
             var locale = $(document).find("#data_locale").val();
 
