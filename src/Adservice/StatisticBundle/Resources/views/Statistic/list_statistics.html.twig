@@ -28,6 +28,14 @@
             </td></tr>
             </table>
         </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} category_service {% endtrans %}</label>
+            <select id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
+                <option value="0">{% trans %} all {% endtrans %}</option>
+                {% for catserv in catservices %}
+                    <option value="{{ catserv.id }}">{{ catserv }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -46,14 +54,6 @@
             </select>
         </div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} category_service {% endtrans %}</label>
-            <select id="flt_catserv" class='form-control'>
-                <option value="0">{% trans %} all {% endtrans %}</option>
-                {% for catserv in catservices %}
-                    <option value="{{ catserv.id }}">{{ catserv }}</option>
-                {% endfor %}
-            </select>
-        </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} raport {% endtrans %}</label>
             <select id="flt_raport" class='form-control'>
                 <option value="0"                             >{% trans %} any                        {% endtrans %}</option>
@@ -391,4 +391,5 @@
     {{ parent() }}
     <script src="{{ asset('bundles/statistic/js/statistic.js') }}"></script>
     <script src="{{ asset('bundles/util/js/pagination_statistic.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 {% endblock %}

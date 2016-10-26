@@ -37,6 +37,7 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
+            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -194,6 +195,7 @@ class StatisticController extends Controller {
                 $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 23:59:59';
                 $where .= "AND e.update_at <= '".$to_y  .'-'.$to_m  .'-'.$to_d  ." 23:59:59'";
             }
+
             if ($type == 'ticket'  )
             {
                 //Realizamos una query deshydratada con los datos ya montados
@@ -372,6 +374,8 @@ class StatisticController extends Controller {
                             ->setParameter('shop', $shop);
                 }
 
+                if (isset($to_date)) $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
+
                 switch ($status) {
 
                     case "active":
@@ -385,8 +389,6 @@ class StatisticController extends Controller {
                                      ->andWhere('e.test != 1');
                         }
                         elseif (isset($from_date) and isset($to_date)){
-
-                            $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
                             $qb = $qb->andWhere('e.update_at <= :update_at_to')
                                      ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
@@ -1227,11 +1229,10 @@ class StatisticController extends Controller {
 
                 if ($shop != "0" and $shop != "undefined") {
 
-                  $qb = $qb->addSelect('s.name as ":nShop"')
-                           ->setParameter('nShop', $nShop)
+                  $qb = $qb->addSelect('s.name as '.$nShop.'')
                            ->leftJoin('e.shop', 's')
-                           ->andWhere('t.id = :typology')
-                           ->setParameter('typology', $typology);
+                           ->andWhere('s.id = :shop')
+                           ->setParameter('shop', $shop);
                 }
                 if($partner != "0") $qb = $qb->andWhere('p.id = :partner')
                                              ->setParameter('partner', $partner);
@@ -1243,6 +1244,8 @@ class StatisticController extends Controller {
                                              ->setParameter('catserv', $catserv);
 
                 if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
+
+                if (isset($to_date)) $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
                 if ($status != '0') {
                     switch ($status) {
@@ -1257,8 +1260,6 @@ class StatisticController extends Controller {
                                          ->andWhere('e.test != 1');
                             }
                             elseif (isset($from_date) and isset($to_date)){
-
-                                $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
                                 $qb = $qb->andWhere('e.update_at <= :update_at_to')
                                          ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
@@ -1345,6 +1346,7 @@ class StatisticController extends Controller {
                             break;
 
                         default:
+
                             if (isset($from_date))
                             {
                                 $qb = $qb->andWhere('e.created_at >= :created_at_from')
@@ -1360,6 +1362,7 @@ class StatisticController extends Controller {
                     }
                 }
 
+                // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
