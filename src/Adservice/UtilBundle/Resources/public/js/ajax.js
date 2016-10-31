@@ -447,12 +447,12 @@ function populate_workshop(id_partner){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                $('form').find('select[id*=_workshop]').empty();
+                $('select[id*=_workshop]').empty();
 
                 var all = $('#lbl_all').val();
-                $('form').find('select[id*=_workshop]').append("<option value=0>"+all+"</option>");
+                $('select[id*=_workshop]').append("<option value=0>"+all+"</option>");
                 $.each(data, function(idx, elm) {
-                    $('form').find('select[id*=_workshop]').append("<option value="+elm.id+">"+elm.code_partner+"-"+elm.code_workshop+": "+elm.name+"</option>");
+                    $('select[id*=_workshop]').append("<option value="+elm.id+">"+elm.code_partner+"-"+elm.code_workshop+": "+elm.name+"</option>");
                 });
             }
         },

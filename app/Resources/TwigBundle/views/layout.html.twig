@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+{% if app.security.getToken().getUser() is defined and app.security.getToken().getUser() == 'anon.' %}
+    <script>window.open('{{ path("_login") }}', '_self'); </script>
+{% else %}
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -45,4 +48,5 @@
 
         {% block javascripts %}{% endblock %}
     </body>
+{% endif %}
 </html>

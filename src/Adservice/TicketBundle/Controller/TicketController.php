@@ -70,6 +70,9 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
 
         $user = $security->getToken()->getUser();
+
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
         $id_user = $user->getId();
         $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
@@ -140,7 +143,8 @@ class TicketController extends Controller {
         } elseif ($option == 'assessor_pending') {
             $params[] = array('status', ' = ' . $open->getId());
 
-            $country_service = $user->getCountryService()->getId();
+            if($user->getCountryService() != null) $country_service = $user->getCountryService()->getId();
+            else $country_service = '0';
             // Esto hacía que se vieran los libres(rojo) además de los pendientes(naranja)
             if ($country_service == '7')
                 $params[] = array('id', ' != 0 AND e.assigned_to = ' . $id_user . ' AND e.pending = 1 '); // OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
@@ -1160,9 +1164,13 @@ class TicketController extends Controller {
      */
     public function showTicketAction($ticket) {
         $security = $this->get('security.context');
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
         if ($security->isGranted('ROLE_SUPER_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $security->getToken()->getUser()->getWorkshop())
+                or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
         ) {
             $em = $this->getDoctrine()->getEntityManager();

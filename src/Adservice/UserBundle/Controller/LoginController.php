@@ -11,6 +11,7 @@ use Adservice\UserBundle\Entity\User;
 class LoginController extends Controller {
 
     public function loginAction() {
+
         $request = $this->getRequest();
         $session = $request->getSession();
 
