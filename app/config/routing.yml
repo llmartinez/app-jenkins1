@@ -7,6 +7,10 @@
 #    prefix:   /{_locale}/import/
 ############################################################################
 
+autologin:
+    pattern: /autologin/
+    defaults: { _controller: UtilBundle:Security:autologin }
+
 LockBundle:
     resource: "@LockBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/lock/

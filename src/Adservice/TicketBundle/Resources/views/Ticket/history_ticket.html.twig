@@ -37,7 +37,7 @@
     </div>
     <div class="col-xs-3 col-md-3 form-group">
         <label>{% trans %} category_service {% endtrans %}</label>
-        <select id="flt_catserv" class='form-control'>
+        <select id="flt_catserv" class='form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
                 <option value="0">{% trans %} category_service {% endtrans %}</option>
             {% for _catserv in catservices %}
                 <option value="{{ _catserv.id }}" {% if catserv.id is defined and catserv.id == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
