@@ -42,7 +42,7 @@ class UserController extends Controller {
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
-
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
