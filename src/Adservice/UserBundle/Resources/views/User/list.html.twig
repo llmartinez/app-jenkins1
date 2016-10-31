@@ -33,11 +33,13 @@
                                     >{{ role.name | trans }}</option> {% endfor %}
         </select>
     </div>
+
     <div class="col-xs-2 col-md-2 form-group">
         <label> {% trans %} category_service {% endtrans %} </label>
-        <select id="slct_catserv" class="form-control"> <option value="0">...</option>
+        <select id="slct_catserv" class="form-control" {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
+            <option value="0">...</option>
             {% for _catserv in cat_services %}
-                <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+                <option value="{{ _catserv.id }}"{% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') and _catserv.id == app.security.getToken().getUser().getCategoryService().getId() %}selected{% elseif _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
             {% endfor %}
         </select>
     </div>
