@@ -34,7 +34,7 @@ class UserController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-        
+
         //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         //  $session = $this->getRequest()->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
@@ -43,13 +43,15 @@ class UserController extends Controller {
         $currentLocale = $request->getLocale();
         $user = $this->get('security.context')->getToken()->getUser();
 
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
         if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
 
         if(!isset($_SESSION['lang'])) {
             if(isset($user)) {
-                $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+                $lang   = $user->getLanguage()->getShortName();
                 $lang   = substr($lang, 0, strrpos($lang, '_'));
             }
             else{ $lang   = 'es'; }
@@ -70,9 +72,9 @@ class UserController extends Controller {
                 if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
                     $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
                     $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
-                                                                      'num_rows' => 10,
-                                                                      'country'  => $country,
-                                                                      'option'   => 'assessor_pending'));
+                                                                          'num_rows' => 10,
+                                                                          'country'  => $country,
+                                                                          'option'   => 'assessor_pending'));
                 }elseif($this->get('security.context')->isGranted('ROLE_USER')){
 
                     $user = $this->get('security.context')->getToken()->getUser();
@@ -84,16 +86,16 @@ class UserController extends Controller {
                                                                                   'country'  => $country));
                         }
                         else{
-                            $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
-                                                                            'num_rows' => 10,
-                                                                            'country'  => $country));
+                            $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
+                                                                                  'num_rows' => 10,
+                                                                                  'country'  => $country));
                         }
                     }
                 }else{
                     $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
-                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
-                                                                            'num_rows' => 10,
-                                                                            'country'  => $country));
+                    $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
+                                                                          'num_rows' => 10,
+                                                                          'country'  => $country));
                 }
             }
 
@@ -105,14 +107,14 @@ class UserController extends Controller {
 
             return $this->redirect($currentPath);
         }elseif($this->get('security.context')->isGranted('ROLE_USER')){
-            
+
             $user= $this->get('security.context')->getToken()->getUser();
-            
+
             $country= $user->getCountry()->getId();
 
             $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
-            
+
             if(isset($user)) {
                 if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
                      $currentPath = $this->generateUrl('accept_privacy');
@@ -129,9 +131,9 @@ class UserController extends Controller {
 
                 }
                 else{
-                    $currentPath = $this->generateUrl('listTicket', array(  'page'     => 1,
-                                                                            'num_rows' => 10,
-                                                                            'country'  => $country));
+                    $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
+                                                                          'num_rows' => 10,
+                                                                          'country'  => $country));
                 }
                 $currentPath = str_replace('/'.$currentLocale.'/', '/'.$lang.'/', $currentPath);
                 $_SESSION['lang'] = $lang;
@@ -149,8 +151,9 @@ class UserController extends Controller {
      */
     public function profileAction() {
         $em             = $this->getDoctrine()->getEntityManager();
-        $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-        $user           = $em->getRepository('UserBundle:User')->find($id_logged_user);
+        $logged_user = $this->get('security.context')->getToken()->getUser();
+        if($logged_user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        $user           = $em->getRepository('UserBundle:User')->find($logged_user->getId());
 
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
@@ -291,6 +294,15 @@ class UserController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
+
+        }elseif ($security->isGranted('ROLE_ADMIN')) {
+
+            $partner_ids = '0';
+            foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
+
+            $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
+            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
