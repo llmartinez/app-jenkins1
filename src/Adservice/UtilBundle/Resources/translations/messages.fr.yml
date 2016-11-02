@@ -606,7 +606,7 @@ page.last:						"Dernière page"
 
 #MAIL
 mail.welcome:							"Bienvenue sur la plate-forme Assistance Diag 24!!"
-mail.image:				   				"http://adserviceticketing.com/logo_adservice.png"
+mail.image:				   				"https://adserviceticketing.com/logo_adservice.png"
 mail.info.tel:							"+34 97 267 77 70"
 mail.info.more:							"Plus d'informations:"
 mail.testing:		                	"En phase d'essai jusqu’au"
@@ -616,21 +616,21 @@ mail.newTicket.subject:					"ADService | Nouveau Ticket créé avec l'id #"
 mail.newTicket.title:					"Un ticket a été créé"
 mail.newTicket.createdby:				"Ce ticket a été créé par téléphone avec un Conseiller"
 mail.newTicket.createdby.user:			"Ce ticket a été créé via la plate-forme AD-Service. "
-mail.newTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.newTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.newTicket.info.id:					"Le code du ticket est :"
 
 mail.editTicket.subject:				"ADService | Ticket édité avec l'id #"
 mail.editTicket.title:					"Un ticket a été édité"
 mail.editTicket.createdby:				"Ce ticket a été édité par un conseiller."
 mail.editTicket.createdby.user:			"Vous avez édité le ticket par la plate-forme AD-Service."
-mail.editTicket.info:					"Pour consulter ou modifier ce ticket, introduire le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.editTicket.info:					"Pour consulter ou modifier ce ticket, introduire le code de référence du ticket sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.editTicket.info.id:				"Le code du ticket est :"
 
 mail.deleteTicket.subject:				"ADService | Ticket effacé avec l'id #"
 mail.deleteTicket.title:				"Un ticket a été supprimé"
 mail.deleteTicket.createdby:			"Ce ticket a été supprimé par un modérateur."
 mail.deleteTicket.createdby.user:		"Vous avez supprimé le ticket à travers la plate-forme AD-service."
-mail.deleteTicket.info:					"Pour consulter vos tickets entrez <a href='http://www.adserviceticketing.com'> www.adserviceticketing.com </a> section "
+mail.deleteTicket.info:					"Pour consulter vos tickets entrez <a href='https://www.adserviceticketing.com'> www.adserviceticketing.com </a> section "
 mail.deleteTicket.info.id:				"Le code du ticket effacé est :"
 
 mail.closeTicket.subject:				"ADService | Ticket effacé avec l'id #"
@@ -638,21 +638,21 @@ mail.closeTicket.title:					"Un ticket a été fermé"
 mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.closeTicket.createdby:				"Ce ticket a été fermé par un conseiller."
 mail.closeTicket.createdby.user:		"Vous avez fermé un ticket via la plate-forme AD-Service."
-mail.closeTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.closeTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.closeTicket.info.id:				"Le code du ticket fermé est :"
 
 mail.reopenTicket.subject:				"ADService | Ticket rouvert avec l'id #"
 mail.reopenTicket.title:				"Un ticket a été rouvert"
 mail.reopenTicket.createdby:			"Ce ticket a été rouvert par un Conseiller."
 mail.reopenTicket.createdby.user:		"Vous avez rouvert le ticket via la plate-forme AD-Service."
-mail.reopenTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.reopenTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.reopenTicket.info.id:				"Le code du ticket rouvert est :"
 
 mail.answerTicket.subject:				"ADService | Ticket délivré avec l'id #"
 mail.answerTicket.title:				"Un ticket a été délivré"
 mail.answerTicket.createdby:			"Ce ticket a été délivré par un conseiller."
 mail.answerTicket.createdby.user:		"Vous avez délivré un ticket via la plate-forme AD-Service."
-mail.answerTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.answerTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.answerTicket.info.id:				"Le code du ticket délivré est :"
 
 mail.newOrder.subject:					"ADService | Demande de création avec l'id #"
@@ -660,7 +660,7 @@ mail.newOrder.title:					"Une demande a été créée pour un nouvel atelier"
 mail.newOrder.shop.title:				"Une demande a été créée pour un nouveau boutique"
 mail.newOrder.createdby:				"Cette demande a été créée par un conseiller."
 mail.newOrder.createdby.user:			"Cette demande a été créée via la plate-forme AD-Service."
-mail.newOrder.info:						"Pour accéder à cette demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.newOrder.info:						"Pour accéder à cette demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.newOrder.info.id:					"Le numéro de référence de la demande est :"
 
 mail.editOrder.subject:					"ADService | Demande d'édition avec l'id #"
@@ -670,7 +670,7 @@ mail.editOrder.shop.createdby.user:		"Ce boutique a été édité via la plate-f
 mail.editOrder.title:					"Une demande a été créée pour éditer un atelier"
 mail.editOrder.createdby:				"Cet atelier a été édité par un conseiller."
 mail.editOrder.createdby.user:			"Cet atelier a été édité via la plate-forme AD-Service."
-mail.editOrder.info:					"Pour accéder à cette demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.editOrder.info:					"Pour accéder à cette demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.editOrder.info.id:					"Le numéro de référence de la demande est :"
 
 mail.changeOrder.subject:				"ADService | Demande d'activation/désactivation avec l'id #"
@@ -680,14 +680,14 @@ mail.changeOrder.shop.createdby.user:	"Ce boutique a été modifié via la plate
 mail.changeOrder.title:					"Une demande a été créée pour modifier un atelier"
 mail.changeOrder.createdby:				"Cet atelier a été modifié par un conseiller."
 mail.changeOrder.createdby.user:		"Cet atelier a été modifié via la plate-forme AD-Service."
-mail.changeOrder.info:					"Pour accéder à cette demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.changeOrder.info:					"Pour accéder à cette demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.changeOrder.info.id:				"Le numéro de référence de la demande est :"
 
 mail.rejectOrder.subject:				"ADService | Demande rejetée avec l'id #"
 mail.rejectOrder.title:					"La demande suivante a été rejetée"
 mail.rejectOrder.createdby:				"Cette demande a été rejetée par un conseiller."
 mail.rejectOrder.createdby.user:		"Cette demande a été rejetée via la plate-forme AD-Service."
-mail.rejectOrder.info:					"Pour accéder à cette demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.rejectOrder.info:					"Pour accéder à cette demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.rejectOrder.info.id:				"Le numéro de référence de la demande est :"
 
 mail.acceptOrder.subject:				"ADService | Demande acceptée pour l'atelier avec l'id #"
@@ -695,8 +695,8 @@ mail.acceptOrder.shop.subject:			"ADService | Demande acceptée pour le boutique
 mail.acceptOrder.title:					"La demande suivante a été acceptée"
 mail.acceptOrder.createdby:				"Cette demande a été acceptée par un conseiller."
 mail.acceptOrder.createdby.user:		"Cette demande a été acceptée via la plate-forme AD-Service."
-mail.acceptOrder.info:					"Pour accéder à cet atelier allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
-mail.acceptOrder.shop.info:				"Pour accéder à ce boutique allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.acceptOrder.info:					"Pour accéder à cet atelier allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.acceptOrder.shop.info:				"Pour accéder à ce boutique allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.acceptOrder.info.id:				"Le numéro de référence de l'atelier est : "
 mail.acceptOrder.shop.info.id:			"Le numéro de référence du boutique est : "
 
@@ -704,7 +704,7 @@ mail.removeOrder.subject:				"ADService | Demande annulée avec l'id #"
 mail.removeOrder.title:					"La demande suivante a été annulée"
 mail.removeOrder.createdby:				"Cette demande a été annulée par un conseiller."
 mail.removeOrder.createdby.user:		"Cette demande a été annulée via la plate-forme AD-Service."
-mail.removeOrder.info:					"Pour consulter vos demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.removeOrder.info:					"Pour consulter vos demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.removeOrder.info.id:				"Le numéro de référence de l'atelier est : "
 mail.removeOrder.shop.info.id:			"Le numéro de référence du boutique est : "
 
@@ -712,29 +712,29 @@ mail.resendOrder.subject:				"ADService | Demande renvoyée avec l'id #"
 mail.resendOrder.title:					"La demande suivante a été renvoyée"
 mail.resendOrder.createdby:				"Cette demande a été renvoyée par un conseiller."
 mail.resendOrder.createdby.user:		"Cette demande a été renvoyée via la plate-forme AD-Service."
-mail.resendOrder.info:					"Pour consulter vos demande, allez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.resendOrder.info:					"Pour consulter vos demande, allez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 mail.resendOrder.info.id:				"Le numéro de référence de la demande est :"
 
 mail.newUser.subject:					"ADService | Nouvel utilisateur pour l'atelier"
 mail.newUser.title:						"Un nouvel utilisateur a été créé pour la plate-forme AD-Service"
 mail.newUser.createdby:					"Cet utilisateur a été créé via la plate-forme AD-Service."
-mail.newUser.info:						"Pour plus d'information, entrez sur la plate-forme <a href='http://www.adserviceticketing.com/fr/help'>www.adserviceticketing.com/fr/help</a> "
+mail.newUser.info:						"Pour plus d'information, entrez sur la plate-forme <a href='https://www.adserviceticketing.com/fr/help'>www.adserviceticketing.com/fr/help</a> "
 mail.newUser.info.tel:					"ou appelez-le"
 mail.newUser.info.id:					"Votre code atelier est : "
 mail.newUser.user:						"Votre nom d'utilisateur est :"
 mail.newUser.password:					"Votre mot de passe est : "
-mail.newUser.info.password:				"Pour modifier votre mot de passe, entrez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.newUser.info.password:				"Pour modifier votre mot de passe, entrez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 
 mail.changePassword.subject:			"ADService | Nouveau mot de passe pour l'utilisateur"
 mail.changePassword.title:				"Le mot de passe de l'utilisateur a été changé depuis la plate-forme AD-Service"
 mail.changePassword.createdby:			"Cette modification a été réalisée par un conseiller. "
 mail.changePassword.createdby.user:		"Cette modification a été réalisée via la plate-forme AD-Service."
-mail.changePassword.info:				"Pour plus d'information, entrez sur la plate-forme <a href='http://www.adserviceticketing.com/fr/help'>www.adserviceticketing.com/fr/help</a> "
+mail.changePassword.info:				"Pour plus d'information, entrez sur la plate-forme <a href='https://www.adserviceticketing.com/fr/help'>www.adserviceticketing.com/fr/help</a> "
 mail.changePassword.info.tel:			"ou appelez-le"
 mail.changePassword.info.id:			"Votre code atelier est : "
 mail.changePassword.user:				"Votre nom d'utilisateur est :"
 mail.changePassword.password:			"Votre nouveau mot de passe est :"
-mail.changePassword.info.password:		"Pour modifier votre mot de passe, entrez sur <a href='http://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
+mail.changePassword.info.password:		"Pour modifier votre mot de passe, entrez sur <a href='https://www.adserviceticketing.com'>www.adserviceticketing.com</a> en la sección "
 
 mail.activateWorkshop.subject:          "ADService | Atelier activation "
 mail.deactivateWorkshop.subject:        "ADService | Atelier deactivation "
@@ -753,14 +753,13 @@ help:				"Aider"
 help.adservice: 	"Aider Assistance Diag 24"
 help.check_manual: 	"Consultez le manuel"
 
-help.manual: 'http://adserviceticketing.com/uploads/help/manual-fr.pdf'
+help.manual: 'https://adserviceticketing.com/uploads/help/manual-fr.pdf'
 help.video:  '<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'
 
 #PRIVACY
 privacy: 	   "Privacidad"
 privacy.title: "VIE PRIVÉE"
-privacy.text:  "Ce site est la propriété de <b>Grup Eina Digital SL</b>.<br><br><br>En conformité avec les dispositions de la loi 15/1999 du 13 Décembre, la protection des données personnelles (LOPD) <b>Grup Eina Digital SL</b> informe les utilisateurs de ce site que les données personnelles et qui proviennent de l'avenir feront partie d'un fichier automatisé de données personnelles, dont la propriété et la responsabilité incombe à <b>Grup Eina digital SL</b> et son objectif est bien assister et traiter les demandes de requêtes envoyées à partir des formulaires de contact et de transmettre des informations pour vous informer des services offerts.<br><br><br>Avec le transfert de vos données, vous consentez expressément à être en mesure d'effectuer un traitement automatisé. Vos informations personnelles seront traitées dans la plus stricte confidentialité, ayant adopté <b>Grup Eina Digital SL</b> en tant que gestionnaire de fichiers, les mesures techniques et structure organisationnelle par la RD 994/99 Mesures de sécurité pour les fichiers informatiques pour assurer la confidentialité et la sécurité des données personnelles et éviter son l'altération, la perte ou l'accès non autorisé.<br><br><br><b>Grup Eina Digital SL</b> vient à l'archivage des données fournies par les utilisateurs pour interroger ou présenter une demande. L'utilisateur est averti de la nécessité de fournir de telles données. S'il vous plaît noter que l'adresse e-mail est utilisée pour répondre à votre demande, et de transmettre des informations sur les services offerts par <b>Grup Eina Digital SL</b> et vous informer de toutes les autres changements pertinents qui se produisent ou pourraient se produire.<br><br><br>Il est notre engagement que toute modification de la politique de confidentialité de ce site Web seront immédiatement informés via ce site Web, y compris la correction en temps opportun dans cette section.<br><br><br>En outre, en ce qui concerne les données personnelles recueillies de la manière prévue dans la présente Politique de confidentialité, les utilisateurs sont informés qu'ils ont le droit d'accès, de rectification, d'opposition et d'annulation de vos données personnelles. Ces droits peuvent être exercés soit par l'utilisateur ou son représentant, en envoyant une demande écrite signée à l'adresse suivante<br><br><br><br><b>Grup Eina Digital S.L.</b><br><b>Av. Llenguadoc, 29.</b><br><b>08915 Badalona (Barcelona) - Espagne</b><br><br><br>La demande doit contenir le nom et le prénom, la photocopie d'identité et le contenu de la demande que vous pourriez avoir, le cas échéant.<br>"
-
+privacy.text:  "Ce site est la propriété de <b>Grup Eina Digital SL</b>.<br><br><br>En conformité avec les dispositions de la loi 15/1999 du 13 Décembre, de la protection des données personnelles (LOPD); <b>Grup Eina Digital SL</b> informe aux utilisateurs de ce site que les données personnelles transmises et celles qui pourraient surgir à l'avenir feront partie d'un fichier automatisé de données personnelles, dont la propriété et la responsabilité incombe à <b>Grup Eina Digital SL</b> et dont l’objectif est de recevoir et traiter les demandes de requêtes envoyées à partir des formulaires de contact afin de transmettre l’ information correspondante aux services offerts.<br><br><br>Avec le transfert de vos données, vous consentez expressément à être en mesure d'effectuer un traitement automatisé. Vos informations personnelles seront traitées dans la plus stricte confidentialité, ayant adopté <b>Grup Eina Digital SL</b> en tant que gestionnaire de fichiers, les mesures techniques et structure organisationnelle par la RD 994/99 Mesures de sécurité pour les fichiers informatiques pour assurer la confidentialité et la sécurité des données personnelles et éviter son l'altération, la perte ou l'accès non autorisé.<br><br><br><br><b>Grup Eina Digital SL</b> procède à l'archivage des données fournies par les utilisateurs pour réaliser une consultation ou transmettre une demande. L'utilisateur est averti de la nécessité de fournir de telles données. Nous vous informons que l'adresse e-mail est utilisée pour répondre à votre demande, ainsi que pour transmettre des l’informationcorrespondante aux services offerts par <b>Grup Eina Digital SL</b> et pour vous informer de tous les autres changements pertinents qui se produisent ou pourraient se produire.<br><br><br>Il est de notre engagement que toute modification de la politique de confidentialité de ce site Web vous sera immédiatement notifié via ce site Web, y compris la correction de cette section.<br><br><br>En outre, en ce qui concerne les données personnelles recueillies de la manière prévue dans la présente Politique de confidentialité, les utilisateurs sont informés qu'ils ont le droit d'accès, de rectification, d'opposition et d'annulation de ses données personnelles. Ces droits peuvent être exercés soit par l'utilisateur ou son représentant, en envoyant une demande écrite signée à l'adresse suivante<br><br><br><b>Grup Eina Digital S.L.</b><br><br>Av. Llenguadoc, 29.<br><br>08915 Badalona (Barcelona) - Espagne<br><br><br>La demande doit contenir le nom et le prénom, la photocopie d'identité et le contenu de la demande que vous pourriez avoir, le cas échéant."
 
 error: "Une erreur s’est produite"
 back_app:  "Revenir à l’application"
@@ -771,5 +770,5 @@ footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressour
 
 help.check_manual: 	"Check the manual"
 
-help.manual: 'http://adserviceticketing.com/uploads/help/manual-es.pdf'
+help.manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
 help.video:  '<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'

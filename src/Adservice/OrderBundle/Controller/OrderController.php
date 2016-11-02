@@ -19,7 +19,7 @@ class OrderController extends Controller
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
-            throw new AccessDeniedException();
+            return $this->redirect($this->generateUrl('user_login'));
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $security->getToken()->getUser();
