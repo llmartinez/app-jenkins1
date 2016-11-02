@@ -21,7 +21,9 @@
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} category_service {% endtrans %} *</label>
                 <select class="form-control" id="id_catserv" name="id_catserv" required>
-                    <option value=>{% trans %} ... {% endtrans %}</option>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <option value="0">...</option>
+                    {% endif %}
                     {% for catserv in cat_services %}
                         <option value={{ catserv.id }}>{{ catserv }}</option>
                     {% endfor %}

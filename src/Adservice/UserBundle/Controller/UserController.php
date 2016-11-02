@@ -275,6 +275,7 @@ class UserController extends Controller {
     public function newUserAction($type) {
 
         $security = $this->get('security.context');
+        $catserv = $security->getToken()->getUser()->getCategoryService();
         if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
@@ -358,6 +359,7 @@ class UserController extends Controller {
                                'user_type'  => $type,
                                'form_name'  => $form->getName(),
                                'form'       => $form->createView(),
+                               'catserv'    => $catserv,
                                'error_username' => $error_username);
 
                 return $this->render('UserBundle:User:new_user.html.twig', $array);
@@ -365,6 +367,9 @@ class UserController extends Controller {
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($security->getToken()->getUser());
+            if($user->getCategoryService() == null && !$security->isGranted('ROLE_SUPER_ADMIN')){
+                $user->setCategoryService($catserv);
+            }
            // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
@@ -378,6 +383,7 @@ class UserController extends Controller {
         $array = array('user'       => $user,
                        'user_type'  => $type,
                        'form_name'  => $form->getName(),
+                       'catserv'    => $catserv,
                        'form'       => $form->createView());
 
         return $this->render('UserBundle:User:new_user.html.twig', $array);
@@ -489,6 +495,7 @@ class UserController extends Controller {
                     $em->persist($partner_user);
                     $em->flush();
                  }
+                 
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);

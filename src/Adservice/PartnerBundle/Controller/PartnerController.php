@@ -46,12 +46,16 @@ class PartnerController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
-
+        $cat_services = array();
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
+            
+            $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
             if ($country != '0') $params[] = array('country', ' = '.$country);
         }
-        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-
+        else{     
+             $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        }
         $pagination = new Pagination($page);
 
         if($catserv != 0) {
@@ -65,8 +69,6 @@ class PartnerController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
-
-        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
 
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
                                                                                     'pagination'   => $pagination,
@@ -90,16 +92,18 @@ class PartnerController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $partner = new Partner();
         $request = $this->getRequest();
-
+        $cat_services = array();
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-
+            $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
             $_SESSION['id_country'] = ' != 0 ';
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+            $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
             $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
+            $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
@@ -182,8 +186,7 @@ class PartnerController extends Controller {
 
         $regions      = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
         $cities       = $em->getRepository("UtilBundle:City"  )->findAll();
-        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
-
+//        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
         return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'      => $partner,
                                                                                   'form_name'    => $form->getName(),
                                                                                   'form'         => $form->createView(),
