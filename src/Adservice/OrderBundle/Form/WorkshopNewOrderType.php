@@ -35,7 +35,7 @@ class WorkshopNewOrderType extends AbstractType
             ->add('numchecks', 'integer', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
             ->add('commercial_code', 'text', array('required' => false))
-             //CONTACT
+            //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
