@@ -285,7 +285,7 @@ function populate_typology2(typology){
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
 function populate_typology3(typology){
-    var id_catserv = $('form').find('select[name*=category_service]').val();
+    var id_catserv = $('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
     var route  = 'typologies_from_catserv';
