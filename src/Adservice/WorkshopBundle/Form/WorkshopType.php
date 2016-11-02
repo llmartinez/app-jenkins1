@@ -95,7 +95,7 @@ class WorkshopType extends AbstractType
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
             ->add('region')
