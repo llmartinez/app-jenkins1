@@ -26,6 +26,7 @@ class StatisticController extends Controller {
         $joins  = array();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $category_service = '0';
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
