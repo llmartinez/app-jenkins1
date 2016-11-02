@@ -17,10 +17,13 @@ $(document).ready(function() {
     }
 
     //si clickamos el combobox de categoria de servicio rellenamos los relacionados
-    $('form').find('select[name$=category_service]').change(function() {
-        populate_partner();
-        populate_typology();
-        populate_diagmachine();
+    $('form').find('select[name*=category_service]').change(function() {
+        if($('select[name$=category_service_statistics]').val() == undefined){
+            populate_partner();
+            populate_typology();
+            populate_diagmachine();
+        }
+    
 
     });
 

@@ -26,7 +26,19 @@
             
             {% if form.category_service is defined %}
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                    <label>{% trans %} category_service {% endtrans %} *</label> 
+                   
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                {% else %}
+                     <div hidden>
+                     {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                     </div>
+                     <select  id="adservice_workshopbundle_typologytype_category_service" name="adservice_workshopbundle_typologytype[category_service]" class="form-control"> 
+                            <option value="0"></option>
+                            <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
+                    </select>
+                {% endif %}
                 </div>
             {% endif %}
             

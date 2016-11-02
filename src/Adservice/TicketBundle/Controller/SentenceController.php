@@ -23,12 +23,12 @@ class SentenceController extends Controller
         if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
-
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
-        }
-        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+$params[] = array();
+//        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+//            if ($country != 'none') $params[] = array('country', ' = '.$country);
+//            else                    
+//        }
+//        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
