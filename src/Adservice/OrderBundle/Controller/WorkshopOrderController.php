@@ -392,7 +392,7 @@ class WorkshopOrderController extends Controller {
             }
         }
 
-        if ((($security->isGranted('ROLE_AD') and $user->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
+        if ((($security->isGranted('ROLE_AD') and $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
