@@ -398,7 +398,6 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      */
     public function editUserAction($user) {
-
         $security = $this->get('security.context');
         if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $user->getCountry()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
@@ -418,13 +417,20 @@ class UserController extends Controller {
                                                                                     'active' => '1'));
         }
         else $partners = '0';
-
+        
+        //que tipo de usuario estamos editando (los formtype varian...)
+    	$role = $user->getRoles();
+    	$role = $role[0];
+    	$role = $role->getRole();
+        
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-
-            $_SESSION['id_partner'] = ' != 0 ';
+            if ($role == "ROLE_USER")
+                $_SESSION['id_partner'] = ' = '.$user->getWorkshop()->getPartner()->getId() ;
+            else
+                $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
-
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -438,11 +444,7 @@ class UserController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
-        //que tipo de usuario estamos editando (los formtype varian...)
-    	$role = $user->getRoles();
-    	$role = $role[0];
-    	$role = $role->getRole();
-
+        
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR")                             $form = $this->createForm(new EditUserAssessorType()     , $user);
         elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
@@ -506,6 +508,7 @@ class UserController extends Controller {
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
                                                                           'role'      => $role,
                                                                           'form_name' => $form->getName(),
+                                                                          'partner_id'=> $user->getWorkshop()->getPartner()->getId(),
                                                                           'form'      => $form->createView()));
     }
 
