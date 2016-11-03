@@ -422,10 +422,12 @@ class UserController extends Controller {
     	$role = $user->getRoles();
     	$role = $role[0];
     	$role = $role->getRole();
-        $partner_id = 0;
+        $partner_id = null;
         if ($security->isGranted('ROLE_ADMIN')) {
             if ($role == "ROLE_USER")
                 $partner_id = $user->getWorkshop()->getPartner()->getId();
+            elseif($role == "ROLE_AD")
+                $partner_id = $user->getPartner()->getId();
         }
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
