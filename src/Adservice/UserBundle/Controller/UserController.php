@@ -210,7 +210,6 @@ class UserController extends Controller {
         }
 
         if(!isset($params)) $params[] = array();
-
         if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
                 $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
@@ -237,6 +236,7 @@ class UserController extends Controller {
             elseif ($role == "ROLE_USER")         $users_role_user[]        = $user;
             elseif ($role == "ROLE_ASSESSOR")     $users_role_assessor[]    = $user;
             elseif ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
+            elseif ($role == "ROLE_TOP_AD")       $users_role_top_ad[]      = $user;
             elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
 
             if($option == null or $option == 'all') unset($role);
@@ -253,6 +253,7 @@ class UserController extends Controller {
                                                                         'users_role_user'        => $users_role_user,
                                                                         'users_role_assessor'    => $users_role_assessor,
                                                                         'users_role_super_ad'    => $users_role_super_ad,
+                                                                        'users_role_top_ad'      => $users_role_top_ad,
                                                                         'users_role_ad'          => $users_role_ad,
                                                                         'pagination'             => $pagination,
                                                                         'roles'                  => $roles,
