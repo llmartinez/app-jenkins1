@@ -392,7 +392,7 @@ class WorkshopOrderController extends Controller {
             }
         }
 
-        if ((($security->isGranted('ROLE_AD') and $user->getCountry()->getId() == $workshopOrder->getCountry()->getId()) === false)
+        if ((($security->isGranted('ROLE_AD') and $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -1101,6 +1101,8 @@ class WorkshopOrderController extends Controller {
                 $user_workshop->setCountry       ($workshop->getCountry());
                 $user_workshop->setRegion        ($workshop->getRegion());
                 $user_workshop->setCity          ($workshop->getCity());
+                $user_workshop->setAddress       ($workshop->getAddress());
+                $user_workshop->setPostalCode    ($workshop->getPostalCode());
                 $user_workshop->setCreatedBy     ($workshop->getCreatedBy());
                 $user_workshop->setCreatedAt     (new \DateTime());
                 $user_workshop->setModifiedBy    ($workshop->getCreatedBy());
@@ -1213,8 +1215,8 @@ class WorkshopOrderController extends Controller {
         $workshopOrder->setCategoryService($workshop->getCategoryService());
         $shop = $workshop->getShop();
         if(isset($shop)) { $workshopOrder->setShop($shop); }
-        $tipology = $workshop->getTypology();
-        if(isset($tipology)) { $workshopOrder->setTypology($tipology); }
+        $typology = $workshop->getTypology();
+        if(isset($typology)) { $workshopOrder->setTypology($typology); }
         $workshopOrder->setTest          ($workshop->getTest());
         $workshopOrder->setContactName   ($workshop->getContactName());
         $workshopOrder->setPhoneNumber1  ($workshop->getPhoneNumber1());

@@ -50,6 +50,16 @@ class UserAssessorType extends AbstractType {
                                                           ->orderBy('cs.category_service', 'ASC')
                                                           ->where('cs.id'.$id_catserv)
                                                           ; }))
+            ->add('country_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UtilBundle\Entity\CountryService',
+                  'property' => 'country',
+                  'empty_value' => $all,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                                                return $er->createQueryBuilder('c')
+                                                          ->orderBy('c.country', 'ASC')
+                                                          ->where('c.id'.$id_country)
+                                                          ; }))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
