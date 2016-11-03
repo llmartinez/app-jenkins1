@@ -183,6 +183,7 @@ class UserController extends Controller {
         $users_role_assessor    = array();
         $users_role_user        = array();
         $users_role_super_ad    = array();
+        $users_role_top_ad      = array();
         $users_role_ad          = array();
 
 
