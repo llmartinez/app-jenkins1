@@ -78,6 +78,7 @@
         <tbody>
             {% if  users_role_super_admin is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_admin  , role:'super_admin'} %}{% endif %}
             {% if  users_role_admin       is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_admin        , role:'admin'      } %}{% endif %}
+            {% if  users_role_top_ad      is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_top_ad       , role:'top_ad'     } %}{% endif %}
             {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
             {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
             {% if  users_role_assessor    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_assessor     , role:'assessor'   } %}{% endif %}
