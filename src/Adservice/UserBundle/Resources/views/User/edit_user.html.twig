@@ -24,12 +24,14 @@
             </div>
             {% if form.partner is defined %}
              <div class="col-xs-2 col-md-2 form-group">
+                <input id="partner_id" type="hidden" value="{{ partner_id }}">
                 <label>{% trans %} partner {% endtrans %} *</label>
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
             {% if user.categoryService is defined %}
              <div class="col-xs-2 col-md-2 form-group">
+                 <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
                 <label>{% trans %} category_service {% endtrans %} *</label>
                 <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
             </div>
