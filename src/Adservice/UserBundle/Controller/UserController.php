@@ -422,13 +422,20 @@ class UserController extends Controller {
     	$role = $user->getRoles();
     	$role = $role[0];
     	$role = $role->getRole();
-        
+        $partner_id = 0;
+        if ($security->isGranted('ROLE_ADMIN')) {
+            if ($role == "ROLE_USER")
+                $partner_id = $user->getWorkshop()->getPartner()->getId();
+        }
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($role == "ROLE_USER")
-                $_SESSION['id_partner'] = ' = '.$user->getWorkshop()->getPartner()->getId() ;
-            else
-                $_SESSION['id_partner'] = ' != 0 ';
+            if ($role == "ROLE_USER") {                
+                
+                $_SESSION['id_partner'] = ' = '.$partner_id ;
+            }
+            else {
+                $_SESSION['id_partner'] = ' != 0 ';               
+            }
             $_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
@@ -508,7 +515,7 @@ class UserController extends Controller {
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
                                                                           'role'      => $role,
                                                                           'form_name' => $form->getName(),
-                                                                          'partner_id'=> $user->getWorkshop()->getPartner()->getId(),
+                                                                          'partner_id'=> $partner_id,
                                                                           'form'      => $form->createView()));
     }
 

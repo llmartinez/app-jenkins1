@@ -5,7 +5,9 @@
         $( "label[for*='_password_password1']" ).text($('#pass_field1').val()+' *');
         $( "label[for*='_password_password2']" ).text($('#pass_field2').val()+' *');
         var partner =$('#partner_id').val();
-        populate_user_partner(partner);
+        if (partner != ""){
+            populate_user_partner(partner);
+        }
         $('#slct_role').change(function() {
             var role = $(this).val();
             var country = $('#slct_country').val();
