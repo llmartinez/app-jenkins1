@@ -29,7 +29,7 @@
                     {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
                 </select>
             </div>
-            <div class="grid w10">
+            <div class="grid w15">
                 <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
                 <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
