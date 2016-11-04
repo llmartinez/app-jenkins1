@@ -419,7 +419,7 @@ class UserController extends Controller {
                                                                                     'active' => '1'));
         }
         else $partners = '0';
-        
+
         //que tipo de usuario estamos editando (los formtype varian...)
     	$role = $user->getRoles();
     	$role = $role[0];
@@ -433,12 +433,12 @@ class UserController extends Controller {
         }
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($role == "ROLE_USER") {                
-                
+            if ($role == "ROLE_USER") {
+
                 $_SESSION['id_partner'] = ' = '.$partner_id ;
             }
             else {
-                $_SESSION['id_partner'] = ' != 0 ';               
+                $_SESSION['id_partner'] = ' != 0 ';
             }
             $_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
@@ -455,9 +455,9 @@ class UserController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
-        
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR")                             $form = $this->createForm(new EditUserAssessorType()     , $user);
+        elseif ($role == "ROLE_TOP_AD")                               $form = $this->createForm(new EditUserSuperPartnerType() , $user);
         elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
         elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
         elseif ($role == "ROLE_USER")                                 $form = $this->createForm(new EditUserWorkshopType()     , $user);
@@ -508,7 +508,7 @@ class UserController extends Controller {
                     $em->persist($partner_user);
                     $em->flush();
                  }
-                 
+
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
