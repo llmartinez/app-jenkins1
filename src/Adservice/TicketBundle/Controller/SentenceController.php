@@ -23,7 +23,7 @@ class SentenceController extends Controller
         if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
-$params[] = array();
+        $params[] = array();
 //        if($security->isGranted('ROLE_SUPER_ADMIN')) {
 //            if ($country != 'none') $params[] = array('country', ' = '.$country);
 //            else                    
