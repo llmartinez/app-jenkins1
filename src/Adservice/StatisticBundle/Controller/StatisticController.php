@@ -38,8 +38,9 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
-            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $category_service = $security->getToken()->getUser()->getCategoryService();
+            if($category_service != null )$catserv = $category_service->getId();
+            else $catserv = '0';
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -51,7 +52,6 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-
         }
         //Estadísticas generales de Ad-service
         $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));

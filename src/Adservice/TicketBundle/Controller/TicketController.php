@@ -270,20 +270,22 @@ class TicketController extends Controller {
                     }
                 }else {
                     if ($security->isGranted('ROLE_ASSESSOR'))
-                        $country = $user->getCountryService()->getId();
+                        $country = '0'; //$user->getCountryService()->getId();
                     else
                         $country = $user->getCountry()->getId();
-                    if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
-                        if ($country == '7')
-                            $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
-                        else
-                            $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
-                    }
-                    else {
-                        if ($country == '7')
-                            $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
-                        else
-                            $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                    if ($country != '0') {
+                        if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                            if ($country == '7')
+                                $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
+                            else
+                                $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
+                        }
+                        else {
+                            if ($country == '7')
+                                $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                            else
+                                $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                        }
                     }
                 }
             }else {
