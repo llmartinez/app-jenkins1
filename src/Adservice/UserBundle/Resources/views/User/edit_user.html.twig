@@ -31,9 +31,15 @@
             {% endif %}
             {% if user.categoryService is defined %}
              <div class="col-xs-2 col-md-2 form-group">
-                 <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
-                <label>{% trans %} category_service {% endtrans %} *</label>
-                <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
+                {% if user_role_id == 1 %}
+                    <input id="id_catserv" type="hidden" value="">
+                    <label>{% trans %} category_service {% endtrans %} *</label>
+                    <input type="text" class="form-control" value="" disabled>
+                {% else %}
+                    <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
+                    <label>{% trans %} category_service {% endtrans %} *</label>
+                    <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
+                 {% endif %}
             </div>
             {% endif %}
             {% if form.category_service is defined %}
