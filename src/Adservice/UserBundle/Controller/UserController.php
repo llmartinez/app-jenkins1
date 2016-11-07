@@ -171,7 +171,7 @@ class UserController extends Controller {
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
     public function userListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
-
+        
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
@@ -208,7 +208,7 @@ class UserController extends Controller {
                 $params[] = array('username', " LIKE '%" . $field . "%'");
             }
         }
-
+        
         if(!isset($params)) $params[] = array();
 
         if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
@@ -219,7 +219,7 @@ class UserController extends Controller {
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
                 $role     = $role->getName();
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $catserv, $role, $pagination);
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $catserv, $role, $term, $field, $pagination);
                 $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $catserv, $role);
         }
 
@@ -439,7 +439,12 @@ class UserController extends Controller {
                 $_SESSION['id_partner'] = ' != 0 ';               
             }
             $_SESSION['id_country'] = ' != 0 ';
-            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+            $user_role_id = 1;
+            if($user->getRoles()[0]->getId() != 1) {
+                $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
+                $user_role_id = 0;
+            }
+        
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -518,6 +523,7 @@ class UserController extends Controller {
                                                                           'role'      => $role,
                                                                           'form_name' => $form->getName(),
                                                                           'partner_id'=> $partner_id,
+                                                                          'user_role_id' => $user_role_id,
                                                                           'form'      => $form->createView()));
     }
 

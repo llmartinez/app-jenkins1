@@ -29,16 +29,7 @@ class UserPartnerType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active' , 'checkbox', array('required' => false))
-            ->add('partner', 'entity', array(
-                  'required' => true,
-                  'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_catserv); }))
+            
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
@@ -49,6 +40,16 @@ class UserPartnerType extends AbstractType {
                                                           ->orderBy('cs.category_service', 'ASC')
                                                           ->where('cs.id'.$id_catserv)
                                                           ; }))
+            ->add('partner', 'entity', array(
+                  'required' => true,
+                  'class' => 'Adservice\PartnerBundle\Entity\Partner',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.country'.$id_catserv); }))
             ->add('language')
 
             //CONTACT

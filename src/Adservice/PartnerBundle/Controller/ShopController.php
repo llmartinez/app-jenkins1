@@ -53,12 +53,15 @@ class ShopController extends Controller {
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($catser != '0' && $catser != 'none') $params[] = array('category_service', ' = '.$catser);
             if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
+            if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
         else {
             $params[] = array('category_service', ' = '.$catser);
+            $params[] = array('country', ' = '.$country);
         }
         if($catserv != 0){
             $params[] = array('category_service', ' = '.$catserv);
+            $params[] = array('country', ' = '.$country);
         }
         $pagination = new Pagination($page);
 
