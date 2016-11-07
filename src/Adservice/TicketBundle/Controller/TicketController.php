@@ -2167,6 +2167,9 @@ class TicketController extends Controller {
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
 
+        if ($model != '0' and $version == '0')
+            $version = '';
+
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
 
@@ -2376,6 +2379,21 @@ class TicketController extends Controller {
             }
         }
         if($brand == '') $brand = null;
+
+        //Al llamar a esta funcion se pierde la version del coche, aqui la volvemos a asignar
+        if(sizeOf($tickets) > 0)
+        {
+            if($tickets[0]->getCar()->getVersion() != null) {
+            $ver = $em->getRepository('CarBundle:Version')->findOneById($tickets[0]->getCar()->getVersion()->getId());
+
+                if($ver != null){
+                    foreach ($tickets as $ticket) {
+
+                        $ticket->getCar()->setVersion($ver);
+                    }
+                }
+            }
+        }
 
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,
