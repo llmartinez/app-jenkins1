@@ -42,8 +42,9 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findByOption($em, $security, $country, $catserv, $option, $pagination)
+    public function findByOption($em, $security, $country, $catserv, $option, $term, $field, $pagination)
     {
+         
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
         if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
@@ -56,6 +57,16 @@ class UserRepository extends EntityRepository
         }
         if ($catserv != 0 ) {
             $query = $query.' AND u.category_service = '.$catserv;
+        }
+        
+        if (!$field == 0 ) {
+            if ($term == 'tel') {
+               $query = $query." AND u.phone_number_1 != '0' AND (u.phone_number_1 LIKE '%" . $field . "%' OR u.phone_number_2 LIKE '%" . $field . "%' OR u.mobile_number_1 LIKE '%" . $field . "%' OR u.mobile_number_2 LIKE '%" . $field . "%')";
+            } elseif ($term == 'mail') {
+               $query = $query." AND u.email_1 != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%')";
+            } elseif ($term == 'user') {
+               $query = $query." AND u.username  LIKE '%" . $field . "%'";
+            } 
         }
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option)
