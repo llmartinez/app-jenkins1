@@ -1188,10 +1188,10 @@ class TicketController extends Controller {
             else
                 $id = "";
 
-            if ($security->isGranted('ROLE_SUPER_ADMIN'))
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
-            else
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
+            $locale      = $request->getLocale();
+            $loc_country = $em->getRepository('UtilBundle:Country')->findBy(array('short_name' => $locale))[0];
+
+            $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $loc_country->getId()));
 
             $post = new Post();
             $message = $request->getSession()->get('message');
