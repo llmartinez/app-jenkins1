@@ -6,7 +6,7 @@
             <input type="hidden" id='ticket_version' name='ticket_version' value="">
             <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
 
-            <div class="grid w20">
+            <div class="grid w15">
                 <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
                 <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# required #}>
                     <option></option>
@@ -16,14 +16,14 @@
                 </select>
             </div>
 
-            <div class="grid w20">
+            <div class="grid w15">
                 <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
                 <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# required #}>
                     {% if model.id is defined %}<option value="{{model.id}}">{{model.name}}</option>{% endif %}
                 </select>
             </div>
 
-            <div class="grid w20">
+            <div class="grid w15">
                 <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
                 <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" >
                     {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
@@ -36,7 +36,7 @@
                        {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %}>
                 </input>
             </div>
-            <div class="grid w20">
+            <div class="grid w15">
                 <label class="w100">
                     <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
                 </label>
@@ -50,17 +50,19 @@
             </div>
 
         </form>
-    </div>
-    <div  class="w100">
-        <form action="{{ path('findTicketByIdAndWorkshop') }}" id="findTicketByIdAndWorkshop" class="form grid-33" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('findTicketByIdAndWorkshop') }}" id="findTicketByIdAndWorkshop" class="form" role="form" method="post" enctype="multipart/form-data">
 
-            <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p>
-            <div class="col-xs-8 col-md-8 form-group pdl0">
-                <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
-            </div>
-            <div class="col-xs-4 col-md-4 form-group pdl0">
-                <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
+            <div class="w15 fr">
+                <div class="w100 pdl0">
+                    <label>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</label>
+                </div>
+                <div class="w70 fl pdl0">
+                    <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                </div>
+                <div class="w30 fl form-group pdl0">
+                    <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></button>
+                </div>
             </div>
         </form>
     </div>

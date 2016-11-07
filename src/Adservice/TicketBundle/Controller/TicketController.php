@@ -270,20 +270,22 @@ class TicketController extends Controller {
                     }
                 }else {
                     if ($security->isGranted('ROLE_ASSESSOR'))
-                        $country = $user->getCountryService()->getId();
+                        $country = '0'; //$user->getCountryService()->getId();
                     else
                         $country = $user->getCountry()->getId();
-                    if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
-                        if ($country == '7')
-                            $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
-                        else
-                            $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
-                    }
-                    else {
-                        if ($country == '7')
-                            $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
-                        else
-                            $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                    if ($country != '0') {
+                        if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                            if ($country == '7')
+                                $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
+                            else
+                                $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
+                        }
+                        else {
+                            if ($country == '7')
+                                $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                            else
+                                $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                        }
                     }
                 }
             }else {
@@ -1186,10 +1188,10 @@ class TicketController extends Controller {
             else
                 $id = "";
 
-            if ($security->isGranted('ROLE_SUPER_ADMIN'))
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
-            else
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
+            $locale      = $request->getLocale();
+            $loc_country = $em->getRepository('UtilBundle:Country')->findBy(array('short_name' => $locale))[0];
+
+            $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $loc_country->getId()));
 
             $post = new Post();
             $message = $request->getSession()->get('message');
@@ -2165,6 +2167,9 @@ class TicketController extends Controller {
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
 
+        if ($model != '0' and $version == '0')
+            $version = '';
+
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
 
@@ -2374,6 +2379,21 @@ class TicketController extends Controller {
             }
         }
         if($brand == '') $brand = null;
+
+        //Al llamar a esta funcion se pierde la version del coche, aqui la volvemos a asignar
+        if(sizeOf($tickets) > 0)
+        {
+            if($tickets[0]->getCar()->getVersion() != null) {
+            $ver = $em->getRepository('CarBundle:Version')->findOneById($tickets[0]->getCar()->getVersion()->getId());
+
+                if($ver != null){
+                    foreach ($tickets as $ticket) {
+
+                        $ticket->getCar()->setVersion($ver);
+                    }
+                }
+            }
+        }
 
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,
