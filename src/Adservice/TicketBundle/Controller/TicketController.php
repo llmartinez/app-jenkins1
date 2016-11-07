@@ -2152,7 +2152,6 @@ class TicketController extends Controller {
         $email = $request->get('ftbmv_email');
         $phone = $request->get('ftbmv_phone');
 
-
         // CAR
         $brand = $request->request->get('new_car_form_brand');
         $model = $request->request->get('new_car_form_model');
