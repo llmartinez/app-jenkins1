@@ -443,8 +443,10 @@ class UserController extends Controller {
             $_SESSION['id_country'] = ' != 0 ';
             $user_role_id = 1;
             if($user->getRoles()[0]->getId() != 1) {
-                $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
-                $user_role_id = 0;
+                if($user->getCategoryService() != null) {
+                    $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
+                    $user_role_id = 0;
+                }
             }
         
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
