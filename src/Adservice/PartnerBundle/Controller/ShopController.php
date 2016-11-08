@@ -61,7 +61,7 @@ class ShopController extends Controller {
         }
         if($catserv != 0){
             $params[] = array('category_service', ' = '.$catserv);
-            if ($country != 'none' && $country != '0' )$params[] = array('country', ' = '.$country);
+            if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
         $pagination = new Pagination($page);
 

@@ -448,7 +448,7 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-        
+
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
