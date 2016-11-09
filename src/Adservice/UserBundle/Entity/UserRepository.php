@@ -44,10 +44,10 @@ class UserRepository extends EntityRepository
      */
     public function findByOption($em, $security, $country, $catserv, $option, $term, $field, $pagination)
     {
-         
+        
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
-        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$security->isGranted('ROLE_ADMIN')) {
             $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
         }
         else{
@@ -68,6 +68,7 @@ class UserRepository extends EntityRepository
                $query = $query." AND u.username  LIKE '%" . $field . "%'";
             } 
         }
+        
         $consulta = $em ->createQuery($query)
                         ->setParameter('role', $option)
                         ->setMaxResults($pagination->getMaxRows())
