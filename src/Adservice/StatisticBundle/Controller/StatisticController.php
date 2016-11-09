@@ -1295,6 +1295,7 @@ class StatisticController extends Controller {
                             break;
 
                         case "deactive":
+
                             if(!isset($from_date) and !isset($to_date))
                             {
                                 $qb = $qb->andWhere('e.active != 1');
@@ -1312,8 +1313,8 @@ class StatisticController extends Controller {
                                              ->setParameter('lowdate_at', $to_date);
                                 }
                             }
-                            break;
 
+                            break;
                         case "test":
 
                             if(!isset($from_date) and !isset($to_date))

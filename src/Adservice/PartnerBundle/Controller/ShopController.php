@@ -215,7 +215,7 @@ class ShopController extends Controller {
             $form->bindRequest($petition);
 
             if ($form->isValid()) {
-                
+
                 $shop = UtilController::settersContact($shop, $shop, $actual_region, $actual_city);
                 UtilController::saveEntity($em, $shop, $security->getToken()->getUser());
                 return $this->redirect($this->generateUrl('shop_list'));

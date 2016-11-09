@@ -70,7 +70,9 @@ class UserController extends Controller {
             elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
 
                 if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
-                    $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
+                    if($this->get('security.context')->getToken()->getUser()->getCountryService() != null)
+                        $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
+                    else $country = '0';
                     $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
                                                                           'num_rows' => 10,
                                                                           'country'  => $country,
@@ -143,7 +145,6 @@ class UserController extends Controller {
         }
 
         return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
-
     }
 
     /**
@@ -171,7 +172,7 @@ class UserController extends Controller {
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
     public function userListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
-        
+
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
@@ -209,7 +210,7 @@ class UserController extends Controller {
                 $params[] = array('username', " LIKE '%" . $field . "%'");
             }
         }
-        
+
         if(!isset($params)) $params[] = array();
         if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination);
