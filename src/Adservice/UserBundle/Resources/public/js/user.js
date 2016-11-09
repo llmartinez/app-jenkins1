@@ -88,7 +88,7 @@ function populate_user_partner(partner){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
 
-                $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                $('form').find('select[id$=e_partner]').append("<option value=></option>");
                 $.each(data, function(idx, elm) {
                     $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
