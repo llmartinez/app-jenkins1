@@ -343,7 +343,7 @@ class WorkshopController extends Controller {
                     //'typologies' => $typologies,
                     //'diagnosis_machines' => $diagnosis_machines,
                     'form_name' => $form->getName(),
-                    'form' => $form->createView(),            
+                    'form' => $form->createView(),
                     'catserv' => $catserv,
                         // 'locations'          => UtilController::getLocations($em),
         ));
@@ -602,8 +602,8 @@ class WorkshopController extends Controller {
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
        $this->saveWorkshop($em, $workshop);
-        
-        
+
+
          /* MAILING */
         //Mail to workshop
         $mail = $workshop->getEmail1();
