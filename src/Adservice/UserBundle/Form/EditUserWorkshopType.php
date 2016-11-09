@@ -41,8 +41,7 @@ class EditUserWorkshopType extends AbstractType {
                   'property' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC');}))
             ->add('region')
             ->add('city')
             ->add('address')

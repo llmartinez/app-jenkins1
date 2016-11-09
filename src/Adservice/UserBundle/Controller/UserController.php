@@ -191,15 +191,15 @@ class UserController extends Controller {
         $pagination = new Pagination($page);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if($country != 0){
+            if($catserv != 0){
+                $params[] = array('category_service', ' = '.$catserv);
+            }
+        }else $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+
+       
+         if($country != 0){
                 $params[] = array('country', ' = '.$country);
             }
-        }else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-
-        if($catserv != 0){
-            $params[] = array('category_service', ' = '.$catserv);
-        }
-
         if ($term != '0' and $field != '0') {
 
             if ($term == 'tel') {
@@ -402,7 +402,7 @@ class UserController extends Controller {
      */
     public function editUserAction($user) {
         $security = $this->get('security.context');
-        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $user->getCountry()->getId()) === false)
+        if (($security->isGranted('ROLE_ADMIN') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -432,6 +432,7 @@ class UserController extends Controller {
             elseif($role == "ROLE_AD")
                 $partner_id = $user->getPartner()->getId();
         }
+        $user_role_id = 0;
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
             if ($role == "ROLE_USER") {
@@ -449,7 +450,7 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-
+        
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -462,9 +463,14 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-
+        
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_ASSESSOR")                             $form = $this->createForm(new EditUserAssessorType()     , $user);
+        elseif ($role == "ROLE_ASSESSOR"){                             
+            $form = $this->createForm(new EditUserAssessorType()     , $user);
+            if ($user->getCategoryService() == null){
+                $user_role_id = 1;
+            }
+        }
         elseif ($role == "ROLE_TOP_AD")                               $form = $this->createForm(new EditUserSuperPartnerType() , $user);
         elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
         elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
@@ -476,8 +482,6 @@ class UserController extends Controller {
 
         if ($petition->getMethod() == 'POST') {
             $form->bindRequest($petition);
-
-            if ($form->isValid()) {
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -500,7 +504,7 @@ class UserController extends Controller {
                     $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
                     $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
 
-
+                    $workshop_user->setPartner($user->getWorkshop()->getPartner());
                     $workshop_user->setContact($user->getName());
                     $workshop_user->setActive($user->getActive());
                     $em->persist($workshop_user);
@@ -520,7 +524,7 @@ class UserController extends Controller {
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
-            }
+           
             return $this->redirect($this->generateUrl('user_list'));
         }
 
