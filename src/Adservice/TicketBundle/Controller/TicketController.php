@@ -240,18 +240,26 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
-            $country = $user->getCountry()->getId();
-            if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
-                if ($country == '7')
-                    $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
-                else
-                    $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
-            }
-            else {
-                if ($country == '7')
-                    $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
-                else
-                    $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+            if($country != 'none') {
+
+                if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                    if ($country == '7')
+                        $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
+                    else
+                        $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
+                }
+                else {
+                    if ($country == '7')
+                        $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                    else
+                        $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                }
+            }else {
+                if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                    $joins[0][1] = $joins[0][1] . ' AND w.country != 0';
+                } else {
+                    $joins[] = array('e.workshop w ', 'w.country != 0');
+                }
             }
         }else {
             if ($country != 'none') {
