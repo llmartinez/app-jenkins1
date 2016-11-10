@@ -1178,14 +1178,17 @@ class TicketController extends Controller {
 
         if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')
+        $user = $security->getToken()->getUser();
+
+        if (
+            ($security->isGranted('ROLE_SUPER_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
                 or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+            ) and ($user->getCategoryService() == null OR $user->getCategoryService() == $ticket->getCategoryService())
         ) {
             $em = $this->getDoctrine()->getEntityManager();
             $request = $this->getRequest();
-            $user = $security->getToken()->getUser();
             $car = $ticket->getCar();
             $version = $car->getVersion();
             $model = $car->getModel();

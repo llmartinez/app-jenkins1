@@ -287,7 +287,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+                                                                                  'active' => '1'));
         }
         else $partners = '0';
 
@@ -399,6 +399,7 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      */
     public function editUserAction($user) {
+
         $security = $this->get('security.context');
         if (($security->isGranted('ROLE_ADMIN') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
@@ -406,16 +407,23 @@ class UserController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        if($petition->request->has('assign_all')){
+            $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
+            $result= $em->createQuery($sql)->getResult();
+            $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+            $this->get('session')->setFlash('alert', $flash);
 
+            return $this->redirect($this->generateUrl('user_list'));
+        }
         //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
 
-        $petition = $this->getRequest();
 
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+                                                                                  'active'  => '1'));
         }
         else $partners = '0';
 
@@ -464,22 +472,27 @@ class UserController extends Controller {
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR"){
-            $form = $this->createForm(new EditUserAssessorType()     , $user);
+            $form = $this->createForm(new EditUserAssessorType() , $user);
             if ($user->getCategoryService() == null){
                 $user_role_id = 1;
             }
         }
-        elseif ($role == "ROLE_TOP_AD")                               $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_USER")                                 $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        elseif ($role == "ROLE_TOP_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_SUPER_AD") $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")       $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")     $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null) {
+                $flash =  $this->get('translator')->trans('error.bad_introduction').' ('.$this->get('translator')->trans('category_service').')';
+                $this->get('session')->setFlash('error', $flash);
+            }
+            else {
+                $form->bindRequest($petition);
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -490,10 +503,10 @@ class UserController extends Controller {
                     if ($username != $name) {
                         $error_username = $this->get('translator')->trans('username_used').$username;
 
-                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                              'form_name' => $form->getName(),
-                                                                              'form'      => $form->createView(),
-                                                                              'error_username' => $error_username));
+                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'           => $user,
+                                                                                          'form_name'      => $form->getName(),
+                                                                                          'form'           => $form->createView(),
+                                                                                          'error_username' => $error_username));
                     }
                 }
 
@@ -523,15 +536,17 @@ class UserController extends Controller {
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
 
-            return $this->redirect($this->generateUrl('user_list'));
+                return $this->redirect($this->generateUrl('user_list'));
+            }
+
         }
 
-        return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                          'role'      => $role,
-                                                                          'form_name' => $form->getName(),
-                                                                          'partner_id'=> $partner_id,
+        return $this->render('UserBundle:User:edit_user.html.twig', array('user'         => $user,
+                                                                          'role'         => $role,
+                                                                          'form_name'    => $form->getName(),
+                                                                          'partner_id'   => $partner_id,
                                                                           'user_role_id' => $user_role_id,
-                                                                          'form'      => $form->createView()));
+                                                                          'form'         => $form->createView()));
     }
 
     /**
@@ -571,7 +586,7 @@ class UserController extends Controller {
         //$password = 'grupeina';
         $this->savePassword($em, $user, $password);
 
-        return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
+        return $this->redirect($this->generateUrl('user_edit' , array('id' => $id )));
     }
 
     /**
