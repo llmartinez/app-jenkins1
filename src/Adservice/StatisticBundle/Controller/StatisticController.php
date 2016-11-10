@@ -1365,7 +1365,6 @@ class StatisticController extends Controller {
                             break;
                     }
                 }
-
                 // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
