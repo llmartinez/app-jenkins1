@@ -187,7 +187,6 @@ class UserController extends Controller {
         $users_role_top_ad      = array();
         $users_role_ad          = array();
 
-
         $pagination = new Pagination($page);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
@@ -196,7 +195,6 @@ class UserController extends Controller {
             }
         }else $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
 
-       
          if($country != 0){
                 $params[] = array('country', ' = '.$country);
             }
@@ -450,7 +448,7 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-        
+
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -463,9 +461,9 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_ASSESSOR"){                             
+        elseif ($role == "ROLE_ASSESSOR"){
             $form = $this->createForm(new EditUserAssessorType()     , $user);
             if ($user->getCategoryService() == null){
                 $user_role_id = 1;
@@ -524,7 +522,7 @@ class UserController extends Controller {
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
-           
+
             return $this->redirect($this->generateUrl('user_list'));
         }
 
