@@ -458,9 +458,7 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-            if($user->getRoles()[0]->getId() == 3) {
-                $_SESSION['all'] = $this->get('translator')->trans('all');
-            }
+          
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';

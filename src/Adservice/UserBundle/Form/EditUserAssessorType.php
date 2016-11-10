@@ -14,8 +14,6 @@ class EditUserAssessorType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
 
-        if (isset($_SESSION['all'])) { $all = $_SESSION['all'];unset($_SESSION['all']);} else { $all = 'All';}
-
         $builder
             ->add('username')
             ->add('name')
