@@ -14,6 +14,8 @@ class EditUserAssessorType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
 
+        if (isset($_SESSION['all'])) { $all = $_SESSION['all'];unset($_SESSION['all']);} else { $all = 'All';}
+
         $builder
             ->add('username')
             ->add('name')
@@ -21,6 +23,14 @@ class EditUserAssessorType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
             // ->add('charge')
             //CONTACT
+            ->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ; }))
             ->add('country_service', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',

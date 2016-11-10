@@ -401,6 +401,7 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      */
     public function editUserAction($user) {
+        
         $security = $this->get('security.context');
         if (($security->isGranted('ROLE_ADMIN') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
@@ -408,11 +409,18 @@ class UserController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+        $petition = $this->getRequest();
+        if($petition->request->has('assign_all')){
+            $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
+            $result= $em->createQuery($sql)->getResult();
+            $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+            $this->get('session')->setFlash('alert', $flash);
 
+            return $this->redirect($this->generateUrl('user_list'));
+        }
         //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
 
-        $petition = $this->getRequest();
 
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -450,7 +458,9 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-        
+            if($user->getRoles()[0]->getId() == 3) {
+                $_SESSION['all'] = $this->get('translator')->trans('all');
+            }
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -481,51 +491,58 @@ class UserController extends Controller {
         $actual_region = $user->getCity();
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null) {
+                $flash =  $this->get('translator')->trans('error.bad_introduction').' ('.$this->get('translator')->trans('category_service').')';
+                $this->get('session')->setFlash('error', $flash);
+            }
+            else {
+                $form->bindRequest($petition);
 
-                // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                $name = $user->getUsername();
-                if ($name != $actual_username) {
-                    $username = UtilController::getUsernameUnused($em, $name);
-                    $user->setUsername($username);
+                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                    $name = $user->getUsername();
+                    if ($name != $actual_username) {
+                        $username = UtilController::getUsernameUnused($em, $name);
+                        $user->setUsername($username);
 
-                    if ($username != $name) {
-                        $error_username = $this->get('translator')->trans('username_used').$username;
+                        if ($username != $name) {
+                            $error_username = $this->get('translator')->trans('username_used').$username;
 
-                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                              'form_name' => $form->getName(),
-                                                                              'form'      => $form->createView(),
-                                                                              'error_username' => $error_username));
+                            return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
+                                                                                  'form_name' => $form->getName(),
+                                                                                  'form'      => $form->createView(),
+                                                                                  'error_username' => $error_username));
+                        }
                     }
-                }
 
-                $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
-                if($user->getWorkshop() !== null){
-                    $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
-                    $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
+                    $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
+                    if($user->getWorkshop() !== null){
+                        $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
+                        $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
 
-                    $workshop_user->setPartner($user->getWorkshop()->getPartner());
-                    $workshop_user->setContact($user->getName());
-                    $workshop_user->setActive($user->getActive());
-                    $em->persist($workshop_user);
-                    $em->flush();
-                 }
-                 elseif($user->getPartner() !== null){
-                    $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
-                    $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
+                        $workshop_user->setPartner($user->getWorkshop()->getPartner());
+                        $workshop_user->setContact($user->getName());
+                        $workshop_user->setActive($user->getActive());
+                        $em->persist($workshop_user);
+                        $em->flush();
+                     }
+                     elseif($user->getPartner() !== null){
+                        $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
+                        $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
 
 
-                    $partner_user->setContact($user->getName());
-                    $partner_user->setActive($user->getActive());
-                    $em->persist($partner_user);
-                    $em->flush();
-                 }
+                        $partner_user->setContact($user->getName());
+                        $partner_user->setActive($user->getActive());
+                        $em->persist($partner_user);
+                        $em->flush();
+                     }
 
-                $this->saveUser($em, $user, $original_password);
-                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
-                $this->get('session')->setFlash('alert', $flash);
-           
-            return $this->redirect($this->generateUrl('user_list'));
+                    $this->saveUser($em, $user, $original_password);
+                    $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                    $this->get('session')->setFlash('alert', $flash);
+
+                return $this->redirect($this->generateUrl('user_list'));
+            }
+            
         }
 
         return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
