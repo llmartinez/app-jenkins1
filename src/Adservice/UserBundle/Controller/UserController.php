@@ -187,7 +187,6 @@ class UserController extends Controller {
         $users_role_top_ad      = array();
         $users_role_ad          = array();
 
-
         $pagination = new Pagination($page);
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
@@ -196,7 +195,6 @@ class UserController extends Controller {
             }
         }else $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
 
-       
          if($country != 0){
                 $params[] = array('country', ' = '.$country);
             }
@@ -289,7 +287,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+                                                                                  'active' => '1'));
         }
         else $partners = '0';
 
@@ -401,7 +399,7 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      */
     public function editUserAction($user) {
-        
+
         $security = $this->get('security.context');
         if (($security->isGranted('ROLE_ADMIN') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
@@ -425,7 +423,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+                                                                                  'active'  => '1'));
         }
         else $partners = '0';
 
@@ -458,7 +456,7 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-          
+
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -471,18 +469,18 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        
+
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
-        elseif ($role == "ROLE_ASSESSOR"){                             
-            $form = $this->createForm(new EditUserAssessorType()     , $user);
+        elseif ($role == "ROLE_ASSESSOR"){
+            $form = $this->createForm(new EditUserAssessorType() , $user);
             if ($user->getCategoryService() == null){
                 $user_role_id = 1;
             }
         }
-        elseif ($role == "ROLE_TOP_AD")                               $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_SUPER_AD")                             $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")                                   $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_USER")                                 $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        elseif ($role == "ROLE_TOP_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_SUPER_AD") $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")       $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_USER")     $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
@@ -496,59 +494,59 @@ class UserController extends Controller {
             else {
                 $form->bindRequest($petition);
 
-                    // SLUGIFY USERNAME TO MAKE IT UNREPEATED
-                    $name = $user->getUsername();
-                    if ($name != $actual_username) {
-                        $username = UtilController::getUsernameUnused($em, $name);
-                        $user->setUsername($username);
+                // SLUGIFY USERNAME TO MAKE IT UNREPEATED
+                $name = $user->getUsername();
+                if ($name != $actual_username) {
+                    $username = UtilController::getUsernameUnused($em, $name);
+                    $user->setUsername($username);
 
-                        if ($username != $name) {
-                            $error_username = $this->get('translator')->trans('username_used').$username;
+                    if ($username != $name) {
+                        $error_username = $this->get('translator')->trans('username_used').$username;
 
-                            return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                                  'form_name' => $form->getName(),
-                                                                                  'form'      => $form->createView(),
-                                                                                  'error_username' => $error_username));
-                        }
+                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'           => $user,
+                                                                                          'form_name'      => $form->getName(),
+                                                                                          'form'           => $form->createView(),
+                                                                                          'error_username' => $error_username));
                     }
+                }
 
-                    $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
-                    if($user->getWorkshop() !== null){
-                        $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
-                        $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
+                $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);
+                if($user->getWorkshop() !== null){
+                    $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
+                    $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
 
-                        $workshop_user->setPartner($user->getWorkshop()->getPartner());
-                        $workshop_user->setContact($user->getName());
-                        $workshop_user->setActive($user->getActive());
-                        $em->persist($workshop_user);
-                        $em->flush();
-                     }
-                     elseif($user->getPartner() !== null){
-                        $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
-                        $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
+                    $workshop_user->setPartner($user->getWorkshop()->getPartner());
+                    $workshop_user->setContact($user->getName());
+                    $workshop_user->setActive($user->getActive());
+                    $em->persist($workshop_user);
+                    $em->flush();
+                 }
+                 elseif($user->getPartner() !== null){
+                    $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
+                    $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
 
 
-                        $partner_user->setContact($user->getName());
-                        $partner_user->setActive($user->getActive());
-                        $em->persist($partner_user);
-                        $em->flush();
-                     }
+                    $partner_user->setContact($user->getName());
+                    $partner_user->setActive($user->getActive());
+                    $em->persist($partner_user);
+                    $em->flush();
+                 }
 
-                    $this->saveUser($em, $user, $original_password);
-                    $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
-                    $this->get('session')->setFlash('alert', $flash);
+                $this->saveUser($em, $user, $original_password);
+                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $this->get('session')->setFlash('alert', $flash);
 
                 return $this->redirect($this->generateUrl('user_list'));
             }
-            
+
         }
 
-        return $this->render('UserBundle:User:edit_user.html.twig', array('user'      => $user,
-                                                                          'role'      => $role,
-                                                                          'form_name' => $form->getName(),
-                                                                          'partner_id'=> $partner_id,
+        return $this->render('UserBundle:User:edit_user.html.twig', array('user'         => $user,
+                                                                          'role'         => $role,
+                                                                          'form_name'    => $form->getName(),
+                                                                          'partner_id'   => $partner_id,
                                                                           'user_role_id' => $user_role_id,
-                                                                          'form'      => $form->createView()));
+                                                                          'form'         => $form->createView()));
     }
 
     /**
@@ -588,7 +586,7 @@ class UserController extends Controller {
         //$password = 'grupeina';
         $this->savePassword($em, $user, $password);
 
-        return $this->redirect($this->generateUrl('user_edit'   , array('id'   => $id )));
+        return $this->redirect($this->generateUrl('user_edit' , array('id' => $id )));
     }
 
     /**
