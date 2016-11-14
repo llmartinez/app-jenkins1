@@ -441,6 +441,7 @@ class UserController extends Controller {
         $user_role_id = 0;
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+                
             if ($role == "ROLE_USER") {
 
                 $_SESSION['id_partner'] = ' = '.$partner_id ;
@@ -456,7 +457,10 @@ class UserController extends Controller {
                     $user_role_id = 0;
                 }
             }
-
+            if($user->getRoles()[0]->getId() == 3) {
+                $user_role_id = 2;
+            }
+            
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -474,7 +478,7 @@ class UserController extends Controller {
         elseif ($role == "ROLE_ASSESSOR"){
             $form = $this->createForm(new EditUserAssessorType() , $user);
             if ($user->getCategoryService() == null){
-                $user_role_id = 1;
+                $user_role_id = 2;
             }
         }
         elseif ($role == "ROLE_TOP_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
@@ -487,7 +491,8 @@ class UserController extends Controller {
         $actual_region = $user->getCity();
 
         if ($petition->getMethod() == 'POST') {
-            if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null) {
+            
+            if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
                 $flash =  $this->get('translator')->trans('error.bad_introduction').' ('.$this->get('translator')->trans('category_service').')';
                 $this->get('session')->setFlash('error', $flash);
             }
