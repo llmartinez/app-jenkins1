@@ -466,22 +466,22 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->privacy;
     }
 
-     /**
-     * Set list
+    /**
+     * Set allow_list
      *
-     * @param boolean $list
+     * @param boolean $allow_list
      */
-    public function setList($list) {
-        $this->list = $list;
+    public function setAllowList($allow_list) {
+        $this->allow_list = $allow_list;
     }
 
     /**
-     * Get list
+     * Get allow_list
      *
      * @return boolean
      */
-    public function getList() {
-        return $this->list;
+    public function getAllowList() {
+        return $this->allow_list;
     }
 
      /**
@@ -489,7 +489,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param boolean $allow_create
      */
-    public function setCreate($allow_create) {
+    public function setAllowCreate($allow_create) {
         $this->allow_create = $allow_create;
     }
 
@@ -507,7 +507,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param boolean $allow_order
      */
-    public function setOrder($allow_order) {
+    public function setAllowOrder($allow_order) {
         $this->allow_order = $allow_order;
     }
 
@@ -516,7 +516,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @return boolean
      */
-    public function getOrder() {
+    public function getAllowOrder() {
         return $this->allow_order;
     }
 
