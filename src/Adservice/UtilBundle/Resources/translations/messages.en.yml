@@ -366,6 +366,9 @@ VARIOS CARROCERIA:				"Various Body"
 #PARTNER
 partner.delete:			 "Delete Partner"
 partner.delete.confirm:	 "Are you sure you want to delete this Partner?"
+allow_list: 			 "List"
+allow_create: 			 "Create"
+allow_order:			 "Order"
 
 #SHOP
 shop.is_assigned:		 "This shop has workshops assigned. Reassign them to delete"

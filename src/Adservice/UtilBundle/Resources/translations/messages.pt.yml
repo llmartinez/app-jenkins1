@@ -366,6 +366,9 @@ VARIOS CARROCERIA:				"Vários Carroçaria"
 #PARTNER
 partner.delete:			 "Apagar Sócio"
 partner.delete.confirm:	 "Tem a certeza de que pretende eliminar este sócio?"
+allow_list: 			 "Lista"
+allow_create: 			 "Criar"
+allow_order:			 "Pedido"
 
 #SHOP
 shop.is_assigned:		 "A loja dispõe de oficinas atribuídas. Volte a atribuí-las para poder apagar"

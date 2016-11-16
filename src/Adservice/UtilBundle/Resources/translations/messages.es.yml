@@ -368,6 +368,9 @@ VARIOS CARROCERIA:				"Varios Carrocería"
 #PARTNER
 partner.delete:			 "Borrar Socio"
 partner.delete.confirm:	 "¿Estás seguro de que quieres eliminar este socio?"
+allow_list: 			 "Listar"
+allow_create: 			 "Crear"
+allow_order:			 "Solicitar"
 
 #SHOP
 shop.is_assigned:		 "La tienda tiene talleres asignados. Reasígnalos para poder borrar"

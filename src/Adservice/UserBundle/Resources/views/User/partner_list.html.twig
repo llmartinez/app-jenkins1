@@ -10,7 +10,9 @@
     </ol>
 
     <legend>{% trans %} menu.list_users {% endtrans %}
-        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
+        {% if app.security.getToken().getUser().getAllowCreate() == true %}
+            <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
+        {% endif %}
     </legend>
 
     {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
@@ -55,21 +57,20 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} username {% endtrans %}</th>
-                <th>{% trans %}          {% endtrans %}</th>
-                <th>{% trans %} name     {% endtrans %}</th>
-                <th>{% trans %} surname  {% endtrans %}</th>
-                <th>{% trans %} email    {% endtrans %}</th>
-                <th>{% trans %} tel      {% endtrans %}</th>
-                <th>{% trans %} region   {% endtrans %}</th>
-                <th>{% trans %} actions  {% endtrans %}</th>
+                <th>{% trans %} username       {% endtrans %}</th>
+                <th>{% trans %}                {% endtrans %}</th>
+                <th>{% trans %} phone_number_1 {% endtrans %}</th>
+                <th>{% trans %} email_1        {% endtrans %}</th>
+                <th>{% trans %} allow_list     {% endtrans %}</th>
+                <th>{% if is_granted('ROLE_SUPER_AD') %}{% trans %} allow_create   {% endtrans %}{% endif %}</th>
+                <th>{% trans %} allow_order    {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
-            {% if  users_role_top_ad      is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_top_ad       , role:'top_ad'     } %}{% endif %}
-            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
-            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
-            {% if  users_role_commercial  is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_commercial   , role:'commercial' } %}{% endif %}
+            {% if  users_role_top_ad      is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_top_ad       , role:'top_ad'     } %}{% endif %}
+            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
+            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
+            {% if  users_role_commercial  is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_commercial   , role:'commercial' } %}{% endif %}
         </tbody>
     </table>
 

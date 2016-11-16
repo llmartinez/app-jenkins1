@@ -367,6 +367,9 @@ VARIOS CARROCERIA: 				"Plusieurs carrosseries"
 #PARTNER
 partner.delete:			 "Effacer Distributeur"
 partner.delete.confirm:	 "Êtes-vous sûr de vouloir effacer ce Distributeur? "
+allow_list: 			 "Liste"
+allow_create: 			 "Créer"
+allow_order:			 "Demander"
 
 #SHOP
 shop.is_assigned:		 "Le boutique possède des ateliers assignés. Réassignez-les pour pouvoir effacer"

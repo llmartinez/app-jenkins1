@@ -133,11 +133,11 @@
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
-            {% if app.security.getToken().getUser().getList() == true %}
+            {% if app.security.getToken().getUser().getAllowList() == true %}
             <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                 {% trans %} menu.list_workshops         {% endtrans %}</a>
-            {% elseif app.security.getToken().getUser().getCreate() == true %}
+            {% elseif app.security.getToken().getUser().getAllowOrder() == true %}
             <a class="btn-menu"                         href="{{ path("workshopOrder_new") }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
                                                                                                 {% trans %} menu.new_workshop_order         {% endtrans %}</a>
