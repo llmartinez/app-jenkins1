@@ -4,7 +4,12 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{{ path('user_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+      {% if is_granted('ROLE_ADMIN') %}
+        <li><a href="{{ path('user_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+      {% else %}
+        <li><a href="{{ path('user_partner_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+      {% endif %}
+
       <li class="active">{% trans %} new.user {% endtrans %}</li>
     </ol>
 

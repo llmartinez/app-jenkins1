@@ -29,7 +29,7 @@ class UserPartnerType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active' , 'checkbox', array('required' => false))
-            
+
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',

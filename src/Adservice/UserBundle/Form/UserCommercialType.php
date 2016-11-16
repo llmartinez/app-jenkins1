@@ -4,26 +4,30 @@ namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Security\Core\SecurityContext;
 
-class EditUserWorkshopType extends AbstractType {
+class UserCommercialType extends AbstractType {
 
+    public function buildForm(FormBuilder $builder, array $options) {
+        $builder = $this->getbasicUserType($builder);
+    }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public static function getbasicUserType($builder)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
-
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-
-        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv =  ' != 0';}
 
         $builder
             ->add('username')
+            ->add('password', 'repeated', array('type'            => 'password',
+                                                'invalid_message' => 'Las dos contraseñas deben coincidir',
+                                                'first_name'      => 'password1',
+                                                'second_name'     => 'password2',
+                                                'required'        => 'required' ))
             ->add('name')
             ->add('surname')
-            ->add('active', 'checkbox', array('required' => false))
-            ->add('language')
+            ->add('active' , 'checkbox', array('required' => false))
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
@@ -34,14 +38,17 @@ class EditUserWorkshopType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv); }))
+            ->add('language')
+
             //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
+                  'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC');}))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')
@@ -53,14 +60,30 @@ class EditUserWorkshopType extends AbstractType {
             ->add('fax'            , 'text', array('required' => false))
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
-            ->add('language')
+            ->add('language','entity', array(
+                  'class' => 'Adservice\UtilBundle\Entity\Language',
+                  'property' => 'language',
+                  'required' => true,
+                  'empty_value' => ''))
         ;
 
+        if($id_catserv !=  ' != 0') {
+        $builder->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => $cserv_empty,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ->where('cs.id'.$id_catserv)
+                                                          ; }));
+        }
         return $builder;
     }
 
     public function getName() {
-//        return 'adservice_userbundle_usertype';
-        return 'workshop_type';
+        return 'commercial_type';
     }
+
 }

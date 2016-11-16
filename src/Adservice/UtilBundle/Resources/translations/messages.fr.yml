@@ -12,6 +12,7 @@ menu.title_admin: 	 "MENU Administrateur"
 menu.title_assessor: "MENU Conseiller"
 menu.title_user: 	 "MENU Utilisateur"
 menu.title_ad: 	 	 "MENU Distributeur"
+menu.title_commercial: "MENU Commercial"
 
 menu.profile: 				  "Mon profil"
 menu.list_statistics: 		  "Statistiques"

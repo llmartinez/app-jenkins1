@@ -112,7 +112,7 @@ class TicketController extends Controller {
                     $error = $this->get('translator')->trans('workshop_inactive');
                     $this->get('session')->setFlash('error', '¡Error! ' . $error);
                 }
-            } elseif (!$security->isGranted('ROLE_ASSESSOR')) {
+            } elseif (!$security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_COMMERCIAL')) {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $user->getWorkshop()->getId()));
 
                 if ($workshops[0]->getId() != "") {

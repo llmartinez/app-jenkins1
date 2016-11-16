@@ -136,6 +136,27 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="privacy", type="boolean")
      */
     private $privacy;
+
+    /**
+     * @var boolean $allow_list
+     *
+     * @ORM\Column(name="allow_list", type="boolean")
+     */
+    private $allow_list;
+
+    /**
+     * @var boolean $allow_create
+     *
+     * @ORM\Column(name="allow_create", type="boolean")
+     */
+    private $allow_create;
+
+    /**
+     * @var boolean $allow_order
+     *
+     * @ORM\Column(name="allow_order", type="boolean")
+     */
+    private $allow_order;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -445,7 +466,59 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->privacy;
     }
 
+     /**
+     * Set list
+     *
+     * @param boolean $list
+     */
+    public function setList($list) {
+        $this->list = $list;
+    }
 
+    /**
+     * Get list
+     *
+     * @return boolean
+     */
+    public function getList() {
+        return $this->list;
+    }
+
+     /**
+     * Set allow_create
+     *
+     * @param boolean $allow_create
+     */
+    public function setCreate($allow_create) {
+        $this->allow_create = $allow_create;
+    }
+
+    /**
+     * Get allow_create
+     *
+     * @return boolean
+     */
+    public function getAllowCreate() {
+        return $this->allow_create;
+    }
+
+     /**
+     * Set allow_order
+     *
+     * @param boolean $allow_order
+     */
+    public function setOrder($allow_order) {
+        $this->allow_order = $allow_order;
+    }
+
+    /**
+     * Get allow_order
+     *
+     * @return boolean
+     */
+    public function getOrder() {
+        return $this->allow_order;
+    }
 
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
