@@ -140,6 +140,8 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var boolean $allow_list
      *
+     * Permiso del usuario (comercial) para listar talleres
+     *
      * @ORM\Column(name="allow_list", type="boolean")
      */
     private $allow_list;
@@ -147,12 +149,16 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var boolean $allow_create
      *
+     * Permiso del usuario (socio) para crear comerciales
+     *
      * @ORM\Column(name="allow_create", type="boolean")
      */
     private $allow_create;
 
     /**
      * @var boolean $allow_order
+     *
+     * Permiso del usuario (socio/comercial) para solicitar talleres
      *
      * @ORM\Column(name="allow_order", type="boolean")
      */
