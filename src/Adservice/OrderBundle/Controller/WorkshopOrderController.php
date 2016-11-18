@@ -857,7 +857,7 @@ class WorkshopOrderController extends Controller {
     public function acceptAction($workshopOrder, $status){
 
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();

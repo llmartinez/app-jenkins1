@@ -14,9 +14,11 @@ class EditCommercialType extends AbstractType {
     public static function getbasicUserType($builder)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
-        if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
+        if (isset($_SESSION['role'      ])) { $role = $_SESSION['role'];unset($_SESSION['role']);} else { $role = '0';}
+        if (isset($_SESSION['id_partner']) and $_SESSION['id_partner'] != ' IN (0)') {$id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
         if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
+
         $builder
             ->add('username')
             ->add('name')
@@ -54,6 +56,20 @@ class EditCommercialType extends AbstractType {
             ->add('email_2','email', array('required' => false))
             ->add('language')
         ;
+
+        if($role != '0') {
+        $builder->add('shop', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.partner'.$id_partner)
+                                                          ->andWhere('s.category_service'.$id_catserv); }));
+        }
         return $builder;
     }
 

@@ -126,6 +126,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      *
      * @var type
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Shop", inversedBy="users")
+     */
+    private $shop;
+
+    /**
+     *
+     * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="workshops")
      */
     private $workshop;
@@ -142,7 +149,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (comercial) para listar talleres
      *
-     * @ORM\Column(name="allow_list", type="boolean")
+     * @ORM\Column(name="allow_list", type="boolean", options={"default" : 1})
      */
     private $allow_list;
 
@@ -151,7 +158,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio) para crear comerciales
      *
-     * @ORM\Column(name="allow_create", type="boolean")
+     * @ORM\Column(name="allow_create", type="boolean", options={"default" : 1})
      */
     private $allow_create;
 
@@ -160,7 +167,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio/comercial) para solicitar talleres
      *
-     * @ORM\Column(name="allow_order", type="boolean")
+     * @ORM\Column(name="allow_order", type="boolean", options={"default" : 1})
      */
     private $allow_order;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
@@ -452,6 +459,14 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
     public function setPartner(\Adservice\PartnerBundle\Entity\Partner $partner) {
         $this->partner = $partner;
+    }
+
+    public function getShop() {
+        return $this->shop;
+    }
+
+    public function setShop(\Adservice\PartnerBundle\Entity\Shop $shop) {
+        $this->shop = $shop;
     }
 
     /**

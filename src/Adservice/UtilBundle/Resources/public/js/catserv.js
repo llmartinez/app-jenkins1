@@ -23,8 +23,6 @@ $(document).ready(function() {
             populate_typology();
             populate_diagmachine();
         }
-    
-
     });
 
     // EN STATISTICS

@@ -89,6 +89,10 @@
 
                 window.open(url, "_self");
         });
+        $('#commercial_type_partner').change(function() {
+            var id_shop = $(this).val();
+            populate_shop(id_shop);
+        });
 
         $('#btn_create').click(function() {
             check_password();

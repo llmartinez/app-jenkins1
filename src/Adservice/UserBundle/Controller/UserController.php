@@ -382,6 +382,11 @@ class UserController extends Controller {
     public function newUserAction($type) {
 
         $security = $this->get('security.context');
+        $user_logged = $this->get('security.context')->getToken()->getUser();
+        if($user_logged == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        if($security->getToken()->getUser()) {
+
+        }
         $catserv = $security->getToken()->getUser()->getCategoryService();
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
@@ -402,6 +407,7 @@ class UserController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         }elseif ($security->isGranted('ROLE_ADMIN')) {
 
@@ -409,21 +415,24 @@ class UserController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
             $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($security->isGranted('ROLE_SUPER_AD') or $security->isGranted('ROLE_TOP_AD') or $security->isGranted('ROLE_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
         }
+
 
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
@@ -453,7 +462,7 @@ class UserController extends Controller {
 
         $form->bindRequest($request);
 
-            if ($form->isValid()) {
+        if ($request->getMethod() == 'POST') {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
@@ -481,6 +490,16 @@ class UserController extends Controller {
             if($user->getCategoryService() == null && !$security->isGranted('ROLE_SUPER_ADMIN')){
                 $user->setCategoryService($catserv);
             }
+
+            if($user->getPartner() == null and isset($request->request->get('commercial_type')['partner'])) {
+                $u_partner = $em->getRepository('PartnerBundle:Partner')->find($request->request->get('commercial_type')['partner']);
+                $user->setPartner($u_partner);
+            }
+            if($user->getShop() == null and isset($request->request->get('commercial_type')['shop'])) {
+                $u_shop = $em->getRepository('PartnerBundle:Shop')->find($request->request->get('commercial_type')['shop']);
+                $user->getShop($u_shop);
+            }
+
            // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
@@ -488,7 +507,8 @@ class UserController extends Controller {
             $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
             $this->get('session')->setFlash('alert', $flash);
 
-            return $this->redirect($this->generateUrl('user_list'));
+            if ($security->isGranted('ROLE_ADMIN')) return $this->redirect($this->generateUrl('user_list'));
+            else                                    return $this->redirect($this->generateUrl('user_partner_list'));
         }
 
         $array = array('user'       => $user,
@@ -904,6 +924,9 @@ class UserController extends Controller {
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
+        $user->setAllowList(1);
+        $user->setAllowCreate(1);
+        $user->setAllowOrder(1);
         $em->persist($user);
         $em->flush();
     }
