@@ -8,7 +8,7 @@
 
     {% set style = 'color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;' %}
     <tr>
-        <td valign="left" align="left" style="{{style}} width: 40%; float: left">
+        <td valign="left" align="left" style="{{style}} float: left">
             <table>
                 <h3></h3>
                 <th>{% trans %}information{% endtrans %} ({{count_closed}})</th>
@@ -17,7 +17,7 @@
                 {% endfor %}
             </table>
         </td>
-        <td valign="right" align="right" style="{{style}} width: 40%; float: right">
+        <td valign="right" align="right" style="{{style}} float: left">
             <table>
                 <h3></h3>
                 <th>{% trans %}advanced_diagnostics{% endtrans %} ({{count_pending}})</th>

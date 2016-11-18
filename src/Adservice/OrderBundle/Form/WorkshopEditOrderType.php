@@ -18,7 +18,7 @@ class WorkshopEditOrderType extends AbstractType
             ->add('name','text', array('required' => false))
             ->add('cif','text', array('required' => false))
             ->add('partner', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {

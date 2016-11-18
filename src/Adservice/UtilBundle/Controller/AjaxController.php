@@ -115,7 +115,7 @@ class AjaxController extends Controller
         $id_catserv = $petition->request->get('id_catserv');
 
         $query = "SELECT t FROM WorkshopBundle:Typology t WHERE t.id != 0 ";
-        if($id_catserv != '') $query .= "AND t.category_service = ".$id_catserv." ";
+        if($id_catserv != '') $query .= "AND t.category_service = ".$id_catserv." AND t.active = 1";
 
         $consulta = $em->createQuery($query);
         $result   = $consulta->getResult();
@@ -249,8 +249,8 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
-        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1 ";
-        if($id_partner != '') $query .= "OR s.partner = ".$id_partner." ";
+        $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1 and s.active = 1 ";
+        if($id_partner != '') $query .= "OR s.partner = ".$id_partner." and s.active = 1 ";
 
         $consulta = $em->createQuery($query);
         $shops   = $consulta->getResult();

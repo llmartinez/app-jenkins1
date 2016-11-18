@@ -33,22 +33,22 @@ class UserWorkshopType extends AbstractType {
                   'class' => 'Adservice\WorkshopBundle\Entity\Workshop',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv); }))
             ->add('language')
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv); }))
             ->add('category_service', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
@@ -67,8 +67,7 @@ class UserWorkshopType extends AbstractType {
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')

@@ -27,15 +27,36 @@
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
-                {% if form.category_service is defined %}
-                 <div class="col-xs-3 col-md-3 form-group">
-                    <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
-                </div>
+                
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                        <div class="col-xs-3 col-md-3 form-group">
+                            <label> {% trans %} category_service {% endtrans %} </label>
+                            <select  id="adservice_workshopbundle_workshoptype_category_service" name="adservice_workshopbundle_workshoptype[category_service]" class="form-control"> 
+                                <option value="0"></option>
+                                <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
+
+                            </select>
+                        </div>
+                        {% if form.category_service is defined %}
+                            <div class="col-xs-3 col-md-3 form-group" hidden >
+                               <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if form.category_service is defined %}
+                            <div class="col-xs-3 col-md-3 form-group">
+                               <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
+               
                 <div class="col-xs-3 col-md-3 form-group">
                     <input type="hidden" id="partner_not_found" value="{% trans %}partner_not_found{% endtrans %} ">
                     <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %} *</label>
-                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required'} }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} code_partner {% endtrans %}</label>

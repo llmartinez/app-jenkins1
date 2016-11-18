@@ -26,6 +26,7 @@ class StatisticController extends Controller {
         $joins  = array();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $category_service = '0';
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
@@ -37,7 +38,9 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
-            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+            $category_service = $security->getToken()->getUser()->getCategoryService();
+            if($category_service != null )$catserv = $category_service->getId();
+            else $catserv = '0';
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -49,7 +52,6 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-
         }
         //Estadísticas generales de Ad-service
         $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
@@ -89,6 +91,7 @@ class StatisticController extends Controller {
                                                                                           'typology'    => $typology,
                                                                                           'status'      => $status,
                                                                                           'country'     => $country,
+                                                                                          'category_service'     => $category_service,
                                                                                           //'length'    => $length,
                                                                             ));
     }
@@ -385,14 +388,14 @@ class StatisticController extends Controller {
 
                         if(!isset($from_date) and !isset($to_date))
                         {
-                            $qb = $qb->andWhere('e.active = 1')
-                                     ->andWhere('e.test != 1');
+                            $qb = $qb->andWhere('w.active = 1')
+                                     ->andWhere('w.test != 1');
                         }
                         elseif (isset($from_date) and isset($to_date)){
 
-                            $qb = $qb->andWhere('e.update_at <= :update_at_to')
-                                     ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
-                                     ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at OR e.lowdate_at >= :lowdate_at_from)')
+                            $qb = $qb->andWhere('w.update_at <= :update_at_to')
+                                     ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_from OR w.endtest_at >= :endtest_at_to)')
+                                     ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at <= w.update_at OR w.lowdate_at >= :lowdate_at_from)')
                                      ->setParameter('update_at_to', $to_date)
                                      ->setParameter('endtest_at_from', $from_date)
                                      ->setParameter('endtest_at_to', $to_date)
@@ -401,18 +404,18 @@ class StatisticController extends Controller {
                         else{
                             if (isset($from_date))
                             {
-                                $qb = $qb->andWhere('e.update_at >= :update_at_from')
-                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from)')
-                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at)')
+                                $qb = $qb->andWhere('w.update_at >= :update_at_from')
+                                         ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_from)')
+                                         ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at <= w.update_at)')
                                          ->setParameter('update_at_from', $from_date)
                                          ->setParameter('endtest_at_from', $from_date);
                             }
 
                             if (isset($to_date))
                             {
-                                $qb = $qb->andWhere('e.update_at <= :update_at_to')
-                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_to)')
-                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at >= :lowdate_at_to)')
+                                $qb = $qb->andWhere('w.update_at <= :update_at_to')
+                                         ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_to)')
+                                         ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at >= :lowdate_at_to)')
                                          ->setParameter('update_at_to', $to_date)
                                          ->setParameter('endtest_at_to', $to_date)
                                          ->setParameter('lowdate_at_to', $to_date);
@@ -1292,6 +1295,7 @@ class StatisticController extends Controller {
                             break;
 
                         case "deactive":
+
                             if(!isset($from_date) and !isset($to_date))
                             {
                                 $qb = $qb->andWhere('e.active != 1');
@@ -1309,8 +1313,8 @@ class StatisticController extends Controller {
                                              ->setParameter('lowdate_at', $to_date);
                                 }
                             }
-                            break;
 
+                            break;
                         case "test":
 
                             if(!isset($from_date) and !isset($to_date))
@@ -1361,7 +1365,6 @@ class StatisticController extends Controller {
                             break;
                     }
                 }
-
                 // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -1506,15 +1509,15 @@ class StatisticController extends Controller {
 
             if(isset($row['description'])) $description = $row['description'];
             else $description = '';
-            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $buscar = array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array('', "", "", "", "", "");
             $description = str_ireplace($buscar,$reemplazar,$description);
             $excel.=$description.';';
 
             if(isset($row['solution'])) $solution = $row['solution'];
             else $solution='';
-            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $buscar = array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array('', "", "", "", "", "");
             $solution = str_ireplace($buscar,$reemplazar,$solution);
             $excel.= $solution.';';
 
@@ -1592,7 +1595,7 @@ class StatisticController extends Controller {
             if(isset($row['name'])) $name = $row['name'];
             else $name = '';
             $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $reemplazar = array("", "", "", "", "", "");
             $name = str_ireplace($buscar,$reemplazar,$name);
 
             // Problema con caracteres especiales
@@ -1612,7 +1615,7 @@ class StatisticController extends Controller {
 
             if(isset($shop)) {
                 $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar = array("", "", "", "");
+                $reemplazar = array("", "", "", "", "", "");
                 $shop = str_ireplace($buscar, $reemplazar, $shop);
             }
             else $shop = '-';
@@ -1710,7 +1713,7 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getCommercialCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $reemplazar=array("", "", "", "", "", "");
             $name=str_ireplace($buscar,$reemplazar,$row->getWorkshop()->getName());
             $excel.=$name.';';
 
@@ -1720,7 +1723,7 @@ class StatisticController extends Controller {
             if(isset($shop)) {
                 $name_shop = $shop->getName();
                 $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar=array("", "", "", "");
+                $reemplazar=array("", "", "", "", "", "");
                 $name_shop=str_ireplace($buscar,$reemplazar,$name_shop);
             }
             else $name_shop = '-';
@@ -1728,15 +1731,15 @@ class StatisticController extends Controller {
 
             $excel.=$row->getId().';';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $buscar=array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array('', "", "", "", "", "");
             $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
             $excel.=$description.';';
 
             $excel.=$row->getStatus().';';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $buscar=array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array('', "", "", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
             $excel.=$row->getCreatedAt()->format('Y-m-d').';';
@@ -1769,7 +1772,7 @@ class StatisticController extends Controller {
                     if ($value instanceof \DateTime) { $value = $value->format('Y-m-d H:i:s'); }
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array('', "", "", "", "", "", "");
                     $text=str_ireplace($buscar,$reemplazar,$value);
                     $excel.=$text.';';
                 }
@@ -1797,7 +1800,7 @@ class StatisticController extends Controller {
             {
                 if($key == $year) $excel.="\n";
                 $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar=array("", "", "", "");
+                $reemplazar=array('', "", "", "", "", "", "");
                 $text=str_ireplace($buscar,$reemplazar,$value);
                 $excel.=$text.';';
             }
@@ -1870,7 +1873,7 @@ class StatisticController extends Controller {
                     $Taller = $res[$nTaller];
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array("", "", "", "", "", "", "");
                     $Socio=str_ireplace($buscar,$reemplazar,$Socio);
                     $Taller=str_ireplace($buscar,$reemplazar,$Taller);
 
@@ -1889,7 +1892,7 @@ class StatisticController extends Controller {
                     $Taller = $res[$nTaller];
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array("", "", "", "", "", "", "");
                     $Socio=str_ireplace($buscar,$reemplazar,$Socio);
                     $Taller=str_ireplace($buscar,$reemplazar,$Taller);
 

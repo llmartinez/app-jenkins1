@@ -29,7 +29,8 @@ class DiagnosisMachineController extends Controller {
 //            else                    $params[] = array();
 //        }
 //        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-        
+        if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+            $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
         if ($catserv != 0) $params[] = array('category_service', ' = '.$catserv);
 
         if(!isset($params)) $params = array();
@@ -45,8 +46,10 @@ class DiagnosisMachineController extends Controller {
 //        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
 //        else $countries = array();
 
-        
-        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+       if($security->isGranted('ROLE_SUPER_ADMIN'))
+            $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+        else
+            $catservices[] = $security->getToken()->getUser()->getCategoryService();
 
         return $this->render('WorkshopBundle:DiagnosisMachine:list_diagnosis_machine.html.twig', array('diagnosis_machines' => $diagnosis_machines,
                                                                                                         'pagination'  => $pagination,
@@ -69,7 +72,7 @@ class DiagnosisMachineController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $diagnosis_machine = new DiagnosisMachine();
-
+        $catserv = $security->getToken()->getUser()->getCategoryService();
         $petition = $this->getRequest();
         if ($id != null) {
                           $diagnosis_machine = $em->getRepository("WorkshopBundle:DiagnosisMachine")->find($id);
@@ -95,7 +98,9 @@ class DiagnosisMachineController extends Controller {
             if ($diagnosis_machine->getName() != '...'){
 
                 if ($form->isValid()) {
-
+                    if($diagnosis_machine->getCategoryService() == null){
+                        $diagnosis_machine->setCategoryService($catserv);
+                    }
                     //$diagnosis_machine->setName($diagnosis_machine->getName().' ('.$diagnosis_machine->getCountry()->getShortName().')');
                     $this->saveDiagnosisMachine($em, $diagnosis_machine);
                     return $this->redirect($this->generateUrl('diagnosis_machine_list'));
@@ -109,6 +114,7 @@ class DiagnosisMachineController extends Controller {
 
         return $this->render('WorkshopBundle:DiagnosisMachine:edit_diagnosis_machine.html.twig', array('diagnosis_machine' => $diagnosis_machine,
                                                                                                       'form_name'          => $form->getName(),
+                                                                                                      'catserv'    => $catserv,
                                                                                                       'form'               => $form->createView()));
     }
 

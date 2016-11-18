@@ -40,7 +40,7 @@ class UserSuperPartnerType extends AbstractType {
             //                                               ->where('s.active = 1')
             //                                               ->andWhere('s.country'.$id_country); }))
             ->add('category_service', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'property' => 'category_service',
                   'empty_value' => $cserv_empty,
@@ -58,8 +58,7 @@ class UserSuperPartnerType extends AbstractType {
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')

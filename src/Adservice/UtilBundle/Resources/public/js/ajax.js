@@ -107,7 +107,7 @@ function populate_partner(){
         success : function(data) {
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
-                 $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                 $('form').find('select[id$=_partner]').append("<option value=></option>");
                 $.each(data, function(idx, elm) {
 
                     $('form').find('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
@@ -142,7 +142,7 @@ function populate_partner2(partner){
             // Limpiamos y llenamos el combo con las opciones del json
             if (data['error'] != "No hay coincidencias") {
 
-                $('form').find('select[id*=_partner]').append("<option value=0></option>");
+                $('form').find('select[id$=e_partner]').append("<option value=></option>");
                 $.each(data, function(idx, elm) {
                     $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
                 });
@@ -182,7 +182,7 @@ function populate_partner3(){
             if (data['error'] != "No hay coincidencias") {
 
                 var all = $('#lbl_all').val();
-                $('select[id*=_partner]').append("<option value=0>"+all+"</option>");
+                $('select[id$=_partner]').append("<option value=0>"+all+"</option>");
 
                 $.each(data, function(idx, elm) {
                     $('select[id$=_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
@@ -285,7 +285,7 @@ function populate_typology2(typology){
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
 function populate_typology3(typology){
-    var id_catserv = $('form').find('select[name*=category_service]').val();
+    var id_catserv = $('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
     var route  = 'typologies_from_catserv';

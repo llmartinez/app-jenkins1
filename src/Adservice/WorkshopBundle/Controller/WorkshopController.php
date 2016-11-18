@@ -61,6 +61,7 @@ class WorkshopController extends Controller {
 
         if ($security->isGranted('ROLE_ADMIN')) {
 
+            $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
             if ($partner != '0')
                 $params[] = array('partner', ' = ' . $partner);
 
@@ -117,6 +118,7 @@ class WorkshopController extends Controller {
                     'country'       => $country,
                     'cat_services'  => $cat_services,
                     'catserv'       => $catserv,
+                    'catser'        => $catser,
                     'partner'       => $partner,
                     'partners'      => $partners,
                     'status'        => $status,
@@ -144,7 +146,8 @@ class WorkshopController extends Controller {
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
-            $_SESSION['id_country'] = ' != 0 ';
+            //$_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['id_catserv'] = ' != 0 ';
         }
         elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -326,18 +329,22 @@ class WorkshopController extends Controller {
             }
         }
 
-        if (!$security->isGranted('ROLE_SUPER_ADMIN'))
-            $country = $security->getToken()->getUser()->getCountry()->getId();
-        else
-            $country = null;
-        $typologies = TypologyRepository::findTypologiesList($em, $country);
-        $diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
+        if ($security->isGranted('ROLE_SUPER_ADMIN')){
+            //$country = $security->getToken()->getUser()->getCountry()->getId();
+            $catserv = null;
+        }
+        else{
+            $catserv = $security->getToken()->getUser()->getCategoryService();
+        }
+        //$typologies = TypologyRepository::findTypologiesList($em, $country);
+        //$diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
 
         return $this->render('WorkshopBundle:Workshop:new_workshop.html.twig', array('workshop' => $workshop,
-                    'typologies' => $typologies,
-                    'diagnosis_machines' => $diagnosis_machines,
+                    //'typologies' => $typologies,
+                    //'diagnosis_machines' => $diagnosis_machines,
                     'form_name' => $form->getName(),
                     'form' => $form->createView(),
+                    'catserv' => $catserv,
                         // 'locations'          => UtilController::getLocations($em),
         ));
     }
@@ -595,8 +602,8 @@ class WorkshopController extends Controller {
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
        $this->saveWorkshop($em, $workshop);
-        
-        
+
+
          /* MAILING */
         //Mail to workshop
         $mail = $workshop->getEmail1();

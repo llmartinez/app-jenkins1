@@ -4,7 +4,10 @@
         $( "input[id*='_password_password2']" ).addClass( "form-control" );
         $( "label[for*='_password_password1']" ).text($('#pass_field1').val()+' *');
         $( "label[for*='_password_password2']" ).text($('#pass_field2').val()+' *');
-
+        var partner =$('#partner_id').val();
+        if (partner != ""){
+            populate_user_partner(partner);
+        }
         $('#slct_role').change(function() {
             var role = $(this).val();
             var country = $('#slct_country').val();
@@ -62,7 +65,42 @@
             }
         });
     });
+/**
+ * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
+ */
+function populate_user_partner(partner){
+    var id_catserv = $('form').find('select[name*=category_service]').val();
+    if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
+    var route  = 'partners_from_catserv';
+    var locale = $(document).find("#data_locale").val();
+
+    $('form').find('select[id$=_partner]').empty();
+
+    $.ajax({
+        type        : "POST",
+        url         : Routing.generate(route, {_locale: locale }),
+        data        : {id_catserv : id_catserv},
+        dataType    : "json",
+        beforeSend: function(){ $("body").css("cursor", "progress"); },
+        complete: function(){ $("body").css("cursor", "default"); },
+        success : function(data) {
+            // Limpiamos y llenamos el combo con las opciones del json
+            if (data['error'] != "No hay coincidencias") {
+
+                $('form').find('select[id$=e_partner]').append("<option value=></option>");
+                $.each(data, function(idx, elm) {
+                    $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                });
+                $('form').find('select[id$=e_partner]').val(partner);
+               
+            }
+        },
+        error : function(){
+            console.log("Error al cargar los socios...");
+        }
+    });
+}
 /**
  * Rellena (populate) el combo de las provincias segun la comunidad autonoma seleccionada por el usuario
  * @param {url de tipo {{ path('mi_path') }}} url_ajax

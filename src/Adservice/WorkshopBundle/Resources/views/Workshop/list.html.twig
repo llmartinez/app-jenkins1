@@ -39,16 +39,29 @@
         </select></div>
         {% endif %}
 
-        <div class="grid w15 form-group pd0">
-            <label> {% trans %} category_service {% endtrans %} </label>
-            <select id="slct_catserv" class="form-control"> <option value="0">...</option>
-                {% for _catserv in cat_services %}
-                    <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
-                {% endfor %}
-            </select>
-        </div>
+      
 
         {% if is_granted('ROLE_ADMIN') %}
+          {% if not is_granted('ROLE_SUPER_ADMIN') %}
+              <div class="grid w15 form-group pd0">
+                  <label> {% trans %} category_service {% endtrans %} </label>
+                  <select disabled id="slct_catserv" class="form-control"> 
+
+                      <option value="{{ catser.id }}">{{ catser.CategoryService }}</option>
+
+                  </select>
+              </div>
+          {% else %}
+              <div class="grid w15 form-group pd0">
+                          <label> {% trans %} category_service {% endtrans %} </label>
+                          <select id="slct_catserv" class="form-control"> <option value="0">...</option>
+                              {% for _catserv in cat_services %}
+                                  <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+          {% endif %}
+      
             <div class="grid w10 form-group pd0"> <label> {% trans %} partner {% endtrans %} </label>
                 <select id="flt_partner" class='form-control'>
                         <option value="0">{% trans %} all {% endtrans %}</option>

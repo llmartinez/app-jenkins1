@@ -50,14 +50,18 @@ class SecurityController extends Controller{
 
                 $em = $this->getDoctrine()->getEntityManager();
     			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
-				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
-				$this->get("security.context")->setToken($key);
 
-				// Fire the login event
-				$event = new InteractiveLoginEvent($request, $key);
-				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+                if($user != null) {
+    				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+    				$this->get("security.context")->setToken($key);
 
-            	return $this->redirect($this->generateUrl('_login'));
+    				// Fire the login event
+    				$event = new InteractiveLoginEvent($request, $key);
+    				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+
+                	return $this->redirect($this->generateUrl('_login'));
+                }
+                else throw new AccessDeniedException();
             }
             else throw new AccessDeniedException();
     	}

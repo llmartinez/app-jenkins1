@@ -29,7 +29,9 @@ class TypologyController extends Controller {
 //            if ($country != 'none') $params[] = array('country', ' = '.$country);
 //        }
 //        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
-
+        
+        if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+            $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
         if ($catserv != 0) $params[] = array('category_service', ' = '.$catserv);
 
         if(!isset($params)) $params = array();
@@ -44,9 +46,10 @@ class TypologyController extends Controller {
 
 //        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
 //        else $countries = array();
-
-        $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
-
+        if($security->isGranted('ROLE_SUPER_ADMIN'))
+            $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+        else
+            $catservices[] = $security->getToken()->getUser()->getCategoryService();
         return $this->render('WorkshopBundle:Typology:list_typology.html.twig', array('typologies'  => $typologies,
                                                                                       'pagination'  => $pagination,
 //                                                                                      'countries'   => $countries,
@@ -68,7 +71,7 @@ class TypologyController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $typology = new Typology();
-
+        $catserv = $security->getToken()->getUser()->getCategoryService();
         $petition = $this->getRequest();
         if ($id != null) {
                           $typology = $em->getRepository("WorkshopBundle:Typology")->find($id);
@@ -93,14 +96,17 @@ class TypologyController extends Controller {
             $form->bindRequest($petition);
 
             if ($form->isValid()) {
-
+                if($typology->getCategoryService() == null){
+                    $typology->setCategoryService($catserv);
+                }
                 $this->saveTypology($em, $typology);
                 return $this->redirect($this->generateUrl('typology_list'));
             }
         }
-
+        
         return $this->render('WorkshopBundle:Typology:edit_typology.html.twig', array('typology'   => $typology,
                                                                                       'form_name'  => $form->getName(),
+                                                                                      'catserv'    => $catserv,
                                                                                       'form'       => $form->createView()));
     }
 
