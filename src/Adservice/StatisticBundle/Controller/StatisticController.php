@@ -171,8 +171,8 @@ class StatisticController extends Controller {
         $join  = '';
 
         $response = new Response();
-        // $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Type', 'application/msexcel');
+        $response->headers->set('Content-Type', 'text/csv');
+        // $response->headers->set('Content-Type', 'application/vnd.ms-excel');
 
         $response->headers->addCacheControlDirective('no-cache', true);
         $response->headers->addCacheControlDirective('must-revalidate', true);
@@ -1379,6 +1379,8 @@ class StatisticController extends Controller {
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+
+                // $this->exportarExcelAction($resultsDehydrated);
                 $excel = $this->createExcelStatistics($resultsDehydrated);
             }
         }
