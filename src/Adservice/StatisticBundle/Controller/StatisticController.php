@@ -347,7 +347,7 @@ class StatisticController extends Controller {
                 /******************************************************************************************************/
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelTicket($resultsDehydrated);
             }
             elseif ($type == 'workshop')
@@ -528,7 +528,7 @@ class StatisticController extends Controller {
 
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'no-ticket'){
@@ -628,7 +628,7 @@ class StatisticController extends Controller {
 
                 $trans     = $this->get('translator');
                 $informe   = UtilController::sinAcentos($trans->trans('statistic.no_ticket'));
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'numworkshopbypartner'){
@@ -693,7 +693,7 @@ class StatisticController extends Controller {
 
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'ticketbyworkshopforpartner'){
@@ -754,7 +754,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbypartner'){
@@ -806,7 +806,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbysystem'){
@@ -881,7 +881,7 @@ class StatisticController extends Controller {
                     $results[$key[$i]][$nSubsistema] = UtilController::sinAcentos($trans->trans($subsistema));
                 }
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbybrand'){
@@ -943,7 +943,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbymodel'){
@@ -1008,7 +1008,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbyfabyear'){
@@ -1091,7 +1091,7 @@ class StatisticController extends Controller {
                     else $years[$inicio][$nTickets] = $years[$inicio][$nTickets] + $res[$nTickets];
                 }
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelFabYear($years);
             }
             elseif ($type == 'numticketsbymonth'){
@@ -1173,7 +1173,7 @@ class StatisticController extends Controller {
                 $qF = $em->createQuery($queryF);
                 $resultsF = $qF->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelByMonth($results, $resultsF);
             }
             elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
@@ -1378,7 +1378,7 @@ class StatisticController extends Controller {
                 // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($resultsDehydrated);
             }
         }
@@ -1418,7 +1418,7 @@ class StatisticController extends Controller {
 
             $trans     = $this->get('translator');
             $informe   = UtilController::sinAcentos($trans->trans('statistic.last_tickets' ));
-            $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+            $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
 
         }
