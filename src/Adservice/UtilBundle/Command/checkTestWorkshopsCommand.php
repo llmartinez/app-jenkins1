@@ -39,8 +39,7 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
 
                 if(($diff->invert == 1 and $diff->days >= 0))
                 {
-                    // $mail   = 'info@adserviceticketing.com';
-                    // $mail   = 'dmaya@grupeina.com';
+                    // $mail   = $this->container->getParameter('mail_info');
 
                     // $message = \Swift_Message::newInstance()
                     //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
