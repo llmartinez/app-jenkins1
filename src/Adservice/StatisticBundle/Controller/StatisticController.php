@@ -98,7 +98,7 @@ class StatisticController extends Controller {
 
     public function listTopAction($type='0', $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
 
-        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false){
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false){
             throw new AccessDeniedException();
         }
 
@@ -1191,6 +1191,8 @@ class StatisticController extends Controller {
                 $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
                 $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
                 $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
+                $nactive         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('active')));
+                $ntest           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('test')));
                 $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
                 $internal_code   = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('internal_code')));
                 $commercial_code = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('commercial_code')));
@@ -1204,10 +1206,17 @@ class StatisticController extends Controller {
                 $fax             = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('fax')));
                 $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
+                $token           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('token')));
 
-                if($shop    == 'undefined') $shop = '0';
-                if($country == 'undefined') $country = '0';
-                if($raport  == 'undefined') $raport = '0';
+                if($shop      == 'undefined') $shop      = '0';
+                if($country   == 'undefined') $country   = '0';
+                if($raport    == 'undefined') $raport    = '0';
+                if($partner   == 'undefined') $partner   = '0';
+                if($typology  == 'undefined') $typology  = '0';
+                if($catserv   == 'undefined') $catserv   = '0';
+                if($status    == 'undefined') $status    = '0';
+                if($from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
+                if($to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                 //Realizamos una query deshydratada con los datos ya montados
                 $qb = $em->getRepository('TicketBundle:Ticket')
@@ -1216,9 +1225,10 @@ class StatisticController extends Controller {
                                     'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
                                     'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
                                     'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'count(t.id) as '.$nTickets.'')
+                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'count(t.id) as '.$nTickets.'', 'u.token as '.$token.'')
 
                     ->leftJoin('t.workshop', 'e')
+                    ->leftJoin('e.users', 'u')
                     ->leftJoin('e.partner', 'p')
                     ->leftJoin('e.typology', 'tp')
                     ->leftJoin('e.country', 'c')
