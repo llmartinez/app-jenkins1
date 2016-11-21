@@ -1225,7 +1225,7 @@ class StatisticController extends Controller {
                                     'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
                                     'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
                                     'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'count(t.id) as '.$nTickets.'', 'u.token as '.$token.'')
+                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
 
                     ->leftJoin('t.workshop', 'e')
                     ->leftJoin('e.users', 'u')
@@ -1239,6 +1239,9 @@ class StatisticController extends Controller {
 
                     ->groupBy('e.id')
                     ->orderBy('e.id');
+
+                if ($security->isGranted('ROLE_TOP_AD')) $qb = $qb->addSelect('count(t.id) as '.$nTickets.'');
+                else                                     $qb = $qb->addSelect('u.token as '.$token.'');
 
                 if ($shop != "0" and $shop != "undefined") {
 
