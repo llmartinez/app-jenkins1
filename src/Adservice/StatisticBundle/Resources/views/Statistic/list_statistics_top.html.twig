@@ -16,6 +16,8 @@
 {# FILTROS GENERALES #}
     <div class="col-xs-12 col-md-12 form-group">
         <legend>{% trans %} filter {% endtrans %}</legend>
+
+    {% if is_granted('ROLE_TOP_AD') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -90,6 +92,7 @@
                     {% endfor %}
                 </select>
             </div>
+    {% endif %}
             <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} status {% endtrans %}</label>
                 <select id="flt_wks_status" class='form-control'>
                     <option value="all"     >{% trans %} all      {% endtrans %}</option>

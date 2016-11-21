@@ -13,6 +13,7 @@
 
     <div class="col-xs-12 col-md-12 form-group">
         {% if app.session.hasFlash('password' ) %} {{ app.session.getFlash('password') }} {% endif %}
+        {% if app.session.hasFlash('error' ) %} <a class="error">{{ app.session.getFlash('error') }}</a> {% endif %}
     </div>
 
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
@@ -24,22 +25,44 @@
             </div>
             {% if form.partner is defined %}
              <div class="col-xs-2 col-md-2 form-group">
+                <input id="partner_id" type="hidden" value="{{ partner_id }}">
                 <label>{% trans %} partner {% endtrans %} *</label>
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
-            {% if user.categoryService is defined %}
-             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} category_service {% endtrans %} *</label>
-                <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
-            </div>
-            {% endif %}
-            {% if form.category_service is defined %}
+
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} category_service {% endtrans %}</label>
-                {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
+                {% if user_role_id == 2 %}                     
+                    <label>{% trans %} category_service {% endtrans %} *</label>
+                    {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
+                    <button id="assign_all" name="assign_all" type="submit" class="btn btn-primary form-control mt5" role="button">{% trans %}assign_to{% endtrans %} {% trans %}all{% endtrans %}</button>
+   
+                {% elseif user_role_id == 1 %}
+                    <input id="id_catserv" type="hidden" value="">
+                    <label>{% trans %} category_service {% endtrans %} 2*</label>
+                    <input type="text" class="form-control" value="" disabled>
+                {% else %}
+                    <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
+                    <label>{% trans %} category_service {% endtrans %} 3*</label>
+                    <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
+                 {% endif %}
+            </div>
+            
+            {% else %}
+             <div class="col-xs-2 col-md-2 form-group">
+                {% if user_role_id == 1 %}
+                    <input id="id_catserv" type="hidden" value="">
+                    <label>{% trans %} category_service {% endtrans %} *</label>
+                    <input type="text" class="form-control" value="" disabled>
+                {% else %}
+                    <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
+                    <label>{% trans %} category_service {% endtrans %} *</label>
+                    <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
+                 {% endif %}
             </div>
             {% endif %}
+
 
             {% if role == "ROLE_ASSESSOR" %}
             <div class="col-xs-2 col-md-2 form-group">
@@ -55,10 +78,8 @@
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} active {% endtrans %}</label>
                 {{ form_widget(form.active) }}
-            </div>
-            <div class="col-xs-2 col-md-2 form-group ">
                 {% if user.roles[0] != 'ROLE_SUPER_ADMIN' %}
-                   <button class="btn btn-primary btn-change-pass " data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
+                   <button class="btn btn-primary " data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
                 {% endif %}
             </div>
         </div>
@@ -73,9 +94,9 @@
                 </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
         </div>
-
-        {{ form_rest(form) }}
-
+        <div hidden>
+            {{ form_rest(form) }}
+        </div>
             <button class="btn btn-primary pull-right" id="btn_save" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.edit {% endtrans %}</button>
     </form>
 

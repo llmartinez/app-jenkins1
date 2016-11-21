@@ -16,6 +16,7 @@ class UserSuperPartnerType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
 
         $builder
             ->add('username')
@@ -39,15 +40,14 @@ class UserSuperPartnerType extends AbstractType {
             //                                               ->where('s.active = 1')
             //                                               ->andWhere('s.country'.$id_country); }))
             ->add('category_service', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'property' => 'category_service',
-                  'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                  'empty_value' => $cserv_empty,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
-                                                          // Descomentar para impedir asignar usuarios al CatServ "GED"
-                                                          // ->Where('cs.id != 1')
+                                                          ->where('cs.id'.$id_catserv)
                                                           ; }))
 
             //CONTACT
@@ -58,8 +58,7 @@ class UserSuperPartnerType extends AbstractType {
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')

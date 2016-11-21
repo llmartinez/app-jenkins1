@@ -26,6 +26,7 @@ class StatisticController extends Controller {
         $joins  = array();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')){
+            $category_service = '0';
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
@@ -37,7 +38,9 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
-            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+            $category_service = $security->getToken()->getUser()->getCategoryService();
+            if($category_service != null )$catserv = $category_service->getId();
+            else $catserv = '0';
             $country = $security->getToken()->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -49,7 +52,6 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-
         }
         //Estadísticas generales de Ad-service
         $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
@@ -89,13 +91,14 @@ class StatisticController extends Controller {
                                                                                           'typology'    => $typology,
                                                                                           'status'      => $status,
                                                                                           'country'     => $country,
+                                                                                          'category_service'     => $category_service,
                                                                                           //'length'    => $length,
                                                                             ));
     }
 
     public function listTopAction($type='0', $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
 
-        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false){
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false){
             throw new AccessDeniedException();
         }
 
@@ -168,8 +171,8 @@ class StatisticController extends Controller {
         $join  = '';
 
         $response = new Response();
-        // $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Type', 'application/msexcel');
+        $response->headers->set('Content-Type', 'text/csv');
+        // $response->headers->set('Content-Type', 'application/vnd.ms-excel');
 
         $response->headers->addCacheControlDirective('no-cache', true);
         $response->headers->addCacheControlDirective('must-revalidate', true);
@@ -344,7 +347,7 @@ class StatisticController extends Controller {
                 /******************************************************************************************************/
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
                 $excel = $this->createExcelTicket($resultsDehydrated);
             }
             elseif ($type == 'workshop')
@@ -385,14 +388,14 @@ class StatisticController extends Controller {
 
                         if(!isset($from_date) and !isset($to_date))
                         {
-                            $qb = $qb->andWhere('e.active = 1')
-                                     ->andWhere('e.test != 1');
+                            $qb = $qb->andWhere('w.active = 1')
+                                     ->andWhere('w.test != 1');
                         }
                         elseif (isset($from_date) and isset($to_date)){
 
-                            $qb = $qb->andWhere('e.update_at <= :update_at_to')
-                                     ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from OR e.endtest_at >= :endtest_at_to)')
-                                     ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at OR e.lowdate_at >= :lowdate_at_from)')
+                            $qb = $qb->andWhere('w.update_at <= :update_at_to')
+                                     ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_from OR w.endtest_at >= :endtest_at_to)')
+                                     ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at <= w.update_at OR w.lowdate_at >= :lowdate_at_from)')
                                      ->setParameter('update_at_to', $to_date)
                                      ->setParameter('endtest_at_from', $from_date)
                                      ->setParameter('endtest_at_to', $to_date)
@@ -401,18 +404,18 @@ class StatisticController extends Controller {
                         else{
                             if (isset($from_date))
                             {
-                                $qb = $qb->andWhere('e.update_at >= :update_at_from')
-                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_from)')
-                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at <= e.update_at)')
+                                $qb = $qb->andWhere('w.update_at >= :update_at_from')
+                                         ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_from)')
+                                         ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at <= w.update_at)')
                                          ->setParameter('update_at_from', $from_date)
                                          ->setParameter('endtest_at_from', $from_date);
                             }
 
                             if (isset($to_date))
                             {
-                                $qb = $qb->andWhere('e.update_at <= :update_at_to')
-                                         ->andWhere('(e.endtest_at IS NULL OR e.endtest_at >= :endtest_at_to)')
-                                         ->andWhere('(e.lowdate_at IS NULL OR e.lowdate_at >= :lowdate_at_to)')
+                                $qb = $qb->andWhere('w.update_at <= :update_at_to')
+                                         ->andWhere('(w.endtest_at IS NULL OR w.endtest_at >= :endtest_at_to)')
+                                         ->andWhere('(w.lowdate_at IS NULL OR w.lowdate_at >= :lowdate_at_to)')
                                          ->setParameter('update_at_to', $to_date)
                                          ->setParameter('endtest_at_to', $to_date)
                                          ->setParameter('lowdate_at_to', $to_date);
@@ -525,7 +528,7 @@ class StatisticController extends Controller {
 
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'no-ticket'){
@@ -625,7 +628,7 @@ class StatisticController extends Controller {
 
                 $trans     = $this->get('translator');
                 $informe   = UtilController::sinAcentos($trans->trans('statistic.no_ticket'));
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelWorkshop($resultsDehydrated);
             }
             elseif ($type == 'numworkshopbypartner'){
@@ -690,7 +693,7 @@ class StatisticController extends Controller {
 
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'ticketbyworkshopforpartner'){
@@ -751,7 +754,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbypartner'){
@@ -803,7 +806,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbysystem'){
@@ -878,7 +881,7 @@ class StatisticController extends Controller {
                     $results[$key[$i]][$nSubsistema] = UtilController::sinAcentos($trans->trans($subsistema));
                 }
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbybrand'){
@@ -940,7 +943,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbymodel'){
@@ -1005,7 +1008,7 @@ class StatisticController extends Controller {
                 $qt = $em->createQuery($sql);
                 $results   = $qt->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelStatistics($results);
             }
             elseif ($type == 'numticketsbyfabyear'){
@@ -1088,7 +1091,7 @@ class StatisticController extends Controller {
                     else $years[$inicio][$nTickets] = $years[$inicio][$nTickets] + $res[$nTickets];
                 }
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelFabYear($years);
             }
             elseif ($type == 'numticketsbymonth'){
@@ -1170,7 +1173,7 @@ class StatisticController extends Controller {
                 $qF = $em->createQuery($queryF);
                 $resultsF = $qF->getResult();
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                 $excel = $this->createExcelByMonth($results, $resultsF);
             }
             elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
@@ -1188,6 +1191,8 @@ class StatisticController extends Controller {
                 $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
                 $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
                 $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
+                $nactive         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('active')));
+                $ntest           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('test')));
                 $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
                 $internal_code   = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('internal_code')));
                 $commercial_code = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('commercial_code')));
@@ -1201,10 +1206,17 @@ class StatisticController extends Controller {
                 $fax             = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('fax')));
                 $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
+                $token           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('token')));
 
-                if($shop    == 'undefined') $shop = '0';
-                if($country == 'undefined') $country = '0';
-                if($raport  == 'undefined') $raport = '0';
+                if($shop      == 'undefined') $shop      = '0';
+                if($country   == 'undefined') $country   = '0';
+                if($raport    == 'undefined') $raport    = '0';
+                if($partner   == 'undefined') $partner   = '0';
+                if($typology  == 'undefined') $typology  = '0';
+                if($catserv   == 'undefined') $catserv   = '0';
+                if($status    == 'undefined') $status    = '0';
+                if($from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
+                if($to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                 //Realizamos una query deshydratada con los datos ya montados
                 $qb = $em->getRepository('TicketBundle:Ticket')
@@ -1213,9 +1225,10 @@ class StatisticController extends Controller {
                                     'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
                                     'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
                                     'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'count(t.id) as '.$nTickets.'')
+                                    'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
 
                     ->leftJoin('t.workshop', 'e')
+                    ->leftJoin('e.users', 'u')
                     ->leftJoin('e.partner', 'p')
                     ->leftJoin('e.typology', 'tp')
                     ->leftJoin('e.country', 'c')
@@ -1226,6 +1239,9 @@ class StatisticController extends Controller {
 
                     ->groupBy('e.id')
                     ->orderBy('e.id');
+
+                if ($security->isGranted('ROLE_TOP_AD')) $qb = $qb->addSelect('count(t.id) as '.$nTickets.'');
+                else                                     $qb = $qb->addSelect('u.token as '.$token.'');
 
                 if ($shop != "0" and $shop != "undefined") {
 
@@ -1292,6 +1308,7 @@ class StatisticController extends Controller {
                             break;
 
                         case "deactive":
+
                             if(!isset($from_date) and !isset($to_date))
                             {
                                 $qb = $qb->andWhere('e.active != 1');
@@ -1309,8 +1326,8 @@ class StatisticController extends Controller {
                                              ->setParameter('lowdate_at', $to_date);
                                 }
                             }
-                            break;
 
+                            break;
                         case "test":
 
                             if(!isset($from_date) and !isset($to_date))
@@ -1361,11 +1378,12 @@ class StatisticController extends Controller {
                             break;
                     }
                 }
-
                 // echo($qb->getQuery()->getSql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+                $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
+
+                // $this->exportarExcelAction($resultsDehydrated);
                 $excel = $this->createExcelStatistics($resultsDehydrated);
             }
         }
@@ -1405,7 +1423,7 @@ class StatisticController extends Controller {
 
             $trans     = $this->get('translator');
             $informe   = UtilController::sinAcentos($trans->trans('statistic.last_tickets' ));
-            $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.xls"');
+            $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelLastTickets($results);
 
         }
@@ -1506,15 +1524,15 @@ class StatisticController extends Controller {
 
             if(isset($row['description'])) $description = $row['description'];
             else $description = '';
-            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $buscar = array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array('', "", "", "", "", "");
             $description = str_ireplace($buscar,$reemplazar,$description);
             $excel.=$description.';';
 
             if(isset($row['solution'])) $solution = $row['solution'];
             else $solution='';
-            $buscar = array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $buscar = array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar = array('', "", "", "", "", "");
             $solution = str_ireplace($buscar,$reemplazar,$solution);
             $excel.= $solution.';';
 
@@ -1592,7 +1610,7 @@ class StatisticController extends Controller {
             if(isset($row['name'])) $name = $row['name'];
             else $name = '';
             $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar = array("", "", "", "");
+            $reemplazar = array("", "", "", "", "", "");
             $name = str_ireplace($buscar,$reemplazar,$name);
 
             // Problema con caracteres especiales
@@ -1612,7 +1630,7 @@ class StatisticController extends Controller {
 
             if(isset($shop)) {
                 $buscar = array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar = array("", "", "", "");
+                $reemplazar = array("", "", "", "", "", "");
                 $shop = str_ireplace($buscar, $reemplazar, $shop);
             }
             else $shop = '-';
@@ -1710,7 +1728,7 @@ class StatisticController extends Controller {
             $excel.=$row->getWorkshop()->getCommercialCode().';';
 
             $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $reemplazar=array("", "", "", "", "", "");
             $name=str_ireplace($buscar,$reemplazar,$row->getWorkshop()->getName());
             $excel.=$name.';';
 
@@ -1720,7 +1738,7 @@ class StatisticController extends Controller {
             if(isset($shop)) {
                 $name_shop = $shop->getName();
                 $buscar=array('"',';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar=array("", "", "", "");
+                $reemplazar=array("", "", "", "", "", "");
                 $name_shop=str_ireplace($buscar,$reemplazar,$name_shop);
             }
             else $name_shop = '-';
@@ -1728,15 +1746,15 @@ class StatisticController extends Controller {
 
             $excel.=$row->getId().';';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $buscar=array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array('', "", "", "", "", "");
             $description=str_ireplace($buscar,$reemplazar,$row->getDescription());
             $excel.=$description.';';
 
             $excel.=$row->getStatus().';';
 
-            $buscar=array('"', chr(13).chr(10), "\r\n", "\n", "\r");
-            $reemplazar=array("", "", "", "");
+            $buscar=array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
+            $reemplazar=array('', "", "", "", "", "");
             $solution=str_ireplace($buscar,$reemplazar,$row->getSolution());
             $excel.=$solution.';';
             $excel.=$row->getCreatedAt()->format('Y-m-d').';';
@@ -1769,7 +1787,7 @@ class StatisticController extends Controller {
                     if ($value instanceof \DateTime) { $value = $value->format('Y-m-d H:i:s'); }
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array('', "", "", "", "", "", "");
                     $text=str_ireplace($buscar,$reemplazar,$value);
                     $excel.=$text.';';
                 }
@@ -1797,7 +1815,7 @@ class StatisticController extends Controller {
             {
                 if($key == $year) $excel.="\n";
                 $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                $reemplazar=array("", "", "", "");
+                $reemplazar=array('', "", "", "", "", "", "");
                 $text=str_ireplace($buscar,$reemplazar,$value);
                 $excel.=$text.';';
             }
@@ -1870,7 +1888,7 @@ class StatisticController extends Controller {
                     $Taller = $res[$nTaller];
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array("", "", "", "", "", "", "");
                     $Socio=str_ireplace($buscar,$reemplazar,$Socio);
                     $Taller=str_ireplace($buscar,$reemplazar,$Taller);
 
@@ -1889,7 +1907,7 @@ class StatisticController extends Controller {
                     $Taller = $res[$nTaller];
 
                     $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
-                    $reemplazar=array("", "", "", "");
+                    $reemplazar=array("", "", "", "", "", "", "");
                     $Socio=str_ireplace($buscar,$reemplazar,$Socio);
                     $Taller=str_ireplace($buscar,$reemplazar,$Taller);
 

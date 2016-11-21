@@ -21,6 +21,30 @@
                 <input type="hidden" id="pass_field2" value="{% trans %} repeat_password {% endtrans %}">
                 {{ form_widget(form.password, { 'attr': { 'required': 'required' } }) }}
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                    <div class="col-xs-2 col-md-2 form-group">
+                        {% if user_type == "assessor" %}
+                            <label> {% trans %} category_service {% endtrans %} </label>
+                        {% else %}
+                            <label>{% trans %} category_service {% endtrans %} *</label>
+                        {% endif %}
+                        <select  id="admin_assessor_type_category_service" name="admin_assessor_type_shoptype[category_service]" class="form-control"> 
+                            <option value="0"></option>
+                            <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
+                        </select>
+                    </div>  
+                    <div class="col-xs-2 col-md-2 form-group" hidden>
+                        <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                {% else %}
+                    {% if form.category_service is defined %}
+                        <div class="col-xs-2 col-md-2 form-group">
+                            <label>{% trans %} category_service {% endtrans %} * </label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
             {% if form.partner is defined %}
              <div class="col-xs-2 col-md-2 form-group">
                 {% if user_type == "super_ad" %}
@@ -30,15 +54,15 @@
                 {% endif %}
             </div>
             {% endif %}
-            {% if form.category_service is defined %}
-             <div class="col-xs-2 col-md-2 form-group">
+            {# {% if form.category_service is defined %}
+            <div class="col-xs-2 col-md-2 form-group">
                 {% if user_type == "assessor" %}
                     <label>{% trans %} category_service {% endtrans %}</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
                 {% else %}
                     <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
                 {% endif %}
             </div>
-            {% endif %}
+            {% endif %}#}
             {% if form.workshop is defined %} {# DEPRECATED #}
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} workshop {% endtrans %} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
@@ -87,6 +111,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 
     <script>
         $('#confirm').click(function(){

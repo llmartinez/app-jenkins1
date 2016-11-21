@@ -29,12 +29,18 @@
             </table>
         </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} category_service {% endtrans %}</label>
-            <select id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
-                <option value="0">{% trans %} all {% endtrans %}</option>
-                {% for catserv in catservices %}
-                    <option value="{{ catserv.id }}">{{ catserv }}</option>
-                {% endfor %}
-            </select>
+           {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <select id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                        {% for catserv in catservices %}
+                            <option value="{{ catserv.id }}">{{ catserv }}</option>
+                        {% endfor %}
+                     </select>
+                   {% else %}
+                        <select disabled id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
+                            <option value="{{category_service.id}}">{{category_service.CategoryService}}</option>
+                        </select>
+                {% endif %}
         </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>

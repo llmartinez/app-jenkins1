@@ -18,7 +18,7 @@
     </ol>
 
 <div class='colIzq15'>
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
+{#     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'option': option, 'country': 'plc_country'}) }}">
                 <option value="0">{% trans %} all {% endtrans %}</option>
@@ -26,7 +26,7 @@
                 <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
             {% endfor %}
     </select></div>
-    {% endif %}
+    {% endif %} #}
     <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br>

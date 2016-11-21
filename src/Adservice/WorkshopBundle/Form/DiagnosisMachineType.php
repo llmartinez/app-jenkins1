@@ -24,7 +24,7 @@ class DiagnosisMachineType extends AbstractType
 //                                                          ->orderBy('c.country', 'ASC')
 //                                                          ->where('c.id'.$id_country); }))
             ->add('category_service', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'property' => 'category_service',
                   'empty_value' => '',

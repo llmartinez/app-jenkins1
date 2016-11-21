@@ -29,6 +29,9 @@ class ShopController extends Controller {
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
+        if($user = $this->get('security.context')->getToken()->getUser()->getCategoryService() != null)
+             $catser = $user = $this->get('security.context')->getToken()->getUser()->getCategoryService()->getId();
+        else $catser = '0';
         $em = $this->getDoctrine()->getEntityManager();
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
@@ -48,14 +51,17 @@ class ShopController extends Controller {
             }
         }
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != '0' && $country != 'none') $params[] = array('country', ' = '.$country);
+            if ($catser != '0' && $catser != 'none') $params[] = array('category_service', ' = '.$catser);
             if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
+            if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
         else {
-            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            $params[] = array('category_service', ' = '.$catser);
+            $params[] = array('country', ' = '.$country);
         }
         if($catserv != 0){
             $params[] = array('category_service', ' = '.$catserv);
+            if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
         $pagination = new Pagination($page);
 
@@ -112,7 +118,8 @@ class ShopController extends Controller {
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $_SESSION['id_country'] = ' != 0 ';
+           //$_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['id_catserv'] = ' != 0 ';
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -121,10 +128,12 @@ class ShopController extends Controller {
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$partner->getCategoryService()->getId();
         }
         $form    = $this->createForm(new ShopType(), $shop);
 
@@ -133,7 +142,9 @@ class ShopController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
+                if($shop->getCategoryService() == null){
+                    $shop->setCategoryService($security->getToken()->getUser()->getCategoryService());
+                }
                 $user = $security->getToken()->getUser();
                 $shop = UtilController::newEntity($shop, $user );
                 $shop = UtilController::settersContact($shop, $shop);
@@ -142,9 +153,17 @@ class ShopController extends Controller {
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }
+        if ($security->isGranted('ROLE_SUPER_ADMIN')){
+            //$country = $security->getToken()->getUser()->getCountry()->getId();
+            $catserv = null;
+        }
+        else{
+            $catserv = $security->getToken()->getUser()->getCategoryService();
+        }
         return $this->render('PartnerBundle:Shop:new_shop.html.twig', array('shop'      => $shop,
                                                                             'form_name' => $form->getName(),
-                                                                            'form'      => $form->createView()));
+                                                                            'form'      => $form->createView(),
+                                                                            'catserv'   => $catserv));
     }
 
     /**

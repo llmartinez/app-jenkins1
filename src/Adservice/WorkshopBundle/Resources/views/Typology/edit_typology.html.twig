@@ -22,7 +22,7 @@
 
             <div class="grid w30 fl">
                 <label for="adservice_workshopbundle_typologytype_name">{% trans %} name {% endtrans %} *</label>
-                {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
             </div>
 
            {# <div class="grid w15 fl">
@@ -32,7 +32,21 @@
 
             {% if form.category_service is defined %}
              <div class="grid w15 fl">
-                <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                <label>{% trans %} category_service {% endtrans %} *</label> 
+                
+                
+                
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                {% else %}
+                     <div hidden>
+                     {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                     </div>
+                     <select  id="adservice_workshopbundle_typologytype_category_service" name="adservice_workshopbundle_typologytype[category_service]" class="form-control"> 
+                            <option value="0"></option>
+                            <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
+                    </select>
+                {% endif %}
             </div>
             {% endif %}
 

@@ -70,6 +70,9 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
 
         $user = $security->getToken()->getUser();
+
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
         $id_user = $user->getId();
         $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
@@ -140,7 +143,8 @@ class TicketController extends Controller {
         } elseif ($option == 'assessor_pending') {
             $params[] = array('status', ' = ' . $open->getId());
 
-            $country_service = $user->getCountryService()->getId();
+            if($user->getCountryService() != null) $country_service = $user->getCountryService()->getId();
+            else $country_service = '0';
             // Esto hacía que se vieran los libres(rojo) además de los pendientes(naranja)
             if ($country_service == '7')
                 $params[] = array('id', ' != 0 AND e.assigned_to = ' . $id_user . ' AND e.pending = 1 '); // OR (e.assigned_to IS NULL AND w.country IN (5,6) AND e.status = 1)');
@@ -236,18 +240,26 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
-            $country = $user->getCountry()->getId();
-            if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
-                if ($country == '7')
-                    $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
-                else
-                    $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
-            }
-            else {
-                if ($country == '7')
-                    $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
-                else
-                    $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+            if($country != 'none') {
+
+                if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                    if ($country == '7')
+                        $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
+                    else
+                        $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
+                }
+                else {
+                    if ($country == '7')
+                        $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                    else
+                        $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                }
+            }else {
+                if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                    $joins[0][1] = $joins[0][1] . ' AND w.country != 0';
+                } else {
+                    $joins[] = array('e.workshop w ', 'w.country != 0');
+                }
             }
         }else {
             if ($country != 'none') {
@@ -266,20 +278,22 @@ class TicketController extends Controller {
                     }
                 }else {
                     if ($security->isGranted('ROLE_ASSESSOR'))
-                        $country = $user->getCountryService()->getId();
+                        $country = '0'; //$user->getCountryService()->getId();
                     else
                         $country = $user->getCountry()->getId();
-                    if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
-                        if ($country == '7')
-                            $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
-                        else
-                            $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
-                    }
-                    else {
-                        if ($country == '7')
-                            $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
-                        else
-                            $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                    if ($country != '0') {
+                        if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
+                            if ($country == '7')
+                                $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
+                            else
+                                $joins[0][1] = $joins[0][1] . ' AND w.country = ' . $country;
+                        }
+                        else {
+                            if ($country == '7')
+                                $joins[] = array('e.workshop w ', 'w.country IN (5,6) ');
+                            else
+                                $joins[] = array('e.workshop w ', 'w.country = ' . $country);
+                        }
                     }
                 }
             }else {
@@ -1160,14 +1174,21 @@ class TicketController extends Controller {
      */
     public function showTicketAction($ticket) {
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_SUPER_ADMIN')
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
+        $user = $security->getToken()->getUser();
+
+        if (
+            ($security->isGranted('ROLE_SUPER_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $security->getToken()->getUser()->getWorkshop())
+                or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+            ) and ($user->getCategoryService() == null OR $user->getCategoryService() == $ticket->getCategoryService())
         ) {
             $em = $this->getDoctrine()->getEntityManager();
             $request = $this->getRequest();
-            $user = $security->getToken()->getUser();
             $car = $ticket->getCar();
             $version = $car->getVersion();
             $model = $car->getModel();
@@ -1178,10 +1199,10 @@ class TicketController extends Controller {
             else
                 $id = "";
 
-            if ($security->isGranted('ROLE_SUPER_ADMIN'))
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1));
-            else
-                $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $security->getToken()->getUser()->getCountry()->getId()));
+            $locale      = $request->getLocale();
+            $loc_country = $em->getRepository('UtilBundle:Country')->findBy(array('short_name' => $locale))[0];
+
+            $sentences = $em->getRepository('TicketBundle:Sentence')->findBy(array('active' => 1, 'country' => $loc_country->getId()));
 
             $post = new Post();
             $message = $request->getSession()->get('message');
@@ -2142,7 +2163,6 @@ class TicketController extends Controller {
         $email = $request->get('ftbmv_email');
         $phone = $request->get('ftbmv_phone');
 
-
         // CAR
         $brand = $request->request->get('new_car_form_brand');
         $model = $request->request->get('new_car_form_model');
@@ -2156,6 +2176,9 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
+
+        if ($model != '0' and $version == '0')
+            $version = '';
 
         if ($plateNumber == null)
             $plateNumber = $request->request->get('new_car_form_plate_number');
@@ -2347,7 +2370,14 @@ class TicketController extends Controller {
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
 
+
         if ($plateNumber != '') {
+
+
+            if (!isset($cars)) {
+                $cars[0] = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($plateNumber);
+            }
+
             if (isset($cars) and $cars != null) {
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
@@ -2366,6 +2396,21 @@ class TicketController extends Controller {
             }
         }
         if($brand == '') $brand = null;
+
+        //Al llamar a esta funcion se pierde la version del coche, aqui la volvemos a asignar
+        if(sizeOf($tickets) > 0)
+        {
+            if($tickets[0]->getCar()->getVersion() != null) {
+            $ver = $em->getRepository('CarBundle:Version')->findOneById($tickets[0]->getCar()->getVersion()->getId());
+
+                if($ver != null){
+                    foreach ($tickets as $ticket) {
+
+                        $ticket->getCar()->setVersion($ver);
+                    }
+                }
+            }
+        }
 
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,

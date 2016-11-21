@@ -12,7 +12,6 @@
 {% block main %}
 
 <div>
-
     {% if is_granted('ROLE_ASSESSOR') %}
 
         {% if workshop.id != "" %}
@@ -31,7 +30,7 @@
     {% include 'TicketBundle:Includes:_filters_ticket.html.twig' %}
 
 </div>
-<div class="content">
+<div class="content w100">
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'listTicket' %}
 
