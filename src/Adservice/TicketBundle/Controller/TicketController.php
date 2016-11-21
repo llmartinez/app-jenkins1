@@ -2370,7 +2370,14 @@ class TicketController extends Controller {
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
 
+
         if ($plateNumber != '') {
+
+
+            if (!isset($cars)) {
+                $cars[0] = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($plateNumber);
+            }
+
             if (isset($cars) and $cars != null) {
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
