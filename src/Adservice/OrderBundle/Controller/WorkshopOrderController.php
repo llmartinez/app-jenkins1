@@ -60,9 +60,11 @@ class WorkshopOrderController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
+        if ($country != '0') $params[] = array('country', ' = '.$country);
+
         if($security->isGranted('ROLE_SUPER_AD') OR $security->isGranted('ROLE_TOP_AD')) {
             if ($partner != '0') $params[] = array('partner', ' = '.$partner);
-            $params[] = array('country', ' = '.$user->getCountry()->getId());
+            // $params[] = array('country', ' = '.$user->getCountry()->getId());
         }
         else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
@@ -71,7 +73,6 @@ class WorkshopOrderController extends Controller {
             elseif ($status == 'deactive') $params[] = array('active', ' = 0');
             elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
         }
-        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -86,8 +87,7 @@ class WorkshopOrderController extends Controller {
             if($user->getCategoryService() != null)
             {
                 $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
-                                              WHERE p.country = '.$user->getCountry()->getId().'
-                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                                              WHERE u.category_service = '.$user->getCategoryService()->getId().'
                                               ORDER BY p.name ASC');
                 $partners = $consulta->getResult();
             }
