@@ -503,18 +503,11 @@ class StatisticController extends Controller {
                         break;
                 }
 
-                if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                if ($country != "0") {
 
-                    $qb = $qb->andWhere('w.country = :country')
-                        ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
-                }else{
-
-                    if ($country != "0") {
-
-                        $qb = $qb->andWhere('w.country = :country')
-                            ->setParameter('country', $country);
-                    }
-                }
+                      $qb = $qb->andWhere('w.country = :country')
+                          ->setParameter('country', $country);
+                  }
                 if ($catserv != "0")
                 {
                     $qb = $qb->andWhere('cs.id = :catserv')
