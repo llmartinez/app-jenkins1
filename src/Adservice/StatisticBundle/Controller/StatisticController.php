@@ -136,7 +136,7 @@ class StatisticController extends Controller {
         }
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
-        return $this->render('StatisticBundle:Statistic:list_statistics_top.html.twig', array('from_y'    => $from_y,
+        return $this->render('StatisticBundle:Statistic:list_statistics_top.html.twig', array('from_y'=> $from_y,
                                                                                           'from_m'    => $from_m,
                                                                                           'from_d'    => $from_d,
                                                                                           'to_y'      => $to_y  ,
@@ -153,7 +153,7 @@ class StatisticController extends Controller {
                                                                                           'shop'      => $shop,
                                                                                           'wks'       => $workshop,
                                                                                           'assessor'  => $assessor,
-                                                                                          'created_by'  => $created_by,
+                                                                                          'created_by'=> $created_by,
                                                                                           'typology'  => $typology,
                                                                                           'status'    => $status,
                                                                                           'country'   => $country,
@@ -1208,15 +1208,15 @@ class StatisticController extends Controller {
                 $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
                 $token           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('token')));
 
-                if($shop      == 'undefined') $shop      = '0';
-                if($country   == 'undefined') $country   = '0';
-                if($raport    == 'undefined') $raport    = '0';
-                if($partner   == 'undefined') $partner   = '0';
-                if($typology  == 'undefined') $typology  = '0';
-                if($catserv   == 'undefined') $catserv   = '0';
-                if($status    == 'undefined') $status    = '0';
-                if($from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
-                if($to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
+                if(isset($shop     ) and $shop      == 'undefined') $shop      = '0';
+                if(isset($country  ) and $country   == 'undefined') $country   = '0';
+                if(isset($raport   ) and $raport    == 'undefined') $raport    = '0';
+                if(isset($partner  ) and $partner   == 'undefined') $partner   = '0';
+                if(isset($typology ) and $typology  == 'undefined') $typology  = '0';
+                if(isset($catserv  ) and $catserv   == 'undefined') $catserv   = '0';
+                if(isset($status   ) and $status    == 'undefined') $status    = '0';
+                if(isset($from_date) and $from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
+                if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                 //Realizamos una query deshydratada con los datos ya montados
                 $qb = $em->getRepository('TicketBundle:Ticket')
@@ -1241,7 +1241,12 @@ class StatisticController extends Controller {
                     ->orderBy('e.id');
 
                 if ($security->isGranted('ROLE_TOP_AD')) $qb = $qb->addSelect('count(t.id) as '.$nTickets.'');
-                else                                     $qb = $qb->addSelect('u.token as '.$token.'');
+                else {
+                        $qb = $qb->addSelect('u.token as '.$token.'');
+                        $user = $security->getToken()->getUser();
+
+                        $qb = $qb->andWhere('p.id = :partner')->setParameter('partner', $user->getPartner());
+                }
 
                 if ($shop != "0" and $shop != "undefined") {
 
