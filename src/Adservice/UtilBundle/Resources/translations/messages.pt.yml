@@ -517,8 +517,8 @@ ticket.similar.matching:	  "Selecione Modelo e Subsistema para procurar talões 
 ticket_blocked_by:			  "Talão bloqueado por"
 ticket_at:					  "à data de"
 ticket_reassign:			  "Desbloquear e voltar a atribuir"
-ticket_vin_error_length:                  "O Número do chassis deve ter 17 caracteres"
-ticket_vin_error_o:                  "O Número do chassis não pode ter a letra 'O' ou 'o'"
+ticket_vin_error_length:      "O Número do chassis deve ter 17 caracteres"
+ticket_vin_error_o:           "O Número do chassis não pode ter a letra 'O' ou 'o'"
 filter_by_year: 			  "Filtrar por ano"
 filter_by_motor: 			  "Filtrar por motor"
 filter_by_type:				  "Tipo de talão"
@@ -633,7 +633,6 @@ mail.deleteTicket.info.id:				"O código do talão apagado é:"
 
 mail.closeTicket.subject:				"ADService | Talão fechado com o ID #"
 mail.closeTicket.title:					"Foi fechado um talão"
-mail.inactiveTicket.title:				"Foi fechado um talão inativo"
 mail.closeTicket.createdby:				"Este talão foi fechado por um assistente."
 mail.closeTicket.createdby.user:		"Fechou o talão através da plataforma AD-Service."
 mail.closeTicket.info:					"Para aceder a este talão introduza o código de referência do mesmo em <a href='https://adserviceticketing.com'>adserviceticketing.com</a> na secção "
@@ -736,6 +735,10 @@ mail.changePassword.info.password:		"Para alterar a sua palavra-passe entre em <
 
 mail.activateWorkshop.subject:                          "ADService | workshop de activação "
 mail.deactivateWorkshop.subject:                        "ADService | Desactivar o workshop "
+
+mail.inactiveTicket.title:				"Foi fechado um talão inativo"
+mail.inactivity_warning.title: 			"Una consulta está prestes a expirar."
+mail.inactivity_warning: 				"Esta consulta está prestes a expirar. Se o veículo for reparado corretamente e tem a solução que irá apreciar o integrado no Bilhete. Sua ajuda pode resolver os problemas de outros workshops. Muito obrigado pela sua colaboração."
 
 mail.textDisclaimer:  "AVISO LEGAL. A informação contida nesta mensagem de correio eletrónico é confidencial e poderá ter carácter reservado, destinando-se exclusivamente ao seu destinatário. O acesso ou utilização desta mensagem por parte de qualquer outra pessoa que não esteja autorizada pode ser ilegal. Se não é o destinatário, por favor elimine o conteúdo da mesma."
 _mail.textDisclaimer: "AVISO LEGAL. A informação contida nesta mensagem de correio eletrónico é confidencial e poderá ter carácter reservado, destinando-se exclusivamente ao seu destinatário. O acesso ou utilização desta mensagem por parte de qualquer outra pessoa que não esteja autorizada pode ser ilegal. Se não é o destinatário, por favor elimine o conteúdo da mesma. <b>soporte@ad-service.com</b>"

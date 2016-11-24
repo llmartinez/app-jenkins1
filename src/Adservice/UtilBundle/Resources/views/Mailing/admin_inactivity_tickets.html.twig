@@ -27,6 +27,17 @@
             {% endfor %}
         </table>
     </div>
+    <hr>
+    <hr>
+    <div style="width: 100%; {{style}}">
+        <table>
+            <h3></h3>
+            <th>{% trans %}mail.inactivity_warning.title{% endtrans %} ({{count_warning}})</th>
+            {% for id in warning_tickets %}
+                <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
+            {% endfor %}
+        </table>
+    </div>
 <div>
 
 <hr>
