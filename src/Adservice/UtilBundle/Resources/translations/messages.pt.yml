@@ -381,8 +381,8 @@ cif:					 "NIF"
 internal_code:			 "Código Interno"
 commercial_code:		 "Código Comercial"
 
-subscribed:				 "Suscribed"
-unsubscribed:			 "Unsubscribed"
+subscribed:				 "Inscrito"
+unsubscribed:			 "Inscrição cancelada"
 test:					 "Em testes"
 endtest:				 "Em testes até"
 ad_service_plus:		 "AD Service +"
@@ -419,7 +419,8 @@ reply_inactive: 		 "Não pode responder a este talão pois não está registado.
 haschecks:				 "Cheques"
 numchecks:				 "Núm. cheques"
 infotech:				 "InfoTech"
-infotech:				 "Só informação técnica"
+infotech_only:			 "Só informação técnica"
+closed_by_unsubscription: "Inscrição da Oficina cancelada"
 
 #USER
 user.delete:			 "Apagar Utilizador"

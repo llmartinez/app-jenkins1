@@ -421,6 +421,7 @@ haschecks:				 "Avec chéquiers"
 numchecks:				 "Nombre de chéquiers"
 infotech:				 "InfoTech"
 infotech_only:			 "Information techniques seulement"
+closed_by_unsubscription: "Atelier désinscrit"
 
 #USER
 user.delete:			 "Effacer utilisateur"

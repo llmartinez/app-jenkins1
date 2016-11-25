@@ -35,14 +35,10 @@ class OrderController extends Controller
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
-        if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_pending[]  = $by_country;
+        if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){
                                             $workshop_pending[]  = $not_rejected;
-                                            $workshop_rejected[] = $by_country;
                                             $workshop_rejected[] = $rejected;
-                                            $shop_pending[]      = $by_country;
                                             $shop_pending[]      = $not_rejected;
-                                            $shop_rejected[]     = $by_country;
                                             $shop_rejected[]     = $rejected;
                                         }
         elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
@@ -55,14 +51,9 @@ class OrderController extends Controller
                                             $shop_rejected[]     = $by_partner;
                                             $shop_rejected[]     = $rejected;
                                         }
-        elseif($role == "ROLE_ADMIN" )  {   $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_pending[]  = $by_country;
-                                            $workshop_pending[]  = $not_rejected;
-                                            $workshop_rejected[] = $by_country;
+        elseif($role == "ROLE_ADMIN" )  {   $workshop_pending[]  = $not_rejected;
                                             $workshop_rejected[] = $rejected;
-                                            $shop_pending[]      = $by_country;
                                             $shop_pending[]      = $not_rejected;
-                                            $shop_rejected[]     = $by_country;
                                             $shop_rejected[]     = $rejected;
                                         }
         elseif($role == "ROLE_SUPER_ADMIN"){$workshop_pending[]  = $not_rejected;

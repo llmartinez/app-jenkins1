@@ -420,6 +420,7 @@ haschecks:				 "With checks"
 numchecks:				 "Num. Checks"
 infotech:				 "InfoTech"
 infotech_only:			 "Technical information only"
+closed_by_unsubscription: "Ticket closed due to unsubscription"
 
 #USER
 user.delete:			 "Delete User"
