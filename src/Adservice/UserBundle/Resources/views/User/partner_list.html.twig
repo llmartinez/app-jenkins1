@@ -1,0 +1,88 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'user_partner_list' %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_users {% endtrans %}</li>
+    </ol>
+
+    <legend>{% trans %} menu.list_users {% endtrans %}
+        {% if app.security.getToken().getUser().getAllowCreate() == true %}
+            <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
+        {% endif %}
+    </legend>
+
+    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+
+    {% if is_granted('ROLE_AD') %}
+        <div class="col-xs-2 col-md-2 form-group">
+            <label> {% trans %} country {% endtrans %} </label>
+            <select id="slct_country_pt" class="form-control"> <option value="0">...</option>
+                {% for country_ in countries %} <option value="{{ country_.id }}"
+                                            {% if country is defined and country == country_.id %} selected {% endif %}
+                                        >{{ country_.country | trans }}</option> {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+    <div class="col-xs-2 col-md-2 form-group">
+        <label> {% trans %} role {% endtrans %} </label>
+        <select id="slct_role_pt" class="form-control"> <option value="all">...</option>
+            {% for role in roles %} <option value="{{ role.id }}"
+                                        {% if option is defined and option == role.id %} selected {% endif %}
+                                    >{{ role.name | trans }}</option> {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
+            <label> {% trans %} find_by {% endtrans %} </label>
+            <select id="flt_search_term" name="flt_search_term" class='form-control'>
+                <option value="user" {% if term == 'user' %}selected{% endif %}>{% trans %} user  {% endtrans %}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+             </select>
+        </div>
+        <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+        </div>
+        <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
+            <a type="button" id="btn_search_field_pt" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
+        </div>
+    </div>
+
+    <table id="tbl_usuarios" class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans %} username       {% endtrans %}</th>
+                <th>{% trans %}                {% endtrans %}</th>
+                <th>{% trans %} phone_number_1 {% endtrans %}</th>
+                <th>{% trans %} email_1        {% endtrans %}</th>
+                <th>{% trans %} allow_list     {% endtrans %}</th>
+                <th>{% if is_granted('ROLE_SUPER_AD') %}{% trans %} allow_create   {% endtrans %}{% endif %}</th>
+                <th>{% trans %} allow_order    {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if  users_role_top_ad      is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_top_ad       , role:'top_ad'     } %}{% endif %}
+            {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
+            {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
+            {% if  users_role_commercial  is defined %} {% include 'UserBundle:User:_partner_list_especific.html.twig' with {users : users_role_commercial   , role:'commercial' } %}{% endif %}
+        </tbody>
+    </table>
+
+    {% set len = users_role_super_ad|length + users_role_ad|length + users_role_commercial|length %}
+
+    {% if len != 0 %}{% include 'UtilBundle:Pagination:pagination_user.html.twig' %}{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+    <script src="{{ asset('bundles/user/js/user.js') }}"></script>
+{% endblock %}
+

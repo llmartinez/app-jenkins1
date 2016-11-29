@@ -36,7 +36,7 @@ class WorkshopOrderController extends Controller {
     public function listWorkshopsAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_AD') === false) {
+        if ($security->isGranted('ROLE_COMMERCIAL') === false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
@@ -145,7 +145,7 @@ class WorkshopOrderController extends Controller {
      */
     public function newAction(){
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
+        if ($security->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -250,7 +250,7 @@ class WorkshopOrderController extends Controller {
                     }
                     $workshopOrder->setActive(false);
                     $workshopOrder->setAction('create');
-                    $workshopOrder->setWantedAction('create');
+                    $workshopOrder->setWantedAction('preorder');
 
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
@@ -294,7 +294,10 @@ class WorkshopOrderController extends Controller {
                         $request->setLocale($locale);
                     }
 
-                    return $this->redirect($this->generateUrl('list_orders'));
+                    if ($security->isGranted('ROLE_AD'))
+                        return $this->redirect($this->generateUrl('list_orders'));
+                    else
+                        return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
 
                 }else{
                     if($findPhone[0]['1']>0){
@@ -854,7 +857,7 @@ class WorkshopOrderController extends Controller {
     public function acceptAction($workshopOrder, $status){
 
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+        if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -870,6 +873,7 @@ class WorkshopOrderController extends Controller {
         /*COMPROBAR CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
                                                                                'code_workshop' => $workshopOrder->getCodeWorkshop()));
+        $preorder = false;
         $code= 0;
         $flash = "";
         $findPhone = array(0,0,0,0);
@@ -906,7 +910,44 @@ class WorkshopOrderController extends Controller {
 
         //  else $this->get('session')->setFlash('error', $flash);
 
-        if (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
+        if (($workshopOrder->getWantedAction() == 'preorder')  && $status == 'accepted'){
+
+            if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+            {
+                $preorder = true;
+
+                $workshopOrder->setWantedAction('create');
+                $em->persist($workshopOrder);
+                $em->flush();
+
+
+                // Enviamos un mail con credenciales de usuario a modo de backup
+                // $mail = $this->container->getParameter('mail_report');
+                // $pos = strpos($mail, '@');
+                // if ($pos != 0) {
+
+                //     // Cambiamos el locale para enviar el mail en el idioma del taller
+                //     $locale = $request->getLocale();
+
+                //     /* MAILING */
+                //     $mailerUser = $this->get('cms.mailer');
+                //     $mailerUser->setTo($mail);
+                //     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$user_workshop->getWorkshop());
+                //     $mailerUser->setFrom('noreply@adserviceticketing.com');
+                //     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass, '__locale' => $locale)));
+                //     $mailerUser->sendMailToSpool();
+                //     // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
+
+                //     // Dejamos el locale tal y como estaba
+                //     $request->setLocale($locale);
+                // }
+
+                $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted').': '.$this->get('translator')->trans('create').' '.$this->get('translator')->trans('new.order.workshop');
+                $this->get('session')->setFlash('alert', $flash);
+            }
+            else $this->get('session')->setFlash('error', $flash);
+
+        }elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -1148,9 +1189,10 @@ class WorkshopOrderController extends Controller {
                 $this->get('session')->setFlash('alert', $flash);
             }
             else $this->get('session')->setFlash('error', $flash);
+
         }
 
-        if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+        if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
         {
             $mail = $workshop->getCreatedBy()->getEmail1();
             $pos = strpos($mail, '@');
@@ -1166,7 +1208,7 @@ class WorkshopOrderController extends Controller {
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($mail);
-                $mailer->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop->getId());
+                $mailer->setSubject($this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted'));
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
                                                                                                            'action'   => $action,

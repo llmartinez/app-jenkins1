@@ -5,7 +5,7 @@ namespace Adservice\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class UserPartnerType extends AbstractType {
+class UserCommercialType extends AbstractType {
 
     public function buildForm(FormBuilder $builder, array $options) {
         $builder = $this->getbasicUserType($builder);
@@ -14,10 +14,10 @@ class UserPartnerType extends AbstractType {
     public static function getbasicUserType($builder)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
-        if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
+        if (isset($_SESSION['role'      ])) { $role = $_SESSION['role'];unset($_SESSION['role']);} else { $role = '0';}
+        if (isset($_SESSION['id_partner']) and $_SESSION['id_partner'] != ' IN (0)') {$id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
-
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv =  ' != 0';$cserv_empty=null;}
 
         $builder
             ->add('username')
@@ -29,17 +29,6 @@ class UserPartnerType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active' , 'checkbox', array('required' => false))
-
-            ->add('category_service', 'entity', array(
-                  'required' => false,
-                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => $cserv_empty,
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
-                                                return $er->createQueryBuilder('cs')
-                                                          ->orderBy('cs.category_service', 'ASC')
-                                                          ->where('cs.id'.$id_catserv)
-                                                          ; }))
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
@@ -78,12 +67,37 @@ class UserPartnerType extends AbstractType {
                   'required' => true,
                   'empty_value' => ''))
         ;
+
+        if($role == 'ROLE_SUPER_ADMIN' OR $role == 'ROLE_ADMIN') {
+        $builder->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => $cserv_empty,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ->where('cs.id'.$id_catserv)
+                                                          ; }));
+        }
+
+        $builder->add('shop', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.partner'.$id_partner)
+                                                          ->andWhere('s.category_service'.$id_catserv); }));
+
         return $builder;
     }
 
     public function getName() {
-//        return 'adservice_userbundle_usertype';
-        return 'partner_type';
+        return 'commercial_type';
     }
 
 }

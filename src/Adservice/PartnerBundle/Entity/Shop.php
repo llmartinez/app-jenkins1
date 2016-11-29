@@ -70,6 +70,13 @@ class Shop {
     private $workshops;
 
     /**
+     *
+     * @var type
+     * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="shop")
+     */
+    private $users;
+
+    /**
      * @var string $category_service
      *
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
@@ -188,6 +195,24 @@ class Shop {
 
     public function setCif($cif) {
         $this->cif = $cif;
+    }
+
+    /**
+     * Add users
+     *
+     * @param Adservice\UserBundle\Entity\User $users
+     */
+    public function addUser(\Adservice\UserBundle\Entity\User $users) {
+        $this->users[] = $users;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getUsers() {
+        return $this->users;
     }
 
     /**

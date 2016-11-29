@@ -55,6 +55,45 @@
                 window.open(url, "_self");
         });
 
+        //USER_PARTNER_LIST
+        $('#slct_role_pt').change(function() {
+            var role = $(this).val();
+            var country = $('#slct_country_pt').val();
+            var route = 'user_partner_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#slct_country_pt').change(function() {
+            var country = $(this).val();
+            var role = $('#slct_role_pt').val();
+            var route = 'user_partner_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#btn_search_field_pt').click(function() {
+            var route = 'user_partner_list';
+            var role = $('#slct_role_pt').val();
+            var country = $('#slct_country_pt').val();
+            var term = $('#flt_search_term').val();
+            var field = $('#flt_search_field').val();
+
+            if(role == null || role == "") role = '0';
+            if(country == null || country == "") country = '0';
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role, term: term, field: field });
+
+                window.open(url, "_self");
+        });
+        $('#commercial_type_partner').change(function() {
+            var id_shop = $(this).val();
+            populate_shop(id_shop);
+        });
+
         $('#btn_create').click(function() {
             check_password();
 
