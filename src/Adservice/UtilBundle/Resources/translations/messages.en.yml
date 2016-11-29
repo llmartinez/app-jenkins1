@@ -12,6 +12,7 @@ menu.title_admin:                    "Admin MENU"
 menu.title_assessor:                 "Technical Adviser MENU"
 menu.title_user:                     "User MENU"
 menu.title_ad:                       "Partner MENU"
+menu.title_commercial:				 "Commercial MENU"
 
 menu.profile:                        "My Profile"
 menu.list_statistics:                "See Statistics"
@@ -365,6 +366,9 @@ VARIOS CARROCERIA:				"Various Body"
 #PARTNER
 partner.delete:			 "Delete Partner"
 partner.delete.confirm:	 "Are you sure you want to delete this Partner?"
+allow_list: 			 "List"
+allow_create: 			 "Create"
+allow_order:			 "Order"
 
 #SHOP
 shop.is_assigned:		 "This shop has workshops assigned. Reassign them to delete"

@@ -1,0 +1,59 @@
+{% for user in users %}
+    {% if role!= 'super_admin' or role == 'super_admin' and is_granted('ROLE_SUPER_ADMIN')%}
+
+    <tr>
+        <td>{{ user.id }}</td>
+        <td><a id="list_username">{{ user.username|length > 15 ? user.username|slice(0, 15) ~ '...' : user.username  }}</a></td>
+        <td>
+            {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} super_admin {% endtrans %}</span> {% endif %}
+            {% if role == 'admin'       %} <span class="label label-primary">{% trans %} admin       {% endtrans %}</span> {% endif %}
+            {% if role == 'assessor'    %} <span class="label label-success">{% trans %} assessor    {% endtrans %}</span> {% endif %}
+            {% if role == 'top_ad'      %} <span class="label label-warning">{% trans %} ROLE_TOP_AD {% endtrans %}</span> {% endif %}
+            {% if role == 'super_ad'    %} <span class="label label-warning">{% trans %} super_ad    {% endtrans %}</span> {% endif %}
+            {% if role == 'ad'          %} <span class="label label-warning">{% trans %} ad          {% endtrans %}</span> {% endif %}
+            {% if role == 'commercial'  %} <span class="label label-warning">{% trans %} commercial  {% endtrans %}</span> {% endif %}
+            {% if user.active == false  %} <span class="label label-danger"> {% trans %} inactive    {% endtrans %}</span> {% endif %}
+        </td>
+        <td>{{ user.phoneNumber1}}</td>
+        <td>{{ user.email1  }}</td>
+        <td>
+            {% if role == 'commercial'  %}
+                <a title="{% trans %} allow_list {% endtrans %}" href="{{ path("active_deactive_permission",
+                {'user_id': user.id , 'permission': 'list', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+                {% if user.allowList == 1 %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                {% else %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                {% endif %}
+            {% endif %}
+        </td>
+         <td>
+            {% if role != 'commercial'  %}
+                <a title="{% trans %} allow_create {% endtrans %}" href="{{ path("active_deactive_permission",
+                {'user_id': user.id , 'permission': 'create', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+                {% if user.allowCreate == 1 %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                {% else %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                {% endif %}
+            {% endif %}
+        </td>
+         <td>
+            <a title="{% trans %} allow_order {% endtrans %}" href="{{ path("active_deactive_permission",
+            {'user_id': user.id , 'permission': 'order', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+            {% if user.allowOrder == 1 %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+            {% else %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+            {% endif %}
+        </td>
+        <td>
+            {% if role == 'top_ad' or role == 'super_ad' or role == 'ad' or role == 'commercial'  %}
+                {# <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a> #}
+            {% else %}
+                <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+{% endfor %}

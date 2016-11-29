@@ -8,10 +8,11 @@ login.welcome: 	"Acesso a utilizadores AD Service"
 login.remember:	"Recordar-me"
 logout:			"Sair"
 
-menu.title_admin: 	 "MENU Administrador"
-menu.title_assessor: "MENU Assistente"
-menu.title_user: 	 "MENU Utilizador"
-menu.title_ad: 	 	 "MENU Sócio"
+menu.title_admin: 	   "MENU Administrador"
+menu.title_assessor:   "MENU Assistente"
+menu.title_user: 	   "MENU Utilizador"
+menu.title_ad: 	 	   "MENU Sócio"
+menu.title_commercial: "MENU Comercial"
 
 menu.profile: 				  "O Meu Perfil"
 menu.list_statistics: 		  "Consultar Estatísticas"
@@ -365,6 +366,9 @@ VARIOS CARROCERIA:				"Vários Carroçaria"
 #PARTNER
 partner.delete:			 "Apagar Sócio"
 partner.delete.confirm:	 "Tem a certeza de que pretende eliminar este sócio?"
+allow_list: 			 "Lista"
+allow_create: 			 "Criar"
+allow_order:			 "Pedido"
 
 #SHOP
 shop.is_assigned:		 "A loja dispõe de oficinas atribuídas. Volte a atribuí-las para poder apagar"

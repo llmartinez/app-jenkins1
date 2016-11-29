@@ -112,7 +112,7 @@ class TicketController extends Controller {
                     $error = $this->get('translator')->trans('workshop_inactive');
                     $this->get('session')->setFlash('error', '¡Error! ' . $error);
                 }
-            } elseif (!$security->isGranted('ROLE_ASSESSOR')) {
+            } elseif (!$security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_COMMERCIAL')) {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $user->getWorkshop()->getId()));
 
                 if ($workshops[0]->getId() != "") {
@@ -2370,7 +2370,14 @@ class TicketController extends Controller {
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
 
+
         if ($plateNumber != '') {
+
+
+            if (!isset($cars)) {
+                $cars[0] = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($plateNumber);
+            }
+
             if (isset($cars) and $cars != null) {
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
