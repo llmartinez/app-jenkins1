@@ -16,6 +16,8 @@
 {# FILTROS GENERALES #}
     <div class="col-xs-12 col-md-12 form-group">
         <legend>{% trans %} filter {% endtrans %}</legend>
+
+    {% if is_granted('ROLE_TOP_AD') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -90,17 +92,17 @@
                     {% endfor %}
                 </select>
             </div>
+    {% endif %}
             <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} status {% endtrans %}</label>
                 <select id="flt_wks_status" class='form-control'>
                     <option value="all"     >{% trans %} all      {% endtrans %}</option>
                     <option value="active"  >{% trans %} active   {% endtrans %}</option>
                     <option value="deactive">{% trans %} inactive {% endtrans %}</option>
                     <option value="test"    >{% trans %} testing  {% endtrans %}</option>
-                    <option value="adsplus" >{% trans %} adsplus  {% endtrans %}</option>
                     {# <option value="noticket">Without Tickets</option> #}
                  </select>
              </div>
-            <div class="col-xs-9 col-md-9 form-group">
+            <div class="col-xs-9 col-md-9 form-group mt20">
                 <button class="btn btn-primary btn100" id="btn_search_workshop" style="margin-top: 4px;">
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.workshop {% endtrans %}</button>
             </div>

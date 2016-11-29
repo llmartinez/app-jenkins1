@@ -42,7 +42,7 @@ class ShopOrderController extends Controller {
 
         if($security->isGranted('ROLE_SUPER_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
-            $params[] = array('country', ' = '.$country->getId());
+            // $params[] = array('country', ' = '.$country->getId());
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
         else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
@@ -64,16 +64,15 @@ class ShopOrderController extends Controller {
         if($security->isGranted('ROLE_SUPER_AD') and $user->getCategoryService() != null)
         {
             $consulta = $em->createQuery("SELECT p FROM PartnerBundle:Partner p JOIN p.users u
-                                          WHERE p.country = '".$user->getCountry()->getId()."'
-                                          AND u.category_service = ".$user->getCategoryService()->getId()."
+                                          WHERE u.category_service = ".$user->getCategoryService()->getId()."
                                           ORDER BY p.name ASC");
 
             $partners = $consulta->getResult();
         }
-        elseif($security->isGranted('ROLE_AD')) {
-            $country = $user->getCountry();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
-        }
+        // elseif($security->isGranted('ROLE_AD')) {
+        //     $country = $user->getCountry();
+        //     $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
+        // }
         else {
             $partners = array();
         }
