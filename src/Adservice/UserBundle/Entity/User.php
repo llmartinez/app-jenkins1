@@ -193,7 +193,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     public function getId() {
         return $this->id;
     }
-
+ 
     /**
      * Set username
      *
