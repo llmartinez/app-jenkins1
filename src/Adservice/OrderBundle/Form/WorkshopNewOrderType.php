@@ -13,6 +13,7 @@ class WorkshopNewOrderType extends AbstractType
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
         if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
+        if (isset($_SESSION['id_shop'   ])) { $id_shop    = $_SESSION['id_shop'   ];unset($_SESSION['id_shop'   ]);$s_empty=false;} else { $id_shop = ' != 0';$s_empty='';}
 
         $builder
             ->add('name')
@@ -66,13 +67,15 @@ class WorkshopNewOrderType extends AbstractType
                     'required' => false,
                     'class' => 'Adservice\PartnerBundle\Entity\Shop',
                     'property' => 'name',
-                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner) {
+                    'empty_value' => $s_empty,
+                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner, $id_shop) {
                                                   return $er->createQueryBuilder('s')
                                                             ->orderBy('s.name', 'ASC')
                                                             ->where('s.active = 1')
                                                             ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
                                                             ->andWhere('s.country'.$id_country.' OR s.id = 1')
-                                                            ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
+                                                            ->andWhere('s.partner'.$id_partner.' OR s.id = 1')
+                                                            ->andWhere('s.id'.$id_shop.''); }))
               ;
         }
     }

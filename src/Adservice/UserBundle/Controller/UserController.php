@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UserBundle\Form\UserAdminAssessorType;
 use Adservice\UserBundle\Form\UserAssessorType;
 use Adservice\UserBundle\Form\UserSuperPartnerType;
+use Adservice\UserBundle\Form\UserPartnerType;
 use Adservice\UserBundle\Form\UserCommercialType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 use Adservice\UserBundle\Form\EditUserAdminAssessorType;
@@ -35,7 +36,6 @@ class UserController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-
         //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         //  $session = $this->getRequest()->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
@@ -558,7 +558,7 @@ class UserController extends Controller {
         $original_password = $user->getPassword();
 
 
-        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
             $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
         }
         elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
