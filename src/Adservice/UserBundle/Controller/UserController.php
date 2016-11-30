@@ -395,10 +395,13 @@ class UserController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        }
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                  'active' => '1'));
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
+                                                                                  'active'  => '1'));
         }
         else $partners = '0';
 
@@ -418,18 +421,18 @@ class UserController extends Controller {
             $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
             $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD') or $security->isGranted('ROLE_TOP_AD') or $security->isGranted('ROLE_AD')) {
+        }elseif ($security->isGranted('ROLE_SUPER_AD') or $security->isGranted('ROLE_TOP_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
             $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         }else {
-            $_SESSION['id_partner'] = ' = '.$partner->getId();
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_partner'] = ' = '.$partners->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
             $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
         }
 
@@ -500,7 +503,12 @@ class UserController extends Controller {
                 $user->getShop($u_shop);
             }
 
-           // $partner = $form->getData('partner');
+            // Permisos por defecto para todos los users
+            $user->setAllowList(1);
+            $user->setAllowCreate(1);
+            $user->setAllowOrder(1);
+
+            // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
@@ -531,7 +539,7 @@ class UserController extends Controller {
     public function editUserAction($user) {
 
         $security = $this->get('security.context');
-        if (($security->isGranted('ROLE_ADMIN') === false)
+        if (($security->isGranted('ROLE_AD') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -550,9 +558,12 @@ class UserController extends Controller {
         $original_password = $user->getPassword();
 
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_ADMIN')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        }
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
         else $partners = '0';
@@ -568,6 +579,10 @@ class UserController extends Controller {
             elseif($role == "ROLE_AD")
                 $partner_id = $user->getPartner()->getId();
         }
+        if ($role == "ROLE_COMMERCIAL" and $user->getShop() != null)
+             $shop_name = $user->getShop()->getName();
+        else $shop_name = null;
+
         $user_role_id = 0;
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
@@ -597,12 +612,12 @@ class UserController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
-            $_SESSION['id_partner'] = ' = '.$partner->getId();
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_partner'] = ' = '.$partners->getId();
         }
+
+        $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR"){
@@ -628,6 +643,7 @@ class UserController extends Controller {
                 $this->get('session')->setFlash('error', $flash);
             }
             else {
+
                 $form->bindRequest($petition);
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
@@ -658,21 +674,30 @@ class UserController extends Controller {
                     $em->flush();
                  }
                  elseif($user->getPartner() !== null){
-                    $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
-                    $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
 
+                    if($user->getRoles()[0]->getName() == 'ROLE_COMMERCIAL') {
 
-                    $partner_user->setContact($user->getName());
-                    $partner_user->setActive($user->getActive());
-                    $em->persist($partner_user);
+                        $em->persist($user);
+                    }else{
+                        $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
+                        $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
+                        $partner_user->setContact($user->getName());
+                        $partner_user->setActive($user->getActive());
+                        $em->persist($partner_user);
+                    }
+
                     $em->flush();
-                 }
+                }
 
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
 
-                return $this->redirect($this->generateUrl('user_list'));
+                if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                    return $this->redirect($this->generateUrl('user_list'));
+                }else{
+                    return $this->redirect($this->generateUrl('user_partner_list'));
+                }
             }
 
         }
@@ -681,27 +706,30 @@ class UserController extends Controller {
                                                                           'role'         => $role,
                                                                           'form_name'    => $form->getName(),
                                                                           'partner_id'   => $partner_id,
+                                                                          'shop_name'      => $shop_name,
                                                                           'user_role_id' => $user_role_id,
                                                                           'form'         => $form->createView()));
     }
 
     /**
      * Elimina el usuario con la $id de la bbdd
-     * @Route("/user/delete/{id}")
-     * @ParamConverter("user", class="UserBundle:User")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
     public function deleteUserAction($id) {
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
         $em->remove($user);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('user_list'));
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('user_list'));
+        }else{
+            return $this->redirect($this->generateUrl('user_partner_list'));
+        }
     }
 
     /**
@@ -924,9 +952,7 @@ class UserController extends Controller {
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
         $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
-        $user->setAllowList(1);
-        $user->setAllowCreate(1);
-        $user->setAllowOrder(1);
+
         $em->persist($user);
         $em->flush();
     }

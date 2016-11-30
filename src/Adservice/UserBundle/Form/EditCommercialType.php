@@ -32,6 +32,7 @@ class EditCommercialType extends AbstractType {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
+                                                          ->andWhere('s.id'.$id_partner)
                                                           ->andWhere('s.category_service'.$id_catserv); }))
             ->add('language')
 
@@ -62,7 +63,7 @@ class EditCommercialType extends AbstractType {
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'empty_value' => '',
+                  'empty_value' => '...',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -74,8 +75,7 @@ class EditCommercialType extends AbstractType {
     }
 
     public function getName() {
-//        return 'adservice_userbundle_usertype';
-        return 'partner_type';
+        return 'commercial_type';
     }
 
 }
