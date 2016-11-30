@@ -66,6 +66,10 @@ class WorkshopOrderController extends Controller {
         }
         else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
+        if($security->isGranted('ROLE_COMMERCIAL') AND !$security->isGranted('ROLE_AD') AND $user->getShop() != null) {
+            $params[] = array('shop', ' = '.$user->getShop()->getId());
+        }
+
         if ($status != 'none') {
             if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
             elseif ($status == 'deactive') $params[] = array('active', ' = 0');
