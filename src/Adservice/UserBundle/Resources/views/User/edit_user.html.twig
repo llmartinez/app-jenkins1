@@ -3,9 +3,13 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}"> {% trans %} home {% endtrans %} </a></li>
-      <li><a href="{{ path('user_list' ) }}"> {% trans %} menu.list_users {% endtrans %} </a></li>
-      <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}) </li>
+        <li><a href="{{ path('user_index') }}"> {% trans %} home {% endtrans %} </a></li>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li><a href="{{ path('user_list' ) }}"> {% trans %} menu.list_users {% endtrans %} </a></li>
+        {% else %}
+            <li><a href="{{ path('user_partner_list' ) }}"> {% trans %} menu.list_users {% endtrans %} </a></li>
+        {% endif %}
+        <li class="active"> {% trans %} edit.user {% endtrans %} ({{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}) </li>
     </ol>
 
     {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
@@ -19,7 +23,7 @@
     <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
 
-             <div class="col-xs-4 col-md-4 form-group">
+             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} username {% endtrans %} *</label>
                 {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
             </div>
@@ -29,6 +33,23 @@
                 <label>{% trans %} partner {% endtrans %} *</label>
                 {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
+            {% endif %}
+            {% if form.shop is defined %}
+
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} shop {% endtrans %} *</label>
+
+                    {% if shop_name != null %}
+                        <input id="shop_name" class="form-control" type="text" value="{{ shop_name }}" disabled>
+
+                        <div class="hidden">
+                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% else %}
+                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                    {% endif %}
+                </div>
+
             {% endif %}
 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -50,15 +71,11 @@
             </div>
 
             {% else %}
-             <div class="col-xs-2 col-md-2 form-group">
+             <div class="">
                 {% if user_role_id == 1 %}
                     <input id="id_catserv" type="hidden" value="">
-                    <label>{% trans %} category_service {% endtrans %} *</label>
-                    <input type="text" class="form-control" value="" disabled>
                 {% else %}
                     <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
-                    <label>{% trans %} category_service {% endtrans %} *</label>
-                    <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
                  {% endif %}
             </div>
             {% endif %}

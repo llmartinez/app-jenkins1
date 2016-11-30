@@ -61,9 +61,12 @@
                 <th>{% trans %}                {% endtrans %}</th>
                 <th>{% trans %} phone_number_1 {% endtrans %}</th>
                 <th>{% trans %} email_1        {% endtrans %}</th>
-                <th>{% trans %} allow_list     {% endtrans %}</th>
-                <th>{% if is_granted('ROLE_SUPER_AD') %}{% trans %} allow_create   {% endtrans %}{% endif %}</th>
-                <th>{% trans %} allow_order    {% endtrans %}</th>
+                {% if app.security.getToken().getUser().getAllowCreate() == true %}
+                    <th>{% trans %} allow_list     {% endtrans %}</th>
+                    <th>{% if is_granted('ROLE_SUPER_AD') %}{% trans %} allow_create   {% endtrans %}{% endif %}</th>
+                    <th>{% trans %} allow_order    {% endtrans %}</th>
+                    <th>{% trans %} action         {% endtrans %}</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>

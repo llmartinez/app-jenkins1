@@ -16,44 +16,49 @@
         </td>
         <td>{{ user.phoneNumber1}}</td>
         <td>{{ user.email1  }}</td>
-        <td>
-            {% if role == 'commercial'  %}
-                <a title="{% trans %} allow_list {% endtrans %}" href="{{ path("active_deactive_permission",
-                {'user_id': user.id , 'permission': 'list', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
-                {% if user.allowList == 1 %}
+        {% if app.security.getToken().getUser().getAllowCreate() == true %}
+            <td>
+                {% if role == 'commercial'  %}
+                    <a title="{% trans %} allow_list {% endtrans %}" href="{{ path("active_deactive_permission",
+                    {'user_id': user.id , 'permission': 'list', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+                    {% if user.allowList == 1 %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                    {% else %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    {% endif %}
+                {% endif %}
+            </td>
+             <td>
+                {% if role != 'commercial'  %}
+                    <a title="{% trans %} allow_create {% endtrans %}" href="{{ path("active_deactive_permission",
+                    {'user_id': user.id , 'permission': 'create', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+                    {% if user.allowCreate == 1 %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                    {% else %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    {% endif %}
+                {% endif %}
+            </td>
+             <td>
+                <a title="{% trans %} allow_order {% endtrans %}" href="{{ path("active_deactive_permission",
+                {'user_id': user.id , 'permission': 'order', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
+                {% if user.allowOrder == 1 %}
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
                 {% else %}
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
                 {% endif %}
-            {% endif %}
-        </td>
-         <td>
-            {% if role != 'commercial'  %}
-                <a title="{% trans %} allow_create {% endtrans %}" href="{{ path("active_deactive_permission",
-                {'user_id': user.id , 'permission': 'create', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
-                {% if user.allowCreate == 1 %}
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+            </td>
+            <td>
+                {% if role == 'top_ad' or role == 'super_ad' or role == 'ad'  %}
+                    {# <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a> #}
+                {% elseif role != 'comercial' %}
+                    <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                    <a id="btn_delete{{ user.username }}"   href="{{ path("user_delete", { 'id': user.id }) }}" onClick="javascript: return confirm('{% trans %}delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
                 {% else %}
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                 {% endif %}
-            {% endif %}
-        </td>
-         <td>
-            <a title="{% trans %} allow_order {% endtrans %}" href="{{ path("active_deactive_permission",
-            {'user_id': user.id , 'permission': 'order', 'page': pagination.page, 'country': country, 'option': option, 'term': term, 'field': field })}}">
-            {% if user.allowOrder == 1 %}
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
-            {% else %}
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
-            {% endif %}
-        </td>
-        <td>
-            {% if role == 'top_ad' or role == 'super_ad' or role == 'ad' or role == 'commercial'  %}
-                {# <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a> #}
-            {% else %}
-                <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-            {% endif %}
-        </td>
+            </td>
+        {% endif %}
     </tr>
     {% endif %}
 {% endfor %}

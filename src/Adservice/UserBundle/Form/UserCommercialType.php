@@ -19,6 +19,8 @@ class UserCommercialType extends AbstractType {
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
         if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv =  ' != 0';$cserv_empty=null;}
 
+        if($role == 'ROLE_AD') $p_empty = false; else $p_empty = '';
+
         $builder
             ->add('username')
             ->add('password', 'repeated', array('type'            => 'password',
@@ -33,12 +35,12 @@ class UserCommercialType extends AbstractType {
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
-                  'empty_value' => '',
+                  'empty_value' => $p_empty,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.category_service'.$id_catserv); }))
+                                                          ->where('s.id = 1')
+                                                         ; }))
             ->add('language')
 
             //CONTACT
