@@ -426,6 +426,7 @@ haschecks:				 "Con cheques"
 numchecks:				 "Núm. cheques"
 infotech:				 "InfoTech"
 infotech_only:			 "Sólo información técnica"
+closed_by_unsubscription: "Ticket cerrado por baja de Taller"
 
 #USER
 user.delete:			 "Borrar Usuario"
@@ -645,7 +646,7 @@ mail.deleteTicket.info.id:				"El código del ticket borrado es:"
 
 mail.closeTicket.subject:				"ADService | Ticket cerrado con id #"
 mail.closeTicket.title:					"Se ha cerrado un ticket"
-mail.inactiveTicket.title:				"Se ha cerrado un ticket por inactividad"
+
 mail.closeTicket.createdby:				"Este ticket ha sido cerrado por un asesor."
 mail.closeTicket.createdby.user:		"Has cerrado el ticket a través de la plataforma AD-Service."
 mail.closeTicket.info:					"Para acceder a este ticket busca el código de referencia del ticket en <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
@@ -746,8 +747,12 @@ mail.changePassword.user:				"Tu nombre de usuario es:"
 mail.changePassword.password:			"Tu nueva contraseña es:"
 mail.changePassword.info.password:		"Para modificar tu contraseña entra en <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 
-mail.activateWorkshop.subject:                          "ADService | Activación del taller "
-mail.deactivateWorkshop.subject:                        "ADService | Desactivación del taller "
+mail.activateWorkshop.subject:          "ADService | Activación del taller "
+mail.deactivateWorkshop.subject:        "ADService | Desactivación del taller "
+
+mail.inactiveTicket.title:				"Se ha cerrado un ticket por inactividad"
+mail.inactivity_warning.title: 			"Una consulta está a punto de expirar."
+mail.inactivity_warning: 				"Esta consulta está a punto de expirar. Si el vehículo se reparó correctamente y tiene la solución le agradeceríamos que la integrara en el Ticket. Su ayuda puede solucionar los problemas de otros talleres. Muchas gracias por su colaboración."
 
 mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido."
 _mail.textDisclaimer: "AVISO LEGAL. La información contenida en este mensaje de correo electrónico es confidencial y puede revestir el carácter de reservada. Está destinada exclusivamente a su destinatario. El acceso o uso de este mensaje, por parte de cualquier otra persona que no esté autorizada, pueden ser ilegales. Si no es Ud. la persona destinataria, le rogamos que proceda a eliminar su contenido. <b>soporte@ad-service.com</b>"

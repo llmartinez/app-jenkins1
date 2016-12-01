@@ -34,6 +34,7 @@ class OrderController extends Controller
 
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
+
         $preorder     = array('wanted_action' , " = 'preorder'");
         $not_preorder = array('wanted_action' , " != 'preorder'");
 
@@ -48,7 +49,12 @@ class OrderController extends Controller
         $preorder_rejected[] = $preorder;
         $preorder_rejected[] = $rejected;
 
+
         if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){
+                                            $workshop_pending[]  = $not_rejected;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_pending[]      = $not_rejected;
+                                            $shop_rejected[]     = $rejected;
                                         }
         elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
                                             $workshop_pending[]  = $by_partner;
@@ -68,7 +74,10 @@ class OrderController extends Controller
                                             //     $preorder_rejected[] = $by_shop;
                                             // }
                                         }
-        elseif($role == "ROLE_ADMIN" )  {
+        elseif($role == "ROLE_ADMIN" )  {   $workshop_pending[]  = $not_rejected;
+                                            $workshop_rejected[] = $rejected;
+                                            $shop_pending[]      = $not_rejected;
+                                            $shop_rejected[]     = $rejected;
                                         }
         elseif($role == "ROLE_SUPER_ADMIN"){
 
