@@ -75,7 +75,7 @@
                 {% endif %}
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
                 {# <th>{% trans %}numTickets{% endtrans %}</th> #}
-                {% if app.security.getToken().getUser().getAllowOrder() == true %}
+                {% if app.security.getToken().getUser().getAllowOrder() == true and is_granted('ROLE_AD') %}
                 <th>{% trans %} actions  {% endtrans %}</th>
                 {% endif %}
             </tr>

@@ -33,9 +33,11 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
         $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1));
         $closed_tickets = array();
         $pending_tickets = array();
+        $warning_tickets = array();
         $count = 0;
         $count_closed = 0;
         $count_pending = 0;
+        $count_warning = 0;
 
         foreach ($tickets as $ticket) {
 
@@ -66,12 +68,32 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                     $ticket->setModifiedAt(new \DateTime());
                     $em->persist($ticket);
                 }
+                elseif ($importance == 'advanced_diagnostics' and $diff->days == 57 and $diff->m < 2)
+                {
+                    $workshop = $ticket->getWorkshop();
+                    $warning_tickets[] = $ticket->getId();
+                    $count_warning++;
+
+                    $mailW    = $workshop->getEmail1();
+                    $messageW = \Swift_Message::newInstance()
+                        ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
+                        ->setFrom('noreply@adserviceticketing.com')
+                        ->setTo($mailW)
+                        ->setCharset('UTF-8')
+                        ->setContentType('text/html')
+                        ->setBody($this->getContainer()->get('templating')
+                                    ->render('UtilBundle:Mailing:workshop_inactivity_tickets.html.twig', array('ticket' => $ticket)));
+                    $this->getContainer()->get('mailer')->send($messageW);
+
+                }
             }
         }
         $em->flush();
 
         if($count > 0) {
-            $mail   = $this->container->getParameter('mail_info');
+
+            $mail   = $this->getContainer()->getParameter('mail_info');
+
             $message = \Swift_Message::newInstance()
                 ->setSubject('Se han modificado '.$count.' tickets por inactividad.')
                 ->setFrom('noreply@adserviceticketing.com')
@@ -82,8 +104,11 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                             ->render('UtilBundle:Mailing:admin_inactivity_tickets.html.twig', array('count' => $count,
                                                                                                     'count_closed' => $count_closed,
                                                                                                     'count_pending' => $count_pending,
+                                                                                                    'count_warning' => $count_warning,
                                                                                                     'closed_tickets' => $closed_tickets,
-                                                                                                    'pending_tickets' => $pending_tickets)));
+                                                                                                    'pending_tickets' => $pending_tickets,
+                                                                                                    'warning_tickets' => $warning_tickets,
+                                                                                                    )));
             $this->getContainer()->get('mailer')->send($message);
         }
 

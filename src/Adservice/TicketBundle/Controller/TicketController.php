@@ -2149,6 +2149,8 @@ class TicketController extends Controller {
         $request = $this->getRequest();
 
         $user = $security->getToken()->getUser();
+        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
         $params = array();
 
         // PAGE
@@ -2294,7 +2296,7 @@ class TicketController extends Controller {
                 $search = true;
 
                 if($subsystem != null and $subsystem != '' and $subsystem != '0'){
-                    if($car->getSubsystem() == null or $subsystem != $car->getSubsystem()->getId()) $search = false;
+                    if($tck->getSubsystem() == null or $subsystem != $tck->getSubsystem()->getId()) $search = false;
                 }
                 if($plateNumber != null and $plateNumber != '' and $plateNumber != '0'){
                     if($car->getPlateNumber() == null or $plateNumber != $car->getPlateNumber())    $search = false;

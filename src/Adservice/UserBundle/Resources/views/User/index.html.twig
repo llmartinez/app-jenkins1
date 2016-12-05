@@ -32,9 +32,11 @@
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
                                                                                                             {% trans %} menu.list_partners      {% endtrans %}</a>
 
-            <a class="btn-menu" id="shop_list"              href="{{ path("shop_list"               ) }}">
+            {% if id_catserv != 3 %}
+                <a class="btn-menu" id="shop_list"          href="{{ path("shop_list"               ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                             {% trans %} menu.list_shops        {% endtrans %}</a>
+            {% endif %}
 
             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">

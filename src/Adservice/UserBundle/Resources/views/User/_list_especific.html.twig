@@ -18,11 +18,9 @@
         <td>{{ user.phoneNumber1 }}</td>
         <td>{{ user.region|length > 15 ? user.region|slice(0, 15) ~ '...' : user.region  }}</td>
         <td>
-            {% if role == 'top_ad' or role == 'super_ad' or role == 'ad' or role == 'commercial'  %}
-                {# <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a> #}
-            {% else %}
-                <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-            {% endif %}
+            <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}">
+            </a>
         </td>
     </tr>
     {% endif %}

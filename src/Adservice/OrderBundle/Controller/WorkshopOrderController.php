@@ -60,18 +60,23 @@ class WorkshopOrderController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
+        if ($country != '0') $params[] = array('country', ' = '.$country);
+
         if($security->isGranted('ROLE_SUPER_AD') OR $security->isGranted('ROLE_TOP_AD')) {
             if ($partner != '0') $params[] = array('partner', ' = '.$partner);
-            $params[] = array('country', ' = '.$user->getCountry()->getId());
+            // $params[] = array('country', ' = '.$user->getCountry()->getId());
         }
         else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
+
+        if($security->isGranted('ROLE_COMMERCIAL') AND !$security->isGranted('ROLE_AD') AND $user->getShop() != null) {
+            $params[] = array('shop', ' = '.$user->getShop()->getId());
+        }
 
         if ($status != 'none') {
             if     ($status == 'active')   $params[] = array('active', ' = 1 AND e.test = 0');
             elseif ($status == 'deactive') $params[] = array('active', ' = 0');
             elseif ($status == 'test')     $params[] = array('active', ' = 1 AND e.test = 1');
         }
-        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -86,8 +91,7 @@ class WorkshopOrderController extends Controller {
             if($user->getCategoryService() != null)
             {
                 $consulta = $em->createQuery('SELECT p FROM PartnerBundle:Partner p JOIN p.users u
-                                              WHERE p.country = '.$user->getCountry()->getId().'
-                                              AND u.category_service = '.$user->getCategoryService()->getId().'
+                                              WHERE u.category_service = '.$user->getCategoryService()->getId().'
                                               ORDER BY p.name ASC');
                 $partners = $consulta->getResult();
             }
@@ -194,6 +198,7 @@ class WorkshopOrderController extends Controller {
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_shop']    = ' = '.$user->getShop()->getId();
         }
         if($user->getCategoryService() != null)
         {
@@ -1006,6 +1011,17 @@ class WorkshopOrderController extends Controller {
             $em->flush();
             $em->remove($workshopOrder);
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
+
+            // Cerramos todos los tickets del taller deshabilitado
+            $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
+            $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
+
+            $ids = '0';
+            foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
+
+            $consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."'
+                                          WHERE t.id IN (".$ids.")");
+            $consulta->getResult();
 
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
