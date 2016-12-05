@@ -421,6 +421,7 @@ haschecks:				 "Avec chéquiers"
 numchecks:				 "Nombre de chéquiers"
 infotech:				 "InfoTech"
 infotech_only:			 "Information techniques seulement"
+closed_by_unsubscription: "Atelier désinscrit"
 
 #USER
 user.delete:			 "Effacer utilisateur"
@@ -635,7 +636,6 @@ mail.deleteTicket.info.id:				"Le code du ticket effacé est :"
 
 mail.closeTicket.subject:				"ADService | Ticket effacé avec l'id #"
 mail.closeTicket.title:					"Un ticket a été fermé"
-mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.closeTicket.createdby:				"Ce ticket a été fermé par un conseiller."
 mail.closeTicket.createdby.user:		"Vous avez fermé un ticket via la plate-forme AD-Service."
 mail.closeTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
@@ -738,6 +738,10 @@ mail.changePassword.info.password:		"Pour modifier votre mot de passe, entrez su
 
 mail.activateWorkshop.subject:          "ADService | Atelier activation "
 mail.deactivateWorkshop.subject:        "ADService | Atelier deactivation "
+
+mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
+mail.inactivity_warning.title: 			"Un ticket requête est sur le point d'expirer."
+mail.inactivity_warning: 				"Cette ticket est sur le point d'expirer. Si le véhicule est réparé correctement et a la solution qui appréciera l'intégration dans la vente de billets. Votre aide peut résoudre les problèmes des autres ateliers. Merci beaucoup pour votre collaboration."
 
 mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu."
 _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu. <b>soporte@ad-service.com</b>"

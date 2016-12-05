@@ -4,35 +4,44 @@
 </head>
 <body style="color: #000000; margin: 0; font-family: Verdana, Geneva, sans-serif; background-color: #FFF;">
 
-<table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;margin-top: 50px;">
+<div style="margin-top: 50px;">
 
     {% set style = 'color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;' %}
-    <tr>
-        <td valign="left" align="left" style="{{style}} float: left">
-            <table>
-                <h3></h3>
-                <th>{% trans %}information{% endtrans %} ({{count_closed}})</th>
-                {% for id in closed_tickets %}
-                    <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
-                {% endfor %}
-            </table>
-        </td>
-        <td valign="right" align="right" style="{{style}} float: left">
-            <table>
-                <h3></h3>
-                <th>{% trans %}advanced_diagnostics{% endtrans %} ({{count_pending}})</th>
-                {% for id in pending_tickets %}
-                    <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
-                {% endfor %}
-            </table>
-        </td>
-    </tr>
-    <tr><td valign="middle" align="center" style="{{style}} padding-top: 20px;"></td></tr>
-</table>
+    <div style="width: 100%; {{style}}">
+        <table>
+            <h3></h3>
+            <th>{% trans %}advanced_diagnostics{% endtrans %} ({{count_pending}})</th>
+            {% for id in pending_tickets %}
+                <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+    <hr>
+    <div style="width: 100%; {{style}}">
+        <table>
+            <h3></h3>
+            <th>{% trans %}information{% endtrans %} ({{count_closed}})</th>
+            {% for id in closed_tickets %}
+                <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+    <hr>
+    <div style="width: 100%; {{style}}">
+        <table>
+            <h3></h3>
+            <th>{% trans %}mail.inactivity_warning.title{% endtrans %} ({{count_warning}})</th>
+            {% for id in warning_tickets %}
+                <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+<div>
 
 <hr>
 
-</table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
         {% trans %} footerText {% endtrans %}
