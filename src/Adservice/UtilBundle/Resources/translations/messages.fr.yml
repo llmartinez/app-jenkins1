@@ -430,7 +430,10 @@ closed_by_unsubscription: "Atelier désinscrit"
 #USER
 user.delete:			 "Effacer utilisateur"
 user.delete.confirm:	 "Êtes-vous sûr de vouloir effacer cet utilisateur? "
-
+user.activate:           "Activer utilisateur"
+user.activate.confirm:   "¿Êtes-vous sûr de vouloir activer cet utilisateur?"
+user.deactivate:         "Désactiver utilisateur"
+user.deactivate.confirm: "¿Êtes-vous sûr de vouloir désactiver cet utilisateur?"
 user.accept_privacy:     "¿Accepter la "
 user.policy_privacy:     "Politique de confidentialité"
 user.cancel:             "Annuler"

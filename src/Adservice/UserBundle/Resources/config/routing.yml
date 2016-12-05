@@ -39,6 +39,10 @@ user_edit:
     pattern: /user/edit/{id}
     defaults: { _controller: UserBundle:User:editUser }
 
+user_disable:
+    pattern: /user/disable/{id}
+    defaults: { _controller: UserBundle:User:disableUser }
+
 user_delete:
     pattern: /user/delete/{id}
     defaults: { _controller: UserBundle:User:deleteUser }

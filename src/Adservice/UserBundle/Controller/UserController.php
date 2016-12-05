@@ -712,6 +712,28 @@ class UserController extends Controller {
     }
 
     /**
+     * Activa/Desactiva el usuario con la $id de la bbdd
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
+    public function disableUserAction($id) {
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+            throw new AccessDeniedException();
+        }
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        $user->setActive(!$user->getActive());
+        $em->persist($user);
+        $em->flush();
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('user_list'));
+        }else{
+            return $this->redirect($this->generateUrl('user_partner_list'));
+        }
+    }
+
+    /**
      * Elimina el usuario con la $id de la bbdd
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
