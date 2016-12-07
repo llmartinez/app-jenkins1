@@ -27,33 +27,6 @@
                 <label>{% trans %} username {% endtrans %} *</label>
                 {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
             </div>
-            {% if form.partner is defined %}
-             <div class="col-xs-2 col-md-2 form-group">
-                <input id="partner_id" type="hidden" value="{{ partner_id }}">
-                <label>{% trans %} partner {% endtrans %} *</label>
-                {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-            </div>
-            {% endif %}
-            {% if form.shop is defined %}
-
-                <div class="col-xs-2 col-md-2 form-group">
-                    <label>{% trans %} shop {% endtrans %} *</label>
-
-                    {#
-                    {% if shop_name != null %}
-                        <input id="shop_name" class="form-control" type="text" value="{{ shop_name }}" disabled>
-
-                        <div class="hidden">
-                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
-                        </div>
-                    {% else %}
-                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
-                    {% endif %}
-                    #}
-                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-
-            {% endif %}
 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             <div class="col-xs-2 col-md-2 form-group">
@@ -72,6 +45,34 @@
                     <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
                  {% endif %}
             </div>
+
+            {% if form.partner is defined %}
+             <div class="col-xs-2 col-md-2 form-group">
+                <input id="partner_id" type="hidden" value="{{ partner_id }}">
+                <label>{% trans %} partner {% endtrans %} *</label>
+                {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            </div>
+            {% endif %}
+            {% if form.shop is defined %}
+
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} shop {% endtrans %}</label>
+
+                    {#
+                    {% if shop_name != null %}
+                        <input id="shop_name" class="form-control" type="text" value="{{ shop_name }}" disabled>
+
+                        <div class="hidden">
+                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% else %}
+                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                    {% endif %}
+                    #}
+                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+            {% endif %}
 
             {% else %}
              <div class="">

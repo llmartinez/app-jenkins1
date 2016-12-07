@@ -545,6 +545,7 @@ class UserController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+
         $petition = $this->getRequest();
         if($petition->request->has('assign_all')){
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
@@ -598,7 +599,7 @@ class UserController extends Controller {
             $user_role_id = 1;
             if($user->getRoles()[0]->getId() != 1) {
                 if($user->getCategoryService() != null) {
-                    $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
+                    $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
                     $user_role_id = 0;
                 }
             }
