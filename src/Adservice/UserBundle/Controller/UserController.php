@@ -545,6 +545,7 @@ class UserController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+
         $petition = $this->getRequest();
         if($petition->request->has('assign_all')){
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
@@ -598,7 +599,7 @@ class UserController extends Controller {
             $user_role_id = 1;
             if($user->getRoles()[0]->getId() != 1) {
                 if($user->getCategoryService() != null) {
-                    $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
+                    $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
                     $user_role_id = 0;
                 }
             }
@@ -709,6 +710,28 @@ class UserController extends Controller {
                                                                           'shop_name'      => $shop_name,
                                                                           'user_role_id' => $user_role_id,
                                                                           'form'         => $form->createView()));
+    }
+
+    /**
+     * Activa/Desactiva el usuario con la $id de la bbdd
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
+    public function disableUserAction($id) {
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+            throw new AccessDeniedException();
+        }
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        $user->setActive(!$user->getActive());
+        $em->persist($user);
+        $em->flush();
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('user_list'));
+        }else{
+            return $this->redirect($this->generateUrl('user_partner_list'));
+        }
     }
 
     /**

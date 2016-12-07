@@ -15,9 +15,11 @@ class EditCommercialType extends AbstractType {
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['role'      ])) { $role = $_SESSION['role'];unset($_SESSION['role']);} else { $role = '0';}
-        if (isset($_SESSION['id_partner']) and $_SESSION['id_partner'] != ' IN (0)') {$id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
+        if (isset($_SESSION['id_partner'])
+        and $_SESSION['id_partner'] != ' IN (0)')
+                                            { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
 
         $builder
             ->add('username')
@@ -63,13 +65,13 @@ class EditCommercialType extends AbstractType {
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'empty_value' => '...',
+                  'empty_value' => false,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.partner'.$id_partner)
-                                                          ->andWhere('s.category_service'.$id_catserv); }));
+                                                          ->where('s.active = 1 OR s.id = 1 ')
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1'); }));
         }
         return $builder;
     }

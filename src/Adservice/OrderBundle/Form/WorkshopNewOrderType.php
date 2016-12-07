@@ -13,7 +13,8 @@ class WorkshopNewOrderType extends AbstractType
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
         if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
-        if (isset($_SESSION['id_shop'   ])) { $id_shop    = $_SESSION['id_shop'   ];unset($_SESSION['id_shop'   ]);$s_empty=false;} else { $id_shop = ' != 0';$s_empty='';}
+        if (isset($_SESSION['id_shop'   ])
+        and $_SESSION['id_shop'] != ' = 1') { $id_shop    = $_SESSION['id_shop'   ];unset($_SESSION['id_shop'   ]);$s_empty=false;} else { $id_shop=' != 0';$s_empty='';}
 
         $builder
             ->add('name')

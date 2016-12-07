@@ -53,7 +53,15 @@
                     {# <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a> #}
                 {% elseif role != 'comercial' %}
                     <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-                    <a id="btn_delete{{ user.username }}"   href="{{ path("user_delete", { 'id': user.id }) }}" onClick="javascript: return confirm('{% trans %}delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                    <a id="btn_disable{{ user.username }}"   href="{{ path("user_disable", { 'id': user.id }) }}" onClick="javascript: return confirm('{% 
+                    if user.active == 0 %}{% trans %}user.activate.confirm{% endtrans %}');"  title="{% trans %} user.activate {% endtrans %}"{%
+                    else %}{% trans %}user.deactivate.confirm{% endtrans %}');"  title="{% trans %} user.deactivate {% endtrans %}"{% endif %}>
+                        {% if user.active == 0 %}
+                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                        {% else %}
+                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                        {% endif %}
+                    </a>
                 {% else %}
                     <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                 {% endif %}
