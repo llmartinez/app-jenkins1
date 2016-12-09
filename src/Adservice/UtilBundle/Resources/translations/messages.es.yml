@@ -95,6 +95,7 @@ The presented password cannot be empty.: "La contraseña no puede estar vacía."
 username_used:					"El nombre introducido ya existe o no es correcto, prueba con: "
 partner_not_found:				"No existe un Socio con el código introducido."
 msg_bad_filter:                "El filtro introducido no es correcto"
+msg.shop.changed:   "Se ha cambiado la tienda asignada al comercial"
 
 #ENTITY
 role:					 "Rol"

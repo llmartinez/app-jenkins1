@@ -29,61 +29,48 @@
             </div>
 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <div class="col-xs-2 col-md-2 form-group">
-                {% if user_role_id == 2 %}
-                    <label>{% trans %} category_service {% endtrans %} *</label>
-                    {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
-                    <button id="assign_all" name="assign_all" type="submit" class="btn btn-primary form-control mt5" role="button">{% trans %}assign_to{% endtrans %} {% trans %}all{% endtrans %}</button>
-
-                {% elseif user_role_id == 1 %}
-                    <input id="id_catserv" type="hidden" value="">
-                    <label>{% trans %} category_service {% endtrans %} *</label>
-                    <input type="text" class="form-control" value="" disabled>
-                {% else %}
-                    <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
-                    <label>{% trans %} category_service {% endtrans %} *</label>
-                    <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
-                 {% endif %}
-            </div>
-
-            {% if form.partner is defined %}
-             <div class="col-xs-2 col-md-2 form-group">
-                <input id="partner_id" type="hidden" value="{{ partner_id }}">
-                <label>{% trans %} partner {% endtrans %} *</label>
-                {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-            </div>
-            {% endif %}
-            {% if form.shop is defined %}
-
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label>{% trans %} shop {% endtrans %}</label>
+                    {% if user_role_id == 2 %}
+                        <label>{% trans %} category_service {% endtrans %} *</label>
+                        {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
+                        <button id="assign_all" name="assign_all" type="submit" class="btn btn-primary form-control mt5" role="button">{% trans %}assign_to{% endtrans %} {% trans %}all{% endtrans %}</button>
 
-                    {#
-                    {% if shop_name != null %}
-                        <input id="shop_name" class="form-control" type="text" value="{{ shop_name }}" disabled>
-
-                        <div class="hidden">
-                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
-                        </div>
+                    {% elseif user_role_id == 1 %}
+                        <input id="id_catserv" type="hidden" value="">
+                        <label>{% trans %} category_service {% endtrans %} *</label>
+                        <input type="text" class="form-control" value="" disabled>
                     {% else %}
-                            {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
-                    {% endif %}
-                    #}
-                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                        <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
+                        <label>{% trans %} category_service {% endtrans %} *</label>
+                        <input type="text" class="form-control" value="{{user.categoryService}}" disabled>
+                     {% endif %}
                 </div>
 
-            {% endif %}
-
             {% else %}
-             <div class="">
-                {% if user_role_id == 1 %}
-                    <input id="id_catserv" type="hidden" value="">
-                {% else %}
-                    <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
-                 {% endif %}
-            </div>
+                 <div class="">
+                    {% if user_role_id == 1 %}
+                        <input id="id_catserv" type="hidden" value="">
+                    {% else %}
+                        <input id="id_catserv" type="hidden" value="{{ user.categoryService.id }}">
+                     {% endif %}
+                </div>
             {% endif %}
 
+
+            {% if form.partner is defined %}
+                 <div class="col-xs-2 col-md-2 form-group">
+                    <input id="partner_id" type="hidden" value="{{ partner_id }}">
+                    <label>{% trans %} partner {% endtrans %} *</label>
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                </div>
+            {% endif %}
+
+            {% if form.shop is defined %}
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} shop {% endtrans %}</label>
+                    {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            {% endif %}
 
             {% if role == "ROLE_ASSESSOR" %}
             <div class="col-xs-2 col-md-2 form-group">

@@ -95,6 +95,7 @@ The presented password cannot be empty.: "Le champ 'Mot de passe' ne peut pas ê
 username_used:					"Le nom introduit existe déjà ou est incorrect, essayez avec: "
 partner_not_found:				"Cette Distributeur n’existe pas"
 msg_bad_filter:                 "Le filtre entré est incorrect"
+msg.shop.changed:   "Le magasin affecté au boutique a été modifié"
 
 #ENTITY
 role:					 "Rôle"

@@ -95,6 +95,7 @@ The presented password cannot be empty.: "The password entered cannot be empty"
 username_used:					"The name entered already exists or is incorrect, try: "
 partner_not_found:				"There is no partner with the code entered."
 msg_bad_filter:                 "The filter entered is incorrect"
+msg.shop.changed:   "The store assigned to the commercial has been changed"
 
 #ENTITY
 role:					 "Role"

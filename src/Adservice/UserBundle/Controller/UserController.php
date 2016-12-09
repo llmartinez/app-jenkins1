@@ -545,12 +545,13 @@ class UserController extends Controller {
         }
 
         $em = $this->getDoctrine()->getEntityManager();
+        $trans = $this->get('translator');
 
         $petition = $this->getRequest();
         if($petition->request->has('assign_all')){
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
             $result= $em->createQuery($sql)->getResult();
-            $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+            $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
             $this->get('session')->setFlash('alert', $flash);
 
             return $this->redirect($this->generateUrl('user_list'));
@@ -640,10 +641,12 @@ class UserController extends Controller {
         if ($petition->getMethod() == 'POST') {
 
             if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
-                $flash =  $this->get('translator')->trans('error.bad_introduction').' ('.$this->get('translator')->trans('category_service').')';
+                $flash =  $trans->trans('error.bad_introduction').' ('.$trans->trans('category_service').')';
                 $this->get('session')->setFlash('error', $flash);
             }
             else {
+
+                $old_shop = $user->getShop()->getId();
 
                 $form->bindRequest($petition);
 
@@ -654,7 +657,7 @@ class UserController extends Controller {
                     $user->setUsername($username);
 
                     if ($username != $name) {
-                        $error_username = $this->get('translator')->trans('username_used').$username;
+                        $error_username = $trans->trans('username_used').$username;
 
                         return $this->render('UserBundle:User:edit_user.html.twig', array('user'           => $user,
                                                                                           'form_name'      => $form->getName(),
@@ -690,8 +693,21 @@ class UserController extends Controller {
                     $em->flush();
                 }
 
+                $shop = $user->getShop()->getId();
+
+                if($old_shop != $shop) {
+                    $orders = $em->getRepository('OrderBundle:WorkshopOrder')->findBy(array('created_by' => $user->getId()));
+                    foreach ($orders as $order) {
+                        $order->setAction('rejected');
+                        $msg_reject = $trans->trans('msg.shop.changed');
+                        $order->setRejectionReason($msg_reject);
+                        $em->persist($order);
+                    }
+                    $em->flush();
+                }
+
                 $this->saveUser($em, $user, $original_password);
-                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
 
                 if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
@@ -933,7 +949,7 @@ class UserController extends Controller {
         elseif($role == "ROLE_COMMERCIAL"){ $by_commercial       = array('created_by', ' = '.$user->getId());
                                             $preorder_pending[]  = $by_commercial;
                                             $preorder_rejected[] = $by_commercial;
-                                            
+
                                             $length = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
                                         }
         elseif($role == "ROLE_ADMIN")   {
