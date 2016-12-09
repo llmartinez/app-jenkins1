@@ -930,14 +930,10 @@ class UserController extends Controller {
 
                                             $length = $length_workshop_rejected + $length_shop_rejected + $length_preorder_pending;
                                         }
-        elseif($role == "ROLE_COMMERCIAL"){
-                                            $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
-                                            $preorder_rejected[] = $by_partner;
-
-                                            // if($user->getShop() != null) {
-                                            //     $by_shop             = array('shop', ' = '.$user->getShop()->getId());
-                                            //     $preorder_rejected[] = $by_shop;
-                                            // }
+        elseif($role == "ROLE_COMMERCIAL"){ $by_commercial       = array('created_by', ' = '.$user->getId());
+                                            $preorder_pending[]  = $by_commercial;
+                                            $preorder_rejected[] = $by_commercial;
+                                            
                                             $length = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
                                         }
         elseif($role == "ROLE_ADMIN")   {

@@ -39,7 +39,7 @@ class UserCommercialType extends AbstractType {
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
-                                                          ->where('s.id = 1')
+                                                          ->where('s.id '.$id_partner)
                                                          ; }))
             ->add('language')
 

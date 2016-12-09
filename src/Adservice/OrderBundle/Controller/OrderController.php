@@ -64,9 +64,9 @@ class OrderController extends Controller
                                             $preorder_pending[]  = $by_partner;
                                             $preorder_rejected[] = $by_partner;
                                         }
-        elseif($role=="ROLE_COMMERCIAL"){   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
-                                            $preorder_pending[]  = $by_partner;
-                                            $preorder_rejected[] = $by_partner;
+        elseif($role=="ROLE_COMMERCIAL"){   $by_commercial       = array('created_by', ' = '.$user->getId());
+                                            $preorder_pending[]  = $by_commercial;
+                                            $preorder_rejected[] = $by_commercial;
 
                                             // if($user->getShop() != null) {
                                             //     $by_shop             = array('shop', ' = '.$user->getShop()->getId());
