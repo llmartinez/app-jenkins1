@@ -201,7 +201,8 @@ class WorkshopOrderController extends Controller {
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
-            $_SESSION['id_shop']    = ' = '.$user->getShop()->getId();
+
+            if($user->getShop() != null)  $_SESSION['id_shop'] = ' = '.$user->getShop()->getId();
         }
         if($user->getCategoryService() != null)
         {
@@ -258,7 +259,12 @@ class WorkshopOrderController extends Controller {
                     }
                     $workshopOrder->setActive(false);
                     $workshopOrder->setAction('create');
-                    $workshopOrder->setWantedAction('preorder');
+
+                    if($roles != 'ROLE_COMMERCIAL') {
+                            $workshopOrder->setWantedAction('create');
+                    }else{
+                            $workshopOrder->setWantedAction('preorder');
+                    }
 
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
