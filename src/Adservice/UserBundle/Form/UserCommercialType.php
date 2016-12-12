@@ -85,17 +85,20 @@ class UserCommercialType extends AbstractType {
                                                           ; }));
         }
 
-        $builder->add('shop', 'entity', array(
-                  'required' => false,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'property' => 'name',
-                  'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.partner'.$id_partner)
-                                                          ->andWhere('s.category_service'.$id_catserv); }));
+        if($id_catserv != ' = 3')
+        {
+          $builder->add('shop', 'entity', array(
+                    'required' => false,
+                    'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                    'property' => 'name',
+                    'empty_value' => '',
+                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                  return $er->createQueryBuilder('s')
+                                                            ->orderBy('s.name', 'ASC')
+                                                            ->where('s.active = 1')
+                                                            ->andWhere('s.partner'.$id_partner)
+                                                            ->andWhere('s.category_service'.$id_catserv); }));
+        }
 
         return $builder;
     }

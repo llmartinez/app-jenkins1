@@ -195,6 +195,9 @@ class WorkshopOrderController extends Controller {
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
 
+        }elseif($security->isGranted('ROLE_AD')) {
+            $_SESSION['id_partner'] = ' = '.$partner->getId();
+            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();

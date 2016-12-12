@@ -62,18 +62,19 @@ class EditCommercialType extends AbstractType {
             ->add('allow_order','checkbox', array('required' => false))
         ;
 
-        if($role != '0') {
-        $builder->add('shop', 'entity', array(
-                  'required' => false,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'property' => 'name',
-                  'empty_value' => false,
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1 OR s.id = 1 ')
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1')
-                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1'); }));
+        if($role != '0' and $id_catserv != ' = 3')
+        {
+          $builder->add('shop', 'entity', array(
+                    'required' => false,
+                    'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                    'property' => 'name',
+                    'empty_value' => false,
+                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                  return $er->createQueryBuilder('s')
+                                                            ->orderBy('s.name', 'ASC')
+                                                            ->where('s.active = 1 OR s.id = 1 ')
+                                                            ->andWhere('s.partner'.$id_partner.' OR s.id = 1')
+                                                            ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1'); }));
         }
         return $builder;
     }
