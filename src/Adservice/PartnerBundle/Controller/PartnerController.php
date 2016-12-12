@@ -148,6 +148,9 @@ class PartnerController extends Controller {
                     $newUser->setLanguage      ($lang);
                     $newUser->setPartner       ($partner);
                     $newUser->addRole          ($role);
+                    $newUser->setAllowList     (1);
+                    $newUser->setAllowCreate   (1);
+                    $newUser->setAllowOrder    (1);
 
                     if($catserv != null){
                         $partner->setCategoryService($catserv);

@@ -1177,29 +1177,29 @@ class StatisticController extends Controller {
                 if($catserv->getId() != null) $catserv = $catserv->getId();
                 else $catserv = 0;
 
-                $code            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('_code')));
-                $nTickets        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('tickets')));
-                $nTaller         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('workshop')));
-                $nSocio          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('partner')));
-                $nShop           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('shop')));
+                $code            = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('_code')));
+                $nTickets        = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('tickets')));
+                $nTaller         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('workshop')));
+                $nSocio          = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('partner')));
+                $nShop           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('shop')));
                 $nTypology       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('typology')));
-                $nCountry        = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('country')));
-                $nactive         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('active')));
-                $ntest           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('test')));
-                $contact         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('contact')));
-                $internal_code   = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('internal_code')));
-                $commercial_code = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('commercial_code')));
-                $update_at       = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('subscribed')));
-                $lowdate_at      = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('unsubscribed')));
-                $region          = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('region')));
-                $city            = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('city')));
-                $address         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('address')));
-                $postal_code     = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('postal_code')));
+                $nCountry        = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('country')));
+                $nactive         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('active')));
+                $ntest           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('test')));
+                $contact         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('contact')));
+                $internal_code   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('internal_code')));
+                $commercial_code = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('commercial_code')));
+                $update_at       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('subscribed')));
+                $lowdate_at      = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('unsubscribed')));
+                $region          = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('region')));
+                $city            = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('city')));
+                $address         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('address')));
+                $postal_code     = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('postal_code')));
                 $phone_number_1  = UtilController::sinAcentos(str_ireplace(array(" ", "."), array("", ""), $trans->trans('phone_number_1')));
-                $fax             = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('fax')));
+                $fax             = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('fax')));
                 $email_1         = UtilController::sinAcentos(str_ireplace(array(" ", "-"), array("", ""), $trans->trans('email_1')));
-                $informe         = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('ticketbyworkshop')));
-                $token           = UtilController::sinAcentos(str_ireplace(" ", "", $trans->trans('token')));
+                $informe         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('ticketbyworkshop')));
+                $token           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('token')));
 
                 if(isset($shop     ) and $shop      == 'undefined') $shop      = '0';
                 if(isset($country  ) and $country   == 'undefined') $country   = '0';
@@ -1377,7 +1377,8 @@ class StatisticController extends Controller {
                             break;
                     }
                 }
-                // echo($qb->getQuery()->getSql());
+
+                // echo($qb->getQuery()->getDql());
                 $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');

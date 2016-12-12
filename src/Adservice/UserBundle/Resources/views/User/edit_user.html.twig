@@ -84,11 +84,29 @@
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} active {% endtrans %}</label>
-                {{ form_widget(form.active) }}
                 {% if user.roles[0] != 'ROLE_SUPER_ADMIN' %}
-                   <button class="btn btn-primary " data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
+                   <button class="btn btn-primary mt20" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
                 {% endif %}
+            </div>
+            <div class="col-xs-4 col-md-4 form-group">
+                <div class="w25 fl">
+                        <label class="mt20">{% trans %} active {% endtrans %}</label> {{ form_widget(form.active) }}
+                </div>
+                <div class="w25 fl">
+                    {% if form.allow_list is defined %}
+                        <label class="mt20">{% trans %} allow_list {% endtrans %}</label> {{ form_widget(form.allow_list) }}
+                    {% endif %}
+                </div>
+                <div class="w25 fl">
+                    {% if form.allow_create is defined %}
+                        <label class="mt20">{% trans %} allow_create {% endtrans %}</label> {{ form_widget(form.allow_create) }}
+                    {% endif %}
+                </div>
+                <div class="w25 fl">
+                    {% if form.allow_order is defined %}
+                        <label class="mt20">{% trans %} allow_order {% endtrans %}</label> {{ form_widget(form.allow_order) }}
+                    {% endif %}
+                </div>
             </div>
         </div>
 

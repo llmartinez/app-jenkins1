@@ -58,6 +58,8 @@ class EditCommercialType extends AbstractType {
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
             ->add('language')
+            ->add('allow_list','checkbox', array('required' => false))
+            ->add('allow_order','checkbox', array('required' => false))
         ;
 
         if($role != '0') {

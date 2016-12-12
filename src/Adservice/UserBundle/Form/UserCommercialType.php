@@ -68,6 +68,8 @@ class UserCommercialType extends AbstractType {
                   'property' => 'language',
                   'required' => true,
                   'empty_value' => ''))
+            ->add('allow_list','checkbox', array('required' => false))
+            ->add('allow_order','checkbox', array('required' => false))
         ;
 
         if($role == 'ROLE_SUPER_ADMIN' OR $role == 'ROLE_ADMIN') {

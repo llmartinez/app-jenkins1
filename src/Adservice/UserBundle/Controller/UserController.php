@@ -503,11 +503,6 @@ class UserController extends Controller {
                 $user->getShop($u_shop);
             }
 
-            // Permisos por defecto para todos los users
-            $user->setAllowList(1);
-            $user->setAllowCreate(1);
-            $user->setAllowOrder(1);
-
             // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
@@ -646,7 +641,7 @@ class UserController extends Controller {
             }
             else {
 
-                $old_shop = $user->getShop()->getId();
+                if($user->getShop() != null) $old_shop = $user->getShop()->getId();
 
                 $form->bindRequest($petition);
 
@@ -695,7 +690,7 @@ class UserController extends Controller {
 
                 $shop = $user->getShop()->getId();
 
-                if($old_shop != $shop) {
+                if(isset($old_shop) and $old_shop != $shop) {
                     $orders = $em->getRepository('OrderBundle:WorkshopOrder')->findBy(array('created_by' => $user->getId()));
                     foreach ($orders as $order) {
                         $order->setAction('rejected');
