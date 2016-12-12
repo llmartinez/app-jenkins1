@@ -1233,7 +1233,7 @@ class WorkshopOrderController extends Controller {
                 /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($mail);
-                $mailer->setSubject($this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted'));
+                $mailer->setSubject($this->get('translator')->trans('order').' '.$this->get('translator')->trans('action.accepted'));
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
                                                                                                            'action'   => $action,
