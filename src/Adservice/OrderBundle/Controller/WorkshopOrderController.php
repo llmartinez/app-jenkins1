@@ -665,7 +665,7 @@ class WorkshopOrderController extends Controller {
      * @throws type
      */
     public function rejectAction($workshopOrder){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
+        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -805,7 +805,7 @@ class WorkshopOrderController extends Controller {
      */
     public function removeAction($workshopOrder){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        if ($this->get('security.context')->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
