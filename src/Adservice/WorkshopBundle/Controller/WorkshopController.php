@@ -170,7 +170,6 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
-            $user_partner = $em->getRepository("UserBundle:User")->findOneByPartner($partner);
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             if ($form->isValid()) {
@@ -197,7 +196,7 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
-                    $workshop->setCategoryService($user_partner->getCategoryService());
+                    $workshop->setCategoryService($partner->getCategoryService());
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
@@ -247,7 +246,7 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage($lang);
                     $newUser->setWorkshop($workshop);
                     $newUser->addRole($role);
-                    $newUser->setCategoryService($user_partner->getCategoryService());
+                    $newUser->setCategoryService($partner->getCategoryService());
 
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
