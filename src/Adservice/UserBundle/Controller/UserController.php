@@ -388,7 +388,7 @@ class UserController extends Controller {
 
         }
         $catserv = $security->getToken()->getUser()->getCategoryService();
-        if ($security->isGranted('ROLE_AD') === false) {
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
 
@@ -503,6 +503,10 @@ class UserController extends Controller {
                 $user->getShop($u_shop);
             }
 
+            if($user->getAllowList() == null) $user->setAllowList(1);
+            if($user->getAllowOrder() == null) $user->setAllowOrder(1);
+            if($user->getAllowCreate() == null) $user->setAllowCreate(1);
+
             // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
@@ -538,7 +542,10 @@ class UserController extends Controller {
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-
+        $user_logged = $this->get('security.context')->getToken()->getUser();
+        if ($user_logged->getAllowCreate() == false) {
+            throw new AccessDeniedException();
+        }
         $em = $this->getDoctrine()->getEntityManager();
         $trans = $this->get('translator');
 
@@ -729,7 +736,9 @@ class UserController extends Controller {
      * @throws CreateNotFoundException
      */
     public function disableUserAction($id) {
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        $user_logged = $security->getToken()->getUser();
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
         $em   = $this->getDoctrine()->getEntityManager();
@@ -751,7 +760,9 @@ class UserController extends Controller {
      * @throws CreateNotFoundException
      */
     public function deleteUserAction($id) {
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false) {
+        $security = $this->get('security.context');
+        $user_logged = $security->getToken()->getUser();
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
         $em   = $this->getDoctrine()->getEntityManager();

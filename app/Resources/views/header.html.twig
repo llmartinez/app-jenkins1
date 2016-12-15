@@ -45,7 +45,7 @@
                                         <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{% trans %} help {% endtrans %}</a></li>
 
                                         <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
-                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE %}
+                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE and is_granted('ROLE_COMMERCIAL')== FALSE %}
                                             <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                         {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}

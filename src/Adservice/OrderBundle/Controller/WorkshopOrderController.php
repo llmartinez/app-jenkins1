@@ -36,7 +36,7 @@ class WorkshopOrderController extends Controller {
     public function listWorkshopsAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
         $security = $this->get('security.context');
         $user     = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_COMMERCIAL') === false) {
+        if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowList() == false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
@@ -149,13 +149,13 @@ class WorkshopOrderController extends Controller {
      */
     public function newAction(){
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_COMMERCIAL') === false)
+        $user = $security->getToken()->getUser();
+
+        if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowOrder() == false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
-
-        $user = $security->getToken()->getUser();
 
         $workshopOrder = new WorkshopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
