@@ -695,7 +695,7 @@ class UserController extends Controller {
                     $em->flush();
                 }
 
-                $shop = $user->getShop()->getId();
+                if($user->getShop() != null) $shop = $user->getShop()->getId();
 
                 if(isset($old_shop) and $old_shop != $shop) {
                     $orders = $em->getRepository('OrderBundle:WorkshopOrder')->findBy(array('created_by' => $user->getId()));
@@ -725,7 +725,7 @@ class UserController extends Controller {
                                                                           'role'         => $role,
                                                                           'form_name'    => $form->getName(),
                                                                           'partner_id'   => $partner_id,
-                                                                          'shop_name'      => $shop_name,
+                                                                          'shop_name'    => $shop_name,
                                                                           'user_role_id' => $user_role_id,
                                                                           'form'         => $form->createView()));
     }
