@@ -75,6 +75,8 @@ class UserSuperPartnerType extends AbstractType {
                   'property' => 'language',
                   'required' => true,
                   'empty_value' => ''))
+            ->add('allow_create','checkbox', array('required' => false))
+            ->add('allow_order','checkbox', array('required' => false))
         ;
         return $builder;
     }

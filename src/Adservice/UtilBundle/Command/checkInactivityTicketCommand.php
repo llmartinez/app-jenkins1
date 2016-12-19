@@ -92,6 +92,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
 
         if($count > 0) {
             $mail   = $this->getContainer()->getParameter('mail_info');
+
             $message = \Swift_Message::newInstance()
                 ->setSubject('Se han modificado '.$count.' tickets por inactividad.')
                 ->setFrom('noreply@adserviceticketing.com')

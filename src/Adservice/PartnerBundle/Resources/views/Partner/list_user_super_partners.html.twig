@@ -1,0 +1,112 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'user_super_partner_list' %}
+    <input type="hidden" id="route" name="route" value="{{ route }}">
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} super_ad  {% endtrans %}</li>
+    </ol>
+
+<legend>
+    {% trans %} super_ad  {% endtrans %}
+</legend>
+
+    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+
+    
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <select id="top_flt_country" class='form-control'>
+            <option value="0">{% trans %} all {% endtrans %}</option>
+            {% for _country in countries %}
+                <option value="{{ _country.id }}" {% if country == _country.id %}selected{%endif %}>{{ _country | trans }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="col-xs-4 col-md-4 form-group">
+        <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
+            <label> {% trans %} find_by {% endtrans %} </label>
+            <select id="flt_search_term" name="flt_search_term" class='form-control'>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+             </select>
+        </div>
+        <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+        </div>
+        <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
+            <a type="button" id="top_btn_search_field" name="top_btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
+        </div>
+    </div>
+
+    {% if all_partners|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+            <tr>
+                <th>{% trans %} username            {% endtrans %}</th>
+                <th>{% trans %}                 {% endtrans %}</th>
+                <th>{% trans %} phone_number_1  {% endtrans %}</th>
+                <th>{% trans %} email_1         {% endtrans %}</th>                
+                <th>{% trans %} list            {% endtrans %}</th>
+                <th>{% trans %} create            {% endtrans %}</th>
+                <th>{% trans %} order            {% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for partner in all_partners %}
+            <tr>
+               
+                <td>{{ partner.username}}</td>
+                <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{{ partner.phoneNumber1}}</td>
+                <td>{{ partner.email1  }}</td>
+                
+                
+                <td>
+                    {% if partner.allowList == 1 %}
+                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                    {% else %}
+                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    {% endif %}
+                </td>
+                 <td>
+                    {% if partner.allowCreate == 1 %}
+                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                    {% else %}
+                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    {% endif %}
+                </td>
+                 <td>
+                    {% if partner.allowOrder == 1 %}
+                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                    {% else %}
+                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                    {% endif %}
+                </td>
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
+
+    {% else %}
+        <p class="alert"> {% trans %} any.partner {% endtrans %}</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/util/js/pagination_order.js') }}"></script>
+    <script src="{{ asset('bundles/partner/js/partner.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            {% if country != 'none' %} $("#top_flt_country").val('{{ country }}');{% endif %}
+        });
+    </script>
+{% endblock %}{# empty Twig template #}
