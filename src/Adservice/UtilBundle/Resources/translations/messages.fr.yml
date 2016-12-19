@@ -106,12 +106,14 @@ ROLE_USER: 				 "Utilisateur"
 ROLE_TOP_AD:  		 	 "Top"
 ROLE_SUPER_AD:  		 "Super Distributeur"
 ROLE_AD:  				 "Distributeur"
+ROLE_COMMERCIAL: 		 "Commercial"
 super_admin: 			 "Super Admin"
 admin: 					 "Administrateur"
 assessor: 				 "Conseiller"
 user: 					 "Utilisateur"
 super_ad:  				 "Super Distributeur"
 ad:  					 "Distributeur"
+commercial:				 "Commercial"
 partner:				 "Distributeur"
 shop:	 				 "Boutique"
 workshop: 				 "Atelier"
@@ -784,8 +786,3 @@ back_app:  "Revenir à l’application"
 termsConditions:	" "
 _termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
-
-help.check_manual: 	"Check the manual"
-
-help.manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
-help.video:  '<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'
