@@ -14,6 +14,21 @@
 
             window.open(url, "_self");
         });
+        $('#top_flt_country').change(function() {
+
+            var country = $('#top_flt_country').val();
+            if(country == null) country = '0';
+            var term = $('#flt_search_term').val();
+            if(term == null || term == "") term = '0';
+
+            var field = $('#flt_search_field').val();
+            if(field == null || field == "") field = '0';
+            var route   = $('#route').val();
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, term: term, field: field  });
+
+            window.open(url, "_self");
+        });
         $('#slct_catserv').change(function() {
 
             var country = $('#flt_country').val();
@@ -75,6 +90,24 @@
 
                 var locale = $(document).find("#data_locale").val();
                 var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: '0', w_id: '0', country: country, partner: partner, status: status, term: term, field: field });
+
+                window.open(url, "_self");
+        });
+        
+        $('#top_btn_search_field').click(function() {
+
+                var route   = $('#route').val();
+                var term = $('#flt_search_term').val();
+                if(term == null || term == "") term = '0';
+
+                var field = $('#flt_search_field').val();
+                if(field == null || field == "") field = '0';
+
+                var country = $('#top_flt_country').val();
+                if(country == null || country == "") country = '0';
+
+                var locale = $(document).find("#data_locale").val();
+                var url = Routing.generate(route, {_locale: locale, page: 1, country: country, term: term, field: field });
 
                 window.open(url, "_self");
         });
