@@ -10,6 +10,7 @@
             {% if role == 'top_ad'      %} <span class="label label-warning">{% trans %} ROLE_TOP_AD {% endtrans %}</span> {% endif %}
             {% if role == 'super_ad'    %} <span class="label label-warning">{% trans %} super_ad    {% endtrans %}</span> {% endif %}
             {% if role == 'ad'          %} <span class="label label-warning">{% trans %} ad          {% endtrans %}</span> {% endif %}
+            {% if role == 'commercial'  %} <span class="label label-warning">{% trans %} commercial  {% endtrans %}</span> {% endif %}
             {% if user.active == false  %} <span class="label label-danger"> {% trans %} inactive    {% endtrans %}</span> {% endif %}</td>
         <td>{{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}</td>
         <td>{{ user.surname|length > 15 ? user.surname|slice(0, 15) ~ '...' : user.surname  }}</td>
@@ -17,8 +18,9 @@
         <td>{{ user.phoneNumber1 }}</td>
         <td>{{ user.region|length > 15 ? user.region|slice(0, 15) ~ '...' : user.region  }}</td>
         <td>
-            <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-           {#  <a id="btn_delete{{ user.username }}" href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"></span></a> #}
+            <a id="btn_edit{{ user.username }}"   href="{{ path("user_edit", { 'id': user.id }) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}">
+            </a>
         </td>
     </tr>
     {% endif %}

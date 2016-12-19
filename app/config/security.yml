@@ -30,6 +30,7 @@ security:
         ROLE_ASSESSOR: ROLE_USER
         ROLE_TOP_AD: ROLE_SUPER_AD
         ROLE_SUPER_AD: ROLE_AD
+        ROLE_AD: ROLE_COMMERCIAL
 
     access_control:
       - { path: ^/,                                         roles: IS_AUTHENTICATED_ANONYMOUSLY,  requires_channel: https }
@@ -37,9 +38,9 @@ security:
       - { path: ^/(es|en|fr|pt)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr|pt)/privacy,                    roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
-      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_ADMIN]                 }
+      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_AD]                    }
       - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_AD]        }
+      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_COMMERCIAL]}
       - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
       - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD]         }
       - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD]         }

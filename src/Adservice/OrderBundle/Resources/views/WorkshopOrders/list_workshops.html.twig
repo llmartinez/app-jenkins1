@@ -11,11 +11,13 @@
     </ol>
 
 <legend> {% trans %} menu.list_workshops {% endtrans %}
-  <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
-    <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
-    {% trans %} menu.new_workshop_order {% endtrans %}</a>
-        <span class="pull-right"> {% trans %}menu.list_tickets{% endtrans %}: {{numTickets}}</span>
-        <span class="pull-right mr15">{% trans %}menu.list_workshops{% endtrans %}: {{length}}</span>
+    {% if app.security.getToken().getUser().getAllowOrder() == true %}
+        <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
+        {% trans %} menu.new_workshop_order {% endtrans %}</a>
+    {% endif %}
+    <span class="pull-right"> {% trans %}menu.list_tickets{% endtrans %}: {{numTickets}}</span>
+    <span class="pull-right mr15">{% trans %}menu.list_workshops{% endtrans %}: {{length}}</span>
 </legend>
 
     {% if is_granted('ROLE_SUPER_AD') %}
@@ -73,7 +75,9 @@
                 {% endif %}
                 {# <th>{% trans %} active   {% endtrans %}</th> #}
                 {# <th>{% trans %}numTickets{% endtrans %}</th> #}
+                {% if app.security.getToken().getUser().getAllowOrder() == true and is_granted('ROLE_AD') %}
                 <th>{% trans %} actions  {% endtrans %}</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -93,56 +97,58 @@
                 {% endif %}
                 {# <td>{{ workshop.active }}       </td> #}
                 {# <td>{{ numTickets[workshop.id]}}</td> #}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <td>
-                        <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                        <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
-                    </td>
+                {% if app.security.getToken().getUser().getAllowOrder() == true %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ workshop.id }}"></span></a>
+                        </td>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{% trans %} workshop.delete {% endtrans %}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% trans %} workshop.delete.confirm {% endtrans %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ path('workshop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                    {% elseif is_granted('ROLE_AD') %}
+                        <td>
+                            <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                            {% if workshop.active == 1 %}
+                                <a title="{% trans %} workshop.deactivate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
+                            {% else %}
+                                <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"> </a>
+                            {% endif %}
+                        </td>
                         <!-- Modal -->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">{% trans %} workshop.delete {% endtrans %}</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        {% trans %} workshop.delete.confirm {% endtrans %}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="{{ path('workshop_delete', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
-                                    </div>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
-                {% elseif is_granted('ROLE_AD') %}
-                    <td>
-                        <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-                        {% if workshop.active == 1 %}
-                            <a title="{% trans %} workshop.deactivate {% endtrans %}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
-                        {% else %}
-                            <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"> </a>
-                        {% endif %}
-                    </td>
-                    <!-- Modal -->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">{% trans %} workshop.delete {% endtrans %}</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        {% trans %} workshop.delete.confirm {% endtrans %}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="{{ path('workshopOrder_remove', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
-                                    </div>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{% trans %} workshop.delete {% endtrans %}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% trans %} workshop.delete.confirm {% endtrans %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ path('workshopOrder_remove', {'id': 'foo'}) }}" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no {% endtrans %}</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                    {% endif %}
                 {% endif %}
             </tr>
             {% endfor %}
