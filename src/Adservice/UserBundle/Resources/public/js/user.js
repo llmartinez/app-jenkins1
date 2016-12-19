@@ -8,6 +8,17 @@
         if (partner != ""){
             populate_user_partner(partner);
         }
+        
+        if ($('.active').text() == 'Nuevo Usuario' || $('.active').text() == 'New User' || $('.active').text() == 'Nouvel utilisateur' || $('.active').text() == 'Novo Utilizador')
+        {
+            $('#commercial_type_shop').empty();
+
+            if($('#commercial_type_category_service').val() != undefined)
+            {
+                $('#commercial_type_partner').empty();
+            }
+        }          
+
         $('#slct_role').change(function() {
             var role = $(this).val();
             var country = $('#slct_country').val();
@@ -111,7 +122,7 @@ function populate_user_partner(partner){
     var id_catserv = $('form').find('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
-    if (id_catserv != undefined) { 
+    if (id_catserv != undefined && id_catserv != "") { 
         var route  = 'partners_from_catserv';
         var locale = $(document).find("#data_locale").val();
 
@@ -140,6 +151,12 @@ function populate_user_partner(partner){
                 console.log("Error al cargar los socios...");
             }
         });
+    }else{
+
+        if ($('.active').text() == 'Nuevo Usuario' || $('.active').text() == 'New User' || $('.active').text() == 'Nouvel utilisateur' || $('.active').text() == 'Novo Utilizador')
+        {
+            $('form').find('select[id$=_partner]').empty();
+        }   
     }
 }
 /**
