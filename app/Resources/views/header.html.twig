@@ -1,13 +1,14 @@
 <div class="MainHeader">
     <div class="span4 offset2">
     </div>
-    <div class="navbar">
+    <div class="navbar {% if env is defined and env != 'prod' %}{{env}}{% endif %}">
         <div class="navbar-inner">
             <div class="span4 offset2">
                 <!-- header -->
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
+                            {% if env is defined and env != 'prod' %}<a class="env">{{env|upper}}</a>{% endif %}
 
                             {% set url_logo = route_logo ~ '.png' %}
                             <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 20px;">
@@ -44,7 +45,7 @@
                                         <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{% trans %} help {% endtrans %}</a></li>
 
                                         <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
-                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE %}
+                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE and is_granted('ROLE_COMMERCIAL')== FALSE %}
                                             <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                         {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}

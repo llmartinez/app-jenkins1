@@ -39,6 +39,10 @@ user_edit:
     pattern: /user/edit/{id}
     defaults: { _controller: UserBundle:User:editUser }
 
+user_disable:
+    pattern: /user/disable/{id}
+    defaults: { _controller: UserBundle:User:disableUser }
+
 user_delete:
     pattern: /user/delete/{id}
     defaults: { _controller: UserBundle:User:deleteUser }
@@ -60,6 +64,16 @@ generate_password:
 change_password:
     pattern: /user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}
     defaults: { _controller: UserBundle:User:changePassword, new_pass: 'none', rep_pass: 'none', old_pass: 'none' }
+    options:
+        expose: true
+
+##############################
+#       RUTAS SOCIO          #
+##############################
+
+user_partner_list:
+    pattern: /user/partner-list/{page}/{country}/{option}/{term}/{field}
+    defaults: { _controller: UserBundle:User:userPartnerList, page: 1, country: 0, option: 0, term: 0, field: 0  }
     options:
         expose: true
 

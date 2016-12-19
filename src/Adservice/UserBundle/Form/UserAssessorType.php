@@ -30,7 +30,7 @@ class UserAssessorType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
             // ->add('charge', 'integer', array('empty_data' => '1'))
             //CONTACT
-             
+
             ->add('country_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',
@@ -50,7 +50,7 @@ class UserAssessorType extends AbstractType {
                                                           ->orderBy('cs.category_service', 'ASC')
                                                           ->where('cs.id'.$id_catserv)
                                                           ; }))
-            
+
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
@@ -59,7 +59,7 @@ class UserAssessorType extends AbstractType {
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
-            
+
             ->add('region', 'text', array('required' => false))
             ->add('city', 'text', array('required' => false))
             ->add('address', 'text', array('required' => false))

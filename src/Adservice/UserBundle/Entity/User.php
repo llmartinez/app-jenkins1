@@ -126,6 +126,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      *
      * @var type
+     * @ORM\ManyToOne(targetEntity="Adservice\PartnerBundle\Entity\Shop", inversedBy="users")
+     */
+    private $shop;
+
+    /**
+     *
+     * @var type
      * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="workshops")
      */
     private $workshop;
@@ -136,6 +143,33 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="privacy", type="boolean")
      */
     private $privacy;
+
+    /**
+     * @var boolean $allow_list
+     *
+     * Permiso del usuario (comercial) para listar talleres
+     *
+     * @ORM\Column(name="allow_list", type="boolean", options={"default" : 1})
+     */
+    private $allow_list;
+
+    /**
+     * @var boolean $allow_create
+     *
+     * Permiso del usuario (socio) para crear comerciales
+     *
+     * @ORM\Column(name="allow_create", type="boolean", options={"default" : 1})
+     */
+    private $allow_create;
+
+    /**
+     * @var boolean $allow_order
+     *
+     * Permiso del usuario (socio/comercial) para solicitar talleres
+     *
+     * @ORM\Column(name="allow_order", type="boolean", options={"default" : 1})
+     */
+    private $allow_order;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -427,6 +461,14 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         $this->partner = $partner;
     }
 
+    public function getShop() {
+        return $this->shop;
+    }
+
+    public function setShop(\Adservice\PartnerBundle\Entity\Shop $shop) {
+        $this->shop = $shop;
+    }
+
     /**
      * Set privacy
      *
@@ -445,7 +487,59 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->privacy;
     }
 
+    /**
+     * Set allow_list
+     *
+     * @param boolean $allow_list
+     */
+    public function setAllowList($allow_list) {
+        $this->allow_list = $allow_list;
+    }
 
+    /**
+     * Get allow_list
+     *
+     * @return boolean
+     */
+    public function getAllowList() {
+        return $this->allow_list;
+    }
+
+     /**
+     * Set allow_create
+     *
+     * @param boolean $allow_create
+     */
+    public function setAllowCreate($allow_create) {
+        $this->allow_create = $allow_create;
+    }
+
+    /**
+     * Get allow_create
+     *
+     * @return boolean
+     */
+    public function getAllowCreate() {
+        return $this->allow_create;
+    }
+
+     /**
+     * Set allow_order
+     *
+     * @param boolean $allow_order
+     */
+    public function setAllowOrder($allow_order) {
+        $this->allow_order = $allow_order;
+    }
+
+    /**
+     * Get allow_order
+     *
+     * @return boolean
+     */
+    public function getAllowOrder() {
+        return $this->allow_order;
+    }
 
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|

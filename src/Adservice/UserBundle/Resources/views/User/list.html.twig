@@ -81,6 +81,7 @@
             {% if  users_role_top_ad      is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_top_ad       , role:'top_ad'     } %}{% endif %}
             {% if  users_role_super_ad    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_super_ad     , role:'super_ad'   } %}{% endif %}
             {% if  users_role_ad          is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_ad           , role:'ad'         } %}{% endif %}
+            {% if  users_role_commercial  is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_commercial   , role:'commercial' } %}{% endif %}
             {% if  users_role_assessor    is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_assessor     , role:'assessor'   } %}{% endif %}
             {% if  users_role_user        is defined %} {% include 'UserBundle:User:_list_especific.html.twig' with {users : users_role_user         , role:'user'       } %}{% endif %}
             {# Cuando se inserta el listado en otro html, los usuarios son "users" #}
@@ -89,7 +90,7 @@
         </tbody>
     </table>
 
-    {% set len = users_role_super_admin|length + users_role_admin|length + users_role_super_ad|length + users_role_ad|length + users_role_assessor|length + users_role_user|length %}
+    {% set len = users_role_super_admin|length + users_role_admin|length + users_role_super_ad|length + users_role_ad|length + users_role_commercial|length + users_role_assessor|length + users_role_user|length %}
 
     {% if len != 0 %}{% include 'UtilBundle:Pagination:pagination_user.html.twig' %}{% endif %}
 
