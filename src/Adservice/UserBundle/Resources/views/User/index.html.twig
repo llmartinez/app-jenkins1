@@ -32,9 +32,11 @@
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
                                                                                                             {% trans %} menu.list_partners      {% endtrans %}</a>
 
-            <a class="btn-menu" id="shop_list"              href="{{ path("shop_list"               ) }}">
+            {% if id_catserv != 3 %}
+                <a class="btn-menu" id="shop_list"          href="{{ path("shop_list"               ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                             {% trans %} menu.list_shops        {% endtrans %}</a>
+            {% endif %}
 
             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
@@ -102,6 +104,9 @@
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
+            <a class="btn-menu" id="user_list"              href="{{ path("user_partner_list") }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
+                                                                                                {% trans %} menu.list_users         {% endtrans %}</a>
         {# {% if is_granted('ROLE_SUPER_AD') %}
             <a class="btn-menu" id="listPartners" href="{{ path("partnerOrder_listpartners"  ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
@@ -116,7 +121,25 @@
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                 {% trans %} menu.list_workshops         {% endtrans %}</a>
         </div>
+    {% elseif is_granted('ROLE_COMMERCIAL') %}
+        <div name="tbl_user" align="center">
+            <legend>{% trans %} menu.title_commercial {% endtrans %}</legend>
+            <a class="btn-menu"                         href="{{ path("list_orders" , {'option': 'preorder_pending'}) }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
+                                                                                                {% trans %} menu.list_orders         {% endtrans %}
+                                                                                                {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
+            {% if app.security.getToken().getUser().getAllowList() == true %}
+            <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
+                                                                                                {% trans %} menu.list_workshops         {% endtrans %}</a>
+            {% elseif app.security.getToken().getUser().getAllowOrder() == true %}
+            <a class="btn-menu"                         href="{{ path("workshopOrder_new") }}">
+                                                                                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
+                                                                                                {% trans %} menu.new_workshop_order         {% endtrans %}</a>
+            {% endif %}
+        </div>
     {% endif %}
+
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

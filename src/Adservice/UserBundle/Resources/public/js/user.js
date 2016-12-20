@@ -8,6 +8,17 @@
         if (partner != ""){
             populate_user_partner(partner);
         }
+        
+        if ($('.active').text() == 'Nuevo Usuario' || $('.active').text() == 'New User' || $('.active').text() == 'Nouvel utilisateur' || $('.active').text() == 'Novo Utilizador')
+        {
+            $('#commercial_type_shop').empty();
+
+            if($('#commercial_type_category_service').val() != undefined)
+            {
+                $('#commercial_type_partner').empty();
+            }
+        }          
+
         $('#slct_role').change(function() {
             var role = $(this).val();
             var country = $('#slct_country').val();
@@ -55,6 +66,45 @@
                 window.open(url, "_self");
         });
 
+        //USER_PARTNER_LIST
+        $('#slct_role_pt').change(function() {
+            var role = $(this).val();
+            var country = $('#slct_country_pt').val();
+            var route = 'user_partner_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#slct_country_pt').change(function() {
+            var country = $(this).val();
+            var role = $('#slct_role_pt').val();
+            var route = 'user_partner_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role });
+            window.open(url, "_self");
+        });
+        $('#btn_search_field_pt').click(function() {
+            var route = 'user_partner_list';
+            var role = $('#slct_role_pt').val();
+            var country = $('#slct_country_pt').val();
+            var term = $('#flt_search_term').val();
+            var field = $('#flt_search_field').val();
+
+            if(role == null || role == "") role = '0';
+            if(country == null || country == "") country = '0';
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, option: role, term: term, field: field });
+
+                window.open(url, "_self");
+        });
+        $('#commercial_type_partner').change(function() {
+            var id_shop = $(this).val();
+            populate_shop(id_shop);
+        });
+
         $('#btn_create').click(function() {
             check_password();
 
@@ -72,34 +122,42 @@ function populate_user_partner(partner){
     var id_catserv = $('form').find('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
 
-    var route  = 'partners_from_catserv';
-    var locale = $(document).find("#data_locale").val();
+    if (id_catserv != undefined && id_catserv != "") { 
+        var route  = 'partners_from_catserv';
+        var locale = $(document).find("#data_locale").val();
 
-    $('form').find('select[id$=_partner]').empty();
+        $('form').find('select[id$=_partner]').empty();
 
-    $.ajax({
-        type        : "POST",
-        url         : Routing.generate(route, {_locale: locale }),
-        data        : {id_catserv : id_catserv},
-        dataType    : "json",
-        beforeSend: function(){ $("body").css("cursor", "progress"); },
-        complete: function(){ $("body").css("cursor", "default"); },
-        success : function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            if (data['error'] != "No hay coincidencias") {
+        $.ajax({
+            type        : "POST",
+            url         : Routing.generate(route, {_locale: locale }),
+            data        : {id_catserv : id_catserv},
+            dataType    : "json",
+            beforeSend: function(){ $("body").css("cursor", "progress"); },
+            complete: function(){ $("body").css("cursor", "default"); },
+            success : function(data) {
+                // Limpiamos y llenamos el combo con las opciones del json
+                if (data['error'] != "No hay coincidencias") {
 
-                $('form').find('select[id$=e_partner]').append("<option value=></option>");
-                $.each(data, function(idx, elm) {
-                    $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
-                });
-                $('form').find('select[id$=e_partner]').val(partner);
-               
+                    $('form').find('select[id$=e_partner]').append("<option value=></option>");
+                    $.each(data, function(idx, elm) {
+                        $('form').find('select[id$=e_partner]').append("<option value="+elm.id+">"+elm.name+"</option>");
+                    });
+                    $('form').find('select[id$=e_partner]').val(partner);
+                   
+                }
+            },
+            error : function(){
+                console.log("Error al cargar los socios...");
             }
-        },
-        error : function(){
-            console.log("Error al cargar los socios...");
-        }
-    });
+        });
+    }else{
+
+        if ($('.active').text() == 'Nuevo Usuario' || $('.active').text() == 'New User' || $('.active').text() == 'Nouvel utilisateur' || $('.active').text() == 'Novo Utilizador')
+        {
+            $('form').find('select[id$=_partner]').empty();
+        }   
+    }
 }
 /**
  * Rellena (populate) el combo de las provincias segun la comunidad autonoma seleccionada por el usuario

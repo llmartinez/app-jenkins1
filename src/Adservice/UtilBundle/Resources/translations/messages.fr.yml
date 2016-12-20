@@ -12,6 +12,7 @@ menu.title_admin: 	 "MENU Administrateur"
 menu.title_assessor: "MENU Conseiller"
 menu.title_user: 	 "MENU Utilisateur"
 menu.title_ad: 	 	 "MENU Distributeur"
+menu.title_commercial: "MENU Commercial"
 
 menu.profile: 				  "Mon profil"
 menu.list_statistics: 		  "Statistiques"
@@ -94,6 +95,7 @@ The presented password cannot be empty.: "Le champ 'Mot de passe' ne peut pas ê
 username_used:					"Le nom introduit existe déjà ou est incorrect, essayez avec: "
 partner_not_found:				"Cette Distributeur n’existe pas"
 msg_bad_filter:                 "Le filtre entré est incorrect"
+msg.shop.changed:   "Le magasin affecté au boutique a été modifié"
 
 #ENTITY
 role:					 "Rôle"
@@ -104,14 +106,16 @@ ROLE_USER: 				 "Utilisateur"
 ROLE_TOP_AD:  		 	 "Top"
 ROLE_SUPER_AD:  		 "Super Distributeur"
 ROLE_AD:  				 "Distributeur"
+ROLE_COMMERCIAL: 		 "Commercial"
 super_admin: 			 "Super Admin"
 admin: 					 "Administrateur"
 assessor: 				 "Conseiller"
 user: 					 "Utilisateur"
 super_ad:  				 "Super Distributeur"
 ad:  					 "Distributeur"
+commercial:				 "Commercial"
 partner:				 "Distributeur"
-shop:	 				 "boutique"
+shop:	 				 "Boutique"
 workshop: 				 "Atelier"
 typology:		 		 "Type d'atelier"
 diagnosis_machine:		 "Outil de diagnostic"
@@ -366,6 +370,9 @@ VARIOS CARROCERIA: 				"Plusieurs carrosseries"
 #PARTNER
 partner.delete:			 "Effacer Distributeur"
 partner.delete.confirm:	 "Êtes-vous sûr de vouloir effacer ce Distributeur? "
+allow_list: 			 "Liste"
+allow_create: 			 "Créer"
+allow_order:			 "Demander"
 
 #SHOP
 shop.is_assigned:		 "Le boutique possède des ateliers assignés. Réassignez-les pour pouvoir effacer"
@@ -421,11 +428,15 @@ haschecks:				 "Avec chéquiers"
 numchecks:				 "Nombre de chéquiers"
 infotech:				 "InfoTech"
 infotech_only:			 "Information techniques seulement"
+closed_by_unsubscription: "Atelier désinscrit"
 
 #USER
 user.delete:			 "Effacer utilisateur"
 user.delete.confirm:	 "Êtes-vous sûr de vouloir effacer cet utilisateur? "
-
+user.activate:           "Activer utilisateur"
+user.activate.confirm:   "¿Êtes-vous sûr de vouloir activer cet utilisateur?"
+user.deactivate:         "Désactiver utilisateur"
+user.deactivate.confirm: "¿Êtes-vous sûr de vouloir désactiver cet utilisateur?"
 user.accept_privacy:     "¿Accepter la "
 user.policy_privacy:     "Politique de confidentialité"
 user.cancel:             "Annuler"
@@ -586,6 +597,11 @@ workshop_pending:			  	"Dem. atelier en attente"
 workshop_rejected:				"Dem. atelier rejetées"
 shop_pending:					"Dem. boutique en attente"
 shop_rejected:					"Dem. boutique rejetées"
+preorder:             "Pre-Demande"
+preorder_pending:         "Pre-Demandes en attente"
+preorder_rejected:        "Pre-Demandes rejetées"
+list.preorder.pending:      "Pre-Demandes en attente"
+list.preorder.rejected:     "Pre-Demandes rejetées"
 
 order.details:					"Détails de la demande"
 order.cancel:					"Annuler la demande"
@@ -635,7 +651,6 @@ mail.deleteTicket.info.id:				"Le code du ticket effacé est :"
 
 mail.closeTicket.subject:				"ADService | Ticket effacé avec l'id #"
 mail.closeTicket.title:					"Un ticket a été fermé"
-mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.closeTicket.createdby:				"Ce ticket a été fermé par un conseiller."
 mail.closeTicket.createdby.user:		"Vous avez fermé un ticket via la plate-forme AD-Service."
 mail.closeTicket.info:					"Pour accéder à ce ticket introduisez le code de référence du ticket sur <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
@@ -739,6 +754,10 @@ mail.changePassword.info.password:		"Pour modifier votre mot de passe, entrez su
 mail.activateWorkshop.subject:          "ADService | Atelier activation "
 mail.deactivateWorkshop.subject:        "ADService | Atelier deactivation "
 
+mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
+mail.inactivity_warning.title: 			"Un ticket requête est sur le point d'expirer."
+mail.inactivity_warning: 				"Cette ticket est sur le point d'expirer. Si le véhicule est réparé correctement et a la solution qui appréciera l'intégration dans la vente de billets. Votre aide peut résoudre les problèmes des autres ateliers. Merci beaucoup pour votre collaboration."
+
 mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu."
 _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu. <b>soporte@ad-service.com</b>"
 
@@ -767,8 +786,3 @@ back_app:  "Revenir à l’application"
 termsConditions:	" "
 _termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
-
-help.check_manual: 	"Check the manual"
-
-help.manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
-help.video:  '<iframe width="560" height="315" src="https://www.youtube.com/embed/jBnEqFbJDBE" frameborder="0" allowfullscreen></iframe>'

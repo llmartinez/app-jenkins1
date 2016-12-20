@@ -14,11 +14,13 @@ use Adservice\UserBundle\Form\UserAdminAssessorType;
 use Adservice\UserBundle\Form\UserAssessorType;
 use Adservice\UserBundle\Form\UserSuperPartnerType;
 use Adservice\UserBundle\Form\UserPartnerType;
+use Adservice\UserBundle\Form\UserCommercialType;
 use Adservice\UserBundle\Form\UserWorkshopType;
 use Adservice\UserBundle\Form\EditUserAdminAssessorType;
 use Adservice\UserBundle\Form\EditUserAssessorType;
 use Adservice\UserBundle\Form\EditUserSuperPartnerType;
 use Adservice\UserBundle\Form\EditUserPartnerType;
+use Adservice\UserBundle\Form\EditCommercialType;
 use Adservice\UserBundle\Form\EditUserWorkshopType;
 
 use Adservice\UserBundle\Entity\User;
@@ -34,7 +36,6 @@ class UserController extends Controller {
      * Welcome function, redirige al html del menu de usuario
      */
     public function indexAction() {
-
         //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
         //  $session = $this->getRequest()->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
@@ -45,7 +46,7 @@ class UserController extends Controller {
 
         if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
 
-        if ($this->get('security.context')->isGranted('ROLE_AD')) $length = $this->getPendingOrders();
+        if ($this->get('security.context')->isGranted('ROLE_COMMERCIAL')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
 
@@ -67,7 +68,7 @@ class UserController extends Controller {
             }
 
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
-            elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_AD')){
+            elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_COMMERCIAL')){
 
                 if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
                     if($this->get('security.context')->getToken()->getUser()->getCountryService() != null)
@@ -186,6 +187,7 @@ class UserController extends Controller {
         $users_role_super_ad    = array();
         $users_role_top_ad      = array();
         $users_role_ad          = array();
+        $users_role_commercial  = array();
 
         $pagination = new Pagination($page);
 
@@ -238,6 +240,7 @@ class UserController extends Controller {
             elseif ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
             elseif ($role == "ROLE_TOP_AD")       $users_role_top_ad[]      = $user;
             elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
+            elseif ($role == "ROLE_COMMERCIAL")   $users_role_commercial[]  = $user;
 
             if($option == null or $option == 'all') unset($role);
         }
@@ -255,6 +258,109 @@ class UserController extends Controller {
                                                                         'users_role_super_ad'    => $users_role_super_ad,
                                                                         'users_role_top_ad'      => $users_role_top_ad,
                                                                         'users_role_ad'          => $users_role_ad,
+                                                                        'users_role_commercial'  => $users_role_commercial,
+                                                                        'pagination'             => $pagination,
+                                                                        'roles'                  => $roles,
+                                                                        'cat_services'           => $cat_services,
+                                                                        'catserv'                => $catserv,
+                                                                        'countries'              => $countries,
+                                                                        'country'                => $country,
+                                                                        'option'                 => $role_id,
+                                                                        'term'                   => $term,
+                                                                        'field'                  => $field,
+                                                                    )
+        );
+    }
+
+    /**
+     * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
+     */
+    public function userPartnerListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
+
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_AD') === false)
+            throw new AccessDeniedException();
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $users_role_super_ad    = array();
+        $users_role_top_ad      = array();
+        $users_role_ad          = array();
+        $users_role_commercial  = array();
+
+        $pagination = new Pagination($page);
+
+        $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+
+        if($country != 0){
+            $params[] = array('country', ' = '.$country);
+        }
+
+        if ($term != '0' and $field != '0') {
+
+            if ($term == 'tel') {
+                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'mail') {
+                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
+            } elseif ($term == 'user') {
+                $params[] = array('username', " LIKE '%" . $field . "%'");
+            }
+        }
+
+        if(!isset($params)) $params[] = array();
+
+        $roles_allowed = "'0'";
+        if($security->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
+        if($security->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
+        if($security->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
+
+        if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
+                $role_id  = 'none';
+                $joins[] = array('e.user_role r ', "r.name IN (".$roles_allowed.")");
+        }else{
+                $role     = $em->getRepository("UserBundle:Role")->find($option);
+                $role_id  = $role->getId();
+                $role     = $role->getName();
+                $joins[] = array('e.user_role r ', "r.name LIKE '".$role."'");
+        }
+
+        $users    = $pagination->getRows      ($em, 'UserBundle', 'User', $params, $pagination, null, $joins);
+        $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params, null, $joins);
+        //separamos los tipos de usuario...
+        foreach ($users as $user) {
+            // $role = $user->getRoles();
+            if ($option == null or $option == 'all' or $option == 'none') {
+                $role     = $user->getRoles();
+                $role     = $role[0];
+                $role     = $role->getName();
+            }
+            if     ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
+            elseif ($role == "ROLE_TOP_AD")       $users_role_top_ad[]      = $user;
+            elseif ($role == "ROLE_AD")           $users_role_ad[]          = $user;
+            elseif ($role == "ROLE_COMMERCIAL")   $users_role_commercial[]  = $user;
+
+            if($option == null or $option == 'all') unset($role);
+        }
+
+        $length = $pagination->setTotalPagByLength($length);
+
+        $roles = $em->getRepository("UserBundle:Role")->findAll();
+
+        $roles_allowed = "'0'";
+        if($security->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
+        if($security->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
+        if($security->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
+
+        $roles = $em->createQuery("SELECT r FROM UserBundle:Role r WHERE r.name IN (".$roles_allowed.")")->getResult();
+
+        $countries = $em->getRepository("UtilBundle:Country")->findAll();
+        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
+
+        return $this->render('UserBundle:User:partner_list.html.twig', array(
+                                                                        'users_role_super_ad'    => $users_role_super_ad,
+                                                                        'users_role_top_ad'      => $users_role_top_ad,
+                                                                        'users_role_ad'          => $users_role_ad,
+                                                                        'users_role_commercial'  => $users_role_commercial,
                                                                         'pagination'             => $pagination,
                                                                         'roles'                  => $roles,
                                                                         'cat_services'           => $cat_services,
@@ -276,18 +382,26 @@ class UserController extends Controller {
     public function newUserAction($type) {
 
         $security = $this->get('security.context');
+        $user_logged = $this->get('security.context')->getToken()->getUser();
+        if($user_logged == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        if($security->getToken()->getUser()) {
+
+        }
         $catserv = $security->getToken()->getUser()->getCategoryService();
-        if ($security->isGranted('ROLE_ADMIN') === false) {
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        }
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                  'active' => '1'));
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
+                                                                                  'active'  => '1'));
         }
         else $partners = '0';
 
@@ -296,6 +410,7 @@ class UserController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         }elseif ($security->isGranted('ROLE_ADMIN')) {
 
@@ -303,21 +418,24 @@ class UserController extends Controller {
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
             $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($security->isGranted('ROLE_SUPER_AD') or $security->isGranted('ROLE_TOP_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         }else {
-            $_SESSION['id_partner'] = ' = '.$partner->getId();
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_partner'] = ' = '.$partners->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
         }
+
 
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
@@ -332,6 +450,10 @@ class UserController extends Controller {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
             $user->setUserRoles($rol);
             $form = $this->createForm(new UserPartnerType(), $user);
+        }elseif ($type == 'commercial') {
+            $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_COMMERCIAL');
+            $user->setUserRoles($rol);
+            $form = $this->createForm(new UserCommercialType(), $user);
         } elseif ($type == 'assessor') {
             $_SESSION['all'] = $this->get('translator')->trans('all');
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
@@ -343,7 +465,7 @@ class UserController extends Controller {
 
         $form->bindRequest($request);
 
-            if ($form->isValid()) {
+        if ($request->getMethod() == 'POST') {
 
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
@@ -371,14 +493,29 @@ class UserController extends Controller {
             if($user->getCategoryService() == null && !$security->isGranted('ROLE_SUPER_ADMIN')){
                 $user->setCategoryService($catserv);
             }
-           // $partner = $form->getData('partner');
+
+            if($user->getPartner() == null and isset($request->request->get('commercial_type')['partner'])) {
+                $u_partner = $em->getRepository('PartnerBundle:Partner')->find($request->request->get('commercial_type')['partner']);
+                $user->setPartner($u_partner);
+            }
+            if($user->getShop() == null and isset($request->request->get('commercial_type')['shop'])) {
+                $u_shop = $em->getRepository('PartnerBundle:Shop')->find($request->request->get('commercial_type')['shop']);
+                $user->getShop($u_shop);
+            }
+
+            if($user->getAllowList() == null) $user->setAllowList(1);
+            if($user->getAllowOrder() == null) $user->setAllowOrder(1);
+            if($user->getAllowCreate() == null) $user->setAllowCreate(1);
+
+            // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
             $this->saveUser($em, $user);
 
             $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
             $this->get('session')->setFlash('alert', $flash);
 
-            return $this->redirect($this->generateUrl('user_list'));
+            if ($security->isGranted('ROLE_ADMIN')) return $this->redirect($this->generateUrl('user_list'));
+            else                                    return $this->redirect($this->generateUrl('user_partner_list'));
         }
 
         $array = array('user'       => $user,
@@ -401,17 +538,22 @@ class UserController extends Controller {
     public function editUserAction($user) {
 
         $security = $this->get('security.context');
-        if (($security->isGranted('ROLE_ADMIN') === false)
+        if (($security->isGranted('ROLE_AD') === false)
         and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-
+        $user_logged = $this->get('security.context')->getToken()->getUser();
+        if ($user_logged->getAllowCreate() == false) {
+            throw new AccessDeniedException();
+        }
         $em = $this->getDoctrine()->getEntityManager();
+        $trans = $this->get('translator');
+
         $petition = $this->getRequest();
         if($petition->request->has('assign_all')){
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
             $result= $em->createQuery($sql)->getResult();
-            $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+            $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
             $this->get('session')->setFlash('alert', $flash);
 
             return $this->redirect($this->generateUrl('user_list'));
@@ -420,9 +562,12 @@ class UserController extends Controller {
         $original_password = $user->getPassword();
 
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        }
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
         else $partners = '0';
@@ -438,10 +583,14 @@ class UserController extends Controller {
             elseif($role == "ROLE_AD")
                 $partner_id = $user->getPartner()->getId();
         }
+        if ($role == "ROLE_COMMERCIAL" and $user->getShop() != null)
+             $shop_name = $user->getShop()->getName();
+        else $shop_name = null;
+
         $user_role_id = 0;
         // Creamos variables de sesion para fitlrar los resultados del formulario
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
-                
+
             if ($role == "ROLE_USER") {
 
                 $_SESSION['id_partner'] = ' = '.$partner_id ;
@@ -453,26 +602,26 @@ class UserController extends Controller {
             $user_role_id = 1;
             if($user->getRoles()[0]->getId() != 1) {
                 if($user->getCategoryService() != null) {
-                    $_SESSION['id_catserv'] = ' != '.$user->getCategoryService()->getId();
+                    $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
                     $user_role_id = 0;
                 }
             }
             if($user->getRoles()[0]->getId() == 3) {
                 $user_role_id = 2;
             }
-            
+
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
 
         }else {
-            $_SESSION['id_partner'] = ' = '.$partner->getId();
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_partner'] = ' = '.$partners->getId();
         }
+
+        $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR"){
@@ -481,22 +630,26 @@ class UserController extends Controller {
                 $user_role_id = 2;
             }
         }
-        elseif ($role == "ROLE_TOP_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_SUPER_AD") $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")       $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_USER")     $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        elseif ($role == "ROLE_TOP_AD")     $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_SUPER_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
+        elseif ($role == "ROLE_AD")         $form = $this->createForm(new EditUserPartnerType()      , $user);
+        elseif ($role == "ROLE_COMMERCIAL") $form = $this->createForm(new EditCommercialType()       , $user);
+        elseif ($role == "ROLE_USER")       $form = $this->createForm(new EditUserWorkshopType()     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
 
         if ($petition->getMethod() == 'POST') {
-            
+
             if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
-                $flash =  $this->get('translator')->trans('error.bad_introduction').' ('.$this->get('translator')->trans('category_service').')';
+                $flash =  $trans->trans('error.bad_introduction').' ('.$trans->trans('category_service').')';
                 $this->get('session')->setFlash('error', $flash);
             }
             else {
+
+                if($user->getShop() != null) $old_shop = $user->getShop()->getId();
+
                 $form->bindRequest($petition);
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
@@ -506,7 +659,7 @@ class UserController extends Controller {
                     $user->setUsername($username);
 
                     if ($username != $name) {
-                        $error_username = $this->get('translator')->trans('username_used').$username;
+                        $error_username = $trans->trans('username_used').$username;
 
                         return $this->render('UserBundle:User:edit_user.html.twig', array('user'           => $user,
                                                                                           'form_name'      => $form->getName(),
@@ -527,21 +680,43 @@ class UserController extends Controller {
                     $em->flush();
                  }
                  elseif($user->getPartner() !== null){
-                    $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
-                    $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
 
+                    if($user->getRoles()[0]->getName() == 'ROLE_COMMERCIAL') {
 
-                    $partner_user->setContact($user->getName());
-                    $partner_user->setActive($user->getActive());
-                    $em->persist($partner_user);
+                        $em->persist($user);
+                    }else{
+                        $partner_user= $em->getRepository('PartnerBundle:Partner')->findOneById($user->getPartner()->getId());
+                        $partner_user = UtilController::saveUserFromWorkshop($user, $partner_user );
+                        $partner_user->setContact($user->getName());
+                        $partner_user->setActive($user->getActive());
+                        $em->persist($partner_user);
+                    }
+
                     $em->flush();
-                 }
+                }
+
+                if($user->getShop() != null) $shop = $user->getShop()->getId();
+
+                if(isset($old_shop) and $old_shop != $shop) {
+                    $orders = $em->getRepository('OrderBundle:WorkshopOrder')->findBy(array('created_by' => $user->getId()));
+                    foreach ($orders as $order) {
+                        $order->setAction('rejected');
+                        $msg_reject = $trans->trans('msg.shop.changed');
+                        $order->setRejectionReason($msg_reject);
+                        $em->persist($order);
+                    }
+                    $em->flush();
+                }
 
                 $this->saveUser($em, $user, $original_password);
-                $flash =  $this->get('translator')->trans('btn.edit').' '.$this->get('translator')->trans('user').': '.$user->getUsername();
+                $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
                 $this->get('session')->setFlash('alert', $flash);
 
-                return $this->redirect($this->generateUrl('user_list'));
+                if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                    return $this->redirect($this->generateUrl('user_list'));
+                }else{
+                    return $this->redirect($this->generateUrl('user_partner_list'));
+                }
             }
 
         }
@@ -550,27 +725,56 @@ class UserController extends Controller {
                                                                           'role'         => $role,
                                                                           'form_name'    => $form->getName(),
                                                                           'partner_id'   => $partner_id,
+                                                                          'shop_name'    => $shop_name,
                                                                           'user_role_id' => $user_role_id,
                                                                           'form'         => $form->createView()));
     }
 
     /**
+     * Activa/Desactiva el usuario con la $id de la bbdd
+     * @throws AccessDeniedException
+     * @throws CreateNotFoundException
+     */
+    public function disableUserAction($id) {
+        $security = $this->get('security.context');
+        $user_logged = $security->getToken()->getUser();
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
+            throw new AccessDeniedException();
+        }
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
+        $user->setActive(!$user->getActive());
+        $em->persist($user);
+        $em->flush();
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('user_list'));
+        }else{
+            return $this->redirect($this->generateUrl('user_partner_list'));
+        }
+    }
+
+    /**
      * Elimina el usuario con la $id de la bbdd
-     * @Route("/user/delete/{id}")
-     * @ParamConverter("user", class="UserBundle:User")
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
     public function deleteUserAction($id) {
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false) {
+        $security = $this->get('security.context');
+        $user_logged = $security->getToken()->getUser();
+        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository("UserBundle:User")->find($id);
         $em->remove($user);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('user_list'));
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('user_list'));
+        }else{
+            return $this->redirect($this->generateUrl('user_partner_list'));
+        }
     }
 
     /**
@@ -688,7 +892,7 @@ class UserController extends Controller {
     public function getPendingOrders(){
 
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
+        if ($security->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -705,54 +909,62 @@ class UserController extends Controller {
 
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
+        $preorder     = array('wanted_action' , " = 'preorder'");
+        $not_preorder = array('wanted_action' , " != 'preorder'");
+
+        $workshop_pending [] = $not_preorder;
+        $workshop_pending [] = $not_rejected;
+        $shop_pending     [] = $not_rejected;
+        $workshop_rejected[] = $not_preorder;
+        $workshop_rejected[] = $rejected;
+        $shop_rejected    [] = $rejected;
+        $preorder_pending [] = $preorder;
+        $preorder_pending [] = $not_rejected;
+        $preorder_rejected[] = $preorder;
+        $preorder_rejected[] = $rejected;
+
 
         if($user->getCategoryService() != null) {
             $id_catserv = $user->getCategoryService()->getId();
-            $workshop_pending[] = array('category_service', ' = '.$id_catserv);
-            $workshop_rejected[] = array('category_service', ' = '.$id_catserv);
-            // $shop_pending[] = array('category_service', ' = '.$id_catserv);
-            // $shop_rejected[] = array('category_service', ' = '.$id_catserv);
+            $workshop_pending[]  = array('category_service' , " = ".$id_catserv);
+            $workshop_rejected[] = array('category_service' , " = ".$id_catserv);
+            $preorder_pending[]  = array('category_service' , " = ".$id_catserv);
+            $preorder_rejected[] = array('category_service' , " = ".$id_catserv);
+            $shop_pending[]      = array('category_service' , " = ".$id_catserv);
+            $shop_rejected[]     = array('category_service' , " = ".$id_catserv);
         }
 
         if    ($role == "ROLE_SUPER_AD"
-            OR $role == "ROLE_TOP_AD"  ){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_rejected[] = $by_country;
-                                            $workshop_rejected[] = $rejected;
-                                            $shop_rejected[]     = $by_country;
-                                            $shop_rejected[]     = $rejected;
-
-                                            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            OR $role == "ROLE_TOP_AD"  ){   $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
                                             $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                                            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
 
-                                            $length = $length_workshop_rejected + $length_shop_rejected;
+                                            $length = $length_workshop_rejected + $length_shop_rejected + $length_preorder_pending;
                                         }
         elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
                                             $workshop_rejected[] = $by_partner;
-                                            $workshop_rejected[] = $rejected;
                                             $shop_rejected[]     = $by_partner;
-                                            $shop_rejected[]     = $rejected;
+                                            $preorder_pending[]  = $by_partner;
 
                                             $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
                                             $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                                            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
 
-                                            $length = $length_workshop_rejected + $length_shop_rejected;
+                                            $length = $length_workshop_rejected + $length_shop_rejected + $length_preorder_pending;
+                                        }
+        elseif($role == "ROLE_COMMERCIAL"){ $by_commercial       = array('created_by', ' = '.$user->getId());
+                                            $preorder_pending[]  = $by_commercial;
+                                            $preorder_rejected[] = $by_commercial;
+
+                                            $length = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
                                         }
         elseif($role == "ROLE_ADMIN")   {
-                                            $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_pending[]  = $by_country;
-                                            $workshop_pending[]  = $not_rejected;
-                                            $shop_pending[]      = $by_country;
-                                            $shop_pending[]      = $not_rejected;
-
                                             $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
                                             $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
 
                                             $length = $length_workshop_pending + $length_shop_pending;
                                         }
         elseif($role == "ROLE_SUPER_ADMIN"){
-                                            $workshop_pending[]  = $not_rejected;
-                                            $shop_pending[]      = $not_rejected;
-
                                             $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
                                             $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
 

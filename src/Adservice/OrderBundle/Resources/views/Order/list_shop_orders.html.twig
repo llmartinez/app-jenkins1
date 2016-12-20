@@ -8,8 +8,8 @@
                     <tr>
                         <th>#</th>
                         <th>{% trans %} shop            {% endtrans %}</th>
-                        <th>{% trans %} partner         {% endtrans %}</th>
                         <th>{% trans %} category_service{% endtrans %}</th>
+                        <th>{% trans %} partner         {% endtrans %}</th>
                         <th>{% trans %} tel             {% endtrans %}</th>
                         <th>{% trans %} region          {% endtrans %}</th>
                         <th>{% trans %} status          {% endtrans %}</th>
@@ -26,8 +26,8 @@
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
                             <td> {{ shopOrder.id           }} </td>
                             <td> {{ shopOrder.name|length > 15 ? shopOrder.name|slice(0, 15) ~ '...' : shopOrder.name  }} </td>
-                            <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.categoryService }} </td>
+                            <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.phoneNumber1 }} </td>
                             <td> {{ shopOrder.region|length > 15 ? shopOrder.region|slice(0, 15) ~ '...' : shopOrder.region  }} </td>
                             <td> {% if shopOrder.active == 0 %}{% trans %} active   {% endtrans %}
@@ -70,8 +70,8 @@
                                                     {% if shopOrder.wantedaction == 'modify' or shopOrder.action == 're_modify' %}
                                                         <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ orderBefore.name          }}</td><td>{{ shopOrder.name          }}</td></tr>
-                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} category_service {% endtrans %}</td><td>{{ orderBefore.categoryService}}</td><td>{{ shopOrder.categoryService       }}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ orderBefore.codeShop      }}</td><td>{{ shopOrder.codeShop      }}</td></tr>
                                                         <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif           }}</td><td>{{ shopOrder.cif           }}</td></tr>
                                                         <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ orderBefore.contact       }}</td><td>{{ shopOrder.contact       }}</td></tr>
@@ -89,8 +89,8 @@
                                                     {% else %}
                                                     <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ shopOrder.name          }}</td></tr>
-                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ shopOrder.categoryService}}</td></tr>
+                                                        <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ shopOrder.codeShop      }}</td></tr>
                                                         <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ shopOrder.cif           }}</td></tr>
                                                         <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ shopOrder.contact       }}</td></tr>

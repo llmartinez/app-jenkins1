@@ -170,7 +170,6 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
-            $user_partner = $em->getRepository("UserBundle:User")->findOneByPartner($partner);
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             if ($form->isValid()) {
@@ -197,7 +196,7 @@ class WorkshopController extends Controller {
                     $workshop = UtilController::settersContact($workshop, $workshop);
                     $workshop->setCodePartner($partner->getCodePartner());
                     $workshop->setCodeWorkshop($code);
-                    $workshop->setCategoryService($user_partner->getCategoryService());
+                    $workshop->setCategoryService($partner->getCategoryService());
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
@@ -247,7 +246,7 @@ class WorkshopController extends Controller {
                     $newUser->setLanguage($lang);
                     $newUser->setWorkshop($workshop);
                     $newUser->addRole($role);
-                    $newUser->setCategoryService($user_partner->getCategoryService());
+                    $newUser->setCategoryService($partner->getCategoryService());
 
                     $newUser = UtilController::settersContact($newUser, $workshop);
 
@@ -597,6 +596,17 @@ class WorkshopController extends Controller {
                 $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
             }else{
                 $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+
+                // Cerramos todos los tickets del taller deshabilitado
+                $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
+                $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
+
+                $ids = '0';
+                foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
+
+                $consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."'
+                                              WHERE t.id IN (".$ids.")");
+                $consulta->getResult();
             }
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
