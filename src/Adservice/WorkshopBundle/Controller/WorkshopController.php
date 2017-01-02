@@ -269,7 +269,7 @@ class WorkshopController extends Controller {
 
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
@@ -439,7 +439,7 @@ class WorkshopController extends Controller {
                         $workshop->setShop(null);
                     }
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
@@ -708,7 +708,7 @@ class WorkshopController extends Controller {
      * Genera un historial de cambios del taller
      * @return WorkshopHistory
      */
-    public function createHistoric($em, $workshop) {
+    /*public function createHistoric($em, $workshop) {
 
         $history = new WorkshopStatusHistory();
 
@@ -736,7 +736,7 @@ class WorkshopController extends Controller {
 
         $em->persist($history);
         $em->flush();
-    }
+    }*/
    
     /**
      * Hace el save de un workshop
