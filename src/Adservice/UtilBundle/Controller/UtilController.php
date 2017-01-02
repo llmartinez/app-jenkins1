@@ -146,7 +146,6 @@ class UtilController extends Controller
      */
     public static function getCodeWorkshopUnused($em, $partner)
     {
-
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
 
