@@ -672,11 +672,17 @@ class UserController extends Controller {
                 if($user->getWorkshop() !== null){
                     $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
                     $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
-
+       
+                    
                     $workshop_user->setPartner($user->getWorkshop()->getPartner());
                     $workshop_user->setContact($user->getName());
                     $workshop_user->setActive($user->getActive());
                     $em->persist($workshop_user);
+                    $status = 0;
+                    if($workshop_user->getActive()){
+                        $status = 1;
+                    }
+                    UtilController::createHistorical($em, $workshop_user, $status);
                     $em->flush();
                  }
                  elseif($user->getPartner() !== null){

@@ -2,6 +2,7 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
@@ -727,5 +728,19 @@ class UtilController extends Controller
         else{                                               $user_workshop->setPostalCode(null);        }
 
         return $user_workshop;
+    }
+    
+     /**
+     * Genera un historial de cambios del taller
+     * @return WorkshopHistory
+     */
+    public static function createHistorical($em, $workshop, $status) {
+        $historical = new Historical();
+        $historical->setWorkshopId($workshop->getId());
+        $historical->setPartnerId($workshop->getPartner()->getId());
+        $historical->setDateOrder(new \DateTime('now'));
+        $historical->setStatus($status);
+        $em->persist($historical);
+        $em->flush();
     }
 }
