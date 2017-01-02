@@ -151,18 +151,13 @@ class UtilController extends Controller
         $unused = 1;
 
         while($unused != 'unused') {
-            $find = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+            if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
+            else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente
         }
-        $unused = 1;
-        while($unused != 'unused') {
-            $find = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
-        }
         return $code;
     }
 
@@ -740,6 +735,8 @@ class UtilController extends Controller
         $historical->setPartnerId($workshop->getPartner()->getId());
         $historical->setDateOrder(new \DateTime('now'));
         $historical->setStatus($status);
+
+
         $em->persist($historical);
         $em->flush();
     }
