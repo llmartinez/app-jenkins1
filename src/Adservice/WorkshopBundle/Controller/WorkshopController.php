@@ -17,6 +17,7 @@ use Adservice\WorkshopBundle\Form\WorkshopObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
+use Adservice\WorkshopBundle\Entity\Historical;
 use Adservice\WorkshopBundle\Entity\WorkshopStatusHistory;
 
 class WorkshopController extends Controller {
@@ -207,7 +208,11 @@ class WorkshopController extends Controller {
                         $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                     }
                     $this->saveWorkshop($em, $workshop);
-
+                    $status = 1;
+                    if($workshop->getTest()){
+                        $status = 2;
+                    }
+                    UtilController::createHistorical($em, $workshop, $status);
                     //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
                     if ($workshop->getAdServicePlus()) {
                         $adsplus = new ADSPlus();
@@ -264,7 +269,7 @@ class WorkshopController extends Controller {
 
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
@@ -434,13 +439,17 @@ class WorkshopController extends Controller {
                         $workshop->setShop(null);
                     }
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
 
                     $this->saveWorkshop($em, $workshop);
-
+                    $status = 1;
+                    if($workshop->getTest()){
+                        $status = 2;
+                    }
+                    UtilController::createHistorical($em, $workshop, $status);
                     if ($security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('workshop_list'));
                     elseif ($security->isGranted('ROLE_ASSESSOR'))
@@ -594,9 +603,10 @@ class WorkshopController extends Controller {
 
             if($workshop->getActive() == true) {
                 $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $status = 1;
             }else{
                 $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-
+                $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
                 $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
                 $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
@@ -611,8 +621,11 @@ class WorkshopController extends Controller {
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
         }
-       $this->saveWorkshop($em, $workshop);
-
+       
+        if($workshop->getTest() && $status == 1){
+            $status = 2;
+        }
+        UtilController::createHistorical($em, $workshop, $status);
 
          /* MAILING */
         //Mail to workshop
@@ -695,7 +708,7 @@ class WorkshopController extends Controller {
      * Genera un historial de cambios del taller
      * @return WorkshopHistory
      */
-    public function createHistoric($em, $workshop) {
+    /*public function createHistoric($em, $workshop) {
 
         $history = new WorkshopStatusHistory();
 
@@ -723,8 +736,8 @@ class WorkshopController extends Controller {
 
         $em->persist($history);
         $em->flush();
-    }
-
+        }*/
+   
     /**
      * Hace el save de un workshop
      * @param EntityManager $em

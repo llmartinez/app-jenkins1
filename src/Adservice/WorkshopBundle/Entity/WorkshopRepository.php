@@ -102,6 +102,7 @@ class WorkshopRepository extends EntityRepository
                    .'OR w.mobile_number_1 = '.$number
                    .'OR w.mobile_number_1 = '.$number;
         $consulta = $em-> createQuery($query);
+
         return $consulta->getResult()[0];
 
     }
