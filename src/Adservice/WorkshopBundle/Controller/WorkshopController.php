@@ -208,7 +208,7 @@ class WorkshopController extends Controller {
                         $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                     }
                     $this->saveWorkshop($em, $workshop);
-                    $status = 1;
+                    $status = 3; // 3 para primera alta
                     if($workshop->getTest()){
                         $status = 2;
                     }

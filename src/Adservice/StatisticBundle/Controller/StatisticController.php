@@ -1654,8 +1654,8 @@ class StatisticController extends Controller {
         if(isset($res['test'    ])) $excel .= $trans->trans('testdate').';';
 
         // Historical Fields
+        if(isset($res['status'])) $excel .= $trans->trans('order').';';
         if(isset($res['date_order'])) $excel .= $trans->trans('date_order').';';
-        if(isset($res['status'])) $excel .= $trans->trans('status').';';
 
         $excel .=
             $trans->trans('first_update').';'.
@@ -1677,14 +1677,14 @@ class StatisticController extends Controller {
             if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
             if(isset($row['lowdate'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['lowdate'       ]).';';
             if(isset($row['test'          ])) $excel.=str_ireplace($buscar,$reemplazar,$row['test'          ]).';';
-/////////////////////////////////
-// FALTA TRANS
-/////////////////////////////////
+            if(isset($row['status'        ])) {
+                if($row['status'] == '0') $excel.=$trans->trans('workshop.deactivate').';';
+                elseif($row['status'] == '1') $excel.=$trans->trans('workshop.activate').';';
+                elseif($row['status'] == '2') $excel.=$trans->trans('test').';';
+                elseif($row['status'] == '3') $excel.=$trans->trans('first_update').';';
+                else $excel.='-;';
+            }
             if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
-/////////////////////////////////
-// FALTA SET ACTIVE INACTIVE
-/////////////////////////////////
-            if(isset($row['status'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['status']).';';;
             if(isset($row['created_at'    ])) $excel.=$row['created_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
             if(isset($row['update_at'     ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
             if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
