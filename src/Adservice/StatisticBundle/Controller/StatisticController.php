@@ -224,6 +224,7 @@ class StatisticController extends Controller {
 
           //Variables para enviar al excel
             $results = array();
+            $data = array();
             $cont = array('update' => 0, 'lowdate' => 0, 'test' => 0);
 
           // Con los IDs de talleres a facturar, consultamos el historico de altas/bajas y añadimos los datos
