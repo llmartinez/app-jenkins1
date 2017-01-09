@@ -388,7 +388,6 @@ typology:				 "Type d'atelier"
 cif:					 "Code réseau"
 internal_code:			 "Code interne"
 commercial_code:		 "Code de commerce"
-
 subscribed:				 "Inscrit"
 unsubscribed:			 "Désinscrit"
 test:					 "À l'essai"
@@ -585,6 +584,14 @@ statistic.num_tickets.open:	  "Nombre de tickets ouverts"
 statistic.num_tickets.closed: "Nombre de tickets fermés"
 statistic.last_tickets:		  "Derniers tickets des ateliers"
 statistic.no_ticket:		  "Ateliers sans ticket"
+
+update: "Journées Inscrit"
+lowdate: "Journées Désinscrit"
+testdate: "Journées À l'essai"
+first_update: "Première enregistrement"
+last_update: "Dernier enregistrement"
+last_lowdate: "Dernier désabonné"
+date_order: "Date de la commande"
 
 #POPUP
 popup.delete:				  "Effacer pop-up"

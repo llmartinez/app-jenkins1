@@ -387,7 +387,6 @@ typology:				 "Customer"
 cif:					 "Corporate tax ID number"
 internal_code:			 "Internal Code"
 commercial_code:		 "Commercial Code"
-
 subscribed:				 "Subscribed"
 unsubscribed:			 "Unsubscribed"
 test:					 "Trial"
@@ -584,6 +583,14 @@ statistic.num_tickets.open:	  "Number of Open Tickets"
 statistic.num_tickets.closed: "Number of Closed Tickets"
 statistic.last_tickets:		  "Latest workshop tickets"
 statistic.no_ticket:		  "Workshops without tickets"
+
+update: "Subscribed days"
+lowdate: "Unsubscribed days"
+testdate: "Trial days"
+first_update: "First subscription"
+last_update: "Last subscription"
+last_lowdate: "Last unsubscription"
+date_order: "Date of the order"
 
 #POPUP
 popup.delete:				  "Delete popup"

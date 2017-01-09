@@ -736,7 +736,7 @@ class WorkshopController extends Controller {
 
         $em->persist($history);
         $em->flush();
-    }*/
+        }*/
    
     /**
      * Hace el save de un workshop
