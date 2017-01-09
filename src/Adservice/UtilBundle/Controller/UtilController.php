@@ -2,6 +2,7 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
@@ -145,23 +146,17 @@ class UtilController extends Controller
      */
     public static function getCodeWorkshopUnused($em, $partner)
     {
-
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
 
         while($unused != 'unused') {
-            $find = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+            if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
+            else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente
         }
-        $unused = 1;
-        while($unused != 'unused') {
-            $find = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
-        }
         return $code;
     }
 
@@ -727,5 +722,21 @@ class UtilController extends Controller
         else{                                               $user_workshop->setPostalCode(null);        }
 
         return $user_workshop;
+    }
+    
+     /**
+     * Genera un historial de cambios del taller
+     * @return WorkshopHistory
+     */
+    public static function createHistorical($em, $workshop, $status) {
+        $historical = new Historical();
+        $historical->setWorkshopId($workshop->getId());
+        $historical->setPartnerId($workshop->getPartner()->getId());
+        $historical->setDateOrder(new \DateTime('now'));
+        $historical->setStatus($status);
+
+
+        $em->persist($historical);
+        $em->flush();
     }
 }

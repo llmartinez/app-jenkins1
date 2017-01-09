@@ -279,7 +279,7 @@ andorra:				 "Andorra"
 france:					 "França"
 portugal:				 "Portugal"
 ireland:				 "Irlanda"
-england:				 "Inglaterra"
+england:				 "Reino Unido"
 british_isles:	 		 "Ilhas Britânicas"
 
 #LANGUAGE
@@ -387,7 +387,6 @@ typology:				 "Tipologia"
 cif:					 "NIF"
 internal_code:			 "Código Interno"
 commercial_code:		 "Código Comercial"
-
 subscribed:				 "Inscrito"
 unsubscribed:			 "Inscrição cancelada"
 test:					 "Em testes"
@@ -584,6 +583,14 @@ statistic.num_tickets.open:	  "Número de Talões abertos"
 statistic.num_tickets.closed: "Número de Talões fechados"
 statistic.last_tickets:		  "Últimos talões das oficinas"
 statistic.no_ticket:		  "Oficinas sem talões"
+
+update: "Dias Inscrito"
+lowdate: "Dias Inativos"
+testdate: "Dias em Testes"
+first_update: "Primeira Inscrição"
+last_update: "Inscrição passada"
+last_lowdate: "Inativação passada"
+date_order: "Data do pedido"
 
 #POPUP
 popup.delete:				  "Apagar pop-up"
