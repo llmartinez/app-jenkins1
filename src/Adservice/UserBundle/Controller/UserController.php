@@ -79,7 +79,7 @@ class UserController extends Controller {
                             "AND p.active = 1 ";
 
                     if($user->getCategoryService() != null) 
-                        $query .= "AND p.category_service = ".$user->getCategoryService()->getId()." ".
+                        $query .= "AND p.category_service = ".$user->getCategoryService()->getId()." ";
 
                     $popups = $em->createQuery($query)->getResult();
 
