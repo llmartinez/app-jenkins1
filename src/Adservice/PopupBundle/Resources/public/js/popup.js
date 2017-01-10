@@ -32,15 +32,31 @@
         // });
 
         //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-        $('#flt_country').change(function() {
+        $('#flt_category_service').change(function() {
 
+            var category_service = $('#flt_category_service').val();
             var country = $('#flt_country').val();
 
+            if(category_service == null) category_service = 'none';
             if(country == null) country = 'none';
 
             var route = 'popup_list';
             var locale = $(document).find("#data_locale").val();
-            var url = Routing.generate(route, {_locale: locale, page: 1, country: country });
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, category_service: category_service });
+
+            window.open(url, "_self");
+        });
+        $('#flt_country').change(function() {
+
+            var category_service = $('#flt_category_service').val();
+            var country = $('#flt_country').val();
+
+            if(category_service == null) category_service = 'none';
+            if(country == null) country = 'none';
+
+            var route = 'popup_list';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: 1, country: country, category_service: category_service });
 
             window.open(url, "_self");
         });

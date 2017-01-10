@@ -2,8 +2,8 @@
 #   APDO. RUTAS GENÉRICAS   #
 #############################
 popup_list:
-    pattern: /list/{page}/{country}
-    defaults: { _controller: PopupBundle:Popup:popupList, page: 1 , country: 'none'  }
+    pattern: /list/{page}/{category_service}/{country}
+    defaults: { _controller: PopupBundle:Popup:popupList, page: 1 , category_service: 'none' , country: 'none'  }
     options:
         expose: true
 
