@@ -283,19 +283,22 @@ class StatisticController extends Controller {
                         if($diff->invert == 0)    $start = $res['dateOrder'];
                         elseif(isset($from_date)) $start = new \DateTime($from_date);
                     }
-
                     // Si ha puesto fecha final se hace una ultima comprobacion
                     if (isset($to_date)){
                         $end     = new \DateTime($to_date);
                         $diff    = date_diff($res['dateOrder'] , $end);
-
+var_dump($res['dateOrder']);
+var_dump($end);
+var_dump($diff);
                         if($res['status'] == 0) $status = 1; elseif($res['status'] == 1) $status = 0;
+var_dump($status);
                         $cont    = $this->sumStatus($diff, $status, $cont);
                     }
                     $results[$id]['update' ] = $cont['update' ];
                     $results[$id]['lowdate'] = $cont['lowdate'];
                     $results[$id]['test'   ] = $cont['test'   ];
 
+var_dump($results[$id]);
                     $data = $results;
                 }  
                 elseif($raport == 'historical')
@@ -347,6 +350,7 @@ class StatisticController extends Controller {
                     $data = $historical;
                 }
             }
+die;
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$raport.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelBilling($data);
         }
@@ -2216,6 +2220,9 @@ class StatisticController extends Controller {
                 break;
               case '2':
                 $test = $test + $diff->days;
+                break;
+              case '3':
+                $update = $update + $diff->days;
                 break;
               default:
                 break;
