@@ -27,8 +27,6 @@
             {% endif %}
             </legend>
 
-            <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
-
             {% if ticket.workshop.active == 0 %}
                 <div class="grid100"> <p class="error">{% trans %} workshop_inactive {% endtrans %}</p></div>
             {% endif %}
