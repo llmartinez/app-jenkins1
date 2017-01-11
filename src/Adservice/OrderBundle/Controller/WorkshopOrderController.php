@@ -1022,15 +1022,15 @@ class WorkshopOrderController extends Controller {
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
 
             // Cerramos todos los tickets del taller deshabilitado
-            $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
-            $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
+                // $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
+                // $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
 
-            $ids = '0';
-            foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
+                // $ids = '0';
+                // foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
 
-            $consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."'
-                                          WHERE t.id IN (".$ids.")");
-            $consulta->getResult();
+                // $consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."'
+                //                               WHERE t.id IN (".$ids.")");
+                // $consulta->getResult();
 
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
