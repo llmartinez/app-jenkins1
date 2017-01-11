@@ -5,6 +5,9 @@
     Description:
         stylesheet para ADService
 */
+.env  {   font-size: 3em; float: left; margin-right: 30px; color: red; }
+.dev  { background-color: #FF0!important; }
+.test { background-color: #0F0!important; }
 
 /*
     BODY
@@ -625,23 +628,31 @@ textarea.form-control_ged {
 .img_logo {
     height: 35px;
     margin-top: 5px;
-    margin-left: -15px;
 }
 
+.h100 {
+    height: 100px !important;
+}
 .h65 {
     height: 65px !important;
 }
 .mb15 {
     margin-bottom: 15px !important;
 }
+.ml15 {
+    margin-left: 15px !important;
+}
 .mr15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
+}
+.mb20 {
+    margin-bottom: 20px !important;
+}
+.mr20 {
+    margin-right: 20px !important;
 }
 .mr40 {
-    margin-right: 40px;
-}
-.ml15 {
-    margin-left: 15px;
+    margin-right: 40px !important;
 }
 .change_page {
     padding-left: 10px;
@@ -817,6 +828,15 @@ fieldset[disabled] .asr_form-control {
 .mt20 {
     margin-top: 20px;
 }
+.mt5 {
+    margin-top: 5px;
+}
+.pd0 {
+    padding: 0!important;
+}
+.pd_form {
+    padding: 0 5px 0 0!important;
+}
 
 .pd_txt {
     padding: 10px 15px;;
@@ -843,6 +863,12 @@ fieldset[disabled] .asr_form-control {
 .w90  { width:  90%!important; }
 .w95  { width:  95%!important; }
 .w100 { width: 100%!important; }
+
+.grid-20  {
+    width:  19%!important;
+    margin-right: 1%;
+    float: left;
+}
 .grid-33  {
     width:  30%!important;
     margin-right: 3.3%;

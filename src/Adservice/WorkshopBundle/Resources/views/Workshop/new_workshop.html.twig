@@ -12,25 +12,51 @@
     <input type="hidden" id="bad_introduction" value="{% trans %}error.bad_introduction{% endtrans %} ">
     <form action="{{ path('workshop_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
-        <div class="container">
-            <legend>{% trans %} workshop {% endtrans %}</legend>
+    <div class="container">
+        <legend>{% trans %} workshop {% endtrans %}</legend>
 
-            <div class="col-xs-12 col-md-12 form-group">
+        <div class="w100">
                 <input type="hidden" id="exist_cif" value="{% trans %}workshop.cif_exist{% endtrans %} ">
                 <div class="error_cif"></div>
             {% if app.session.hasFlash('error') %}
                 <p class="error">{{ app.session.getFlash('error') }}</p>
             {% endif %}
 
-            <div class="col-xs-8 col-md-8 form-group">
+            <div class="w70 fl">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
-                <div class="col-xs-6 col-md-6 form-group">
+                
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                        <div class="col-xs-3 col-md-3 form-group">
+                            <label> {% trans %} category_service {% endtrans %} </label>
+                            <select  id="adservice_workshopbundle_workshoptype_category_service" name="adservice_workshopbundle_workshoptype[category_service]" class="form-control"> 
+                                <option value="0"></option>
+                                <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
+
+                            </select>
+                        </div>
+                        {% if form.category_service is defined %}
+                            <div class="col-xs-3 col-md-3 form-group" hidden >
+                               <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if form.category_service is defined %}
+                            <div class="col-xs-3 col-md-3 form-group">
+                               <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+               
+                <div class="col-xs-3 col-md-3 form-group">
                     <input type="hidden" id="partner_not_found" value="{% trans %}partner_not_found{% endtrans %} ">
                     <label for="adservice_workshopbundle_workshoptype_partner">{% trans %} partner {% endtrans %} *</label>
-                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.partner, { 'attr': {'class': 'form-control', 'required': 'required'} }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} code_partner {% endtrans %}</label>
@@ -56,56 +82,77 @@
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_diagnosis_machines">{% trans %} diagnosis_machines {% endtrans %}</label>
-                    <div> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control'} }) }} </div>
+                    <div> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control h100'} }) }} </div>
 
                     {% if is_granted('ROLE_SUPER_ADMIN') and diagnosis_machines[0].id is defined %}
                         <div id="lan_diag_machines">
                             {% for diag_machine in diagnosis_machines %}
-                                <input type="hidden" id="lan{{diag_machine.id}}" value="{{diag_machine.country.shortName}}">
+                                <input type="hidden" id="lan{{diag_machine.id}}" value="{{diag_machine.categoryService}}">
                             {% endfor %}
                         </div>
                     {% endif %}
                 </div>
             </div>
-            <div class="col-xs-4 col-md-4 form-group">
-                <div class="col-xs-12 col-md-12 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
-                    {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
-                </div>
-              {#  <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_active">{% trans %} active {% endtrans %}</label>
-                    {{ form_widget(form.active, { 'attr': {'checked': 'checked' }}) }}
-                </div>#}
-                <div class="col-xs-8 col-md-8 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_ad_service_plus">{% trans %} ad_service_plus {% endtrans %}</label>
-                    {{ form_widget(form.ad_service_plus) }}
-                </div>
-                <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
-                    {{ form_widget(form.test) }}
-                </div>
-                <div class="col-xs-8 col-md-8 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
-                    {{ form_widget(form.endtest_at) }}
-                </div>
 
-                <div class="col-xs-4 col-md-4 form-group">
-                    <div class="grid-full w80 mt20">
-                        <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
+            <div class="w30 fl">
+                <div class="grid w100 fl">
+                    <div class="grid w45 fl">
+                        <div class="grid-full w95">
+                            <label for="adservice_workshopbundle_workshoptype_internal_code">{% trans %} internal_code {% endtrans %}</label>
+                            {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+                        </div>
                     </div>
-                    <div class="grid-full w20 mt20">
-                        {{ form_widget(form.haschecks) }}
+                    <div class="grid w45 fl">
+                        <div class="grid-full w95">
+                            <label for="adservice_workshopbundle_workshoptype_commercial_code">{% trans %} commercial_code {% endtrans %}</label>
+                            {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control mb15', 'placeholder': 'commercial_code' | trans } }) }}
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-8 col-md-8 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
-                    {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                <div class="grid w100 fl">
+                    <div class="grid w45 fl">
+                        <div class="grid-full w80">
+                            <label for="adservice_workshopbundle_workshoptype_test">{% trans %} test {% endtrans %}</label>
+                        </div>
+                        <div class="grid-full w20">
+                            {{ form_widget(form.test) }}
+                        </div>
+                    </div>
+                    <div class="grid w45 fl">
+                        <label for="adservice_workshopbundle_workshoptype_endtest_at">{% trans %} endtest {% endtrans %}</label>
+                        {{ form_widget(form.endtest_at) }}
+                    </div>
                 </div>
-                <div class="col-xs-12 col-md-12 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
-                    {{ form_widget(form.infotech) }}
+                <div class="grid w100 fl mt20">
+                    <div class="grid w45 fl">
+                        <div class="grid-full w80">
+                            <label for="adservice_workshopbundle_workshoptype_haschecks">{% trans %} haschecks {% endtrans %}</label>
+                        </div>
+                        <div class="grid-full w20">
+                            {{ form_widget(form.haschecks) }}
+                        </div>
+                    </div>
+                    <div class="grid w45 fl">
+                        <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
+                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                    </div>
                 </div>
-            </div>
+                <div class="grid w45 fl mt20">
+                    <div class="grid-full w80">
+                        <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
+                    </div>
+                    <div class="grid-full w20">
+                        {{ form_widget(form.infotech) }}
+                    </div>
+                </div>
+                <div class="grid w45 fl mt20">
+                    <div class="grid-full w80">
+                        <label for="adservice_workshopbundle_workshoptype_ad_service_plus">{% trans %} ad_service_plus {% endtrans %}</label>
+                    </div>
+                    <div class="grid-full w20">
+                        {{ form_widget(form.ad_service_plus) }}
+                    </div>
+                </div>
         </div>
 
         <legend>{% trans %} contact {% endtrans %}</legend>
@@ -150,5 +197,6 @@
     {{ parent() }}
     <script src="{{ asset('bundles/workshop/js/workshop.js') }}"></script>
     <script src="{{ asset('bundles/workshop/js/workshop_shop.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 
 {% endblock %}

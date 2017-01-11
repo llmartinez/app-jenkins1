@@ -35,18 +35,23 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $security->getToken()->getUser();
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
         if($security->isGranted('ROLE_SUPER_AD')) {
             $country = $security->getToken()->getUser()->getCountry();
-            $params[] = array('country', ' = '.$country->getId());
+            // $params[] = array('country', ' = '.$country->getId());
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
         else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
 
         //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+
+        if($user->getCategoryService() != null) {
+            $params[] = array('category_service', ' = '.$user->getCategoryService()->getId());
+        }
 
         $pagination = new Pagination($page);
 
@@ -56,11 +61,21 @@ class ShopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_AD')) {
-            $country = $security->getToken()->getUser()->getCountry();
-            $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
+        if($security->isGranted('ROLE_SUPER_AD') and $user->getCategoryService() != null)
+        {
+            $consulta = $em->createQuery("SELECT p FROM PartnerBundle:Partner p JOIN p.users u
+                                          WHERE u.category_service = ".$user->getCategoryService()->getId()."
+                                          ORDER BY p.name ASC");
+
+            $partners = $consulta->getResult();
         }
-        else $partners = array();
+        // elseif($security->isGranted('ROLE_AD')) {
+        //     $country = $user->getCountry();
+        //     $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
+        // }
+        else {
+            $partners = array();
+        }
 
         return $this->render('OrderBundle:ShopOrders:list_shops.html.twig', array( 'shops'      => $shops,
                                                                                    'pagination' => $pagination,
@@ -82,8 +97,8 @@ class ShopOrderController extends Controller {
      */
     public function newAction(){
         $request = $this->getRequest();
-
         $security = $this->get('security.context');
+        $user = $security->getToken()->getUser();
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
@@ -93,10 +108,14 @@ class ShopOrderController extends Controller {
         $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
-                                                                                    'active' => '1'));
+            $params_partners['active'] = '1';
+
+            if($user->getCategoryService() != null) $params_partners['category_service'] = $user->getCategoryService()->getId();
+            else                                    $params_partners['country'] = $user->getCountry()->getId();
+
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy($params_partners);
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
@@ -107,12 +126,17 @@ class ShopOrderController extends Controller {
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-       
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+            unset($_SESSION['id_country']);
+        }
+
         $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
@@ -122,11 +146,12 @@ class ShopOrderController extends Controller {
             if ($form->isValid()) {
                 $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
                 $partner = $em->getRepository("PartnerBundle:Partner")->find($partner_id);
-                $user = $security->getToken()->getUser();
-                
+
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
                 if ($security->isGranted('ROLE_AD_COUNTRY') === false)
+
                 $shopOrder->setPartner($partner);
+                $shopOrder->setCategoryService($user->getCategoryService());
                 $shopOrder->setActive(false);
                 $shopOrder->setAction('create');
                 $shopOrder->setWantedAction('create');
@@ -186,6 +211,7 @@ class ShopOrderController extends Controller {
      */
     public function editAction($id) {
         $security = $this->get('security.context');
+        $user = $security->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
 
@@ -202,18 +228,18 @@ class ShopOrderController extends Controller {
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
 
-        if (($security->isGranted('ROLE_AD') and ($security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
-        and ($security->isGranted('ROLE_SUPER_AD') and ($security->getToken()->getUser()->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
+        if (($security->isGranted('ROLE_AD') and ($user->getPartner() != null and $user->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
+        and ($security->isGranted('ROLE_SUPER_AD') and ($user->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         if (!$shopOrder) $shopOrder = new ShopOrder();
         if ($security->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
-            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
-        else { $id_partner = $security->getToken()->getUser()->getPartner()->getId();
+        else { $id_partner = $user->getPartner()->getId();
                $partners   = '0';
         }
 
@@ -224,9 +250,13 @@ class ShopOrderController extends Controller {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+        }
+        if($user->getCategoryService() != null)
+        {
+            $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }
 
         $form = $this->createForm(new ShopEditOrderType(), $shopOrder);
@@ -235,8 +265,6 @@ class ShopOrderController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
-                $user = $security->getToken()->getUser();
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
 
@@ -679,7 +707,6 @@ class ShopOrderController extends Controller {
             $shop->setActive(true);
             $action = $shopOrder->getWantedAction();
             $em->remove($shopOrder);
-            UtilController::newEntity($shop, $user);
             UtilController::saveEntity($em, $shop, $user);
 
         }elseif (( $shopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
@@ -766,22 +793,23 @@ class ShopOrderController extends Controller {
 
         $shopOrder = new ShopOrder();
 
-        $shopOrder->setIdShop        ($shop->getId());
-        $shopOrder->setName          ($shop->getName());
-        $shopOrder->setPartner       ($shop->getPartner());
-        $shopOrder->setCountry       ($shop->getCountry());
-        $shopOrder->setRegion        ($shop->getRegion());
-        $shopOrder->setCity          ($shop->getCity());
-        $shopOrder->setAddress       ($shop->getAddress());
-        $shopOrder->setPostalCode    ($shop->getPostalCode());
-        $shopOrder->setPhoneNumber1  ($shop->getPhoneNumber1());
-        $shopOrder->setPhoneNumber2  ($shop->getPhoneNumber2());
-        $shopOrder->setFax           ($shop->getFax());
-        $shopOrder->setEmail1        ($shop->getEmail1());
-        $shopOrder->setEmail2        ($shop->getEmail2());
-        $shopOrder->setCodeShop      ($shop->getCodeShop());
-        $shopOrder->setCif           ($shop->getCif());
-        $shopOrder->setContact       ($shop->getContact());
+        $shopOrder->setIdShop         ($shop->getId());
+        $shopOrder->setName           ($shop->getName());
+        $shopOrder->setPartner        ($shop->getPartner());
+        $shopOrder->setCategoryService($shop->getCategoryService());
+        $shopOrder->setCountry        ($shop->getCountry());
+        $shopOrder->setRegion         ($shop->getRegion());
+        $shopOrder->setCity           ($shop->getCity());
+        $shopOrder->setAddress        ($shop->getAddress());
+        $shopOrder->setPostalCode     ($shop->getPostalCode());
+        $shopOrder->setPhoneNumber1   ($shop->getPhoneNumber1());
+        $shopOrder->setPhoneNumber2   ($shop->getPhoneNumber2());
+        $shopOrder->setFax            ($shop->getFax());
+        $shopOrder->setEmail1         ($shop->getEmail1());
+        $shopOrder->setEmail2         ($shop->getEmail2());
+        $shopOrder->setCodeShop       ($shop->getCodeShop());
+        $shopOrder->setCif            ($shop->getCif());
+        $shopOrder->setContact        ($shop->getContact());
 
         if ($shop->getCreatedBy() != null ) {
             $shopOrder->setCreatedBy($shop->getCreatedBy());
@@ -808,21 +836,22 @@ class ShopOrderController extends Controller {
      */
     private function shopOrder_to_shop($shop, $shopOrder){
 
-        $shop->setName          ($shopOrder->getName());
-        $shop->setPartner       ($shopOrder->getPartner());
-        $shop->setCountry       ($shopOrder->getCountry());
-        $shop->setRegion        ($shopOrder->getRegion());
-        $shop->setCity          ($shopOrder->getCity());
-        $shop->setAddress       ($shopOrder->getAddress());
-        $shop->setPostalCode    ($shopOrder->getPostalCode());
-        $shop->setPhoneNumber1  ($shopOrder->getPhoneNumber1());
-        $shop->setPhoneNumber2  ($shopOrder->getPhoneNumber2());
-        $shop->setFax           ($shopOrder->getFax());
-        $shop->setEmail1        ($shopOrder->getEmail1());
-        $shop->setEmail2        ($shopOrder->getEmail2());
-        $shop->setCodeShop      ($shopOrder->getCodeShop());
-        $shop->setCif           ($shopOrder->getCif());
-        $shop->setContact       ($shopOrder->getContact());
+        $shop->setName           ($shopOrder->getName());
+        $shop->setPartner        ($shopOrder->getPartner());
+        $shop->setCategoryService($shopOrder->getCategoryService());
+        $shop->setCountry        ($shopOrder->getCountry());
+        $shop->setRegion         ($shopOrder->getRegion());
+        $shop->setCity           ($shopOrder->getCity());
+        $shop->setAddress        ($shopOrder->getAddress());
+        $shop->setPostalCode     ($shopOrder->getPostalCode());
+        $shop->setPhoneNumber1   ($shopOrder->getPhoneNumber1());
+        $shop->setPhoneNumber2   ($shopOrder->getPhoneNumber2());
+        $shop->setFax            ($shopOrder->getFax());
+        $shop->setEmail1         ($shopOrder->getEmail1());
+        $shop->setEmail2         ($shopOrder->getEmail2());
+        $shop->setCodeShop       ($shopOrder->getCodeShop());
+        $shop->setCif            ($shopOrder->getCif());
+        $shop->setContact        ($shopOrder->getContact());
 
         if ($shopOrder->getCreatedBy() != null ) {
             $shop->setCreatedBy($shopOrder->getCreatedBy());

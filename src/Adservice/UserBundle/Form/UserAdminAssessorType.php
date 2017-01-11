@@ -34,7 +34,18 @@ class UserAdminAssessorType extends AbstractType {
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+//                                                          ->where('c.id'.$id_country)
+                                                          ; }))
+
+            ->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                   ; }))
             ->add('region')
             ->add('city')
             ->add('address')

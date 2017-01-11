@@ -14,6 +14,10 @@ user_credentials:
     pattern:  /user-credentials/{type}
     defaults: { _controller: ImportBundle:Import:sendUserCredentials }
 
+import_workshop_fr:
+    pattern:  /importWorkshopFR
+    defaults: { _controller: ImportBundle:Import:importWorkshopFR }
+
 import:
     pattern:  /{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }

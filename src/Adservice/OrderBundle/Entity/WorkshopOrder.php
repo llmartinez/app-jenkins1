@@ -93,6 +93,13 @@ class WorkshopOrder {
     private $internal_code;
 
     /**
+     * @var string $commercial_code
+     *
+     * @ORM\Column(name="commercial_code", type="string", length=255, nullable=true)
+     */
+    private $commercial_code;
+
+    /**
      *
      * @var string $observation_workshop
      * @ORM\Column(name="observation_workshop", type="string", length=255, nullable=true)
@@ -135,6 +142,13 @@ class WorkshopOrder {
      * @ORM\OneToMany(targetEntity="Adservice\UserBundle\Entity\User", mappedBy="workshop")
      */
     private $users;
+
+    /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
 
     /**
      * @var boolean $active
@@ -352,6 +366,24 @@ class WorkshopOrder {
     }
 
     /**
+     * Set commercial_code
+     *
+     * @param boolean $commercial_code
+     */
+    public function setCommercialCode($commercial_code) {
+        $this->commercial_code = $commercial_code;
+    }
+
+    /**
+     * Get commercial_code
+     *
+     * @return boolean
+     */
+    public function getCommercialCode() {
+        return $this->commercial_code;
+    }
+
+    /**
      * Set ad_service_plus
      *
      * @param boolean $ad_service_plus
@@ -556,6 +588,24 @@ class WorkshopOrder {
      */
     public function getUsers() {
         return $this->users;
+    }
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     /**

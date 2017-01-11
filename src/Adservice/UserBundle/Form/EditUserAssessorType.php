@@ -21,22 +21,28 @@ class EditUserAssessorType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
             // ->add('charge')
             //CONTACT
+            ->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ; }))
             ->add('country_service', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',
                   'property' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')

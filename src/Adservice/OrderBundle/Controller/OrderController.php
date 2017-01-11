@@ -18,8 +18,8 @@ class OrderController extends Controller
     public function listOrdersAction($page=1, $option='workshop_pending', $country='0', $w_idpartner='0', $w_id='0', $partner='0', $status='0', $term='0', $field='0'){
 
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
-            throw new AccessDeniedException();
+        if ($security->isGranted('ROLE_COMMERCIAL') === false)
+            return $this->redirect($this->generateUrl('user_login'));
 
         $em = $this->getDoctrine()->getEntityManager();
         $user = $security->getToken()->getUser();
@@ -35,52 +35,68 @@ class OrderController extends Controller
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
-        if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){   $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_pending[]  = $by_country;
-                                            $workshop_pending[]  = $not_rejected;
-                                            $workshop_rejected[] = $by_country;
-                                            $workshop_rejected[] = $rejected;
-                                            $shop_pending[]      = $by_country;
-                                            $shop_pending[]      = $not_rejected;
-                                            $shop_rejected[]     = $by_country;
-                                            $shop_rejected[]     = $rejected;
+        $preorder     = array('wanted_action' , " = 'preorder'");
+        $not_preorder = array('wanted_action' , " != 'preorder'");
+
+        $workshop_pending [] = $not_preorder;
+        $workshop_pending [] = $not_rejected;
+        $shop_pending     [] = $not_rejected;
+        $workshop_rejected[] = $not_preorder;
+        $workshop_rejected[] = $rejected;
+        $shop_rejected    [] = $rejected;
+        $preorder_pending [] = $preorder;
+        $preorder_pending [] = $not_rejected;
+        $preorder_rejected[] = $preorder;
+        $preorder_rejected[] = $rejected;
+
+        if    ($role == "ROLE_SUPER_AD" || $role == "ROLE_TOP_AD"){
                                         }
         elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
                                             $workshop_pending[]  = $by_partner;
-                                            $workshop_pending[]  = $not_rejected;
                                             $workshop_rejected[] = $by_partner;
-                                            $workshop_rejected[] = $rejected;
                                             $shop_pending[]      = $by_partner;
-                                            $shop_pending[]      = $not_rejected;
                                             $shop_rejected[]     = $by_partner;
-                                            $shop_rejected[]     = $rejected;
+                                            $preorder_pending[]  = $by_partner;
+                                            $preorder_rejected[] = $by_partner;
                                         }
-        elseif($role == "ROLE_ADMIN" )  {   $by_country          = array('country', ' = '.$user->getCountry()->getId());
-                                            $workshop_pending[]  = $by_country;
-                                            $workshop_pending[]  = $not_rejected;
-                                            $workshop_rejected[] = $by_country;
-                                            $workshop_rejected[] = $rejected;
-                                            $shop_pending[]      = $by_country;
-                                            $shop_pending[]      = $not_rejected;
-                                            $shop_rejected[]     = $by_country;
-                                            $shop_rejected[]     = $rejected;
+        elseif($role=="ROLE_COMMERCIAL"){   $by_commercial       = array('created_by', ' = '.$user->getId());
+                                            $preorder_pending[]  = $by_commercial;
+                                            $preorder_rejected[] = $by_commercial;
+
+                                            // if($user->getShop() != null) {
+                                            //     $by_shop             = array('shop', ' = '.$user->getShop()->getId());
+                                            //     $preorder_pending[]  = $by_shop;
+                                            //     $preorder_rejected[] = $by_shop;
+                                            // }
                                         }
-        elseif($role == "ROLE_SUPER_ADMIN"){$workshop_pending[]  = $not_rejected;
-                                            $workshop_rejected[] = $rejected;
-                                            $shop_pending[]      = $not_rejected;
-                                            $shop_rejected[]     = $rejected;
+        elseif($role == "ROLE_ADMIN" )  { 
+                                        }
+        elseif($role == "ROLE_SUPER_ADMIN"){
                                         }
 
         if ($country != '0' ) {
-            $workshop_pending[] = array('country' , " = ".$country);
+            $workshop_pending[]  = array('country' , " = ".$country);
             $workshop_rejected[] = array('country' , " = ".$country);
-            $shop_pending[] = array('country' , " = ".$country);
-            $shop_rejected[] = array('country' , " = ".$country);
+            $preorder_pending[]  = array('country' , " = ".$country);
+            $preorder_rejected[] = array('country' , " = ".$country);
+            $shop_pending[]      = array('country' , " = ".$country);
+            $shop_rejected[]     = array('country' , " = ".$country);
+        }
+
+        if($user->getCategoryService() != null) {
+            $workshop_pending[]  = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $workshop_rejected[] = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $preorder_pending[]  = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $preorder_rejected[] = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $shop_pending[]      = array('category_service' , " = ".$user->getCategoryService()->getId());
+            $shop_rejected[]     = array('category_service' , " = ".$user->getCategoryService()->getId());
         }
 
         $pagination = new Pagination($page);
         $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
         $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+        $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+        $length_preorder_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
         $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
         $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
 
@@ -92,18 +108,27 @@ class OrderController extends Controller
             $orders = $pagination->getRows($em, 'OrderBundle', 'WorkshopOrder', $workshop_rejected, $pagination);
             $pagination->setTotalPagByLength($length_workshop_rejected);
         }
+        elseif($option == 'preorder_pending') {
+            $orders = $pagination->getRows($em, 'OrderBundle', 'WorkshopOrder', $preorder_pending, $pagination);
+            $pagination->setTotalPagByLength($length_preorder_pending);
+        }
+        elseif($option == 'preorder_rejected') {
+            $orders = $pagination->getRows($em, 'OrderBundle', 'WorkshopOrder', $preorder_rejected, $pagination);
+            $pagination->setTotalPagByLength($length_preorder_rejected);
+        }
         elseif($option == 'shop_pending') {
-            $orders = $pagination->getRows($em, 'OrderBundle', 'ShopOrder'    , $shop_pending     , $pagination);
+            $orders = $pagination->getRows($em, 'OrderBundle', 'ShopOrder'     , $shop_pending     , $pagination);
             $pagination->setTotalPagByLength($length_shop_pending);
         }
 
         elseif($option == 'shop_rejected') {
-            $orders = $pagination->getRows($em, 'OrderBundle', 'ShopOrder'    , $shop_rejected    , $pagination);
+            $orders = $pagination->getRows($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected    , $pagination);
             $pagination->setTotalPagByLength($length_shop_rejected);
         }
 
         //valores anteriores a la modificacion/rechazo de la Solicitud
-        if    (($option == 'workshop_pending') or ($option == 'workshop_rejected')) $ordersBefore = WorkshopOrderController::getWorkshopOrdersBefore($em, $orders);
+        if    (($option == 'workshop_pending') or ($option == 'workshop_rejected') or ($option == 'preorder_pending') or ($option == 'preorder_rejected'))
+                                                                                    $ordersBefore = WorkshopOrderController::getWorkshopOrdersBefore($em, $orders);
         elseif(($option == 'shop_pending')     or ($option == 'shop_rejected'))     $ordersBefore = ShopOrderController::getShopOrdersBefore($em, $orders);
 
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
@@ -116,6 +141,8 @@ class OrderController extends Controller
 	                                                                            'ordersBefore' => $ordersBefore,
                                                                                 'length_workshop_pending'  => $length_workshop_pending,
                                                                                 'length_workshop_rejected' => $length_workshop_rejected,
+                                                                                'length_preorder_pending'   => $length_preorder_pending,
+                                                                                'length_preorder_rejected'  => $length_preorder_rejected,
                                                                                 'length_shop_pending'      => $length_shop_pending,
                                                                                 'length_shop_rejected'     => $length_shop_rejected,
                                                                             ));

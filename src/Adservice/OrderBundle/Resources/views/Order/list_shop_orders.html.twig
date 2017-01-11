@@ -7,14 +7,14 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{% trans %} shop    {% endtrans %}</th>
-                        <th>{% trans %} partner {% endtrans %}</th>
-                        <th>{% trans %} tel     {% endtrans %}</th>
-                        <th>{% trans %} region  {% endtrans %}</th>
-                        <th>{% trans %} address {% endtrans %}</th>
-                        <th>{% trans %} status  {% endtrans %}</th>
-                        <th>{% trans %} order   {% endtrans %}</th>
-                        <th>{% trans %} actions {% endtrans %}</th>
+                        <th>{% trans %} shop            {% endtrans %}</th>
+                        <th>{% trans %} category_service{% endtrans %}</th>
+                        <th>{% trans %} partner         {% endtrans %}</th>
+                        <th>{% trans %} tel             {% endtrans %}</th>
+                        <th>{% trans %} region          {% endtrans %}</th>
+                        <th>{% trans %} status          {% endtrans %}</th>
+                        <th>{% trans %} order           {% endtrans %}</th>
+                        <th>{% trans %} actions         {% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,10 +26,10 @@
                         <tr>{# {% if orderBefore is defined and orderBefore.name         != shopOrder.name         %} *{% endif %} #}
                             <td> {{ shopOrder.id           }} </td>
                             <td> {{ shopOrder.name|length > 15 ? shopOrder.name|slice(0, 15) ~ '...' : shopOrder.name  }} </td>
+                            <td> {{ shopOrder.categoryService }} </td>
                             <td> {{ shopOrder.partner      }} </td>
                             <td> {{ shopOrder.phoneNumber1 }} </td>
                             <td> {{ shopOrder.region|length > 15 ? shopOrder.region|slice(0, 15) ~ '...' : shopOrder.region  }} </td>
-                            <td> {{ shopOrder.address|length > 15 ? shopOrder.address|slice(0, 15) ~ '...' : shopOrder.address  }} </td>
                             <td> {% if shopOrder.active == 0 %}{% trans %} active   {% endtrans %}
                                  {% else %}                    {% trans %} deactive {% endtrans %}{% endif %}</td>
                             <td>
@@ -70,6 +70,7 @@
                                                     {% if shopOrder.wantedaction == 'modify' or shopOrder.action == 're_modify' %}
                                                         <tr><th>                                  </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ orderBefore.name          }}</td><td>{{ shopOrder.name          }}</td></tr>
+                                                        <tr><td>{% trans %} category_service {% endtrans %}</td><td>{{ orderBefore.categoryService}}</td><td>{{ shopOrder.categoryService       }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ orderBefore.partner       }}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ orderBefore.codeShop      }}</td><td>{{ shopOrder.codeShop      }}</td></tr>
                                                         <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ orderBefore.cif           }}</td><td>{{ shopOrder.cif           }}</td></tr>
@@ -84,11 +85,11 @@
                                                         <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ orderBefore.country|trans }}</td><td>{{ shopOrder.country|trans }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ orderBefore.region        }}</td><td>{{ shopOrder.region        }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ orderBefore.city          }}</td><td>{{ shopOrder.city          }}</td></tr>
-                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ orderBefore.address       }}</td><td>{{ shopOrder.address       }}</td></tr>
                                                         <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ orderBefore.postalCode    }}</td><td>{{ shopOrder.postalCode    }}</td></tr>
                                                     {% else %}
                                                     <tr><th>                                      </th><th>{% trans %} values {% endtrans %}</th></tr>
                                                         <tr><td>{% trans %} workshop        {% endtrans %}</td><td>{{ shopOrder.name          }}</td></tr>
+                                                        <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ shopOrder.categoryService}}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ shopOrder.partner       }}</td></tr>
                                                         <tr><td>{% trans %} code_shop       {% endtrans %}</td><td>{{ shopOrder.codeShop      }}</td></tr>
                                                         <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ shopOrder.cif           }}</td></tr>
@@ -103,7 +104,6 @@
                                                         <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ shopOrder.country|trans }}</td></tr>
                                                         <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ shopOrder.region        }}</td></tr>
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ shopOrder.city          }}</td></tr>
-                                                        <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ shopOrder.address       }}</td></tr>
                                                         <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ shopOrder.postalCode    }}</td></tr>
                                                     {% endif %}
                                                     </table>

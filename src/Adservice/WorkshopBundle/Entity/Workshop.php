@@ -105,11 +105,25 @@ class Workshop {
     private $users;
 
     /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
      * @var string $internal_code
      *
      * @ORM\Column(name="internal_code", type="string", length=255, nullable=true)
      */
     private $internal_code;
+
+    /**
+     * @var string $commercial_code
+     *
+     * @ORM\Column(name="commercial_code", type="string", length=255, nullable=true)
+     */
+    private $commercial_code;
 
     /**
      * @var boolean $active
@@ -218,6 +232,14 @@ class Workshop {
     public function __construct() {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->diagnosis_machines = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function to_json(){
+        $json = array('id'            => $this->getId(),
+                      'code_partner'  => $this->getCodePartner(),
+                      'code_workshop' => $this->getCodeWorkshop(),
+                      'name'          => $this->getName());
+        return $json;
     }
    /**
      * Get id
@@ -380,6 +402,24 @@ class Workshop {
      */
     public function getInternalCode() {
         return $this->internal_code;
+    }
+
+    /**
+     * Set commercial_code
+     *
+     * @param boolean $commercial_code
+     */
+    public function setCommercialCode($commercial_code) {
+        $this->commercial_code = $commercial_code;
+    }
+
+    /**
+     * Get commercial_code
+     *
+     * @return boolean
+     */
+    public function getCommercialCode() {
+        return $this->commercial_code;
     }
 
     /**
@@ -596,6 +636,24 @@ class Workshop {
      */
     public function getUsers() {
         return $this->users;
+    }
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
     }
 
     /**

@@ -12,18 +12,35 @@
         <legend>{% trans %} filter {% endtrans %}</legend>
         <div class="col-xs-12 col-md-12 form-group">
             <table style="margin: 0 auto;">
-            <tr><td><label> {% trans %} date.start {% endtrans %} </label></td><td><label> {% trans %} date.end   {% endtrans %} </label></td></tr>
+            <tr>
+                <td><label> {% trans %} date.start {% endtrans %} </label></td>
+                <td><label style="margin-left: 15px;"> {% trans %} date.end   {% endtrans %} </label></td>
+            </tr>
             <tr><td>
-                <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}"  {% endif %} class='form-control' style="width:60px;float:left;">
-                <input id="from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}"  {% endif %} class='form-control' style="width:60px;float:left;">
-                <input id="from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('Y')}}"  {% endif %} class='form-control' style="width:75px;float:left;margin-right: 30px;">
+                <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;">
+                <input id="from_m" type="number" {% if from_m != '0' %} value="{{ from_m | date ('m')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;">
+                <input id="from_y" type="number" {% if from_y != '0' %} value="{{ from_y | date ('Y')}}" {% endif %} class='form-control' style="width: 41%;float: left;">
             </td>
             <td>
-                <input id="to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('d')}}"  {% endif %} class='form-control' style="width:60px;float:left;">
-                <input id="to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}"  {% endif %} class='form-control' style="width:60px;float:left;">
-                <input id="to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}"  {% endif %} class='form-control' style="width:75px;float:left;">
+                <input id="to_d"   type="number" {% if to_d   != '0' %} value="{{ to_d   | date ('d')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;  margin-left: 8%;">
+                <input id="to_m"   type="number" {% if to_m   != '0' %} value="{{ to_m   | date ('m')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;">
+                <input id="to_y"   type="number" {% if to_y   != '0' %} value="{{ to_y   | date ('Y')}}" {% endif %} class='form-control' style="width: 42%;float: left;">
             </td></tr>
             </table>
+        </div>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} category_service {% endtrans %}</label>
+           {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <select id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
+                    <option value="0">{% trans %} all {% endtrans %}</option>
+                        {% for catserv in catservices %}
+                            <option value="{{ catserv.id }}">{{ catserv }}</option>
+                        {% endfor %}
+                     </select>
+                   {% else %}
+                        <select disabled id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
+                            <option value="{{category_service.id}}">{{category_service.CategoryService}}</option>
+                        </select>
+                {% endif %}
         </div>
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
@@ -43,36 +60,41 @@
             </select>
         </div>
         {% endif %}
-        <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} raport {% endtrans %}</label>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} raport {% endtrans %}</label>
             <select id="flt_raport" class='form-control'>
-                <option value="0"                             >{% trans %} any                            {% endtrans %}</option>
+                {# Facturación ADService #}
+                <option value="billing"                       >{% trans %} billing                    {% endtrans %}</option>
+
+                <option value="historical"                    >{% trans %} historical                 {% endtrans %}</option>
+
+                <option value="0"                             >{% trans %} any                        {% endtrans %}</option>
 
                 {# Talleres sin tickets #}
-                <option value="no-ticket"                     >{% trans %} statistic.no_ticket            {% endtrans %}</option>
+                <option value="no-ticket"                     >{% trans %} statistic.no_ticket        {% endtrans %}</option>
 
                 {# Últimos tickets de los talleres #}
-                <option value="last-tickets"                  >{% trans %} statistic.last_tickets         {% endtrans %}</option>
+                <option value="last-tickets"                  >{% trans %} statistic.last_tickets     {% endtrans %}</option>
 
                 {# TOP TEN de talleres por socio #}
-                <option value="numworkshopbypartner"          >{% trans %} numworkshopbypartner  {% endtrans %}</option>
+                <option value="numworkshopbypartner"          >{% trans %} numworkshopbypartner       {% endtrans %}</option>
 
                 {# TOP TEN de tickets de talleres por socio #}
-                <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner  {% endtrans %}</option>
+                <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner {% endtrans %}</option>
 
                 {# TOP TEN de tickets por socio #}
-                <option value="numticketsbypartner"           >{% trans %} numticketsbypartner     {% endtrans %}</option>
+                <option value="numticketsbypartner"           >{% trans %} numticketsbypartner        {% endtrans %}</option>
 
                 {# TOP TEN de tickets por sistema/subsistema #}
-                <option value="numticketsbysystem"            >{% trans %} numticketsbysystem      {% endtrans %}</option>
+                <option value="numticketsbysystem"            >{% trans %} numticketsbysystem         {% endtrans %}</option>
 
                 {# TOP TEN de tickets por marca #}
-                <option value="numticketsbybrand"             >{% trans %} numticketsbybrand       {% endtrans %}</option>
+                <option value="numticketsbybrand"             >{% trans %} numticketsbybrand          {% endtrans %}</option>
 
                 {# TOP TEN de tickets por modelo #}
-                <option value="numticketsbymodel"             >{% trans %} numticketsbymodel       {% endtrans %}</option>
+                <option value="numticketsbymodel"             >{% trans %} numticketsbymodel          {% endtrans %}</option>
 
                 {# TOP TEN de tickets por año de fabricacion #}
-                <option value="numticketsbyfabyear"           >{% trans %} numticketsbyfabyear  {% endtrans %}</option>
+                <option value="numticketsbyfabyear"           >{% trans %} numticketsbyfabyear        {% endtrans %}</option>
              </select>
         </div>
     </div>
@@ -106,7 +128,7 @@
             </div>
             <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} created_by {% endtrans %}</label>
                 <select id="flt_tck_created_by" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
+                    <option value="0">  {% trans %} all {% endtrans %}</option>
                     <option value="tel">{% trans %} tel {% endtrans %}</option>
                     <option value="app">{% trans %} ticket {% endtrans %}</option>
                 </select>
@@ -380,4 +402,5 @@
     {{ parent() }}
     <script src="{{ asset('bundles/statistic/js/statistic.js') }}"></script>
     <script src="{{ asset('bundles/util/js/pagination_statistic.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/catserv.js') }}"></script>
 {% endblock %}

@@ -1,21 +1,29 @@
 <div class="MainHeader">
     <div class="span4 offset2">
     </div>
-    <div class="navbar">
+    <div class="navbar {% if env is defined and env != 'prod' %}{{env}}{% endif %}">
         <div class="navbar-inner">
             <div class="span4 offset2">
                 <!-- header -->
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
+                            {% if env is defined and env != 'prod' %}<a class="env">{{env|upper}}</a>{% endif %}
 
-                            {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
+                            {% set url_logo = route_logo ~ '.png' %}
+                            <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 20px;">
+
+                            {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
+                                {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                                <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
+                            {% endif %}
+
+                        {#  {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
                             {% elseif app.session.locale == 'pt' %}{% set url_logo = 'bundles/util/images/icon/logo_PT.png' %}
                             {% elseif app.session.locale == 'en' %}{% set url_logo = 'bundles/util/images/icon/logo_EN.png' %}
                             {% elseif app.session.locale == 'fr' %}{% set url_logo = 'bundles/util/images/icon/logo_FR.png' %}
-                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %}
+                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %} #}
 
-                            <img class="img_logo" src="{{ asset(url_logo) }}">
                             {# <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
                         </td>
                         <td align="right">
@@ -37,7 +45,7 @@
                                         <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{% trans %} help {% endtrans %}</a></li>
 
                                         <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
-                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE %}
+                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE and is_granted('ROLE_COMMERCIAL')== FALSE %}
                                             <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                         {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}

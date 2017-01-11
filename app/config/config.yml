@@ -20,6 +20,10 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        env:             '%env%'
+        route_logo:      '%route_logo%'
+        route_logo_mail: '%route_logo_mail%'
 
 # Assetic Configuration
 assetic:

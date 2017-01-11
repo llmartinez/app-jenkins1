@@ -13,55 +13,71 @@ class WorkshopType extends AbstractType
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
         $builder
             ->add('name')
             ->add('code_workshop', 'number')
             ->add('cif', 'text', array('required' => true))
+            ->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ; }))
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          //->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv); }))
             ->add('shop', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
                   'empty_value' => false,
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
+                                                          //->andWhere('s.country'.$id_country.' OR s.id = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
                                                           ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('typology', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv)
+                                                          // ->andWhere('s.country'.$id_country)
+                                                          ; }))
             ->add('diagnosis_machines', 'entity', array(
                   'required' => false,
                   'multiple' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
                   'property' => 'name',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv)
+                                                          // ->andWhere('s.country'.$id_country)
+                                                          ; }))
             ->add('contact', 'text', array('required' => true))
             ->add('internal_code', 'text', array('required' => false))
+            ->add('commercial_code', 'text', array('required' => false))
             ->add('ad_service_plus', 'checkbox', array('required' => false))
 //            ->add('active', 'checkbox', array('required' => false))
             ->add('test', 'checkbox', array('required' => false))
@@ -79,10 +95,9 @@ class WorkshopType extends AbstractType
                   'class' => 'Adservice\UtilBundle\Entity\Country',
                   'property' => 'country',
                   'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')

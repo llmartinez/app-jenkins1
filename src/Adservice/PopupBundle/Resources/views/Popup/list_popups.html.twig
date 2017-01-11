@@ -9,12 +9,19 @@
       <li class="active">{% trans %} menu.list_popups {% endtrans %}</li>
     </ol>
 
-<legend>
-    {% trans %} menu.list_popups {% endtrans %}
-    <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.popup {% endtrans %}</a>
-</legend>
+    <legend>
+        {% trans %} menu.list_popups {% endtrans %}
+        <a href="{{ path('popup_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.popup {% endtrans %}</a>
+    </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} category_service {% endtrans %} </label>
+        <select id="flt_category_service" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'category_service': 'plc_category_service'}) }}">
+                <option value="none">{% trans %} all {% endtrans %}</option>
+            {% for _category_service in catservices %}
+                <option value="{{ _category_service.id }}" {% if _category_service.id == category_service %} selected {% endif %}>{{ _category_service | trans }}</option>
+            {% endfor %}
+    </select></div>
     <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'country': 'plc_country'}) }}">
                 <option value="none">{% trans %} all {% endtrans %}</option>
@@ -29,12 +36,13 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} name        {% endtrans %}</th>
-                <th>{% trans %} description {% endtrans %}</th>
-                <th>{% trans %} date.start  {% endtrans %}</th>
-                <th>{% trans %} date.end    {% endtrans %}</th>
-                <th>{% trans %} country     {% endtrans %}</th>
-                <th>{% trans %} actions     {% endtrans %}</th>
+                <th>{% trans %} name             {% endtrans %}</th>
+                <th>{% trans %} category_service {% endtrans %}</th>
+                <th>{% trans %} country          {% endtrans %}</th>
+                <th>{% trans %} date.start       {% endtrans %}</th>
+                <th>{% trans %} date.end         {% endtrans %}</th>
+                <th>{% trans %} description      {% endtrans %}</th>
+                <th>{% trans %} actions          {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -42,10 +50,11 @@
                 <tr>
                     <td>{{ popup.id }}</td>
                     <td>{{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }}{% if popup.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                    <td>{{ popup.description|length > 60 ? popup.description|slice(0, 60) ~ '...' : popup.description  }}</td>
+                    <td>{{ popup.categoryService|trans }} </td>
+                    <td>{{ popup.country|trans }} </td>
                     <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
-                    <td>{{ popup.country|trans }} </td>
+                    <td>{{ popup.description|length > 40 ? popup.description|slice(0, 40) ~ '...' : popup.description  }}</td>
                     <td>
                         <a href="{{ path("popup_edit", { 'id':popup.id }) }}" title="{% trans %} edit.popup {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
 

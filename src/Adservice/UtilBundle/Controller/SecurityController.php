@@ -27,14 +27,13 @@ class SecurityController extends Controller{
         // Mostrar Token encriptado para test
         ///////////////////////////////////////////////////////////////////////////////////////
         // $em = $this->getDoctrine()->getEntityManager();
-        // $user = $em->getRepository('UserBundle:User')->findOneById(3318); //adpruebas
+        // $user = $em->getRepository('UserBundle:User')->findOneById(48); //ganixtalleres
         // $tok = $user->getToken();
         // $enc = $this->encryptADS($tok);
         // $dec = $this->decryptADS($enc);
         // var_dump('Token: '.$tok);
         // var_dump('Encript: '.$enc);
-        // var_dump('Decript => ');
-        // var_dump($dec);
+        // var_dump('Decript => ');var_dump($dec);
         // die;
         ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,23 +47,48 @@ class SecurityController extends Controller{
 
             if(isset($hash) and $hash != null and $hash != "")
             {
+
                 $em = $this->getDoctrine()->getEntityManager();
     			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 
-				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
-				$this->get("security.context")->setToken($key);
+                if($user != null) {
+    				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+    				$this->get("security.context")->setToken($key);
 
-				// Fire the login event
-				$event = new InteractiveLoginEvent($request, $key);
-				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+    				// Fire the login event
+    				$event = new InteractiveLoginEvent($request, $key);
+    				$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-            	return $this->redirect($this->generateUrl('user_index'));
+                	return $this->redirect($this->generateUrl('_login'));
+                }
+                else throw new AccessDeniedException();
             }
             else throw new AccessDeniedException();
     	}
-    	else throw new AccessDeniedException();
+        else{
+            throw new AccessDeniedException();
 
-        return $this->render('UtilBundle:Default:help.html.twig');
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // Mostrar Token encriptado para test
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // $em = $this->getDoctrine()->getEntityManager();
+            // $user = $em->getRepository('UserBundle:User')->findOneById(48); //ganixtalleres
+            // $tok = $user->getToken();
+            // $enc = $this->encryptADS($tok);
+            // $dec = $this->decryptADS($enc);
+            // var_dump('Token: '.$tok);
+            // var_dump('Encript: '.$enc);
+            // var_dump('Decript => ');
+            // var_dump($dec);
+
+            // echo "
+            //     <form action='".$this->generateUrl('autologin')."' method='GET'>
+            //         <input id='token' name='token' type='text' value='".$tok."'><input type='submit'>
+            //     </form>";
+            // die;
+            ///////////////////////////////////////////////////////////////////////////////////////
+        }
+        return $this->render('UserBundle:Default:login.html.twig');
     }
 
     /**

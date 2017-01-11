@@ -16,7 +16,7 @@ class EditUserPartnerType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
         $builder
             ->add('username')
             ->add('name')
@@ -26,11 +26,11 @@ class EditUserPartnerType extends AbstractType {
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                                                          ->andWhere('s.category_service'.$id_catserv); }))
             ->add('language')
 
             //CONTACT
@@ -40,8 +40,7 @@ class EditUserPartnerType extends AbstractType {
                   'property' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('region')
             ->add('city')
             ->add('address')
@@ -54,6 +53,8 @@ class EditUserPartnerType extends AbstractType {
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
             ->add('language')
+            ->add('allow_create','checkbox', array('required' => false))
+            ->add('allow_order','checkbox', array('required' => false))
         ;
         return $builder;
     }

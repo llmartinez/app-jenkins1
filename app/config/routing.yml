@@ -2,10 +2,14 @@
 ############################################################################
 # LINEA PARA IMPORTAR DATOS DE LA BBDD: COMENTAR UNA VEZ EN PROD           #
 ############################################################################
-# ImportBundle:
+#ImportBundle:
 #    resource: "@ImportBundle/Resources/config/routing.yml"
 #    prefix:   /{_locale}/import/
 ############################################################################
+
+autologin:
+    pattern: /autologin/
+    defaults: { _controller: UtilBundle:Security:autologin }
 
 LockBundle:
     resource: "@LockBundle/Resources/config/routing.yml"

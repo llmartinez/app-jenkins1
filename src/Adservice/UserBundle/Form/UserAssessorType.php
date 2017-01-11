@@ -13,6 +13,9 @@ class UserAssessorType extends AbstractType {
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
+
+        if (isset($_SESSION['all'])) { $all = $_SESSION['all'];unset($_SESSION['all']);} else { $all = 'All';}
 
         $builder
             ->add('username')
@@ -27,15 +30,27 @@ class UserAssessorType extends AbstractType {
             ->add('active', 'checkbox', array('required' => false))
             // ->add('charge', 'integer', array('empty_data' => '1'))
             //CONTACT
+
             ->add('country_service', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',
                   'property' => 'country',
-                  'empty_value' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'empty_value' => $all,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ; }))
+            ->add('category_service', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\UserBundle\Entity\CategoryService',
+                  'property' => 'category_service',
+                  'empty_value' => $all,
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
+                                                return $er->createQueryBuilder('cs')
+                                                          ->orderBy('cs.category_service', 'ASC')
+                                                          ->where('cs.id'.$id_catserv)
+                                                          ; }))
+
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
@@ -43,8 +58,8 @@ class UserAssessorType extends AbstractType {
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
+
             ->add('region', 'text', array('required' => false))
             ->add('city', 'text', array('required' => false))
             ->add('address', 'text', array('required' => false))

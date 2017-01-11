@@ -375,6 +375,7 @@ class ImportController extends Controller
 			return $this->render('ImportBundle:Import:import.html.twig');
         }
     }
+
 //  _     ___   ____ _  __   ____    _    ____  ____
 // | |   / _ \ / ___| |/ /  / ___|  / \  |  _ \/ ___|
 // | |  | | | | |   | ' /  | |     / _ \ | |_) \___ \
@@ -425,6 +426,7 @@ class ImportController extends Controller
         	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'incidences', 'num' => 0));
 		}
     }
+
 //  ___ _   _  ____ ___ ____  _____ _   _  ____ _____ ____
 // |_ _| \ | |/ ___|_ _|  _ \| ____| \ | |/ ___| ____/ ___|
 //  | ||  \| | |    | || | | |  _| |  \| | |   |  _| \___ \
@@ -505,6 +507,285 @@ class ImportController extends Controller
 			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'complete'));
 		}
 	}
+
+    public function importWorkshopFRAction()
+    {
+        $em      = $this->getDoctrine()->getEntityManager();
+    	$session = $this->get('session');
+
+		$sa 	 = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
+
+		$partner_role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_AD');
+		$workshop_role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
+
+		// Get the file
+		$route = __DIR__.'/../../../../web/uploads/data/datos_FR.txt' ;
+		$this->checkRowsLenght($route, 18); // El excel se compone de 18 columnas
+		$file = fopen($route, "r") or exit("Unable to open file!");
+
+		// Campos fijos
+		$created_at	= $modified_at = $update_at	= new \DateTime('now');
+		$language 				= $em->getRepository('UtilBundle:Language')->find('3');
+		$country 				= $em->getRepository('UtilBundle:Country')->find('3');
+		$category_service 		= $em->getRepository('UserBundle:CategoryService')->find('3');
+		$typology 				= $em->getRepository('WorkshopBundle:Typology')->find('12'); // - AD France
+		$created_by 			= $sa;
+		$modified_by 			= $sa;
+		$active 				= 1;
+		$test 					= 0;
+		$conflictive 			= 0;
+		$privacy				= 0;
+		$shop 					= null;
+		$observation_workshop 	= null;
+		$observation_assessor 	= null;
+		$observation_admin 		= null;
+		$commercial_code 		= null;
+		$ad_service_plus 		= null;
+		$lowdate_at 			= null;
+		$endtest_at 			= null;
+		$phone_number_2 		= null;
+		$mobile_number_1 		= null;
+		$mobile_number_2 		= null;
+		$email_2 				= null;
+		$has_checks 			= null;
+		$num_checks 			= null;
+		$infotech 				= null;
+		$country_service		= null;
+		$default_mail 			= $this->container->getParameter('mail_test');
+
+		// Campos variables
+		$region 				= 0;
+
+		// Campos incrementales
+		$rows = 1;
+		$code_partner = $em->createQuery("SELECT MAX(p.code_partner) FROM PartnerBundle:Partner p")->getResult()[0][1];
+		$code_workshop = 0;
+
+		$_partner = new Partner();
+
+		$excel ="Usuario;Password;Email;Rol;\n";
+
+		// Output a line of the file until the end is reached
+		while (!feof($file)) {
+
+			$line = fgets($file);
+			$columns = explode('|', $line);
+
+			// Campos variables
+			$name 					= trim(UtilController::normalizeChars($columns[1]));  // Enseigne com.
+			$cif 					= trim($columns[0]);  // Code Client
+			$contact 				= trim(UtilController::normalizeChars($columns[14])); // Dirigeant : Nom
+			$internal_code 			= trim($columns[0]);  // Code Client
+			$region 				= trim(UtilController::normalizeChars($columns[2]));  // Region
+			$city 					= trim(UtilController::normalizeChars($columns[2]));  // Ville
+			$address 				= trim(UtilController::normalizeChars($columns[4]));  // Adresse
+			$postal_code 			= trim($columns[5]);  // CP
+			$fax 				 	= trim($columns[8]);  // Fax
+
+			$phone_number_1 		= trim($columns[7]);  // Tel
+			if ($phone_number_1 == '') {
+
+				$phone_number_1 = '00 00 00 00 00';
+			}
+
+			$email_1 = $default_mail;
+			$email_2 = '';
+			$columns[15] = trim($columns[15]); // Dirigeant : Email
+			if ($columns[15] != '') {
+
+				//Por alguna razón no sabe encontrar los \n, por eso haremos varios explodes
+				//$output = preg_split('/(\\n|\s;\s|;)/', $columns[15]);
+
+				$output = explode( "\\n", $columns[15] );
+				if (isset($output[1])) {
+
+					$email_1 = $output[0];
+					$email_2 = $output[1];
+				} else {
+
+					$output = explode( " ; ", $columns[15] );
+					if (isset($output[1])) {
+
+						$email_1 = $output[0];
+						$email_2 = $output[1];
+					} else {
+
+						$email_1 = $columns[15];
+					}
+				}
+			}
+
+			$user = new User();
+			$username = UtilController::getUsernameUnused($em, $name);
+
+			$excel .= $username.';';
+
+			$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+			$password = substr( md5(microtime()), 1, 8);
+			$salt = md5(time());
+
+			$excel .= $password.';';
+
+			$password = $encoder->encodePassword($password, $salt);
+
+	        // INSERT USER
+			$user->setUsername($username);
+			$user->setPassword($password);
+			$user->setSalt($salt);
+			$user->setCreatedAt($created_at);
+			$user->setModifiedAt($modified_at);
+			$user->setLanguage($language);
+			$user->setCountry($country);
+			$user->setCategoryService($category_service);
+			$user->setCreatedBy($created_by);
+			$user->setModifiedBy($modified_by);
+			$user->setActive($active);
+			$user->setPrivacy($privacy);
+			$user->setName($name);
+			$user->setSurname($name);
+			$user->setRegion($region);
+			$user->setCity($city);
+			$user->setAddress($address);
+			$user->setPostalCode($postal_code);
+			$user->setPhoneNumber1($phone_number_1);
+			$user->setFax($fax);
+			$user->setEmail1($email_1);
+			$user->setEmail2($email_2);
+
+			$excel .= $email_1.';';
+
+			$is_partner = $columns[17]; // Insertada por nosotros para distinguir si es socio o taller
+
+			// ES SOCIO
+			if ($is_partner == 1) {
+
+				$code_partner++;
+				$code_workshop = 0;
+				$token = null;
+
+				// INSERT PARTNER
+				$partner = new Partner();
+				$partner->setCountry($country);
+				$partner->setCategoryService($category_service);
+				$partner->setCreatedBy($created_by);
+				$partner->setModifiedBy($modified_by);
+				$partner->setCodePartner($code_partner);
+				$partner->setName($name);
+				$partner->setActive($active);
+				$partner->setRegion($region);
+				$partner->setCity($city);
+				$partner->setAddress($address);
+				$partner->setPostalCode($postal_code);
+				$partner->setPhoneNumber1($phone_number_1);
+				$partner->setFax($fax);
+				$partner->setEmail1($email_1);
+				$partner->setEmail2($email_2);
+				$partner->setCreatedAt($created_at);
+				$partner->setModifiedAt($modified_at);
+				$partner->setContact($contact);
+				$partner->setCif($cif);
+
+				$em->persist($partner);
+
+				$_partner = $partner;
+
+				// UPDATE PARTNER USER
+				$user->setPartner($partner);
+				$user->setRegion($region);
+				$user->addRole($partner_role);
+				$excel .= $partner_role->getName().';';
+
+			} else {
+				// ES TALLER
+				$code_workshop++;
+                $token = UtilController::getRandomToken();
+
+				// INSERT WORKSHOP
+				$workshop = new Workshop();
+				$workshop->setPartner($_partner);
+				$workshop->setCodePartner($code_partner);
+				$workshop->setCodeWorkshop($code_workshop);
+
+				$workshop->setTypology($typology);
+				$workshop->setCountry($country);
+				$workshop->setCategoryService($category_service);
+				$workshop->setCreatedBy($created_by);
+				$workshop->setModifiedBy($modified_by);
+				$workshop->setName($name);
+				$workshop->setCif($cif);
+				$workshop->setContact($contact);
+				$workshop->setActive($active);
+				$workshop->setConflictive($conflictive);
+				$workshop->setRegion($_partner->getRegion());
+				$workshop->setCity($city);
+				$workshop->setAddress($address);
+				$workshop->setPostalCode($postal_code);
+				$workshop->setPhoneNumber1($phone_number_1);
+				$workshop->setFax($fax);
+				$workshop->setEmail1($email_1);
+				$workshop->setEmail2($email_2);
+				$workshop->setTest($test);
+				$workshop->setCreatedAt($created_at);
+				$workshop->setModifiedAt($modified_at);
+				$workshop->setUpdateAt($update_at);
+				$workshop->setAdServicePlus(false);
+
+				$em->persist($workshop);
+
+				// UPDATE WORKSHOP USER
+				$user->setWorkshop($workshop);
+				$user->setRegion($_partner->getRegion());
+				$user->setToken($token);
+				$user->addRole($workshop_role);
+				$excel .= $workshop_role->getName().';';
+			}
+
+			$excel.="\n";
+
+			$em->persist($user);
+			$em->flush();
+
+			$rows++; //Vamos sumando el numero de registros por si hay un error saber cuantos tenemos que eliminar de la DB
+		}
+		fclose($file);
+
+		//$session->set('msg', 'TALLERES FR IMPORTADOS! ('.$rows.')');
+
+		$response = new Response();
+		$response->headers->set('Content-Type', 'text/csv');
+		$response->headers->addCacheControlDirective('no-cache', true);
+		$response->headers->addCacheControlDirective('must-revalidate', true);
+		$response->setMaxAge(600);
+		$response->setSharedMaxAge(600);
+		$response->headers->set('Pragma', 'public');
+		$date    = new \DateTime();
+		$response->setLastModified($date);
+
+		$response->headers->set('Content-Disposition', 'attachment;filename="credenciales_FR_'.date("d-m-Y").'.csv"');
+
+		$response->setContent($excel);
+
+		return $response;
+
+    }
+    public function checkRowsLenght($route, $len) {
+
+		$file = fopen($route, "r") or exit("Unable to open file!");
+		$rows = 1;
+
+		while(!feof($file))
+		{
+			$line = fgets($file);
+			$columns = explode('|', $line);
+
+			if(sizeof($columns) != $len) {
+				echo '<h3 style="color:#00F">ERROR (L. '.$rows.'): Elimina los saltos de linea del excel antes de procesar el archivo.</h3>';
+				die;
+			}
+			$rows++;
+		}
+		fclose($file);
+    }
 
     private function setUserFields($em, $entity, $role, $name, $password='grupeina')
     {
@@ -1014,7 +1295,6 @@ class ImportController extends Controller
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
-
     public function sendUserCredentialsAction($type)
     {
         $em      = $this->getDoctrine()->getEntityManager();
@@ -1083,7 +1363,6 @@ class ImportController extends Controller
 		$session->set('msg' , 'Credenciales de talleres generados correctamente!');
 
 		return $this->render('ImportBundle:Import:import.html.twig');
-
     }
 
     private function doExcelCredentialsAction($type, $array) {

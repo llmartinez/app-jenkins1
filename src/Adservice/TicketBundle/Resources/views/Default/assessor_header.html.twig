@@ -8,7 +8,14 @@
                 <table width="100%" border="0">
                     <tr>
                         <td align="left">
-                            <img class="asr_img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}">
+                            {% set url_logo = route_logo ~ '.png' %}
+                            <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 20px;">
+
+                            {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
+                                {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                                <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
+                            {% endif %}
+                            {# <img class="asr_img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
                         </td>
                         <td align="right" class="pull-right">
                             {% if app.user.username is defined %}
@@ -49,7 +56,7 @@
                                         {% if not is_granted('ROLE_SUPER_AD') or is_granted('ROLE_USER') %}
                                             <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
                                         {% endif %}
-                                        {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}
+                                        {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or (workshop != null and workshop.id == "") ) %}
                                             <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{% trans %} new.ticket {% endtrans %}</a></li>
                                         {% endif %}
                                         <li><a href="#"></a></li>

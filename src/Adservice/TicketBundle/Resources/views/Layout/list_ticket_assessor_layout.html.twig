@@ -17,6 +17,10 @@
 
 {% block main %}
 
+{% if app.session.hasFlash('popup') %}
+     <p class="alert">{{ app.session.getFlash('popup')|nl2br }}</p>
+{% endif %}
+    
 <div>
     {% if is_granted('ROLE_ASSESSOR') %}
 
@@ -29,6 +33,12 @@
     {% include 'TicketBundle:Includes:_filters_assessor_ticket.html.twig' %}
 </div>
 <div class="info asr_info">
+
+        {% if workshop != null and workshop.haschecks == true %}
+        <div class="grid pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
+            {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+        </div>
+        {% endif %}
 
         <legend>{% trans %} description {% endtrans %} <span class="pull-right" id="list_date"></span></legend>
         <p id="list_description"></p><br>
@@ -46,13 +56,15 @@
     {% set route = 'listTicket' %}
 
     <div class="grid-full w100">
-        <div class="grid-33">
+        <div class="grid-20">
 
             <input type="hidden" id="route"    value= {{ route    }}>
             <input type="hidden" id="country"  value= {{ country  }}>
+            <input type="hidden" id="lang"     value= {{ lang     }}>
+            <input type="hidden" id="catserv"  value= {% if catserv is defined and catserv.id is defined %} {{ catserv.id  }} {% else %}0{% endif %}>
             <input type="hidden" id="num_rows" value= {{ num_rows }}>
             <input type="hidden" id="option"   value= {{ option   }}>
-            <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
+            <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'lang': 'plc_lang', 'catserv': 'plc_catserv', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
 
 
             <label>{% trans %} filter_by_type {% endtrans %}</label>
@@ -81,21 +93,44 @@
                 {% endif %}
             </select>
         </div>
-        <div class="grid-33">
+        <div class="grid-20">
+            <label>{% trans %} category_service {% endtrans %}</label>
+            <select id="flt_catserv" class='form-control asr_form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
+
+                {% if catservices|length == 1 %}
+                    <option value="{{catservices[0].id}}" selected>{{catservices[0].categoryService}}</option>
+                {% else %}
+                    <option value="0">{% trans %} category_service {% endtrans %}</option>
+                    {% for _catserv in catservices %}
+                        <option value="{{ _catserv.id }}" {% if catserv is defined and catserv.id is defined and catserv.id == _catserv.id %} selected {% endif %}>{{_catserv.categoryService}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        <div class="grid-20">
+            <label>{% trans %} country {% endtrans %}</label>
+            <select id="flt_country" class='form-control asr_form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
+                    <option value="0">{% trans %} country {% endtrans %}</option>
+                {% for _country in countries %}
+                    <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %}>{{ _country | trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="grid-20">
+            <label>{% trans %} language {% endtrans %}</label>
+            <select id="flt_language" class='form-control asr_form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
+                    <option value="0">{% trans %} language {% endtrans %}</option>
+                {% for _language in languages %}
+                    <option value="{{ _language.id }}" {% if lang == _language.id %} selected {% endif %}>{{ _language | trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="grid-20">
             <label>{% trans %} filter_by_rows {% endtrans %}</label>
             <select id="slct_numRows" class="form-control asr_form-control">
                 <option value="10" selected="selected" >10</option>
                 <option value="20" >20</option>
                 <option value="50" >50</option>
-            </select>
-        </div>
-        <div class="grid-33">
-            <label>{% trans %} filter_by_country {% endtrans %}</label>
-            <select id="flt_country" class='form-control asr_form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
-                    <option value="none">{% trans %} country {% endtrans %}</option>
-                {% for _country in countries %}
-                    <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %}>{{ _country | trans }}</option>
-                {% endfor %}
             </select>
         </div>
     </div>

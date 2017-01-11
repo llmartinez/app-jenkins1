@@ -12,46 +12,37 @@ class WorkshopEditOrderType extends AbstractType
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);} else { $id_catserv = ' != 0';}
 
         $builder
             ->add('name','text', array('required' => false))
             ->add('cif','text', array('required' => false))
             ->add('partner', 'entity', array(
-                  'required' => true,
+                  'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv)
                                                           ->andWhere('s.country'.$id_country); }))
-            ->add('shop', 'entity', array(
-                  'required' => false,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                               'required' => true,
                               'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                               'property' => 'name',
-                              'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country); }))
+                              'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
+                                                return $er->createQueryBuilder('t')
+                                                          ->orderBy('t.name', 'ASC')
+                                                          ->where('t.active = 1')
+                                                          ->andWhere('t.category_service'.$id_catserv); }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
             ->add('haschecks', 'checkbox', array('required' => false))
             ->add('numchecks', 'integer', array('required' => false))
-            ->add('infotech', 'checkbox', array('required' => false))
             ->add('internal_code', 'text', array('required' => false))
-            ->add('ad_service_plus', 'checkbox', array('required' => false))
+            ->add('commercial_code', 'text', array('required' => false))
              //CONTACT
             ->add('country', 'entity', array(
                   'required' => true,
@@ -73,6 +64,24 @@ class WorkshopEditOrderType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
         ;
+        if($id_catserv != ' = 3'){
+          $builder
+            ->add('shop', 'entity', array(
+                  'required' => false,
+                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                  'property' => 'name',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
+
+            ->add('infotech', 'checkbox', array('required' => false))
+
+            ->add('ad_service_plus', 'checkbox', array('required' => false))
+          ;
+        }
     }
 
     public function getName()

@@ -50,9 +50,33 @@ cities_from_region:
     options:
         expose: true
 
+partners_from_catserv:
+    pattern: /partnersFromCatServ
+    defaults: { _controller: UtilBundle:Ajax:partnersFromCatServ }
+    options:
+        expose: true
+
+typologies_from_catserv:
+    pattern: /typologiesFromCatServ
+    defaults: { _controller: UtilBundle:Ajax:typologiesFromCatServ }
+    options:
+        expose: true
+
+diag_machines_from_catserv:
+    pattern: /diagMachinesFromCatServ
+    defaults: { _controller: UtilBundle:Ajax:diagMachinesFromCatServ }
+    options:
+        expose: true
+
 shops_from_partner:
     pattern: /shopsFromPartner
     defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
+    options:
+        expose: true
+
+workshops_from_partner:
+    pattern: /workshopsFromPartner
+    defaults: { _controller: UtilBundle:Ajax:workshopsFromPartner }
     options:
         expose: true
 
@@ -79,7 +103,7 @@ get_country_partner:
     defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
     options:
         expose: true
-   
+
 get_car_from_plate_number:
     pattern: /getCarFromPlateNumber/{idPlateNumber}
     defaults: {_controller: UtilBundle:Ajax:getCarFromPlateNumber, idPlateNumber: 0}

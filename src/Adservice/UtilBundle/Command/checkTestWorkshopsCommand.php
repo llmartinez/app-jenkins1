@@ -39,8 +39,7 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
 
                 if(($diff->invert == 1 and $diff->days >= 0))
                 {
-                    // $mail   = 'info@adserviceticketing.com';
-                    // $mail   = 'dmaya@grupeina.com';
+                    // $mail   = $this->getContainer()->getParameter('mail_info');
 
                     // $message = \Swift_Message::newInstance()
                     //     ->setSubject('Se ha terminado el período de prueba del taller '.$workshop->getId())
@@ -52,11 +51,12 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
 
                     // $this->getContainer()->get('mailer')->send($message);
 
-                    $workshop->setEndtestAt(null);
                     $workshop->setTest(0);
                     $em->persist($workshop);
                     $em->flush();
 
+
+                    UtilController::createHistorical($em, $workshop, 0);
                     $count++;
                 }
             }

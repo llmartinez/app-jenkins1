@@ -11,10 +11,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class WorkshopRepository extends EntityRepository
 {
-    public function findWorkshopInfo($request)
+    public function findWorkshopInfo($request, $security=null)
     {
         $em = $this->getEntityManager();
-
         $w_id        = $request->get('w_id'       );
         $w_idpartner = $request->get('w_idpartner');
         $w_name      = $request->get('w_name'     );
@@ -42,10 +41,11 @@ class WorkshopRepository extends EntityRepository
             $where = 'WHERE w.id != 0 ';
             // $where = 'WHERE w.active = 1 ';
 
+            if($security != NULL AND $security->isGranted('ROLE_ASSESSOR') AND $security->getToken()->getUser()->getCategoryService() != NULL) {
+                $where .= "AND w.category_service = ".$security->getToken()->getUser()->getCategoryService()->getId()." ";
+            }
             if ($w_id          != 0) {  $where .= "AND w.code_workshop = ".$w_id." "; }
-            if ($w_idpartner   != 0) {  $query .= ", p ";
-                                         $from  .= "JOIN w.partner p ";
-                                         $where .= "AND p.code_partner = ".$w_idpartner." "; }
+            if ($w_idpartner   != 0) {  $where .= "AND w.code_partner = ".$w_idpartner." "; }
 
             if ($w_id == 0 and $w_idpartner == 0){
                 if ($w_name        != "") {  $where .= "AND w.name like '%".$w_name."%' "; }
@@ -102,6 +102,7 @@ class WorkshopRepository extends EntityRepository
                    .'OR w.mobile_number_1 = '.$number
                    .'OR w.mobile_number_1 = '.$number;
         $consulta = $em-> createQuery($query);
+
         return $consulta->getResult()[0];
 
     }
@@ -157,6 +158,16 @@ class WorkshopRepository extends EntityRepository
         return $consulta->getResult()[0][1];
     }
 
+    public function getNumTicketsByCategoryServicePartner($catserv=null, $partner='') {
+        $em = $this->getEntityManager();
+
+        if($partner != '') $query = 'SELECT COUNT(t) FROM TicketBundle:Ticket t JOIN t.workshop w WHERE w.partner = '.$partner.' AND w.category_service = '.$catserv.' ';
+        else $query = 'SELECT COUNT(t) FROM TicketBundle:Ticket t JOIN t.workshop  w WHERE w.category_service = '.$catserv.' ';
+
+        $consulta = $em-> createQuery($query);
+        return $consulta->getResult()[0][1];
+    }
+
     public function getNumTicketsByPartnerCountry($partner='', $country=null) {
         $em = $this->getEntityManager();
 
@@ -166,12 +177,12 @@ class WorkshopRepository extends EntityRepository
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0][1];
     }
-    
+
     public function getNumTicketsByPartnerId($id) {
         $em = $this->getEntityManager();
 
         $query = 'SELECT COUNT(t) FROM TicketBundle:Ticket t JOIN t.workshop w JOIN w.partner p WHERE p.id = '.$id;
-        
+
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0][1];
     }

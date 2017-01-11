@@ -13,7 +13,7 @@ class SentenceType extends AbstractType
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
 
         $builder
-            ->add('name')
+            ->add('name', 'textarea')
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
@@ -21,8 +21,7 @@ class SentenceType extends AbstractType
                   'empty_value' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
-                                                          ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
+                                                          ->orderBy('c.country', 'ASC'); }))
             ->add('active', 'checkbox', array('required' => false))
         ;
     }

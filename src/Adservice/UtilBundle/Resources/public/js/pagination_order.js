@@ -6,17 +6,19 @@
 
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
-		    var country = $("#flt_country").val();
-                    var term = $("#flt_search_term").val();
-                    var field = $("#flt_search_field").val();
-                    var partner = $('#flt_partner').val();
-                    if(term == null || term == "") term = '0';
-                    if(field == null || field == "") field = '0';
-                    if(partner == null || partner == "") partner = '0';
+            var country = $("#flt_country").val();
+            var catserv = $("#slct_catserv").val();
+            var term = $("#flt_search_term").val();
+            var field = $("#flt_search_field").val();
+            var partner = $('#flt_partner').val();
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+            if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
-                    if(option == undefined || option == '') option = '0';
+            if(catserv == undefined || catserv == '') catserv = '0';
+            if(option == undefined || option == '') option = '0';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country, partner:partner, term: term, field: field});
+		    var url = Routing.generate(route, {_locale: locale, page: 1, option: option, country: country, catserv: catserv, partner: partner, term: term, field: field});
 
 	    	url = url.replace("plc_page", 1);
 	    	window.open(url, "_self");
@@ -30,22 +32,24 @@
 
 	    	if (prev_page > 0 ) {
 
-                        var route  = $("#route" ).val();
-                        var option = $("#option").val();
-                        var country = $("#flt_country").val();
-                        var term = $("#flt_search_term").val();
-                        var field = $("#flt_search_field").val();
-                        var partner = $('#flt_partner').val();
-                        if(term == null || term == "") term = '0';
-                        if(field == null || field == "") field = '0';
-                        if(partner == null || partner == "") partner = '0';
-                        if(country == undefined || country == '') country = '0';
-                        if(option == undefined || option == '') option = '0';
-                        var locale = $(document).find("#data_locale").val();
-                        var url = Routing.generate(route, {_locale: locale, page: prev_page, option: option, country: country, partner:partner, term: term, field: field });
+                var route  = $("#route" ).val();
+                var option = $("#option").val();
+                var country = $("#flt_country").val();
+                var catserv = $("#slct_catserv").val();
+                var term = $("#flt_search_term").val();
+                var field = $("#flt_search_field").val();
+                var partner = $('#flt_partner').val();
+                if(term == null || term == "") term = '0';
+                if(field == null || field == "") field = '0';
+                if(partner == null || partner == "") partner = '0';
+                if(country == undefined || country == '') country = '0';
+                if(catserv == undefined || catserv == '') catserv = '0';
+                if(option == undefined || option == '') option = '0';
+                var locale = $(document).find("#data_locale").val();
+                var url = Routing.generate(route, {_locale: locale, page: prev_page, option: option, country: country, catserv: catserv, partner: partner, term: term, field: field });
 
-                    window.open(url, "_self");
-                }
+                window.open(url, "_self");
+            }
 	    });
 
 	    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
@@ -54,16 +58,18 @@
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
 		    var country = $("#flt_country").val();
-                    var term = $("#flt_search_term").val();
-                    var field = $("#flt_search_field").val();
-                    var partner = $('#flt_partner').val();
-                    if(term == null || term == "") term = '0';
-                    if(field == null || field == "") field = '0';
-                    if(partner == null || partner == "") partner = '0';
+            var catserv = $("#slct_catserv").val();
+            var term = $("#flt_search_term").val();
+            var field = $("#flt_search_field").val();
+            var partner = $('#flt_partner').val();
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+            if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
-                    if(option == undefined || option == '') option = '0';
+            if(catserv == undefined || catserv == '') catserv = '0';
+            if(option == undefined || option == '') option = '0';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), option: option, country: country, partner:partner, term: term, field: field });
+		    var url = Routing.generate(route, {_locale: locale, page: $(this).text(), option: option, country: country, catserv: catserv, partner: partner, term: term, field: field });
 
 	    	window.open(url, "_self");
 	    });
@@ -75,24 +81,25 @@
 	    	var total = $('#total').val();
 	    	var country = '0';
 	    	if (next_page > total ) {
-                    next_page = total;
-                    
-                }               
-                var route  = $("#route" ).val();
-                var option = $("#option").val();
-                var country = $("#flt_country").val();
-                var term = $("#flt_search_term").val();
-                var field = $("#flt_search_field").val();
-                var partner = $('#flt_partner').val();
-                if(term == null || term == "") term = '0';
-                if(field == null || field == "") field = '0';
-                if(partner == null || partner == "") partner = '0';
-                if(country == undefined || country == '' || country == 'none') country = '0';
-                if(option == undefined || option == ''|| option == 'none') option = '0';
-                var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: next_page, option: option, country: country, partner:partner, term: term, field: field });
+                next_page = total;
+            }
+            var route  = $("#route" ).val();
+            var option = $("#option").val();
+            var country = $("#flt_country").val();
+            var catserv = $("#slct_catserv").val();
+            var term = $("#flt_search_term").val();
+            var field = $("#flt_search_field").val();
+            var partner = $('#flt_partner').val();
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+            if(partner == null || partner == "") partner = '0';
+            if(country == undefined || country == '' || country == 'none') country = '0';
+            if(catserv == undefined || catserv == '' || catserv == 'none') catserv = '0';
+            if(option == undefined || option == ''|| option == 'none') option = '0';
+            var locale = $(document).find("#data_locale").val();
+            var url = Routing.generate(route, {_locale: locale, page: next_page, option: option, country: country, catserv: catserv, partner: partner, term: term, field: field });
 
-                window.open(url, "_self");
+            window.open(url, "_self");
 
 	    });
 
@@ -103,16 +110,18 @@
 		    var route  = $("#route" ).val();
 		    var option = $("#option").val();
 		    var country = $("#flt_country").val();
-                    var term = $("#flt_search_term").val();
-                    var field = $("#flt_search_field").val();
-                    var partner = $('#flt_partner').val();
-                    if(term == null || term == "") term = '0';
-                    if(field == null || field == "") field = '0';
-                    if(partner == null || partner == "") partner = '0';
+            var catserv = $("#slct_catserv").val();
+            var term = $("#flt_search_term").val();
+            var field = $("#flt_search_field").val();
+            var partner = $('#flt_partner').val();
+            if(term == null || term == "") term = '0';
+            if(field == null || field == "") field = '0';
+            if(partner == null || partner == "") partner = '0';
 		    if(country == undefined || country == '') country = '0';
-                    if(option == undefined || option == '') option = '0';
+            if(catserv == undefined || catserv == '') catserv = '0';
+            if(option == undefined || option == '') option = '0';
 		    var locale = $(document).find("#data_locale").val();
-		    var url = Routing.generate(route, {_locale: locale, page: total, option: option, country: country, partner:partner, term: term, field: field});
+		    var url = Routing.generate(route, {_locale: locale, page: total, option: option, country: country, catserv: catserv, partner: partner, term: term, field: field});
 
 	    	window.open(url, "_self");
 	    });

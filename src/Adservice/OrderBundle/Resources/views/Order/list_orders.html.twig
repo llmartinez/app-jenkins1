@@ -1,6 +1,12 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'list_orders' %}
     <input type="hidden" id="route" value="{{ route }}">
@@ -12,7 +18,7 @@
     </ol>
 
 <div class='colIzq15'>
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
+{#     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <div class="col-xs-12 col-md-12 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'option': option, 'country': 'plc_country'}) }}">
                 <option value="0">{% trans %} all {% endtrans %}</option>
@@ -20,36 +26,67 @@
                 <option value="{{ _country.id }}" {% if _country.id == country %} selected {% endif %}>{{ _country | trans }}</option>
             {% endfor %}
     </select></div>
+    {% endif %} #}
+
+    {% if is_granted('ROLE_AD') %}
+
+    {### ORDER WORKSHOP ##########################}
+
+        <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br>
+            {% if length_workshop_pending > 0 %} <div class="pending_application3">{{ length_workshop_pending }}</div>{% endif %}
+        </button>
+        <button onclick="window.open('{{ path(route, { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br>
+            {% if length_workshop_rejected > 0 %} <div class="pending_application3">{{ length_workshop_rejected }}</div>{% endif %}
+        </button>
+
+        {% if id_catserv != 3 %}
+
+    {### ORDER SHOP ##########################}
+
+            <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br>
+                {% if length_shop_pending > 0 %} <div class="pending_application3">{{ length_shop_pending }}</div>{% endif %}
+            </button>
+            <button onclick="window.open('{{ path(route, { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br>
+                {% if length_shop_rejected > 0 %} <div class="pending_application3">{{ length_shop_rejected }}</div>{% endif %}
+            </button>
+
+        {% endif %}
+
     {% endif %}
-    <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} workshop_pending  {% endtrans %} <br>
-        {% if length_workshop_pending > 0 %} <div class="pending_application3">{{ length_workshop_pending }}</div>{% endif %}
-    </button>
-    <button onclick="window.open('{{ path(route, { 'option': 'workshop_rejected' }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} workshop_rejected {% endtrans %} <br>
-        {% if length_workshop_rejected > 0 %} <div class="pending_application3">{{ length_workshop_rejected }}</div>{% endif %}
-    </button>
-    <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} shop_pending      {% endtrans %} <br>
-        {% if length_shop_pending > 0 %} <div class="pending_application3">{{ length_shop_pending }}</div>{% endif %}
-    </button>
-    <button onclick="window.open('{{ path(route, { 'option': 'shop_rejected'     }) }}','_self')" class="btn-primary">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} shop_rejected     {% endtrans %} <br>
-        {% if length_shop_rejected > 0 %} <div class="pending_application3">{{ length_shop_rejected }}</div>{% endif %}
-    </button>
+
+    {### PREORDER WORKSHOP ##########################}
+
+    {% if not is_granted('ROLE_ADMIN') %}
+        <button onclick="window.open('{{ path(route, { 'option': 'preorder_pending'  }) }}','_self')" class="btn-primary">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} preorder_pending  {% endtrans %} <br>
+            {% if length_preorder_pending > 0 %} <div class="pending_application3">{{ length_preorder_pending }}</div>{% endif %}
+        </button>
+        <button onclick="window.open('{{ path(route, { 'option': 'preorder_rejected' }) }}','_self')" class="btn-primary">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_rejected.png') }}"><br> {% trans %} preorder_rejected {% endtrans %} <br>
+            {% if length_preorder_rejected > 0 %} <div class="pending_application3">{{ length_preorder_rejected }}</div>{% endif %}
+        </button>
+    {% endif %}
 </div>
 
 <div class='colDer85'>
 
-    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>
+    {% if     app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>
     {% elseif app.session.hasFlash('error') %}<p class="error">{{ app.session.getFlash('error') }}</p>{% endif %}
 
     {% if     option == 'workshop_pending'  %} {% include 'OrderBundle:Order:list_workshop_orders.html.twig'          %}
     {% elseif option == 'workshop_rejected' %} {% include 'OrderBundle:Order:list_workshop_rejected_orders.html.twig' %}
+    {% elseif option == 'preorder_pending'  %} {% include 'OrderBundle:Order:list_preorders.html.twig'                %}
+    {% elseif option == 'preorder_rejected' %} {% include 'OrderBundle:Order:list_preorders_rejected.html.twig'       %}
     {% elseif option == 'shop_pending'      %} {% include 'OrderBundle:Order:list_shop_orders.html.twig'              %}
     {% elseif option == 'shop_rejected'     %} {% include 'OrderBundle:Order:list_shop_rejected_orders.html.twig'     %}
     {% endif %}

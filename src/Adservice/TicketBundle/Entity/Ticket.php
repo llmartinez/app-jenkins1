@@ -59,6 +59,27 @@ class Ticket {
     private $status;
 
     /**
+     * @var string $language
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Language")
+     */
+    private $language;
+
+    /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UtilBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
      * @var integer $pending
      *
      * @ORM\Column(name="pending", type="integer")
@@ -81,7 +102,7 @@ class Ticket {
 
     /**
      * @var integer $car
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Car", inversedBy="Car")
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true)
      */
@@ -237,6 +258,61 @@ class Ticket {
      */
     public function getStatus() {
         return $this->status;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     */
+    public function setLanguage(\Adservice\UtilBundle\Entity\Language $language) {
+        $this->language = $language;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string
+     */
+    public function getLanguage() {
+        return $this->language;
+    }
+
+
+    /**
+     * Set category_service
+     *
+     * @param string $category_service
+     */
+    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService() {
+        return $this->category_service;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     */
+    public function setCountry(\Adservice\UtilBundle\Entity\Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry() {
+        return $this->country;
     }
 
     /**

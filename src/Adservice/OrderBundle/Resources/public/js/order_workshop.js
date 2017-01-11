@@ -12,7 +12,7 @@
         var id_partner = $('form').find('#id_partner').val();
         var partners   = $('form').find('#select[id=partners]').val();
 
-        if(id_partner == 0){
+        if(id_partner == 0 || id_partner == undefined){
 
             $('#workshopOrder_newOrder_partner').empty();
 
@@ -100,7 +100,7 @@
 
                 },
                 error: function () {
-                    console.log("Error loading versions...");
+                    console.log("Error loading cifs...");
                 }
             });
         });
@@ -125,7 +125,7 @@
 
                 },
                 error: function () {
-                    console.log("Error loading versions...");
+                    console.log("Error loading cifs...");
                 }
             });
         });

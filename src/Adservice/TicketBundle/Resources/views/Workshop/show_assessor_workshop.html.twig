@@ -33,7 +33,7 @@
 	<div class="grid-full w100">
 		{# WORKSHOP #}
 		<div class="grid-full w50" {% if workshop.name != "" %}title="{{workshop.name}}" alt="{{workshop.name}}"{% endif %}>
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.partner.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 100 ? workshop.name|slice(0, 100) ~ '...' : workshop.name  }}</b>
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 100 ? workshop.name|slice(0, 100) ~ '...' : workshop.name  }}</b>
 		</div>
 
 		{# MAIL #}

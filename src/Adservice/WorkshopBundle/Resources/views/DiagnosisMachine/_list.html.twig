@@ -5,7 +5,8 @@
                 <th>{% trans %} code    {% endtrans %}</th>
                 <th>{% trans %} name    {% endtrans %}</th>
                 <th>{% trans %}         {% endtrans %}</th>
-                {% if country == 'none' %}<th>{% trans %} country {% endtrans %}</th>{% endif %}
+                <th>{% trans %} category_service {% endtrans %}</th>
+                {#{% if country == 'none' %}<th>{% trans %} country {% endtrans %}</th>{% endif %}#}
                 <th>{% trans %} actions {% endtrans %}</th>
             </tr>
         </thead>
@@ -16,7 +17,8 @@
                     <td>{{ diagnosis_machine.id       }}</td>
                     <td>{{ diagnosis_machine.name|length > 15 ? diagnosis_machine.name|slice(0, 15) ~ '...' : diagnosis_machine.name  }}</td>
                     <td>{% if diagnosis_machine.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
-                    {% if country == 'none' %}<td>{{ diagnosis_machine.country | trans }}</td>{% endif %}
+                    <td>{{ diagnosis_machine.categoryService }}</td>
+                    {#{% if country == 'none' %}<td>{{ diagnosis_machine.country | trans }}</td>{% endif %}#}
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
                             <a href="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
@@ -27,7 +29,7 @@
             {% endfor %}
         </tbody>
     </table>
-        {% include 'UtilBundle:Pagination:pagination.html.twig' %}
+        {% include 'UtilBundle:Pagination:pagination_catserv.html.twig' %}
 {% else %}
     {% trans %} any.diagnosis_machine {% endtrans %}
 {% endif %}

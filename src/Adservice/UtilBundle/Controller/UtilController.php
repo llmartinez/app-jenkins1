@@ -2,6 +2,7 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
@@ -145,23 +146,17 @@ class UtilController extends Controller
      */
     public static function getCodeWorkshopUnused($em, $partner)
     {
-
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
 
         while($unused != 'unused') {
-            $find = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
+            if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
+            else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente
         }
-        $unused = 1;
-        while($unused != 'unused') {
-            $find = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
 
-            if( $find == null) { $unused = 'unused'; } //Si no encuentra el codigo significa que esta disponible y se devuelve
-            else               { $code ++;           } //Si el codigo esta en uso, se busca el siguiente
-        }
         return $code;
     }
 
@@ -352,6 +347,248 @@ class UtilController extends Controller
         return $string;
     }
 
+    public static function normalizeChars($s) {
+        $replace = array(
+            'à' => 'a',
+            'á' => 'a',
+            'â' => 'a',
+            'ã' => 'a',
+            'ä' => 'a',
+            'ą' => 'a',
+            'å' => 'a',
+            'ā' => 'a',
+            'ă' => 'a',
+            'ǎ' => 'a',
+            'ǻ' => 'a',
+            'À' => 'A',
+            'Á' => 'A',
+            'Â' => 'A',
+            'Ã' => 'A',
+            'Ä' => 'A',
+            'Ą' => 'A',
+            'Å' => 'A',
+            'Ā' => 'A',
+            'Ă' => 'A',
+            'Ǎ' => 'A',
+            'Ǻ' => 'A',
+
+            'ç' => 'c',
+            'ć' => 'c',
+            'ĉ' => 'c',
+            'ċ' => 'c',
+            'č' => 'c',
+            'Ç' => 'C',
+            'Ć' => 'C',
+            'Ĉ' => 'C',
+            'Ċ' => 'C',
+            'Č' => 'C',
+
+            'ď' => 'd',
+            'đ' => 'd',
+            'Ð' => 'D',
+            'Ď' => 'D',
+            'Đ' => 'D',
+
+
+            'è' => 'e',
+            'é' => 'e',
+            'ê' => 'e',
+            'ë' => 'e',
+            'ę' => 'e',
+            'ē' => 'e',
+            'ĕ' => 'e',
+            'ė' => 'e',
+            'ě' => 'e',
+            'È' => 'E',
+            'É' => 'E',
+            'Ê' => 'E',
+            'Ë' => 'E',
+            'Ę' => 'E',
+            'Ē' => 'E',
+            'Ĕ' => 'E',
+            'Ė' => 'E',
+            'Ě' => 'E',
+
+            'ƒ' => 'f',
+
+
+            'ĝ' => 'g',
+            'ğ' => 'g',
+            'ġ' => 'g',
+            'ģ' => 'g',
+            'Ĝ' => 'G',
+            'Ğ' => 'G',
+            'Ġ' => 'G',
+            'Ģ' => 'G',
+
+
+            'ĥ' => 'h',
+            'ħ' => 'h',
+            'Ĥ' => 'H',
+            'Ħ' => 'H',
+
+            'ì' => 'i',
+            'í' => 'i',
+            'î' => 'i',
+            'ï' => 'i',
+            'ĩ' => 'i',
+            'ī' => 'i',
+            'ĭ' => 'i',
+            'į' => 'i',
+            'ſ' => 'i',
+            'ǐ' => 'i',
+            'Ì' => 'I',
+            'Í' => 'I',
+            'Î' => 'I',
+            'Ï' => 'I',
+            'Ĩ' => 'I',
+            'Ī' => 'I',
+            'Ĭ' => 'I',
+            'Į' => 'I',
+            'İ' => 'I',
+            'Ǐ' => 'I',
+
+            'ĵ' => 'j',
+            'Ĵ' => 'J',
+
+            'ķ' => 'k',
+            'Ķ' => 'K',
+
+
+            'ł' => 'l',
+            'ĺ' => 'l',
+            'ļ' => 'l',
+            'ľ' => 'l',
+            'ŀ' => 'l',
+            'Ł' => 'L',
+            'Ĺ' => 'L',
+            'Ļ' => 'L',
+            'Ľ' => 'L',
+            'Ŀ' => 'L',
+
+
+            'ñ' => 'n',
+            'ń' => 'n',
+            'ņ' => 'n',
+            'ň' => 'n',
+            'ŉ' => 'n',
+            'Ñ' => 'N',
+            'Ń' => 'N',
+            'Ņ' => 'N',
+            'Ň' => 'N',
+
+            'ò' => 'o',
+            'ó' => 'o',
+            'ô' => 'o',
+            'õ' => 'o',
+            'ö' => 'o',
+            'ð' => 'o',
+            'ø' => 'o',
+            'ō' => 'o',
+            'ŏ' => 'o',
+            'ő' => 'o',
+            'ơ' => 'o',
+            'ǒ' => 'o',
+            'ǿ' => 'o',
+            'Ò' => 'O',
+            'Ó' => 'O',
+            'Ô' => 'O',
+            'Õ' => 'O',
+            'Ö' => 'O',
+            'Ø' => 'O',
+            'Ō' => 'O',
+            'Ŏ' => 'O',
+            'Ő' => 'O',
+            'Ơ' => 'O',
+            'Ǒ' => 'O',
+            'Ǿ' => 'O',
+
+
+            'ŕ' => 'r',
+            'ŗ' => 'r',
+            'ř' => 'r',
+            'Ŕ' => 'R',
+            'Ŗ' => 'R',
+            'Ř' => 'R',
+
+
+            'ś' => 's',
+            'š' => 's',
+            'ŝ' => 's',
+            'ş' => 's',
+            'Ś' => 'S',
+            'Š' => 'S',
+            'Ŝ' => 'S',
+            'Ş' => 'S',
+
+            'ţ' => 't',
+            'ť' => 't',
+            'ŧ' => 't',
+            'Ţ' => 'T',
+            'Ť' => 'T',
+            'Ŧ' => 'T',
+
+
+            'ù' => 'u',
+            'ú' => 'u',
+            'û' => 'u',
+            'ü' => 'u',
+            'ũ' => 'u',
+            'ū' => 'u',
+            'ŭ' => 'u',
+            'ů' => 'u',
+            'ű' => 'u',
+            'ų' => 'u',
+            'ư' => 'u',
+            'ǔ' => 'u',
+            'ǖ' => 'u',
+            'ǘ' => 'u',
+            'ǚ' => 'u',
+            'ǜ' => 'u',
+            'Ù' => 'U',
+            'Ú' => 'U',
+            'Û' => 'U',
+            'Ü' => 'U',
+            'Ũ' => 'U',
+            'Ū' => 'U',
+            'Ŭ' => 'U',
+            'Ů' => 'U',
+            'Ű' => 'U',
+            'Ų' => 'U',
+            'Ư' => 'U',
+            'Ǔ' => 'U',
+            'Ǖ' => 'U',
+            'Ǘ' => 'U',
+            'Ǚ' => 'U',
+            'Ǜ' => 'U',
+
+
+            'ŵ' => 'w',
+            'Ŵ' => 'W',
+
+            'ý' => 'y',
+            'ÿ' => 'y',
+            'ŷ' => 'y',
+            'Ý' => 'Y',
+            'Ÿ' => 'Y',
+            'Ŷ' => 'Y',
+
+            'ż' => 'z',
+            'ź' => 'z',
+            'ž' => 'z',
+            'Ż' => 'Z',
+            'Ź' => 'Z',
+            'Ž' => 'Z',
+
+            // accentuated ligatures
+            'Ǽ' => 'A',
+            'ǽ' => 'a',
+
+            '\"' => ''
+        );
+        return strtr($s, $replace);
+    }
+
     private static function seemsUtf8($string)
     {
       for ($i = 0; $i < strlen($string); $i++) {
@@ -445,12 +682,12 @@ class UtilController extends Controller
 
         return false;
     }
-    
+
     public static function saveUserFromWorkshop($workshop,$user_workshop){
         $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());
         if($workshop->getPhoneNumber1() != null){           $user_workshop->setPhoneNumber1($workshop->getPhoneNumber1());        }
         else{                                               $user_workshop->setPhoneNumber1(null);        }
-        
+
         if($workshop->getPhoneNumber2() != null){           $user_workshop->setPhoneNumber2($workshop->getPhoneNumber2());        }
         else{                                               $user_workshop->setPhoneNumber2(null);        }
 
@@ -473,7 +710,7 @@ class UtilController extends Controller
         else{                                               $user_workshop->setCountry(null);        }
 
         if($workshop->getRegion() != null){                 $user_workshop->setRegion($workshop->getRegion());                    }
-        else{                                               $user_workshop->setRegion(null);        }      
+        else{                                               $user_workshop->setRegion(null);        }
 
         if($workshop->getCity() != null){                   $user_workshop->setCity($workshop->getCity());                        }
         else{                                               $user_workshop->setCity(null);        }
@@ -483,7 +720,23 @@ class UtilController extends Controller
 
         if($workshop->getPostalCode() != null){             $user_workshop->setPostalCode($workshop->getPostalCode());            }
         else{                                               $user_workshop->setPostalCode(null);        }
-        
+
         return $user_workshop;
+    }
+    
+     /**
+     * Genera un historial de cambios del taller
+     * @return WorkshopHistory
+     */
+    public static function createHistorical($em, $workshop, $status) {
+        $historical = new Historical();
+        $historical->setWorkshopId($workshop->getId());
+        $historical->setPartnerId($workshop->getPartner()->getId());
+        $historical->setDateOrder(new \DateTime('now'));
+        $historical->setStatus($status);
+
+
+        $em->persist($historical);
+        $em->flush();
     }
 }

@@ -18,17 +18,25 @@
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} country {% endtrans %} </label>
         <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="0">{% trans %} all {% endtrans %}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %} >{{ _country | trans }}</option>
             {% endfor %}
     </select></div>
 
-    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %} </label>
+    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} category_service {% endtrans %} </label>
+        <select id="flt_catserv" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
+                <option value="0">{% trans %} all {% endtrans %}</option>
+            {% for _catserv in cat_services %}
+                <option value="{{ _catserv.id }}" {% if catserv == _catserv.id %} selected {% endif %} >{{ _catserv }}</option>
+            {% endfor %}
+    </select></div>
+
+    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} partner {% endtrans %} </label>
         <select id="flt_partner" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="0">{% trans %} all {% endtrans %}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner.codePartner }} - {{ _partner | trans }}</option>
             {% endfor %}
@@ -61,8 +69,8 @@
                 <th>{% trans %} shop    {% endtrans %}</th>
                 <th>{% trans %}         {% endtrans %}</th>
                 <th>{% trans %} partner {% endtrans %}</th>
+                <th>{% trans %} category_service {% endtrans %}</th>
                 <th>{% trans %} tel     {% endtrans %}</th>
-                <th>{% trans %} email   {% endtrans %}</th>
                 <th>{% trans %} region  {% endtrans %}</th>
                 <th>{% trans %} actions {% endtrans %}</th>
             </tr>
@@ -74,8 +82,8 @@
                 <td>{{ shop.codeShop}} - {{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
                 <td>{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ shop.partner.codePartner }} - {{ shop.partner.name|length > 15 ? shop.partner.name|slice(0, 15) ~ '...' : shop.partner.name  }}</td>
+                <td>{{ shop.categoryService }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
-                <td>{{ shop.email1       }}</td>
                 <td>{{ shop.region|length > 15 ? shop.region|slice(0, 15) ~ '...' : shop.region  }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
@@ -100,7 +108,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/util/js/pagination_order.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination_shop.js') }}"></script>
     <script src="{{ asset('bundles/partner/js/shop.js') }}"></script>
     <script src="{{ asset('bundles/util/js/util.js') }}"></script>
 
