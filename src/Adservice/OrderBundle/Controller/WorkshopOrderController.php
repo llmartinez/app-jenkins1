@@ -975,6 +975,11 @@ class WorkshopOrderController extends Controller {
             $em->flush();
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
 
+            $stat = 1;
+            if($workshop->getTest()) $stat = 2;
+
+            UtilController::createHistorical($em, $workshop, $stat);
+
             // Cambiamos el locale para enviar el mail en el idioma del taller
             $locale = $request->getLocale();
             $lang_w = $workshop->getCountry()->getLang();
@@ -1020,6 +1025,9 @@ class WorkshopOrderController extends Controller {
             $em->flush();
             $em->remove($workshopOrder);
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
+
+            $stat = 0;            
+            UtilController::createHistorical($em, $workshop, $stat);
 
             // Cerramos todos los tickets del taller deshabilitado
                 // $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
@@ -1188,6 +1196,11 @@ class WorkshopOrderController extends Controller {
                 $user_workshop->setPassword($password);
                 $user_workshop->setSalt($salt);
                 UtilController::saveEntity($em, $user_workshop, $user);
+
+                $stat = 3;
+                if($workshop->getTest()) $stat = 2;
+            
+                UtilController::createHistorical($em, $workshop, $stat);
 
                 // Enviamos un mail con credenciales de usuario a modo de backup
                 $mail = $this->container->getParameter('mail_report');

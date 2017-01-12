@@ -187,7 +187,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.created_at, w.update_at, w.lowdate_at')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at, w.active, w.test')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -218,6 +218,7 @@ class StatisticController extends Controller {
             if     ($catserv != "0") $qb = $qb->andWhere('w.category_service = :catserv')->setParameter('catserv', $catserv);
 
             $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            unset($qb);
 
             if ($from_y != '0' and $from_m != '0' and $from_d != '0') $from_date = $from_y.'-'.$from_m.'-'.$from_d.' 00:00:00';
             if ($to_y   != '0' and $to_m   != '0' and $to_d   != '0') $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 23:59:59';
@@ -240,94 +241,149 @@ class StatisticController extends Controller {
                                         'sname'          => $res['sname'],
                                         'email_1'        => $res['email_1'],
                                         'phone_number_1' => $res['phone_number_1'],
-                                        'created_at'     => $res['created_at'],
                                         'update_at'      => $res['update_at'],
-                                        'lowdate_at'     => $res['lowdate_at']
+                                        'lowdate_at'     => $res['lowdate_at'],
+                                        'status'         => $res['active'],
+                                        'test'           => $res['test'],
+                                        'update'         => '0',
+                                        'lowdate'        => '0',
+                                        'test'           => '0'
                                       );
             }
+            unset($resultsDehydrated);
 
             $qb = $em->getRepository('WorkshopBundle:Historical')
                 ->createQueryBuilder('h')
                 ->select('h')
-                ->where('h.workshopId IN ('.$in.')')
-                ->orderBy('h.partnerId, h.workshopId, h.dateOrder');
+                ->where('h.workshopId IN ('.$in.')');
+
+            if (isset($from_date)) $qb->andWhere("h.dateOrder >= '".$from_date."' ");
+            if (isset($to_date  )) $qb->andWhere("h.dateOrder <= '".$to_date."' ");
+            
+            $qb->orderBy('h.partnerId, h.workshopId, h.dateOrder');
 
             $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            unset($qb);
 
-            if ($resH != null) {
-
-                if($raport == 'billing')
+            if($raport == 'billing')
+            {
+                if ($resH != null)
                 {
-                    $id = $resH['0']['workshopId'];
-                    if (isset($from_date)) $start = new \DateTime($from_date); else $start = $resH['0']['dateOrder'];
+                    // Generamos un array organizado por IDs de taller
+                    if(sizeof($resH) > 0)
+                    {
+                        $rows = array();
+                        foreach ($resH as $res)
+                        {
+                            $w_id = $res['workshopId'];
+                            $stat = $res['status'];
+                            $date = $res['dateOrder'];
 
-                    // Comprobacion del historico
-                    foreach ($resH as $key => $res) {
-
-                        // Si cambia el ID de taller se guarda la informacion en el array
-                        if($id != $res['workshopId']) {
-                            $results[$id]['update' ] = $cont['update' ];
-                            $results[$id]['lowdate'] = $cont['lowdate'];
-                            $results[$id]['test'   ] = $cont['test'   ];
-                            $cont = array('update' => 0, 'lowdate' => 0, 'test' => 0);
-
-                            if (isset($from_date)) $start = new \DateTime($from_date); else $start = $res['dateOrder'];
+                            $rows[$w_id][] = array('stat' => $stat, 'date' => $date);
                         }
+                        unset($resH);
 
-                        $status = $res['status'];
-                        $id     = $res['workshopId'];
+                        $now = new \DateTime('now');
 
-                        $diff   = date_diff($start , $res['dateOrder']);
-                        $cont   = $this->sumStatus($diff, $status, $cont);
+                        foreach ($rows as $w_id => $workshop)
+                        {
+                            $len = sizeof($workshop);
 
-                        if($diff->invert == 0)    $start = $res['dateOrder'];
-                        elseif(isset($from_date)) $start = new \DateTime($from_date);
+                            //SET DATES
+                            if (isset($from_date)) $start = new \DateTime($from_date);
+                            else                   $start = $workshop[0]['date'];
+                            if (isset($to_date))   $end = new \DateTime($to_date);
+                            else                   $end =$workshop[$len-1]['date'];
+
+                            foreach ($workshop as $key => $reg)
+                            {
+                                $date = $reg['date'];
+                                $stat = $reg['stat'];
+                                // Si es el primer registro(stat 3) no se puede sumar de una fecha anterior hasta el mismo (ya que en teoria no existía antes)
+                                if($stat != 3) {
+                                    $diff = date_diff($start, $date);
+                                    $cont = $this->sumStatus($diff, $stat, $cont);
+                                }
+
+                                if($key != $len-1) $start = $date;
+                                else {
+                                    $diff = date_diff($date, $end);
+                                    if    ($stat == 0) $stat = 1;
+                                    elseif($stat == 1) $stat = 0;
+                                    $cont = $this->sumStatus($diff, $stat, $cont);
+                                }
+
+                            }
+                            $results[$w_id]['update' ] = $cont['update' ];
+                            $results[$w_id]['lowdate'] = $cont['lowdate'];
+                            $results[$w_id]['test'   ] = $cont['test'   ]; 
+                            $cont = array('update' => 0, 'lowdate' => 0, 'test' => 0);
+                        }
+                        unset($rows);
                     }
-                    // Si ha puesto fecha final se hace una ultima comprobacion
-                    if (isset($to_date)){
-                        $end     = new \DateTime($to_date);
-                        $diff    = date_diff($res['dateOrder'] , $end);
-var_dump($res['dateOrder']);
-var_dump($end);
-var_dump($diff);
-                        if($res['status'] == 0) $status = 1; elseif($res['status'] == 1) $status = 0;
-var_dump($status);
-                        $cont    = $this->sumStatus($diff, $status, $cont);
-                    }
-                    $results[$id]['update' ] = $cont['update' ];
-                    $results[$id]['lowdate'] = $cont['lowdate'];
-                    $results[$id]['test'   ] = $cont['test'   ];
+                }
 
-var_dump($results[$id]);
-                    $data = $results;
-                }  
-                elseif($raport == 'historical')
-                { 
+                // Tratamiento de talleres que no tienen ningun registro en el historico dentro de un rango de fechas
+                if(isset($from_date) and isset($to_date))
+                {
+                    $start = new \DateTime($from_date);
+                    $end   = new \DateTime($to_date);
+                    $diff  = date_diff($start, $end);
+                    $in = '0';
+
+                    foreach ($results as $key => $res)
+                    {
+                        if ($res['update' ] == '0' and $res['lowdate'] == '0' and $res['test'   ] == '0' )
+                        {
+                            $in .= ', '.$key;
+                        }
+                    }
+                    $qb = $em->getRepository('WorkshopBundle:Historical')
+                    ->createQueryBuilder('h')
+                    ->select('h.workshopId, h.status')
+                    ->where('h.workshopId IN ('.$in.')')
+                    ->andWhere("h.dateOrder < '".$from_date."' ")
+                    ->orderBy('h.partnerId, h.workshopId, h.dateOrder', 'DESC')
+                    ->groupBy('h.workshopId');
+
+                    $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+                    foreach ($resH as $row)
+                    {
+                        $w_id = $row['workshopId'];
+
+                        if ($results[$w_id]['test'] == 1) $stat = 2;
+                        else $stat = $row['status'];
+                        $cont = $this->sumStatus($diff, $stat, $cont);
+
+                        $results[$w_id]['update' ] = $cont['update' ];
+                        $results[$w_id]['lowdate'] = $cont['lowdate'];
+                        $results[$w_id]['test'   ] = $cont['test'   ]; 
+
+                        $cont = array('update' => '0', 'lowdate' => '0', 'test' => '0');
+                    }
+                }
+                $data = $results;
+                unset($results);
+            }  
+            elseif($raport == 'historical')
+            { 
+                if ($resH != null)
+                {
                     $historical = array();
                     $h_key = 0;
-                    if (isset($from_date)) $start = new \DateTime($from_date); else $start = $resH['0']['dateOrder'];
 
                     // Comprobacion del historico
                     foreach ($resH as $key => $res) {
 
                         $status = $res['status'];
                         $id     = $res['workshopId'];
-
-                        $diff   = date_diff($start , $res['dateOrder']);
-                        $cont   = $this->sumStatus($diff, $status, $cont);
-
-                        if($diff->invert == 0)    $start = $res['dateOrder'];
-                        elseif(isset($from_date)) $start = new \DateTime($from_date);
                         
                         // Se guarda cada comprobacion en el historico
                         $historical[$h_key] = $results[$id];
-                        $historical[$h_key]['update'    ] = $cont['update'    ];
-                        $historical[$h_key]['lowdate'   ] = $cont['lowdate'   ];
-                        $historical[$h_key]['test'      ] = $cont['test'      ];
                         $historical[$h_key]['date_order'] = $res['dateOrder'];
                         $historical[$h_key]['status'    ] = $res['status'    ];
 
-                        $cont = array('update' => 0, 'lowdate' => 0, 'test' => 0);
                         $h_key++;
                     }
 
@@ -343,16 +399,17 @@ var_dump($results[$id]);
                         $results[$id]['test'   ] = $cont['test'   ];
 
                         $historical[$h_key] = $results[$id];
+                        unset($results);
                         $historical[$h_key]['date_order'] = $res['dateOrder'];
                         $historical[$h_key]['status'    ] = $res['status'    ];
                     }
-
                     $data = $historical;
+                    unset($historical);
                 }
             }
-die;
+
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$raport.'_'.date("dmY").'.csv"');
-            $excel = $this->createExcelBilling($data);
+            $excel = $this->createExcelBilling($data, $raport);
         }
         else{
 
@@ -1631,7 +1688,7 @@ die;
         return $response;
     }
 
-    public function createExcelBilling($results){
+    public function createExcelBilling($results, $raport){
 
         $locale = $this->getRequest()->getLocale();
         $trans  = $this->get('translator');
@@ -1643,26 +1700,30 @@ die;
         $excel =
             $trans->trans('code_partner').';'.
             $trans->trans('code_workshop').';'.
-            $trans->trans('workshop').';'.
-            $trans->trans('partner').';'.
+            $trans->trans('workshop').';';
+            /*$trans->trans('partner').';'.
             $trans->trans('typology').';'.
             $trans->trans('shop').';'.
             $trans->trans('email_1').';'.
-            $trans->trans('phone_number_1').';';
+            $trans->trans('phone_number_1').';';*/
 
         $res = reset($results); // Primer elemento del array
 
-        // Billing Fields
-        if(isset($res['update'  ])) $excel .= $trans->trans('update').';';
-        if(isset($res['lowdate' ])) $excel .= $trans->trans('lowdate').';';
-        if(isset($res['test'    ])) $excel .= $trans->trans('testdate').';';
-
-        // Historical Fields
-        if(isset($res['status'])) $excel .= $trans->trans('order').';';
-        if(isset($res['date_order'])) $excel .= $trans->trans('date_order').';';
+        if($raport == 'billing')
+        {
+            // Billing Fields
+            $excel .= $trans->trans('update').';';
+            $excel .= $trans->trans('lowdate').';';
+            $excel .= $trans->trans('testdate').';';
+        }
+        elseif($raport == 'historical')
+        {
+            // Historical Fields
+            $excel .= $trans->trans('order').';';
+            $excel .= $trans->trans('date_order').';';
+        }
 
         $excel .=
-            $trans->trans('first_update').';'.
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
             "\n";
@@ -1673,23 +1734,28 @@ die;
             if(isset($row['code_partner'  ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_partner'  ]).';'; else $excel.='-;';
             if(isset($row['code_workshop' ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_workshop' ]).';'; else $excel.='-;';
             if(isset($row['wname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['wname'         ]).';'; else $excel.='-;';
-            if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
+            /*if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
             if(isset($row['tyname'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['tyname'        ]).';'; else $excel.='-;';
             if(isset($row['sname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['sname'         ]).';'; else $excel.='-;';
             if(isset($row['email_1'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['email_1'       ]).';'; else $excel.='-;';
-            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';
-            if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
-            if(isset($row['lowdate'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['lowdate'       ]).';';
-            if(isset($row['test'          ])) $excel.=str_ireplace($buscar,$reemplazar,$row['test'          ]).';';
-            if(isset($row['status'        ])) {
-                if($row['status'] == '0') $excel.=$trans->trans('workshop.deactivate').';';
-                elseif($row['status'] == '1') $excel.=$trans->trans('workshop.activate').';';
-                elseif($row['status'] == '2') $excel.=$trans->trans('test').';';
-                elseif($row['status'] == '3') $excel.=$trans->trans('first_update').';';
-                else $excel.='-;';
+            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';*/
+            if($raport == 'billing')
+            {
+                if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
+                if(isset($row['lowdate'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['lowdate'       ]).';';
+                if(isset($row['test'          ])) $excel.=str_ireplace($buscar,$reemplazar,$row['test'          ]).';';
             }
-            if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
-            if(isset($row['created_at'    ])) $excel.=$row['created_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            elseif($raport == 'historical')
+            {
+                if(isset($row['status'        ])) {
+                    if($row['status'] == '0') $excel.=$trans->trans('workshop.deactivate').';';
+                    elseif($row['status'] == '1') $excel.=$trans->trans('workshop.activate').';';
+                    elseif($row['status'] == '2') $excel.=$trans->trans('test').';';
+                    elseif($row['status'] == '3') $excel.=$trans->trans('first_update').';';
+                    else $excel.='-;';
+                }
+                if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
+            }
             if(isset($row['update_at'     ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
             if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
             $excel.="\n";
