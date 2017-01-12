@@ -347,12 +347,20 @@ class StatisticController extends Controller {
                     ->groupBy('h.workshopId');
 
                     $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
                     foreach ($resH as $row)
                     {
                         $w_id = $row['workshopId'];
 
+                        if($results[$w_id]['update_at']  != null) $ini = strtotime($results[$w_id]['update_at']->format('Y-m-d H:i:s'));
+                        else $ini = null;
+                        if($results[$w_id]['lowdate_at'] != null) $fin = strtotime($results[$w_id]['lowdate_at']->format('Y-m-d H:i:s'));
+                        else $fin = null;
+
                         if ($results[$w_id]['test'] == 1) $stat = 2;
+                        elseif ($ini != null and $fin != null and $ini-$fin <= 0)
+                        {
+                          $stat = !$results[$w_id]['status'];
+                        }
                         else $stat = $row['status'];
                         $cont = $this->sumStatus($diff, $stat, $cont);
 
@@ -363,6 +371,7 @@ class StatisticController extends Controller {
                         $cont = array('update' => '0', 'lowdate' => '0', 'test' => '0');
                     }
                 }
+
                 $data = $results;
                 unset($results);
             }  
