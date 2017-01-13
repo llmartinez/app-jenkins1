@@ -387,7 +387,6 @@ typology:				 "Tipología"
 cif:					 "CIF"
 internal_code:			 "Código Interno"
 commercial_code:		 "Código Comercial"
-
 subscribed:				 "Dado de alta"
 unsubscribed:			 "Dado de baja"
 test:					 "En pruebas"
@@ -585,6 +584,14 @@ statistic.num_tickets.closed: "Número de Tickets cerrados"
 statistic.last_tickets:		  "Últimos tickets de los talleres"
 statistic.no_ticket:		  "Talleres sin tickets"
 
+update: "Días de Alta"
+lowdate: "Días de Baja"
+testdate: "Días en Pruebas"
+first_update: "Primera alta"
+last_update: "Última alta"
+last_lowdate: "Última baja"
+date_order: "Fecha de la solicitud"
+
 #POPUP
 popup.delete:				  "Borrar popup"
 popup.delete.confirm:		  "¿Estás seguro de que quieres eliminar este popup?"
@@ -620,7 +627,7 @@ page.next:						"Página siguiente"
 page.last:						"Última página"
 
 #MAIL
-mail.welcome:							"Bienvenido a la plataforma AD Service"
+mail.welcome:							"Bienvenido a la plataforma"
 mail.image:								"https://adserviceticketing.com/logo"
 mail.info.tel:							"97 267 77 70"
 mail.info.more:							"Más información:"
@@ -718,6 +725,7 @@ mail.removeOrder.subject:				"Auto Diagnostic service | Solicitud cancelada con 
 mail.removeOrder.title:					"Se ha cancelado la solicitud de "
 mail.removeOrder.createdby:				"Esta solicitud ha sido cancelada por un asesor."
 mail.removeOrder.createdby.user:		"Esta solicitud ha sido cancelada a través de la plataforma Auto Diagnostic service."
+
 mail.removeOrder.info:					"Para consultar tus solicitudes entra en <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.removeOrder.info.id:				"El número de referencia del taller es:"
 mail.removeOrder.shop.info.id:			"El número de referencia de la tienda es:"
@@ -732,6 +740,7 @@ mail.resendOrder.info.id:				"El número de referencia de la solicitud es:"
 mail.newUser.subject:					"Auto Diagnostic service | Nuevo usuario para el taller "
 mail.newUser.title:						"Se ha creado un usuario para la plataforma Auto Diagnostic service"
 mail.newUser.createdby:					"Este usuario ha sido creado a través de la plataforma Auto Diagnostic service."
+
 mail.newUser.info:						"Para más información entra en la plataforma <a href='https://adserviceticketing.com/es/help'>adserviceticketing.com/es/help</a> "
 mail.newUser.info.tel:					"o llama al teléfono "
 mail.newUser.info.id:					"Tu código de taller es:"
@@ -743,6 +752,7 @@ mail.changePassword.subject:			"Auto Diagnostic service | Nueva contraseña para
 mail.changePassword.title:				"Se ha cambiado la contraseña del usuario desde la plataforma Auto Diagnostic service"
 mail.changePassword.createdby:			"Esta modificación ha sido realizada por un asesor."
 mail.changePassword.createdby.user:		"Esta modificación ha sido realizada a través de la plataforma Auto Diagnostic service."
+
 mail.changePassword.info:				"Para más información entra en la plataforma <a href='https://adserviceticketing.com/es/help'>adserviceticketing.com/es/help</a> "
 mail.changePassword.info.tel:			"o llama al teléfono "
 mail.changePassword.info.id:			"Tu código de taller es:"

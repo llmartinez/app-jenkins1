@@ -1,6 +1,5 @@
 header.welcome: "Auto Diagnostic service"
 
-
 adserviceticketing.com: "adserviceticketing.com"
 www.adserviceticketing.com: "adserviceticketing.com"
 
@@ -388,7 +387,6 @@ typology:				 "Tipologia"
 cif:					 "NIF"
 internal_code:			 "Código Interno"
 commercial_code:		 "Código Comercial"
-
 subscribed:				 "Inscrito"
 unsubscribed:			 "Inscrição cancelada"
 test:					 "Em testes"
@@ -572,7 +570,7 @@ numticketsbymonth: 		   	  "Número de talões de oficinas por mês"
 statistic.general:			  "Estatísticas gerais"
 statistic.tickets:			  "Estatísticas de talões"
 statistic.workshops:		  "Estatísticas de oficinas"
-statistic.from_adservice:	  "do Ad-service"
+statistic.from_adservice:	  "do Ticketing"
 statistic.from_country:		  "do seu país"
 statistic.num_users:		  "Número de Utilizadores"
 statistic.num_partners:		  "Número de Sócios"
@@ -585,6 +583,14 @@ statistic.num_tickets.open:	  "Número de Talões abertos"
 statistic.num_tickets.closed: "Número de Talões fechados"
 statistic.last_tickets:		  "Últimos talões das oficinas"
 statistic.no_ticket:		  "Oficinas sem talões"
+
+update: "Dias Inscrito"
+lowdate: "Dias Inativos"
+testdate: "Dias em Testes"
+first_update: "Primeira Inscrição"
+last_update: "Inscrição passada"
+last_lowdate: "Inativação passada"
+date_order: "Data do pedido"
 
 #POPUP
 popup.delete:				  "Apagar pop-up"

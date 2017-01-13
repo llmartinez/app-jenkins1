@@ -15,20 +15,21 @@
 		</div>
 
 		<div align="center">
-			<button class="btn-menu" onclick="window.open('{{ path('user_credentials', {'type' : 'workshop'}) }}', '_self')">RESET PASSWORDS + EXCEL TALLERES (3h aprox)</button>
+			{#<button class="btn-menu" onclick="window.open('{{ path('user_credentials', {'type' : 'workshop'}) }}', '_self')">RESET PASSWORDS + EXCEL TALLERES (3h aprox)</button>
 			<button class="btn-menu" onclick="window.open('{{ path('user_credentials', {'type' : 'partner' }) }}', '_self')">RESET PASSWORDS + EXCEL SOCIOS</button>
-			<button class="btn-menu" onclick="window.open('{{ path('user_credentials', {'type' : 'country_service'}) }}', '_self')">RESET PASSWORDS + EXCEL ASESORES</button>
+			<button class="btn-menu" onclick="window.open('{{ path('user_credentials', {'type' : 'country_service'}) }}', '_self')">RESET PASSWORDS + EXCEL ASESORES</button>#}
 		</div>
 
 		<div align="center">
-			<button class="btn-menu" onclick="window.open('{{ path('lock_cars',  { 'bbdd': 'old_cars',  }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
-			<button class="btn-menu" onclick="window.open('{{ path('incidences', { 'bbdd': 'incidences' }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>
-			<button class="btn-menu" onclick="window.open('{{ path('test_mail')                            }}', '_self')"> TEST MAILING </button>
+			{#<button class="btn-menu" onclick="window.open('{{ path('lock_cars',  { 'bbdd': 'old_cars',  }) }}', '_self')"> IMPORTAR BBDD_CARS       </button>
+			<button class="btn-menu" onclick="window.open('{{ path('incidences', { 'bbdd': 'incidences' }) }}', '_self')"> IMPORTAR BBDD_INCIDENCES </button>#}
+			<button class="btn-menu" onclick="window.open('{{ path('test_mail')                            }}', '_self')">  CREATE HISTORICAL </button>
+                        
 		</div>
 
 		<div align="center">
-			<button class="btn-menu" onclick="window.open('{{ path('import_workshop_fr') }}', '_self')"> IMPORTAR TALLERES FR </button>
-		</div>
+			{#<button class="btn-menu" onclick="window.open('{{ path('import_workshop_fr') }}', '_self')"> IMPORTAR TALLERES FR </button>#}
+		</div>                        
 
 	{% elseif bbdd == 'complete' %}
 		<h1> BBDD IMPORTADA CORRECTAMENTE! </h1>
