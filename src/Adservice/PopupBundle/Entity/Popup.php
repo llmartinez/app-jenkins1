@@ -52,6 +52,13 @@ class Popup {
     private $country;
 
     /**
+     * @var string $category_service
+     *
+     * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
+     */
+    private $category_service;
+
+    /**
      * @var datetime $startdate_at
      *
      * @ORM\Column(name="startdate_at", type="datetime")
@@ -200,6 +207,27 @@ class Popup {
     public function getCountry()
     {
         return $this->country;
+    }
+
+
+    /**
+     * Set category_service
+     *
+     * @param user $category_service
+     */
+    public function setCategoryService($category_service)
+    {
+        $this->category_service = $category_service;
+    }
+
+    /**
+     * Get category_service
+     *
+     * @return string
+     */
+    public function getCategoryService()
+    {
+        return $this->category_service;
     }
 
     /**
