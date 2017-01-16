@@ -10,9 +10,9 @@
                         <td align="left">
                             {% if env is defined and env != 'prod' %}<a class="env">{{env|upper}}</a>{% endif %}
 
-                            {% set url_logo = route_logo ~ '.png' %}
-                            <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
-
+                            {#{% set url_logo = route_logo ~ '.png' %}#}
+                            {#<img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">#}
+                            
                             {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
                                 {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
                                 <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
