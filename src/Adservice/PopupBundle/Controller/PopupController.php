@@ -38,7 +38,7 @@ class PopupController extends Controller {
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function popupListAction($page=1 , $country='none') {
+    public function popupListAction($page=1 , $category_service='none' , $country='none') {
 
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ADMIN') === false)
@@ -47,12 +47,16 @@ class PopupController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
-            if ($country != 'none') $params[] = array('country', ' = '.$country);
-            else                    $params[] = array();
+            if($country != 'none' OR $category_service != 'none')
+            {
+                if ($country          != 'none') $params[] = array('country', ' = '.$country);
+                if ($category_service != 'none') $params[] = array('category_service', ' = '.$category_service);
+            }
+            else $params[] = array();
         }
         else {
             $id_superadmin = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_SUPER_ADMIN')->getId();
-            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+            $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
             $params[] = array('role', ' != '.$id_superadmin);
         }
 
@@ -64,13 +68,16 @@ class PopupController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
-        else $countries = array();
+        if($security->isGranted('ROLE_SUPER_ADMIN')) $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+        else $catservices = array();
+        $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
         return $this->render('PopupBundle:Popup:list_popups.html.twig', array(  'all_popups'   => $popups,
                                                                                 'pagination'   => $pagination,
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
+                                                                                'catservices'  => $catservices,
+                                                                                'category_service' => $category_service,
                                                                                 ));
     }
 
@@ -88,14 +95,17 @@ class PopupController extends Controller {
         $_SESSION['role'] = ' = '.$role;
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $_SESSION['id_country'] = ' != 0 ';
+            //$_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['id_catserv'] = ' != 0 ';
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            //$_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
 
         }else {
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
         }
         $form = $this->createForm(new PopupType(), $popup);
 
@@ -110,7 +120,7 @@ class PopupController extends Controller {
 
             return $this->redirect($this->generateUrl('popup_list'));
         }
-        return $this->render('PopupBundle:Popup:new_popup.html.twig', array( 'popup'      => $popup,
+        return $this->render('PopupBundle:Popup:new_popup.html.twig', array('popup'      => $popup,
                                                                             'form_name'  => $form->getName(),
                                                                             'form'       => $form->createView()));
     }
@@ -137,14 +147,17 @@ class PopupController extends Controller {
         $_SESSION['role'] = $role;
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $_SESSION['id_country'] = ' != 0 ';
+            //$_SESSION['id_country'] = ' != 0 ';
+            $_SESSION['id_catserv'] = ' != 0 ';
 
         }elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            //$_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
 
         }else {
-            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
         }
         $form = $this->createForm(new PopupType(), $popup);
 

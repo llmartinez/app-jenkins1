@@ -38,342 +38,342 @@ class ImportController extends Controller
 // |  __/ ___ \|  _ < | | | |\  | |___|  _ <
 // |_| /_/   \_\_| \_\|_| |_| \_|_____|_| \_\
 
-    	if( $bbdd == 'partner' )
-    	{
-    		$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
-			$locations  = $this->getLocations($em);																						 // MAPPING LOCATIONS
-
-			foreach ($old_Socios as $old_Socio)
-			{
-				$newPartner = UtilController::newEntity(new Partner(), $sa);
-				$name = $old_Socio->getNombre();
-				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-				$newPartner->setName($name);
-				$newPartner->setCodePartner($old_Socio->getId());
-				$newPartner->setActive('1');
-				$newPartner = $this->setContactFields($em, $old_Socio, $newPartner, $locations);
-				UtilController::saveEntity($em, $newPartner, $sa,false);
-			}
-			$em->flush();
-
-			$session->set('msg' ,	'Socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
-			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
-			$session->set('next',  	'shop');
-
-			//return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
-    	}
-//  ____  _   _  ___  ____
-// / ___|| | | |/ _ \|  _ \
-// \___ \| |_| | | | | |_) |
-//  ___) |  _  | |_| |  __/
-// |____/|_| |_|\___/|_|
-
-    	elseif( $bbdd == 'shop' )
-    	{
-			//$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
-			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
-
-			// TIENDA POR DEFECTO
-			$partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => '9999')); //SOCIO POR DEFECTO
-			$shop    = $em->getRepository('PartnerBundle:Shop')->find(0); //TIENDA POR DEFECTO
-			$newShop = UtilController::newEntity(new Shop(), $sa);
-			$newShop->setId(0);
-			$newShop->setName('...');
-			$newShop->setPartner($partner);
-			$newShop->setActive('1');
-			$newShop->setPhoneNumber1  ('0');
-	        $newShop->setPhoneNumber2  ('0');
-	        $newShop->setMobileNumber1 ('0');
-	        $newShop->setMobileNumber2 ('0');
-	        $newShop->setFax           ('0');
-
-	        $mail = $this->container->getParameter('mail_test');
-	        $newShop->setEmail1($mail);
-	        $newShop->setEmail2($mail);
-
-	        $newShop->setCity  ('...');
-	        $newShop->setRegion('...');
-
-	        $newShop->setCountry($locations['countries']['spain']);
-			UtilController::saveEntity($em, $newShop, $sa,false);
-
-			// $partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
-
-			// foreach ($old_Tiendas as $old_Tienda)
-			// {
-			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
-			// 	$name = $old_Tienda->getNombre();
-			// 	$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-			// 	$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-			// 	$newShop->setName($name);
-			// 	$newShop->setPartner($partner);
-			// 	$newShop->setActive('1');
-			// 	$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
-			// 	UtilController::saveEntity($em, $newShop, $sa,false);
-			// }
-			// $em->flush();
-			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
-			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
-			$session->set('next',  	'ad');
-
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	// return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
-    	}
-//  _   _ ____  _____ ____       _    ____
-// | | | / ___|| ____|  _ \     / \  |  _ \
-// | | | \___ \|  _| | |_) |   / _ \ | | | |
-// | |_| |___) | |___|  _ <   / ___ \| |_| |
-//  \___/|____/|_____|_| \_\ /_/   \_\____/
-
-    	elseif( $bbdd == 'ad' )
-    	{
-   			$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
-			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
-
-			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
-			$all_partners  = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
-			$role          = $em->getRepository('UserBundle:Role'      )->findOneByName('ROLE_AD');	//ROLE
-
-			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-
-			foreach ($old_Socios as $old_Socio)
-			{
-				$newAD = UtilController::newEntity(new User(), $sa);
-				$name = $old_Socio->getNombre();
-				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
-				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
-				$password = substr( md5(microtime()), 1, 8);
-				$newAD->setName($name);
-				$newAD = $this->setUserFields   ($em, $newAD, $role, $name, $password);
-				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
-				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
-				$newAD->setActive('1');
-				$newAD->setPartner($partners[$old_Socio->getId()]);
-				UtilController::saveEntity($em, $newAD, $sa,false);
-
-				$partner_users[] =  array($newAD, $password);
-			}
-			$em->flush();
- 			if(isset($partner_users)) {
-				$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
-				$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
-				$session->set('next',  	'assessor');
-
-				// Generarando excel ususarios
-				$response = $this->doExcelPartnerAction($partner_users);
-				$session->set('response' ,	$response);
-
-	 			if(isset($response)) {
-	 				return $response;
-	 			}
- 			}
-
-			return $this->render('ImportBundle:Import:import.html.twig');
-        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
-    	}
-//     _    ____ ____  _____ ____ ____   ___  ____
-//    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
-//   / _ \ \___ \___ \|  _| \___ \___ \| | | | |_) |
-//  / ___ \ ___) |__) | |___ ___) |__) | |_| |  _ <
-// /_/   \_\____/____/|_____|____/____/ \___/|_| \_\
-
-    	elseif( $bbdd == 'assessor' )
-    	{
-			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
-
-			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
-			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
-			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
-
-			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
-
-			foreach ($old_Asesores as $old_Asesor)
-			{
-				$password = substr( md5(microtime()), 1, 8);
-				$newAssessor = UtilController::newEntity(new User(), $sa);
-				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre(), $password);
-				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
-				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
-				$newAssessor->setActive($old_Asesor->getActive());
-
-				UtilController::saveEntity($em, $newAssessor, $sa, false);
-
-				$assessor_users[] =  array($newAssessor, $password);
-			}
-			$em->flush();
- 			if(isset($assessor_users)) {
-				$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("d-m-Y, H:i:s").')');
-				$session->set('info',  	'Importando talleres (entidad Workshop)...');
-				$session->set('next',  	'workshop');
-
-				// Generarando excel ususarios
-				$response = $this->doExcelAssessorAction($assessor_users);
-				$session->set('response' ,	$response);
-
-	 			if(isset($response)) {
-	 				return $response;
-	 			}
- 			}
-            return $this->render('ImportBundle:Import:import.html.twig');
-			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
-    	}
-// __        _____  ____  _  ______  _   _  ___  ____
-// \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
-//  \ \ /\ / / | | | |_) | ' /\___ \| |_| | | | | |_) |
-//   \ V  V /| |_| |  _ <| . \ ___) |  _  | |_| |  __/
-//    \_/\_/  \___/|_| \_\_|\_\____/|_| |_|\___/|_|
-
-    	elseif( $bbdd == 'workshop' )
-    	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findBy(array('active' => 1)); // WORKSHOP	//
-            $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
-
-            $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
-            $all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
-            $all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
-            $typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
-            //find($old_Taller->getTipologia());
-
-            foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
-            foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
-            foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
-            //var_dump($all_shops);die;
-            foreach ($old_Talleres as $old_Taller)
-            {
-
-                    $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
-
-		            $buscar=array(chr(13).chr(10), chr(9), "\r\n", "\n", "\r");
-		            $reemplazar=array("", "", "", "");
-		            $name=str_ireplace($buscar,$reemplazar,$old_Taller->getNombre());
-                    $newWorkshop->setName($name);
-
-                    $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
-                    $newWorkshop->setAddress 				($old_Taller->getDireccion());
-                    $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
-                    $newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
-                    $newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
-                    $newWorkshop->setActive	 				($old_Taller->getActive());
-                    $newWorkshop->setContact 				($old_Taller->getContacto());
-                    $newWorkshop->setTypology 				($typology);
-                    $newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
-
-                    //COMPROVACION SI EXISTE EL SOCIO
-                    $idSocio    = $old_Taller->getIdSocio();
-
-                    if(isset($partners[$idSocio]))
-                    {
-                            $newWorkshop->setPartner ($partners[$idSocio]);
-                            $newWorkshop->setCodePartner ($idSocio);
-                    }
-                    elseif($idSocio >= 60 AND $idSocio <= 78){
-                                     $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
-                                     $newWorkshop->setCodePartner(28);
-
-                                     if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
-                    }else{
-                                     $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
-                                     $newWorkshop->setCodePartner(9999);
-                    }
-
-                    //setAdServicePlus
-                    if(isset($adsplus[$old_Taller->getId()])) {
-                            $newWorkshop->setAdServicePlus(1);
-
-                            $adsp = $adsplus[$old_Taller->getId()];
-                            $newADSPlus = new ADSPlus();
-                            $newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
-                            $newADSPlus->setAltaInicial($adsp->getAltaInicial());
-                            $newADSPlus->setUltAlta($adsp->getUltAlta());
-                            $newADSPlus->setBaja($adsp->getBaja());
-                            $newADSPlus->setContador($adsp->getContador());
-                            $newADSPlus->setActive($adsp->getActive());
-
-                    $em->persist($newADSPlus);
-                    }
-                    else $newWorkshop->setAdServicePlus(0);
-
-                    UtilController::saveEntity($em, $newWorkshop, $sa, false);
-            }
-            $em->flush();
-            $session->set('msg' ,	'Talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
-            $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
-            $session->set('next',  	'user');
-
-            //return $this->render('ImportBundle:Import:import.html.twig');
-        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
-    	}
-//  _   _ ____  _____ ____
-// | | | / ___|| ____|  _ \
-// | | | \___ \|  _| | |_) |
-// | |_| |___) | |___|  _ <
-//  \___/|____/|_____|_| \_\
-
-    	elseif( $bbdd == 'user' )
-    	{
-    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findBy(array('active' => 1)); // USER 	//
-
-			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
-			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
-			$all_languages = $em->getRepository('UtilBundle:Language'    )->findAll();					//MAPPING LANG
-			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
-
-			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
-			foreach ($all_languages as $language) { $languages[$language->getLanguage()    ] = $language;	}
-
-			foreach ($old_Talleres  as $old_Taller)
-			{
-				$newUser = UtilController::newEntity(new User(), $sa);
-				$password = substr( md5(microtime()), 1, 8);
-				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getNombre(), $password);
-				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
-				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
-				$newUser->setActive   ($old_Taller->getActive());
-				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
-
-				if( $newUser->getName() == 'sin-especificar' and $newUser->getSurname() == 'sin-especificar') {
-					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
-					$newUser->setName($workshops[$old_Taller->getId()]->getName());
-					$newUser->setSurname($workshops[$old_Taller->getId()]->getName());
-				}
-
-				// GUARDANDO USUARIOS EN EXCEL
-				$users_email_log[] = array($newUser, $password);
-				UtilController::saveEntity($em, $newUser, $sa, false);
- 			}
-			$em->flush();
- 			if(isset($users_email_log)) {
-				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
-				$session->set('info',  	'Generarando excel con los ususarios...
-										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
-				$session->set('next',  	'user_log');
-
-				// Generarando excel ususarios
-				$response = $this->doExcelAction($users_email_log);
-				$session->set('response' ,	$response);
- 			}
-			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
-    	}
-    	elseif( $bbdd == 'user_log' )
-    	{
-    		$response = $session->get('response');
- 			if(isset($response)) {
- 				return $response;
- 			}else{
- 				return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
- 			}
-
-    	}
-    	else{
+//    	if( $bbdd == 'partner' )
+//    	{
+//    		$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
+//			$locations  = $this->getLocations($em);																						 // MAPPING LOCATIONS
+//
+//			foreach ($old_Socios as $old_Socio)
+//			{
+//				$newPartner = UtilController::newEntity(new Partner(), $sa);
+//				$name = $old_Socio->getNombre();
+//				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+//				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+//				$newPartner->setName($name);
+//				$newPartner->setCodePartner($old_Socio->getId());
+//				$newPartner->setActive('1');
+//				$newPartner = $this->setContactFields($em, $old_Socio, $newPartner, $locations);
+//				UtilController::saveEntity($em, $newPartner, $sa,false);
+//			}
+//			$em->flush();
+//
+//			$session->set('msg' ,	'Socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
+//			$session->set('info',  	'Importando tiendas por defecto (entidad Shop)...');
+//			$session->set('next',  	'shop');
+//
+//			//return $this->render('ImportBundle:Import:import.html.twig');
+//        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'partner'));
+//    	}
+////  ____  _   _  ___  ____
+//// / ___|| | | |/ _ \|  _ \
+//// \___ \| |_| | | | | |_) |
+////  ___) |  _  | |_| |  __/
+//// |____/|_| |_|\___/|_|
+//
+//    	elseif( $bbdd == 'shop' )
+//    	{
+//			//$old_Tiendas = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id >= 60 AND os.id <= 78' )->getResult(); // PARTNERS //
+//			$locations   = $this->getLocations($em);																					 	 // MAPPING LOCATIONS
+//
+//			// TIENDA POR DEFECTO
+//			$partner = $em->getRepository('PartnerBundle:Partner')->findOneBy(array('code_partner' => '9999')); //SOCIO POR DEFECTO
+//			$shop    = $em->getRepository('PartnerBundle:Shop')->find(0); //TIENDA POR DEFECTO
+//			$newShop = UtilController::newEntity(new Shop(), $sa);
+//			$newShop->setId(0);
+//			$newShop->setName('...');
+//			$newShop->setPartner($partner);
+//			$newShop->setActive('1');
+//			$newShop->setPhoneNumber1  ('0');
+//	        $newShop->setPhoneNumber2  ('0');
+//	        $newShop->setMobileNumber1 ('0');
+//	        $newShop->setMobileNumber2 ('0');
+//	        $newShop->setFax           ('0');
+//
+//	        $mail = $this->container->getParameter('mail_test');
+//	        $newShop->setEmail1($mail);
+//	        $newShop->setEmail2($mail);
+//
+//	        $newShop->setCity  ('...');
+//	        $newShop->setRegion('...');
+//
+//	        $newShop->setCountry($locations['countries']['spain']);
+//			UtilController::saveEntity($em, $newShop, $sa,false);
+//
+//			// $partner     = $em->getRepository('PartnerBundle:Partner')->find('28'); //Tiendas asociadas con VEMARE, S.L.
+//
+//			// foreach ($old_Tiendas as $old_Tienda)
+//			// {
+//			// 	$newShop = UtilController::newEntity(new Shop(), $sa);
+//			// 	$name = $old_Tienda->getNombre();
+//			// 	$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+//			// 	$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+//			// 	$newShop->setName($name);
+//			// 	$newShop->setPartner($partner);
+//			// 	$newShop->setActive('1');
+//			// 	$newShop = $this->setContactFields($em, $old_Tienda, $newShop, $locations);
+//			// 	UtilController::saveEntity($em, $newShop, $sa,false);
+//			// }
+//			// $em->flush();
+//			$session->set('msg' ,	'Tiendas importadas correctamente! ('.date("d-m-Y, H:i:s").')');
+//			$session->set('info',  	'Importando usuarios para socios (entidad User de rol AD)...');
+//			$session->set('next',  	'ad');
+//
+//			return $this->render('ImportBundle:Import:import.html.twig');
+//        	// return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'shop'));
+//    	}
+////  _   _ ____  _____ ____       _    ____
+//// | | | / ___|| ____|  _ \     / \  |  _ \
+//// | | | \___ \|  _| | |_) |   / _ \ | | | |
+//// | |_| |___) | |___|  _ <   / ___ \| |_| |
+////  \___/|____/|_____|_| \_\ /_/   \_\____/
+//
+//    	elseif( $bbdd == 'ad' )
+//    	{
+//   			$old_Socios = $em_old->createQuery('SELECT os FROM ImportBundle:old_Socio os WHERE os.id < 60 OR os.id > 78' )->getResult(); // PARTNERS //
+//			// $old_Socios = $em_old->getRepository('ImportBundle:old_Socio')->findBy(array('asociado' => 0));	// PARTNERS //
+//
+//			$locations     = $this->getLocations($em);												//MAPPING LOCATIONS
+//			$all_partners  = $em->getRepository('PartnerBundle:Partner')->findAll();				//MAPPING PARTNERS
+//			$role          = $em->getRepository('UserBundle:Role'      )->findOneByName('ROLE_AD');	//ROLE
+//
+//			foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
+//
+//			foreach ($old_Socios as $old_Socio)
+//			{
+//				$newAD = UtilController::newEntity(new User(), $sa);
+//				$name = $old_Socio->getNombre();
+//				$name = preg_replace('/^[0-9]{2,3}-/', '', $name, 1);
+//				$name = preg_replace('/^[0-9]{2,3} - /', '', $name, 1);
+//				$password = substr( md5(microtime()), 1, 8);
+//				$newAD->setName($name);
+//				$newAD = $this->setUserFields   ($em, $newAD, $role, $name, $password);
+//				$newAD = $this->setContactFields($em, $old_Socio, $newAD, $locations);
+//				$newAD->setLanguage ($em->getRepository('UtilBundle:Language')->findOneByLanguage($newAD->getCountry()->getLang()));
+//				$newAD->setActive('1');
+//				$newAD->setPartner($partners[$old_Socio->getId()]);
+//				UtilController::saveEntity($em, $newAD, $sa,false);
+//
+//				$partner_users[] =  array($newAD, $password);
+//			}
+//			$em->flush();
+// 			if(isset($partner_users)) {
+//				$session->set('msg' ,	'Usuarios para socios importados correctamente! ('.date("d-m-Y, H:i:s").')');
+//				$session->set('info',  	'Importando usuarios para asesores (entidad User de rol ASSESSOR)...');
+//				$session->set('next',  	'assessor');
+//
+//				// Generarando excel ususarios
+//				$response = $this->doExcelPartnerAction($partner_users);
+//				$session->set('response' ,	$response);
+//
+//	 			if(isset($response)) {
+//	 				return $response;
+//	 			}
+// 			}
+//
+//			return $this->render('ImportBundle:Import:import.html.twig');
+//        	//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'ad'));
+//    	}
+////     _    ____ ____  _____ ____ ____   ___  ____
+////    / \  / ___/ ___|| ____/ ___/ ___| / _ \|  _ \
+////   / _ \ \___ \___ \|  _| \___ \___ \| | | | |_) |
+////  / ___ \ ___) |__) | |___ ___) |__) | |_| |  _ <
+//// /_/   \_\____/____/|_____|____/____/ \___/|_| \_\
+//
+//    	elseif( $bbdd == 'assessor' )
+//    	{
+//			$old_Asesores  = $em_old->getRepository('ImportBundle:old_Asesor' )->findAll();				// ASSESSOR
+//
+//			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+//			$all_languages = $em->getRepository('UtilBundle:Language')->findAll();						//MAPPING LANG
+//			$role          = $em->getRepository('UserBundle:Role' )->findOneByName('ROLE_ASSESSOR');	//ROLE
+//
+//			foreach ($all_languages as $language) { $languages[$language->getLanguage()] = $language;		}
+//
+//			foreach ($old_Asesores as $old_Asesor)
+//			{
+//				$password = substr( md5(microtime()), 1, 8);
+//				$newAssessor = UtilController::newEntity(new User(), $sa);
+//				$newAssessor = $this->setUserFields   ($em, $newAssessor, $role, $old_Asesor->getNombre(), $password);
+//				$newAssessor = $this->setContactFields($em, $old_Asesor, $newAssessor, $locations);
+//				$newAssessor->setLanguage ($languages[$locations['countries'][$newAssessor->getCountry()->getCountry()]->getLang()]);
+//				$newAssessor->setActive($old_Asesor->getActive());
+//
+//				UtilController::saveEntity($em, $newAssessor, $sa, false);
+//
+//				$assessor_users[] =  array($newAssessor, $password);
+//			}
+//			$em->flush();
+// 			if(isset($assessor_users)) {
+//				$session->set('msg' ,	'Usuarios para asesores importados correctamente! ('.date("d-m-Y, H:i:s").')');
+//				$session->set('info',  	'Importando talleres (entidad Workshop)...');
+//				$session->set('next',  	'workshop');
+//
+//				// Generarando excel ususarios
+//				$response = $this->doExcelAssessorAction($assessor_users);
+//				$session->set('response' ,	$response);
+//
+//	 			if(isset($response)) {
+//	 				return $response;
+//	 			}
+// 			}
+//            return $this->render('ImportBundle:Import:import.html.twig');
+//			//return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'assessor'));
+//    	}
+//// __        _____  ____  _  ______  _   _  ___  ____
+//// \ \      / / _ \|  _ \| |/ / ___|| | | |/ _ \|  _ \
+////  \ \ /\ / / | | | |_) | ' /\___ \| |_| | | | | |_) |
+////   \ V  V /| |_| |  _ <| . \ ___) |  _  | |_| |  __/
+////    \_/\_/  \___/|_| \_\_|\_\____/|_| |_|\___/|_|
+//
+//    	elseif( $bbdd == 'workshop' )
+//    	{
+//    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller' )->findBy(array('active' => 1)); // WORKSHOP	//
+//            $all_adsplus     = $em_old->getRepository('ImportBundle:old_ADSPlus')->findAll();		//MAPPING AD-SERVICE PLUS
+//
+//            $locations    	 = $this->getLocations($em);											//MAPPING LOCATIONS
+//            $all_partners 	 = $em->getRepository('PartnerBundle:Partner'  )->findAll();			//MAPPING PARTNERS
+//            $all_shops    	 = $em->getRepository('PartnerBundle:Shop'     )->findAll();			//MAPPING SHOPS
+//            $typology    	 = $em->getRepository('WorkshopBundle:Typology')->find('1');			//MAPPING TYPOLOGIES
+//            //find($old_Taller->getTipologia());
+//
+//            foreach ($all_adsplus  as $adsp   ) { $adsplus [$adsp   ->getIdTallerADS()] = $adsp;	}
+//            foreach ($all_partners as $partner) { $partners[$partner->getCodePartner()] = $partner;	}
+//            foreach ($all_shops    as $shop   ) { $shops   [$shop   ->getId()]    = $shop;	}
+//            //var_dump($all_shops);die;
+//            foreach ($old_Talleres as $old_Taller)
+//            {
+//
+//                    $newWorkshop = UtilController::newEntity(new Workshop(), $sa);
+//
+//		            $buscar=array(chr(13).chr(10), chr(9), "\r\n", "\n", "\r");
+//		            $reemplazar=array("", "", "", "");
+//		            $name=str_ireplace($buscar,$reemplazar,$old_Taller->getNombre());
+//                    $newWorkshop->setName($name);
+//
+//                    $newWorkshop->setCodeWorkshop 			($old_Taller->getId());
+//                    $newWorkshop->setAddress 				($old_Taller->getDireccion());
+//                    $newWorkshop->setConflictive     		($old_Taller->getConflictivo());
+//                    $newWorkshop->setObservationAdmin 		($old_Taller->getObservaciones());
+//                    $newWorkshop->setObservationAssessor 	($old_Taller->getObservaciones());
+//                    $newWorkshop->setActive	 				($old_Taller->getActive());
+//                    $newWorkshop->setContact 				($old_Taller->getContacto());
+//                    $newWorkshop->setTypology 				($typology);
+//                    $newWorkshop = $this->setContactFields	($em, $old_Taller, $newWorkshop, $locations);
+//
+//                    //COMPROVACION SI EXISTE EL SOCIO
+//                    $idSocio    = $old_Taller->getIdSocio();
+//
+//                    if(isset($partners[$idSocio]))
+//                    {
+//                            $newWorkshop->setPartner ($partners[$idSocio]);
+//                            $newWorkshop->setCodePartner ($idSocio);
+//                    }
+//                    elseif($idSocio >= 60 AND $idSocio <= 78){
+//                                     $newWorkshop->setPartner($partners['28']); //Tiendas asociadas con VEMARE, S.L.
+//                                     $newWorkshop->setCodePartner(28);
+//
+//                                     if (isset($shops[$idSocio])) $newWorkshop->setShop($shops[$idSocio]);
+//                    }else{
+//                                     $newWorkshop->setPartner($partners[9999]); //SIN SOCIO
+//                                     $newWorkshop->setCodePartner(9999);
+//                    }
+//
+//                    //setAdServicePlus
+//                    if(isset($adsplus[$old_Taller->getId()])) {
+//                            $newWorkshop->setAdServicePlus(1);
+//
+//                            $adsp = $adsplus[$old_Taller->getId()];
+//                            $newADSPlus = new ADSPlus();
+//                            $newADSPlus->setIdTallerADS($adsp->getIdTallerADS());
+//                            $newADSPlus->setAltaInicial($adsp->getAltaInicial());
+//                            $newADSPlus->setUltAlta($adsp->getUltAlta());
+//                            $newADSPlus->setBaja($adsp->getBaja());
+//                            $newADSPlus->setContador($adsp->getContador());
+//                            $newADSPlus->setActive($adsp->getActive());
+//
+//                    $em->persist($newADSPlus);
+//                    }
+//                    else $newWorkshop->setAdServicePlus(0);
+//
+//                    UtilController::saveEntity($em, $newWorkshop, $sa, false);
+//            }
+//            $em->flush();
+//            $session->set('msg' ,	'Talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
+//            $session->set('info',  	'Importando usuarios para talleres (entidad User de rol USER)...');
+//            $session->set('next',  	'user');
+//
+//            //return $this->render('ImportBundle:Import:import.html.twig');
+//        	return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'workshop'));
+//    	}
+////  _   _ ____  _____ ____
+//// | | | / ___|| ____|  _ \
+//// | | | \___ \|  _| | |_) |
+//// | |_| |___) | |___|  _ <
+////  \___/|____/|_____|_| \_\
+//
+//    	elseif( $bbdd == 'user' )
+//    	{
+//    		$old_Talleres    = $em_old->getRepository('ImportBundle:old_Taller'		)->findBy(array('active' => 1)); // USER 	//
+//
+//			$locations     = $this->getLocations($em);													//MAPPING LOCATIONS
+//			$all_workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();					//MAPPING WORKSHOPS
+//			$all_languages = $em->getRepository('UtilBundle:Language'    )->findAll();					//MAPPING LANG
+//			$role          = $em->getRepository('UserBundle:Role'        )->findOneByName('ROLE_USER');	//ROLE
+//
+//			foreach ($all_workshops as $workshop) { $workshops[$workshop->getCodeWorkshop()] = $workshop;	}
+//			foreach ($all_languages as $language) { $languages[$language->getLanguage()    ] = $language;	}
+//
+//			foreach ($old_Talleres  as $old_Taller)
+//			{
+//				$newUser = UtilController::newEntity(new User(), $sa);
+//				$password = substr( md5(microtime()), 1, 8);
+//				$newUser = $this->setUserFields   ($em, $newUser, $role, $old_Taller->getNombre(), $password);
+//				$newUser = $this->setContactFields($em, $old_Taller, $newUser, $locations);
+//				$newUser->setLanguage ($languages[$locations['countries'][$newUser->getCountry()->getCountry()]->getLang()]);
+//				$newUser->setActive   ($old_Taller->getActive());
+//				$newUser->setWorkshop ($workshops[$old_Taller->getId()]);
+//
+//				if( $newUser->getName() == 'sin-especificar' and $newUser->getSurname() == 'sin-especificar') {
+//					$newUser->setUsername($workshops[$old_Taller->getId()]->getName());
+//					$newUser->setName($workshops[$old_Taller->getId()]->getName());
+//					$newUser->setSurname($workshops[$old_Taller->getId()]->getName());
+//				}
+//
+//				// GUARDANDO USUARIOS EN EXCEL
+//				$users_email_log[] = array($newUser, $password);
+//				UtilController::saveEntity($em, $newUser, $sa, false);
+// 			}
+//			$em->flush();
+// 			if(isset($users_email_log)) {
+//				$session->set('msg' ,	'Usuarios para talleres importados correctamente! ('.date("d-m-Y, H:i:s").')');
+//				$session->set('info',  	'Generarando excel con los ususarios...
+//										 Haz click en Importar Lock para importar el historico de coches e incidencias(entidad LockCar y LockIncidence)...');
+//				$session->set('next',  	'user_log');
+//
+//				// Generarando excel ususarios
+//				$response = $this->doExcelAction($users_email_log);
+//				$session->set('response' ,	$response);
+// 			}
+//			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
+//    	}
+//    	elseif( $bbdd == 'user_log' )
+//    	{
+//    		$response = $session->get('response');
+// 			if(isset($response)) {
+// 				return $response;
+// 			}else{
+// 				return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
+// 			}
+//
+//    	}
+//    	else{
 
 			$session->set('info', '<h3>Deseas importar la BBDD antigua de AD-service??</h3>
 			<p>Se importaran Socios, Asesores, Talleres y Usuarios.</p>
 			<p>Se creará el historico de coches e incidencias de los datos antiguos.</p>');
 
 			return $this->render('ImportBundle:Import:import.html.twig');
-        }
+//        }
     }
 
 //  _     ___   ____ _  __   ____    _    ____  ____
@@ -381,7 +381,7 @@ class ImportController extends Controller
 // | |  | | | | |   | ' /  | |     / _ \ | |_) \___ \
 // | |__| |_| | |___| . \  | |___ / ___ \|  _ < ___) |
 // |_____\___/ \____|_|\_\  \____/_/   \_\_| \_\____/
-
+/*
     public function importLockCarsAction($bbdd=null, $num=0)
     {
     	$session = $this->get('session');
@@ -790,10 +790,10 @@ class ImportController extends Controller
     private function setUserFields($em, $entity, $role, $name, $password='grupeina')
     {
 		$entity->setUsername   (UtilController::getUsernameUnused($em, $name));	/*CREAR USERNAME Y EVITAR REPETICIONES*/
-        $entity->setPassword   ($password); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
+ /*       $entity->setPassword   ($password); //(substr( md5(microtime()), 1, 8));	/*CREAR PASSWORD AUTOMATICAMENTE*/
 
         //password nuevo, se codifica con el nuevo salt
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
+   /*     $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
         $salt = md5(time());
         $password = $encoder->encodePassword($entity->getPassword(), $salt);
         $entity->setPassword($password);
@@ -849,7 +849,7 @@ class ImportController extends Controller
         // $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
         // $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
-
+/*
 		return $entity;
 	}
 
@@ -1041,10 +1041,87 @@ class ImportController extends Controller
         $excel = str_replace(',', '.', $excel);
         return($excel);
     }
-
+*/
+    
+    
     public function testMailingAction()
     {
-        $em      = $this->getDoctrine()->getEntityManager();
+      
+      $sql = "INSERT INTO historical VALUES ";
+      $id = 1;
+      $em = $this->getDoctrine()->getEntityManager();
+        $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
+        foreach ($workshops as $workshop) {
+            if ($workshop->getLowdateAt() == null && $workshop->getEndtestAt()== null){
+                $status = 3;
+                $update = $workshop->getCreatedAt()->format('Y-m-d H:i:s');
+                if ($workshop->getActive() == 0){
+                    $status = 0;
+                }
+                else{
+                    if ($workshop->getUpdateAt() != null){
+                        $update = $workshop->getUpdateAt()->format('Y-m-d H:i:s');
+                    } 
+                }
+                $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$update."',".$status."),";
+                $id++;                
+            }
+            elseif ($workshop->getUpdateAt() != null && $workshop->getLowdateAt() != null && $workshop->getEndtestAt() != null){
+                $modified = $workshop->getModifiedAt()->format('Y-m-d H:i:s');
+                $status = 0;
+                if($workshop->getActive() == 1){
+                    $status = 1;
+                }
+                $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$modified."',".$status."),";
+                $id++;
+            }
+            else {
+                
+                if ($workshop->getLowdateAt() != null){
+                    $status = 0;
+                    $lowdate = $workshop->getLowdateAt()->format('Y-m-d H:i:s');
+                    $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$lowdate."',".$status."),";
+                    $id++;
+                }
+                if ($workshop->getUpdateAt() != null){
+                    $status = 1;
+                    $update = $workshop->getUpdateAt()->format('Y-m-d H:i:s');
+                    if($workshop->getActive() == 0 ){
+                        $status = 0;
+                        if($workshop->getLowdateAt() == null){
+                            $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$update."',".$status."),";
+                            $id++;   
+                        }
+                    }
+                    else{
+                        if($workshop->getLowdateAt() != null){
+                            $lowdate = $workshop->getLowdateAt()->format('Y-m-d H:i:s');
+                            if (strtotime($update) != strtotime($lowdate)){
+                                $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$update."',".$status."),";
+                                $id++;       
+                            }    
+                        }
+                    }                          
+                }                
+                if ($workshop->getEndtestAt() != null){
+                    $enddate = $workshop->getEndtestAt()->format('Y-m-d H:i:s');
+                    $created = $workshop->getCreatedAt()->format('Y-m-d H:i:s');
+                    $now = new \DateTime('now');
+                    $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$created."',2),";
+                    $id++;
+                    if (strtotime($now->format('Y-m-d H:i:s')) > strtotime($enddate)){
+                        $sql = $sql."(".$id.",".$workshop->getId().",".$workshop->getPartner()->getId().",'".$enddate."',1),";
+                        $id++;
+                    }
+                }           
+            }
+        }
+        $sql = substr($sql,0,strlen($sql)-1).";";
+        echo $sql;
+        return $this->render('ImportBundle:Import:import.html.twig');
+    }
+    
+    /*    $em      = $this->getDoctrine()->getEntityManager();
         $admin   = $em->getRepository('UserBundle:User')->find(1);
         $role    = $em->getRepository('UserBundle:Role'  )->find(1);
         $partner = $em->getRepository('PartnerBundle:Partner')->find(1);
@@ -1183,7 +1260,7 @@ class ImportController extends Controller
 		$ticket->setModifiedBy($admin);
 
     	/* MAILING */
-        $mailer = $this->get('cms.mailer');
+  /*      $mailer = $this->get('cms.mailer');
         $mailer->setTo('dmaya@grupeina.com');
         $mailer->setFrom('noreply@adserviceticketing.com');
 
@@ -1306,12 +1383,12 @@ class ImportController extends Controller
         foreach ($users as $user) {
 
 	        /*CREAR PASSWORD AUTOMATICAMENTE*/
-	        $password = substr( md5(microtime()), 1, 8);
+//	        $password = substr( md5(microtime()), 1, 8);
 	        // Los passwords que acaban en 'e' y 3 numeros (e051) se malinterpretan por el csv
-	        $password = str_replace('e', 'd', $password);
+//	        $password = str_replace('e', 'd', $password);
 
 	        //password nuevo, se codifica con el nuevo salt
-	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+/*	        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
 	        $salt = md5(time());
 	        $coded_pass = $encoder->encodePassword($password, $salt);
 	        $user->setPassword($coded_pass);
@@ -1416,4 +1493,8 @@ class ImportController extends Controller
 
         return($excel);
     }
+    */
+    
+    
+    
 }

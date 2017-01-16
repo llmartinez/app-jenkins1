@@ -208,7 +208,7 @@ class WorkshopController extends Controller {
                         $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                     }
                     $this->saveWorkshop($em, $workshop);
-                    $status = 1;
+                    $status = 3; // 3 para primera alta
                     if($workshop->getTest()){
                         $status = 2;
                     }
@@ -269,7 +269,7 @@ class WorkshopController extends Controller {
 
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
@@ -439,7 +439,7 @@ class WorkshopController extends Controller {
                         $workshop->setShop(null);
                     }
 
-                    $this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
+                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
@@ -608,15 +608,14 @@ class WorkshopController extends Controller {
                 $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                 $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
-                $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
-                $unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
+                    //$tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
+                    //$unsubscribed = $this->get('translator')->trans('closed_by_unsubscription');
 
-                $ids = '0';
-                foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
+                    //$ids = '0';
+                    //foreach ($tickets as $ticket) { $ids .= ', '.$ticket->getId(); }
 
-                $consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."'
-                                              WHERE t.id IN (".$ids.")");
-                $consulta->getResult();
+                    //$consulta = $em->createQuery("UPDATE TicketBundle:Ticket t SET t.status = 2, t.solution = '".$unsubscribed."' WHERE t.id IN (".$ids.")");
+                    //$consulta->getResult();
             }
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
@@ -708,7 +707,7 @@ class WorkshopController extends Controller {
      * Genera un historial de cambios del taller
      * @return WorkshopHistory
      */
-    public function createHistoric($em, $workshop) {
+    /*public function createHistoric($em, $workshop) {
 
         $history = new WorkshopStatusHistory();
 
@@ -736,7 +735,7 @@ class WorkshopController extends Controller {
 
         $em->persist($history);
         $em->flush();
-    }
+        }*/
    
     /**
      * Hace el save de un workshop

@@ -17,6 +17,10 @@
 
 {% block main %}
 
+{% if app.session.hasFlash('popup') %}
+     <p class="alert">{{ app.session.getFlash('popup')|nl2br }}</p>
+{% endif %}
+    
 <div>
     {% if is_granted('ROLE_ASSESSOR') %}
 

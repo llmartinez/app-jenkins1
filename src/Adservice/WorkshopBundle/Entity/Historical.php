@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Adservice\WorkshopBundle\Entity\Historical
- * @ORM\Entity
+ *
  * @ORM\Table(name="historical")
+ * @ORM\Entity
  */
 class Historical {
 
