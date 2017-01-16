@@ -1344,7 +1344,7 @@ class TicketController extends Controller {
                                         $mail = $ticket->getWorkshop()->getEmail1();
                                         $pos = strpos($mail, '@');
 
-                                        if ($pos != 0) {
+                                        if ($pos != 0 and $ticket->getWorkshop()->getActive()) {
 
                                             // Cambiamos el locale para enviar el mail en el idioma del taller
                                             $locale = $request->getLocale();
@@ -1383,7 +1383,7 @@ class TicketController extends Controller {
 
                                         $mail = $ticket->getWorkshop()->getEmail1();
                                         $pos = strpos($mail, '@');
-                                        if ($pos != 0) {
+                                        if ($pos != 0 and $ticket->getWorkshop()->getActive()) {
 
                                             // Cambiamos el locale para enviar el mail en el idioma del taller
                                             $locale = $request->getLocale();

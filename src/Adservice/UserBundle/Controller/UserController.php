@@ -58,6 +58,7 @@ class UserController extends Controller {
             else{ $lang   = 'es'; }
             $currentLocale = $request->getLocale();
             $request->setLocale($lang);
+
             if(isset($user)) {
                 if($user->getPrivacy() == 0 || $user->getPrivacy() == null ){
                      $currentPath = $this->generateUrl('accept_privacy');
@@ -65,22 +66,53 @@ class UserController extends Controller {
                      $_SESSION['lang'] = $lang;
                      return $this->redirect($currentPath);
                 }
+                // POPUP: Mostramos por flash los popups para el usuario logeado
+                    $em   = $this->getDoctrine()->getEntityManager();
+                    $now  = new \DateTime('now');
+                    $now  = $now->format("Y-m-d H:i:s");
+
+                    $query ="SELECT p.name, p.description FROM PopupBundle:Popup p ".
+                            "WHERE p.country = ".$user->getCountry()->getId()." ".
+                            "AND p.role = ".$user->getRoles()[0]->getId()." ".
+                            "AND p.startdate_at < '".$now."' ".
+                            "AND p.enddate_at > '".$now."' ".
+                            "AND p.active = 1 ";
+
+                    if($user->getCategoryService() != null) 
+                        $query .= "AND p.category_service = ".$user->getCategoryService()->getId()." ";
+
+                    $popups = $em->createQuery($query)->getResult();
+
+                    if(isset($popups)){
+                        if(sizeof($popups) > 0) $flash = '**'.$this->get('translator')->trans('info').'**';
+                        else $flash = '';
+
+                        foreach ($popups as $popup) {
+                            $flash .= '
+                            '.$popup['name'].': '.$popup['description'].' ';
+                        }
+                        if($flash != '') $this->get('session')->setFlash('popup', $flash);
+                    }
+                //END POPUP
             }
+
 
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
             elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_COMMERCIAL')){
 
                 if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
-                    if($this->get('security.context')->getToken()->getUser()->getCountryService() != null)
-                        $country = $this->get('security.context')->getToken()->getUser()->getCountryService()->getId();
+
+                    if($user->getCountryService() != null)
+                        $country = $user->getCountryService()->getId();
                     else $country = '0';
+
                     $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
                                                                           'num_rows' => 10,
                                                                           'country'  => $country,
                                                                           'option'   => 'assessor_pending'));
-                }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+                }
+                elseif($this->get('security.context')->isGranted('ROLE_USER')){
 
-                    $user = $this->get('security.context')->getToken()->getUser();
                     $country = $user->getCountry()->getId();
 
                     if($user->getWorkshop() != null){
@@ -95,7 +127,7 @@ class UserController extends Controller {
                         }
                     }
                 }else{
-                    $country = $this->get('security.context')->getToken()->getUser()->getCountry()->getId();
+                    $country = $user->getCountry()->getId();
                     $currentPath = $this->generateUrl('listTicket', array('page'     => 1,
                                                                           'num_rows' => 10,
                                                                           'country'  => $country));
@@ -111,11 +143,9 @@ class UserController extends Controller {
             return $this->redirect($currentPath);
         }elseif($this->get('security.context')->isGranted('ROLE_USER')){
 
-            $user= $this->get('security.context')->getToken()->getUser();
-
             $country= $user->getCountry()->getId();
 
-            $lang   = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+            $lang   = $user->getLanguage()->getShortName();
             $lang   = substr($lang, 0, strrpos($lang, '_'));
 
             if(isset($user)) {
