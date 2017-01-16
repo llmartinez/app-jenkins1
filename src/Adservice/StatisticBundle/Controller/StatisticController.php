@@ -187,7 +187,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at, w.active, w.test')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -243,6 +243,7 @@ class StatisticController extends Controller {
                                         'phone_number_1' => $res['phone_number_1'],
                                         'update_at'      => $res['update_at'],
                                         'lowdate_at'     => $res['lowdate_at'],
+                                        'endtest_at'     => $res['endtest_at'],
                                         'status'         => $res['active'],
                                         'test'           => $res['test'],
                                         'update'         => '0',
@@ -264,7 +265,7 @@ class StatisticController extends Controller {
 
             $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             unset($qb);
-
+           
             if($raport == 'billing')
             {
                 if ($resH != null)
@@ -300,11 +301,26 @@ class StatisticController extends Controller {
                                 $date = $reg['date'];
                                 $stat = $reg['stat'];
                                 // Si es el primer registro(stat 3) no se puede sumar de una fecha anterior hasta el mismo (ya que en teoria no existía antes)
-                                if($stat != 3) {
+                                if($stat != 3 ){
+                                
+                                    if($key == 0 && $results[$w_id]['endtest_at']!= null && isset($from_date))
+                                    {
+                                        $end_test = strtotime($results[$w_id]['endtest_at']->format('Y-m-d H:i:s'));
+                                        $start_date = strtotime($from_date);
+                                        if($end_test >= $start_date){
+                                            $stat = 2;
+                                            $diff = date_diff($start, $results[$w_id]['endtest_at']);
+                                            $cont = $this->sumStatus($diff, $stat, $cont);
+                                            
+                                            $start = $results[$w_id]['endtest_at'];
+                                            $stat = 1;
+                                            
+                                        }
+                                    }
+                                    
                                     $diff = date_diff($start, $date);
                                     $cont = $this->sumStatus($diff, $stat, $cont);
                                 }
-
                                 if($key != $len-1) $start = $date;
                                 else {
                                     $diff = date_diff($date, $end);
@@ -314,6 +330,7 @@ class StatisticController extends Controller {
                                 }
 
                             }
+                           
                             $results[$w_id]['update' ] = $cont['update' ];
                             $results[$w_id]['lowdate'] = $cont['lowdate'];
                             $results[$w_id]['test'   ] = $cont['test'   ]; 
@@ -1691,7 +1708,6 @@ class StatisticController extends Controller {
 
           }
         }
-
         $excel = UtilController::sinAcentos($excel);
         $response->setContent($excel);
         return $response;
@@ -1735,6 +1751,7 @@ class StatisticController extends Controller {
         $excel .=
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
+            $trans->trans('endtest').';'.
             "\n";
 
         foreach ($results as $row) {
@@ -1766,7 +1783,8 @@ class StatisticController extends Controller {
                 if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
             }
             if(isset($row['update_at'     ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
-            if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
+            if(isset($row['endtest_at'    ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
             $excel.="\n";
         }
         $excel = nl2br($excel);
