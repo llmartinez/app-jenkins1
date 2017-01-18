@@ -6,13 +6,13 @@ changeLanguage:
     pattern: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
 
-help:
-    pattern: /help/
-    defaults: { _controller: UtilBundle:Default:help }
+# help:
+#     pattern: /help/
+#     defaults: { _controller: UtilBundle:Default:help }
 
-ayuda:
-    pattern: /ayuda/
-    defaults: { _controller: UtilBundle:Default:help }
+# ayuda:
+#     pattern: /ayuda/
+#     defaults: { _controller: UtilBundle:Default:help }
 
 accept_privacy:
     pattern: /acceptPrivacy/
