@@ -34,7 +34,6 @@ class LoginController extends Controller {
             } else {
                 $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
             }
-
             return $this->render('UserBundle:Login:login.html.twig', array('last_username'  => $session->get(SecurityContext::LAST_USERNAME),
                                                                            'error'          => $error));
         }else{
