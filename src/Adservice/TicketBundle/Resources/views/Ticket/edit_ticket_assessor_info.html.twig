@@ -1,5 +1,10 @@
 
-    <legend class="grid-full w50"> {% trans %} edit.ticket.info {% endtrans %} </legend>
+    <legend class="grid-full w50"> 
+        {% trans %} edit.ticket.info {% endtrans %} 
+        {% if ticket.isPhoneCall == 1 %}
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
+        {%endif %}
+    </legend>
 
 
     {% if id_version  is defined %}
