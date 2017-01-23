@@ -600,12 +600,17 @@ class WorkshopController extends Controller {
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop){
             $workshop->setActive(!$workshop->getActive());
-
+            $new_date = new \DateTime(\date("Y-m-d H:i:s"));
             if($workshop->getActive() == true) {
-                $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $workshop->setUpdateAt($new_date);
                 $status = 1;
             }else{
-                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $workshop->setLowdateAt($new_date);
+                
+                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
+                    $workshop->setEndTestAt($new_date);
+                    $workshop->setTest(0);
+                }
                 $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
                     //$tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));

@@ -835,13 +835,19 @@ class TicketController extends Controller {
                                                     $ticket->setLanguage($language);
                                                     $ticket->setAssignedTo($user);
                                                     $ticket->setPending(0);
+                                                    $ticket->setIsPhoneCall(1);
                                                 } else {
                                                     $ticket->setWorkshop($user->getWorkshop());
                                                     $ticket->setCategoryService($user->getCategoryService());
                                                     $ticket->setCountry($user->getCountry());
                                                     $ticket->setLanguage($user->getLanguage());
                                                     $ticket->setPending(1);
+                                                    $ticket->setIsPhoneCall(0);
+                                                    if($security->isGranted('ROLE_ADMIN')) {
+                                                         $ticket->setIsPhoneCall(1);
+                                                    }                                                       
                                                 }
+                                                
                                                 $ticket->setStatus($status);
                                                 $ticket->setCar($car);
 
@@ -1315,6 +1321,9 @@ class TicketController extends Controller {
                                 if ($str_len <= $max_len) {
                                     if($request->request->has("sendTicket")){
                                         //Define Post
+                                        if($request->request->has("is_phone_call")){
+                                            $post->setIsPhoneCall(1);
+                                        }
                                         $post = UtilController::newEntity($post, $user);
                                         $post->setTicket($ticket);
                                         UtilController::saveEntity($em, $post, $user, false);
