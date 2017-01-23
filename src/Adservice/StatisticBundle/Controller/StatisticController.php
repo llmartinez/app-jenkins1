@@ -316,12 +316,7 @@ class StatisticController extends Controller {
                                             $up_date = null;
                                         if($results[$w_id]['lowdate_at'] != null){
                                             $low_date = strtotime($results[$w_id]['lowdate_at']->format('Y-m-d H:i:s'));
-//                                        var_dump($low_date < $end_test);
-//                                        var_dump($results[$w_id]['endtest_at']);
-//                                        var_dump($date);
-//                                        var_dump($end_test == $date_date);die;
                                             if($low_date < $end_test && $end_test == $date_date ){
-                                                var_dump("entra");die;
                                                 $end_test = $low_date;
                                             }  
                                         }
