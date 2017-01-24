@@ -2378,7 +2378,7 @@ class TicketController extends Controller {
                 $cars[0] = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($plateNumber);
             }
 
-            if (isset($cars) and $cars != null) {
+            if (isset($cars) and $cars != null and $cars[0] != null) {
                 $brand = $cars[0]->getBrand()->getId();
                 $model = $cars[0]->getModel();
                 $vin = $cars[0]->getVin();
