@@ -1,35 +1,23 @@
-# -- Symfony2 -----------------------------------------
-# -- app/bootstrap.php.cache
-# -- app/bootstrap_cache.php.cache
-/app/build/*
-/app/config/parameters.ini
-# -- app/config/parameters_test.ini.dist
-/app/config/parameters.yml
+# -- Symfony -----------------------------------------
+/web/bundles/
+/app/bootstrap.php.cache
 /app/cache/*
+/app/config/parameters.yml
 /app/logs/*
-/app/spool/*
-/app/bootstrap*
-vendor/*
-vendor.zip
-/web/bundles/*
-/web/css/*
-/web/js/*
-/web/uploads/*
-/web/help/*
-/data
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/app/phpunit.xml
+/build/
+/vendor/
+/bin/
+/composer.phar
 
-# -- Capifony ---
+# -- Capifony -----------------------------------------
 /app/config/*.rb
 /Capfile
 
-# -- Scripts para la carga de schema y fixtures -------
-# -- data/scripts
-
-# -- Composer -----------------------------------------
-composer.phar
-
 # -- PHPUnit ------------------------------------------
-# -- app/phpunit.xml
+# -- app/phpunit.xml.dist
 
 # -- Editores -----------------------------------------
 # vim

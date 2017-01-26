@@ -1,0 +1,16 @@
+{% extends '::layout.html.twig' %}
+
+{% block breadcrumbs %}
+    <li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
+    <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
+{% endblock %}
+
+{% block body %}
+	<h2>{{ 'selectRole'|trans }}</h2>
+	<ul>
+	    {% for key, role in roles %}
+	    	<li><a href="{{ path("user", { 'role_id': key }) }}">{{ role|trans }}</a></li>
+	    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,7 +1,0 @@
-parameters:
-#    popup.example.class: Adservice\PopupBundle\Example
-
-services:
-#    popup.example:
-#        class: %popup.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

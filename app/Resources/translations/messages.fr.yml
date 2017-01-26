@@ -1,0 +1,93 @@
+en: "Anglais"
+es: "Espagnol"
+fr: "Français"
+pt: "Portugais"
+
+helloworld: "Salut Monde!"
+
+# Rutas/Breadcrumb
+index: "Index"
+login: "Ouvrir une session"
+logout: "Fermer la session"
+users: "Utilisateurs"
+selectRole: "Sélectionnez Rôle"
+user_new: "Nouveau utilisateur"
+
+# ROLES
+ROLE_USER: "Utilisateur"
+ROLE_WORKSHOP: "Atelier"
+ROLE_ADVISER: "Conseiller"
+ROLE_COMMERCIAL: "Commercial"
+ROLE_PARTNER: "Distributeur"
+ROLE_SUPER_PARTNER: "Super Distributeur"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Administrateur"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "Dieu"
+
+#HELP
+help: "Aider"
+help_title: "Aider Ticketing"
+help_check_manual: "Consultez le manuel"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-fr.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# FORMS
+Username: "Utilisateur"
+Password: "Mot de passe"
+password_insert: "Insérer le mot de passe"
+password_repeat: "Répétition du mot de passe"
+Submit: "Envoyer"
+search: "Rechercher"
+All: "Tous"
+
+# DATATABLE
+loading: "Chargement..."
+dt_show: "Afficher"
+dt_entries: "entrées"
+dt_search: "Recherche"
+dt_showing: "Affichage"
+dt_to: "à"
+dt_of: "de"
+dt_previous: "Précédent"
+dt_next: "Suivant"
+
+# USER
+id: "ID"
+role: "Rôle"
+Status: "État"
+active: "Actif"
+inactive: "Inactif"
+test: "À l'essai"
+name: "Nom"
+Category service: "Catégorie du service"
+Language: "Language"
+Country: "Pays"
+region: "Département"
+city: "Localité"
+address: "Adresse"
+postal_code: "Code postal"
+phone: "Téléphone"
+phone_number_1: "Tél. fixe 1"
+phone_number_2: "Tél. fixe 2"
+mobile_number_1: "Tél. portable 1"
+mobile_number_2: "Tél. portable 2"
+fax: "Fax"
+email: "E-mail"
+email_1: "E-mail 1"
+email_2: "E-mail 2"
+created_by: "Créé par"
+created_at: "Créé à"
+modified_by: "Modifié par"
+modified_at: "Modifié à"
+
+# DATES
+date.day: "Jour"
+date.month: "Mois"
+date.year: "Année"
+
+# TICKET
+ticket_list: "Liste des tickets"
+ticket_new: "Nouveau ticket"
+ticket_edit: "Éditer ticket"
+ticket_delete: "Effacer le ticket"

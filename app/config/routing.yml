@@ -1,62 +1,13 @@
-
-############################################################################
-# LINEA PARA IMPORTAR DATOS DE LA BBDD: COMENTAR UNA VEZ EN PROD           #
-############################################################################
-# ImportBundle:
-#    resource: "@ImportBundle/Resources/config/routing.yml"
-#    prefix:   /{_locale}/import/
-############################################################################
-
-LockBundle:
-    resource: "@LockBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/lock/
-
-OrderBundle:
-    resource: "@OrderBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/order
-
-StatisticBundle:
-    resource: "@StatisticBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/statistic
-
-CarBundle:
-    resource: "@CarBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
-PopupBundle:
-    resource: "@PopupBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/popup
-
-WorkshopBundle:
-    resource: "@WorkshopBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/workshop
-
-PartnerBundle:
-    resource: "@PartnerBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/partner
-
-TicketBundle:
-    resource: "@TicketBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
-UserBundle:
-    resource: "@UserBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
-UtilBundle:
-    resource: "@UtilBundle/Resources/config/routing.yml"
-    prefix:   /{_locale}/
-
-_login:
-    pattern:  /
-    defaults: { _controller: UserBundle:Login:goToLogin }
+app:
+    resource: "config/routing.yml"
+    prefix:   /{_locale}
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
-#redirect:
-#    pattern: /{_locale}/{_location}/
-#    defaults:
-#         _controller: FrameworkBundle:Redirect:urlRedirect
-#         path: /{_locale}/{_location}/
-#         permanent: true
+default:
+    path:  /
+    defaults: { _controller: AppBundle:Default:index  }
+
+logout:
+    path:   /logout

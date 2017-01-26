@@ -1,31 +1,45 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>{% block title %}Ticketing{% endblock %} | AD Service</title>
-
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        <meta charset="UTF-8" />
+        <title>{% block title %}Ticketing{% endblock %}</title>
 
         {% block stylesheets %}{% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
+    <body>
+        {# Activar en caso de que la redirección al login al cerrarse sesión no funcione correctamente
+            (ADService OLD): Aunque esté configurado security.yml no redirecciona al cerrarse sesión por inactividad #}
+        {# Si el usuario no está logeado redirecciona al login (Para plantillas con acceso anonimo como "help" sobreescribir el bloque) #}
+        {#
+         ## locale y user estan definidos en header, eliminar de allí para evitar duplicados
+        {% set locale = app.request.locale %}
+        {% set user = app.user %}
 
-
-    <body id="MainBody">
-
-        {% block header %}
-            {% include '::header.html.twig'%}
+        {% block checkUserLogged %}
+            {% if user == null %} GOTOLOGIN-> {% endif %}
         {% endblock %}
+        #}
+        <div id="header">
+            {% block header %}
+                {% include '::header.html.twig'%}
+            {% endblock %}
+        </div>
 
+        <div id="breadcrumbs">
+            <ol>{% block breadcrumbs %}{% endblock %}</ol>
+        </div>
 
-        <div id="MainContent">
+        <div id="body">
             {% block body %}{% endblock %}
         </div>
 
-        <footer id="MainFooter">
+        <div id="footer">
             {% block footer %}
-                {% include '::footer.html.twig'%}
+                <footer> {# Footer Text #} </footer>
             {% endblock %}
-        </footer>
+        </div>
 
         {% block javascripts %}{% endblock %}
     </body>

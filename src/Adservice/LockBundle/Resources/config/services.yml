@@ -1,7 +1,0 @@
-parameters:
-#    lock.example.class: Adservice\LockBundle\Example
-
-services:
-#    lock.example:
-#        class: %lock.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
