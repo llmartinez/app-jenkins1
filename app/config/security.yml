@@ -1,60 +1,66 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
 security:
 
-    firewalls:
-        main:
-            pattern: /.*
-            anonymous: true
-#            provider: user_db
-            form_login:
-                login_path: user_login
-                check_path: user_login_check
-                default_target_path: user_index
-                always_use_default_target_path: true
-            logout:
-                path: user_logout
-                target: user_login
-            security: true
-            remember_me:
-                key:      "%secret%"
-                lifetime: 31536000 # 365 days in seconds
-                path:     /
-                domain:   ~ # Defaults to the current domain from $_SERVER
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            # algorithm: sha512
+            # encode_as_base64: false
+            # iterations: 10
 
+    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        usuarios:
-            entity: { class: Adservice\UserBundle\Entity\User, property: username }
+        in_memory:
+            memory: ~
+        users:
+            entity:
+                class: AppBundle:User
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern:    ^/
+            http_basic: ~
+            provider: users
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: index
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: false
+
+                # csrf_token_generator: security.csrf.token_manager
+                # You can change the name of the field by setting csrf_parameter and change the token ID by setting csrf_token_id in your configuration:
+                # csrf_parameter: _csrf_security_token
+                # csrf_token_id: a_private_string
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
     role_hierarchy:
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_ASSESSOR, ROLE_USER, ROLE_TOP_AD]
-        ROLE_ASSESSOR: ROLE_USER
-        ROLE_TOP_AD: ROLE_SUPER_AD
-        ROLE_SUPER_AD: ROLE_AD
+        ROLE_GOD:           ROLE_SUPER_ADMIN
+        ROLE_SUPER_ADMIN:   ROLE_ADMIN
+        ROLE_ADMIN:         [ ROLE_ADVISOR, ROLE_TOP ]
+        ROLE_TOP:           ROLE_SUPER_PARTNER
+        ROLE_SUPER_PARTNER: ROLE_PARTNER
+        ROLE_PARTNER:       ROLE_COMMERCIAL
+        ROLE_COMMERCIAL:    ROLE_USER
+        ROLE_ADVISOR:       ROLE_WORKSHOP
+        ROLE_WORKSHOP:      ROLE_USER
 
     access_control:
-      - { path: ^/(es|en|fr|pt)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/login,                      roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/changeLang,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr|pt)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/privacy,                    roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/autologin,                  roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
-      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
-      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD]         }
-      - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD]         }
-      - { path: ^/(es|en|fr|pt)/workshop/observation,       roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr|pt)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD]        }
-      - { path: ^/(es|en|fr|pt)/ticket/workshopList,        roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr|pt)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR]              }
-      - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/statistic/list-top,         roles: [ROLE_TOP_AD]                }
-      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_TOP_AD]                }
-      # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN]           }
-      # - { path: ^/(es|en|fr|pt)/,                         roles: [ROLE_USER]                  }
-
-    encoders:
-        Adservice\UserBundle\Entity\User: { algorithm: sha512, iterations: 10 }
+      - { path: ^/(es|en|fr|pt)/user,                       roles: ROLE_PARTNER  }
+      - { path: ^/(es|en|fr|pt)/ticket,                     roles: ROLE_WORKSHOP }
+      - { path: ^/(es|en|fr|pt),                            roles: ROLE_USER }

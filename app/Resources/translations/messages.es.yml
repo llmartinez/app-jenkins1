@@ -1,0 +1,93 @@
+en: "Inglés"
+es: "Español"
+fr: "Francés"
+pt: "Portugués"
+
+helloworld: "Hola Mundo!"
+
+# Rutas/Breadcrumb
+index: "Índice"
+login: "Iniciar sesión"
+logout: "Cerrar sesión"
+users: "Usuarios"
+selectRole: "Selecciona rol"
+user_new: "Nuevo usuario"
+
+# ROLES
+ROLE_USER: Usuario
+ROLE_WORKSHOP: Taller
+ROLE_ADVISER: Asesor
+ROLE_COMMERCIAL: "Comercial"
+ROLE_PARTNER: "Socio"
+ROLE_SUPER_PARTNER: "Super Socio"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Admin"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "Dios"
+
+# HELP
+help: "Ayuda"
+help_title: "Ayuda Ticketing"
+help_check_manual: "Consulta el Manual"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# FORMS
+Username: "Usuario"
+Password: "Contraseña"
+password_insert: "Insertar contraseña"
+password_repeat: "Repetir contraseña"
+Submit: "Enviar"
+search: "Buscar"
+All: "Todos"
+
+# DATATABLE
+loading: "Cargando..."
+dt_show: "Mostrar"
+dt_entries: "filas"
+dt_search: "Buscar"
+dt_showing: "Mostrando de"
+dt_to: "a"
+dt_of: "de"
+dt_previous: "Anterior"
+dt_next: "Siguiente"
+
+# USER
+id: "ID"
+role: "Rol"
+Status: "Estado"
+active: "Activo"
+inactive: "Inactivo"
+test: "Pruebas"
+name: "Nombre"
+Category service: "Categoria de Servicio"
+Language: "Idioma"
+Country: "País"
+region: "Provincia"
+city: "Población"
+address: "Dirección"
+postal_code: "Código postal"
+phone: "Teléfono"
+PhoneNumber1: "Tel. fijo 1"
+PhoneNumber2: "Tel. fijo 2"
+MobileNumber1: "Tel. móvil 1"
+MobileNumber2: "Tel. móvil 2"
+fax: "Fax"
+Email: "Email"
+Email1: "Email 1"
+Email2: "Email 2"
+created_by: "Creado por"
+created_at: "Creado en"
+modified_by: "Modificado por"
+modified_at: "Modificado en"
+
+# DATES
+date.day: "Día"
+date.month: "Mes"
+date.year: "Año"
+
+# TICKET
+ticket_list: "Listado de Tickets"
+ticket_new: "Nuevo ticket"
+ticket_edit: "Editar ticket"
+ticket_delete: "Borrar ticket"

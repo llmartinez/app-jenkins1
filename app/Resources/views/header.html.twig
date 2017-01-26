@@ -1,117 +1,24 @@
-<div class="MainHeader">
-    <div class="span4 offset2">
-    </div>
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="span4 offset2">
-                <!-- header -->
-                <table width="100%" border="0">
-                    <tr>
-                        <td align="left">
+{% set locale = app.request.locale %}
+{% set user = app.user %}
 
-                            {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
-                            {% elseif app.session.locale == 'pt' %}{% set url_logo = 'bundles/util/images/icon/logo_PT.png' %}
-                            {% elseif app.session.locale == 'en' %}{% set url_logo = 'bundles/util/images/icon/logo_EN.png' %}
-                            {% elseif app.session.locale == 'fr' %}{% set url_logo = 'bundles/util/images/icon/logo_FR.png' %}
-                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %}
+{# LOGO #}
+	{% set logo = url_logo ~ '.png' %}
+	<a href="{{ path("index") }}"><img src="{{ asset(logo) }}"></a>
 
-                            <img class="img_logo" src="{{ asset(url_logo) }}">
-                            {# <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
-                        </td>
-                        <td align="right">
+{# LANG #}
+	<select id="locale" onchange="window.location.href = '{{ path('changeLang')}}/'+this.options[this.selectedIndex].value;">
+	{% for lang in languages %}
+		<option {% if locale == lang %}selected{% endif %} value="{{ lang }}">{{ lang|trans }}</option>
+	{% endfor %}
+	</select>
 
-                            {% if app.user.username is defined %}
+{# LOGIN #}
+{% if user != null %}
+    {{  user.username }}
+    <a href="{{ path('logout') }}">{{ 'logout' |trans }}</a>
+{% else %}
+    <a href="{{ path('login') }}">{{ 'login' |trans }}</a>
+{% endif %}
 
-                            <!-- Split button -->
-                            <div class="user">
-                                <img src="{{ asset('bundles/util/images/icon/user_icon.png') }}">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default">{{ app.security.getToken().getUser().getUsername() }}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a class="btn pull-left" href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-
-                                        <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{% trans %} help {% endtrans %}</a></li>
-
-                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
-                                        {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE %}
-                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-                                        {% endif %}
-                                        {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}
-                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{% trans %} new.ticket {% endtrans %}</a></li>
-                                        {% endif %}
-                                        <li><a href="#"></a></li>
-                                        <li class="divider"></li>
-                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}logout       {% endtrans %}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                           {# {% else %}
-                                <a href="{{ path('login') }}" class="btn btn-success btn-lg" role="button">{% trans %} Login to ADService {% endtrans %}</a>#}
-                            {% endif %}
-                            {#
-                               app.request.getPathInfo()
-                               app.request.attributes.get('_route')
-                            #}
-                            <!-- Split button -->
-                            <div class="language">
-                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
-                                <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu" >
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"> {% trans %} english {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"> {% trans %} spanish {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-{#
-*************************
-* IDIOMA
-*************************
-    {% set location = 'ticket' %}
-    <a href="{{ path('redirect', {'_locale': 'en', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_great_britain.png') }}"></a>
-    <a href="{{ path('redirect', {'_locale': 'es', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_spain.png') }}"></a>
-    <a href="{{ path('redirect', {'_locale': 'fr', '_location': 'ticket'}) }}">  <img src="{{ asset('bundles/util/images/flags/flag_france.png') }}"></a>
-#}
-{#
-*************************
-* OPCIONES DESPLEGABLE
-*************************
-    {% if is_granted('ROLE_ADMIN') %}
-        <li><a class="btn pull-left"  href="{{ path("listStatistics"              ) }}">{% trans %} menu.list_statistics      {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders          {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("popup_list"                  ) }}">{% trans %} menu.list_popups          {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("partner_list"                ) }}">{% trans %} menu.list_partners        {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shop_list"                   ) }}">{% trans %} menu.list_shops           {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshop_list"               ) }}">{% trans %} menu.list_workshops       {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("user_list"                   ) }}">{% trans %} menu.list_users           {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("ticketWorkshopList"          ) }}">{% trans %} menu.asign_user_to_ticket {% endtrans %}</a></li>
-    {% elseif is_granted('ROLE_AD') %}
-        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile            {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders        {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shopOrder_listShops"         ) }}">{% trans %} menu.list_shops         {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshopOrder_listWorkshops" ) }}">{% trans %} menu.list_workshops     {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shopOrder_new"               ) }}">{% trans %} menu.new_shop_order     {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshopOrder_new"           ) }}">{% trans %} menu.new_workshop_order {% endtrans %}</a></li>
-    {% else %}
-        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile      {% endtrans %}</a></li>
-    {% endif %}
-#}
+{# HELP #}
+<a href="{{ path("help") }}">{{ 'help'|trans }}</a>

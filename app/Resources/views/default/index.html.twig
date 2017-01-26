@@ -1,0 +1,20 @@
+{% extends '::layout.html.twig' %}
+{% set locale = app.request.locale %}
+{% set user = app.user %}
+
+{% block breadcrumbs %}
+	<li><a href="{{path("index")}}">{{ 'index'|trans }}</a></li>
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+
+            <h3>{{ user.getRoles[0]|trans }}</h3>
+            {# Load Menu according to Role #}
+            {% if user != null %}
+                {% include ':default:menu/menu_' ~ user.getRoles[0] ~ '.html.twig' %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

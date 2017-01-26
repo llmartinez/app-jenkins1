@@ -1,0 +1,93 @@
+en: "Inglês"
+es: "Espanhol"
+fr: "Francês"
+pt: "Português"
+
+helloworld: "Olá Mundo!"
+
+# Rutas/Breadcrumb
+index: "Índice"
+login: "Iniciar sessão"
+logout: "Sair"
+users: "Usuários"
+selectRole: "Selecciona Função"
+user_new: "Novo Usuário"
+
+# ROLES
+ROLE_USER: "Utilizador"
+ROLE_WORKSHOP: "Oficina"
+ROLE_ADVISER: "Assistente"
+ROLE_COMMERCIAL: "Comercial"
+ROLE_PARTNER: "Sócio"
+ROLE_SUPER_PARTNER: "Super-Sócio"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Administrador"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "Deus"
+
+#HELP
+help: "Ajuda"
+help_title: "Ajuda Ticketing"
+help_check_manual: "Consulte o Manual"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# FORMS
+Username: "Usuário"
+Password: "Palavra-passe"
+password_insert: "Insira a palavra-passe"
+password_repeat: "Repetir palavra-passe"
+Submit: "Enviar"
+search: "Buscar"
+All: "Todos"
+
+# DATATABLE
+loading: "Carregando..."
+dt_show: "Mostrar"
+dt_entries: "entradas"
+dt_search: "Pesquisar"
+dt_showing: "Mostrando"
+dt_to: "para"
+dt_of: "de"
+dt_previous: "Anterior"
+dt_next: "Siguiente"
+
+# USER
+id: "ID"
+role: "Função"
+Status: "Estado"
+active: "Ativo"
+inactive: "Inativo"
+test: "Em testes"
+name: "Nome"
+Category service: "Categoria de serviço"
+Language: "Idioma"
+Country: "País"
+region: "Distrito"
+city: "Localidade"
+address: "Morada"
+postal_code: "Código postal"
+phone: "Telefone"
+phone_number_1: "Tel. fixo 1"
+phone_number_2: "Tel. fixo 2"
+mobile_number_1: "Telemóvel 1"
+mobile_number_2: "Telemóvel 2"
+fax: "Fax"
+Email: "E-mail"
+email_1: "E-mail 1"
+email_2: "E-mail 2"
+created_by: "Criado por"
+created_at: "Criado em"
+modified_by: "Alterado por"
+modified_at: "Alterado em"
+
+# DATES
+date.day: "Dia"
+date.month: "Mês"
+date.year: "Ano"
+
+# TICKET
+ticket_list: "Lista de Talão"
+ticket_new: "Novo Talão"
+ticket_edit: "Editar Talão"
+ticket_delete: "Apagar Talão"

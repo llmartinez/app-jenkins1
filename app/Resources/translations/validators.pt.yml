@@ -1,0 +1,3 @@
+# ERRORS
+error_username_repeated: "O nome de usuário já está sendo usado"
+error_passwords_not_match: "As senhas não correspondem"

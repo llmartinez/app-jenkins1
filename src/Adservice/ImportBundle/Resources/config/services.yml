@@ -1,7 +1,0 @@
-parameters:
-#    import.example.class: Adservice\ImportBundle\Example
-
-services:
-#    import.example:
-#        class: %import.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

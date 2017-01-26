@@ -1,0 +1,39 @@
+# DEFAULT
+changeLang:
+    path:  /changeLang/{locale}
+    defaults: { _controller: AppBundle:Default:changeLang, locale: locale }
+#    options:
+#        expose: true
+
+index:
+    path:  /
+    defaults: { _controller: AppBundle:Default:index }
+
+# HELP
+help:
+    path:  /help
+    defaults: { _controller: AppBundle:Default:help }
+
+# LOGIN
+login:
+    path:  /login
+    defaults: { _controller: AppBundle:Security:login }
+
+
+# USER
+selectRole:
+    path:  /users/select-role
+    defaults: { _controller: AppBundle:User:selectRole }
+
+user:
+    path:  /users/user/{role_id}/{id}
+    defaults: { _controller: AppBundle:User:user, role_id: null, id: null }
+users:
+    path:  /users/{page}/{filter}/{value}
+    defaults: { _controller: AppBundle:User:users, page: 1, filter: 0, value: 0 }
+
+# TICKET
+tickets:
+    path:  /tickets
+    defaults: { _controller: AppBundle:Ticket:tickets }
+    
