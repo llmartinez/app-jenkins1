@@ -170,52 +170,14 @@ class TicketController extends Controller {
         } elseif ($option == 'other_closed') {
             $params[] = array('status', ' = ' . $closed->getId());
             $params[] = array('assigned_to', '!= ' . $id_user);
-        } elseif ($option == 'inactive') {
-            // Recupera la fecha del ultimo post de cada ticket del asesor
+        } elseif ($option == 'inactive')
+        {
+            $params[] = array('inactive', ' = 1 ');
 
-            if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN')) {
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1 GROUP BY t.id');
-                $ids = '0';
-                $ids_not = '0';
-                foreach ($consulta->getResult() as $row) {
-                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                    $now = new \DateTime(\date("Y-m-d H:i:s"));
-                    $time = new \DateTime(\date($row['time']));
+            if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
 
-                    $diff = $now->diff($time);
-                    $hours = $diff->h + ($diff->days * 24);
+                $params[] = array('assigned_to', '= ' . $id_user);
 
-                    if ($hours >= 2 and $diff->invert == 1)
-                        $ids = $ids . ', ' . $row['id'];
-                    else
-                        $ids_not = $ids_not . ', ' . $row['id'];
-                }
-                $params[] = array('status', ' = ' . $open->getId());
-                $params[] = array('id', ' NOT IN (' . $ids_not . ') AND e.assigned_to = ' . $user->getId() . ' AND e.pending = 1 ');
-            }
-            // Recupera la fecha del ultimo post de cada ticket
-            //  SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
-            else {
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1  GROUP BY t');
-                $ids = '0';
-                $ids_not = '0';
-                foreach ($consulta->getResult() as $row) {
-                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                    $now = new \DateTime(\date("Y-m-d H:i:s"));
-                    $time = new \DateTime(\date($row['time']));
-
-                    $diff = $now->diff($time);
-                    $hours = $diff->h + ($diff->days * 24);
-
-                    if ($hours >= 2 and $diff->invert == 1)
-                        $ids = $ids . ', ' . $row['id'];
-                    else
-                        $ids_not = $ids_not . ', ' . $row['id'];
-                }
-
-                $params[] = array('status', ' = ' . $open->getId());
-                $params[] = array('id', ' IN (' . $ids . ') OR (e.id NOT IN (' . $ids_not . ') AND e.assigned_to IS NOT NULL) AND e.pending = 1 ');
-            }
         }
         else {
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
@@ -404,53 +366,14 @@ class TicketController extends Controller {
         }
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
 
-        $t_inactive = array();
-
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshops[0]->getId()));
 
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN')) {
-
-            $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.assigned_to = ' . $user->getId() . ' GROUP BY t');
-            $ids = '0';
-            $ids_not = '0';
-            foreach ($consulta->getResult() as $row) {
-                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                $now = new \DateTime(\date("Y-m-d H:i:s"));
-                $time = new \DateTime(\date($row['time']));
-
-                $diff = $now->diff($time);
-                $hours = $diff->h + ($diff->days * 24);
-
-                if ($hours >= 2 and $diff->invert == 1)
-                    $ids = $ids . ', ' . $row['id'];
-                else
-                    $ids_not = $ids_not . ', ' . $row['id'];
-            }
-
-            if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
-                $params_inactive[] = array('category_service', " = " . $user->getCategoryService()->getId()." ");
-            }
-            $params_inactive[] = array('assigned_to', ' = ' . $user->getId());
-            $params_inactive[] = array('pending', ' = 1');
-            $params_inactive[] = array('status', ' = ' . $open->getId());
-            $params_inactive[] = array('id', ' NOT IN (' . $ids_not . ')');
-
-            $pagination_inactive = new Pagination(1);
-
-            if (isset($country) and $country != 0) {
-                // Buscar tickets inactivos según el país de servicio
-                $joins[] = array('e.workshop wo ', 'wo.country = ' . $country . " ");
-                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive, null, $joins);
-                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive, $pagination_inactive, null, $joins);
-            } else {
-                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
-                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
-            }
-
-            foreach ($tickets_inactive as $t) {
-                $t_inactive[$t->getId()] = $t->getId();
-            }
+        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        {
+            $t_inactive = $em->getRepository('TicketBundle:Ticket')->findBy(array('inactive' => 1, 'assigned_to' => $user->getId()));
+            $inactive = sizeof($t_inactive);
         } else {
+            $t_inactive = array();
             $inactive = 0;
         }
 
@@ -1311,6 +1234,8 @@ class TicketController extends Controller {
                                     $max_len = 10000;
                                 } else {
                                     $max_len = 500;
+                                    // Quitamos el estado inactivo si alguien responde al ticket
+                                    $ticket->setInactive(0);
                                 }
                                 if ($str_len <= $max_len) {
                                     if($request->request->has("sendTicket")){
@@ -1318,6 +1243,7 @@ class TicketController extends Controller {
                                         $post = UtilController::newEntity($post, $user);
                                         $post->setTicket($ticket);
                                         UtilController::saveEntity($em, $post, $user, false);
+
 
                                         //Define Document
                                         $document->setPost($post);
