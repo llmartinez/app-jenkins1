@@ -1,9 +1,5 @@
-en: "Anglais"
-es: "Espagnol"
-fr: "Français"
-pt: "Portugais"
-
 helloworld: "Salut Monde!"
+title: "Auto Diagnostic Service"
 
 # Rutas/Breadcrumb
 index: "Index"
@@ -25,12 +21,20 @@ ROLE_ADMIN: "Administrateur"
 ROLE_SUPER_ADMIN: "Super Admin"
 ROLE_GOD: "Dieu"
 
-#HELP
-help: "Aider"
-help_title: "Aider Ticketing"
-help_check_manual: "Consultez le manuel"
-help_manual: 'https://adserviceticketing.com/uploads/help/manual-fr.pdf'
-help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+# COUNTRIES
+spain: "Espagne"
+france: "France"
+portugal: "Portugal"
+ireland: "Irlande"
+england: "Royaume-Uni"
+# andorra: "Andorre"
+# british_isles: "Îles britanniques"
+
+# LANGUAGES
+en: "Anglais"
+es: "Espagnol"
+fr: "Français"
+pt: "Portugais"
 
 # FORMS
 Username: "Utilisateur"
@@ -59,27 +63,27 @@ Status: "État"
 active: "Actif"
 inactive: "Inactif"
 test: "À l'essai"
-name: "Nom"
+Name: "Nom"
 Category service: "Catégorie du service"
 Language: "Language"
 Country: "Pays"
-region: "Département"
-city: "Localité"
-address: "Adresse"
-postal_code: "Code postal"
-phone: "Téléphone"
-phone_number_1: "Tél. fixe 1"
-phone_number_2: "Tél. fixe 2"
-mobile_number_1: "Tél. portable 1"
-mobile_number_2: "Tél. portable 2"
-fax: "Fax"
-email: "E-mail"
-email_1: "E-mail 1"
-email_2: "E-mail 2"
-created_by: "Créé par"
-created_at: "Créé à"
-modified_by: "Modifié par"
-modified_at: "Modifié à"
+Region: "Département"
+City: "Localité"
+Address: "Adresse"
+Postal code: "Code postal"
+Phone: "Téléphone"
+Phone number1: "Tél. fixe 1"
+Phone number2: "Tél. fixe 2"
+Mobile number1: "Tél. portable 1"
+Mobile number2: "Tél. portable 2"
+Fax: "Fax"
+Email: "E-mail"
+Email1: "E-mail 1"
+Email2: "E-mail 2"
+CreatedBy: "Créé par"
+CreatedAt: "Créé à"
+ModifiedBy: "Modifié par"
+ModifiedAt: "Modifié à"
 
 # DATES
 date.day: "Jour"
@@ -91,3 +95,22 @@ ticket_list: "Liste des tickets"
 ticket_new: "Nouveau ticket"
 ticket_edit: "Éditer ticket"
 ticket_delete: "Effacer le ticket"
+
+
+
+#HELP
+help: "Aider"
+help_title: "Aider Ticketing"
+help_check_manual: "Consultez le manuel"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-fr.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# CATEGORY SERVICES
+GED: "GED"
+AD Service ES: "AD Service ES"
+Assistance Diag 24 FR: "Assistance Diag 24 FR"
+AD Service PT: "AD Service PT"
+Phone Eina ECP: "Phone Eina ECP"
+Phone Eina JS: "Phone Eina JS"
+Phone Eina TecnoDiag: "Phone Eina TecnoDiag"
+Phone Eina Actia: "Phone Eina Actia"
