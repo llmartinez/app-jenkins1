@@ -1,9 +1,5 @@
-en: "Inglés"
-es: "Español"
-fr: "Francés"
-pt: "Portugués"
-
 helloworld: "Hola Mundo!"
+title: "Auto Diagnostic Service"
 
 # Rutas/Breadcrumb
 index: "Índice"
@@ -25,12 +21,20 @@ ROLE_ADMIN: "Admin"
 ROLE_SUPER_ADMIN: "Super Admin"
 ROLE_GOD: "Dios"
 
-# HELP
-help: "Ayuda"
-help_title: "Ayuda Ticketing"
-help_check_manual: "Consulta el Manual"
-help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
-help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+# COUNTRIES
+spain: "España"
+france: "Francia"
+portugal: "Portugal"
+ireland: "Irlanda"
+uk: "Reino Unido"
+# andorra: "Andorra"
+# british_isles: "Islas Británicas"
+
+# LANGUAGES
+en: "Inglés"
+es: "Español"
+fr: "Francés"
+pt: "Portugués"
 
 # FORMS
 Username: "Usuario"
@@ -40,17 +44,7 @@ password_repeat: "Repetir contraseña"
 Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
-
-# DATATABLE
-loading: "Cargando..."
-dt_show: "Mostrar"
-dt_entries: "filas"
-dt_search: "Buscar"
-dt_showing: "Mostrando de"
-dt_to: "a"
-dt_of: "de"
-dt_previous: "Anterior"
-dt_next: "Siguiente"
+SelectValue: "Selecciona valor"
 
 # USER
 id: "ID"
@@ -59,27 +53,27 @@ Status: "Estado"
 active: "Activo"
 inactive: "Inactivo"
 test: "Pruebas"
-name: "Nombre"
+Name: "Nombre"
 Category service: "Categoria de Servicio"
 Language: "Idioma"
 Country: "País"
-region: "Provincia"
-city: "Población"
-address: "Dirección"
-postal_code: "Código postal"
-phone: "Teléfono"
-PhoneNumber1: "Tel. fijo 1"
-PhoneNumber2: "Tel. fijo 2"
-MobileNumber1: "Tel. móvil 1"
-MobileNumber2: "Tel. móvil 2"
-fax: "Fax"
+Region: "Provincia"
+City: "Población"
+Address: "Dirección"
+Postal code: "Código postal"
+Phone: "Teléfono"
+Phone number1: "Tel. fijo 1"
+Phone number2: "Tel. fijo 2"
+Mobile number1: "Tel. móvil 1"
+Mobile number2: "Tel. móvil 2"
+Fax: "Fax"
 Email: "Email"
 Email1: "Email 1"
 Email2: "Email 2"
-created_by: "Creado por"
-created_at: "Creado en"
-modified_by: "Modificado por"
-modified_at: "Modificado en"
+CreatedBy: "Creado por"
+CreatedAt: "Creado en"
+ModifiedBy: "Modificado por"
+ModifiedAt: "Modificado en"
 
 # DATES
 date.day: "Día"
@@ -91,3 +85,22 @@ ticket_list: "Listado de Tickets"
 ticket_new: "Nuevo ticket"
 ticket_edit: "Editar ticket"
 ticket_delete: "Borrar ticket"
+
+
+
+# HELP
+help: "Ayuda"
+help_title: "Ayuda Ticketing"
+help_check_manual: "Consulta el Manual"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# CATEGORY SERVICES
+GED: "GED"
+AD Service ES: "AD Service ES"
+Assistance Diag 24 FR: "Assistance Diag 24 FR"
+AD Service PT: "AD Service PT"
+Phone Eina ECP: "Phone Eina ECP"
+Phone Eina JS: "Phone Eina JS"
+Phone Eina TecnoDiag: "Phone Eina TecnoDiag"
+Phone Eina Actia: "Phone Eina Actia"

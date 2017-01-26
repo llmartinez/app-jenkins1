@@ -90,8 +90,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $email1;
 
     /**
-     * @ORM\Column(type="string", length=60)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=60, nullable=true)
      * @Assert\Email()
      */
     private $email2;
@@ -103,39 +102,39 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $phoneNumber1;
 
     /**
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $phoneNumber2;
 
     /**
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $mobileNumber1;
 
     /**
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $mobileNumber2;
 
     /**
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $fax;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $region;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $postalCode;
 
@@ -145,7 +144,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $createdAt;
 
     /**
-     * @ORM\Column(name="modified_at", type="datetime", nullable=true)
+     * @ORM\Column(name="modified_at", type="datetime", nullable=true, nullable=true)
      */
     private $modifiedAt;
 
@@ -164,6 +163,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->status = '1';
+        $this->createdAt = new \DateTime();
         //$this->salt = md5(uniqid(null, true));
     }
 
@@ -378,12 +378,121 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
         return $this->email2;
     }
 
+    public function setPhoneNumber1($phoneNumber1)
+    {
+        $this->phoneNumber1 = $phoneNumber1;
+
+        return $this;
+    }
+
+    public function getPhoneNumber1()
+    {
+        return $this->phoneNumber1;
+    }
+
+    public function setPhoneNumber2($phoneNumber2)
+    {
+        $this->phoneNumber2 = $phoneNumber2;
+
+        return $this;
+    }
+
+    public function getPhoneNumber2()
+    {
+        return $this->phoneNumber2;
+    }
+
+    public function setMobileNumber1($mobileNumber1)
+    {
+        $this->mobileNumber1 = $mobileNumber1;
+
+        return $this;
+    }
+
+    public function getMobileNumber1()
+    {
+        return $this->mobileNumber1;
+    }
+
+    public function setMobileNumber2($mobileNumber2)
+    {
+        $this->mobileNumber2 = $mobileNumber2;
+
+        return $this;
+    }
+
+    public function getMobileNumber2()
+    {
+        return $this->mobileNumber2;
+    }
+
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
+
+        return $this;
+    }
+
+    public function getFax()
+    {
+        return $this->fax;
+    }
+
+    public function setRegion($region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    public function setPostalCode($postalCode)
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getPostalCode()
+    {
+        return $this->postalCode;
+    }
+
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
+
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -407,6 +516,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
 
         return $this;
     }
+    
     public function getCreatedBy()
     {
         return $this->createdBy;
