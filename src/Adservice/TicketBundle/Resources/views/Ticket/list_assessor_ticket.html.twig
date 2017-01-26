@@ -122,6 +122,8 @@
                         {% endif %}
                         {% if ticket.isPhoneCall == 1 %}
                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
+                        {% else %}
+                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket.png') }}" title="{{ 'ticket' | trans }}" alt="{{ 'ticket' | trans }}">
                         {%endif %}
                         </td>
                         {% if is_granted('ROLE_ASSESSOR') %}
