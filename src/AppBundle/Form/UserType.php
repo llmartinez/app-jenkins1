@@ -24,21 +24,32 @@ class UserType extends AbstractType
             ))
             ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
                                                         'required'=> 'required',
-                                                        'empty_value' => 'All'))
+                                                        'empty_value' => 'SelectValue'))
 
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
                                                 'required'=> 'required',
-                                                'empty_value' => 'All' ))
+                                                'empty_value' => 'SelectValue' ))
 
             ->add('language' , 'choice'  , array('choices' => Utils::getLanguages(),
                                                  'required'=> 'required',
-                                                 'empty_value' => 'All'))
+                                                 'empty_value' => 'SelectValue'))
 
             ->add('status' , 'choice'  , array('choices' => UtilsUser::getStatus(),
                                                'required'=> 'required',
-                                               'empty_value' => 'All' ))
+                                               'empty_value' => 'SelectValue' ))
 
             ->add('email1', 'email', array('required' => 'required' ))
+            ->add('email2', 'email', array('required' => false ))
+
+            ->add('phoneNumber1', 'integer', array('required' => 'required', 'attr' => array('min' => 0)))
+            ->add('phoneNumber2', 'integer', array('required' => false, 'attr' => array('min' => 0)))
+            ->add('mobileNumber1', 'integer', array('required' => false, 'attr' => array('min' => 0)))
+            ->add('mobileNumber2', 'integer', array('required' => false, 'attr' => array('min' => 0)))
+            ->add('fax', 'integer', array('required' => false, 'attr' => array('min' => 0)))
+            ->add('region', 'text', array('required' => false ))
+            ->add('city', 'text', array('required' => false ))
+            ->add('address', 'text', array('required' => false ))
+            ->add('postalCode', 'text', array('required' => false ))
         ;
     }
 
