@@ -240,7 +240,7 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
-            if($country != 'none') {
+            if($country != 'none' && $country != '0') {
 
                 if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
                     if ($country == '7')
@@ -1187,7 +1187,7 @@ class TicketController extends Controller {
         $user = $security->getToken()->getUser();
 
         if (
-            ($security->isGranted('ROLE_SUPER_ADMIN')
+            ($security->isGranted('ROLE_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
                 or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
