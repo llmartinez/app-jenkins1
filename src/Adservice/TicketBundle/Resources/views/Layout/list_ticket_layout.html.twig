@@ -33,23 +33,15 @@
 
     {# Mostrar un acceso a VTS de clientes de Phone Eina #}
     <div id="ged_btns_min">
-        {% set user_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+        {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
+        {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
+        {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
 
-        {% if user_catserv == '5' %}
-            <input type="hidden" id="vts-url" value="{% trans %}vts-ecp-url{% endtrans %}">
-        {% else %}
-            <input type="hidden" id="vts-url" value="{% trans %}vts-url{% endtrans %}">
+        {% if user_catserv.getDis() != null %}
+            <a class="btn btn-primary fr asr_btn" id="dis" href="{{ user_catserv.getDis() }}" target="_blank">{{'dis'|trans}}</a>
         {% endif %}
-
-        {# Definimos las categorias de servicio que tienen acceso a VTS #}
-        {% if user_catserv == '5' %}
-                <a class="btn btn-primary fr asr_btn" id="vts" href="{{ 'vts-ecp-url'|trans }}" target="_blank"> {{ 'gotoVTS'|trans }}</a>
-        {% elseif user_catserv == '6' %}
-                <a class="btn btn-primary fr asr_btn" id="vts" href="{{ 'vts-url'|trans }}" target="_blank"> {{ 'gotoVTS'|trans }}</a>
-        {% elseif user_catserv == '7' %}
-                <a class="btn btn-primary fr asr_btn" id="vts" href="{{ 'vts-url'|trans }}" target="_blank"> {{ 'gotoVTS'|trans }}</a>
-        {% elseif user_catserv == '8' %}
-                <a class="btn btn-primary fr asr_btn" id="vts" href="{{ 'vts-url'|trans }}" target="_blank"> {{ 'gotoVTS'|trans }}</a>
+        {% if user_catserv.getVts() != null %}
+            <a class="btn btn-primary fr asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
         {% endif %}
     </div>
 

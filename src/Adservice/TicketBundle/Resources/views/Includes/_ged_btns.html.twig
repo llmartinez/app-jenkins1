@@ -1,45 +1,21 @@
 {# integración con otras plataformas #}
 
 
-    {% set user_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
 
-    {# Definimos las categorias de servicio que tienen acceso a DIS #}
-    {% if user_catserv == '1' or user_catserv == '2' %}
-        {% set show_dis = true %}{% else %}{% set show_dis = false %}
-    {% endif %}
-
-    {# Definimos las categorias de servicio que tienen acceso a VTS #}
-    {% if user_catserv == '3' or user_catserv == '5' or user_catserv == '6' or user_catserv == '7' or user_catserv == '8' %}
-        {% set show_vts = true %}{% else %}{% set show_vts = false %}
-    {% endif %}
-
-    <input type="hidden" id="dis-url" value="{% trans %}dis-url{% endtrans %}">
-    {% if user_catserv == '5' %}
-        <input type="hidden" id="vts-url" value="{% trans %}vts-ecp-url{% endtrans %}">
-    {% else %}
-        <input type="hidden" id="vts-url" value="{% trans %}vts-url{% endtrans %}">
-    {% endif %}
+    {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
+    {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
 
 {% if id is defined and id != "" %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %} #}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
 
-                {% if show_dis %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/{{id}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/{{id}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if show_vts %}
-                    {# Definimos las categorias de servicio que tienen acceso a VTS #}
-                    {% if user_catserv == '5' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-ecp-url'|trans}}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '6' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '7' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '8' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% endif %}
-                   {#  <a id="vts" href="{% trans %}'vts-url'{% endtrans %}/{{brand}}/{{model}}/{{id}}" target="_blank" title="{{'gotoVTS'|trans}}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>#}
+                {% if user_catserv.getVts() != null %}
+                            <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
@@ -47,22 +23,11 @@
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if show_dis %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/model-{{model}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/model-{{model}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if show_vts %}
-                    {# Definimos las categorias de servicio que tienen acceso a VTS #}
-                    {% if user_catserv == '5' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-ecp-url'|trans}}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '6' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '7' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '8' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% endif %}
-                   {# 
-                    <a id="vts" href="{% trans %}'vts-url'{% endtrans %}/{{brand}}/{{model}}" target="_blank" title="{{'gotoVTS'|trans}}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a> #}
+                {% if user_catserv.getVts() != null %}
+                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
@@ -70,23 +35,12 @@
         <div {# {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if show_dis %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if show_vts %}
-                    {# Definimos las categorias de servicio que tienen acceso a VTS #}
-                    {% if user_catserv == '5' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-ecp-url'|trans}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '6' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '7' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% elseif user_catserv == '8' %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{'vts-url'|trans}}" target="_blank">{{'gotoVTS'|trans}}</a>
-                    {% endif %}
-                   {# 
-                    <a id="vts" href="http://einavts.com/{{app.session.locale}}" target="_blank" title="{{'gotoVTS'|trans}}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a> #}
-                    {% endif %}
+                {% if user_catserv.getVts() != null %}
+                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
+                {% endif %}
         </div>
 
 {% endif %}
