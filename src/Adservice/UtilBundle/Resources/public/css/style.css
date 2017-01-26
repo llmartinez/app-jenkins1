@@ -787,6 +787,22 @@ fieldset[disabled] .asr_form-control {
     background: none repeat scroll 0 0 #e1001a;
 }
 
+/* GED BTNS */
+#ged_btns_min {
+    width: 225px;
+    position: relative;
+    float: right;
+    right: 125px;
+    margin: 0 0 0 -225px;
+    padding: 0 15px;
+}
+#ged_btns_min legend {
+    display: none;
+}
+#ged_btns_min .btn {
+    margin: 0 3px;
+}
+
 
 /* autocomplete */
 
