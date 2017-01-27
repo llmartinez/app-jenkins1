@@ -4,11 +4,11 @@
     <li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
     <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
-    <li><a href="{{ path("userNew") }}">{{ 'user_new'|trans }} {{ roles[role_id]|trans }}</a></li>
+    <li><a href="{{ path("userNew") }}">{{ 'user'|trans }} {{ roles[role_id]|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
-	<h2>{{ 'user_new'|trans }} {{ roles[role_id]|trans }}</h2>
+	<h2>{{ 'user'|trans }} {{ roles[role_id]|trans }}</h2>
 
 	<form action="{{form.vars.action}}" method="{{form.vars.method}}" >
 

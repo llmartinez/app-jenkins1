@@ -43,7 +43,7 @@
                         <td>{{ row.city }}</td>
                         <td>{{ row.address }}</td>
                         <td>{{ row.postalCode }}</td>
-                        <td><a href="#">GO</a></td>
+                        <td><a href="{{ path("userEdit", {id: row.id})}}">Edit</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
