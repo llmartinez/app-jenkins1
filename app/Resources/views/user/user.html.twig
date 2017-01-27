@@ -4,24 +4,17 @@
     <li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
     <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
-    <li><a href="{{ path("user") }}">{{ 'user_new'|trans }} {{ roles[role_id]|trans }}</a></li>
+    <li><a href="{{ path("userNew") }}">{{ 'user_new'|trans }} {{ roles[role_id]|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
 	<h2>{{ 'user_new'|trans }} {{ roles[role_id]|trans }}</h2>
 
 	<form action="{{form.vars.action}}" method="{{form.vars.method}}" >
-{# 
-      	{{ form_label(form.username)  }}
-        {{ form_errors(form.username) }}
-        {{ form_widget(form.username) }}
-#}
+
 		{{ form_rest(form) }}
 
-		{% if formSP is defined %} {{ form_rest(formSP) }}{% endif %}
-		{% if formP  is defined %} {{ form_rest(formP)  }}{% endif %}
-		{% if formC  is defined %} {{ form_rest(formC)  }}{% endif %}
-		{% if formW  is defined %} {{ form_rest(formW)  }}{% endif %}
+		{% if formE is defined %} {{ form_rest(formE) }}{% endif %}
 		
         <input type="submit" class="btn btn-primary"/>
     </form>

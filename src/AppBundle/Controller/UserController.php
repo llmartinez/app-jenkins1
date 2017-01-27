@@ -2,6 +2,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,32 +47,38 @@ class UserController extends Controller
         return $this->render('user/selectRole.html.twig', array('roles' => $roles));
     }
 
-    public function userAction(Request $request, $role_id=null, $id=null)
+    public function userNewAction(Request $request, $role_id=null)
     {
         // Si no hay rol redirige a la funcion de selección de rol para el nuevo usuario
         if($role_id == null) return $this->redirect($this->generateUrl('selectRole'));
 
         $em = $this->getDoctrine()->getManager();
 
-        if($id == null) // NewEntity
-        {
-            $user = new User();
-            $workshop = New Workshop();
-            $workshop->setUser($user);
-        }
-        else // EditEntity
-        {
-            $user = $em->getRepository('AppBundle:User')->find($id);
-            $workshop = $em->getRepository('AppBundle:Workshop')->findByUser($user);
-        }
+        $user = new User();
 
         $form = $this->createForm(new UserType(), $user);
-        if($role_id == 9) $formW = $this->createForm(new WorkshopType(), $workshop);
-        
-        $form->handleRequest($request);
-        $formW->handleRequest($request);
+        $return = array('_locale' => $this->get('locale'), 'role_id' => $role_id, 'form' => $form->createView());
 
-        if ($form->isSubmitted() && $form->isValid() && $formW->isSubmitted() && $formW->isValid())
+        $entityName = $this->getEntityName($role_id);
+
+        if($entityName != null)
+        {
+            $entityType = 'AppBundle\Form\\'.$entityName.'Type';
+            $entityCheck = 'check'.$entityName;
+            $entityName = 'AppBundle\Entity\\'.$entityName;
+
+            $entity = New $entityName();
+            $entity->setUser($user);
+
+            $formE = $this->createForm(new $entityType(), $entity);
+            $return['formE'] = $formE->createView();
+            $formE->handleRequest($request);
+
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && (!isset($formE) || $formE->isSubmitted() && $formE->isValid()))
         {
             if($user->getRoleId() == null)
             {
@@ -88,17 +95,90 @@ class UserController extends Controller
                     ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
                 $user->setPassword($password);
             }
-
-            $em->persist($user);
+            if($this->checkUser($user)) {
+                if ($entityName != null) {
+                    if ($this->$entityCheck($entity)) {
+                        $em->persist($user);
+                        $em->persist($entity);
+                    }
+                } else
+                    $em->persist($user);
+            }
             $em->flush();
 
-            return $this->redirect($this->generateUrl('login'));
+            return $this->redirect($this->generateUrl('users'));
+        }
+
+
+        return $this->render('user/user.html.twig', $return);
+    }
+    public function checkWorkshop($workshop){
+        if($workshop->getId() == null){
+            $workshop->setId($this->getMaxIdWorkshop($workshop));
+        }
+        //Faltan comprobaciones de que Workshop sea correcto
+        return true;
+    }
+
+    public function checkUser($user){
+        //Faltan comprobaciones de que User sea correcto
+        return true;
+    }
+
+    public function getMaxIdWorkshop($workshop){
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT MAX(w.id)
+             FROM AppBundle:Workshop w
+             WHERE w.partner = :idPartner'
+        )->setParameter('idPartner', $workshop->getPartner()->getId());
+
+        $max_id = $query->getSingleScalarResult();
+        if($max_id == null)
+            return 1;
+        return $max_id+1;
+    }
+
+
+    public function getEntityName($role_id)
+    {
+        if($role_id == 6) $entityName = 'Partner';
+        elseif($role_id == 9) $entityName = 'Workshop';
+        else $entityName = null;
+        return $entityName;
+    }
+    /*
+     * @paramconverter("user", class="AppBundle:User")
+     */
+    public function userEditAction(Request $request, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(new UserType(), $user);
+        $form->handleRequest($request);
+        $return = array('_locale' => $this->get('locale'), 'user' => $user->getId(), 'form' => $form->createView());
+        $entityName = $this->getEntityName($user->getRoleId());
+
+        if($entityName != null)
+        {
+            $entityType = 'AppBundle\Form\\'.$entityName.'Type';
+            $entity = $em->getRepository('AppBundle:'.$entityName)->findByUser($user);
+
+            $formE = $this->createForm(new $entityType(), $entity);
+            $formE->handleRequest($request);
+
+            $return['formE'] = $formE->createView();
+        }
+        if ($form->isSubmitted() && $form->isValid() && (!isset($formE) || $formE->isSubmitted() && $formE->isValid()))
+        {
+            $em->persist($user);
+            $em->flush();
+            if($entityName != null)
+                $em->persist($entity);
+            return $this->redirect($this->generateUrl('user'));
         }
 
         # Devolvemos
-        $return = array('_locale' => $this->get('locale'), 'role_id' => $role_id, 'form' => $form->createView());
-        if($role_id == 9) $return['formW'] = $formW->createView();
-
         return $this->render('user/user.html.twig', $return);
     }
 }

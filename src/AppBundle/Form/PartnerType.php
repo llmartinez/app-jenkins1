@@ -6,17 +6,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class WorkshopType extends AbstractType
+class PartnerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $builder
             ->add('name' , 'text'  , array('required'=> 'required', 'translation_domain' => 'messages'))
-            ->add('Partner' , 'entity', array(
-                'class' => 'AppBundle:Partner',
-                'choice_label' => 'name',
-            ))
         ;
 
     }
