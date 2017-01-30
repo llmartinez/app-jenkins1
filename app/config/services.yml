@@ -17,5 +17,5 @@ services:
         class: AppBundle\Utils\Export
     ticket:
         class: AppBundle\Utils\Ticket
-    user:
-        class: AppBundle\Utils\User
+    utilsUser:
+        class: AppBundle\Utils\UtilsUser

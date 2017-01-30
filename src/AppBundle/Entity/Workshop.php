@@ -13,7 +13,7 @@ class Workshop
 {
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Partner", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Partner")
      * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
      */
     private $partner;
@@ -46,6 +46,11 @@ class Workshop
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function setUser($user)

@@ -47,7 +47,7 @@ class DefaultController extends Controller
     {
         //return $this->get('export')->xls($this);
 
-        //$html = $this->renderView('::default/menu/menu_ROLE_ADVISOR.html.twig');
+        //$html = $this->renderView('::default/menu/menu_ROLE_ADVISER.html.twig');
         //return $this->get('export')->pdf($this, "TEST", $html);
 
         return $this->render('default/help.html.twig');

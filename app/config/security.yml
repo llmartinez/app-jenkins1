@@ -49,12 +49,12 @@ security:
     role_hierarchy:
         ROLE_GOD:           ROLE_SUPER_ADMIN
         ROLE_SUPER_ADMIN:   ROLE_ADMIN
-        ROLE_ADMIN:         [ ROLE_ADVISOR, ROLE_TOP ]
+        ROLE_ADMIN:         [ ROLE_ADVISER, ROLE_TOP ]
         ROLE_TOP:           ROLE_SUPER_PARTNER
         ROLE_SUPER_PARTNER: ROLE_PARTNER
         ROLE_PARTNER:       ROLE_COMMERCIAL
         ROLE_COMMERCIAL:    ROLE_USER
-        ROLE_ADVISOR:       ROLE_WORKSHOP
+        ROLE_ADVISER:       ROLE_WORKSHOP
         ROLE_WORKSHOP:      ROLE_USER
 
     access_control:
