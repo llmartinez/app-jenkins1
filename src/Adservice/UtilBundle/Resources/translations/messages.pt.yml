@@ -457,8 +457,10 @@ plate_number:			 "Matrícula"
 app:					 "Aplicações"
 dis:					 "DIS-NET"
 dis-url:				 "http://dis-net.com/home"
-vts:					 "EinaVTS"
+vts:					 "VTS"
+gotoVTS: "Casos VTS"
 vts-url:				 "http://einavts.com/en/autosearch/0"
+vts-ecp-url:     "http://eurovts.com/en/autosearch/0"
 
 #TICKET
 tickets:					  "Talões"
