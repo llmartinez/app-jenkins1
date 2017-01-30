@@ -29,7 +29,7 @@
             <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} workshop {% endtrans %}">
         </div>
 
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {% if is_granted('ROLE_ADMIN') %}
         <div class="grid w10 form-group pd0"> <label> {% trans %} country {% endtrans %} </label>
             <select id="flt_country" class='form-control'>
                     <option value="0">{% trans %} all {% endtrans %}</option>
@@ -37,11 +37,7 @@
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}
         </select></div>
-        {% endif %}
-
-      
-
-        {% if is_granted('ROLE_ADMIN') %}
+        
           {% if not is_granted('ROLE_SUPER_ADMIN') %}
               <div class="grid w15 form-group pd0">
                   <label> {% trans %} category_service {% endtrans %} </label>
@@ -51,15 +47,16 @@
 
                   </select>
               </div>
+        
           {% else %}
               <div class="grid w15 form-group pd0">
-                          <label> {% trans %} category_service {% endtrans %} </label>
-                          <select id="slct_catserv" class="form-control"> <option value="0">...</option>
-                              {% for _catserv in cat_services %}
-                                  <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
+                <label> {% trans %} category_service {% endtrans %} </label>
+                <select id="slct_catserv" class="form-control"> <option value="0">...</option>
+                    {% for _catserv in cat_services %}
+                        <option value="{{ _catserv.id }}"{% if _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+                    {% endfor %}
+                </select>
+            </div>
           {% endif %}
       
             <div class="grid w10 form-group pd0"> <label> {% trans %} partner {% endtrans %} </label>

@@ -68,7 +68,14 @@ class Post
      * @ORM\OneToOne(targetEntity="Adservice\UtilBundle\Entity\Document", mappedBy="post")
      */
     private $document;
-
+        
+    /**
+     * @var boolean $is_phone_call
+     *
+     * @ORM\Column(name="is_phone_call", type="boolean", nullable=true)
+     */
+    private $is_phone_call;
+    
     /**
      * Get id
      *
@@ -228,4 +235,24 @@ class Post
     {
         return $this->document;
     }
+    
+    
+    /**
+     * Get is_phone_call
+     *
+     * @return boolean
+     */
+    public function getIsPhoneCall() {
+        return $this->is_phone_call;
+    }
+
+    /**
+     * Set is_phone_call
+     *
+      * @param datetime $is_phone_call
+     */
+    public function setIsPhoneCall($is_phone_call) {
+        $this->is_phone_call = $is_phone_call;
+    }
+
 }

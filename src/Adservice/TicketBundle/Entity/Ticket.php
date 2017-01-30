@@ -156,7 +156,13 @@ class Ticket {
      * @ORM\OneToMany(targetEntity="Adservice\TicketBundle\Entity\Post", mappedBy="ticket")
      */
     private $posts;
-
+    
+    /**
+     * @var boolean $is_phone_call
+     *
+     * @ORM\Column(name="is_phone_call", type="boolean", nullable=true)
+     */
+    private $is_phone_call;
 //    /**
 //     * @var string $cars
 //     *
@@ -538,6 +544,24 @@ class Ticket {
      */
     public function getCars() {
         return $this->cars;
+    }
+    
+    /**
+     * Get is_phone_call
+     *
+     * @return boolean
+     */
+    public function getIsPhoneCall() {
+        return $this->is_phone_call;
+    }
+
+    /**
+     * Set is_phone_call
+     *
+      * @param datetime $is_phone_call
+     */
+    public function setIsPhoneCall($is_phone_call) {
+        $this->is_phone_call = $is_phone_call;
     }
 
     public function __toString() {

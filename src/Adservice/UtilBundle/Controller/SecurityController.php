@@ -47,7 +47,6 @@ class SecurityController extends Controller{
 
             if(isset($hash) and $hash != null and $hash != "")
             {
-
                 $em = $this->getDoctrine()->getEntityManager();
     			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 

@@ -13,19 +13,23 @@
     {# <input type="hidden" id="order_by" value="{{ order_by }}"> #}
     {# <input type="hidden" id="trend"    value="{{ trend    }}"> #}
     {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
-
+    {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}
+        {% set catservId = catserv.id %}
+    {% else %}
+        {% set catservId = catserv %}
+    {% endif %}
     <div id="pagination"  class="pagination_content">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
     	<a id="firstpage"    class="page_number" title="{% trans %} page.first {% endtrans %}"
-            href="{{ path(route, { page: 1, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            href="{{ path(route, { page: 1, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left_double.png') }}">
         </a>
 
         {% if page-1 <= 0 %} {% set this_prev_page = 1 %} {% else %} {% set this_prev_page = page-1 %}{% endif %}
 
     	<a id="btn_anterior" class="page_number" title="{% trans %} page.prev {% endtrans %}"
-            href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left.png') }}">
         </a>
 
@@ -36,7 +40,7 @@
                 {% set this_prev_page = page - prev_page %}
 
                 <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}"
-                    href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+                    href="{{ path(route, { page: this_prev_page, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
                     {{ this_prev_page }}
                 </a>
 	    	{% endfor %}
@@ -52,7 +56,7 @@
                 {% set this_next_page = page + next_page %}
 
                 <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}"
-                    href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+                    href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
                     {{ this_next_page }}
                 </a>
 	    	{% endfor %}
@@ -63,11 +67,11 @@
         {% if page+1 >= totalpag %} {% set this_next_page = totalpag %} {% else %} {% set this_next_page = page+1 %}{% endif %}
 
         <a id="btn_siguiente" class="page_number" title="{% trans %} page.next {% endtrans %}"
-            href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            href="{{ path(route, { page: this_next_page, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right.png') }}">
         </a>
         <a id="totalpage"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
-            href="{{ path(route, { page: totalpag, num_rows: num_rows, country: country, option: option, catserv: catserv }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
+            href="{{ path(route, { page: totalpag, num_rows: num_rows, country: country, option: option, catserv: catservId }) }}"> {# , order_by: order_by, trend: trend, mail: mail }) }}"> #}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right_double.png') }}">
         </a>
 
