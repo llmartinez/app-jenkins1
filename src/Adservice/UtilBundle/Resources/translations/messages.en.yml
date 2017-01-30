@@ -457,8 +457,10 @@ plate_number:			 "Plate Number"
 app:					 "Applications"
 dis:					 "DIS-NET"
 dis-url:				 "http://dis-net.com/home"
-vts:					 "EinaVTS"
-vts-url:				 "http://einavts.com/en/autosearch/0"
+vts:					 "VTS"
+gotoVTS: "VTS Cases"
+vts-url:         "http://einavts.com/en/autosearch/0"
+vts-ecp-url:     "http://eurovts.com/en/autosearch/0"
 
 #TICKET
 tickets:					  "Tickets"
