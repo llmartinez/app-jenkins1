@@ -17,6 +17,7 @@ security:
             entity:
                 class: AppBundle:User
                 property: username
+                property: apiKey
                 # if you're using multiple entity managers
                 # manager_name: customer
 
@@ -39,6 +40,9 @@ security:
                 path:   /logout
                 target: /
                 invalidate_session: false
+            guard:
+                authenticators:
+                    - app.token_authenticator
 
                 # csrf_token_generator: security.csrf.token_manager
                 # You can change the name of the field by setting csrf_parameter and change the token ID by setting csrf_token_id in your configuration:

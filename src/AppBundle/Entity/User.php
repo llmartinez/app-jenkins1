@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="username", message="error_username_repeated")
+ * @UniqueEntity(fields="apikey", message="error_apikey_repeated")
  */
 class User implements UserInterface, AdvancedUserInterface, \Serializable
 {
@@ -81,6 +82,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     private $salt;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     */
+    private $apiKey;
 
     /**
      * @ORM\Column(type="string", length=60)

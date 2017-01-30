@@ -17,7 +17,7 @@ class NavigationTest extends WebTestCase
 
     public function testNavigation()
     {
-        // LOGIN (redirect for anonymous users)
+        // redirect to LOGIN for anonymous users
         $crawler = $this->client->request('GET', '/');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $crawler = $this->client->followRedirect(); //go to '/en'
