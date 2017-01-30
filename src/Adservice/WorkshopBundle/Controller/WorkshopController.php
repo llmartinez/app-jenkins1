@@ -49,7 +49,7 @@ class WorkshopController extends Controller {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             }
         }
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($security->isGranted('ROLE_ADMIN')) {
             if ($country != '0')
                 $params[] = array('country', ' = ' . $country);
         } else
@@ -97,13 +97,17 @@ class WorkshopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($security->isGranted('ROLE_ADMIN')) {
             $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        }
+        else
+            $countries = array();
+
+        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
             if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
             else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         } else {
-            $countries = array();
             $country_id = $security->getToken()->getUser()->getCountry()->getId();
             if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id));
             else              $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country_id);
@@ -364,7 +368,7 @@ class WorkshopController extends Controller {
         $security = $this->get('security.context');
         $request = $this->getRequest();
 
-        if ((!$security->isGranted('ROLE_SUPER_ADMIN')) and ( $security->isGranted('ROLE_AD') and ( $security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
+        if ((!$security->isGranted('ROLE_ADMIN')) and ( $security->isGranted('ROLE_AD') and ( $security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
                 and ( $security->isGranted('ROLE_SUPER_AD') and ( $security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
@@ -600,12 +604,17 @@ class WorkshopController extends Controller {
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop){
             $workshop->setActive(!$workshop->getActive());
-
+            $new_date = new \DateTime(\date("Y-m-d H:i:s"));
             if($workshop->getActive() == true) {
-                $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $workshop->setUpdateAt($new_date);
                 $status = 1;
             }else{
-                $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                $workshop->setLowdateAt($new_date);
+                
+                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
+                    $workshop->setEndTestAt($new_date);
+                    $workshop->setTest(0);
+                }
                 $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
                     //$tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));

@@ -32,8 +32,8 @@
 
 		    var findByBMV = checkForBMV();
 
-		    if (findByBMV == 0) var url = Routing.generate($('#findTicketByBMV').val(), {_locale: locale, page: 1, num_rows: num_rows, option: option, catserv: catserv });
-    		else 			  	var url = Routing.generate($('#slct_historyTickets').val(), {_locale: locale, page: 1, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv });
+		    if (findByBMV == 0) var url = Routing.generate($('#findTicketByBMV').val(), {_locale: locale, page: 1, num_rows: num_rows, option: option, catserv: catserv.id });
+    		else 			  	var url = Routing.generate($('#slct_historyTickets').val(), {_locale: locale, page: 1, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv.id });
 
 	    	window.open(url, "_self");
 	    });
@@ -53,8 +53,8 @@
 
 		    	var findByBMV = checkForBMV();
 
-			    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: prev_page, num_rows: num_rows, option: option, catserv: catserv });
-	    		else 			  	var url = Routing.generate(route, {_locale: locale, page: prev_page, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv });
+			    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: prev_page, num_rows: num_rows, option: option, catserv: catserv.id });
+	    		else 			  	var url = Routing.generate(route, {_locale: locale, page: prev_page, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv.id });
 
 		    	window.open(url, "_self");
 		    }
@@ -71,8 +71,8 @@
 
 		    var findByBMV = checkForBMV();
 
-		    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: $(this).text(), num_rows: num_rows, option: option, catserv: catserv });
-    		else 			  	var url = Routing.generate(route, {_locale: locale, page: $(this).text(), brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv });
+		    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: $(this).text(), num_rows: num_rows, option: option, catserv: catserv.id });
+    		else 			  	var url = Routing.generate(route, {_locale: locale, page: $(this).text(), brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv.id });
 
 	    	window.open(url, "_self");
 	    });
@@ -92,8 +92,8 @@
 
 		    	var findByBMV = checkForBMV();
 
-			    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: next_page, num_rows: num_rows, option: option, catserv: catserv });
-	    		else 			  	var url = Routing.generate(route, {_locale: locale, page: next_page, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv });
+			    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: next_page, num_rows: num_rows, option: option, catserv: catserv.id });
+	    		else 			  	var url = Routing.generate(route, {_locale: locale, page: next_page, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv.id });
 
 		    	window.open(url, "_self");
 		    }
@@ -111,8 +111,8 @@
 
 		    var findByBMV = checkForBMV();
 
-		    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: total, num_rows: num_rows, option: option, catserv: catserv });
-    		else 			  	var url = Routing.generate(route, {_locale: locale, page: total, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv });
+		    if (findByBMV == 0) var url = Routing.generate(route, {_locale: locale, page: total, num_rows: num_rows, option: option, catserv: catserv.id });
+    		else 			  	var url = Routing.generate(route, {_locale: locale, page: total, brand: brand, model: model, version: version, system: system, subsystem: subsystem, num_rows: num_rows, catserv: catserv.id });
 
 	    	window.open(url, "_self");
 	    });
