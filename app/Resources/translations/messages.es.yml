@@ -47,6 +47,7 @@ All: "Todos"
 SelectValue: "Selecciona valor"
 
 # USER
+user: "Usuario"
 id: "ID"
 role: "Rol"
 Status: "Estado"
@@ -84,9 +85,13 @@ date.year: "Año"
 ticket_list: "Listado de Tickets"
 ticket_new: "Nuevo ticket"
 ticket_edit: "Editar ticket"
-ticket_delete: "Borrar ticket"
+ticket_delete: "Delete ticket"
 
+#PARTNER
+partner: "Socio"
 
+#WORKSHOP
+workshop: "Taller"
 
 # HELP
 help: "Ayuda"

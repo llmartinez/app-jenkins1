@@ -12,7 +12,7 @@ user_new: "New user"
 # ROLES
 ROLE_USER: User
 ROLE_WORKSHOP: Workshop
-ROLE_ADVISER: Advisor
+ROLE_ADVISER: Adviser
 ROLE_COMMERCIAL: "Commercial"
 ROLE_PARTNER: "Partner"
 ROLE_SUPER_PARTNER: "Super Partner"
@@ -47,6 +47,7 @@ All: "All"
 SelectValue: "Select value"
 
 # USER
+user: "User"
 id: "ID"
 role: "Role"
 Status: "Status"
@@ -86,7 +87,11 @@ ticket_new: "New ticket"
 ticket_edit: "Edit ticket"
 ticket_delete: "Delete ticket"
 
+#PARTNER
+partner: "Partner"
 
+#WORKSHOP
+workshop: "Workshop"
 
 # HELP
 help: "Help"

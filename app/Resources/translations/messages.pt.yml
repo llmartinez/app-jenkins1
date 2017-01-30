@@ -57,6 +57,7 @@ dt_previous: "Anterior"
 dt_next: "Siguiente"
 
 # USER
+user: "Usuário"
 id: "ID"
 role: "Função"
 Status: "Estado"
@@ -96,7 +97,11 @@ ticket_new: "Novo Talão"
 ticket_edit: "Editar Talão"
 ticket_delete: "Apagar Talão"
 
+#PARTNER
+partner: "Sócio"
 
+#WORKSHOP
+workshop: "Oficina"
 
 #HELP
 help: "Ajuda"

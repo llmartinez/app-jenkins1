@@ -29,7 +29,7 @@ class NavigationTest extends WebTestCase
         $this->assertEquals('LoginHelp', $breadcrumbs);
 
         // Login as USER
-        SecurityControllerTest::LogIn($this);
+        SecurityControllerTest::LogInGod($this);
 
         // INDEX
         $crawler = $this->client->request('GET', '/en');
@@ -51,7 +51,30 @@ class NavigationTest extends WebTestCase
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
         $this->assertEquals('Índice', $breadcrumbs);
 
+        // GO TO USERS
+        $crawler = $this->client->request('GET', '/en');
+        $crawler = $this->client->followRedirect();
+        $link = $crawler->filter('a:contains("USERS")')->eq(0)->link();
+        $crawler = $this->client->click($link);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
+        $this->assertEquals('IndexUsers', $breadcrumbs);
 
+        // GO TO NEW USER
+
+        $link = $crawler->filter('a:contains("New user")')->eq(0)->link();
+        $crawler = $this->client->click($link);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
+        $this->assertEquals('IndexUsersRole', $breadcrumbs);
+
+        // GO TO NEW USER ADMIN
+
+        $link = $crawler->filter('a:contains("Admin")')->eq(0)->link();
+        $crawler = $this->client->click($link);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
+        $this->assertEquals('IndexUsersRoleUserAdmin', $breadcrumbs);
 /////// FALTA HACER LOGOUT 
 
 
