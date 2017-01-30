@@ -57,6 +57,7 @@ dt_previous: "Précédent"
 dt_next: "Suivant"
 
 # USER
+user: "Utilisateur"
 id: "ID"
 role: "Rôle"
 Status: "État"
@@ -94,9 +95,13 @@ date.year: "Année"
 ticket_list: "Liste des tickets"
 ticket_new: "Nouveau ticket"
 ticket_edit: "Éditer ticket"
-ticket_delete: "Effacer le ticket"
+ticket_delete: "Effacer ticket"
 
+#PARTNER
+partner: "Distributeur"
 
+#WORKSHOP
+workshop: "Atelier"
 
 #HELP
 help: "Aider"

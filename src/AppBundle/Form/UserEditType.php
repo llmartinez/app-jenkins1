@@ -7,24 +7,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use AppBundle\Utils\Utils as Utils;
-use AppBundle\Utils\User as UtilsUser;
+use AppBundle\Utils\UtilsUser;
 
-class UserType extends AbstractType
+class UserEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('username', 'text', array('required' => 'required'))
-            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'first_options'  => array('label' => 'password_insert'),
-                'second_options' => array('label' => 'password_repeat'),
-                'invalid_message' => 'error_passwords_not_match',
-                'required' => 'required'
-            ))
-            ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
-                                                        'required'=> 'required',
-                                                        'empty_value' => 'SelectValue'))
 
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
                                                 'required'=> 'required',

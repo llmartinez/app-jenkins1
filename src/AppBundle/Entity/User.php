@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="username", message="error_username_repeated")
- * @UniqueEntity(fields="apikey", message="error_apikey_repeated")
+ * @UniqueEntity(fields="token", message="error_token_repeated")
  */
 class User implements UserInterface, AdvancedUserInterface, \Serializable
 {
@@ -68,7 +68,6 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $username;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
@@ -86,7 +85,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(type="string", nullable=true, unique=true)
      */
-    private $apiKey;
+    private $token;
 
     /**
      * @ORM\Column(type="string", length=60)

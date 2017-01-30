@@ -17,7 +17,6 @@ security:
             entity:
                 class: AppBundle:User
                 property: username
-                property: apiKey
                 # if you're using multiple entity managers
                 # manager_name: customer
 
@@ -40,9 +39,6 @@ security:
                 path:   /logout
                 target: /
                 invalidate_session: false
-            guard:
-                authenticators:
-                    - app.token_authenticator
 
                 # csrf_token_generator: security.csrf.token_manager
                 # You can change the name of the field by setting csrf_parameter and change the token ID by setting csrf_token_id in your configuration:
@@ -53,12 +49,12 @@ security:
     role_hierarchy:
         ROLE_GOD:           ROLE_SUPER_ADMIN
         ROLE_SUPER_ADMIN:   ROLE_ADMIN
-        ROLE_ADMIN:         [ ROLE_ADVISOR, ROLE_TOP ]
+        ROLE_ADMIN:         [ ROLE_ADVISER, ROLE_TOP ]
         ROLE_TOP:           ROLE_SUPER_PARTNER
         ROLE_SUPER_PARTNER: ROLE_PARTNER
         ROLE_PARTNER:       ROLE_COMMERCIAL
         ROLE_COMMERCIAL:    ROLE_USER
-        ROLE_ADVISOR:       ROLE_WORKSHOP
+        ROLE_ADVISER:       ROLE_WORKSHOP
         ROLE_WORKSHOP:      ROLE_USER
 
     access_control:
