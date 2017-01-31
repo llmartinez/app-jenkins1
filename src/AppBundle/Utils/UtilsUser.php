@@ -14,6 +14,8 @@ class UtilsUser
 
     public static $rolesPartner = array('7' => 'ROLE_COMMERCIAL');
 
+    public static $rolesCommercial = array('9' => 'ROLE_WORKSHOP');
+
     public static $status = array('0' => 'inactive', '1' => 'active', '2' => 'test');
 
     public static function getRolesForAdmin() {
@@ -23,6 +25,10 @@ class UtilsUser
     public static function getRolesForPartner() {
         return self::$rolesPartner;
     }
+    
+    public static function getRolesForCommercial() {
+        return self::$rolesCommercial;
+    }
 
     public static function getStatus() {
         return self::$status;
@@ -30,7 +36,6 @@ class UtilsUser
 
     public static function newUser($_this, $request, $role_id)
     {
-
         $em = $_this->getDoctrine()->getManager();
 
         $user = new User();
@@ -38,7 +43,7 @@ class UtilsUser
         $form = $_this->createForm(new UserNewType(), $user);
         $return = array('_locale' => $_this->get('locale'), 'role_id' => $role_id, 'form' => $form->createView());
 
-        $entityName =   self::getEntityName($role_id);
+        $entityName = self::getEntityName($role_id);
 
         if($entityName != null)
         {
@@ -52,7 +57,6 @@ class UtilsUser
             $formE = $_this->createForm(new $entityType(), $entity);
             $return['formE'] = $formE->createView();
             $formE->handleRequest($request);
-
         }
 
         $form->handleRequest($request);
@@ -74,14 +78,20 @@ class UtilsUser
                     ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
                 $user->setPassword($password);
             }
-            if(self::checkUser($user)) {
-                if ($entityName != null) {
-                    if (self::$entityCheck($em,$entity)) {
+
+            if(self::checkUser($_this, $user))
+            {
+                $user->setToken(self::getRandomToken());
+
+                if ($entityName != null)
+                {
+                    if (self::$entityCheck($em, $entity))
+                    {
                         $em->persist($user);
                         $em->persist($entity);
                     }
-                } else
-                    $em->persist($user);
+                }
+                else $em->persist($user);
             }
             $em->flush();
 
@@ -111,6 +121,7 @@ class UtilsUser
         }
         if ($form->isSubmitted() && $form->isValid() && (!isset($formE) || $formE->isSubmitted() && $formE->isValid()))
         {
+                $user->setToken(self::getRandomToken());
             $em->persist($user);
             if($entityName != null)
                 $em->persist($entity);
@@ -122,33 +133,16 @@ class UtilsUser
         return $return;
     }
 
-    public static function checkWorkshop($em,$workshop)
-    {
-        if($workshop->getId() == null){
-            $workshop->setId(self::getMaxIdWorkshop($em,$workshop));
-        }
-        //Faltan comprobaciones de que Workshop sea correcto
-        return true;
-    }
 
-    public static function checkUser($user)
+    static public function getRandomToken()
     {
-        //Faltan comprobaciones de que User sea correcto
-        return true;
-    }
+          $key = '';
+          $keys = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
 
-    public static function getMaxIdWorkshop($em,$workshop)
-    {
-        $query = $em->createQuery(
-            'SELECT MAX(w.id)
-             FROM AppBundle:Workshop w
-             WHERE w.partner = :idPartner'
-        )->setParameter('idPartner', $workshop->getPartner()->getId());
-
-        $max_id = $query->getSingleScalarResult();
-        if($max_id == null)
-            return 1;
-        return $max_id+1;
+          for ($i = 0; $i < 20; $i++) {
+              $key .= $keys[array_rand($keys)];
+          }
+          return $key;
     }
 
     public static function getEntityName($role_id)
@@ -159,5 +153,37 @@ class UtilsUser
         return $entityName;
     }
 
+    public static function getMaxIdWorkshop($em,$workshop)
+    {
+        $query = $em->createQuery(
+            'SELECT MAX(w.id) FROM AppBundle:Workshop w
+             WHERE w.partner = :idPartner'
+        )->setParameter('idPartner', $workshop->getPartner()->getId());
 
+        $max_id = $query->getSingleScalarResult();
+
+        if($max_id == null) return 1;
+        return $max_id+1;
+    }
+
+    public static function checkUser($_this, $user)
+    {
+        // Username tiene que estar en formato slug
+        if( $user->getUsername() != $_this->get('slugger')->slugify($user->getUsername())) return false;
+
+        return true;
+    }
+
+    public static function checkWorkshop($em,$workshop)
+    {
+        if($workshop->getId() == null){
+            $workshop->setId(self::getMaxIdWorkshop($em,$workshop));
+        }
+        return true;
+    }
+
+    public static function checkPartner($em,$workshop)
+    {
+        return true;
+    }
 }

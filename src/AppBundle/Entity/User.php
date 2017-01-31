@@ -359,6 +359,18 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
         return $this->salt;
     }
 
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
     public function setEmail1($email1)
     {
         $this->email1 = $email1;
