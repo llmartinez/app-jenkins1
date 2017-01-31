@@ -58,9 +58,14 @@ security:
         ROLE_WORKSHOP:      ROLE_USER
 
     access_control:
-      - { path: ^/(es|en|fr|pt)/login,                      roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/changeLang,                 roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/user,                       roles: ROLE_PARTNER  }
-      - { path: ^/(es|en|fr|pt)/ticket,                     roles: ROLE_WORKSHOP }
-      - { path: ^/(es|en|fr|pt),                            roles: ROLE_USER }
+      - { path: ^/(es|en|fr|pt)/login,                        roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/autologin,                    roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/changeLang,                   roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/help,                         roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(es|en|fr|pt)/users/user-new/(1|2|10),      roles: ROLE_GOD           } # 1-GOD|2-SA|10-USER  
+      - { path: ^/(es|en|fr|pt)/users/user-new/(3|4|5|6|8|9), roles: ROLE_ADMIN         } # 3-AD|4-TOP|5-SP|6-PARTNER|8-ADVISER
+      - { path: ^/(es|en|fr|pt)/users/user-new/7,             roles: ROLE_PARTNER       } # 7-COMM
+      - { path: ^/(es|en|fr|pt)/users,                        roles: ROLE_PARTNER  }
+      - { path: ^/(es|en|fr|pt)/ticket,                       roles: ROLE_WORKSHOP }
+      - { path: ^/(es|en|fr|pt),                              roles: ROLE_USER }
+      - { path: ^/,                                           roles: ROLE_USER }

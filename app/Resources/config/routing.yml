@@ -18,6 +18,9 @@ help:
 login:
     path:  /login
     defaults: { _controller: AppBundle:Security:login }
+autologin:
+    path:  /autologin
+    defaults: { _controller: AppBundle:Security:autologin }
 
 
 # USER
