@@ -3,7 +3,7 @@
 
 {# LOGO #}
 	{% set logo = url_logo ~ '.png' %}
-	<a href="{{ path("index") }}"><img src="{{ asset(logo) }}"></a>
+	<a href="{{ path("index", { '_locale': locale }) }}"><img src="{{ asset(logo) }}"></a>
 
 {# LANG #}
 	<select id="locale" onchange="window.location.href = '{{ path('changeLang')}}/'+this.options[this.selectedIndex].value;">

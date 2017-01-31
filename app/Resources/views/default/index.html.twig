@@ -3,7 +3,7 @@
 {% set user = app.user %}
 
 {% block breadcrumbs %}
-	<li><a href="{{path("index")}}">{{ 'index'|trans }}</a></li>
+	<li><a href="{{path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
