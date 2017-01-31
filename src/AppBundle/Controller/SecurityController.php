@@ -53,11 +53,11 @@ class SecurityController extends Controller
                     $event   = new InteractiveLoginEvent($request, $key);
                     $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-                    return $this->redirectToRoute('index', array('_locale' => $this->get('locale')->getDefaultLocale($request)));
+                    return $this->redirectToRoute('index');
                 }
             }
     	}
-        // throw new AccessDeniedException();
+        throw new AccessDeniedException();
 
         ///////////////////////////////////////////////////////////////////////////////////////
         // Mostrar Token encriptado para test
@@ -78,8 +78,6 @@ class SecurityController extends Controller
             //     </form>";
             // die;
         ///////////////////////////////////////////////////////////////////////////////////////
-
-        return $this->redirectToRoute('index', array('_locale' => $this->get('locale')->getDefaultLocale($request)));
     }
 
     /**
