@@ -25,7 +25,7 @@ class ShopType extends AbstractType {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_catserv); }))
+                                                          ->andWhere('s.category_service'.$id_catserv); }))
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',

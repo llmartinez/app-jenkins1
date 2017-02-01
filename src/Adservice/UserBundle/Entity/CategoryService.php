@@ -35,6 +35,20 @@ class CategoryService
      */
     private $slug;
 
+    /**
+     * @var string $dis
+     *
+     * @ORM\Column(name="dis", type="string", length=255)
+     */
+    private $dis;
+
+    /**
+     * @var string $vts
+     *
+     * @ORM\Column(name="vts", type="string", length=255)
+     */
+    private $vts;
+
 
     /**
      * Get id
@@ -84,6 +98,46 @@ class CategoryService
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set dis
+     *
+     * @param string $dis
+     */
+    public function setDis($dis)
+    {
+        $this->dis = $dis;
+    }
+
+    /**
+     * Get dis
+     *
+     * @return string
+     */
+    public function getDis()
+    {
+        return $this->dis;
+    }
+
+    /**
+     * Set vts
+     *
+     * @param string $vts
+     */
+    public function setVts($vts)
+    {
+        $this->vts = $vts;
+    }
+
+    /**
+     * Get vts
+     *
+     * @return string
+     */
+    public function getVts()
+    {
+        return $this->vts;
     }
 
     public function __toString() {

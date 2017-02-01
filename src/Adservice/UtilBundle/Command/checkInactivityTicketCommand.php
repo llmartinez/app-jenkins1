@@ -46,6 +46,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                 $importance = $ticket->getImportance()->getImportance();
                 $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
                 $close = false;
+                $closed = $em->getRepository('TicketBundle:Status')->find(2);
 
                 if( $importance == 'information' and $diff->days > 10)
                 {
@@ -53,7 +54,6 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                     $count++;
                     $count_closed++;
 
-                    $closed = $em->getRepository('TicketBundle:Status')->find(2);
                     $ticket->setStatus($closed);
                     $ticket->setModifiedAt(new \DateTime());
                     $em->persist($ticket);
@@ -63,15 +63,25 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                     $pending_tickets[] = $ticket->getId();
                     $count++;
                     $count_pending++;
-
-                    $ticket->setPending(1);
+    
+                    $sol = $this->getContainer()->get('translator')->trans('mail.inactiveTicket.title');
+                    $ticket->setSolution($sol);
+                    $ticket->setStatus($closed);
                     $ticket->setModifiedAt(new \DateTime());
                     $em->persist($ticket);
                 }
-                elseif ($importance == 'advanced_diagnostics' and $diff->days == 57 and $diff->m < 2)
+                elseif ($importance == 'advanced_diagnostics' and ($diff->days == 30 or $diff->days == 57) and $diff->m < 2)
                 {
                     $workshop = $ticket->getWorkshop();
                     $warning_tickets[] = $ticket->getId();
+
+                    if($diff->days == 57)
+                    {
+                        $ticket->setInactive(1);
+                        $em->persist($ticket);
+                        $em->flush();
+                    }
+
                     $count_warning++;
 
                     $mailW    = $workshop->getEmail1();

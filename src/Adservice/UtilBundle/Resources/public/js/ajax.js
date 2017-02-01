@@ -1081,8 +1081,9 @@ function get_country_partner(id_partner){
         success : function(data) {
 
             if(data.id != 0) {
-                $('form').find('select[name*=country]').empty();
-                $('form').find('select[name*=country]').append("<option value="+data.id+" selected>"+data.name+"</option>");
+              //$('form').find('select[name*=country]').empty();
+                $('#adservice_workshopbundle_workshoptype_country').find('option:selected').attr("selected", false);
+                $("#adservice_workshopbundle_workshoptype_country option[value="+ data.id +"]").attr("selected",true);
             }
             else{
                 alert($('#bad_introduction').val());
