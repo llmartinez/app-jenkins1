@@ -61,43 +61,52 @@ class UtilsUser
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && (!isset($formE) || $formE->isSubmitted() && $formE->isValid()))
+        if ($form->isSubmitted() && (!isset($formE) || $formE->isSubmitted()) )
         {
-            if($user->getRoleId() == null)
+            if( $form->isValid() && (!isset($formE) || $formE->isValid()) )
             {
-                $role = $em->getRepository('AppBundle:Role')->find($role_id);
-
-                $user->setRoleId($role_id);
-                $user->addRole($role);
-            }
-
-            if($user->getPassword() == null)
-            {
-                $user->setSalt(md5(uniqid()));
-                $password = $_this->get('security.password_encoder')
-                    ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
-                $user->setPassword($password);
-            }
-
-            if(self::checkUser($_this, $user))
-            {
-                $user->setToken(self::getRandomToken());
-
-                if ($entityName != null)
+                if($user->getRoleId() == null)
                 {
-                    if (self::$entityCheck($em, $entity))
-                    {
-                        $em->persist($user);
-                        $em->persist($entity);
-                    }
+                    $role = $em->getRepository('AppBundle:Role')->find($role_id);
+
+                    $user->setRoleId($role_id);
+                    $user->addRole($role);
                 }
-                else $em->persist($user);
+
+                if($user->getPassword() == null)
+                {
+                    $user->setSalt(md5(uniqid()));
+                    $password = $_this->get('security.password_encoder')
+                        ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
+                    $user->setPassword($password);
+                }
+
+                if(self::checkUser($_this, $user))
+                {
+                    $user->setToken(self::getRandomToken());
+
+                    if ($entityName != null)
+                    {
+                        if (self::$entityCheck($em, $entity))
+                        {
+                            $em->persist($user);
+                            $em->persist($entity);
+                        }
+                    }
+                    else $em->persist($user);
+                }
+                $em->flush();
+
+                return false;
             }
-            $em->flush();
+            else #Si $form->isValid() == fasle devolvemos el error
+            {
+                $return['form'] = $form->createView();
 
-            return false;
+                if(isset($formE))
+                    $return['formE'] = $formE->createView();
+            }
         }
-
         return $return;
     }
 
@@ -119,17 +128,28 @@ class UtilsUser
 
             $return['formE'] = $formE->createView();
         }
-        if ($form->isSubmitted() && $form->isValid() && (!isset($formE) || $formE->isSubmitted() && $formE->isValid()))
-        {
-                $user->setToken(self::getRandomToken());
-            $em->persist($user);
-            if($entityName != null)
-                $em->persist($entity);
-            $em->flush();
-            return false;
-        }
 
-        # Devolvemos
+        if ($form->isSubmitted() && (!isset($formE) || $formE->isSubmitted()) )
+        {
+            if( $form->isValid() && (!isset($formE) || $formE->isValid()) )
+            {
+                $user->setToken(self::getRandomToken());
+                $em->persist($user);
+
+                if($entityName != null)
+                    $em->persist($entity);
+
+                $em->flush();
+                return false;
+            }
+            else #Si $form->isValid() == fasle devolvemos el error
+            {
+                $return['form'] = $form->createView();
+
+                if(isset($formE))
+                    $return['formE'] = $formE->createView();
+            }
+        }
         return $return;
     }
 
@@ -168,9 +188,6 @@ class UtilsUser
 
     public static function checkUser($_this, $user)
     {
-        // Username tiene que estar en formato slug
-        if( $user->getUsername() != $_this->get('slugger')->slugify($user->getUsername())) return false;
-
         return true;
     }
 

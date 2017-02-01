@@ -88,10 +88,10 @@ ticket_edit: "Editar ticket"
 ticket_delete: "Borrar ticket"
 
 #PARTNER
-partner: "Socio"
+Partner: "Socio"
 
 #WORKSHOP
-workshop: "Taller"
+Workshop: "Taller"
 
 # HELP
 help: "Ayuda"

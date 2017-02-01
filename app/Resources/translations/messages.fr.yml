@@ -98,10 +98,10 @@ ticket_edit: "Éditer ticket"
 ticket_delete: "Effacer ticket"
 
 #PARTNER
-partner: "Distributeur"
+Partner: "Distributeur"
 
 #WORKSHOP
-workshop: "Atelier"
+Workshop: "Atelier"
 
 #HELP
 help: "Aider"

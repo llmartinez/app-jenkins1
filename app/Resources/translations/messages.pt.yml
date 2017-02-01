@@ -98,10 +98,10 @@ ticket_edit: "Editar Talão"
 ticket_delete: "Apagar Talão"
 
 #PARTNER
-partner: "Sócio"
+Partner: "Sócio"
 
 #WORKSHOP
-workshop: "Oficina"
+Workshop: "Oficina"
 
 #HELP
 help: "Ajuda"
