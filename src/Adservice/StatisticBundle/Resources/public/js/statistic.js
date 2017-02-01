@@ -163,7 +163,7 @@ $(document).ready(function() {
     //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     $('#btn_billing').click(function() {
 
-        var raport  = "billing";
+        var raport  = "0";
 
         var from_y  = $('#from_y').val();
         var from_m  = $('#from_m').val();
