@@ -64,6 +64,7 @@ class WorkshopController extends Controller {
             
             $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
              
+             
             if(!$security->isGranted('ROLE_SUPER_ADMIN'))
                 $params[] = array('category_service', ' = ' . $catser->getId());
 
