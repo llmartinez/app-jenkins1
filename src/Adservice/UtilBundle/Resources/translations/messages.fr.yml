@@ -458,8 +458,10 @@ plate_number:			 "Immatriculation"
 app:					 "Applications"
 dis:					 "DIS-NET"
 dis-url:				 "http://dis-net.com/home"
-vts:					 "EinaVTS"
+vts:					 "VTS"
+gotoVTS: "Cas VTS"
 vts-url:				 "http://einavts.com/fr/autosearch/0"
+vts-ecp-url:     "http://eurovts.com/fr/autosearch/0"
 
 #TICKET
 tickets:					  "Tickets"

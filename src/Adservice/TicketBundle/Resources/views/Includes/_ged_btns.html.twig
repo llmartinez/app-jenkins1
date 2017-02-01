@@ -1,18 +1,21 @@
 {# integración con otras plataformas #}
 
-    <input type="hidden" id="dis-url" value="{% trans %}dis-url{% endtrans %}">
-    <input type="hidden" id="vts-url" value="{% trans %}vts-url{% endtrans %}">
+
+    {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
+
+    {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
+    {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
 
 {% if id is defined and id != "" %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %} #}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
 
-                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/{{id}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/{{id}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6' %}
-                    <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}/{{id}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% if user_catserv.getVts() != null %}
+                            <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
@@ -20,24 +23,24 @@
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}/model-{{model}}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/model-{{model}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6'  %}
-                    <a id="vts" href="{% trans %}vts-url{% endtrans %}/{{brand}}/{{model}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
+                {% if user_catserv.getVts() != null %}
+                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
 {% else %}
-        <div {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}>
+        <div {# {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if app.security.getToken().getUser().getCountry().getId() == '1' %}
-                    <a id="dis" href="{% trans %}dis-url{% endtrans %}" target="_blank" title="{% trans %} dis {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_dis.png') }}"></a>
+                {% if user_catserv.getDis() != null %}
+                    <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if app.security.getToken().getUser().getCountry().getId() == '3' or app.security.getToken().getUser().getCountry().getId() == '6'  %}
-                    <a id="vts" href="http://einavts.com/{{app.session.locale}}" target="_blank" title="{% trans %} vts {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/logo_vts.png') }}"></a>
-                    {% endif %}
+                {% if user_catserv.getVts() != null %}
+                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
+                {% endif %}
         </div>
 
 {% endif %}

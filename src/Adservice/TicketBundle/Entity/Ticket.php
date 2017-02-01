@@ -87,6 +87,13 @@ class Ticket {
     private $pending;
 
     /**
+     * @var integer $inactive
+     *
+     * @ORM\Column(name="inactive", type="integer")
+     */
+    private $inactive;
+
+    /**
      * @var integer $importance
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
@@ -337,6 +344,24 @@ class Ticket {
      */
     public function getPending() {
         return $this->pending;
+    }
+
+    /**
+     * Set inactive
+     *
+     * @param integer $inactive
+     */
+    public function setInactive($inactive) {
+        $this->inactive = $inactive;
+    }
+
+    /**
+     * Get inactive
+     *
+     * @return integer
+     */
+    public function getInactive() {
+        return $this->inactive;
     }
 
     /**
