@@ -63,6 +63,9 @@ class WorkshopController extends Controller {
         if ($security->isGranted('ROLE_ADMIN')) {
 
             $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+             if ($catser != '0')
+                $params[] = array('category_service', ' = ' . $catser->getId());
+
             if ($partner != '0')
                 $params[] = array('partner', ' = ' . $partner);
 
@@ -176,7 +179,7 @@ class WorkshopController extends Controller {
 
             $partner = $workshop->getPartner();
             $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
-
+           
             if ($form->isValid()) {
                 $workshop->setActive(1);
                 /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
@@ -211,6 +214,7 @@ class WorkshopController extends Controller {
                     }else{
                         $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                     }
+                    
                     $this->saveWorkshop($em, $workshop);
                     $status = 3; // 3 para primera alta
                     if($workshop->getTest()){
@@ -270,11 +274,11 @@ class WorkshopController extends Controller {
                     //Asignamos un Token para AD360
                     $token = UtilController::getRandomToken();
                     $newUser->setToken($token);
-
+                    
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
-
+                    
                     $mail = $newUser->getEmail1();
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
