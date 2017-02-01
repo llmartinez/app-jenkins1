@@ -1,7 +1,7 @@
 {% extends '::layout.html.twig' %}
 
 {% block breadcrumbs %}
-	<li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
+	<li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
 	<li><a href="{{ path("help") }}">{{ 'help'|trans }}</a></li>
 {% endblock %}
 

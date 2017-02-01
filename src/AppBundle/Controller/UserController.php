@@ -49,6 +49,7 @@ class UserController extends Controller
     {
         // Si no hay rol redirige a la funcion de selección de rol para el nuevo usuario
         if($role_id == null) return $this->redirect($this->generateUrl('selectRole'));
+        
         $return = $this->get('utilsUser')->newUser($this, $request, $role_id);
 
         if($return)
@@ -62,6 +63,7 @@ class UserController extends Controller
     public function userEditAction(Request $request, User $user)
     {
         $return = $this->get('utilsUser')->editUser($this, $request, $user);
+        
         if($return)
             return $this->render('user/user.html.twig', $return);
         else

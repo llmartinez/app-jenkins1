@@ -7,6 +7,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     _locale: en
+    secret_iv: TYDJbDYNYR4L19q6y5Eu
     url_logo: http://adserviceticketing.com/logo
     languages: 
         es: es

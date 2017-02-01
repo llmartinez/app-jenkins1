@@ -16,7 +16,7 @@ class Utils
                                  '6' => 'ROLE_PARTNER', '7' => 'ROLE_COMMERCIAL', '8' => 'ROLE_ADVISER', '9' => 'ROLE_WORKSHOP', '10' => 'ROLE_USER');
 
 
-    public static $countries = array('1' => 'spain', '3' => 'france', '4' => 'portugal', '5' => 'england', '6' => 'ireland');
+    public static $countries = array('1' => 'spain', '3' => 'france', '4' => 'portugal', '5' => 'uk', '6' => 'ireland');
 
     public static $languages = array('1' => 'es', '2' => 'en', '3' => 'fr', '4' => 'pt');
 

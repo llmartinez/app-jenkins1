@@ -11,7 +11,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request, $_locale=null)
     {
         if($_locale == null) {
-            $lc = $this->get('locale')->getDefaultLocale($request);
+            $lc = $this->get('locale')->getDefaultLocale($this, $request);
             return $this->redirect($this->generateUrl('index', array('_locale' => $lc) ));
         }
 

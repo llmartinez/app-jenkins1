@@ -1,9 +1,8 @@
 {% extends '::layout.html.twig' %}
 {% set locale = app.request.locale %}
-{% set user = app.user %}
 
 {% block breadcrumbs %}
-    <li><a href="{{path("index")}}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
     <li><a href="{{path("users")}}">{{ 'users'|trans }}</a></li>
 {% endblock %}
 
@@ -12,47 +11,43 @@
         <div id="container">
 
             <h2>{{ 'users'|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
-            <ul>
-                <li><a href="{{ path("selectRole") }}">{{ 'user_new'|trans }}</a></li>
-            </ul>
-
+            <ul><li><a href="{{ path("selectRole") }}">{{ 'user_new'|trans }}</a></li></ul>
             <div>
-            <table>
-                <thead><tr>
-                {# sorting of properties based on query components #}
-                   <th{% if pagination.isSorted('u.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 'u.id') }}</th>
-                   <th{% if pagination.isSorted('u.RoleId')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'role'|trans, 'u.RoleId') }}</th>
-                   <th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Username'|trans,'u.username')}}</th>
-                   <th{% if pagination.isSorted('u.email1')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Email'|trans,'u.email1') }}</th>
-                   <th{% if pagination.isSorted('u.phoneNumber1') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Phone'|trans,'u.phoneNumber1') }}</th>
-                </tr></thead>
-                <tbody>
-                    {% for row in pagination %}
-                    <tr {% if loop.index is odd %}class="color"{% endif %}>
-                        <td>{{ row.id }}</td>
-                        <td>{{ roles[row.RoleId]|trans }}</td>
-                        <td>{{ row.username }}</td>
-                        <td>{{ row.email1 }}</td>
-                        <td>{{ row.email2 }}</td>
-                        <td>{{ row.phoneNumber1 }}</td>
-                        <td>{{ row.phoneNumber2 }}</td>
-                        <td>{{ row.mobileNumber1 }}</td>
-                        <td>{{ row.mobileNumber2 }}</td>
-                        <td>{{ row.fax }}</td>
-                        <td>{{ row.region }}</td>
-                        <td>{{ row.city }}</td>
-                        <td>{{ row.address }}</td>
-                        <td>{{ row.postalCode }}</td>
-                        <td><a href="{{ path("userEdit", {id: row.id})}}">Edit</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <table>
+                    <thead><tr>
+                    {# sorting of properties based on query components #}
+                       <th{% if pagination.isSorted('u.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 'u.id') }}</th>
+                       <th{% if pagination.isSorted('u.RoleId')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'role'|trans, 'u.RoleId') }}</th>
+                       <th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Username'|trans,'u.username')}}</th>
+                       <th{% if pagination.isSorted('u.email1')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Email'|trans,'u.email1') }}</th>
+                       <th{% if pagination.isSorted('u.phoneNumber1') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Phone'|trans,'u.phoneNumber1') }}</th>
+                    </tr></thead>
+                    <tbody>
+                        {% for row in pagination %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td>{{ row.id }}</td>
+                            <td>{{ roles[row.RoleId]|trans }}</td>
+                            <td>{{ row.username }}</td>
+                            <td>{{ row.email1 }}</td>
+                            <td>{{ row.email2 }}</td>
+                            <td>{{ row.phoneNumber1 }}</td>
+                            <td>{{ row.phoneNumber2 }}</td>
+                            <td>{{ row.mobileNumber1 }}</td>
+                            <td>{{ row.mobileNumber2 }}</td>
+                            <td>{{ row.fax }}</td>
+                            <td>{{ row.region }}</td>
+                            <td>{{ row.city }}</td>
+                            <td>{{ row.address }}</td>
+                            <td>{{ row.postalCode }}</td>
+                            <td><a href="{{ path("userEdit", {id: row.id})}}">Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-            <div>
-                {{ knp_pagination_render(pagination) }}
-            </div>
-            
+                <div>
+                    {{ knp_pagination_render(pagination) }}
+                </div>
             </div>
         </div>
     </div>

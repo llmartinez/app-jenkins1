@@ -1,7 +1,8 @@
 {% extends '::layout.html.twig' %}
+{% set locale = app.request.locale %}
 
 {% block breadcrumbs %}
-    <li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
     <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
     <li><a href="{{ path("userNew") }}">{{ 'user'|trans }} {{ roles[role_id]|trans }}</a></li>
@@ -14,9 +15,9 @@
 
 		{{ form_rest(form) }}
 
-		{% if formE is defined %} {{ form_rest(formE) }}{% endif %}
+		{% if formE is defined %}{{ form_rest(formE) }}{% endif %}
 		
-        <button type="submit" class="btn btn-primary">{{ "submit" | trans }}</button>
+        <button type="submit" class="btn btn-primary">{{ "Submit" | trans }}</button>
     </form>
 
 {% endblock %}

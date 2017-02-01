@@ -85,7 +85,7 @@ date.year: "Año"
 ticket_list: "Listado de Tickets"
 ticket_new: "Nuevo ticket"
 ticket_edit: "Editar ticket"
-ticket_delete: "Delete ticket"
+ticket_delete: "Borrar ticket"
 
 #PARTNER
 partner: "Socio"

@@ -26,7 +26,7 @@ spain: "Espagne"
 france: "France"
 portugal: "Portugal"
 ireland: "Irlande"
-england: "Royaume-Uni"
+uk: "Royaume-Uni"
 # andorra: "Andorre"
 # british_isles: "Îles britanniques"
 
@@ -95,7 +95,7 @@ date.year: "Année"
 ticket_list: "Liste des tickets"
 ticket_new: "Nouveau ticket"
 ticket_edit: "Éditer ticket"
-ticket_delete: "Delete ticket"
+ticket_delete: "Effacer ticket"
 
 #PARTNER
 partner: "Distributeur"

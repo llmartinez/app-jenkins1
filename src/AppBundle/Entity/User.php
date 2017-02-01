@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="username", message="error_username_repeated")
+ * @UniqueEntity(fields="token", message="error_token_repeated")
  */
 class User implements UserInterface, AdvancedUserInterface, \Serializable
 {
@@ -80,6 +81,11 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     private $salt;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     */
+    private $token;
 
     /**
      * @ORM\Column(type="string", length=60)
@@ -351,6 +357,18 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     public function getSalt()
     {
         return $this->salt;
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     public function setEmail1($email1)
