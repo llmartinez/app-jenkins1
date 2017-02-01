@@ -36,11 +36,9 @@
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
                                                                                                             {% trans %} menu.list_partners      {% endtrans %}</a>
 
-            {% if id_catserv != 3 %}
                 <a class="btn-menu" id="shop_list"          href="{{ path("shop_list"               ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                             {% trans %} menu.list_shops        {% endtrans %}</a>
-            {% endif %}
 
             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
@@ -116,11 +114,10 @@
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
                                                                                                 {% trans %} menu.list_partners   {% endtrans %}</a>
         {% endif %} #}
-        {% if id_catserv != 3 %}
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
                                                                                                 {% trans %} menu.list_shops         {% endtrans %}</a>
-        {% endif %}
+                                                                                                
             <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                 {% trans %} menu.list_workshops         {% endtrans %}</a>
