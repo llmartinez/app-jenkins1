@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+{% if app.security.getToken().getUser() is defined and app.security.getToken().getUser() == 'anon.' %}
+    <script>window.open('{{ path("_login") }}', '_self'); </script>
+{% else %}
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>{% block title %}{% trans %}There was an error{% endtrans %}{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/util/css/style.css') }}">
+            <link rel="stylesheet" href="{{ asset('bundles/util/css/bootstrap.css') }}">
+        {% endblock %}
+        {% block favicon %}<link rel="shortcut icon" href="{{ asset('bundles/cms/images/error/mygarageweb.ico') }}" type="image/x-icon"/>{% endblock %}
+    </head>
+  <body id="MainBody">
+
+        {% block header %}
+            <div class="MainHeader">
+                <div class="span4 offset2">
+                </div>
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="span4 offset2">
+                            <!-- header -->
+                            <table width="100%" border="0">
+                                <tr>
+                                    <td align="left"><img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"></td>
+                                    <td align="right"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        <div id="MainContent" style="text-align: center">
+            {% block titleException %}{% endblock %}
+            {% block exception %}{% endblock %}
+        </div>
+
+        <footer id="MainFooter">
+            {% block footer %}
+                {% include '::footer.html.twig'%}
+            {% endblock %}
+        </footer>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+{% endif %}
+</html>
