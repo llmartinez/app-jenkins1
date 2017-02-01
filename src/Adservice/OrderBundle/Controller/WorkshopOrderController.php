@@ -1015,12 +1015,17 @@ class WorkshopOrderController extends Controller {
         }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
-            $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $new_date = new \DateTime(\date("Y-m-d H:i:s"));
+            $workshop->setLowdateAt($new_date);
             $workshop->setActive(false);
-
+            
             $action = $workshopOrder->getWantedAction();
             $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop->setActive($workshop->getActive());
+            if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
+                $workshop->setEndTestAt($new_date);
+                $workshop->setTest(0);
+            }
             $em->persist($user_workshop);
             $em->flush();
             $em->remove($workshopOrder);
