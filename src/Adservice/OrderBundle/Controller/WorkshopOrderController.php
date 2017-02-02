@@ -181,7 +181,7 @@ class WorkshopOrderController extends Controller {
         }
 
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+        if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner, $workshopOrder->getCodeWorkshop()); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
         else                  $code = 0;
 
         $request = $this->getRequest();
@@ -218,7 +218,7 @@ class WorkshopOrderController extends Controller {
             // $id_partner = $request->request->get('partner');
             // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
-            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+            $code = UtilController::getCodeWorkshopUnused($em, $partner, $workshopOrder->getCodeWorkshop());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                 and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
@@ -914,7 +914,7 @@ class WorkshopOrderController extends Controller {
         if(isset($find))$codeWorkshop = $find->getCodeWorkshop();
         else            $codeWorkshop = " ";
         if($find){
-            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner(), $workshopOrder->getCodeWorkshop());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
             $flash .= $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
         }
         if($findPhone[0]['1']>0){

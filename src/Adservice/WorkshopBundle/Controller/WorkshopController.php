@@ -180,8 +180,9 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
-            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
-            
+
+            $code = UtilController::getCodeWorkshopUnused($em, $partner, $workshop->getCodeWorkshop());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
+
             $workshop->setActive(1);
             /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
             $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
