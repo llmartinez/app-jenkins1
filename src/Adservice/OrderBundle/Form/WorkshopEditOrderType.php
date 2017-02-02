@@ -64,7 +64,7 @@ class WorkshopEditOrderType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
         ;
-        if($id_catserv != ' = 3'){
+        
           $builder
             ->add('shop', 'entity', array(
                   'required' => false,
@@ -81,7 +81,7 @@ class WorkshopEditOrderType extends AbstractType
 
             ->add('ad_service_plus', 'checkbox', array('required' => false))
           ;
-        }
+        
     }
 
     public function getName()
