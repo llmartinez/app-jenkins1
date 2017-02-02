@@ -60,10 +60,12 @@ class WorkshopController extends Controller {
             $params[] = array('category_service', ' = '.$catserv.' ');
         }
 
-        if ($security->isGranted('ROLE_ADMIN')) {
-
+        if ($security->isGranted('ROLE_ADMIN') ) {
+            
             $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
-             if ($catser != '0')
+             
+             
+            if(!$security->isGranted('ROLE_SUPER_ADMIN'))
                 $params[] = array('category_service', ' = ' . $catser->getId());
 
             if ($partner != '0')

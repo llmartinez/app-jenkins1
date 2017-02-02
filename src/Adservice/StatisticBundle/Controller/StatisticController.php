@@ -187,7 +187,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -195,8 +195,10 @@ class StatisticController extends Controller {
                 ->leftJoin('w.typology', 'ty')
                 ->orderBy('w.id');
 
-            if     ($status == "open"  ) $qb = $qb->andWhere('s.name = :status')->setParameter('status', 'open');
-            elseif ($status == "closed") $qb = $qb->andWhere('s.name = :status')->setParameter('status', 'closed');
+            if     ($status == "open"  ) $qb = $qb->andWhere('w.active = 1');
+            elseif ($status == "closed") $qb = $qb->andWhere('s.name = 0');
+            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks IS NOT NULL');
+            elseif ($status == "infotech") $qb = $qb->andWhere('w.infotech IS NOT NULL');
 
             if ($partner  != "0") $qb = $qb->andWhere('w.id != 0')->andWhere('p.id = :partner')->setParameter('partner', $partner);
 
@@ -246,6 +248,8 @@ class StatisticController extends Controller {
                                         'endtest_at'     => $res['endtest_at'],
                                         'status'         => $res['active'],
                                         'test'           => $res['test'],
+                                        'numchecks'      => $res['numchecks'],
+                                        'infotech'       => $res['infotech'],
                                         'update'         => '0',
                                         'lowdate'        => '0',
                                         'test'           => '0'
@@ -1745,14 +1749,12 @@ class StatisticController extends Controller {
         $excel =
             $trans->trans('code_partner').';'.
             $trans->trans('code_workshop').';'.
-            $trans->trans('workshop').';';
-            /*$trans->trans('partner').';'.
+            $trans->trans('workshop').';'.
+            $trans->trans('partner').';'.
             $trans->trans('typology').';'.
             $trans->trans('shop').';'.
             $trans->trans('email_1').';'.
-            $trans->trans('phone_number_1').';';*/
-
-        $res = reset($results); // Primer elemento del array
+            $trans->trans('phone_number_1').';';
 
         if($raport == 'billing')
         {
@@ -1772,6 +1774,8 @@ class StatisticController extends Controller {
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
             $trans->trans('endtest').';'.
+            $trans->trans('haschecks').';'.
+            $trans->trans('infotech').';'.
             "\n";
 
         foreach ($results as $row) {
@@ -1780,11 +1784,11 @@ class StatisticController extends Controller {
             if(isset($row['code_partner'  ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_partner'  ]).';'; else $excel.='-;';
             if(isset($row['code_workshop' ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_workshop' ]).';'; else $excel.='-;';
             if(isset($row['wname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['wname'         ]).';'; else $excel.='-;';
-            /*if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
+            if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
             if(isset($row['tyname'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['tyname'        ]).';'; else $excel.='-;';
             if(isset($row['sname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['sname'         ]).';'; else $excel.='-;';
             if(isset($row['email_1'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['email_1'       ]).';'; else $excel.='-;';
-            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';*/
+            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';
             if($raport == 'billing')
             {
                 if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
@@ -1802,9 +1806,11 @@ class StatisticController extends Controller {
                 }
                 if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
             }
-            if(isset($row['update_at'     ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
-            if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
-            if(isset($row['endtest_at'    ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['update_at'  ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['lowdate_at' ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
+            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';       
+            if(isset($row['numchecks' ]) and $row['numchecks'] != null ) $excel.=$row['numchecks'].';'; else $excel.=' ;';
+            if(isset($row['infotech'   ])) $excel.=$row['infotech'].';'; else $excel.=' ;';       
             $excel.="\n";
         }
         $excel = nl2br($excel);
