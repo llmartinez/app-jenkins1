@@ -60,9 +60,14 @@ class WorkshopController extends Controller {
             $params[] = array('category_service', ' = '.$catserv.' ');
         }
 
-        if ($security->isGranted('ROLE_ADMIN')) {
-
+        if ($security->isGranted('ROLE_ADMIN') ) {
+            
             $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+             
+             
+            if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+                $params[] = array('category_service', ' = ' . $catser->getId());
+
             if ($partner != '0')
                 $params[] = array('partner', ' = ' . $partner);
 
@@ -175,166 +180,166 @@ class WorkshopController extends Controller {
             $form->bindRequest($request);
 
             $partner = $workshop->getPartner();
-            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
-            if ($form->isValid()) {
-                $workshop->setActive(1);
-                /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
-                    'code_workshop' => $workshop->getCodeWorkshop()));
-                $findPhone = array(0, 0, 0, 0);
-                if ($workshop->getPhoneNumber1() != null) {
-                    $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber1());
+            $code = UtilController::getCodeWorkshopUnused($em, $partner, $workshop->getCodeWorkshop());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
+
+            $workshop->setActive(1);
+            /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
+            $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
+                'code_workshop' => $workshop->getCodeWorkshop()));
+            $findPhone = array(0, 0, 0, 0);
+            if ($workshop->getPhoneNumber1() != null) {
+                $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber1());
+            }
+            if ($workshop->getPhoneNumber2() != null) {
+                $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber2());
+            }
+            if ($workshop->getMobileNumber1() != null) {
+                $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMobileNumber1());
+            }
+            if ($workshop->getMobileNumber2() != null) {
+                $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMobileNumber2());
+            }
+
+            if ($find == null and $findPhone[0]['1'] < 1 and $findPhone[1]['1'] < 1 and $findPhone[2]['1'] < 1 and $findPhone[3]['1'] < 1) {
+                $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
+                $workshop = UtilController::settersContact($workshop, $workshop);
+                $workshop->setCodePartner($partner->getCodePartner());
+                $workshop->setCodeWorkshop($code);
+                $workshop->setCategoryService($partner->getCategoryService());
+
+                if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
+                if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+
+                if($workshop->getActive() == true) {
+                    $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+                }else{
+                    $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
                 }
-                if ($workshop->getPhoneNumber2() != null) {
-                    $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber2());
+                $this->saveWorkshop($em, $workshop);
+                $status = 3; // 3 para primera alta
+                if($workshop->getTest()){
+                    $status = 2;
                 }
-                if ($workshop->getMobileNumber1() != null) {
-                    $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMobileNumber1());
+                UtilController::createHistorical($em, $workshop, $status);
+                //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
+                if ($workshop->getAdServicePlus()) {
+                    $adsplus = new ADSPlus();
+                    $adsplus->setIdTallerADS($workshop->getID());
+                    $dateI = new \DateTime('now');
+                    $dateF = new \DateTime('+2 year');
+                    $adsplus->setAltaInicial($dateI->format('Y-m-d'));
+                    $adsplus->setUltAlta($dateI->format('Y-m-d'));
+                    $adsplus->setBaja($dateF->format('Y-m-d'));
+                    $adsplus->setContador(0);
+                    $adsplus->setActive(1);
+
+                    $em->persist($adsplus);
+                    $em->flush();
                 }
-                if ($workshop->getMobileNumber2() != null) {
-                    $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getMobileNumber2());
-                }
 
-                if ($find == null and $findPhone[0]['1'] < 1 and $findPhone[1]['1'] < 1 and $findPhone[2]['1'] < 1 and $findPhone[3]['1'] < 1) {
-                    $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
-                    $workshop = UtilController::settersContact($workshop, $workshop);
-                    $workshop->setCodePartner($partner->getCodePartner());
-                    $workshop->setCodeWorkshop($code);
-                    $workshop->setCategoryService($partner->getCategoryService());
+                /* CREAR USERNAME Y EVITAR REPETICIONES */
+                $username = UtilController::getUsernameUnused($em, $workshop->getName());
 
-                    if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
-                    if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
+                /* CREAR PASSWORD AUTOMATICAMENTE */
+                $pass = substr(md5(microtime()), 1, 8);
 
-                    if($workshop->getActive() == true) {
-                        $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-                    }else{
-                        $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
-                    }
-                    $this->saveWorkshop($em, $workshop);
-                    $status = 3; // 3 para primera alta
-                    if($workshop->getTest()){
-                        $status = 2;
-                    }
-                    UtilController::createHistorical($em, $workshop, $status);
-                    //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
-                    if ($workshop->getAdServicePlus()) {
-                        $adsplus = new ADSPlus();
-                        $adsplus->setIdTallerADS($workshop->getID());
-                        $dateI = new \DateTime('now');
-                        $dateF = new \DateTime('+2 year');
-                        $adsplus->setAltaInicial($dateI->format('Y-m-d'));
-                        $adsplus->setUltAlta($dateI->format('Y-m-d'));
-                        $adsplus->setBaja($dateF->format('Y-m-d'));
-                        $adsplus->setContador(0);
-                        $adsplus->setActive(1);
+                $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
+                $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
 
-                        $em->persist($adsplus);
-                        $em->flush();
-                    }
+                $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                $newUser->setUsername($username);
+                $newUser->setPassword($pass);
+                $newUser->setName($workshop->getContact());
+                $newUser->setSurname($workshop->getName());
+                $newUser->setActive('1');
+                $newUser->setCreatedBy($workshop->getCreatedBy());
+                $newUser->setCreatedAt(new \DateTime());
+                $newUser->setModifiedBy($workshop->getCreatedBy());
+                $newUser->setModifiedAt(new \DateTime());
+                $newUser->setLanguage($lang);
+                $newUser->setWorkshop($workshop);
+                $newUser->addRole($role);
+                $newUser->setCategoryService($partner->getCategoryService());
 
-                    /* CREAR USERNAME Y EVITAR REPETICIONES */
-                    $username = UtilController::getUsernameUnused($em, $workshop->getName());
+                $newUser = UtilController::settersContact($newUser, $workshop);
 
-                    /* CREAR PASSWORD AUTOMATICAMENTE */
-                    $pass = substr(md5(microtime()), 1, 8);
+                //ad-service +
+                //password nuevo, se codifica con el nuevo salt
+                $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
+                $salt = md5(time());
+                $password = $encoder->encodePassword($newUser->getPassword(), $salt);
+                $newUser->setPassword($password);
+                $newUser->setSalt($salt);
 
-                    $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
-                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+                //Asignamos un Token para AD360
+                $token = UtilController::getRandomToken();
+                $newUser->setToken($token);
 
-                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
-                    $newUser->setUsername($username);
-                    $newUser->setPassword($pass);
-                    $newUser->setName($workshop->getContact());
-                    $newUser->setSurname($workshop->getName());
-                    $newUser->setActive('1');
-                    $newUser->setCreatedBy($workshop->getCreatedBy());
-                    $newUser->setCreatedAt(new \DateTime());
-                    $newUser->setModifiedBy($workshop->getCreatedBy());
-                    $newUser->setModifiedAt(new \DateTime());
-                    $newUser->setLanguage($lang);
-                    $newUser->setWorkshop($workshop);
-                    $newUser->addRole($role);
-                    $newUser->setCategoryService($partner->getCategoryService());
+                UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
-                    $newUser = UtilController::settersContact($newUser, $workshop);
+                //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
-                    //ad-service +
-                    //password nuevo, se codifica con el nuevo salt
-                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($newUser);
-                    $salt = md5(time());
-                    $password = $encoder->encodePassword($newUser->getPassword(), $salt);
-                    $newUser->setPassword($password);
-                    $newUser->setSalt($salt);
+                $mail = $newUser->getEmail1();
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
 
-                    //Asignamos un Token para AD360
-                    $token = UtilController::getRandomToken();
-                    $newUser->setToken($token);
+                    /* Cambiamos el locale para enviar el mail en el idioma del taller */
+                    $locale = $request->getLocale();
+                    $lang_u = $newUser->getCountry()->getLang();
+                    $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
+                    $request->setLocale($lang->getShortName());
 
-                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+                    /* MAILING */
+                    $mailerUser = $this->get('cms.mailer');
+                    $mailerUser->setTo($mail);
+                    $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject') . $newUser->getWorkshop());
+                    $mailerUser->setFrom('noreply@adserviceticketing.com');
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
+                    $mailerUser->sendMailToSpool();
+                    //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
-                    //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
-
-                    $mail = $newUser->getEmail1();
+                    // Enviamos un mail con la solicitud a modo de backup
+                    $mail = $this->container->getParameter('mail_db');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 
-                        /* Cambiamos el locale para enviar el mail en el idioma del taller */
-                        $locale = $request->getLocale();
-                        $lang_u = $newUser->getCountry()->getLang();
-                        $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
-                        $request->setLocale($lang->getShortName());
-
-                        /* MAILING */
-                        $mailerUser = $this->get('cms.mailer');
                         $mailerUser->setTo($mail);
-                        $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject') . $newUser->getWorkshop());
-                        $mailerUser->setFrom('noreply@adserviceticketing.com');
-                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass, '__locale' => $locale)));
                         $mailerUser->sendMailToSpool();
-                        //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
-
-                        // Enviamos un mail con la solicitud a modo de backup
-                        $mail = $this->container->getParameter('mail_db');
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-
-                            $mailerUser->setTo($mail);
-                            $mailerUser->sendMailToSpool();
-                        }
-
-                        /* Dejamos el locale tal y como estaba */
-                        $request->setLocale($locale);
                     }
 
-                    $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username . ' ' . $this->get('translator')->trans('with_password') . ': ' . $pass;
-                    $this->get('session')->setFlash('alert', $flash);
-
-                    return $this->redirect($this->generateUrl('workshop_list'));
-                } else {
-
-                    if ($findPhone[0]['1'] > 0) {
-                        $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber1()
-                                . ' -> ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber1());
-                    } else if ($findPhone[1]['1'] > 0) {
-                        $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber2()
-                                . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2());
-                    } else if ($findPhone[2]['1'] > 0) {
-                        $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber1()
-                                . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber1());
-                    } else if ($findPhone[3]['1'] > 0) {
-                        $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber2()
-                                . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2());
-                    } else {
-                        $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
-                    }
-                    $this->get('session')->setFlash('error', $flash);
+                    /* Dejamos el locale tal y como estaba */
+                    $request->setLocale($locale);
                 }
+
+                $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username . ' ' . $this->get('translator')->trans('with_password') . ': ' . $pass;
+                $this->get('session')->setFlash('alert', $flash);
+
+                return $this->redirect($this->generateUrl('workshop_list'));
+            } else {
+
+                if ($findPhone[0]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber1()
+                            . ' -> ' . $this->get('translator')->trans('workshop')
+                            . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber1());
+                } else if ($findPhone[1]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber2()
+                            . ' - ' . $this->get('translator')->trans('workshop')
+                            . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2());
+                } else if ($findPhone[2]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber1()
+                            . ' - ' . $this->get('translator')->trans('workshop')
+                            . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber1());
+                } else if ($findPhone[3]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber2()
+                            . ' - ' . $this->get('translator')->trans('workshop')
+                            . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2());
+                } else {
+                    $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
+                }
+                $this->get('session')->setFlash('error', $flash);
             }
+            
         }
 
         if ($security->isGranted('ROLE_SUPER_ADMIN')){

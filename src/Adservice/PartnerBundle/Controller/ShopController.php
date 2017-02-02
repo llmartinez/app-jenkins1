@@ -55,6 +55,11 @@ class ShopController extends Controller {
             if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
             if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
+        elseif( $security->isGranted('ROLE_ADMIN')){
+            if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
+            if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
+            $params[] = array('category_service', ' = '.$catser);
+        }
         else {
             $params[] = array('category_service', ' = '.$catser);
             $params[] = array('country', ' = '.$country);
@@ -138,9 +143,9 @@ class ShopController extends Controller {
         $form    = $this->createForm(new ShopType(), $shop);
 
         if ($request->getMethod() == 'POST') {
-
+            
             $form->bindRequest($request);
-
+          
             if ($form->isValid()) {
                 if($shop->getCategoryService() == null){
                     $shop->setCategoryService($security->getToken()->getUser()->getCategoryService());
