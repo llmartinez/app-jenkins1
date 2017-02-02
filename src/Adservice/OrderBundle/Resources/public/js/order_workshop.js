@@ -17,6 +17,7 @@
             $('#workshopOrder_newOrder_partner').empty();
 
             $('#partners option').appendTo("#workshopOrder_newOrder_partner");
+             populate_shop(id_partner);
         }else{
             $('form').find('select[name*=partner]').val(id_partner);
         }

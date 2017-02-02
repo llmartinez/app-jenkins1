@@ -3,18 +3,20 @@
 
     {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
 
-    {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
-    {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
+    {% if user_catserv is defined and user_catserv != '' and user_catserv != null %}
+        {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
+        {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
+    {% endif %}
 
 {% if id is defined and id != "" %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %} #}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
 
-                {% if user_catserv.getDis() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/{{id}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if user_catserv.getVts() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getVts() != null %}
                             <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
@@ -23,10 +25,10 @@
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if user_catserv.getDis() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/model-{{model}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if user_catserv.getVts() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getVts() != null %}
                     <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
@@ -35,10 +37,10 @@
         <div {# {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{% trans %} app {% endtrans %}</legend>
-                {% if user_catserv.getDis() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
-                {% if user_catserv.getVts() != null %}
+                {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getVts() != null %}
                     <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
