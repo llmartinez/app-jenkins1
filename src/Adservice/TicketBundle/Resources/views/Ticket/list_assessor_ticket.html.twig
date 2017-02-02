@@ -98,9 +98,9 @@
                         {% if ticket.status == 'open' %}
 
                             {% if ticket.inactive == 1 %}
-                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.opt.inactive'|trans }}" alt="{{'ticket.opt.inactive'|trans }}"></td>
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.opt.inactive'|trans }}" alt="{{'ticket.opt.inactive'|trans }}">
                             {% elseif ticket.assignedTo == null %}
-                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}"></td>
+                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}">
                             {% else %}
                                 {% if ticket.pending == 1 %}
                                     {% if is_granted('ROLE_ASSESSOR') %}
