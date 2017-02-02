@@ -209,8 +209,8 @@ class PartnerController extends Controller {
      */
     public function editPartnerAction($partner){
         $security = $this->get('security.context');
-        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $partner->getCountry()->getId()) === false)
-        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
+        if ((!$security->isGranted('ROLE_SUPER_ADMIN'))        and 
+            (($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCategoryService()->getId() == $partner->getCategoryService()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 

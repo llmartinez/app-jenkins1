@@ -144,10 +144,19 @@ class UtilController extends Controller
      * @param  Partner       $partner
      * @return integer
      */
-    public static function getCodeWorkshopUnused($em, $partner)
+    public static function getCodeWorkshopUnused($em, $partner, $code_workshop=null)
     {
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
+
+        if($code_workshop != null )
+        {
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code_workshop));
+            if($find == null) {
+                $unused = 'unused';
+                $code   = $code_workshop;
+            }
+        }
 
         while($unused != 'unused') {
             $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
