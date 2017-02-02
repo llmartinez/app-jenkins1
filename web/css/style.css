@@ -7,7 +7,19 @@
 
 h1 { color: #0FF; }
 
+/* Forms validation */
+/*
+	input.invalid, textarea.invalid {
+		border: 2px solid red;
+	}
+
+	input.valid, textarea.valid {
+		border: 1px solid #aaa;
+	}
+*/
+
 /* DataTable */
+/*
 	#datatable,
 	#datatable-rows { display:none; }
 	.dataTable { display:table!important; }
@@ -20,3 +32,4 @@ h1 { color: #0FF; }
 	#list-rows label a {
 		font-size: 17px;
 	}
+*/

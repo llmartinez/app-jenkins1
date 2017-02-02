@@ -44,6 +44,8 @@ password_repeat: "Répétition du mot de passe"
 Submit: "Envoyer"
 search: "Rechercher"
 All: "Tous"
+SelectValue: "Sélectionner la valeur"
+searchId: "Chercher par ID"
 
 # DATATABLE
 loading: "Chargement..."

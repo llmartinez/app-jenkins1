@@ -11,13 +11,13 @@
 {% block body %}
 	<h2>{{ 'user'|trans }} {{ roles[role_id]|trans }}</h2>
 
-	<form action="{{form.vars.action}}" method="{{form.vars.method}}" >
+	<form action="{{form.vars.action}}" method="{{form.vars.method}}" onsubmit="event.preventDefault();">
 
 		{{ form_rest(form) }}
 
 		{% if formE is defined %}{{ form_rest(formE) }}{% endif %}
 		
-        <button type="submit" class="btn btn-primary">{{ "Submit" | trans }}</button>
+        <button type="submit">{{ "Submit" | trans }}</button>
     </form>
 
 {% endblock %}

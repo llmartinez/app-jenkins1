@@ -45,6 +45,7 @@ Submit: "Submit"
 search: "Search"
 All: "All"
 SelectValue: "Select value"
+searchId: "Search ID"
 
 # USER
 user: "User"

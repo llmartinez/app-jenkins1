@@ -45,6 +45,7 @@ Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
 SelectValue: "Selecciona valor"
+searchId: "Buscar ID"
 
 # USER
 user: "Usuario"

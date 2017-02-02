@@ -48,14 +48,14 @@ class UserController extends Controller
     public function userNewAction(Request $request, $role_id=null)
     {
         // Si no hay rol redirige a la funcion de selección de rol para el nuevo usuario
-        if($role_id == null) return $this->redirect($this->generateUrl('selectRole'));
+        if($role_id == null) return $this->redirectToRoute('selectRole');
         
         $return = $this->get('utilsUser')->newUser($this, $request, $role_id);
 
         if($return)
             return $this->render('user/user.html.twig', $return);
         else
-            return $this->redirect($this->generateUrl('users'));
+            return $this->redirectToRoute('users');
     }
     /*
      * @ParamConverter("user", class="AppBundle:User")
@@ -67,6 +67,21 @@ class UserController extends Controller
         if($return)
             return $this->render('user/user.html.twig', $return);
         else
-            return $this->redirect($this->generateUrl('users'));
+            return $this->redirectToRoute('users');
+    }
+
+    /*
+     * @ParamConverter("user", class="AppBundle:User")
+     * @throws AccessDeniedException
+     */
+    public function searchIdAction(User $user)
+    {
+        $service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService();
+
+        if( $service == NULL or $service == $user->getCategoryService()) 
+        {
+            return $this->redirectToRoute('userEdit', array('id' => $user->getId() ));
+        }
+        else throw new AccessDeniedException();
     }
 }

@@ -44,6 +44,8 @@ password_repeat: "Repetir palavra-passe"
 Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
+SelectValue: "Escolha um valor"
+searchId: "Procura ID"
 
 # DATATABLE
 loading: "Carregando..."
