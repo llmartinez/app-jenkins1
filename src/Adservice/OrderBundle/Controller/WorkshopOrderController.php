@@ -470,9 +470,12 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                // Si hay diferencias crea la solicitud de modificación, sino no hace nada
+            $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
+            if($idShop != null){
+                $shop = $em->getRepository('PartnerBundle:Shop')->find($idShop);
+                $workshopOrder->setShop($shop);
+            }
+            
                 if( $this::existsDiffInOrder($workshop, $workshopOrder) )
                 {
                     if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
@@ -498,8 +501,7 @@ class WorkshopOrderController extends Controller {
                         if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
                         // Set default shop to NULL
-                        if ($catserv != 3 ) $shop = $form['shop']->getClientData();
-                        else                $shop = 0;
+                        $shop = $form['shop']->getClientData();                        
                         if($shop == 0) { $workshopOrder->setShop(null); }
 
                         $workshopOrder->setCategoryService($user->getCategoryService());
@@ -553,14 +555,19 @@ class WorkshopOrderController extends Controller {
                     // Si no hay cambios en la solicitud, volvemos al listado de talleres
                     return $this->redirect($this->generateUrl('workshopOrder_listWorkshops'));
                 }
-            }
+            
         }
         $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
-        
+        if($workshop->getShop() != null){
+            $id_shop = $workshop->getShop()->getId();
+        }
+        else
+            $id_shop = 0;
         $token = $user->getToken();
         return $this->render('OrderBundle:WorkshopOrders:edit_order.html.twig', array( 'workshopOrder' => $workshopOrder,
                                                                                        'workshop'      => $workshop,
                                                                                        'token'         => $token,
+                                                                                       'id_shop'       => $id_shop,    
                                                                                        'id_partner'    => $id_partner,              //old values
                                                                                        'form_name'     => $form->getName(),         //new values
                                                                                        'form'          => $form->createView()));
