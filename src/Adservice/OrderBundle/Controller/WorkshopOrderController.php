@@ -388,6 +388,7 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
+        
         if($user->getCategoryService() != null) {
             if($user->getCategoryService()->getId() != $workshop->getCategoryService()->getId()) {
                 throw new AccessDeniedException();
@@ -399,8 +400,8 @@ class WorkshopOrderController extends Controller {
             // SUPER_AD
             if ($security->isGranted('ROLE_SUPER_AD'))
             {
-                if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
-                throw new AccessDeniedException();
+                //if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
+                //throw new AccessDeniedException();
             }
             // AD
             else{
@@ -408,7 +409,7 @@ class WorkshopOrderController extends Controller {
                 throw new AccessDeniedException();
             }
         }
-
+        
         if ((($security->isGranted('ROLE_AD') and $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -554,8 +555,8 @@ class WorkshopOrderController extends Controller {
                 }
             }
         }
-
         $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+        
         $token = $user->getToken();
         return $this->render('OrderBundle:WorkshopOrders:edit_order.html.twig', array( 'workshopOrder' => $workshopOrder,
                                                                                        'workshop'      => $workshop,
