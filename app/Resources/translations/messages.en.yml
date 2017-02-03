@@ -45,6 +45,7 @@ Submit: "Submit"
 search: "Search"
 All: "All"
 SelectValue: "Select value"
+searchId: "Search ID"
 
 # USER
 user: "User"
@@ -88,10 +89,10 @@ ticket_edit: "Edit ticket"
 ticket_delete: "Delete ticket"
 
 #PARTNER
-partner: "Partner"
+Partner: "Partner"
 
 #WORKSHOP
-workshop: "Workshop"
+Workshop: "Workshop"
 
 # HELP
 help: "Help"

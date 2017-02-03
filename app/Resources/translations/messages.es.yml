@@ -45,6 +45,7 @@ Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
 SelectValue: "Selecciona valor"
+searchId: "Buscar ID"
 
 # USER
 user: "Usuario"
@@ -88,10 +89,10 @@ ticket_edit: "Editar ticket"
 ticket_delete: "Borrar ticket"
 
 #PARTNER
-partner: "Socio"
+Partner: "Socio"
 
 #WORKSHOP
-workshop: "Taller"
+Workshop: "Taller"
 
 # HELP
 help: "Ayuda"
