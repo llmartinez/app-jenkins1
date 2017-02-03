@@ -1520,11 +1520,11 @@ class StatisticController extends Controller {
 
                       ->groupBy('e.id')
                       ->orderBy('e.id');
+
                       $qb = $qb->addSelect('count(t.id) as '.$nTickets.'');
                   }
-                  
-
-                  else {
+                  else
+                  {
                       $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
                       ->select($select)
