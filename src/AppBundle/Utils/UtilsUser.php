@@ -9,29 +9,34 @@ use AppBundle\Form\WorkshopType;
 
 class UtilsUser
 {
-    public static $rolesAdmin = array('3' => 'ROLE_ADMIN', '4' => 'ROLE_TOP', '5' => 'ROLE_SUPER_PARTNER',
-                                      '6' => 'ROLE_PARTNER', '7' => 'ROLE_COMMERCIAL', '8' => 'ROLE_ADVISER', '9' => 'ROLE_WORKSHOP');
-
-    public static $rolesPartner = array('7' => 'ROLE_COMMERCIAL');
-
-    public static $rolesCommercial = array('9' => 'ROLE_WORKSHOP');
-
     public static $status = array('0' => 'inactive', '1' => 'active', '2' => 'test');
-
-    public static function getRolesForAdmin() {
-        return self::$rolesAdmin;
-    }
-    
-    public static function getRolesForPartner() {
-        return self::$rolesPartner;
-    }
-    
-    public static function getRolesForCommercial() {
-        return self::$rolesCommercial;
-    }
 
     public static function getStatus() {
         return self::$status;
+    }
+
+    public static function findUsersByRole($em, $roles)
+    {
+        $query = $em->getRepository("AppBundle:User")
+                    ->createQueryBuilder("u")
+                    ->select("u");
+
+        if($roles != '')
+        {
+            $roles_in = '(0';
+            foreach ($roles as $key => $role)
+            {
+                $roles_in .= ', '.$key.' ';
+            }
+            $roles_in .= ')';
+
+            $query->where("u.roleId IN ".$roles_in." ");
+        }
+
+        // TODO: Get Users by filters
+        // if(isset($filter)) $query->where("u.".$filter." LIKE '%".$value."%'' ")
+
+        return $query;
     }
 
     public static function newUser($_this, $request, $role_id)

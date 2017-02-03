@@ -11,7 +11,7 @@
 {% block body %}
 	<h2>{{ 'user'|trans }} {{ roles[role_id]|trans }}</h2>
 
-	<form action="{{form.vars.action}}" method="{{form.vars.method}}" onsubmit="event.preventDefault();">
+	<form action="{{form.vars.action}}" method="{{form.vars.method}}">
 
 		{{ form_rest(form) }}
 

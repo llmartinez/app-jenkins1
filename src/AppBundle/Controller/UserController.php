@@ -18,6 +18,12 @@ class UserController extends Controller
     public function usersAction(Request $request, $page=1/*, $filter=0, $value=0*/)
     {
         $em = $this->getDoctrine()->getManager();
+
+        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
+        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
+        $roles = $this->get('utilsRole')->$getRolesFor();
+
+        $query = $this->get('utilsUser')->findUsersByRole($em, $roles);
         /*
             if($filter==0 && $value==0) $query = $em->getRepository('AppBundle:User')->findAll();
             else{
@@ -28,9 +34,8 @@ class UserController extends Controller
                         ->getQuery();
             }
         */
-        $query = $em->getRepository('AppBundle:User')->findAll();
         
-        $pagination = $this->get('knp_paginator')->paginate($query, $page, 10);
+        $pagination = $this->get('knp_paginator')->paginate($query->getQuery(), $page, 10);
 
         return $this->render('user/users.html.twig', array('pagination' => $pagination));
     }
@@ -38,9 +43,9 @@ class UserController extends Controller
     /** Selecciona el rol del usuario a crear */
     public function selectRoleAction(Request $request)
     {
-        if( $this->isGranted('ROLE_ADMIN') ) $roles = $this->get('utilsUser')->getRolesForAdmin();
-        elseif( $this->isGranted('ROLE_PARTNER') ) $roles = $this->get('utilsUser')->getRolesForPartner();
-        else $roles = null;
+        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
+        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
+        $roles = $this->get('utilsRole')->$getRolesFor();
 
         return $this->render('user/selectRole.html.twig', array('roles' => $roles));
     }
