@@ -7,8 +7,6 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-    utils:
-        class: AppBundle\Utils\Utils
     slugger:
         class: AppBundle\Utils\Slugger
     locale:
@@ -17,5 +15,9 @@ services:
         class: AppBundle\Utils\Export
     ticket:
         class: AppBundle\Utils\Ticket
+    utils:
+        class: AppBundle\Utils\Utils
     utilsUser:
         class: AppBundle\Utils\UtilsUser
+    utilsRole:
+        class: AppBundle\Utils\UtilsRole

@@ -11,7 +11,13 @@
         <div id="container">
 
             <h2>{{ 'users'|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
-            <ul><li><a href="{{ path("selectRole") }}">{{ 'user_new'|trans }}</a></li></ul>
+            <ul>
+                <li><a href="{{ path("selectRole") }}">{{ 'user_new'|trans }}</a></li>
+                <li>
+                    <input type="text" id="searchId" name="id" placeholder="{{ "searchId" | trans }}">
+                    <button type="submit" onclick="window.location.href ='{{ path("searchId") }}/'+$('#searchId').val(); ">{{ "Submit" | trans }}</button>
+                </li>
+            </ul>
             <div>
                 <table>
                     <thead><tr>

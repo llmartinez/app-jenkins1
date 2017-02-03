@@ -44,6 +44,8 @@ password_repeat: "Repetir palavra-passe"
 Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
+SelectValue: "Escolha um valor"
+searchId: "Procura ID"
 
 # DATATABLE
 loading: "Carregando..."
@@ -98,10 +100,10 @@ ticket_edit: "Editar Talão"
 ticket_delete: "Apagar Talão"
 
 #PARTNER
-partner: "Sócio"
+Partner: "Sócio"
 
 #WORKSHOP
-workshop: "Oficina"
+Workshop: "Oficina"
 
 #HELP
 help: "Ajuda"

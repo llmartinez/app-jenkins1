@@ -40,9 +40,14 @@ userDelete:
     path:  /users/user-delete/{id}
     defaults: { _controller: AppBundle:User:userDelete, id: null }
 
+searchId:
+    path:  /users/search-id/{id}
+    defaults: { _controller: AppBundle:User:searchId, id: null }
+
 users:
     path:  /users/{page}/{filter}/{value}
     defaults: { _controller: AppBundle:User:users, page: 1, filter: 0, value: 0 }
+
 
 # TICKET
 tickets:
