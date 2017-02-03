@@ -109,7 +109,8 @@ class StatisticController extends Controller {
         $params = array();
         $joins  = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($security->isGranted('ROLE_SUPER_ADMIN'))
+        {
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
@@ -120,7 +121,11 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-        }else{
+        }
+        else
+        { 
+            if($security->isGranted('ROLE_AD') && !$security->isGranted('ROLE_SUPER_AD')) $partner = $security->getToken()->getUser()->getPartner()->getId();
+
             $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");

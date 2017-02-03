@@ -171,7 +171,7 @@ $(document).ready(function() {
         var to_y    = $('#to_y').val();
         var to_m    = $('#to_m').val();
         var to_d    = $('#to_d').val();
-        var partner = $('#flt_partner').val();
+        var partner = $('#type_partner').val();
         var catserv = $('#id_catserv').val();
         var country = $('#id_country').val();
         var shop    = $("#flt_wks_shop").val();
