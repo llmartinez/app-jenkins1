@@ -109,7 +109,8 @@ class StatisticController extends Controller {
         $params = array();
         $joins  = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($security->isGranted('ROLE_SUPER_ADMIN'))
+        {
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
@@ -120,7 +121,11 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-        }else{
+        }
+        else
+        { 
+            if($security->isGranted('ROLE_AD') && !$security->isGranted('ROLE_SUPER_AD')) $partner = $security->getToken()->getUser()->getPartner()->getId();
+
             $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -1467,6 +1472,8 @@ class StatisticController extends Controller {
                   $nCountry        = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('country')));
                   $nactive         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('active')));
                   $ntest           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('test')));
+                  $nhaschecks      = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('haschecks')));
+                  $ninfotech       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('infotech')));
                   $contact         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('contact')));
                   $internal_code   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('internal_code')));
                   $commercial_code = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('commercial_code')));
@@ -1497,13 +1504,14 @@ class StatisticController extends Controller {
                   if ($security->isGranted('ROLE_TOP_AD')){
                       $qb = $em->getRepository('TicketBundle:Ticket')
                       ->createQueryBuilder('t')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
+                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 's.name as '.$nShop.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
                                       'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
                                       'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
                                       'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
+                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'e.numchecks as '.$nhaschecks.'', 'e.infotech as '.$ninfotech.'')
 
                       ->leftJoin('t.workshop', 'e')
+                      ->leftJoin('t.shop', 's')
                       ->leftJoin('e.users', 'u')
                       ->leftJoin('e.partner', 'p')
                       ->leftJoin('e.typology', 'tp')
@@ -1522,13 +1530,14 @@ class StatisticController extends Controller {
                   else {
                       $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
+                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 's.name as '.$nShop.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
                                       'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
                                       'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
                                       'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
+                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'e.numchecks as '.$nhaschecks.'', 'e.infotech as '.$ninfotech.'')
 
                       ->leftJoin('e.users', 'u')
+                      ->leftJoin('e.shop', 's')
                       ->leftJoin('e.partner', 'p')
                       ->leftJoin('e.typology', 'tp')
                       ->leftJoin('e.country', 'c')
