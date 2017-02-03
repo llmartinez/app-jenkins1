@@ -1500,18 +1500,15 @@ class StatisticController extends Controller {
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                   //Realizamos una query deshydratada con los datos ya montados
-                 
+                  $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio.', s.name as '.$nShop.', tp.name as '.$nTypology.', c.country as '.$nCountry.', e.contact as '.$contact.', e.internal_code as '.$internal_code.', e.commercial_code as '.$commercial_code.', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at.', e.region as '.$region.', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks.', e.infotech as '.$ninfotech.'';
+
                   if ($security->isGranted('ROLE_TOP_AD')){
                       $qb = $em->getRepository('TicketBundle:Ticket')
                       ->createQueryBuilder('t')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 's.name as '.$nShop.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
-                                      'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
-                                      'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
-                                      'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'e.numchecks as '.$nhaschecks.'', 'e.infotech as '.$ninfotech.'')
+                      ->select($select)
 
                       ->leftJoin('t.workshop', 'e')
-                      ->leftJoin('t.shop', 's')
+                      ->leftJoin('e.shop', 's')
                       ->leftJoin('e.users', 'u')
                       ->leftJoin('e.partner', 'p')
                       ->leftJoin('e.typology', 'tp')
@@ -1530,11 +1527,7 @@ class StatisticController extends Controller {
                   else {
                       $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 's.name as '.$nShop.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
-                                      'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
-                                      'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
-                                      'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'', 'e.numchecks as '.$nhaschecks.'', 'e.infotech as '.$ninfotech.'')
+                      ->select($select)
 
                       ->leftJoin('e.users', 'u')
                       ->leftJoin('e.shop', 's')
@@ -1548,6 +1541,7 @@ class StatisticController extends Controller {
 
                       ->groupBy('e.id')
                       ->orderBy('e.id');
+
                       $qb = $qb->addSelect('u.token as '.$token.'');
                       $user = $security->getToken()->getUser();
                       if($user->getPartner() != null){
