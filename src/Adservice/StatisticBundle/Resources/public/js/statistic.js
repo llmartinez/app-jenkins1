@@ -161,7 +161,7 @@ $(document).ready(function() {
     });
 
     //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-    $('#btn_billing').click(function() {
+    $('#btn_raport_partner').click(function() {
 
         var raport  = "0";
 
@@ -193,7 +193,7 @@ $(document).ready(function() {
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport });
+        var url    = Routing.generate(route, {_locale: locale, type: 'undefined', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport });
 
         window.open(url, "_self");
     });
