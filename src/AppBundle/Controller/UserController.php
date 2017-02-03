@@ -69,4 +69,15 @@ class UserController extends Controller
         else
             return $this->redirect($this->generateUrl('users'));
     }
+
+    /*
+     * @ParamConverter("user", class="AppBundle:User")
+     */
+    public function userDeleteAction(User $user)
+    {
+        $this->get('utilsUser')->deleteUser($this, $user);
+
+        return $this->redirect($this->generateUrl('users'));
+
+    }
 }

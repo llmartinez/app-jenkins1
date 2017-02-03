@@ -133,6 +133,20 @@ class UtilsUser
         return $return;
     }
 
+    public static function deleteUser($_this, $user)
+    {
+        $em = $_this->getDoctrine()->getManager();
+
+        $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $user->getRoleId());
+        $entityName = self::getEntityName($user->getRoleId());
+        if($entityName != null){
+            $entity = $em->getRepository('AppBundle:'.$entityName)->findOneByUser($user->getId());
+            $em->remove($entity);
+        }
+        $em->remove($user);
+        $em->flush();
+        return $return;
+    }
 
     static public function getRandomToken()
     {
@@ -169,7 +183,7 @@ class UtilsUser
     public static function checkUser($_this, $user)
     {
         // Username tiene que estar en formato slug
-        if( $user->getUsername() != $_this->get('slugger')->slugify($user->getUsername())) return false;
+        //if( $user->getUsername() != $_this->get('slugger')->slugify($user->getUsername())) return false;
 
         return true;
     }
