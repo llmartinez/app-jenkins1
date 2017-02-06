@@ -33,9 +33,7 @@
 
                 {% set this_prev_page = page - prev_page %}
 
-                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}"> 
-                    {{ this_prev_page }}
-                </a>
+                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}">{{ this_prev_page }}</a>
 	    	{% endfor %}
     	{% endif %}
 
@@ -48,9 +46,7 @@
 
                 {% set this_next_page = page + next_page %}
 
-                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}"> 
-                    {{ this_next_page }}
-                </a>
+                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}">{{ this_next_page }}</a>
 	    	{% endfor %}
     	{% endif %}
 

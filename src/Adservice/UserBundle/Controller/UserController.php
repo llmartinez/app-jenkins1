@@ -428,8 +428,8 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
             $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
         }
-        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
-
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN'))
+        {
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
@@ -455,7 +455,7 @@ class UserController extends Controller {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
-
+            
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
             $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
