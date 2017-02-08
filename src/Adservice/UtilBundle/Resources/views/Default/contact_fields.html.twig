@@ -1,4 +1,7 @@
-
+        {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+                   {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+        {% else %} {% set id_catserv = '0' %}
+        {% endif %}
             <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
             <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
 
