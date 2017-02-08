@@ -1,4 +1,7 @@
-
+        {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+                   {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+        {% else %} {% set id_catserv = '0' %}
+        {% endif %}
             <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
             <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
 
@@ -30,7 +33,7 @@
                 <div class="col-xs-2 col-md-2 form-group">
                     <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
                 </div>
-                <div class="col-xs-2 col-md-2 form-group">
+                <div class="col-xs-2 col-md-2 form-group" {% if id_catserv == 3 %} hidden {% endif %}>
                     <label> {% trans %} region          {% endtrans %} *</label>
                     <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
                     {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
