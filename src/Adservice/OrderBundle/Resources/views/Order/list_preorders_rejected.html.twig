@@ -55,7 +55,7 @@
                                                     {% endif %}
                                                     <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ workshopOrder.cif             }}</td></tr>
                                                     <tr><td>{% trans %} internal_code   {% endtrans %}</td><td>{{ workshopOrder.internalCode    }}</td></tr>
-                                                    <tr><td>{% trans %} commercial_code {% endtrans %}</td><td>{{ workshopOrder.commercialCode  }}</td></tr>
+                                                    {% if id_catserv != 3 %}    <tr><td>{% trans %} commercial_code {% endtrans %}</td><td>{{ workshopOrder.commercialCode  }}</td></tr>{% endif %}
                                                     <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ workshopOrder.typology        }}</td></tr>
                                                     <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ workshopOrder.contact         }}</td></tr>
                                                     <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
