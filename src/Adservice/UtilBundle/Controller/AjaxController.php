@@ -189,8 +189,8 @@ class AjaxController extends Controller
 
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-
-        $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
+        
+        $workshop = UtilController::getCodeWorkshopUnused($em,$partner->getCodePartner());
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);

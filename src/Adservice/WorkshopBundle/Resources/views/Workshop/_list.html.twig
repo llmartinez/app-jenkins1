@@ -6,7 +6,9 @@
                 <th>{% trans %} workshop {% endtrans %}</th>
                 <th>{% trans %}          {% endtrans %}</th>
                 <th>{% trans %} partner  {% endtrans %}</th>
+                {% if id_catserv != 3 %}
                 <th>{% trans %} shop     {% endtrans %}</th>
+                {% endif %}
                 <th>{% trans %} email    {% endtrans %}</th>
                 <th>{% trans %} tel      {% endtrans %}</th>
                 <th>{% trans %} actions  {% endtrans %}</th>
@@ -33,9 +35,11 @@
 
                     </td>
                     <td>{{ workshop.partner      }}</td>
-                    {% set shop = workshop.shop %}
-                    {% if shop.name is defined %} <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
-                    {% else %}               <td></td>{% endif %}
+                     {% if id_catserv != 3 %}
+                        {% set shop = workshop.shop %}
+                        {% if shop.name is defined %} <td>{{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
+                        {% else %}               <td></td>{% endif %}
+                    {% endif %}
                     <td>{{ workshop.email1|length > 15 ? workshop.email1|slice(0, 15) ~ '...' : workshop.email1  }}</td>
                     <td>{{ workshop.phoneNumber1 }}</td>
                     {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}

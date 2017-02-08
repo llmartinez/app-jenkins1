@@ -30,7 +30,7 @@
                 <div class="col-xs-2 col-md-2 form-group">
                     <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
                 </div>
-                <div class="col-xs-2 col-md-2 form-group">
+                <div class="col-xs-2 col-md-2 form-group" {% if id_catserv == 3 %} hidden {% endif %}>
                     <label> {% trans %} region          {% endtrans %} *</label>
                     <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
                     {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
