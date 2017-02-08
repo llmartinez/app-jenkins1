@@ -46,8 +46,8 @@ class WorkshopNewOrderType extends AbstractType
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
-            ->add('region')
+                                                          ->where('c.id'.$id_country); }))            
+            ->add('region', 'text', array('required' => false))
             ->add('city')
             ->add('address')
             ->add('postal_code')
@@ -60,7 +60,7 @@ class WorkshopNewOrderType extends AbstractType
             ->add('email_2','email', array('required' => false))
         ;
 
-        
+        if($id_catserv != ' = 3'){
           $builder
               ->add('infotech', 'checkbox', array('required' => false))
               ->add('ad_service_plus', 'checkbox', array('required' => false))
@@ -78,7 +78,7 @@ class WorkshopNewOrderType extends AbstractType
                                                             ->andWhere('s.partner'.$id_partner.' OR s.id = 1')
                                                             ->andWhere('s.id'.$id_shop.''); }))
               ;
-        
+        }
     }
 
     public function getName()

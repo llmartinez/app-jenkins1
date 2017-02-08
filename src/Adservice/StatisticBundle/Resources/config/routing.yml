@@ -11,7 +11,7 @@ listStatistics_top:
         expose: true
 
 doExcel:
-    pattern:  /doExcel/{type}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{catserv}/{assessor}/{created_by}/{raport}
-    defaults: { _controller: StatisticBundle:Statistic:doExcel, type: '0', from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', catserv: '0', assessor: '0', created_by: '0', raport: '0' }
+    pattern:  /doExcel/{type}/{from_y}/{from_m}/{from_d}/{to_y}/{to_m}/{to_d}/{partner}/{shop}/{workshop}/{typology}/{status}/{country}/{catserv}/{assessor}/{created_by}/{raport}/{code_zone}
+    defaults: { _controller: StatisticBundle:Statistic:doExcel, type: '0', from_y: '0', from_m: '0', from_d: '0', to_y: '0', to_m: '0', to_d: '0', partner: '0', shop: '0', workshop: '0', typology: '0', status: '0', country: '0', catserv: '0', assessor: '0', created_by: '0', raport: '0', code_zone: '0' }
     options:
         expose: true

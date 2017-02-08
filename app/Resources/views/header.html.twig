@@ -9,21 +9,25 @@
                     <tr>
                         <td align="left">
                             {% if env is defined and env != 'prod' %}<a class="env">{{env|upper}}</a>{% endif %}
-
-                            {#{% set url_logo = route_logo ~ '.png' %}#}
-                            {#<img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">#}
+                        {#  
+                            <h2 style="width: 322px;float: left;margin: 5px;color: white;">
+                                {% trans %} header.welcome {% endtrans %}
+                            </h2>
+                        #}
+                            {% set url_logo = route_logo ~ '.png' %}
+                            <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
                             
                             {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
                                 {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
                                 <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
                             {% endif %}
-                            <h2 style="width: 322px;float: left;margin: 5px;color: white;">{% trans %} header.welcome {% endtrans %}</h2>
 
                         {#  {% if     app.session.locale == 'es' %}{% set url_logo = 'bundles/util/images/icon/logo_ES.png' %}
                             {% elseif app.session.locale == 'pt' %}{% set url_logo = 'bundles/util/images/icon/logo_PT.png' %}
                             {% elseif app.session.locale == 'en' %}{% set url_logo = 'bundles/util/images/icon/logo_EN.png' %}
                             {% elseif app.session.locale == 'fr' %}{% set url_logo = 'bundles/util/images/icon/logo_FR.png' %}
-                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %} #}
+                            {% else %}{% set url_logo = 'bundles/util/images/icon/logos.png' %}{% endif %}
+                        #}
 
                             {# <img class="img_logo" src="{{ asset('bundles/util/images/icon/logos.png') }}"> #}
                         </td>
