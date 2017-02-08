@@ -109,9 +109,12 @@
                                                      'placeholder': 'cif' | trans,
                                                      'required':'required' } }) }}
             </div>
-            <div class="col-xs-3 col-md-3">
-                <label>{% trans %} internal_code {% endtrans %}</label>
-                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+            <div class="col-xs-3 col-md-3">  
+                {% if id_catserv != 3 %} {% set lbl_internal_code = 'internal_code'|trans %}
+                {% else               %} {% set lbl_internal_code = 'Siret' %}{% endif %}
+
+                <label>{{ lbl_internal_code }}</label>
+                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': lbl_internal_code } }) }}
             </div>
             <div class="col-xs-3 col-md-3" {% if id_catserv == 3 %} hidden {% endif %}>
                 <label>{% trans %} commercial_code {% endtrans %}</label>
