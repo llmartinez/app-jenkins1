@@ -1,7 +1,15 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-
+ {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+    {% if id_catserv ==  3 %}
+        {% set is_hidden = 'hidden' %}
+    {% else %}
+        {% set is_hidden = '' %}
+    {% endif %}
 <ol class="breadcrumb">
     <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
     <li class="active">{% trans %} menu.profile {% endtrans %}</li>
@@ -62,7 +70,7 @@
         <tr>
             <td><b>{% trans %} active   {% endtrans %}</b></td><td>{{ user.active      }}</td>
         </tr>
-        <tr>
+        <tr {{is_hidden}}>
             <td><b>{% trans %} region   {% endtrans %}</b></td><td>{{ user.region      }}</td>
         </tr>
         <tr>

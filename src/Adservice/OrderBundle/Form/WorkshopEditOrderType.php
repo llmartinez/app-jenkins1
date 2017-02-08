@@ -65,7 +65,8 @@ class WorkshopEditOrderType extends AbstractType
             ->add('email_2','email', array('required' => false))
         ;
         
-          $builder
+        if($id_catserv != ' = 3'){
+            $builder
             ->add('shop', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
@@ -80,8 +81,8 @@ class WorkshopEditOrderType extends AbstractType
             ->add('infotech', 'checkbox', array('required' => false))
 
             ->add('ad_service_plus', 'checkbox', array('required' => false))
-          ;
-        
+            ;
+        }   
     }
 
     public function getName()
