@@ -1500,7 +1500,17 @@ class StatisticController extends Controller {
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                   //Realizamos una query deshydratada con los datos ya montados
-                  $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio.', s.name as '.$nShop.', tp.name as '.$nTypology.', c.country as '.$nCountry.', e.contact as '.$contact.', e.internal_code as '.$internal_code.', e.commercial_code as '.$commercial_code.', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at.', e.region as '.$region.', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks.', e.infotech as '.$ninfotech.'';
+                  $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
+
+                  if($catserv != 3) $select .= ', s.name as '.$nShop;
+
+                  $select .= ', tp.name as '.$nTypology.', c.country as '.$nCountry.', e.contact as '.$contact;
+
+                  if($catserv != 3) $select .= ', e.internal_code as '.$internal_code.', e.commercial_code as '.$commercial_code;
+                  else              $select .= ', e.internal_code as SIRET';
+                
+
+                  $select .= ', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at.', e.region as '.$region.', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks.', e.infotech as '.$ninfotech.'';
 
                   $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
@@ -1822,7 +1832,7 @@ class StatisticController extends Controller {
             $trans->trans('code_shop').';'.
             $trans->trans('code_workshop').';'.
             $trans->trans('internal_code').';'.
-            $trans->trans('name').';'.
+            $trans->trans('workshop').';'.
             $trans->trans('category_service').';'.
             $trans->trans('partner').';'.
             $trans->trans('shop').';'.
@@ -1948,7 +1958,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('commercial_code').';'.
-                $trans->trans('name').';'.
+                $trans->trans('workshop').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.
@@ -2079,7 +2089,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('commercial_code').';'.
-                $trans->trans('name').';'.
+                $trans->trans('workshop').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.
