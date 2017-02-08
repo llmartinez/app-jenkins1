@@ -109,7 +109,8 @@ class StatisticController extends Controller {
         $params = array();
         $joins  = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($security->isGranted('ROLE_SUPER_ADMIN'))
+        {
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.active = 1 ");
@@ -120,7 +121,11 @@ class StatisticController extends Controller {
             $workshops  = $qw->getResult();
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
-        }else{
+        }
+        else
+        { 
+            if($security->isGranted('ROLE_AD') && !$security->isGranted('ROLE_SUPER_AD')) $partner = $security->getToken()->getUser()->getPartner()->getId();
+
             $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
@@ -161,7 +166,7 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
-    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0'){
+    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0', $code_zone='0'){
 
         $em = $this->getDoctrine()->getEntityManager();
         $statistic = new Statistic();
@@ -187,7 +192,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -195,8 +200,10 @@ class StatisticController extends Controller {
                 ->leftJoin('w.typology', 'ty')
                 ->orderBy('w.id');
 
-            if     ($status == "open"  ) $qb = $qb->andWhere('s.name = :status')->setParameter('status', 'open');
-            elseif ($status == "closed") $qb = $qb->andWhere('s.name = :status')->setParameter('status', 'closed');
+            if     ($status == "open"  ) $qb = $qb->andWhere('w.active = 1');
+            elseif ($status == "closed") $qb = $qb->andWhere('s.name = 0');
+            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks IS NOT NULL');
+            elseif ($status == "infotech") $qb = $qb->andWhere('w.infotech IS NOT NULL');
 
             if ($partner  != "0") $qb = $qb->andWhere('w.id != 0')->andWhere('p.id = :partner')->setParameter('partner', $partner);
 
@@ -246,6 +253,8 @@ class StatisticController extends Controller {
                                         'endtest_at'     => $res['endtest_at'],
                                         'status'         => $res['active'],
                                         'test'           => $res['test'],
+                                        'numchecks'      => $res['numchecks'],
+                                        'infotech'       => $res['infotech'],
                                         'update'         => '0',
                                         'lowdate'        => '0',
                                         'test'           => '0'
@@ -1463,6 +1472,8 @@ class StatisticController extends Controller {
                   $nCountry        = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('country')));
                   $nactive         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('active')));
                   $ntest           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('test')));
+                  $nhaschecks      = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('haschecks')));
+                  $ninfotech       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('infotech')));
                   $contact         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('contact')));
                   $internal_code   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('internal_code')));
                   $commercial_code = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('commercial_code')));
@@ -1489,42 +1500,24 @@ class StatisticController extends Controller {
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
 
                   //Realizamos una query deshydratada con los datos ya montados
-                 
-                  if ($security->isGranted('ROLE_TOP_AD')){
-                      $qb = $em->getRepository('TicketBundle:Ticket')
-                      ->createQueryBuilder('t')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
-                                      'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
-                                      'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
-                                      'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
+                  $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
 
-                      ->leftJoin('t.workshop', 'e')
-                      ->leftJoin('e.users', 'u')
-                      ->leftJoin('e.partner', 'p')
-                      ->leftJoin('e.typology', 'tp')
-                      ->leftJoin('e.country', 'c')
+                  if($catserv != 3) $select .= ', s.name as '.$nShop;
 
-                      ->andWhere('p.id = e.partner')
-                      ->andWhere('tp.id = e.typology')
-                      ->andWhere('c.id = e.country')
+                  $select .= ', tp.name as '.$nTypology.', c.country as '.$nCountry.', e.contact as '.$contact;
 
-                      ->groupBy('e.id')
-                      ->orderBy('e.id');
-                      $qb = $qb->addSelect('count(t.id) as '.$nTickets.'');
-                  }
-                  
+                  if($catserv != 3) $select .= ', e.internal_code as '.$internal_code.', e.commercial_code as '.$commercial_code;
+                  else              $select .= ', e.internal_code as SIRET';
+                
 
-                  else {
-                      $qb = $em->getRepository('WorkshopBundle:Workshop')
+                  $select .= ', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at.', e.region as '.$region.', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks.', e.infotech as '.$ninfotech.'';
+
+                  $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
-                      ->select('e.name as '.$nTaller.'', 'p.name as '.$nSocio.'', 'p.code_partner as '.$code.$nSocio.'', 'e.code_workshop as '.$code.$nTaller.'',
-                                      'tp.name as '.$nTypology.'', 'c.country as '.$nCountry.'', 'e.contact as '.$contact.'', 'e.internal_code as '.$internal_code.'',
-                                      'e.commercial_code as '.$commercial_code.'', 'e.update_at as '.$update_at.'', 'e.lowdate_at as '.$lowdate_at.'', 'e.region as '.$region.'',
-                                      'e.city as '.$city.'', 'e.address as '.$address.'', 'e.postal_code as '.$postal_code.'', 'e.phone_number_1 as '.$phone_number_1.'',
-                                      'e.fax as '.$fax.'', 'e.email_1 as '.$email_1.'', 'e.active as '.$nactive.'', 'e.test as '.$ntest.'')
+                      ->select($select)
 
                       ->leftJoin('e.users', 'u')
+                      ->leftJoin('e.shop', 's')
                       ->leftJoin('e.partner', 'p')
                       ->leftJoin('e.typology', 'tp')
                       ->leftJoin('e.country', 'c')
@@ -1535,11 +1528,23 @@ class StatisticController extends Controller {
 
                       ->groupBy('e.id')
                       ->orderBy('e.id');
+
+                  if ($security->isGranted('ROLE_TOP_AD'))
+                  {       
+                      $qb = $qb->leftJoin('e.tickets', 't')
+                               ->addSelect('count(t.id) as '.$nTickets.'');
+                               
+                      if($code_zone != '0') $qb = $qb->andWhere('e.code_partner = '.$code_zone.'');
+                  }
+                  else
+                  {
+
                       $qb = $qb->addSelect('u.token as '.$token.'');
                       $user = $security->getToken()->getUser();
                       if($user->getPartner() != null){
                           $qb = $qb->andWhere('p.id = :partner')->setParameter('partner', $user->getPartner());
                       }
+                      if($code_zone != '0') $qb = $qb->andWhere('e.code_partner = '.$code_zone.'');
                   }
 
                   if ($shop != "0" and $shop != "undefined") {
@@ -1677,7 +1682,7 @@ class StatisticController extends Controller {
                               break;
                       }
                   }
-                    
+  
                   // echo($qb->getQuery()->getDql());
                   $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -1745,14 +1750,12 @@ class StatisticController extends Controller {
         $excel =
             $trans->trans('code_partner').';'.
             $trans->trans('code_workshop').';'.
-            $trans->trans('workshop').';';
-            /*$trans->trans('partner').';'.
+            $trans->trans('workshop').';'.
+            $trans->trans('partner').';'.
             $trans->trans('typology').';'.
             $trans->trans('shop').';'.
             $trans->trans('email_1').';'.
-            $trans->trans('phone_number_1').';';*/
-
-        $res = reset($results); // Primer elemento del array
+            $trans->trans('phone_number_1').';';
 
         if($raport == 'billing')
         {
@@ -1772,6 +1775,8 @@ class StatisticController extends Controller {
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
             $trans->trans('endtest').';'.
+            $trans->trans('haschecks').';'.
+            $trans->trans('infotech').';'.
             "\n";
 
         foreach ($results as $row) {
@@ -1780,11 +1785,11 @@ class StatisticController extends Controller {
             if(isset($row['code_partner'  ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_partner'  ]).';'; else $excel.='-;';
             if(isset($row['code_workshop' ])) $excel.=str_ireplace($buscar,$reemplazar,$row['code_workshop' ]).';'; else $excel.='-;';
             if(isset($row['wname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['wname'         ]).';'; else $excel.='-;';
-            /*if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
+            if(isset($row['pname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['pname'         ]).';'; else $excel.='-;';
             if(isset($row['tyname'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['tyname'        ]).';'; else $excel.='-;';
             if(isset($row['sname'         ])) $excel.=str_ireplace($buscar,$reemplazar,$row['sname'         ]).';'; else $excel.='-;';
             if(isset($row['email_1'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['email_1'       ]).';'; else $excel.='-;';
-            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';*/
+            if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';
             if($raport == 'billing')
             {
                 if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
@@ -1802,9 +1807,11 @@ class StatisticController extends Controller {
                 }
                 if(isset($row['date_order'    ])) $excel.=$row['date_order']->format('Y-m-d H:i:s').';';
             }
-            if(isset($row['update_at'     ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
-            if(isset($row['lowdate_at'    ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
-            if(isset($row['endtest_at'    ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['update_at'  ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['lowdate_at' ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
+            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';       
+            if(isset($row['numchecks' ]) and $row['numchecks'] != null ) $excel.=$row['numchecks'].';'; else $excel.=' ;';
+            if(isset($row['infotech'   ])) $excel.=$row['infotech'].';'; else $excel.=' ;';       
             $excel.="\n";
         }
         $excel = nl2br($excel);
@@ -1825,7 +1832,7 @@ class StatisticController extends Controller {
             $trans->trans('code_shop').';'.
             $trans->trans('code_workshop').';'.
             $trans->trans('internal_code').';'.
-            $trans->trans('name').';'.
+            $trans->trans('workshop').';'.
             $trans->trans('category_service').';'.
             $trans->trans('partner').';'.
             $trans->trans('shop').';'.
@@ -1951,7 +1958,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('commercial_code').';'.
-                $trans->trans('name').';'.
+                $trans->trans('workshop').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.
@@ -2082,7 +2089,7 @@ class StatisticController extends Controller {
                 $trans->trans('code_workshop').';'.
                 $trans->trans('internal_code').';'.
                 $trans->trans('commercial_code').';'.
-                $trans->trans('name').';'.
+                $trans->trans('workshop').';'.
                 $trans->trans('category_service').';'.
                 $trans->trans('partner').';'.
                 $trans->trans('shop').';'.

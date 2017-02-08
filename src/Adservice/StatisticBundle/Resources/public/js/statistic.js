@@ -160,6 +160,46 @@ $(document).ready(function() {
         window.open(url, "_self");
     });
 
+    //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
+    $('#btn_raport_partner').click(function() {
+
+        var raport  = "0";
+        var code_zone  = $('#code_zone').val();
+
+        var from_y  = $('#from_y').val();
+        var from_m  = $('#from_m').val();
+        var from_d  = $('#from_d').val();
+        var to_y    = $('#to_y').val();
+        var to_m    = $('#to_m').val();
+        var to_d    = $('#to_d').val();
+        var partner = $('#type_partner').val();
+        var catserv = $('#id_catserv').val();
+        var country = $('#id_country').val();
+        var shop    = $("#flt_wks_shop").val();
+        var typology= $("#flt_wks_typology").val();
+        var status  = $('#flt_wks_status').val();
+        var workshop= '0';
+        var assessor= '0';
+        var created_by= '0';
+
+        if(code_zone == "" || code_zone == 0 || code_zone == undefined ) code_zone = '0';
+        if(partner   == "" || partner   == 0 || partner   == undefined ) partner   = '0';
+        if(shop      == "" || shop      == 0 || shop      == undefined ) shop      = '0';
+        if(typology  == "" || typology  == 0 || typology  == undefined ) typology  = '0';
+        if(from_y    == "" || from_y    == 0 || from_y    == undefined ) from_y    = '0';
+        if(from_m    == "" || from_m    == 0 || from_m    == undefined ) from_m    = '0';
+        if(from_d    == "" || from_d    == 0 || from_d    == undefined ) from_d    = '0';
+        if(to_y      == "" || to_y      == 0 || to_y      == undefined ) to_y      = '0';
+        if(to_m      == "" || to_m      == 0 || to_m      == undefined ) to_m      = '0';
+        if(to_d      == "" || to_d      == 0 || to_d      == undefined ) to_d      = '0';
+
+        var route  = 'doExcel';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'undefined', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport, code_zone: code_zone });
+
+        window.open(url, "_self");
+    });
+
     // //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     // $('#btn_search_no_ticket').click(function() {
 

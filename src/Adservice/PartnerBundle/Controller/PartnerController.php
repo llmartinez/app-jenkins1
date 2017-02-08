@@ -114,12 +114,12 @@ class PartnerController extends Controller {
             $form->bindRequest($request);
             $code = UtilController::getCodePartnerUnused($em);
 
-            if ($form->isValid()) {
-
+            if ($form->isValid())
+            {
                 /*CHECK CODE PARTNER NO SE REPITA*/
-                $find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
-                if($find == null)
-                {
+                //$find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
+                //if($find == null)
+                //{
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
                     $partner = UtilController::settersContact($partner, $partner);
 
@@ -157,7 +157,6 @@ class PartnerController extends Controller {
                         $newUser->setCategoryService($catserv);
                     }
 
-
                     $newUser = UtilController::settersContact($newUser, $partner);
 
                     //password nuevo, se codifica con el nuevo salt
@@ -174,11 +173,11 @@ class PartnerController extends Controller {
                     $this->get('session')->setFlash('alert', $flash);
 
                     return $this->redirect($this->generateUrl('partner_list'));
-                }
-                else{
-                    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
-                    $this->get('session')->setFlash('error', $flash);
-                }
+                //}
+                //else{
+                //    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
+                //    $this->get('session')->setFlash('error', $flash);
+                //}
             }
         }
         else{
@@ -209,8 +208,8 @@ class PartnerController extends Controller {
      */
     public function editPartnerAction($partner){
         $security = $this->get('security.context');
-        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $partner->getCountry()->getId()) === false)
-        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
+        if ((!$security->isGranted('ROLE_SUPER_ADMIN'))        and 
+            (($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCategoryService()->getId() == $partner->getCategoryService()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
