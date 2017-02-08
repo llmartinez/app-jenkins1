@@ -496,7 +496,9 @@ class UserController extends Controller {
         $form->bindRequest($request);
 
         if ($request->getMethod() == 'POST') {
-
+            if($user->getRegion() == null){
+                $user->setRegion('-');
+            }
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
 
