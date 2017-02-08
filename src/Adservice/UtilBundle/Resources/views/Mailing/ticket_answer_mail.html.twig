@@ -3,23 +3,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body style="color: #000000; margin: 0; font-family: Verdana, Geneva, sans-serif; background-color: #FFF;">
-<table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #285e8e; text-align: center;">
+<table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #428bca; text-align: center;">
     <tr><td width="100%" height="50" valign="middle">
+
+        {% set url_logo = route_logo ~ '.png' %}
+        <img src="{{ asset(url_logo) }}" style="height: 60px;">
+        <br>
         {% trans %} mail.answerTicket.title {% endtrans %}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
     <tr><td height="150" valign="middle" align="center">
-        {% set url_logo = route_logo_mail ~ '.png' %}
-        <img src="{{ asset(url_logo) }}" style="height: 60px;margin-right: 20px;">
-
         {% if app.security.getToken().getUser() != "anon." and ticket.categoryService != null %}
             {% set url_logo_catserv = route_logo_mail ~ '_' ~ ticket.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
         {% endif %}
     </td></tr>
 
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
         {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.answerTicket.createdby {% endtrans %}
         {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} mail.answerTicket.createdby {% endtrans %}
@@ -27,29 +28,29 @@
         {% endif %}
     </td></tr>
 
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         {% trans %} mail.answerTicket.info {% endtrans %}"<b>{% trans %} menu.list_tickets {% endtrans %}</b>".
     </td></tr>
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         {% trans %} mail.answerTicket.info.id {% endtrans %}
     </td></tr>
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ ticket.id }}</h2>
     </td></tr>
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2><a href="https://adserviceticketing.com/es/ticket/show/{{ticket.id}}">
             {% trans %} mail.goto_ticket {% endtrans %}</a>
         </h2>
     </td></tr>
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
-            <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+            <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} car {% endtrans %}:</b> {{ ticket.car }}
             </td></tr>
-            <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+            <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 <b>{% trans %} description {% endtrans %}:</b> {{ ticket.description|nl2br }}
             </td></tr>
-            <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
+            <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 {% set post_length = ticket.posts | length  %}
                 {% if post_length > 0 %}
                     <b>{% trans %} answer {% endtrans %}:</b> {{ ticket.posts[post_length - 1].message }}
@@ -58,7 +59,7 @@
             </td></tr>
         </table>
     </td></tr>
-    <tr><td valign="middle" align="center" style="color: #285e8e; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
+    <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
         {% trans %} mail.info.more {% endtrans %}
         <a href="https://adserviceticketing.com/{{__locale}}/help">{% trans %}adserviceticketing.com{% endtrans %}/{{__locale}}/help</a>
     </td></tr>
@@ -68,13 +69,13 @@
 
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
-    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
         {% trans %} footerText {% endtrans %}
     </td></tr>
-    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
         {% trans %} termsConditions {% endtrans %}
     </td></tr>
-    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #285e8e; font-family: Verdana, Geneva, sans-serif;">
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
         {% trans %} mail.textDisclaimer {% endtrans %}
     </td></tr>
 </table>
