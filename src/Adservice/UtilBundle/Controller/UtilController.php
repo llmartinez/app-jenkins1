@@ -141,17 +141,17 @@ class UtilController extends Controller
     /**
      * Obtiene el primero Codigo de Taller sin usar
      * @param  entityManager $em
-     * @param  Partner       $partner
+     * @param  integer       $code_partner
      * @return integer
      */
-    public static function getCodeWorkshopUnused($em, $partner, $code_workshop=null)
+    public static function getCodeWorkshopUnused($em, $code_partner, $code_workshop=null)
     {
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
 
         if($code_workshop != null )
         {
-            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code_workshop));
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
             if($find == null) {
                 $unused = 'unused';
                 $code   = $code_workshop;
@@ -159,8 +159,8 @@ class UtilController extends Controller
         }
 
         while($unused != 'unused') {
-            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
-            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $code));
+            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
+            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
 
             if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
             else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente

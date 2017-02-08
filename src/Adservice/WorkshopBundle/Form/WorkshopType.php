@@ -98,7 +98,7 @@ class WorkshopType extends AbstractType
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
-            ->add('region')
+            ->add('region', 'text', array('required' => false))
             ->add('city')
             ->add('address')
             ->add('postal_code')
