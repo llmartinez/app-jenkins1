@@ -3,6 +3,10 @@
 {% block body %}
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'workshop_list' %}
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
     <input type="hidden" id="route" name="route" value="{{ route }}">
 
     <ol class="breadcrumb">
