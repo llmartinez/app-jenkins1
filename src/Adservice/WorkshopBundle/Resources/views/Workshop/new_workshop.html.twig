@@ -1,6 +1,15 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+    {% if id_catserv == 3 %}
+        {% set is_hidden = 'hidden' %}
+    {% else %}
+        {% set is_hidden = '' %}
+    {% endif %}
 
     <ol class="breadcrumb">
         <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
@@ -72,7 +81,7 @@
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %} * </label>
                     {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
-                <div class="col-xs-3 col-md-3 form-group">
+                <div class="col-xs-3 col-md-3 form-group" {{is_hidden}}>
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
                     {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -137,15 +146,15 @@
                         {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
                     </div>
                 </div>
-                <div class="grid w45 fl mt20">
-                    <div class="grid-full w80">
+                <div class="grid w45 fl mt20" {{is_hidden}}>
+                    <div class="grid-full w80" >
                         <label for="adservice_workshopbundle_workshoptype_infotech">{% trans %} infotech {% endtrans %}</label>
                     </div>
                     <div class="grid-full w20">
                         {{ form_widget(form.infotech) }}
                     </div>
                 </div>
-                <div class="grid w45 fl mt20">
+                <div class="grid w45 fl mt20" {{is_hidden}}>
                     <div class="grid-full w80">
                         <label for="adservice_workshopbundle_workshoptype_ad_service_plus">{% trans %} ad_service_plus {% endtrans %}</label>
                     </div>

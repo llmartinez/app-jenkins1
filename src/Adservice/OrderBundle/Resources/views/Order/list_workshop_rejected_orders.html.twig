@@ -15,9 +15,13 @@
                         <th>{% trans %} workshop         {% endtrans %}</th>
                         <th>{% trans %} category_service {% endtrans %}</th>
                         <th>{% trans %} partner          {% endtrans %}</th>
-                        <th>{% trans %} shop             {% endtrans %}</th>
+                        {% if id_catserv != 3 %}
+                            <th>{% trans %} shop             {% endtrans %}</th>
+                        {% endif %}
                         <th>{% trans %} tel              {% endtrans %}</th>
-                        <th>{% trans %} region           {% endtrans %}</th>
+                        {% if id_catserv != 3 %}
+                            <th>{% trans %} region           {% endtrans %}</th>
+                        {% endif %}
                         <th>{% trans %} order            {% endtrans %}</th>
                         <th>{% trans %} actions          {% endtrans %}</th>
                     </tr>
@@ -29,7 +33,9 @@
                             <td>{{ workshopOrder.name|length > 15 ? workshopOrder.name|slice(0, 15) ~ '...' : workshopOrder.name  }}</td>
                             <td>{{ workshopOrder.categoryService }}</td>
                             <td>{{ workshopOrder.partner         }}</td>
-                            <td>{{ workshopOrder.shop            }}</td>
+                            {% if id_catserv != 3 %}
+                                <td>{{ workshopOrder.shop            }}</td>
+                            {% endif %}
                             <td>{{ workshopOrder.phoneNumber1    }}</td>
                             <td>{{ workshopOrder.region          }}</td>
                             <td>
@@ -50,7 +56,9 @@
                                                         <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
                                                         <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ workshopOrder.categoryService }}</td></tr>
                                                         <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ workshopOrder.partner         }}</td></tr>
-                                                        <tr><td>{% trans %} shop            {% endtrans %}</td><td>{{ workshopOrder.shop            }}</td></tr>
+                                                        {% if id_catserv != 3 %}
+                                                            <tr><td>{% trans %} shop            {% endtrans %}</td><td>{{ workshopOrder.shop            }}</td></tr>
+                                                        {% endif %}
                                                         <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ workshopOrder.cif             }}</td></tr>
                                                         <tr><td>{% trans %} internal_code   {% endtrans %}</td><td>{{ workshopOrder.internalCode    }}</td></tr>
                                                         <tr><td>{% trans %} commercial_code {% endtrans %}</td><td>{{ workshopOrder.commercialCode  }}</td></tr>
@@ -64,7 +72,9 @@
                                                         <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
                                                         <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
                                                         <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
-                                                        <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
+                                                        {% if id_catserv != 3 %}
+                                                            <tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>
+                                                        {% endif %}
                                                         <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
                                                         <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>
                                                         <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ workshopOrder.postalCode      }}</td></tr>

@@ -217,14 +217,16 @@ class WorkshopOrderController extends Controller {
             $form->bindRequest($request);
             // $id_partner = $request->request->get('partner');
             // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-
+            if($workshopOrder->getRegion() == null){
+                $workshopOrder->setRegion('-');
+            }
             $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner(), $workshopOrder->getCodeWorkshop());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                 and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
                 and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
                 and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
-                and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                and $workshopOrder->getCountry() != null and $workshopOrder->getCity() != null
                 and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
             {
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
@@ -470,19 +472,23 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
-            $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
-            if($idShop != null){
-                $shop = $em->getRepository('PartnerBundle:Shop')->find($idShop);
-                $workshopOrder->setShop($shop);
+            if( $request->request->has('workshopOrder_editOrder')['shop']){
+                $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
+                if($idShop != null){
+                    $shop = $em->getRepository('PartnerBundle:Shop')->find($idShop);
+                    $workshopOrder->setShop($shop);
+                }
             }
-            
+            else 
+                $shop = 0;
                 if( $this::existsDiffInOrder($workshop, $workshopOrder) )
                 {
+                    
                     if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                         and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
                         and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
                         and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
-                        and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                        and $workshopOrder->getCountry() != null and  $workshopOrder->getCity() != null
                         and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
                     {
                         $user = $security->getToken()->getUser();
@@ -501,7 +507,7 @@ class WorkshopOrderController extends Controller {
                         if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
                         // Set default shop to NULL
-                        $shop = $form['shop']->getClientData();                        
+                        //$shop = $form['shop']->getClientData();                        
                         if($shop == 0) { $workshopOrder->setShop(null); }
 
                         $workshopOrder->setCategoryService($user->getCategoryService());

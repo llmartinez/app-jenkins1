@@ -178,7 +178,9 @@ class WorkshopController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
-
+            if($workshop->getRegion() == null){
+                $workshop->setRegion('-');
+            }
             $partner = $workshop->getPartner();
 
             $code = UtilController::getCodeWorkshopUnused($em, $workshop->getCodePartner(), $workshop->getCodeWorkshop());  /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
