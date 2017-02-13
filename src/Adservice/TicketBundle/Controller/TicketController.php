@@ -310,12 +310,12 @@ class TicketController extends Controller {
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('category_service', " = " . $catserv->getId()." ");
         }
-        elseif($catserv != 0){
+        elseif($catserv != 0) {
             $catserv = $em->getRepository('UserBundle:CategoryService')->find($catserv);
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('category_service', " = " . $catserv->getId()." ");
         }
-        if($lang != 0){
+        if($lang != 0) {
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('language', " = " . $lang." ");
         }
@@ -445,7 +445,7 @@ class TicketController extends Controller {
 
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
-
+        
         $array = array('workshop' => $workshops[0], 'pagination' => $pagination, 'tickets' => $tickets,
             'country' => $country, 'lang' => $lang, 'catserv' => $catserv, 'num_rows' => $num_rows, 'option' => $option, 'brands' => $brands,
             'systems' => $systems, 'countries' => $countries, 'catservices' => $catservices, 'languages' => $languages,
@@ -1964,7 +1964,7 @@ class TicketController extends Controller {
         else
             $ticket = $em->getRepository('TicketBundle:Ticket')->find($id);
 
-        if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+        if ($ticket)
             $tickets = array($ticket);
         else
             $tickets = array();
