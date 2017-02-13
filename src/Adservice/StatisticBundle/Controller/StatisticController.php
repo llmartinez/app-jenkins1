@@ -1538,7 +1538,7 @@ class StatisticController extends Controller {
                       ->groupBy('e.id')
                       ->orderBy('e.id');
 
-                  if ($security->isGranted('ROLE_AD') AND $user->getCategoryService()->getId() == 3)
+                  if ($security->isGranted('ROLE_AD') AND $catserv->getId() == 3) // 3 - Assistance Diag 24 FR
                   {       
                       $qb = $qb->leftJoin('e.tickets', 't')
                                ->addSelect('count(t.id) as '.$nTickets.'');
@@ -1546,7 +1546,7 @@ class StatisticController extends Controller {
                       if($code_zone != '0') $qb = $qb->andWhere('e.code_partner = '.$code_zone.'');
                   }
 
-                  if ($security->isGranted('ROLE_AD') AND $user->getCategoryService()->getId() == 2)
+                  if ($security->isGranted('ROLE_AD') AND ($catserv->getId() == 2 OR $catserv->getId() == 4)) // 2 - ADService ES, 4 - ADService PT
                   {
                       $qb = $qb->addSelect('u.token as '.$token.'');
                       if($user->getPartner() != null){
