@@ -66,12 +66,13 @@
         {% endif %}
         <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} raport {% endtrans %}</label>
             <select id="flt_raport" class='form-control'>
+
+                <option value="0"                             >{% trans %} any                        {% endtrans %}</option>
+                
                 {# Facturación ADService #}
                 <option value="billing"                       >{% trans %} billing                    {% endtrans %}</option>
 
                 <option value="historical"                    >{% trans %} historical                 {% endtrans %}</option>
-
-                <option value="0"                             >{% trans %} any                        {% endtrans %}</option>
 
                 {# Talleres sin tickets #}
                 <option value="no-ticket"                     >{% trans %} statistic.no_ticket        {% endtrans %}</option>
