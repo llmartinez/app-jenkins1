@@ -1457,7 +1457,7 @@ class StatisticController extends Controller {
                   $excel = $this->createExcelByMonth($results, $resultsF);
               }
               elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
-              {
+              {                  
                   $trans  = $this->get('translator');
                   $catserv = $security->getToken()->getUser()->getCategoryService();
 
@@ -1475,6 +1475,7 @@ class StatisticController extends Controller {
                   $ntest           = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('test')));
                   $nhaschecks      = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('haschecks')));
                   $ninfotech       = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('infotech')));
+                  $ndiagmachines   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('diagnosis_machine')));
                   $contact         = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('contact')));
                   $internal_code   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('internal_code')));
                   $commercial_code = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('commercial_code')));
@@ -1499,7 +1500,6 @@ class StatisticController extends Controller {
                   if(isset($status   ) and $status    == 'undefined') $status    = '0';
                   if(isset($from_date) and $from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
-
                   //Realizamos una query deshydratada con los datos ya montados
                   $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
 
@@ -1511,8 +1511,15 @@ class StatisticController extends Controller {
                   else              $select .= ', e.internal_code as SIRET';
                 
 
-                  $select .= ', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at.', e.region as '.$region.', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks.', e.infotech as '.$ninfotech.'';
-
+                  $select .= ', e.update_at as '.$update_at.', e.lowdate_at as '.$lowdate_at;
+                  
+                  if($catserv != 3) $select .= ', e.region as '.$region;
+                          
+                  $select .= ', e.city as '.$city.', e.address as '.$address.', e.postal_code as '.$postal_code.', e.phone_number_1 as '.$phone_number_1.', e.fax as '.$fax.', e.email_1 as '.$email_1.', e.active as '.$nactive.', e.test as '.$ntest.', e.numchecks as '.$nhaschecks;
+                  if($catserv != 3) $select .= ', e.infotech as '.$ninfotech;
+                          
+                  $select .= ', dm.name as '.$ndiagmachines.'';
+                  
                   $qb = $em->getRepository('WorkshopBundle:Workshop')
                       ->createQueryBuilder('e')
                       ->select($select)
@@ -1522,7 +1529,8 @@ class StatisticController extends Controller {
                       ->leftJoin('e.partner', 'p')
                       ->leftJoin('e.typology', 'tp')
                       ->leftJoin('e.country', 'c')
-
+                      ->leftJoin('e.diagnosis_machines', 'dm')
+                          
                       ->andWhere('p.id = e.partner')
                       ->andWhere('tp.id = e.typology')
                       ->andWhere('c.id = e.country')
@@ -1563,7 +1571,7 @@ class StatisticController extends Controller {
                   if($catserv != "0") $qb = $qb->andWhere('e.category_service = :catserv')
                                                ->setParameter('catserv', $catserv);
 
-                  if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
+//                  if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
 
                   if (isset($to_date)) $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
