@@ -211,6 +211,11 @@ class TicketController extends Controller {
                 $params[] = array('id', ' IN (' . $ids . ') OR (e.id NOT IN (' . $ids_not . ') AND e.assigned_to IS NOT NULL) AND e.pending = 1 ');
             }
         }
+        elseif ($option == 'expirated')
+        {
+                $params[] = array('status', ' != 2');
+                $params[] = array('expiration_date', ' IS NOT NULL ');
+        }
         else {
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
             $params[] = array('workshop', ' = ' . $option);

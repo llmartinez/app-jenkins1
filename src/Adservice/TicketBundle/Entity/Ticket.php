@@ -144,6 +144,13 @@ class Ticket {
     private $modified_at;
 
     /**
+     * @var date $expiration_date
+     *
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=true)
+     */
+    private $expiration_date;
+
+    /**
      * @var string $modified_by
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\UserBundle\Entity\User")
@@ -490,6 +497,24 @@ class Ticket {
      */
     public function getModifiedAt() {
         return $this->modified_at;
+    }
+
+    /**
+     * Set expiration_date
+     *
+     * @param datetime $expirationDate
+     */
+    public function setExpirationDate($expirationDate) {
+        $this->expiration_date = $expirationDate;
+    }
+
+    /**
+     * Get expiration_date
+     *
+     * @return datetime
+     */
+    public function getExpirationDate() {
+        return $this->expiration_date;
     }
 
     /**
