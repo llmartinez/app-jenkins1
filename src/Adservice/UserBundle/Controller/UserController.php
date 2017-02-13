@@ -918,7 +918,7 @@ class UserController extends Controller {
             $request->setLocale($locale);
         }
 
-        $flash =  $this->get('translator')->trans('change_password.correct');
+        $flash =  $this->get('translator')->trans('change_password.correct').' - '.$this->get('translator')->trans('mail.changePassword.password').' '.$password;
         $this->get('session')->setFlash('password', $flash);
     }
 
