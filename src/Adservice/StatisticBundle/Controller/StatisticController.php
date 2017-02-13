@@ -169,8 +169,9 @@ class StatisticController extends Controller {
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0', $code_zone='0'){
 
         $em = $this->getDoctrine()->getEntityManager();
-        $statistic = new Statistic();
         $security = $this->get('security.context');
+        $user = $security->getToken()->getUser();
+        $statistic = new Statistic();
         $pagination = new Pagination($page);
         $where = 'e.id != 0 ';
         $join  = '';
@@ -1529,18 +1530,17 @@ class StatisticController extends Controller {
                       ->groupBy('e.id')
                       ->orderBy('e.id');
 
-                  if ($security->isGranted('ROLE_TOP_AD'))
+                  if ($security->isGranted('ROLE_AD') AND $user->getCategoryService()->getId() == 3)
                   {       
                       $qb = $qb->leftJoin('e.tickets', 't')
                                ->addSelect('count(t.id) as '.$nTickets.'');
                                
                       if($code_zone != '0') $qb = $qb->andWhere('e.code_partner = '.$code_zone.'');
                   }
-                  else
-                  {
 
+                  if ($security->isGranted('ROLE_AD') AND $user->getCategoryService()->getId() == 2)
+                  {
                       $qb = $qb->addSelect('u.token as '.$token.'');
-                      $user = $security->getToken()->getUser();
                       if($user->getPartner() != null){
                           $qb = $qb->andWhere('p.id = :partner')->setParameter('partner', $user->getPartner());
                       }
