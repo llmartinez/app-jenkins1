@@ -15,7 +15,12 @@
     {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
 
     {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCategoryService() == NULL %}
-        {% set catservId = catserv.id %}
+        
+        {% if catserv.id is defined %}
+            {% set catservId = catserv.id %}
+        {% else %}
+            {% set catservId = catserv %}
+        {% endif %}
     {% else %}
         {% set catservId = app.security.getToken().getUser().getCategoryService().getId()  %}
     {% endif %}
