@@ -1501,7 +1501,7 @@ class StatisticController extends Controller {
                   if(isset($from_date) and $from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
                   //Realizamos una query deshydratada con los datos ya montados
-                  $select = 'p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
+                  $select = 'e.id as ID, p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
 
                   if($catserv != 3) $select .= ', s.name as '.$nShop;
 
@@ -1694,10 +1694,12 @@ class StatisticController extends Controller {
                   // echo($qb->getQuery()->getDql());
                   $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+                  $workshopdiagnosismachine = $em->getRepository('WorkshopBundle:WorkshopDiagnosisMachine')->findAll();
+
                   $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
 
                   // $this->exportarExcelAction($resultsDehydrated);
-                  $excel = $this->createExcelStatistics($resultsDehydrated);
+                  $excel = $this->createExcelStatistics($resultsDehydrated, $workshopdiagnosismachine);
               }
           }
           else{
@@ -2163,7 +2165,8 @@ class StatisticController extends Controller {
         return($excel);
     }
 
-    public function createExcelStatistics($results){
+    public function createExcelStatistics($results, $workshopdiagnosismachine=null)
+    {
         $excel = '';
         $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
 
@@ -2174,8 +2177,33 @@ class StatisticController extends Controller {
                 $excel.=$key.';';
             }
 
+            if($workshopdiagnosismachine != null) {
+                $em = $this->getDoctrine()->getEntityManager();
+                $diagmachines = $em->getRepository('WorkshopBundle:DiagnosisMachine')->findAll();
+            }
+
             foreach ($results as $res)
             {
+                if($workshopdiagnosismachine != null)
+                {
+                    $res['Outildediagnostic'] = '';
+
+                    foreach ($workshopdiagnosismachine as $wkdm)
+                    {
+                        if($wkdm->getWorkshopId() == $res['ID'])
+                        {
+                            foreach ($diagmachines as $dm)
+                            {
+                                if($dm->getId() == $wkdm->getDiagnosisMachineId())
+                                {
+                                    $res['Outildediagnostic'] .= $dm->getName().' - ';
+                                } 
+                            }
+                        }
+                    }
+                    $res['Outildediagnostic'] = substr($res['Outildediagnostic'], 0, -3);
+                }
+
                 foreach ($res as $key => $value)
                 {
                     if($firstKey == $key) $excel.="\n";
