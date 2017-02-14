@@ -27,6 +27,7 @@ class OrderController extends Controller
         $role = $role[0];
         $role = $role->getRole();
 
+        $ntickets = array();
         $workshop_pending = array();
         $workshop_rejected = array();
         $shop_pending = array();
@@ -126,6 +127,16 @@ class OrderController extends Controller
             $pagination->setTotalPagByLength($length_shop_rejected);
         }
 
+        foreach ($orders as $order)
+        {
+            if($order->getWantedAction() == 'deactivate')
+            {
+                $id = $order->getIdWorkshop();
+                $ntickets[$id] = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
+            }
+            
+        }
+
         //valores anteriores a la modificacion/rechazo de la Solicitud
         if    (($option == 'workshop_pending') or ($option == 'workshop_rejected') or ($option == 'preorder_pending') or ($option == 'preorder_rejected'))
                                                                                     $ordersBefore = WorkshopOrderController::getWorkshopOrdersBefore($em, $orders);
@@ -138,7 +149,8 @@ class OrderController extends Controller
                                                                                 'countries'    => $countries,
                                                                                 'country'      => $country,
                                                                                 'orders'       => $orders,
-	                                                                            'ordersBefore' => $ordersBefore,
+                                                                                'ordersBefore' => $ordersBefore,
+                                                                                'ntickets'     => $ntickets,
                                                                                 'length_workshop_pending'  => $length_workshop_pending,
                                                                                 'length_workshop_rejected' => $length_workshop_rejected,
                                                                                 'length_preorder_pending'   => $length_preorder_pending,

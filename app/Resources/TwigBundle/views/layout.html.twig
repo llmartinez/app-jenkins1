@@ -11,7 +11,7 @@
             <link rel="stylesheet" href="{{ asset('bundles/util/css/style.css') }}">
             <link rel="stylesheet" href="{{ asset('bundles/util/css/bootstrap.css') }}">
         {% endblock %}
-        {% block favicon %}<link rel="shortcut icon" href="{{ asset('bundles/cms/images/error/mygarageweb.ico') }}" type="image/x-icon"/>{% endblock %}
+        {% block favicon %}<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />{% endblock %}
     </head>
   <body id="MainBody">
 
@@ -25,7 +25,16 @@
                             <!-- header -->
                             <table width="100%" border="0">
                                 <tr>
-                                    <td align="left"><h2 style="width: 322px;float: left;margin: 5px;color: white;">{% trans %} header.welcome {% endtrans %}</h2></td>
+                                    <td align="left">
+                                        {# <h2 style="width: 322px;float: left;margin: 5px;color: white;">{% trans %} header.welcome {% endtrans %}</h2> #}
+                                        {% set url_logo = route_logo ~ '.png' %}
+                                        <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
+
+                                        {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
+                                            {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                                            <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
+                                        {% endif %}
+                                    </td>
                                     <td align="right"></td>
                                 </tr>
                             </table>
