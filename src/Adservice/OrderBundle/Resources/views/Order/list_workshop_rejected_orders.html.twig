@@ -65,8 +65,6 @@
                                                         <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.name            }}</td></tr>
                                                         {% if is_granted('ROLE_ADMIN') and ntickets[workshopOrder.idWorkshop] is defined %}
                                                             <tr><td>{% trans %} numTickets {% endtrans %}</td><td>{{ ntickets[workshopOrder.idWorkshop] }}</td></tr>
-                                                        {% else %}
-                                                            <td>--</td>
                                                         {% endif %}
                                                         <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
                                                         <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ workshopOrder.categoryService }}</td></tr>
