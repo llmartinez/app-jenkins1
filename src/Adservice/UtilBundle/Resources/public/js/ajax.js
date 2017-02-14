@@ -407,6 +407,7 @@ function populate_shop(id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
     if (id_partner == undefined) { id_partner = $('#id_partner').val(); }
     var id_shop = $('form').find('#id_shop').val();
+    if(id_shop == undefined){ id_shop = $('form').find('#adservice_workshopbundle_workshoptype_shop').val(); }
     if(id_shop == undefined){ id_shop = ''; }
 
     var route  = 'shops_from_partner';
