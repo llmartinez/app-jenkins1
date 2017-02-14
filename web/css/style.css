@@ -8,6 +8,8 @@
 h1 { color: #0FF; }
 
 /* Forms validation */
+form div label.required::after { content: " *"; }
+
 /*
 	input.invalid, textarea.invalid {
 		border: 2px solid red;

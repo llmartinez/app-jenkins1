@@ -44,9 +44,7 @@ users:
     path:  /users/{page}/{filter}/{value}
     defaults: { _controller: AppBundle:User:users, page: 1, filter: 0, value: 0 }
 
-
 # TICKET
 tickets:
     path:  /tickets
     defaults: { _controller: AppBundle:Ticket:tickets }
-    

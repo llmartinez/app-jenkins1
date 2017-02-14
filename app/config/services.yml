@@ -19,5 +19,3 @@ services:
         class: AppBundle\Utils\Utils
     utilsUser:
         class: AppBundle\Utils\UtilsUser
-    utilsRole:
-        class: AppBundle\Utils\UtilsRole

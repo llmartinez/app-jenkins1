@@ -1,0 +1,8 @@
+
+# WORKSHOP
+getMaxIdWorkshopByPartner:
+    path:  /getMaxIdWorkshopByPartner/{partner}
+    defaults: { _controller: AppBundle:Ajax:getMaxIdWorkshopByPartner, partner: partner }
+    options:
+        expose: true
+    

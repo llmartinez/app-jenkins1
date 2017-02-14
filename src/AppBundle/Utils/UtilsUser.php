@@ -41,11 +41,19 @@ class UtilsUser
 
     public static function newUser($_this, $request, $role_id)
     {
+        if($_this->get('security.token_storage')->getToken()->getUser()->getCategoryService() != null)
+             $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getCategoryService();
+        else $tokenService = '0';
+        
         $em = $_this->getDoctrine()->getManager();
 
         $user = new User();
 
-        $form = $_this->createForm(new UserNewType(), $user);
+    // TODO: funcion getCategoryServices filtrada si el usuario tiene una Cateforia de Servicio asignada
+    // TODO: guardar Service como JSON: http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#array-types
+
+        $form = $_this->createForm(new UserNewType(), $user, array('attr' => array('tokenService' => $tokenService,
+                                                                                   'role' => $role_id )));
         $return = array('_locale' => $_this->get('locale'), 'role_id' => $role_id, 'form' => $form->createView());
 
         $entityName = self::getEntityName($role_id);
@@ -178,12 +186,12 @@ class UtilsUser
         return $entityName;
     }
 
-    public static function getMaxIdWorkshop($em,$workshop)
+    public static function getMaxIdWorkshop($em,$codePartner)
     {
         $query = $em->createQuery(
             'SELECT MAX(w.id) FROM AppBundle:Workshop w
-             WHERE w.partner = :idPartner'
-        )->setParameter('idPartner', $workshop->getPartner()->getId());
+             WHERE w.codePartner = :CodePartner'
+        )->setParameter('CodePartner', $codePartner);
 
         $max_id = $query->getSingleScalarResult();
 
@@ -199,7 +207,7 @@ class UtilsUser
     public static function checkWorkshop($em,$workshop)
     {
         if($workshop->getId() == null){
-            $workshop->setId(self::getMaxIdWorkshop($em,$workshop));
+            $workshop->setId(self::getMaxIdWorkshop($em,$workshop->getCodePartner()));
         }
         return true;
     }

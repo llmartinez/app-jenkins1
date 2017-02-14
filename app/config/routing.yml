@@ -2,6 +2,12 @@ app:
     resource: "config/routing.yml"
     prefix:   /{_locale}
 
+ajax:
+    resource: "config/routing_ajax.yml"
+    prefix:   /ajax
+    options:
+        expose: true
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 

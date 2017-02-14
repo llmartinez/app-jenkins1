@@ -38,7 +38,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $roleId;
 
     /**
-     * @ORM\Column(name="category_service", type="integer")
+     * @ORM\Column(name="category_service", type="integer", nullable=true)
      * @Assert\NotBlank()
      */
     private $categoryService;

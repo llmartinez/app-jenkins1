@@ -101,9 +101,11 @@ ticket_delete: "Apagar Talão"
 
 #PARTNER
 Partner: "Sócio"
+Code partner: "Código de Sócio"
 
 #WORKSHOP
 Workshop: "Oficina"
+Code workshop: "Código de Oficina"
 
 #HELP
 help: "Ajuda"

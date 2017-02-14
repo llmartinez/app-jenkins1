@@ -19,9 +19,8 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
-        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
-        $roles = $this->get('utilsRole')->$getRolesFor();
+        $tokenRole = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
+        $roles = $this->get('utils')->getRolesForRole($tokenRole);
 
         $query = $this->get('utilsUser')->findUsersByRole($em, $roles);
         /*
@@ -43,9 +42,8 @@ class UserController extends Controller
     /** Selecciona el rol del usuario a crear */
     public function selectRoleAction(Request $request)
     {
-        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
-        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
-        $roles = $this->get('utilsRole')->$getRolesFor();
+        $tokenRole = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
+        $roles = $this->get('utils')->getRolesForRole($tokenRole);
 
         return $this->render('user/selectRole.html.twig', array('roles' => $roles));
     }

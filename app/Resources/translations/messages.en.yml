@@ -90,9 +90,11 @@ ticket_delete: "Delete ticket"
 
 #PARTNER
 Partner: "Partner"
+Code partner: "Partner Code"
 
 #WORKSHOP
 Workshop: "Workshop"
+Code workshop: "Workshop Code"
 
 # HELP
 help: "Help"

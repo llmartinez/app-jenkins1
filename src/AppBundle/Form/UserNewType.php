@@ -22,7 +22,8 @@ class UserNewType extends AbstractType
                 'invalid_message' => 'error_passwords_not_match',
                 'required' => 'required'
             ))
-            ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
+            // TODO: guardar Service como JSON: http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#array-types
+            ->add('categoryService' , 'choice'  , array('choices' => $this->getServices($options['attr']),
                                                         'required'=> 'required',
                                                         'empty_value' => 'SelectValue'))
 
@@ -55,5 +56,17 @@ class UserNewType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+    }
+
+    /** Si el usuario tiene un Servicio asignado devolvemos solo ese servicio,
+        sino devolvemos todos los que le permite su Rol
+     */
+    private function getServices($attr)
+    {
+        if($attr['tokenService'] != '0')
+            // $services = array(idService => nameService)
+            return array($attr['tokenService'] => Utils::getCategoryServices($attr['tokenService']));
+        else
+            return Utils::getCategoryServicesForRole($attr['role']);
     }
 }

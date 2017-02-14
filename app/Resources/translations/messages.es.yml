@@ -90,9 +90,11 @@ ticket_delete: "Borrar ticket"
 
 #PARTNER
 Partner: "Socio"
+Code partner: "Código de Socio"
 
 #WORKSHOP
 Workshop: "Taller"
+Code workshop: "Código de Taller"
 
 # HELP
 help: "Ayuda"
