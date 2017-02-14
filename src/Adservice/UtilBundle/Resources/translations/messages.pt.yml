@@ -633,7 +633,7 @@ page.last:						"Última página"
 #MAIL
 mail.welcome:							"Bem-vindo à plataforma Auto Diagnostic Service!!"
 mail.image:								"https://adserviceticketing.com/logo_adservice.png"
-mail.info.tel:							"97 267 77 70"
+mail.info.tel:							"+351 214 45 17 90"
 mail.info.more:							"Mais informação:"
 mail.testing:		                	"Em fase de testes até "
 mail.goto_ticket:						"Ir para o talão"
