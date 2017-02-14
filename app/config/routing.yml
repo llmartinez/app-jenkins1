@@ -5,8 +5,6 @@ app:
 ajax:
     resource: "config/routing_ajax.yml"
     prefix:   /ajax
-    options:
-        expose: true
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

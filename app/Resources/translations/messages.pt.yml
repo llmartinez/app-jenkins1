@@ -60,7 +60,7 @@ dt_next: "Siguiente"
 
 # USER
 user: "Usuário"
-id: "ID"
+Id: "ID"
 role: "Função"
 Status: "Estado"
 active: "Ativo"

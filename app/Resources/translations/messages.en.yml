@@ -49,7 +49,7 @@ searchId: "Search ID"
 
 # USER
 user: "User"
-id: "ID"
+Id: "ID"
 role: "Role"
 Status: "Status"
 active: "Active"

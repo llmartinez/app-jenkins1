@@ -49,7 +49,7 @@ searchId: "Buscar ID"
 
 # USER
 user: "Usuario"
-id: "ID"
+Id: "ID"
 role: "Rol"
 Status: "Estado"
 active: "Activo"
