@@ -1036,7 +1036,7 @@ class WorkshopOrderController extends Controller {
             $action = $workshopOrder->getWantedAction();
             $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop->setActive($workshop->getActive());
-            if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
+            if($workshop->getEndTestAt()!=null && strtotime($new_date->format("Y-m-d H:i:s"))< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
                 $workshop->setEndTestAt($new_date);
                 $workshop->setTest(0);
             }
