@@ -309,7 +309,7 @@ class StatisticController extends Controller {
 
                             foreach ($workshop as $key => $reg)
                             {
-                                
+                                $low_date = null;
                                 $date = $reg['date'];
                                 $stat = $reg['stat'];
                                 // Si es el primer registro(stat 3) no se puede sumar de una fecha anterior hasta el mismo (ya que en teoria no existía antes)
@@ -327,18 +327,24 @@ class StatisticController extends Controller {
                                             $up_date = null;
                                         if($results[$w_id]['lowdate_at'] != null){
                                             $low_date = strtotime($results[$w_id]['lowdate_at']->format('Y-m-d H:i:s'));
+                                            
                                             if($low_date < $end_test && $end_test == $date_date ){
                                                 $end_test = $low_date;
+                                                
                                             }  
                                         }
+                                        
                                         if($end_test >= $start_date){
                                             if($end_test < $end_date){
-                                            
+                                                
+                                                if($end_test != $low_date) {
                                                 $stat = 2;
                                                 $diff = date_diff($start, $results[$w_id]['endtest_at']);
+                                                
                                                 $cont = $this->sumStatus($diff, $stat, $cont);
-
+                                                }
                                                 $start = $results[$w_id]['endtest_at'];
+                                                
                                                 if($results[$w_id]['lowdate_at']!=null){
                                                     $stat = 0;
                                                 }
@@ -348,7 +354,11 @@ class StatisticController extends Controller {
                                             }
                                         }
                                     }
-                                    
+                                    if($low_date != null ) {
+                                        if ( $end_test == $low_date) {
+                                            $stat = 2;
+                                        }
+                                    }
                                     $diff = date_diff($start, $date);
                                     $cont = $this->sumStatus($diff, $stat, $cont);
                                 }
