@@ -57,7 +57,7 @@ class Historical {
 // |____/|_____| |_|   |_| |_____|_| \_\____/_/  \____|_____| |_|   |_| |_____||_| \_\____/
 
     public function __toString() {
-        return $this->getName();
+        return $this->id;
     }
 
    /**

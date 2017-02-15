@@ -271,11 +271,12 @@ class StatisticController extends Controller {
             if (isset($from_date)) $qb->andWhere("h.dateOrder >= '".$from_date."' ");
             if (isset($to_date  )) $qb->andWhere("h.dateOrder <= '".$to_date."' ");
             
-            $qb->orderBy('h.partnerId, h.workshopId, h.dateOrder');
+            $qb->orderBy('h.workshopId, h.dateOrder');
 
             $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             unset($qb);
-           
+          
+          // billing
             if($raport == 'billing')
             {
                 if ($resH != null)
@@ -390,7 +391,7 @@ class StatisticController extends Controller {
                     ->select('h.workshopId, h.status')
                     ->where('h.workshopId IN ('.$in.')')
                     ->andWhere("h.dateOrder < '".$from_date."' ")
-                    ->orderBy('h.partnerId, h.workshopId, h.dateOrder', 'DESC')
+                    ->orderBy('h.workshopId, h.dateOrder', 'ASC')
                     ->groupBy('h.workshopId');
 
                     $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -422,6 +423,7 @@ class StatisticController extends Controller {
                 $data = $results;
                 unset($results);
             }  
+          // historical
             elseif($raport == 'historical')
             { 
                 if ($resH != null)
@@ -1571,7 +1573,7 @@ class StatisticController extends Controller {
                   if($catserv != "0") $qb = $qb->andWhere('e.category_service = :catserv')
                                                ->setParameter('catserv', $catserv);
 
-//                  if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
+                  //  if($country != "0") $qb = $qb->andWhere('e.country = :country')->setParameter('country', $country);
 
                   if (isset($to_date)) $to_date = $to_y.'-'.$to_m.'-'.$to_d.' 00:00:00';
 
