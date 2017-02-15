@@ -64,24 +64,25 @@ class WorkshopEditOrderType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
         ;
+        
         if($id_catserv != ' = 3'){
-          $builder
+            $builder
             ->add('shop', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
                   'property' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          ->andWhere('s.country'.$id_country.' OR s.id = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
                                                           ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
 
             ->add('infotech', 'checkbox', array('required' => false))
 
             ->add('ad_service_plus', 'checkbox', array('required' => false))
-          ;
-        }
+            ;
+        }   
     }
 
     public function getName()

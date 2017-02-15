@@ -406,6 +406,8 @@ function populate_diagmachine2(diag_machine){
 function populate_shop(id_shop){
     var id_partner = $('form').find('select[name*=partner]').val();
     if (id_partner == undefined) { id_partner = $('#id_partner').val(); }
+    var id_shop = $('form').find('#id_shop').val();
+    if(id_shop == undefined){ id_shop = $('form').find('#adservice_workshopbundle_workshoptype_shop').val(); }
     if(id_shop == undefined){ id_shop = ''; }
 
     var route  = 'shops_from_partner';
@@ -1081,8 +1083,9 @@ function get_country_partner(id_partner){
         success : function(data) {
 
             if(data.id != 0) {
-                $('form').find('select[name*=country]').empty();
-                $('form').find('select[name*=country]').append("<option value="+data.id+" selected>"+data.name+"</option>");
+              //$('form').find('select[name*=country]').empty();
+                $('#adservice_workshopbundle_workshoptype_country').find('option:selected').attr("selected", false);
+                $("#adservice_workshopbundle_workshoptype_country option[value="+ data.id +"]").attr("selected",true);
             }
             else{
                 alert($('#bad_introduction').val());

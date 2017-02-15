@@ -181,7 +181,7 @@ class WorkshopOrderController extends Controller {
         }
 
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+        if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner(), $workshopOrder->getCodeWorkshop()); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
         else                  $code = 0;
 
         $request = $this->getRequest();
@@ -217,14 +217,16 @@ class WorkshopOrderController extends Controller {
             $form->bindRequest($request);
             // $id_partner = $request->request->get('partner');
             // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-
-            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+            if($workshopOrder->getRegion() == null){
+                $workshopOrder->setRegion('-');
+            }
+            $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner(), $workshopOrder->getCodeWorkshop());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
 
             if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                 and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
                 and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
                 and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
-                and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                and $workshopOrder->getCountry() != null and $workshopOrder->getCity() != null
                 and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
             {
                 /*CHECK CODE WORKSHOP NO SE REPITA*/
@@ -388,6 +390,7 @@ class WorkshopOrderController extends Controller {
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
 
+        
         if($user->getCategoryService() != null) {
             if($user->getCategoryService()->getId() != $workshop->getCategoryService()->getId()) {
                 throw new AccessDeniedException();
@@ -399,8 +402,8 @@ class WorkshopOrderController extends Controller {
             // SUPER_AD
             if ($security->isGranted('ROLE_SUPER_AD'))
             {
-                if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
-                throw new AccessDeniedException();
+                //if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
+                //throw new AccessDeniedException();
             }
             // AD
             else{
@@ -408,7 +411,7 @@ class WorkshopOrderController extends Controller {
                 throw new AccessDeniedException();
             }
         }
-
+        
         if ((($security->isGranted('ROLE_AD') and $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
         and (!$security->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
@@ -469,16 +472,23 @@ class WorkshopOrderController extends Controller {
         if ($request->getMethod() == 'POST') {
 
             $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                // Si hay diferencias crea la solicitud de modificación, sino no hace nada
+            if( $request->request->has('workshopOrder_editOrder')['shop']){
+                $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
+                if($idShop != null){
+                    $shop = $em->getRepository('PartnerBundle:Shop')->find($idShop);
+                    $workshopOrder->setShop($shop);
+                }
+            }
+            else 
+                $shop = 0;
                 if( $this::existsDiffInOrder($workshop, $workshopOrder) )
                 {
+                    
                     if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                         and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
                         and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
                         and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
-                        and $workshopOrder->getCountry() != null and $workshopOrder->getRegion() != null and $workshopOrder->getCity() != null
+                        and $workshopOrder->getCountry() != null and  $workshopOrder->getCity() != null
                         and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
                     {
                         $user = $security->getToken()->getUser();
@@ -497,8 +507,7 @@ class WorkshopOrderController extends Controller {
                         if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
                         // Set default shop to NULL
-                        if ($catserv != 3 ) $shop = $form['shop']->getClientData();
-                        else                $shop = 0;
+                        //$shop = $form['shop']->getClientData();                        
                         if($shop == 0) { $workshopOrder->setShop(null); }
 
                         $workshopOrder->setCategoryService($user->getCategoryService());
@@ -552,14 +561,19 @@ class WorkshopOrderController extends Controller {
                     // Si no hay cambios en la solicitud, volvemos al listado de talleres
                     return $this->redirect($this->generateUrl('workshopOrder_listWorkshops'));
                 }
-            }
+            
         }
-
         $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
+        if($workshop->getShop() != null){
+            $id_shop = $workshop->getShop()->getId();
+        }
+        else
+            $id_shop = 0;
         $token = $user->getToken();
         return $this->render('OrderBundle:WorkshopOrders:edit_order.html.twig', array( 'workshopOrder' => $workshopOrder,
                                                                                        'workshop'      => $workshop,
                                                                                        'token'         => $token,
+                                                                                       'id_shop'       => $id_shop,    
                                                                                        'id_partner'    => $id_partner,              //old values
                                                                                        'form_name'     => $form->getName(),         //new values
                                                                                        'form'          => $form->createView()));
@@ -906,7 +920,7 @@ class WorkshopOrderController extends Controller {
         if(isset($find))$codeWorkshop = $find->getCodeWorkshop();
         else            $codeWorkshop = " ";
         if($find){
-            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
+            $code  = UtilController::getCodeWorkshopUnused($em, $workshopOrder->getPartner()->getCodePartner(), $workshopOrder->getCodeWorkshop());        /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
             $flash .= $this->get('translator')->trans('error.code_partner.used').$code.' ('.$codeWorkshop.').';
         }
         if($findPhone[0]['1']>0){
@@ -1015,12 +1029,19 @@ class WorkshopOrderController extends Controller {
         }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
-            $workshop->setLowdateAt(new \DateTime(\date("Y-m-d H:i:s")));
+            $new_date = new \DateTime(\date("Y-m-d H:i:s"));
+            $workshop->setLowdateAt($new_date);
             $workshop->setActive(false);
-
+            
             $action = $workshopOrder->getWantedAction();
             $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop->setActive($workshop->getActive());
+
+            if($workshop->getTest() && $workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
+            {
+                $workshop->setEndTestAt($new_date);
+                $workshop->setTest(0);
+            }
             $em->persist($user_workshop);
             $em->flush();
             $em->remove($workshopOrder);

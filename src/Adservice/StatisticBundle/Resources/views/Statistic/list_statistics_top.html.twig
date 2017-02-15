@@ -1,5 +1,9 @@
 {% extends '::layout.html.twig' %}
-
+{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% else %} 
+    {% set id_catserv = '0' %}
+{% endif %}
 {% block body %}
 
     {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
@@ -16,6 +20,9 @@
 {# FILTROS GENERALES #}
     <div class="col-xs-12 col-md-12 form-group">
         <legend>{% trans %} filter {% endtrans %}</legend>
+
+        <input type="hidden" id="id_catserv" value="{{ id_catserv }}">
+        <input type="hidden" id="id_country" value="{{ app.security.getToken().getUser().getCountry().getId() }}">
 
     {% if is_granted('ROLE_TOP_AD') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %}</label>
@@ -73,17 +80,20 @@
         <div class="col-xs-12 col-md-12 form-group">
         {# <legend>{% trans %} filter_workshop {% endtrans %}</legend> #}
 
-        {% if id_catserv != 3 %}
-            <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} shop {% endtrans %}</label>
-                <input type="hidden" id="lbl_all" value="{% trans %} all {% endtrans %}">
-                <select id="flt_wks_shop" class='form-control'>
-                        <option value="0">{% trans %} all {% endtrans %}</option>
-                    {% for shop in shops %}
-                        <option value="{{ shop.id }}">{{ shop }}</option>
-                    {% endfor %}
-                </select>
+            <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} code_zone {% endtrans %}</label>
+                <input type="text" id="code_zone" name="code_zone" class='form-control' placeholder="{% trans %} code_zone {% endtrans %}">
             </div>
-        {% endif %}
+            {% if id_catserv != 3 %}
+                <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} shop {% endtrans %}</label>
+                    <input type="hidden" id="lbl_all" value="{% trans %} all {% endtrans %}">
+                    <select id="flt_wks_shop" class='form-control'>
+                            <option value="0">{% trans %} all {% endtrans %}</option>
+                        {% for shop in shops %}
+                            <option value="{{ shop.id }}">{{ shop }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
             <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} typology {% endtrans %}</label>
                 <select id="flt_wks_typology" class='form-control'>
                         <option value="0">{% trans %} all {% endtrans %}</option>
@@ -99,11 +109,13 @@
                     <option value="active"  >{% trans %} active   {% endtrans %}</option>
                     <option value="deactive">{% trans %} inactive {% endtrans %}</option>
                     <option value="test"    >{% trans %} testing  {% endtrans %}</option>
+                    <option value="check"   >{% trans %} haschecks{% endtrans %}</option>
+                    <option value="infotech">{% trans %} infotech {% endtrans %}</option>
                     {# <option value="noticket">Without Tickets</option> #}
                  </select>
              </div>
             <div class="col-xs-9 col-md-9 form-group mt20">
-                <button class="btn btn-primary btn100" id="btn_search_workshop" style="margin-top: 4px;">
+                <button class="btn btn-primary btn100" id="btn_raport_partner" style="margin-top: 4px;">
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.workshop {% endtrans %}</button>
             </div>
         </div>

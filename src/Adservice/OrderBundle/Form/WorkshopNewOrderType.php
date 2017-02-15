@@ -46,8 +46,8 @@ class WorkshopNewOrderType extends AbstractType
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
-                                                          ->where('c.id'.$id_country); }))
-            ->add('region')
+                                                          ->where('c.id'.$id_country); }))            
+            ->add('region', 'text', array('required' => false))
             ->add('city')
             ->add('address')
             ->add('postal_code')
