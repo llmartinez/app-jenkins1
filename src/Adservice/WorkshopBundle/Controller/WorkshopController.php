@@ -414,7 +414,7 @@ class WorkshopController extends Controller {
 
         $actual_city = $workshop->getRegion();
         $actual_region = $workshop->getCity();
-
+        $actual_test = $workshop->getTest();
         if ($petition->getMethod() == 'POST') {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
@@ -462,7 +462,9 @@ class WorkshopController extends Controller {
                     if($workshop->getTest()){
                         $status = 2;
                     }
-                    //UtilController::createHistorical($em, $workshop, $status);
+                    if($actual_test != $workshop->getTest()){
+                        UtilController::createHistorical($em, $workshop, $status);
+                    }
                     if ($security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('workshop_list'));
                     elseif ($security->isGranted('ROLE_ASSESSOR'))
