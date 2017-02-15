@@ -462,7 +462,7 @@ class WorkshopController extends Controller {
                     if($workshop->getTest()){
                         $status = 2;
                     }
-                    UtilController::createHistorical($em, $workshop, $status);
+                    //UtilController::createHistorical($em, $workshop, $status);
                     if ($security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('workshop_list'));
                     elseif ($security->isGranted('ROLE_ASSESSOR'))
