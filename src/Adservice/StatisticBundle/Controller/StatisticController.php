@@ -193,12 +193,14 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech, count(t.id) as total')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
                 ->leftJoin('w.shop', 's')
                 ->leftJoin('w.typology', 'ty')
+                ->leftJoin('w.tickets', 't')
+                ->groupBy('w.id')
                 ->orderBy('w.id');
 
             if     ($status == "open"  ) $qb = $qb->andWhere('w.active = 1');
@@ -258,7 +260,9 @@ class StatisticController extends Controller {
                                         'infotech'       => $res['infotech'],
                                         'update'         => '0',
                                         'lowdate'        => '0',
-                                        'test'           => '0'
+                                        'test'           => '0',
+                                        'total'          => $res['total'],
+                                        'month'          => '0',
                                       );
             }
             unset($resultsDehydrated);
@@ -275,7 +279,28 @@ class StatisticController extends Controller {
 
             $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             unset($qb);
-          
+
+            $qb = $em->getRepository('WorkshopBundle:Workshop')
+                ->createQueryBuilder('w')
+                ->select('w.id, count(t.id) as month')
+                ->leftJoin('w.tickets', 't')
+                ->where('w.id IN ('.$in.')')
+                ->groupBy('w.id');
+
+            if (isset($from_date)) $qb->andWhere("t.created_at >= '".$from_date."' ");
+            if (isset($to_date  )) $qb->andWhere("t.created_at <= '".$to_date."' ");
+            
+            $qb->orderBy('w.id');
+
+            $resNT = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            unset($qb);
+
+            foreach ($resNT as $nt)
+            {
+                $results[$nt['id']]['month'] = $nt['month'];
+            }
+            unset($resNT);
+
           // billing
             if($raport == 'billing')
             {
@@ -313,8 +338,8 @@ class StatisticController extends Controller {
                                 $date = $reg['date'];
                                 $stat = $reg['stat'];
                                 // Si es el primer registro(stat 3) no se puede sumar de una fecha anterior hasta el mismo (ya que en teoria no existía antes)
-                                if($stat != 3 ){
-                                   
+                                if($stat != 3 )
+                                {
                                     if($key == 0 && $results[$w_id]['endtest_at']!= null && isset($from_date))
                                     {
                                         $end_test = strtotime($results[$w_id]['endtest_at']->format('Y-m-d H:i:s'));
@@ -330,7 +355,6 @@ class StatisticController extends Controller {
                                             
                                             if($low_date < $end_test && $end_test == $date_date ){
                                                 $end_test = $low_date;
-                                                
                                             }  
                                         }
                                         
@@ -1782,9 +1806,12 @@ class StatisticController extends Controller {
         if($raport == 'billing')
         {
             // Billing Fields
+            $excel .= $trans->trans('status').';';
             $excel .= $trans->trans('update').';';
             $excel .= $trans->trans('lowdate').';';
             $excel .= $trans->trans('testdate').';';
+            $excel .= $trans->trans('ticket.opt.all').';';
+            $excel .= $trans->trans('tickets').' '.$trans->trans('date.month').';';
         }
         elseif($raport == 'historical')
         {
@@ -1814,9 +1841,18 @@ class StatisticController extends Controller {
             if(isset($row['phone_number_1'])) $excel.=str_ireplace($buscar,$reemplazar,$row['phone_number_1']).';'; else $excel.='-;';
             if($raport == 'billing')
             {
-                if(isset($row['update'        ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update'        ]).';';
-                if(isset($row['lowdate'       ])) $excel.=str_ireplace($buscar,$reemplazar,$row['lowdate'       ]).';';
-                if(isset($row['test'          ])) $excel.=str_ireplace($buscar,$reemplazar,$row['test'          ]).';';
+                if(isset($row['status'        ])) {
+                    if($row['status'] == '0') $excel.=$trans->trans('inactive').';';
+                    elseif($row['status'] == '1') $excel.=$trans->trans('active').';';
+                    elseif($row['status'] == '2') $excel.=$trans->trans('test').';';
+                    elseif($row['status'] == '3') $excel.=$trans->trans('active').';';
+                    else $excel.='-;';
+                }
+                if(isset($row['update' ])) $excel.=str_ireplace($buscar,$reemplazar,$row['update' ]).';';
+                if(isset($row['lowdate'])) $excel.=str_ireplace($buscar,$reemplazar,$row['lowdate']).';';
+                if(isset($row['test'   ])) $excel.=str_ireplace($buscar,$reemplazar,$row['test'   ]).';';
+                if(isset($row['total'  ])) $excel.=str_ireplace($buscar,$reemplazar,$row['total'  ]).';';
+                if(isset($row['month'  ])) $excel.=str_ireplace($buscar,$reemplazar,$row['month'  ]).';';
             }
             elseif($raport == 'historical')
             {
