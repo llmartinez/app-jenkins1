@@ -1811,7 +1811,7 @@ class StatisticController extends Controller {
             $excel .= $trans->trans('lowdate').';';
             $excel .= $trans->trans('testdate').';';
             $excel .= $trans->trans('ticket.opt.all').';';
-            $excel .= $trans->trans('tickets').' '.$trans->trans('date.month').';';
+            $excel .= $trans->trans('tickets').' '.$trans->trans('ticket_at').';';
         }
         elseif($raport == 'historical')
         {
