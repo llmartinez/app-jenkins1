@@ -134,7 +134,6 @@ class OrderController extends Controller
                 $id = $order->getIdWorkshop();
                 $ntickets[$id] = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
             }
-            
         }
 
         //valores anteriores a la modificacion/rechazo de la Solicitud
