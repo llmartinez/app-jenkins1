@@ -730,6 +730,7 @@ mail.removeOrder.subject:				"Auto Diagnostic Service | Order cancelled with id 
 mail.removeOrder.title:					"The order cancelled was of "
 mail.removeOrder.createdby:				"This order has been cancelled by a technical adviser:"
 mail.removeOrder.createdby.user:		"This order has been cancelled through the Auto Diagnostic Service Platform."
+
 mail.removeOrder.info:					"To access your orders go to <a href='https://adserviceticketing.com'>adserviceticketing.com</a> section "
 mail.removeOrder.info.id:				"The reference code of the workshop is:"
 mail.removeOrder.shop.info.id:			"The reference code of the shop is:"
@@ -744,6 +745,7 @@ mail.resendOrder.info.id:				"The reference code of the order is:"
 mail.newUser.subject:					"Auto Diagnostic Service | New user for the Workshop "
 mail.newUser.title:						"A new user for the Auto Diagnostic Service Platform has been created"
 mail.newUser.createdby:					"This user has been created through the Auto Diagnostic Service Platform."
+
 mail.newUser.info:						"For more information go to <a href='https://adserviceticketing.com/en/help'>adserviceticketing.com/en/help</a> "
 mail.newUser.info.tel:					"or call"
 mail.newUser.info.id:					"Your workshop code is:"
@@ -755,6 +757,7 @@ mail.changePassword.subject:			"Auto Diagnostic Service | New password for user 
 mail.changePassword.title:				"The user password has been changed through the Auto Diagnostic Service Platform."
 mail.changePassword.createdby:			"This modification has been executed by a technical adviser:"
 mail.changePassword.createdby.user:		"This modification has been executed through the Auto Diagnostic Service Platform."
+
 mail.changePassword.info:				"For more information go to <a href='https://adserviceticketing.com/en/help'>adserviceticketing.com/en/help</a> "
 mail.changePassword.info.tel:			"or call"
 mail.changePassword.info.id:			"Your workshop code is:"
