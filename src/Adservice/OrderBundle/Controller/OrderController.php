@@ -129,9 +129,10 @@ class OrderController extends Controller
 
         foreach ($orders as $order)
         {
-            if($order->getWantedAction() == 'deactivate')
+            if($order->getWantedAction() == 'activate' || $order->getWantedAction() == 'deactivate')
             {
                 $id = $order->getIdWorkshop();
+
                 $ntickets[$id] = $em->getRepository("WorkshopBundle:Workshop")->getNumTickets($id);
             }
         }
