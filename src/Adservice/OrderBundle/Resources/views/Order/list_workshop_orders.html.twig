@@ -41,10 +41,13 @@
                             <td> {{ workshopOrder.id              }} </td>
                             <td> {{ workshopOrder.name|length > 15 ? workshopOrder.name|slice(0, 15) ~ '...' : workshopOrder.name  }} </td>
 
-                            {% if is_granted('ROLE_ADMIN') and ntickets[workshopOrder.idWorkshop] is defined %}
-                                <td>{{ ntickets[workshopOrder.idWorkshop] }}</td>
-                            {% else %}
-                                <td>--</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+
+                                {% if ntickets[workshopOrder.idWorkshop] is defined %}
+                                    <td>{{ ntickets[workshopOrder.idWorkshop] }}</td>
+                                {% else %}
+                                    <td>--</td>
+                                {% endif %}
                             {% endif %}
 
                             <td> {{ workshopOrder.categoryService }} </td>
@@ -93,10 +96,9 @@
                                                     <tr><th>                                          </th><th>{% trans %} before {% endtrans %}</th><th>{% trans %} after {% endtrans %}</th></tr>
                                                     <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ orderBefore.name            }}</td>
                                                                                                            <td>{{ workshopOrder.name          }}</td></tr>
+  
                                                     {% if is_granted('ROLE_ADMIN') and ntickets[workshopOrder.idWorkshop] is defined %}
-                                                        <tr><td>{% trans %} numTickets {% endtrans %}</td><td>{{ ntickets[workshopOrder.idWorkshop] }}</td></tr>
-                                                    {% else %}
-                                                        <td>--</td>
+                                                            <tr><td>{% trans %} numTickets {% endtrans %}</td><td>{{ ntickets[workshopOrder.idWorkshop] }}</td></tr>
                                                     {% endif %}
                                                     <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ orderBefore.codeWorkshop    }}</td>
                                                                                                            <td>{{ workshopOrder.codeWorkshop  }}</td></tr>
@@ -189,8 +191,6 @@
                                                     <tr><td>{% trans %} name             {% endtrans %}</td><td>{{ workshopOrder.name          }}</td></tr>
                                                     {% if is_granted('ROLE_ADMIN') and ntickets[workshopOrder.idWorkshop] is defined %}
                                                         <tr><td>{% trans %} numTickets {% endtrans %}</td><td>{{ ntickets[workshopOrder.idWorkshop] }}</td></tr>
-                                                    {% else %}
-                                                        <td>--</td>
                                                     {% endif %}
                                                     <tr><td>{% trans %} code_workshop    {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop  }}</td></tr>
                                                     <tr><td>{% trans %} category_service {% endtrans %}</td><td>{{ workshopOrder.categoryService}}</td></tr>

@@ -721,6 +721,7 @@ mail.acceptOrder.shop.subject:			"Auto Diagnostic Service | Solicitud aceptada p
 mail.acceptOrder.title:					"Se ha aceptado la solicitud de "
 mail.acceptOrder.createdby:				"Esta solicitud ha sido aceptada por un asesor."
 mail.acceptOrder.createdby.user:		"Esta solicitud ha sido aceptada a través de la plataforma Auto Diagnostic Service."
+
 mail.acceptOrder.info:					"Para acceder a este taller entra en <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.acceptOrder.shop.info:				"Para acceder a esta tienda entra en <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.acceptOrder.info.id:				"El número de referencia del taller es:"

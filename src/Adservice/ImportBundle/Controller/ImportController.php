@@ -1046,7 +1046,72 @@ class ImportController extends Controller
     
     public function testMailingAction()
     {
-      
+      	$em = $this->getDoctrine()->getEntityManager();
+    	$historical = $em->getRepository('WorkshopBundle:Historical')->findBy(array(), array('partnerId' => 'ASC', 'workshopId' => 'ASC', 'dateOrder' => 'ASC'));
+
+    	$last_row = null;
+    	$ids = '0';
+
+    	foreach ($historical as $row)
+    	{
+    		if($last_row != null)
+    		{
+    			if($row->getWorkshopId() == $last_row->getWorkshopId())
+    			{
+    				if($row->getStatus() == 1 and $last_row->getStatus() == 3)
+    				{
+    					$ids .= ', '.$row->getId();
+    					//echo 'Remove: '.$row->getId().' W: '.$row->getWorkshopId().' Status: '.$row->getStatus().'<br>';
+    					//$em->remove($row);
+    					//$em->flush();
+    				}
+    				elseif($row->getStatus() == 0 and $last_row->getStatus() == 0)
+    				{
+    					$ids .= ', '.$row->getId();
+    					//echo 'Remove: '.$row->getId().' W: '.$row->getWorkshopId().' Status: '.$row->getStatus().'<br>';
+    					//$em->remove($row);
+    					//$em->flush();
+    				}
+    				elseif($row->getStatus() == 1 and $last_row->getStatus() == 1)
+    				{
+    					$ids .= ', '.$row->getId();
+    					//echo 'Remove: '.$row->getId().' W: '.$row->getWorkshopId().' Status: '.$row->getStatus().'<br>';
+    					//$em->remove($row);
+    					//$em->flush();
+    				}
+    				elseif($row->getStatus() == 2 and $last_row->getStatus() == 2)
+    				{
+    					$ids .= ', '.$row->getId();
+    					//echo 'Remove: '.$row->getId().' W: '.$row->getWorkshopId().' Status: '.$row->getStatus().'<br>';
+    					//$em->remove($row);
+    					//$em->flush();
+    				}
+    				elseif($row->getStatus() == 3 and $last_row->getStatus() == 3)
+    				{
+    					$ids .= ', '.$row->getId();
+    					//echo 'Remove: '.$row->getId().' W: '.$row->getWorkshopId().' Status: '.$row->getStatus().'<br>';
+    					//$em->remove($row);
+    					//$em->flush();
+    				}
+    				else
+    				{
+    					$last_row = $row;
+    				}
+    			}
+				else
+				{
+					$last_row = $row;
+				}
+    		}
+    		if($last_row == null) $last_row = $row;
+    	}
+
+		$this->get('session')->set('msg' ,'DELETE FROM historical WHERE id IN ('.$ids.');');
+
+        return $this->render('ImportBundle:Import:import.html.twig');
+    }
+    
+ /*
       $sql = "INSERT INTO historical VALUES ";
       $id = 1;
       $em = $this->getDoctrine()->getEntityManager();
@@ -1118,9 +1183,8 @@ class ImportController extends Controller
         }
         $sql = substr($sql,0,strlen($sql)-1).";";
         echo $sql;
-        return $this->render('ImportBundle:Import:import.html.twig');
-    }
-    
+*/
+
     /*    $em      = $this->getDoctrine()->getEntityManager();
         $admin   = $em->getRepository('UserBundle:User')->find(1);
         $role    = $em->getRepository('UserBundle:Role'  )->find(1);
