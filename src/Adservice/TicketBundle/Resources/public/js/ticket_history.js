@@ -12,12 +12,17 @@
             var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $(this).val();
+            var adviser_id = $('#flt_adviser').val();
+            var workshop_id = $('#workshop_id').val();            
+            if(workshop_id == "") var workshop_id = 0;
 
             var url = str.replace('plc_country', country);
             var url = url.replace('plc_catserv', catserv);
             var url = url.replace('plc_lang', lang);
             var url = url.replace('plc_rows', num_rows);
             var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
 
             window.open(url, "_self");
         });
@@ -31,12 +36,17 @@
             var lang     = $('#flt_language').val();
             var num_rows = $(this).val();
             var option   = $('#option').val();
+            var adviser_id = $('#flt_adviser').val();
+            var workshop_id = $('#workshop_id').val();            
+            if(workshop_id == "") var workshop_id = 0;
 
             var url = str.replace('plc_country', country);
             var url = url.replace('plc_catserv', catserv);
             var url = url.replace('plc_lang', lang);
             var url = url.replace('plc_rows', num_rows);
             var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
 
             window.open(url, "_self");
         });
@@ -49,12 +59,17 @@
             var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
-
+            var adviser_id = 0;
+            var workshop_id = $('#workshop_id').val();            
+            if(workshop_id == "") var workshop_id = 0;
+            
             var url = str.replace('plc_country', country);
             var url = url.replace('plc_catserv', catserv);
             var url = url.replace('plc_lang', lang);
             var url = url.replace('plc_rows', num_rows);
             var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
 
             window.open(url, "_self");
         });
@@ -68,12 +83,17 @@
             var lang     = $('#flt_language').val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
+            var adviser_id = 0;
+            var workshop_id = $('#workshop_id').val();            
+            if(workshop_id == "") var workshop_id = 0;
 
             var url = str.replace('plc_country', country);
             var url = url.replace('plc_catserv', catserv);
             var url = url.replace('plc_lang', lang);
             var url = url.replace('plc_rows', num_rows);
             var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
 
             window.open(url, "_self");
         });
@@ -87,12 +107,41 @@
             var lang     = $(this).val();
             var num_rows = $('#num_rows').val();
             var option   = $('#option').val();
+            var adviser_id = $('#flt_adviser').val();
+            var workshop_id = $('#workshop_id').val();            
+            if(workshop_id == "") var workshop_id = 0;
 
             var url = str.replace('plc_country', country);
             var url = url.replace('plc_catserv', catserv);
             var url = url.replace('plc_lang', lang);
             var url = url.replace('plc_rows', num_rows);
             var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
+
+            window.open(url, "_self");
+        });
+        
+        $("#flt_adviser").change(function() {
+
+            var str      = $('#href_tickets').val();
+            var country  = $('#country').val();
+            var catserv  = $('#catserv').val();
+            if(catserv == undefined) var catserv  = $('#flt_catserv').val();
+            var lang     = $('#flt_language').val();
+            var num_rows = $('#num_rows').val();
+            var option   = $('#option').val();
+            var workshop_id = $('#workshop_id').val();
+            if(workshop_id == "") var workshop_id = 0;
+            var adviser_id = $(this).val();
+            
+            var url = str.replace('plc_country', country);
+            var url = url.replace('plc_catserv', catserv);
+            var url = url.replace('plc_lang', lang);
+            var url = url.replace('plc_rows', num_rows);
+            var url = url.replace('plc_option', option);
+            var url = url.replace('plc_workshop_id', workshop_id);
+            var url = url.replace('plc_adviser_id', adviser_id);
 
             window.open(url, "_self");
         });
