@@ -98,7 +98,9 @@
                         {% if ticket.status == 'open' %}
 
                             {% if ticket.inactive == 1 %}
-                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.opt.inactive'|trans }}" alt="{{'ticket.opt.inactive'|trans }}">
+                                    <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.inactive'|trans }}" alt="{{'ticket.inactive'|trans }}">
+                            {% elseif ticket.expirationDate != null %}
+                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_expirated.png') }}" title="{{'ticket.expirated'|trans }}" alt="{{ 'ticket.expirated' | trans }}">
                             {% elseif ticket.assignedTo == null %}
                                 <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}">
                             {% else %}
