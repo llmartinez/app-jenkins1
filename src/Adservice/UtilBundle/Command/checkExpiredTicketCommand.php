@@ -75,14 +75,14 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $ticket->setModifiedBy($sa);
 
                     $em->persist($ticket);
-                    $em->flush();
-
+/*
                     $message
                     ->setSubject($msg_expired)
                     ->setTo($ticket->getWorkshop()->getEmail1())
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
+*/
                     $count++;
                 }
 
@@ -96,14 +96,14 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $ticket->setModifiedBy($sa);
 
                     $em->persist($ticket);
-                    $em->flush();
-                    
+/*   
                     $message
                     ->setSubject($msg_expired)
                     ->setTo($ticket->getWorkshop()->getEmail1())
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
+*/
                     $count++;
                 }
 
@@ -127,17 +127,18 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
 
                     $em->persist($post);
                     $em->persist($ticket);
-                    $em->flush();
-
+/*
                     $message
                     ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
                     ->setTo($ticket->getWorkshop()->getEmail1())
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expirated.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
+*/
                     $count++;
                 }
         }
+        $em->flush();
         $output->writeln('Se han modificado '.$count.' tickets por inactividad.');
     }
 }

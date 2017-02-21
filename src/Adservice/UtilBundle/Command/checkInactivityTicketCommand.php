@@ -48,11 +48,11 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
                 $ticket->setModifiedAt(new \DateTime());
 
                 $em->persist($ticket);
-                $em->flush();
 
                 $count_inactive++;
             }
         }
+        $em->flush();
 
         $output->writeln('Se han modificado '.$count_inactive.' tickets por inactividad.');
     }
