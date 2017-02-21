@@ -880,6 +880,12 @@ fieldset[disabled] .asr_form-control {
 .w95  { width:  95%!important; }
 .w100 { width: 100%!important; }
 
+
+.grid-15  {
+    width:  14%!important;
+    margin-right: 1%;
+    float: left;
+}
 .grid-20  {
     width:  19%!important;
     margin-right: 1%;
