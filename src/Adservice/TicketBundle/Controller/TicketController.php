@@ -75,6 +75,8 @@ class TicketController extends Controller {
         $id_user = $user->getId();
         $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
+        $inactive = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'inactive'));
+        $expirated = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'expirated'));
         $params = array();
         $joins = array();
 
@@ -125,22 +127,22 @@ class TicketController extends Controller {
         } elseif ($option == 'all_mine') {
             $params[] = array('assigned_to', '= ' . $id_user);
         } elseif ($option == 'opened') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
         } elseif ($option == 'closed') {
             $params[] = array('status', ' = ' . $closed->getId());
         } elseif ($option == 'free') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to ', 'IS NULL');
         } elseif ($option == 'pending') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to', 'IS NOT NULL');
             $params[] = array('pending', '= 1');
         } elseif ($option == 'answered') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to', 'IS NOT NULL');
             $params[] = array('pending', '= 0');
         } elseif ($option == 'assessor_pending') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
 
             if($user->getCountryService() != null) $country_service = $user->getCountryService()->getId();
             else $country_service = '0';
@@ -150,17 +152,16 @@ class TicketController extends Controller {
             else
                 $params[] = array('id', ' != 0 AND e.assigned_to = ' . $id_user . ' AND e.pending = 1 '); // OR (e.assigned_to IS NULL AND w.country = '.$country_service.' AND e.status = 1)');
         }
-
         elseif ($option == 'assessor_answered') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to', '= ' . $id_user);
             $params[] = array('pending', '= 0');
         } elseif ($option == 'other_pending') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to', '!= ' . $id_user);
             $params[] = array('pending', '= 1');
         } elseif ($option == 'other_answered') {
-            $params[] = array('status', ' = ' . $open->getId());
+            $params[] = array('status', ' IN (' . $open->getId() .', '. $inactive->getId() .', '. $expirated->getId().' )');
             $params[] = array('assigned_to', '!= ' . $id_user);
             $params[] = array('pending', '= 0');
         } elseif ($option == 'assessor_closed') {
@@ -170,50 +171,12 @@ class TicketController extends Controller {
             $params[] = array('status', ' = ' . $closed->getId());
             $params[] = array('assigned_to', '!= ' . $id_user);
         } elseif ($option == 'inactive') {
-            // Recupera la fecha del ultimo post de cada ticket del asesor
-            if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN')) {
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1 GROUP BY t.id');
-                $ids = '0';
-                $ids_not = '0';
-                foreach ($consulta->getResult() as $row) {
-                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                    $now = new \DateTime(\date("Y-m-d H:i:s"));
-                    $time = new \DateTime(\date($row['time']));
-                    $diff = $now->diff($time);
-                    $hours = $diff->h + ($diff->days * 24);
-                    if ($hours >= 2 and $diff->invert == 1)
-                        $ids = $ids . ', ' . $row['id'];
-                    else
-                        $ids_not = $ids_not . ', ' . $row['id'];
-                }
-                $params[] = array('status', ' = ' . $open->getId());
-                $params[] = array('id', ' NOT IN (' . $ids_not . ') AND e.assigned_to = ' . $user->getId() . ' AND e.pending = 1 ');
-            }
-            // Recupera la fecha del ultimo post de cada ticket
-            //  SQL: SELECT t.id, MAX(p.modified_at) FROM post p JOIN ticket t GROUP BY p.ticket_id
-            else {
-                $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.pending = 1  GROUP BY t');
-                $ids = '0';
-                $ids_not = '0';
-                foreach ($consulta->getResult() as $row) {
-                    // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                    $now = new \DateTime(\date("Y-m-d H:i:s"));
-                    $time = new \DateTime(\date($row['time']));
-                    $diff = $now->diff($time);
-                    $hours = $diff->h + ($diff->days * 24);
-                    if ($hours >= 2 and $diff->invert == 1)
-                        $ids = $ids . ', ' . $row['id'];
-                    else
-                        $ids_not = $ids_not . ', ' . $row['id'];
-                }  
-                $params[] = array('status', ' = ' . $open->getId());
-                $params[] = array('id', ' IN (' . $ids . ') OR (e.id NOT IN (' . $ids_not . ') AND e.assigned_to IS NOT NULL) AND e.pending = 1 ');
-            }
+            $params[] = array('status', ' = ' . $inactive->getId());
         }
         elseif ($option == 'expirated')
         {
-                $params[] = array('status', ' != 2');
-                $params[] = array('expiration_date', ' IS NOT NULL ');
+            $params[] = array('status', ' = ' . $expirated->getId());
+            $params[] = array('expiration_date', ' IS NOT NULL ');
         }
         else {
             $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $option));
@@ -410,50 +373,12 @@ class TicketController extends Controller {
         }
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
 
-        $t_inactive = array();
-
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshops[0]->getId()));
 
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN')) {
-            $consulta = $em->createQuery('SELECT t.id as id, MAX(p.modified_at) as time FROM TicketBundle:Post p JOIN p.ticket t WHERE t.assigned_to = ' . $user->getId() . ' GROUP BY t');
-            $ids = '0';
-            $ids_not = '0';
-            foreach ($consulta->getResult() as $row) {
-                // Solo añade las id de los ticket que sobrepasan el limite de tiempo (2h)
-                $now = new \DateTime(\date("Y-m-d H:i:s"));
-                $time = new \DateTime(\date($row['time']));
-                $diff = $now->diff($time);
-                $hours = $diff->h + ($diff->days * 24);
-                if ($hours >= 2 and $diff->invert == 1)
-                    $ids = $ids . ', ' . $row['id'];
-                else
-                    $ids_not = $ids_not . ', ' . $row['id'];
-            }
-            if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
-                $params_inactive[] = array('category_service', " = " . $user->getCategoryService()->getId()." ");
-            }
-            $params_inactive[] = array('assigned_to', ' = ' . $user->getId());
-            $params_inactive[] = array('pending', ' = 1');
-            $params_inactive[] = array('status', ' = ' . $open->getId());
-            $params_inactive[] = array('id', ' NOT IN (' . $ids_not . ')');
-            $pagination_inactive = new Pagination(1);
-            if (isset($country) and $country != 0) {
-                // Buscar tickets inactivos según el país de servicio
-                $joins[] = array('e.workshop wo ', 'wo.country = ' . $country . " ");
-                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive, null, $joins);
-                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive, $pagination_inactive, null, $joins);
-            } else {
-                $inactive = $pagination_inactive->getRowsLength($em, 'TicketBundle', 'Ticket', $params_inactive);
-                $tickets_inactive = $pagination_inactive->getRows($em, 'TicketBundle', 'Ticket', $params_inactive);
-            }
-            foreach ($tickets_inactive as $t) {
-                $t_inactive[$t->getId()] = $t->getId();
-            }
-        } else {
-            $inactive = 0;
-        }
-
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
+
+        $t_inactive =  $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 3));
+        $inactive =  sizeof($t_inactive);
 
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
@@ -1318,7 +1243,7 @@ class TicketController extends Controller {
                                 } else {
                                     $max_len = 500;
                                     // Quitamos el estado inactivo si alguien responde al ticket
-                                    $ticket->setInactive(0);
+                                    $ticket->setStatus($em->getRepository('TicketBundle:Status')->find(1));
                                 }
                                 if ($str_len <= $max_len) {
                                     if($request->request->has("sendTicket")){
@@ -2307,10 +2232,15 @@ class TicketController extends Controller {
                 $num_rows = 10;
             $more_results = 0;
 
-            $tickets = array();
+            $arr_open = array();
+            $arr_closed = array();
+            $arr_inactive = array();
+            $arr_expirated = array();
 
-            foreach ($ticket as $tck) {
+            foreach ($ticket as $tck)
+            {
                 $car = $tck->getCar();
+                $add_ticket = null;
 
                 // Si se esta buscando algun campo y no lo encuentra, deja de buscar coincidencias entre ese ticket y el coche buscado
                 $search = true;
@@ -2325,39 +2255,67 @@ class TicketController extends Controller {
                 if($search){
                     if($version != null and $version != '' and $version != '0'){
                         if($car->getVersion() != null and $version == $car->getVersion()->getId()) {
-                            $tickets[] = $tck;
+                            $add_ticket = $tck;
                         }
                     }
                     elseif($model != null and $model != '' and $model != '0'){
                         if($car->getModel() != null and $model == $car->getModel()->getId()) {
-                            $tickets[] = $tck;
+                            $add_ticket = $tck;
                         }
                     }
                     elseif($brand != null and $brand != '' and $brand != '0'){
                         if($car->getBrand() != null and $brand == $car->getBrand()->getId()) {
-                            $tickets[] = $tck;
+                            $add_ticket = $tck;
                         }
                     }else{
                         if($subsystem != null and $subsystem != '' and $subsystem != '0' and $plateNumber != null and $plateNumber != '' and $plateNumber != '0')
                         {
                             if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId()
                               and $car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber()->getId()) {
-                                $tickets[] = $tck;
+                                $add_ticket = $tck;
                             }
                         }elseif($subsystem != null and $subsystem != '' and $subsystem != '0')
                         {
                             if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId())
-                                $tickets[] = $tck;
+                                $add_ticket = $tck;
 
                         }elseif($plateNumber != null and $plateNumber != '' and $plateNumber != '0')
                         {
                             if ($car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber())
-                                $tickets[] = $tck;
+                                $add_ticket = $tck;
 
                         }
                     }
                 }
+
+                if($add_ticket != null)
+                {
+                    $id_stat = $tck->getStatus()->getId();
+
+                    switch ($id_stat) {
+                        case '1': // OPEN
+                            $arr_open[] = $add_ticket;
+                            break;
+                        case '2': // CLOSED
+                            $arr_closed[] = $add_ticket;
+                            break;
+                        case '3': // INACTIVE
+                            $arr_inactive[] = $add_ticket;
+                            break;
+                        case '4': // EXPIRATED
+                            $arr_expirated[] = $add_ticket;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
+
+            $tickets = array();
+            foreach ($arr_inactive  as $t) { $tickets[] = $t; }
+            foreach ($arr_expirated as $t) { $tickets[] = $t; }
+            foreach ($arr_open      as $t) { $tickets[] = $t; }
+            foreach ($arr_closed    as $t) { $tickets[] = $t; }
         }
 
         $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
