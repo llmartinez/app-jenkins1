@@ -76,6 +76,25 @@ class UserRepository extends EntityRepository
 
         return $consulta->getResult();
     }
+    
+    public function findByRole($em, $country, $catserv, $option){
+    
+        $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
+
+        
+        if ($country != 0 ) {
+            $query = $query.' AND u.country = '.$country;
+        }
+        
+        if ($catserv != 0 ) {
+            $query = $query.' AND u.category_service = '.$catserv;
+        }       
+        $query .= ' AND u.active = 1';
+        $query .= ' ORDER BY u.name, u.surname';
+        $consulta = $em ->createQuery($query)
+                        ->setParameter('role', $option);
+        return $consulta->getResult();
+    }
     /**
      * Get 10 rows of a role
      *

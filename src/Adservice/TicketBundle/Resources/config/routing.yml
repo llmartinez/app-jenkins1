@@ -85,8 +85,8 @@ reopenTicket:
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 listTicket:
-    pattern:  /ticket/{page}/{num_rows}/{country}/{lang}/{catserv}/{option}/{workshop_id}
-    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1, num_rows: 10, country: 0, lang: 0, catserv: 0, option: null, workshop_id: null  }
+    pattern:  /ticket/{page}/{num_rows}/{country}/{lang}/{catserv}/{option}/{workshop_id}/{adviser_id}
+    defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1, num_rows: 10, country: 0, lang: 0, catserv: 0, option: null, workshop_id: null, adviser_id: null  }
 
 callTicket:
     pattern:  /call/{code_partner}/{code_workshop}
