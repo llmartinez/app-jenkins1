@@ -11,6 +11,38 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
+
+    public function findByNot( array $criteria, array $orderBy = null, $limit = null, $offset = null )
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+
+        $qb->select( 'Ticket' )
+            ->from( $this->getEntityName(), 'Ticket' );
+
+        foreach ( $criteria as $field => $value ) {
+
+            $qb->andWhere( $expr->neq( 'Ticket.' . $field, $value ) );
+        }
+
+        if ( $orderBy ) {
+
+            foreach ( $orderBy as $field => $order ) {
+
+                $qb->addOrderBy( 'Ticket.' . $field, $order );
+            }
+        }
+
+        if ( $limit )
+            $qb->setMaxResults( $limit );
+
+        if ( $offset )
+            $qb->setFirstResult( $offset );
+
+        return $qb->getQuery()
+            ->getResult();
+    }
+
     public function findAllFree($em, $status, $ordered=null)
     {
         $query = 'SELECT t FROM TicketBundle:Ticket t

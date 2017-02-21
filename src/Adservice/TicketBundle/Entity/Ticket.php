@@ -87,13 +87,6 @@ class Ticket {
     private $pending;
 
     /**
-     * @var integer $inactive
-     *
-     * @ORM\Column(name="inactive", type="integer")
-     */
-    private $inactive;
-
-    /**
      * @var integer $importance
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Importance")
@@ -142,6 +135,13 @@ class Ticket {
      * @ORM\Column(name="modified_at", type="datetime")
      */
     private $modified_at;
+
+    /**
+     * @var date $expiration_date
+     *
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=true)
+     */
+    private $expiration_date;
 
     /**
      * @var string $modified_by
@@ -347,24 +347,6 @@ class Ticket {
     }
 
     /**
-     * Set inactive
-     *
-     * @param integer $inactive
-     */
-    public function setInactive($inactive) {
-        $this->inactive = $inactive;
-    }
-
-    /**
-     * Get inactive
-     *
-     * @return integer
-     */
-    public function getInactive() {
-        return $this->inactive;
-    }
-
-    /**
      * Set importance
      *
      * @param \Adservice\TicketBundle\Entity\Imoprtance $importance
@@ -490,6 +472,24 @@ class Ticket {
      */
     public function getModifiedAt() {
         return $this->modified_at;
+    }
+
+    /**
+     * Set expiration_date
+     *
+     * @param datetime $expirationDate
+     */
+    public function setExpirationDate($expirationDate) {
+        $this->expiration_date = $expirationDate;
+    }
+
+    /**
+     * Get expiration_date
+     *
+     * @return datetime
+     */
+    public function getExpirationDate() {
+        return $this->expiration_date;
     }
 
     /**
