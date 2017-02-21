@@ -13,10 +13,16 @@
     {# <input type="hidden" id="order_by" value="{{ order_by }}"> #}
     {# <input type="hidden" id="trend"    value="{{ trend    }}"> #}
     {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
-    {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}
-        {% set catservId = catserv.id %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCategoryService() == NULL %}
+        
+        {% if catserv.id is defined %}
+            {% set catservId = catserv.id %}
+        {% else %}
+            {% set catservId = catserv %}
+        {% endif %}
     {% else %}
-        {% set catservId = catserv %}
+        {% set catservId = app.security.getToken().getUser().getCategoryService().getId()  %}
     {% endif %}
     <div id="pagination"  class="pagination_content">
 
