@@ -64,13 +64,12 @@ class TicketController extends Controller {
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null) {
+    public function listTicketAction($page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null, $adviser_id = null) {
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         $security = $this->get('security.context');
-
         $user = $security->getToken()->getUser();
-
+        $catservId = $catserv ;
         if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
 
         $id_user = $user->getId();
@@ -238,7 +237,8 @@ class TicketController extends Controller {
                 else
                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
-        }elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
+        }
+        elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
             if($country != 'none' && $country != '0') {
 
                 if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
@@ -324,6 +324,10 @@ class TicketController extends Controller {
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('language', " = " . $lang." ");
         }
+        if($adviser_id != 0) {
+            if($params == null or ($params != null and $params[0] == null)) $params = null;
+            $params[] = array('assigned_to', " = " . $adviser_id." ");
+        }
 
         if (($security->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ( $workshops[0]->getId() != null))) {
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
@@ -395,10 +399,13 @@ class TicketController extends Controller {
         if($security->isGranted('ROLE_ASSESSOR')) {
             if($user->getCategoryService() != NULL) {
                 $catservices[0] = $em->getRepository('UserBundle:CategoryService')->find($user->getCategoryService());
+                $advisers = $em->getRepository("UserBundle:User")->findByRole($em, $country, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
             }else{
                 $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+                $advisers = $em->getRepository("UserBundle:User")->findByRole($em, $country, $catservId, 'ROLE_ASSESSOR');
             }
         }else{
+            $advisers = array();
             $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         }
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
@@ -455,6 +462,7 @@ class TicketController extends Controller {
             'country' => $country, 'lang' => $lang, 'catserv' => $catserv, 'num_rows' => $num_rows, 'option' => $option, 'brands' => $brands,
             'systems' => $systems, 'countries' => $countries, 'catservices' => $catservices, 'languages' => $languages,
             'adsplus' => $adsplus, 'inactive' => $inactive, 't_inactive' => $t_inactive, 'importances' => $importances,
+            'advisers' => $advisers, 'adviser_id' => $adviser_id, 'workshop_id' => $workshop_id
         );
 
         if ($security->isGranted('ROLE_ADMIN'))
@@ -1986,7 +1994,11 @@ class TicketController extends Controller {
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
         $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
-
+        if($security->getToken()->getUser()->getCategoryService() != NULL) {
+            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
+        }else{
+            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
+        }
         $array = array('workshop' => new Workshop(),
             'pagination' => new Pagination(0),
             'tickets' => $tickets,
@@ -2002,7 +2014,8 @@ class TicketController extends Controller {
             'num_rows' => 10,
             'country' => 0,
             'inactive' => 0,
-            'disablePag' => 0);
+            'disablePag' => 0,
+            'advisers' => $advisers);
 
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
@@ -2055,7 +2068,11 @@ class TicketController extends Controller {
             $params[] = array('motor', " LIKE '%" . $motor . "%' ");
         if ($kw != '0' and $kw != '')
             $params[] = array('kw', ' = ' . $kw);
-
+        if($user->getCategoryService() != NULL) {
+            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
+        }else{
+            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
+        }
         $pagination = new Pagination($page);
 
         // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
@@ -2124,7 +2141,8 @@ class TicketController extends Controller {
             'page' => $page,
             'country' => 0,
             'inactive' => 0,
-            'disablePag' => 0);
+            'disablePag' => 0,
+            'advisers' => $advisers);
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
@@ -2348,13 +2366,15 @@ class TicketController extends Controller {
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
 
-
+        
         if($security->isGranted('ROLE_ASSESSOR')) {
             if($user->getCategoryService() != NULL) {
                 $catservices[0] = $em->getRepository('UserBundle:CategoryService')->find($user->getCategoryService());
+                $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
             }else{
                 $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
-            }
+                $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
+            }            
         }else{
             $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         }
@@ -2449,7 +2469,8 @@ class TicketController extends Controller {
             'more_results' => $more_results,
             'country' => 0,
             'inactive' => 0,
-            'disablePag' => 0);
+            'disablePag' => 0,
+            'advisers' => $advisers);
         if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
