@@ -24,7 +24,8 @@ class CarController extends Controller {
         $security   = $this->get('security.context');
         $car = $ticket->getCar();
         $formC = $this->createForm(new CarType(), $car);
-        // Esto es Magia: por algun motivo sin esto no carga nombre de Version en edit_car
+        // MAGIC: por algun motivo sin esto no carga nombre de Version en edit_car
+        // mas info: http://imgur.com/gallery/YsbKHg1
         if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();
         if ($request->getMethod() == 'POST') {
 

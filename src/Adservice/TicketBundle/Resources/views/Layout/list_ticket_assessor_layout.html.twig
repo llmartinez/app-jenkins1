@@ -66,7 +66,6 @@
             <input type="hidden" id="option"   value= {{ option   }}>
             <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'lang': 'plc_lang', 'catserv': 'plc_catserv', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
 
-
             <label>{% trans %} filter_by_type {% endtrans %}</label>
             <select id="slct_historyTickets" class="form-control asr_form-control">
 
@@ -77,7 +76,7 @@
                         <option value="free"                    >{% trans %} ticket.opt.free              {% endtrans %}</option>
                         <option value="pending"                 >{% trans %} ticket.opt.pending           {% endtrans %}</option>
                         <option value="answered"                >{% trans %} ticket.opt.answered          {% endtrans %}</option>
-                        <option value="inactive"                >{% trans %} ticket.opt.inactive          {% endtrans %}</option>
+                        <option value="inactive"                >{% trans %} ticket.inactive              {% endtrans %}</option>
                         <option value="expirated"               >{% trans %} ticket.expirated             {% endtrans %}</option>
                 {% else %}
                     {% if is_granted('ROLE_ASSESSOR') %}
