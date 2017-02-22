@@ -23,10 +23,10 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
 
     /**
      * Comando que comprueba el tiempo que lleva inactivo un ticket
-     *      - CADUCADO: +1mes sin actividad
-     *          - Información: Se cierra a los 10 días
-     *          - Diagnosis: Se avisa al pasar 1 mes
-     *                       Se cierra 15 dias después si no ha habido actividad
+     *      EXPIRED: 
+     *      - T.Información: Se cierra a los 10 días sin actividad
+     *      - T.Diagnosis:   Se avisa al pasar 1 mes sin actividad
+     *                                 Se cierra 15 dias después si no ha habido actividad
      *
      * @param  InputInterface  $input  An InputInterface instance
      * @param  OutputInterface $output An OutputInterface instance
@@ -34,26 +34,22 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findByNot(array('status' => 2));
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findByNot(array('status' => 2)); // Cualquier estado menos 2 - cerrado
 
         $status = $em->getRepository('TicketBundle:Status')->findAll();
         $sa = $em->getRepository('UserBundle:User')->find(1);
 
         $date = new \DateTime();
-        // MAGIC: Esto es Magia: por algun motivo sin el var_dump
-        // mas info: http://imgur.com/gallery/YsbKHg1
-        //var_dump($date);
-        //$expDate = strtotime ( '+15 day' , strtotime ( $date->date ) ) ;
-        // Se acaba usando DateTime de 15 dias
         $expDate = new \DateTime('+15 day');
+
+        /** MAGIC BUG: por algun motivo sin el var_dump lanza "[ErrorException] Notice: Undefined property: DateTime::$date"
+          - mas info: http://imgur.com/gallery/YsbKHg1 **/
+            //var_dump($date);
+            //$expDate = strtotime ( '+15 day' , strtotime ( $date->date ) ) ;
+            // Se acaba usando DateTime de 15 dias
 
         $msg_expirated = $this->getContainer()->get('translator')->trans('mail.inactivity_warning');
         $msg_expired = $this->getContainer()->get('translator')->trans('mail.inactiveTicket.title');
-
-        $expirated_tickets = array();   // +30d sin actividad
-        $info_closed_tickets = array(); // +10d sin actividad
-        $diag_closed_tickets = array(); // +45d sin actividad
-
         $count = 0;
 
         $message = \Swift_Message::newInstance()
@@ -65,7 +61,8 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
         {
             $diff = date_diff($date, $ticket->getModifiedAt());
 
-            // INFO_CLOSED_TICKETS (INFO +10d sin actividad)
+            // INFO_CLOSED_TICKETS 
+            // - T.Información: Se cierra a los 10 días sin actividad
 
                 if($diff->days >= 10 and $ticket->getImportance() != null and $ticket->getImportance()->getImportance() == 'information')
                 {
@@ -86,28 +83,8 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $count++;
                 }
 
-            // DIAG_CLOSED_TICKETS (DIAG +45d sin actividad)
-                // se calculan +15d ya que a los 30d se crea un aviso y se setea 'expiration_date' a +15d
-
-                elseif($ticket->getStatus() == $status[3] and $diff->days >= 15 and $ticket->getExpirationDate() != null) // $status[3] = array(4 => 'expirated')
-                {
-                    $ticket->setStatus($status[1]); // $status[1] = array(2 => 'closed')
-                    $ticket->setSolution($msg_expired);
-                    $ticket->setModifiedBy($sa);
-
-                    $em->persist($ticket);
-/*   
-                    $message
-                    ->setSubject($msg_expired)
-                    ->setTo($ticket->getWorkshop()->getEmail1())
-                    ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
-
-                    $this->getContainer()->get('mailer')->send($message);
-*/
-                    $count++;
-                }
-
-            // EXPIRATED_TICKETS (DIAG +30d sin actividad)
+            // EXPIRATED_TICKETS
+            // - T.Diagnosis: Se manda un aviso al pasar 30 dias sin actividad y se setea 'expiration_date' a +15d
 
                 elseif($diff->days >= 30 and $ticket->getExpirationDate() == null)
                 {
@@ -132,6 +109,27 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
                     ->setTo($ticket->getWorkshop()->getEmail1())
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expirated.html.twig', array('ticket' => $ticket)));
+
+                    $this->getContainer()->get('mailer')->send($message);
+*/
+                    $count++;
+                }
+
+            // DIAG_CLOSED_TICKETS (+45d sin actividad)
+            // - Se cierra al pasar 15 dias si no ha habido actividad después EXPIRATED_TICKETS (30 dias sin actividad y de seteo de 'expiration_date')
+
+                elseif($ticket->getStatus() == $status[3] and $diff->days >= 15 and $ticket->getExpirationDate() != null) // $status[3] = array(4 => 'expirated')
+                {
+                    $ticket->setStatus($status[1]); // $status[1] = array(2 => 'closed')
+                    $ticket->setSolution($msg_expired);
+                    $ticket->setModifiedBy($sa);
+
+                    $em->persist($ticket);
+/*   
+                    $message
+                    ->setSubject($msg_expired)
+                    ->setTo($ticket->getWorkshop()->getEmail1())
+                    ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
 */
