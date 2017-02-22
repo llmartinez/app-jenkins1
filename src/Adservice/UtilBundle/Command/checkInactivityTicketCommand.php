@@ -21,7 +21,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
 
     /**
      * Comando que comprueba el tiempo que lleva inactivo un ticket
-     *      - INACTIVO: pendiente de responder por el asesor y +2h sin actividad
+     *      - INACTIVO: +2h sin actividad
      *        Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
      *
      * @param  InputInterface  $input  An InputInterface instance
@@ -40,7 +40,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
         {
             $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
 
-            // INACTIVO: pendiente de responder por el asesor y +2h sin actividad
+            // INACTIVO: +2h sin actividad
             //           - Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
             if($diff->h >= 2 or $diff->days >= 1)
             {
