@@ -1263,6 +1263,7 @@ class TicketController extends Controller {
 
                                         // Quitamos el estado inactivo/caducado si alguien responde al ticket
                                         $ticket->setStatus($em->getRepository('TicketBundle:Status')->find(1));
+                                        $ticket->setExpirationDate(null);
 
                                         //Se desbloquea el ticket una vez respondido
                                         if ($ticket->getBlockedBy() != null) {

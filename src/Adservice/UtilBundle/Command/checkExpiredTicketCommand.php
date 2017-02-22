@@ -26,7 +26,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
      *      EXPIRED: 
      *      - T.Información: Se cierra a los 10 días sin actividad
      *      - T.Diagnosis:   Se avisa al pasar 1 mes sin actividad
-     *                                 Se cierra 15 dias después si no ha habido actividad
+     *                       Se cierra 15 dias después si no ha habido actividad
      *
      * @param  InputInterface  $input  An InputInterface instance
      * @param  OutputInterface $output An OutputInterface instance
@@ -44,8 +44,8 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
 
         /** MAGIC BUG: por algun motivo sin el var_dump lanza "[ErrorException] Notice: Undefined property: DateTime::$date"
           - mas info: http://imgur.com/gallery/YsbKHg1 **/
-            //var_dump($date);
-            //$expDate = strtotime ( '+15 day' , strtotime ( $date->date ) ) ;
+            // var_dump($date);
+            // $expDate = strtotime ( '+15 day' , strtotime ( $date->date ) ) ;
             // Se acaba usando DateTime de 15 dias
 
         $msg_expirated = $this->getContainer()->get('translator')->trans('mail.inactivity_warning');
