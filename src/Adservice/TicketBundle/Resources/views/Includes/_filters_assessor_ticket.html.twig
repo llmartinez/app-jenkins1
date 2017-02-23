@@ -40,7 +40,7 @@
 
             <div class="grid w10">
                 <label class="lbl_lgray" for="new_car_form_year">{% trans %} year {% endtrans %}</label>
-                <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+                <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
                 <input type="text" id="new_car_form_year" name="new_car_form_year" class="form-control asr_form-control"
                     {% if year is defined %}value="{{year}}"{% endif %}>
                 </input>
@@ -49,8 +49,7 @@
             <div class="grid w10">
 
                 <label class="lbl_lgray" for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
-
-                <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+                <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
 
                 {# <a class="pull-right" id="list_motor" title="{% trans %} motor {% endtrans %}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
 
@@ -132,6 +131,6 @@
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
                 </a>
             </div>
-
+        </div>
     </form>
-   </div>
+</div>
