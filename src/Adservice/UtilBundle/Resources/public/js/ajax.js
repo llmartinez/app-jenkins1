@@ -1,5 +1,6 @@
 
     $.ajaxSetup({ cache: false });
+
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} route
@@ -121,6 +122,7 @@ function populate_partner(){
         });
     }
 }
+
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -165,6 +167,7 @@ function populate_partner2(partner){
         });
     }
 }
+
 function populate_partner3(){
     var id_catserv = $('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
@@ -325,6 +328,7 @@ function populate_typology3(typology){
         }
     });
 }
+
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -396,8 +400,6 @@ function populate_diagmachine2(diag_machine){
             console.log("Error al cargar las maquinas de diagnosis...");
         }
     });
-
-
 }
 
 /**
@@ -437,6 +439,7 @@ function populate_shop(id_shop){
         }
     });
 }
+
 /**
  * Funcion que rellena (populate) el combo de los talleres segun el socio seleccionado por el usuario
  */
@@ -802,15 +805,15 @@ function fill_car_by_year() {
                         $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
-                    $('#filter_motor').empty();
-                    $('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
+                    //$('#filter_motor').empty();
+                    //$('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-                    $('#filter_year').empty();
-                    if(year != ''){
-                        $('#filter_year').append('<input type="hidden" id="flt_year" name="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
-                    }else{
-                        $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
-                    }
+                    //$('#filter_year').empty();
+                    //if(year != ''){
+                    //   $('#filter_year').append('<input type="hidden" id="flt_year" name="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                    //}else{
+                    //    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                    //}
                 }
             }
         },
@@ -861,15 +864,15 @@ function fill_car_by_motor() {
                             $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
-                    $('#filter_year').empty();
-                    $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+                    //$('#filter_year').empty();
+                    //$('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-                    $('#filter_motor').empty();
-                    if(motor != ''){
-                        $('#filter_motor').append('<input type="hidden" id="flt_motor" name="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-                    }else{
-                        $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
-                    }
+                    //$('#filter_motor').empty();
+                    //if(motor != ''){
+                    //    $('#filter_motor').append('<input type="hidden" id="flt_motor" name="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
+                    //}else{
+                    //    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                    //}
                 }
             }else{
                 msg_bad_filter = $('#msg_bad_filter').val();
@@ -1098,8 +1101,8 @@ function get_country_partner(id_partner){
     });
 }
 
-$("#filter_plate_number").on('click', function ()
-{
+function fill_car_from_plate_number() {
+
     var route     = 'get_car_from_plate_number';
 
     var idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
@@ -1130,7 +1133,7 @@ $("#filter_plate_number").on('click', function ()
             console.log("Error loading models...");
         }
     });
-});
+}
 
 /**
  * Rellena el combo de los modelos segun la matricula

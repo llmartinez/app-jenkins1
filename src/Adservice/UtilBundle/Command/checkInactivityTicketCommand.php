@@ -22,6 +22,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
     /**
      * Comando que comprueba el tiempo que lleva inactivo un ticket
      *      - INACTIVO: +2h sin actividad
+     *        Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
      *
      * @param  InputInterface  $input  An InputInterface instance
      * @param  OutputInterface $output An OutputInterface instance
@@ -29,19 +30,19 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1, 'pending' => 1));
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1));
         $status = $em->getRepository('TicketBundle:Status')->findAll();
         $sa = $em->getRepository('UserBundle:User')->find(1);
 
-        $count_inactive = 0; // +2h sin actividad
+        $count = 0;
 
         foreach ($tickets as $ticket)
         {
             $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
 
-            // INACTIVE_TICKETS (+2h sin actividad)
-
-            if($diff->h >= 2)
+            // INACTIVO: +2h sin actividad
+            //           - Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
+            if($diff->h >= 2 or $diff->days >= 1)
             {
                 $ticket->setStatus($status[2]);
                 $ticket->setModifiedBy($sa);
@@ -49,11 +50,11 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
 
                 $em->persist($ticket);
 
-                $count_inactive++;
+                $count++;
             }
         }
         $em->flush();
 
-        $output->writeln('Se han modificado '.$count_inactive.' tickets por inactividad.');
+        $output->writeln('Se han modificado '.$count.' tickets por inactividad.');
     }
 }
