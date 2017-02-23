@@ -31,6 +31,11 @@
     {
         fill_car_from_plate_number();
     });
+    
+    $("#filter_vin").on('click', function ()
+    {
+        fill_car_from_vin();
+    });
 
     $(document).on('click','#btn_create',function(){
         checkVIN()

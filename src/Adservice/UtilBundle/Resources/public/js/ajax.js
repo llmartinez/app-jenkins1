@@ -1300,8 +1300,7 @@ function fill_model_by_PlateNumber(dataPN) {
     }
 }
 
-
-$("#filter_vin").on('click', function ()
+function fill_car_from_vin()
 {
     var route     = 'get_car_from_vin';
 
@@ -1333,7 +1332,7 @@ $("#filter_vin").on('click', function ()
             console.log("Error loading models...");
         }
     });
-});
+}
 
 function fill_model_by_Vin(dataV) {
 
@@ -1496,7 +1495,6 @@ function fill_model_by_Vin(dataV) {
         });
     }
 }
-
 
 $("#btn_search_ticket_id").on('click', function ()
 {
