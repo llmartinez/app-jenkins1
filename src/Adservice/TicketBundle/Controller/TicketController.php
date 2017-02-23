@@ -1242,8 +1242,6 @@ class TicketController extends Controller {
                                     $max_len = 10000;
                                 } else {
                                     $max_len = 500;
-                                    // Quitamos el estado inactivo si alguien responde al ticket
-                                    $ticket->setStatus($em->getRepository('TicketBundle:Status')->find(1));
                                 }
                                 if ($str_len <= $max_len) {
                                     if($request->request->has("sendTicket")){
@@ -1256,19 +1254,23 @@ class TicketController extends Controller {
                                         UtilController::saveEntity($em, $post, $user, false);
 
 
-                                        //Define Document
+                                        // Define Document
                                         $document->setPost($post);
 
                                         if ($file != "") {
                                                 $em->persist($document);
                                         }
 
+                                        // Quitamos el estado inactivo/caducado si alguien responde al ticket
+                                        $ticket->setStatus($em->getRepository('TicketBundle:Status')->find(1));
+                                        $ticket->setExpirationDate(null);
+
                                         //Se desbloquea el ticket una vez respondido
                                         if ($ticket->getBlockedBy() != null) {
                                             $ticket->setBlockedBy(null);
                                         }
 
-                                        /*si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente */
+                                        // Si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente
                                         if ($security->isGranted('ROLE_ASSESSOR')) {
                                             $ticket->setAssignedTo($user);
                                             $ticket->setPending(0);
