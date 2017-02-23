@@ -437,7 +437,8 @@ class Car
                       'motor'               => $this->getMotor(),
                       'kw'                  => $this->getKw(),
                       'cm3'                 => $this->getDisplacement(),
-                      'vin'                 => $this->getVin());
+                      'vin'                 => $this->getVin(),
+                      'plateNumber'         => $this->getPlateNumber());
         return $json;
     }
 }
