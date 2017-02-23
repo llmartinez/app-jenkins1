@@ -31,6 +31,11 @@
 </div>
 
 <div class="grid-full w100">
+    {% if id_version  is defined %}
+        <input type="hidden" id="ticket_version" value="{{id_version }}">
+    {% else %}
+        <input type="hidden" id="ticket_version" value="0">
+    {% endif %}
    <div class="grid-33">
         <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
         <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
