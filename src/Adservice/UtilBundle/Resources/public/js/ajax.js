@@ -1297,6 +1297,204 @@ function fill_model_by_PlateNumber(dataPN) {
     }
 }
 
+
+$("#filter_vin").on('click', function ()
+{
+    var route     = 'get_car_from_vin';
+
+    var vin = $(document).find('#new_car_form_vin').val();
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale, vin: vin}),
+        dataType: "json",
+        beforeSend: function () {
+            $("body").css("cursor", "progress");
+        },
+        complete: function () {
+            $("body").css("cursor", "default");
+        },
+        success: function (data) {
+           if (data['error'] !== "No hay coincidencias") {
+               var versionId = data.versionId;
+               fill_model_by_Vin(data);
+
+           }
+           else {
+               alert($("#msg_plate_number_not_found").val());
+           }
+
+        },
+        error: function () {
+            console.log("Error loading models...");
+        }
+    });
+});
+
+function fill_model_by_Vin(dataV) {
+
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text());
+    $('select#new_car_form_brand' ).val(dataV.brandId);
+    $("#ticket_model").val(dataV.modelId);
+    $("#ticket_version").val(dataV.versionId);
+
+    var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
+    var model = dataV.modelId;
+    var motor = dataV.motor;
+    if (id_brand != undefined && id_brand != "") {
+
+        var route  = 'car_model';
+        var locale = $(document).find("#data_locale").val();
+        var filter = '';
+        var filter_value = '';
+        // var id_mts = '';
+        // var motor = '';
+
+        if ($('#year_selected').val()  == '') { filter       = 'year';
+                                                filter_value = $('#new_car_form_year').val(); }
+
+        if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                filter_value = $('#new_car_form_motor').val();
+                                                // id_mts       = $('#id_mts').val();
+                                                // motor        = $('form[id=contact]').find('#new_car_form_motor').val();
+                                              }
+
+        $.ajax({
+            type: "POST",
+            url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
+            data: {id_brand: id_brand, filter: filter, filter_value: filter_value}, //, id_mts: id_mts, motor: motor},
+            dataType: "json",
+            beforeSend: function(){ $("body").css("cursor", "progress"); },
+            complete: function(){ $("body").css("cursor", "default"); },
+            success: function(data) {
+                // Limpiamos y llenamos el combo con las opciones del json
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
+                $('#new_car_form_version').append("<option></option>");
+
+
+                if (data['error'] != "No hay coincidencias") {
+                    //Primer campo vacío
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
+                    $.each(data, function(idx, elm) {
+                        // if (idx == 'id_mts') $('#id_mts').val(elm);
+                        // else {
+                            if(model == elm.id )
+                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                            else
+                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                        // }
+                    });
+                }
+                if(id_brand == 0){
+                    $('#new_car_form_model').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
+                    $('#new_car_form_version').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
+
+                    $("#new_car_form_plateNumber").val("");
+                   // var version = $("#ticket_version").val();
+                   // if(version != undefined && version != ""){
+                   //     fill_version(version);
+                   // }
+                }
+                if(model != undefined && model != '' ) {
+                    var version = $("#ticket_version").val();
+                    if(version != undefined && version != ""){
+
+                        $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
+                        if (motor == undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
+
+                        if (model != undefined && model != "") {
+                            var route  = 'car_version';
+                            var locale = $(document).find("#data_locale").val();
+                            var filter = '';
+                            var filter_value = '';
+                            // var id_mts = '';
+
+                            if ($('#year_selected').val()  == '') { filter       = 'year';
+                                                                    filter_value = $('#new_car_form_year').val(); }
+
+                            if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                                    filter_value = $('#new_car_form_motor').val();
+                                                                    // id_mts       = $('#id_mts').val();
+                                                                  }
+
+                            $.ajax({
+                                type: "POST",
+                                url: Routing.generate(route, {_locale: locale, id_model: model, filter: filter, filter_value: filter_value}),
+                                data: {id_model: model, filter: filter, filter_value: filter_value}, //, id_mts: id_mts},
+                                dataType: "json",
+                                beforeSend: function(){ $("body").css("cursor", "progress"); },
+                                complete: function(){ $("body").css("cursor", "default"); },
+                                success: function(data) {
+                                    // Limpiamos y llenamos el combo con las opciones del json
+                                    $('#new_car_form_version').empty();
+
+
+                                    if (data['error'] != "No hay coincidencias") {
+
+                                        var dis_url = $( "#dis-url" ).val();
+                                        var vts_url = $( "#vts-url" ).val();
+
+                                        //Primer campo vacío
+                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
+
+                                        $.each(data, function(idx, elm) {
+                                            // if (idx == 'id_mts') $('#id_mts').val(elm);
+                                            // else {
+                                                if(version == elm.id ){
+                                                    var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
+
+                                                   // if(motor == undefined || (motor == mt))
+
+                                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                                                }
+                                                else
+                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+
+                                                $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
+                                                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
+                                            // }
+                                        });
+                                    }
+                                    if(version != undefined && version != '' ) {
+
+                                        var system = $('#id_system').val();
+                                        if(system == '' ) { system = $("#ticket_system").val(); }
+
+                                        if(system != '' ) {
+                                            $('#id_system').val(system);
+                                            var subsystem = $("#ticket_subsystem").val();
+                                            if (subsystem != undefined)
+                                               fill_subsystem(subsystem);
+                                        }
+
+                                    }
+
+                                },
+                                error: function() {
+                                    console.log("Error al cargar versiones...");
+                                }
+                            });
+                        }
+                    }
+                    $("#new_car_form_year").val(dataV.year);
+                    $("#new_car_form_motor").val(dataV.motor);
+                    $("#new_car_form_kW").val(dataV.kw);
+                    $("#new_car_form_displacement").val(dataV.cm3);
+                    $("#new_car_form_plateNumber").val(dataV.plateNumber);
+                }
+            },
+            error: function() {
+                console.log("Error al cargar modelos...");
+            }
+        });
+    }
+}
+
+
 $("#btn_search_ticket_id").on('click', function ()
 {
     var idTicket = $(document).find('#flt_id').val();

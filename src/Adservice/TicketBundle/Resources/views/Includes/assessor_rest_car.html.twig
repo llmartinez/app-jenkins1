@@ -35,6 +35,7 @@
 
         <div class="grid-33">
             <label for="new_car_form_vin">{% trans %} vin {% endtrans %} *</label>
+            <a class="pull-right" id="filter_vin" title="{% trans %} filter_by_vin {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
             {{ form_widget(formC.vin, { 'attr': { 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'vin' | trans } }) }}
         </div>
 
