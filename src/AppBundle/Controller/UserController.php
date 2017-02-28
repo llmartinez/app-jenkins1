@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Entity\User;
-
+use AppBundle\Form\UserPasswordType;
 
 class UserController extends Controller
 {
@@ -19,11 +19,12 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
-        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
-        $roles = $this->get('utilsRole')->$getRolesFor();
+        $user  = $this->get('security.token_storage')->getToken()->getUser();
+        $roles = $this->get('utils')->getRolesForRole($user->getRoleId());
 
-        $query = $this->get('utilsUser')->findUsersByRole($em, $roles);
+        $query = $this->get('utilsUser')->findUsersByRole($this, $roles);
+        /* TODO: filtrar por Service del user_token*/
+
         /*
             if($filter==0 && $value==0) $query = $em->getRepository('AppBundle:User')->findAll();
             else{
@@ -43,9 +44,8 @@ class UserController extends Controller
     /** Selecciona el rol del usuario a crear */
     public function selectRoleAction(Request $request)
     {
-        $roleId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
-        $getRolesFor = "getRolesFor".$this->get('utils')->getRoles($roleId);
-        $roles = $this->get('utilsRole')->$getRolesFor();
+        $tokenRole = $this->get('security.token_storage')->getToken()->getUser()->getRoleId();
+        $roles = $this->get('utils')->getRolesForRole($tokenRole);
 
         return $this->render('user/selectRole.html.twig', array('roles' => $roles));
     }
@@ -67,6 +67,11 @@ class UserController extends Controller
      */
     public function userEditAction(Request $request, User $user)
     {
+        // Si entras en tu mismo usuario solo se te permite resetear password y mostrar tus datos
+        if ($this->get('security.token_storage')->getToken()->getUser()->getId() == $user->getId())
+        {
+            return $this->redirectToRoute('userView', array('id' => $user->getId()));
+        }
         $return = $this->get('utilsUser')->editUser($this, $request, $user);
         
         if($return)
@@ -77,13 +82,44 @@ class UserController extends Controller
 
     /*
      * @ParamConverter("user", class="AppBundle:User")
+     */
+    public function userViewAction(Request $request, User $user)
+    {
+        $form = $this->createForm(new UserPasswordType(), $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            if($this->get('utilsUser')->checkOldPassword($this, $user, $request->request->get('oldPassword')))
+            {
+                $user = $this->get('utilsUser')->setNewPassword($this, $user);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+
+                // Show confirmation of new password
+                $this->get('session')->getFlashBag()->add('ok' , 'password_changed');
+            }
+            else
+            {
+                // Show error old password
+                $this->get('session')->getFlashBag()->add('ko' , 'password_old_error');
+            }
+        }
+        
+        return $this->render('user/user_view.html.twig', array('user' => $user, 'form' => $form->createView()));
+    }
+
+    /*
+     * @ParamConverter("user", class="AppBundle:User")
      * @throws AccessDeniedException
      */
     public function searchIdAction(User $user)
     {
-        $service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService();
+        $service = $this->get('security.token_storage')->getToken()->getUser()->getService();
 
-        if( $service == NULL or $service == $user->getCategoryService()) 
+        if( $service == NULL or $service == $user->getService()) 
         {
             return $this->redirectToRoute('userEdit', array('id' => $user->getId() ));
         }

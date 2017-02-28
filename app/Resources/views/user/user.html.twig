@@ -13,11 +13,16 @@
 
 	<form action="{{form.vars.action}}" method="{{form.vars.method}}">
 
-		{{ form_rest(form) }}
+        {% if formE is defined %}{{ form_rest(formE) }}{% endif %}
 
-		{% if formE is defined %}{{ form_rest(formE) }}{% endif %}
+		{{ form_rest(form) }}
 		
         <button type="submit">{{ "Submit" | trans }}</button>
     </form>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/user.js"></script>
 {% endblock %}

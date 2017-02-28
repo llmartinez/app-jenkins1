@@ -23,7 +23,7 @@
                     <thead><tr>
                     {# sorting of properties based on query components #}
                        <th{% if pagination.isSorted('u.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 'u.id') }}</th>
-                       <th{% if pagination.isSorted('u.RoleId')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'role'|trans, 'u.RoleId') }}</th>
+                       <th{% if pagination.isSorted('u.roleId')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'role'|trans, 'u.roleId') }}</th>
                        <th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Username'|trans,'u.username')}}</th>
                        <th{% if pagination.isSorted('u.email1')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Email'|trans,'u.email1') }}</th>
                        <th{% if pagination.isSorted('u.phoneNumber1') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Phone'|trans,'u.phoneNumber1') }}</th>
@@ -32,7 +32,7 @@
                         {% for row in pagination %}
                         <tr {% if loop.index is odd %}class="color"{% endif %}>
                             <td>{{ row.id }}</td>
-                            <td>{{ roles[row.RoleId]|trans }}</td>
+                            <td>{{ roles[row.roleId]|trans }}</td>
                             <td>{{ row.username }}</td>
                             <td>{{ row.email1 }}</td>
                             <td>{{ row.email2 }}</td>

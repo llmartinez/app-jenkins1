@@ -5,7 +5,7 @@ class Ticket
 {
     public static $importances = array('information', 'advanced_diagnostics');
 
-    public static $states = array('1' => 'open', '2' => 'closed', '3' => 'pending', '4' => 'answered', '5' => 'inactive');
+    public static $states = array('0' => 'created', '1' => 'inactive', '2' => 'expired', '3' => 'pending', '4' => 'answered', '6' => 'closed');
 
     public static $systems = array('1' => 'CARROCERÍA',
                                    '2' => 'CONFORT',

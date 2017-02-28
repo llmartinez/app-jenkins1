@@ -40,6 +40,10 @@ userDelete:
     path:  /users/user-delete/{id}
     defaults: { _controller: AppBundle:User:userDelete, id: null }
 
+userView:
+    path:  /users/user-view/{id}
+    defaults: { _controller: AppBundle:User:userView, id: null }
+
 searchId:
     path:  /users/search-id/{id}
     defaults: { _controller: AppBundle:User:searchId, id: null }
@@ -48,9 +52,7 @@ users:
     path:  /users/{page}/{filter}/{value}
     defaults: { _controller: AppBundle:User:users, page: 1, filter: 0, value: 0 }
 
-
 # TICKET
 tickets:
     path:  /tickets
     defaults: { _controller: AppBundle:Ticket:tickets }
-    

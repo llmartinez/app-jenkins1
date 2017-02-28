@@ -21,6 +21,18 @@ ROLE_ADMIN: "Admin"
 ROLE_SUPER_ADMIN: "Super Admin"
 ROLE_GOD: "God"
 
+# SERVICES
+Service: "Service"
+SERV_GED: "GED"
+SERV_ADSERVICE_ES: "AD Service ES"
+SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+SERV_ADSERVICE_PT: "AD Service PT"
+SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+SERV_PHONE_EINA_JS: "Phone Eina JS"
+SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+SERV_ACTIA: "Actia"
+SERV_NEXUS: "Nexus"
+
 # COUNTRIES
 spain: "Spain"
 france: "France"
@@ -41,6 +53,7 @@ Username: "Username"
 Password: "Password"
 password_insert: "Insert password"
 password_repeat: "Repeat password"
+password_old: "Old password"
 Submit: "Submit"
 search: "Search"
 All: "All"
@@ -49,14 +62,13 @@ searchId: "Search ID"
 
 # USER
 user: "User"
-id: "ID"
+Id: "ID"
 role: "Role"
 Status: "Status"
 active: "Active"
 inactive: "Inactive"
 test: "Test"
 Name: "Name"
-Category service: "Category Service"
 Language: "Language"
 Country: "Country"
 Region: "Region"
@@ -76,6 +88,7 @@ CreatedBy: "Created by"
 CreatedAt: "Created at"
 ModifiedBy: "Modified by"
 ModifiedAt: "Modified at"
+Token: "Token"
 
 # DATES
 date.day: "Day"
@@ -90,9 +103,11 @@ ticket_delete: "Delete ticket"
 
 #PARTNER
 Partner: "Partner"
+Code partner: "Partner Code"
 
 #WORKSHOP
 Workshop: "Workshop"
+Code workshop: "Workshop Code"
 
 # HELP
 help: "Help"
@@ -100,13 +115,3 @@ help_title: "Help Ticketing"
 help_check_manual: "Check the manual"
 help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
 help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
-
-# CATEGORY SERVICES
-GED: "GED"
-AD Service ES: "AD Service ES"
-Assistance Diag 24 FR: "Assistance Diag 24 FR"
-AD Service PT: "AD Service PT"
-Phone Eina ECP: "Phone Eina ECP"
-Phone Eina JS: "Phone Eina JS"
-Phone Eina TecnoDiag: "Phone Eina TecnoDiag"
-Phone Eina Actia: "Phone Eina Actia"

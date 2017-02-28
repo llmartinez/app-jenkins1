@@ -19,6 +19,12 @@ class Partner
     private $id;
 
     /**
+     * @ORM\Column(type="integer", length=255)
+     * @Assert\NotBlank()
+     */
+    private $codePartner;
+
+    /**
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -39,6 +45,18 @@ class Partner
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setCodePartner($codePartner)
+    {
+        $this->codePartner = $codePartner;
+
+        return $this;
+    }
+
+    public function getCodePartner()
+    {
+        return $this->codePartner;
     }
 
     public function setUser($user)
@@ -67,7 +85,7 @@ class Partner
 
     public function __toString()
     {
-        return $this->getId();
+        return $this->codePartner.' - '.$this->name;
     }
 
 }

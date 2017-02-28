@@ -12,9 +12,9 @@ class PartnerType extends AbstractType
     {
 
         $builder
-            ->add('name' , 'text'  , array('required'=> 'required', 'translation_domain' => 'messages'))
+            ->add('codePartner' , 'integer', array('required'=> 'required'))
+            ->add('name' 		, 'text'   , array('required'=> 'required'))
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

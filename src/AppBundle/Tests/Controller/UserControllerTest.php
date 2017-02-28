@@ -150,6 +150,8 @@ class UserControllerTest extends WebTestCase
         // sustituye algunos valores
         $form['user_new[username]'] = 'admintest';
 
+
+        // envía el formulario
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
@@ -645,7 +647,7 @@ class UserControllerTest extends WebTestCase
     public function getGenericForm($form){
         $form['user_new[plainPassword][first]'] = 'test';
         $form['user_new[plainPassword][second]'] = 'test';
-        $form['user_new[categoryService]'] = 1;
+        $form['user_new[service]'] = 1;
         $form['user_new[country]'] = 1;
         $form['user_new[language]'] = 1;
         $form['user_new[status]'] = 1;
