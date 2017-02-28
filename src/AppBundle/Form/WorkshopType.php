@@ -12,9 +12,9 @@ class WorkshopType extends AbstractType
     {
 
         $builder
-            ->add('name'       , 'text'    , array('required'=> 'required', 'attr' => array('class' => 'required')))
-            ->add('Partner'    , 'entity'  , array('class' => 'AppBundle:Partner', 'empty_value' => 'SelectValue', 'attr' => array('class' => 'required')))
-            ->add('id' , 'integer', array('required'=> 'required', 'attr' => array('min' => 1)))
+            ->add('name'         , 'text'   , array('required'=> 'required', 'attr' => array('class' => 'required')))
+            ->add('Partner'      , 'entity' , array('class' => 'AppBundle:Partner', 'empty_value' => 'SelectValue', 'attr' => array('class' => 'required')))
+            ->add('codeWorkshop' , 'integer', array('required'=> 'required', 'attr' => array('min' => 1)))
         ;
 
     }
