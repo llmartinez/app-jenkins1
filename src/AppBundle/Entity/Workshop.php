@@ -13,12 +13,7 @@ class Workshop
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
-    private $codePartner;
-
-    /**
-     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -34,6 +29,12 @@ class Workshop
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+    
+    /**
+     * @ORM\Column(type="integer", length=11)
+     * @Assert\NotBlank()
+     */
+    private $codeWorkshop;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -48,24 +49,19 @@ class Workshop
         $this->partner = $partner;
     }
 
-    public function getCodePartner()
+    public function getCodeWorkshop()
     {
-        return $this->codePartner;
+        return $this->codeWorkshop;
     }
 
-    public function setCodePartner($codePartner)
+    public function setCodeWorkshop($codeWorkshop)
     {
-        $this->codePartner = $codePartner;
+        $this->codeWorkshop = $codeWorkshop;
     }
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     public function setUser($user)

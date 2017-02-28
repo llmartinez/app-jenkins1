@@ -62,7 +62,7 @@ class UtilsUser
         if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
              $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
         else $tokenService = '0';
-
+        
         $em = $_this->getDoctrine()->getManager();
 
         $user = new User();
@@ -113,7 +113,7 @@ class UtilsUser
                     }
                 }
 
-                if($user->getPassword() == null) $user = self::setNewPassword($_this,$user);
+                if($user->getPassword() == null) $user = self::setNewPassword($_this, $user);
 
                 if(self::checkUser($_this, $user))
                 {
@@ -237,16 +237,17 @@ class UtilsUser
     {
         $oldPassword = $_this->get('security.password_encoder')
                           ->encodePassword($user, $oldPass, $user->getSalt());
-
+                          
         return ($oldPassword == $user->getPassword());
     }
 
-    public static function getMaxIdWorkshop($em,$codePartner)
+    public static function getMaxCodeWorkshop($em,$codePartner)
     {
         $query = $em->createQuery(
             'SELECT MAX(w.id) FROM AppBundle:Workshop w
-             WHERE w.codePartner = :CodePartner'
-        )->setParameter('CodePartner', $codePartner);
+             JOIN w.partner p
+             WHERE p.codePartner = :codePartner'
+        )->setParameter('codePartner', $codePartner);
 
         $max_id = $query->getSingleScalarResult();
 
@@ -261,8 +262,8 @@ class UtilsUser
 
     public static function checkWorkshop($em,$workshop)
     {
-        if($workshop->getId() == null){
-            $workshop->setId(self::getMaxIdWorkshop($em,$workshop->getCodePartner()));
+        if($workshop->getCodeWorkshop() == null){
+            $workshop->setCodeWorkshop(self::getMaxCodeWorkshop($em,$workshop->getPartner()->getCodePartner()));
         }
         return true;
     }
