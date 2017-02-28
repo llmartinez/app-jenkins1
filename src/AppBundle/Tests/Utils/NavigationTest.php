@@ -20,8 +20,8 @@ class NavigationTest extends WebTestCase
         // redirect to LOGIN for anonymous users
         $crawler = $this->client->request('GET', '/');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-        $crawler = $this->client->followRedirect(); //go to '/en'
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        /*$crawler = $this->client->followRedirect(); //go to '/en'
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());*/
         $crawler = $this->client->followRedirect(); //go to '/en/login'
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
