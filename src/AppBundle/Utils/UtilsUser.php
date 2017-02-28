@@ -105,12 +105,15 @@ class UtilsUser
                 {
                     foreach ($user->getService() as $service)
                     {
-                        $role = $em->getRepository('AppBundle:Role')->find($service);
-                        $user->addRole($role);
+                        if($service != 0)
+                        {
+                            $role = $em->getRepository('AppBundle:Role')->find($service);
+                            $user->addRole($role);
+                        }
                     }
                 }
 
-                if($user->getPassword() == null) $user = self::setNewPassword($user);
+                if($user->getPassword() == null) $user = self::setNewPassword($_this,$user);
 
                 if(self::checkUser($_this, $user))
                 {
