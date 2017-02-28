@@ -13,16 +13,21 @@ class Workshop
 {
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Partner")
-     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
+     * @ORM\Column(type="integer")
      */
-    private $partner;
+    private $codePartner;
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
     private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Partner")
+     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
+     */
+    private $partner;
 
     /**
      * @ORM\OneToOne(targetEntity="User")
@@ -41,6 +46,16 @@ class Workshop
     public function __construct($partner=null)
     {
         $this->partner = $partner;
+    }
+
+    public function getCodePartner()
+    {
+        return $this->codePartner;
+    }
+
+    public function setCodePartner($codePartner)
+    {
+        $this->codePartner = $codePartner;
     }
 
     public function getId()

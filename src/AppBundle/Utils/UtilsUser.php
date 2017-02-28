@@ -2,10 +2,8 @@
 namespace AppBundle\Utils;
 
 use AppBundle\Entity\User;
-use AppBundle\Entity\Workshop;
 use AppBundle\Form\UserNewType;
 use AppBundle\Form\UserEditType;
-use AppBundle\Form\WorkshopType;
 
 class UtilsUser
 {
@@ -15,11 +13,19 @@ class UtilsUser
         return self::$status;
     }
 
-    public static function findUsersByRole($em, $roles)
+    public static function findUsersByRole($_this, $roles)
     {
+        $em = $_this->getDoctrine()->getManager();
+
         $query = $em->getRepository("AppBundle:User")
                     ->createQueryBuilder("u")
-                    ->select("u");
+                    ->select("u")
+                    ->join('u.user_role', 'r')
+                    ->where("u.id != 0");
+
+        if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
+             $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
+        else $tokenService = '0';
 
         if($roles != '')
         {
@@ -30,7 +36,19 @@ class UtilsUser
             }
             $roles_in .= ')';
 
-            $query->where("u.roleId IN ".$roles_in." ");
+            $query->andWhere("u.roleId IN ".$roles_in." ");
+        }
+
+        if($tokenService != '0')
+        {
+            $services_in = '(0';
+            foreach ($tokenService as $key => $token)
+            {
+                $services_in .= ', '.$token.' ';
+            }
+            $services_in .= ')';
+
+            $query->andWhere("r.id IN ".$services_in." ");
         }
 
         // TODO: Get Users by filters
@@ -41,11 +59,16 @@ class UtilsUser
 
     public static function newUser($_this, $request, $role_id)
     {
+        if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
+             $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
+        else $tokenService = '0';
+        
         $em = $_this->getDoctrine()->getManager();
 
         $user = new User();
 
-        $form = $_this->createForm(new UserNewType(), $user);
+        $form = $_this->createForm(new UserNewType(), $user, array('attr' => array('tokenService' => $tokenService,
+                                                                                   'role' => $role_id )));
         $return = array('_locale' => $_this->get('locale'), 'role_id' => $role_id, 'form' => $form->createView());
 
         $entityName = self::getEntityName($role_id);
@@ -78,13 +101,16 @@ class UtilsUser
                     $user->addRole($role);
                 }
 
-                if($user->getPassword() == null)
+                if($user->getService() != null)
                 {
-                    $user->setSalt(md5(uniqid()));
-                    $password = $_this->get('security.password_encoder')
-                        ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
-                    $user->setPassword($password);
+                    foreach ($user->getService() as $service)
+                    {
+                        $role = $em->getRepository('AppBundle:Role')->find($service);
+                        $user->addRole($role);
+                    }
                 }
+
+                if($user->getPassword() == null) $user = self::setNewPassword($user);
 
                 if(self::checkUser($_this, $user))
                 {
@@ -104,7 +130,7 @@ class UtilsUser
 
                 return false;
             }
-            else #Si $form->isValid() == fasle devolvemos el error
+            else #Si $form->isValid() == false devolvemos el error
             {
                 $return['form'] = $form->createView();
 
@@ -119,10 +145,13 @@ class UtilsUser
     {
         $em = $_this->getDoctrine()->getManager();
 
-        $form = $_this->createForm(new UserEditType(), $user);
+        $role_id = $user->getRoleId();
+
+        $form = $_this->createForm(new UserEditType(), $user, array('attr' => array('tokenService' => '0',
+                                                                                    'role' => $role_id )));
         $form->handleRequest($request);
-        $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $user->getRoleId(), 'form' => $form->createView());
-        $entityName = self::getEntityName($user->getRoleId());
+        $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $role_id, 'form' => $form->createView());
+        $entityName = self::getEntityName($role_id);
 
         if($entityName != null)
         {
@@ -158,7 +187,6 @@ class UtilsUser
         return $return;
     }
 
-
     static public function getRandomToken()
     {
           $key = '';
@@ -178,12 +206,29 @@ class UtilsUser
         return $entityName;
     }
 
-    public static function getMaxIdWorkshop($em,$workshop)
+    public static function setNewPassword($_this, $user)
+    {
+        $user->setSalt(md5(uniqid()));
+        $password = $_this->get('security.password_encoder')
+                          ->encodePassword($user, $user->getPlainPassword(), $user->getSalt());
+        $user->setPassword($password);
+
+        return $user;
+    }
+    public static function checkOldPassword($_this, $user, $oldPass)
+    {
+        $oldPassword = $_this->get('security.password_encoder')
+                          ->encodePassword($user, $oldPass, $user->getSalt());
+                          
+        return ($oldPassword == $user->getPassword());
+    }
+
+    public static function getMaxIdWorkshop($em,$codePartner)
     {
         $query = $em->createQuery(
             'SELECT MAX(w.id) FROM AppBundle:Workshop w
-             WHERE w.partner = :idPartner'
-        )->setParameter('idPartner', $workshop->getPartner()->getId());
+             WHERE w.codePartner = :CodePartner'
+        )->setParameter('CodePartner', $codePartner);
 
         $max_id = $query->getSingleScalarResult();
 
@@ -199,7 +244,7 @@ class UtilsUser
     public static function checkWorkshop($em,$workshop)
     {
         if($workshop->getId() == null){
-            $workshop->setId(self::getMaxIdWorkshop($em,$workshop));
+            $workshop->setId(self::getMaxIdWorkshop($em,$workshop->getCodePartner()));
         }
         return true;
     }

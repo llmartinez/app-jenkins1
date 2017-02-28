@@ -32,6 +32,12 @@
         </div>
 
         <div id="body">
+
+            {% block flashMessages %}
+                {% for flashMessage in app.session.flashbag.get('ok') %} <div class="ok">{{ flashMessage }}</div>{% endfor %}
+                {% for flashMessage in app.session.flashbag.get('ko') %} <div class="ko">{{ flashMessage }}</div>{% endfor %}
+            {% endblock %}
+
             {% block body %}{% endblock %}
         </div>
 

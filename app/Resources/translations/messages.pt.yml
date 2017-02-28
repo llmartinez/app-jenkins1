@@ -21,6 +21,18 @@ ROLE_ADMIN: "Administrador"
 ROLE_SUPER_ADMIN: "Super Admin"
 ROLE_GOD: "Deus"
 
+# SERVICES
+Service: "Service"
+SERV_GED: "GED"
+SERV_ADSERVICE_ES: "AD Service ES"
+SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+SERV_ADSERVICE_PT: "AD Service PT"
+SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+SERV_PHONE_EINA_JS: "Phone Eina JS"
+SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+SERV_ACTIA: "Actia"
+SERV_NEXUS: "Nexus"
+
 # COUNTRIES
 spain: "Espanha"
 france: "França"
@@ -41,6 +53,7 @@ Username: "Usuário"
 Password: "Palavra-passe"
 password_insert: "Insira a palavra-passe"
 password_repeat: "Repetir palavra-passe"
+password_old: "Palavra-passe anterior"
 Submit: "Enviar"
 search: "Buscar"
 All: "Todos"
@@ -60,14 +73,13 @@ dt_next: "Siguiente"
 
 # USER
 user: "Usuário"
-id: "ID"
+Id: "ID"
 role: "Função"
 Status: "Estado"
 active: "Ativo"
 inactive: "Inativo"
 test: "Em testes"
 Name: "Nome"
-Category service: "Categoria de serviço"
 Language: "Idioma"
 Country: "País"
 Region: "Distrito"
@@ -87,6 +99,7 @@ CreatedBy: "Criado por"
 CreatedAt: "Criado em"
 ModifiedBy: "Alterado por"
 ModifiedAt: "Alterado em"
+Token: "Token"
 
 # DATES
 date.day: "Dia"
@@ -101,9 +114,11 @@ ticket_delete: "Apagar Talão"
 
 #PARTNER
 Partner: "Sócio"
+Code partner: "Código de Sócio"
 
 #WORKSHOP
 Workshop: "Oficina"
+Code workshop: "Código de Oficina"
 
 #HELP
 help: "Ajuda"
@@ -111,13 +126,3 @@ help_title: "Ajuda Ticketing"
 help_check_manual: "Consulte o Manual"
 help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
 help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
-
-# CATEGORY SERVICES
-GED: "GED"
-AD Service ES: "AD Service ES"
-Assistance Diag 24 FR: "Assistance Diag 24 FR"
-AD Service PT: "AD Service PT"
-Phone Eina ECP: "Phone Eina ECP"
-Phone Eina JS: "Phone Eina JS"
-Phone Eina TecnoDiag: "Phone Eina TecnoDiag"
-Phone Eina Actia: "Phone Eina Actia"

@@ -16,15 +16,19 @@ class UserNewType extends AbstractType
         $builder
             ->add('username', 'text', array('required' => 'required'))
             ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'first_options'  => array('label' => 'password_insert'),
-                'second_options' => array('label' => 'password_repeat'),
-                'invalid_message' => 'error_passwords_not_match',
-                'required' => 'required'
+                                                    'type' => 'password',
+                                                    'first_options'  => array('label' => 'password_insert'),
+                                                    'second_options' => array('label' => 'password_repeat'),
+                                                    'invalid_message' => 'error_passwords_not_match',
+                                                    'required' => 'required'
             ))
-            ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
-                                                        'required'=> 'required',
-                                                        'empty_value' => 'SelectValue'))
+
+            ->add('service' , 'choice'  , array('choices' => Utils::getFormServices($options['attr']),
+                                                'required'=>'required',
+                                                'expanded'=> 'true',
+                                                'multiple'=> 'true'
+                                                )
+            )
 
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
                                                 'required'=> 'required',
