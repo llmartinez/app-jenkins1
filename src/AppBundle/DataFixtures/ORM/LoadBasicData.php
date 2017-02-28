@@ -260,7 +260,7 @@ class LoadBasicData implements FixtureInterface
 		$manager->persist($userAV);
 
 		// USER (workshop:test)
-/*
+
 		$userW = new User();
 		$userW->addRole($role_workshop);
 		$userW->setUsername('workshop');
@@ -279,10 +279,11 @@ class LoadBasicData implements FixtureInterface
 
 		$new_workshop = new Workshop();
 		$new_workshop->setName('workshop');
-		$new_workshop->setCodePartner(1);
+		$new_workshop->setCodeWorkshop(1);
 		$new_workshop->setUser($userW);
+		$new_workshop->setPartner($new_partner);
 		$manager->persist($new_workshop);
-*/
+
 
 		// USER (user:test)
 
@@ -301,6 +302,26 @@ class LoadBasicData implements FixtureInterface
 		$userU->setCreatedAt(new \DateTime());
 
 		$manager->persist($userU);
+
+		// USER (user:test)
+
+		$userU = new User();
+		$userU->addRole($role_user);
+		$userU->setUsername('user2');
+		$userU->setPassword('$2y$13$3aa59e12fee9debecc349uGkMVuLFLmFXgT35rUYd33amUSH/vFlG');
+		$userU->setSalt('3aa59e12fee9debecc349384c0719245');
+		$userU->setService(NULL);
+		$userU->setRoleId(10);
+		$userU->setLanguage(1);
+		$userU->setCountry(1);
+		$userU->setStatus(1);
+		$userU->setEmail1('mail@mail.com');
+		$userU->setPhoneNumber1('0');
+		$userU->setCreatedAt(new \DateTime());
+
+		$manager->persist($userU);
+
+
 		$manager->flush();
     }
 }

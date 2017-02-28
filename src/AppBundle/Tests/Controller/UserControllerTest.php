@@ -5,7 +5,6 @@ namespace AppBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use AppBundle\Utils\Slugger as Slugger;
-use AppBundle\Utils\UtilsUser as UtilsUser;
 class UserControllerTest extends WebTestCase
 {
     public $client = null;
@@ -59,7 +58,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('godtest2');
         $this->assertEquals('godtest2', $user->getUsername());
     }
-/*
+
     public function testDeleteGod()
     {
         SecurityControllerTest::LogInGod($this);
@@ -77,7 +76,7 @@ class UserControllerTest extends WebTestCase
 
     }
 */
-    /*
+
     public function testNewSuperAdmin()
     {
         SecurityControllerTest::LogInGod($this);
@@ -94,7 +93,7 @@ class UserControllerTest extends WebTestCase
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
         $this->assertEquals('IndexUsers', $breadcrumbs);
     }
-*/
+
     public function testEditSuperAdmin()
     {
         SecurityControllerTest::LogInGod($this);
@@ -122,7 +121,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superadmintest2');
         $this->assertEquals('superadmintest2', $user->getUsername());
     }
-/*
+
     public function testDeleteSuperAdmin()
     {
         SecurityControllerTest::LogInGod($this);
@@ -139,7 +138,7 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(null, $user);
 
     }
-/*
+
     public function testNewAdmin()
     {
         SecurityControllerTest::LogInGod($this);
@@ -338,6 +337,7 @@ class UserControllerTest extends WebTestCase
         $form = self::getGenericForm($form);
         // sustituye algunos valores
         $form['user_new[username]'] = 'partnertest';
+        $form['partner[codePartner]'] = 2;
         $form['partner[name]'] = 'partnertest';
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
@@ -528,6 +528,7 @@ class UserControllerTest extends WebTestCase
         // sustituye algunos valores
         $form['user_new[username]'] = 'workshoptest';
         $form['workshop[name]'] = 'workshoptest';
+        $form['workshop[codeWorkshop]'] = 2;
         $form['workshop[Partner]'] = 1;
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
@@ -644,7 +645,7 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(null, $user);
 
     }
-*/
+
     public function getGenericForm($form){
         $form['user_new[plainPassword][first]'] = 'test';
         $form['user_new[plainPassword][second]'] = 'test';
