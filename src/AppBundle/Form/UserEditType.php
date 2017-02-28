@@ -16,9 +16,10 @@ class UserEditType extends AbstractType
         $builder
             ->add('username', 'text', array('required' => 'required'))
 
-            ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
-                                                        'required'=> 'required',
-                                                        'empty_value' => 'SelectValue'))
+            ->add('service' , 'choice'  , array('choices' => Utils::getFormServices($options['attr']),
+                                                'required'=>'required',
+                                                'expanded'=> 'true',
+                                                'multiple'=> 'true'))
 
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
                                                 'required'=> 'required',

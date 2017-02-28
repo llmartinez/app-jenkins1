@@ -26,7 +26,7 @@ class UserControllerTest extends WebTestCase
         $form['user_new[username]'] = 'admintest';
         $form['user_new[plainPassword][first]'] = 'test';
         $form['user_new[plainPassword][second]'] = 'test';
-        $form['user_new[categoryService]'] = 1;
+        $form['user_new[service]'] = 1;
         $form['user_new[country]'] = 1;
         $form['user_new[language]'] = 1;
         $form['user_new[status]'] = 1;
@@ -62,7 +62,7 @@ class UserControllerTest extends WebTestCase
         $form['user_new[username]'] = 'workshoptest';
         $form['user_new[plainPassword][first]'] = 'test';
         $form['user_new[plainPassword][second]'] = 'test';
-        $form['user_new[categoryService]'] = 1;
+        $form['user_new[service]'] = 1;
         $form['user_new[country]'] = 1;
         $form['user_new[language]'] = 1;
         $form['user_new[status]'] = 1;

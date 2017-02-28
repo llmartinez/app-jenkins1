@@ -30,9 +30,9 @@ class Ticket
 //todo    private $car;
 
     /**
-     * @ORM\Column(name="category_service", type="integer")
+     * @ORM\Column(name="service", type="integer")
      */
-    private $categoryService;
+    private $service;
 
     /**
      * @ORM\Column(name="country", type="integer")
@@ -135,16 +135,16 @@ class Ticket
         return $this->id;
     }
 
-    public function setCategoryService($categoryService)
+    public function setService($service)
     {
-        $this->categoryService = $categoryService;
+        $this->service = $service;
 
         return $this;
     }
 
-    public function getCategoryService()
+    public function getService()
     {
-        return $this->categoryService;
+        return $this->service;
     }
     
     public function setCountry($country)

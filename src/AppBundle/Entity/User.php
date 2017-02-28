@@ -38,10 +38,10 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $roleId;
 
     /**
-     * @ORM\Column(name="category_service", type="integer", nullable=true)
+     * @ORM\Column(name="service", type="json_array", nullable=true)
      * @Assert\NotBlank()
      */
-    private $categoryService;
+    private $service;
 
     /**
      * @ORM\Column(name="language", type="integer")
@@ -266,16 +266,16 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
         return $this->id;
     }
     
-    public function setCategoryService($categoryService)
+    public function setService($service)
     {
-        $this->categoryService = $categoryService;
+        $this->service = $service;
 
         return $this;
     }
 
-    public function getCategoryService()
+    public function getService()
     {
-        return $this->categoryService;
+        return $this->service;
     }
     
     public function setCountry($country)
@@ -560,7 +560,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
                       'status'   => $this->status, 
                       'username' => $this->username, 
                       'email'    => $this->email,
-                      'categoryService' => $this->categoryService
+                      'service'  => $this->service
                       );
         return $json;
     }

@@ -14,26 +14,28 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categoryService' , 'choice'  , array('choices' => Utils::getCategoryServices(),
-                                                        'required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
-            ->add('country'         , 'choice'  , array('choices' => Utils::getCountries(),
-                                                        'required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
-            ->add('language'        , 'choice'  , array('choices' => Utils::getLanguages(),
-                                                        'required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
-            ->add('status'          , 'choice'  , array('choices' => Utils::getStates(),
-                                                        'required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
-            ->add('importance'      , 'choice'  , array('choices' => Ticket::getImportances(),
-                                                        'required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
-            ->add('subsystem'       , 'choice'  , array('choices' => Ticket::getSubsystems(),
-                                                        'required'=> false,
-                                                        'translation_domain' => 'messages' ))
-            ->add('description'     , 'text'    , array('required'=> 'required',
-                                                        'translation_domain' => 'messages' ))
+            ->add('service'     , 'choice'  , array('choices' => Utils::getFormServices($options['attr']),
+                                                    'expanded'=> 'true',
+                                                    'multiple'=> 'true'
+                                                    'required'=>'required',
+                                                    'translation_domain' => 'messages' ))
+            ->add('country'     , 'choice'  , array('choices' => Utils::getCountries(),
+                                                    'required'=> 'required',
+                                                    'translation_domain' => 'messages' ))
+            ->add('language'    , 'choice'  , array('choices' => Utils::getLanguages(),
+                                                    'required'=> 'required',
+                                                    'translation_domain' => 'messages' ))
+            ->add('status'      , 'choice'  , array('choices' => Utils::getStates(),
+                                                    'required'=> 'required',
+                                                    'translation_domain' => 'messages' ))
+            ->add('importance'  , 'choice'  , array('choices' => Ticket::getImportances(),
+                                                    'required'=> 'required',
+                                                    'translation_domain' => 'messages' ))
+            ->add('subsystem'   , 'choice'  , array('choices' => Ticket::getSubsystems(),
+                                                    'required'=> false,
+                                                    'translation_domain' => 'messages' ))
+            ->add('description' , 'text'    , array('required'=> 'required',
+                                                    'translation_domain' => 'messages' ))
             //
             // COMPROBAR SI FUNCIONA LINKANDO CON CARFORM
             /*

@@ -36,6 +36,12 @@ userEdit:
     path:  /users/user-edit/{id}
     defaults: { _controller: AppBundle:User:userEdit, id: null }
 
+userView:
+    path:  /users/user-view/{id}
+    defaults: { _controller: AppBundle:User:userView, id: null }
+
+
+
 searchId:
     path:  /users/search-id/{id}
     defaults: { _controller: AppBundle:User:searchId, id: null }
