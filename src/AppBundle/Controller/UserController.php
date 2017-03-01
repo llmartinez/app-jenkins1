@@ -125,4 +125,15 @@ class UserController extends Controller
         }
         else throw new AccessDeniedException();
     }
+
+    /*
+     * @ParamConverter("user", class="AppBundle:User")
+     */
+    public function userDeleteAction(User $user)
+    {
+        $this->get('utilsUser')->deleteUser($this, $user);
+
+        return $this->redirect($this->generateUrl('users'));
+
+    }
 }
