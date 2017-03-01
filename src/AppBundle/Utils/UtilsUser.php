@@ -105,8 +105,11 @@ class UtilsUser
                 {
                     foreach ($user->getService() as $service)
                     {
-                        $role = $em->getRepository('AppBundle:Role')->find($service);
-                        $user->addRole($role);
+                        if($service != 0)
+                        {
+                            $role = $em->getRepository('AppBundle:Role')->find($service);
+                            $user->addRole($role);
+                        }
                     }
                 }
 
@@ -187,6 +190,21 @@ class UtilsUser
         return $return;
     }
 
+    public static function deleteUser($_this, $user)
+    {
+        $em = $_this->getDoctrine()->getManager();
+
+        $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $user->getRoleId());
+        $entityName = self::getEntityName($user->getRoleId());
+        if($entityName != null){
+            $entity = $em->getRepository('AppBundle:'.$entityName)->findOneByUser($user->getId());
+            $em->remove($entity);
+        }
+        $em->remove($user);
+        $em->flush();
+        return $return;
+    }
+
     static public function getRandomToken()
     {
           $key = '';
@@ -227,7 +245,7 @@ class UtilsUser
     {
         $query = $em->createQuery(
             'SELECT MAX(w.id) FROM AppBundle:Workshop w
-             JOIN w.partner p 
+             JOIN w.partner p
              WHERE p.codePartner = :codePartner'
         )->setParameter('codePartner', $codePartner);
 
