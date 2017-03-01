@@ -70,7 +70,7 @@ class NavigationTest extends WebTestCase
 
         // GO TO NEW USER ADMIN
 
-        $link = $crawler->filter('a:contains("Admin")')->eq(0)->link();
+        $link = $crawler->filter('a:contains("Admin")')->eq(1)->link();
         $crawler = $this->client->click($link);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
