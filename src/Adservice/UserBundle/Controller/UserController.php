@@ -89,7 +89,8 @@ class UserController extends Controller {
 
                         foreach ($popups as $popup) {
                             $flash .= '
-                            '.$popup['name'].': '.$popup['description'].' ';
+                            - '.$popup['name'].': '.$popup['description'].'
+                            ';
                         }
                         if($flash != '') $this->get('session')->setFlash('popup', $flash);
                     }
