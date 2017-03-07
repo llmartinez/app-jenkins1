@@ -26,34 +26,14 @@
                     <tr id="ticketRow" title="{{ticket_info}}">
                         <td id="id_ticket">{{ ticket.id         }}</td>
 
-                        {% if ticket.status == 'open' %}
-                            {% if ticket.assignedTo == null %}
-                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}">
+                        <td style="width: 60px">
+                            {% include 'TicketBundle:Includes:_ticket_status_icon.html.twig' %}
+
+                            {% if ticket.isPhoneCall == 1 %}
+                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
                             {% else %}
-                                {% if ticket.inactive == 1 %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.opt.inactive'|trans }}" alt="{{'ticket.opt.inactive'|trans }}"></td>
-                                {% elseif ticket.pending == 1 %}
-                                    {% if is_granted('ROLE_ASSESSOR') %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}">
-                                    {% else %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}">
-                                    {% endif %}
-                                {% else %}
-                                    {% if is_granted('ROLE_ASSESSOR') %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}">
-                                    {% else %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}">
-                                    {% endif %}
-                                {% endif %}
+                                <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket.png') }}" title="{{ 'ticket' | trans }}" alt="{{ 'ticket' | trans }}">
                             {% endif %}
-                        {% elseif ticket.status == 'closed' %}
-                            <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}">
-                        {% endif %}
-                        {% if ticket.isPhoneCall == 1 %}
-                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
-                        {% else %}
-                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket.png') }}" title="{{ 'ticket' | trans }}" alt="{{ 'ticket' | trans }}">
-                        {%endif %}
                         </td>
                         {% if is_granted('ROLE_ASSESSOR') %}
 
