@@ -593,6 +593,16 @@ class StatisticController extends Controller {
                       $qb = $qb->andWhere('s.name = :status')
                           ->setParameter('status', 'closed');
                   }
+                  elseif ($status == "inactive")
+                  {
+                      $qb = $qb->andWhere('s.name = :status')
+                          ->setParameter('status', 'inactive');
+                  }
+                  elseif ($status == "expirated")
+                  {
+                      $qb = $qb->andWhere('s.name = :status')
+                          ->setParameter('status', 'expirated');
+                  }
 
                   if ($partner != "0")
                   {

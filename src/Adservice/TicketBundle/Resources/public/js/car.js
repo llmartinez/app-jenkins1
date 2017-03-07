@@ -1,6 +1,65 @@
 
 //Funciones para el autorellenado de los combos de campos de coches de los formularios
 
+    /*
+        FILTERS FUNNEL NEW/EDIT TICKET
+    */
+    function checkEnterInFilterFields(e, id)
+    {
+        if(e.keyCode == 13)
+        {
+            if (id.endsWith("_plateNumber")) {
+                fill_car_from_plate_number();
+                event.preventDefault();
+            }
+            else if (id.endsWith("_vin")) {
+                fill_car_from_vin();
+                event.preventDefault();
+            }
+            else if (id.endsWith("_motor")) {
+                fill_car_by_motor();
+                event.preventDefault();
+            }
+            else if (id.endsWith("_year")) {
+                fill_car_by_year();
+                event.preventDefault();
+            }
+        }
+    }
+
+    $("#filter_plate_number").on('click', function ()
+    {
+        fill_car_from_plate_number();
+    });
+    
+    $("#filter_vin").on('click', function ()
+    {
+        fill_car_from_vin();
+    });
+
+    $(document).on('click','#btn_create',function(){
+        checkVIN()
+    });
+
+    $(document).on('click','#save_close',function(){
+        checkVIN()
+    });
+
+    function checkVIN(){
+        var str = $('#new_car_form_vin').val()
+        var len = str.length;
+        if (len != 17){
+            event.preventDefault();
+            var err = $('#msg_bad_cif_length').val();
+            alert(err);
+        }
+        if(str.toLowerCase().indexOf("o") >= 0){
+            event.preventDefault();
+            var err = $('#msg_bad_cif_o').val();
+            alert(err);
+        }
+    }
+
     //cambiar model en funcion de brand
     $(document).on('change','#new_car_form_brand',function(){
     // $('#new_car_form_brand').on('change', function(){
@@ -27,10 +86,6 @@
         fill_car_by_motor();
     });
 
-    $(document).on('click','#filter_motor',function(){
-        fill_car_by_motor();
-    });
-
     $(document).on('click','.closeTicket',function(){
         //if ($('#year_assessor').val() != undefined)
         //    checkYearLength();
@@ -46,30 +101,6 @@
         if (len != 4) {
             event.preventDefault();
             var err = $('#msg_bad_year').val();
-            alert(err);
-        }
-    }
-
-    $(document).on('click','#btn_create',function(){
-        checkVIN()
-    });
-
-
-    $(document).on('click','#save_close',function(){
-        checkVIN()
-    });
-
-    function checkVIN(){
-        var str = $('#new_car_form_vin').val()
-        var len = str.length;
-        if (len != 17){
-            event.preventDefault();
-            var err = $('#msg_bad_cif_length').val();
-            alert(err);
-        }
-        if(str.toLowerCase().indexOf("o") >= 0){
-            event.preventDefault();
-            var err = $('#msg_bad_cif_o').val();
             alert(err);
         }
     }

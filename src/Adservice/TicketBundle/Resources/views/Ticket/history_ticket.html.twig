@@ -19,7 +19,8 @@
                     <option value="free"                    >{% trans %} ticket.opt.free              {% endtrans %}</option>
                     <option value="pending"                 >{% trans %} ticket.opt.pending           {% endtrans %}</option>
                     <option value="answered"                >{% trans %} ticket.opt.answered          {% endtrans %}</option>
-                    <option value="inactive"                >{% trans %} ticket.opt.inactive          {% endtrans %}</option>
+                    <option value="inactive"                >{% trans %} ticket.inactive              {% endtrans %}</option>
+                    <option value="expirated"               >{% trans %} ticket.expirated             {% endtrans %}</option>
             {% else %}
                 {% if is_granted('ROLE_ASSESSOR') %}
                     <option value="free" selected="selected">{% trans %} ticket.opt.free              {% endtrans %}</option>
@@ -30,6 +31,8 @@
                     <option value="other_pending"           >{% trans %} ticket.opt.other.pending     {% endtrans %}</option>
                     <option value="other_answered"          >{% trans %} ticket.opt.other.answered    {% endtrans %}</option>
                     <option value="other_closed"            >{% trans %} ticket.opt.other.closed      {% endtrans %}</option>
+                    <option value="inactive"                >{% trans %} ticket.inactive              {% endtrans %}</option>
+                    <option value="expirated"               >{% trans %} ticket.expirated             {% endtrans %}</option>
                     <option value="all"                     >{% trans %} ticket.opt.all               {% endtrans %}</option>
                 {% endif %}
             {% endif %}
@@ -85,37 +88,16 @@
                         {% if ticket.assignedTo != null and is_granted('ROLE_ASSESSOR') %} {% set ticket_info = 'ticket.assigned_to'|trans ~ ': ' ~ ticket.assignedTo ~ ' ' %}{% endif %}
                         <tr id="ticketRow" title="{{ticket_info}}">
                             <td id="id_ticket">{{ ticket.id        }}</td>
-                            {% if t_inactive[ticket.id] is defined %}
-                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.inactive'|trans }}" alt="{{ 'ticket.inactive' | trans }}">
-                            {% else %}
-                                {% if ticket.status == 'open' %}
-                                    {% if ticket.assignedTo == null %}
-                                        <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}">
-                                    {% else %}
-                                        {% if ticket.pending == 1 %}
-                                            {% if is_granted('ROLE_ASSESSOR') %}
-                                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}">
-                                            {% else %}
-                                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}">
-                                            {% endif %}
-                                        {% else %}
-                                            {% if is_granted('ROLE_ASSESSOR') %}
-                                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}" alt="{{ ticket.status | trans }}">
-                                            {% else %}
-                                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }}" alt="{{ ticket.status | trans }}">
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endif %}
-                                {% elseif ticket.status == 'closed' %}
-                                <td><img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ ticket.status | trans }}" alt="{{ ticket.status | trans }}">
-                                {% endif %}
+                            
+                            <td style="width: 60px">
+                                {% include 'TicketBundle:Includes:_ticket_status_icon.html.twig' %}
+
                                 {% if ticket.isPhoneCall == 1 %}
                                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
                                 {% else %}
                                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket.png') }}" title="{{ 'ticket' | trans }}" alt="{{ 'ticket' | trans }}">
-                                {%endif %}
-                                </td>
-                            {% endif %}
+                                {% endif %}
+                            </td>
                             <td>{{ ticket.workshop.name|length > 15 ? ticket.workshop.name|slice(0, 15) ~ '...' : ticket.workshop.name  }}</td>
 
                         {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
