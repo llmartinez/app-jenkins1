@@ -974,8 +974,9 @@ class WorkshopOrderController extends Controller {
                 $this->get('session')->setFlash('alert', $flash);
             }
             else $this->get('session')->setFlash('error', $flash);
-
-        }elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
+        }
+        elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted')
+        {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $workshop->setUpdateAt(new \DateTime(\date("Y-m-d H:i:s")));
@@ -1025,8 +1026,9 @@ class WorkshopOrderController extends Controller {
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
-
-        }elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted'){
+        }
+        elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted')
+        {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $new_date = new \DateTime(\date("Y-m-d H:i:s"));
@@ -1092,8 +1094,9 @@ class WorkshopOrderController extends Controller {
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
-
-        }elseif (($workshopOrder->getWantedAction() == 'modify')  && $status == 'accepted'){
+        }
+        elseif (($workshopOrder->getWantedAction() == 'modify')  && $status == 'accepted')
+        {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
             $action = $workshopOrder->getWantedAction();
@@ -1116,8 +1119,8 @@ class WorkshopOrderController extends Controller {
             // Enviamos un mail con la solicitud al taller
             $mail = $workshop->getEmail1();
             $pos = strpos($mail, '@');
-            if ($pos != 0) {
-
+            if ($pos != 0)
+            {
                 /* MAILING */
                 $mailerUser = $this->get('cms.mailer');
                 $mailerUser->setTo($mail);
@@ -1126,21 +1129,20 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'modify', '__locale' => $locale)));
                 $mailerUser->sendMailToSpool();
                 // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
-
             }
             // Enviamos un mail con la solicitud a modo de backup
             $mail = $this->container->getParameter('mail_report');
             $pos = strpos($mail, '@');
-            if ($pos != 0) {
-
+            if ($pos != 0)
+            {
                 $mailerUser->setTo($mail);
                 $mailerUser->sendMailToSpool();
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
-
-        }elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted'){
-
+        }
+        elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted')
+        {
             if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
             {
                 $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
@@ -1156,7 +1158,8 @@ class WorkshopOrderController extends Controller {
                 UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
 
                 //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
-                if ($workshop->getAdServicePlus()){
+                if ($workshop->getAdServicePlus())
+                {
                     $adsplus = new ADSPlus();
                     $adsplus->setIdTallerADS($workshop->getID());
                     $dateI = new \DateTime('now');
@@ -1248,7 +1251,6 @@ class WorkshopOrderController extends Controller {
                 $this->get('session')->setFlash('alert', $flash);
             }
             else $this->get('session')->setFlash('error', $flash);
-
         }
 
         if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
