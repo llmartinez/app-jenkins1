@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
 use Adservice\WorkshopBundle\Entity\Workshop;
+use Adservice\WorkshopBundle\Entity\WorkshopDiagnosisMachine;
 use Adservice\OrderBundle\Entity\WorkshopOrder;
 use Adservice\OrderBundle\Form\WorkshopOrderType;
 use Adservice\OrderBundle\Form\WorkshopNewOrderType;
@@ -371,7 +372,8 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $security = $this->get('security.context');
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
@@ -389,8 +391,7 @@ class WorkshopOrderController extends Controller {
             //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
-
-        
+       
         if($user->getCategoryService() != null) {
             if($user->getCategoryService()->getId() != $workshop->getCategoryService()->getId()) {
                 throw new AccessDeniedException();
@@ -467,100 +468,121 @@ class WorkshopOrderController extends Controller {
             unset($_SESSION['id_country']);
         }
 
+        $w_diagmachines = $em->getRepository("WorkshopBundle:WorkshopDiagnosisMachine")->findBy(array('workshop_id' => $workshop->getId()));
+
+        foreach ($w_diagmachines as $wdm)
+        {
+            $dm = $em->getRepository("WorkshopBundle:DiagnosisMachine")->findOneBy(array('id' => $wdm->getDiagnosisMachineId()));
+            $workshopOrder->addDiagnosisMachine($dm);
+        }
+
         $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
 
-        if ($request->getMethod() == 'POST') {
-
+        if ($request->getMethod() == 'POST')
+        {
             $form->bindRequest($request);
-            if( $request->request->has('workshopOrder_editOrder')['shop']){
+
+            if( $request->request->has('workshopOrder_editOrder')['shop'])
+            {
                 $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
-                if($idShop != null){
+                if($idShop != null)
+                {
                     $shop = $em->getRepository('PartnerBundle:Shop')->find($idShop);
                     $workshopOrder->setShop($shop);
                 }
-            }
-            else 
+            }else{
                 $shop = 0;
-                if( $this::existsDiffInOrder($workshop, $workshopOrder) )
+            }
+            if( $request->request->get('workshopOrder_editOrder')['diagnosis_machines'] != null)
+            {
+                $workshopOrder->setDiagnosisMachines(array());
+                $id_diagmachines = $request->request->get('workshopOrder_editOrder')['diagnosis_machines'];
+                foreach ($id_diagmachines as $iddiag)
                 {
-                    
-                    if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
-                        and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
-                        and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
-                        and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
-                        and $workshopOrder->getCountry() != null and  $workshopOrder->getCity() != null
-                        and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
-                    {
-                        $user = $security->getToken()->getUser();
+                    $diagmachine = $em->getRepository('WorkshopBundle:DiagnosisMachine')->find($iddiag);
+                    $workshopOrder->addDiagnosisMachine($diagmachine);
+                }
+            }
 
-                        $workshopOrder = UtilController::newEntity($workshopOrder, $user);
+            if( $this::existsDiffInOrder($workshop, $workshopOrder) )
+            {
+                if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
+                    and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
+                    and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
+                    and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
+                    and $workshopOrder->getCountry() != null and  $workshopOrder->getCity() != null
+                    and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
+                {
+                    $user = $security->getToken()->getUser();
 
-                        if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
-                            $workshopOrder->setAction('re_modify');
-                        }
-                        elseif ($workshopOrder->getAction() == 'rejected') {
-                            $workshopOrder->setAction('re_modify');
-                        }else{
-                            $workshopOrder->setAction('modify');
-                            $workshopOrder->setWantedAction('modify');
-                        }
-                        if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
+                    $workshopOrder = UtilController::newEntity($workshopOrder, $user);
 
-                        // Set default shop to NULL
-                        //$shop = $form['shop']->getClientData();                        
-                        if($shop == 0) { $workshopOrder->setShop(null); }
-
-                        $workshopOrder->setCategoryService($user->getCategoryService());
-
-                        if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
-                        if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
-
-                        UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
-
-                        $mail = $workshopOrder->getCreatedBy()->getEmail1();
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-
-                            // Cambiamos el locale para enviar el mail en el idioma del taller
-                            $locale = $request->getLocale();
-                            $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
-                            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                            $request->setLocale($lang->getShortName());
-
-                            /* MAILING */
-                            $mailer = $this->get('cms.mailer');
-                            $mailer->setTo($mail);
-                            $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
-                            $mailer->setFrom('noreply@adserviceticketing.com');
-                            $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
-                                                                                                                     'workshop'      => $workshop,
-                                                                                                                     '__locale' => $locale )));
-                            $mailer->sendMailToSpool();
-                            // echo $this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
-                            //                                                                              'workshop'      => $workshop));die;
-
-                            // Copia del mail de confirmacion a modo de backup
-                            //
-                            // $mail = $this->container->getParameter('mail_report');
-                            // $request->setLocale('es_ES');
-                            // $mailer->setTo($mail);
-                            // $mailer->sendMailToSpool();
-
-                            // Dejamos el locale tal y como estaba
-                            $request->setLocale($locale);
-                        }
-                    }else
-                    {
-                        $flash = $this->get('translator')->trans('error.bad_introduction');
-                        $this->get('session')->setFlash('error', $flash);
+                    if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
+                        $workshopOrder->setAction('re_modify');
                     }
+                    elseif ($workshopOrder->getAction() == 'rejected') {
+                        $workshopOrder->setAction('re_modify');
+                    }else{
+                        $workshopOrder->setAction('modify');
+                        $workshopOrder->setWantedAction('modify');
+                    }
+                    if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
-                    return $this->redirect($this->generateUrl('list_orders'));
+                    // Set default shop to NULL
+                    //$shop = $form['shop']->getClientData();                        
+                    if($shop == 0) { $workshopOrder->setShop(null); }
+
+                    $workshopOrder->setCategoryService($user->getCategoryService());
+
+                    if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
+                    if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
+
+                    UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
+
+                    $mail = $workshopOrder->getCreatedBy()->getEmail1();
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
+
+                        // Cambiamos el locale para enviar el mail en el idioma del taller
+                        $locale = $request->getLocale();
+                        $lang_w = $workshopOrder->getPartner()->getCountry()->getLang();
+                        $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
+                        $request->setLocale($lang->getShortName());
+
+                        /* MAILING */
+                        $mailer = $this->get('cms.mailer');
+                        $mailer->setTo($mail);
+                        $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
+                        $mailer->setFrom('noreply@adserviceticketing.com');
+                        $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
+                                                                                                                 'workshop'      => $workshop,
+                                                                                                                 '__locale' => $locale )));
+                        $mailer->sendMailToSpool();
+                        // echo $this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
+                        //                                                                              'workshop'      => $workshop));die;
+
+                        // Copia del mail de confirmacion a modo de backup
+                        //
+                        // $mail = $this->container->getParameter('mail_report');
+                        // $request->setLocale('es_ES');
+                        // $mailer->setTo($mail);
+                        // $mailer->sendMailToSpool();
+
+                        // Dejamos el locale tal y como estaba
+                        $request->setLocale($locale);
+                    }
+                }else
+                {
+                    $flash = $this->get('translator')->trans('error.bad_introduction');
+                    $this->get('session')->setFlash('error', $flash);
                 }
-                else {
-                    // Si no hay cambios en la solicitud, volvemos al listado de talleres
-                    return $this->redirect($this->generateUrl('workshopOrder_listWorkshops'));
-                }
+
+                return $this->redirect($this->generateUrl('list_orders'));
+            }
+            else {
+                // Si no hay cambios en la solicitud, volvemos al listado de talleres
+                return $this->redirect($this->generateUrl('workshopOrder_listWorkshops'));
+            }
             
         }
         $user = $em->getRepository('UserBundle:User')->findOneByWorkshop($workshop->getId());
@@ -882,8 +904,8 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function acceptAction($workshopOrder, $status){
-
+    public function acceptAction($workshopOrder, $status)
+    {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
@@ -1099,13 +1121,34 @@ class WorkshopOrderController extends Controller {
         {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
-            $action = $workshopOrder->getWantedAction();
-            $em->remove($workshopOrder);
+
+            // Borramos las DiagMachines asignadas a la soliciutd
+
+            $diagmachines = $em->getRepository("OrderBundle:WorkshopOrderDiagnosisMachine")->findBy(array('workshop_order_id' => $workshopOrder->getId()));
+
+            $consultaWO = $em->createQuery('DELETE FROM OrderBundle:WorkshopOrderDiagnosisMachine wod
+                                          WHERE wod.workshop_order_id = '.$workshopOrder->getId());
+            $consultaWO->getResult();
+
+            $consultaW = $em->createQuery('DELETE FROM WorkshopBundle:WorkshopDiagnosisMachine wd
+                                          WHERE wd.workshop_id = '.$workshop->getId());
+            $consultaW->getResult();
+
+            foreach ($diagmachines as $diagmachine)
+            {
+                $w_diag = New WorkshopDiagnosisMachine();
+                $w_diag->setWorkshopId($workshop->getId());
+                $w_diag->setDiagnosisMachineId($diagmachine->getDiagnosisMachineId());
+                $em->persist($w_diag);
+            }
+
             $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
 
             $user_workshop->setName($workshop->getContact());
             $user_workshop->setActive($workshop->getActive());
+            $action = $workshopOrder->getWantedAction();
+            $em->remove($workshopOrder);
             $em->persist($user_workshop);
             $em->flush();
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
@@ -1146,16 +1189,44 @@ class WorkshopOrderController extends Controller {
             if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
             {
                 $workshop = $this->workshopOrder_to_workshop(new Workshop(), $workshopOrder);
+
+                // Borramos las DiagMachines asignadas a la soliciutd
+                $diagmachines = $workshopOrder->getDiagnosisMachines();
+                $ids = '0';
+                foreach ($diagmachines as $diagmachine)
+                {
+                    $ids .= ', '.$diagmachine->getId();
+                }
+                $workshopOrder->setDiagnosisMachines(array());
+
+                $consultaWO = $em->createQuery('DELETE FROM OrderBundle:WorkshopOrderDiagnosisMachine wod
+                                              WHERE wod.workshop_order_id = '.$workshopOrder->getId().'
+                                              AND wod.diagnosis_machine_id IN ('.$ids.')');
+
                 //El taller devuelto antes, tiene campo activo false, ya que si modificaban un taller inactivo pasaba a ser activo , al compartir la misma funcion workshopOrder_to_workshop
                 $workshop->setActive(true);
                 if ($workshopOrder->getTest() != null) {
                     $workshop->setEndTestAt(new \DateTime(\date('Y-m-d H:i:s',strtotime("+1 month"))));
                 }
                 $action = $workshopOrder->getWantedAction();
+                //$em->flush();
+
                 $em->remove($workshopOrder);
 
                 UtilController::newEntity($workshop, $workshop->getCreatedBy());
+                $workshop->setId($em->getRepository('WorkshopBundle:Workshop')->getLastId()+1);
+
+                foreach ($diagmachines as $diagmachine)
+                {
+                    $w_diag = New WorkshopDiagnosisMachine();
+                    $w_diag->setWorkshopId($workshop->getId());
+                    $w_diag->setDiagnosisMachineId($diagmachine->getId());
+                    $em->persist($w_diag);
+                }
+
                 UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
+
+                $consultaWO->getResult();
 
                 //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
                 if ($workshop->getAdServicePlus())
@@ -1365,8 +1436,8 @@ class WorkshopOrderController extends Controller {
      * @param type $workshopOrder
      * @return \Adservice\WorkshopBundle\Entity\WorkshopOrder
      */
-    private function workshopOrder_to_workshop($workshop, $workshopOrder){
-
+    private function workshopOrder_to_workshop($workshop, $workshopOrder)
+    {
         $workshop->setName          ($workshopOrder->getName());
         $workshop->setCodePartner   ($workshopOrder->getCodePartner());
         $workshop->setCodeWorkshop  ($workshopOrder->getCodeWorkshop());
@@ -1452,6 +1523,7 @@ class WorkshopOrderController extends Controller {
             and ($workshop->getHasChecks()     == $workshopOrder->getHasChecks()     )
             and ($workshop->getNumChecks()     == $workshopOrder->getNumChecks()     )
             and ($workshop->getInfotech()      == $workshopOrder->getInfotech()      )
+            and ($workshop->getDiagnosisMachines()->getSnapshot() == $workshopOrder->getDiagnosisMachines())
         )
             return false;
         else
