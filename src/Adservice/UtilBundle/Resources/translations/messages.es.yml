@@ -564,7 +564,7 @@ statistics.download:		  "Descargar estadísticas"
 #STATISTIC
 generate.raport: 		  	  "Generar informe"
 generate.ticket: 		  	  "Generar informe de Tickets"
-generate.workshop: 		  	Generar informe de Talleres"
+generate.workshop: 		  	"Generar informe de Talleres"
 filter_general:         "Filtros generales"
 filter_ticket: 				  "Filtros de ticket"
 filter_workshop: 			  "Filtros de taller"
