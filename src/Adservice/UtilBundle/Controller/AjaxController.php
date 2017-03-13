@@ -189,8 +189,8 @@ class AjaxController extends Controller
 
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-
-        $workshop = UtilController::getCodeWorkshopUnused($em,$partner);
+        
+        $workshop = UtilController::getCodeWorkshopUnused($em,$partner->getCodePartner());
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);
@@ -601,6 +601,24 @@ class AjaxController extends Controller
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
+        if($car == null){
+            $json = array( 'error' => 'No hay coincidencias');
+        }
+        else{
+            $json = $car->to_json();
+
+            $version = null;
+            if($car->getVersion() != null){
+                $version = $car->getVersion()->getId();
+            }
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+    
+    public function getCarFromVinAction($vin){
+        $em = $this->getDoctrine();
+
+        $car = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $vin));
         if($car == null){
             $json = array( 'error' => 'No hay coincidencias');
         }

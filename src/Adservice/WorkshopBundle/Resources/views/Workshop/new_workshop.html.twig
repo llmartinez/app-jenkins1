@@ -34,7 +34,7 @@
             <div class="w70 fl">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
-                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'workshop' | trans } }) }}
                 </div>
                 
                 
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="grid w45 fl">
-                        <div class="grid-full w95">
+                        <div class="grid-full w95" {{is_hidden}}>
                             <label for="adservice_workshopbundle_workshoptype_commercial_code">{% trans %} commercial_code {% endtrans %}</label>
                             {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control mb15', 'placeholder': 'commercial_code' | trans } }) }}
                         </div>

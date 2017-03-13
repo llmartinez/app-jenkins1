@@ -155,7 +155,10 @@ function populate_user_partner(partner){
 
         if ($('.active').text() == 'Nuevo Usuario' || $('.active').text() == 'New User' || $('.active').text() == 'Nouvel utilisateur' || $('.active').text() == 'Novo Utilizador')
         {
-            $('form').find('select[id$=_partner]').empty();
+            if($('#id_catserv').val() != undefined)
+            {
+                $('form').find('select[id$=_partner]').empty();
+            }
         }   
     }
 }

@@ -161,9 +161,10 @@ $(document).ready(function() {
     });
 
     //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
-    $('#btn_billing').click(function() {
+    $('#btn_raport_partner').click(function() {
 
         var raport  = "0";
+        var code_zone  = $('#code_zone').val();
 
         var from_y  = $('#from_y').val();
         var from_m  = $('#from_m').val();
@@ -181,19 +182,20 @@ $(document).ready(function() {
         var assessor= '0';
         var created_by= '0';
 
-        if(partner  == "" || partner  == 0 || partner  == undefined ) partner  = '0';
-        if(shop     == "" || shop     == 0 || shop     == undefined ) shop     = '0';
-        if(typology == "" || typology == 0 || typology == undefined ) typology = '0';
-        if(from_y   == "" || from_y   == 0 || from_y   == undefined ) from_y   = '0';
-        if(from_m   == "" || from_m   == 0 || from_m   == undefined ) from_m   = '0';
-        if(from_d   == "" || from_d   == 0 || from_d   == undefined ) from_d   = '0';
-        if(to_y     == "" || to_y     == 0 || to_y     == undefined ) to_y     = '0';
-        if(to_m     == "" || to_m     == 0 || to_m     == undefined ) to_m     = '0';
-        if(to_d     == "" || to_d     == 0 || to_d     == undefined ) to_d     = '0';
+        if(code_zone == "" || code_zone == 0 || code_zone == undefined ) code_zone = '0';
+        if(partner   == "" || partner   == 0 || partner   == undefined ) partner   = '0';
+        if(shop      == "" || shop      == 0 || shop      == undefined ) shop      = '0';
+        if(typology  == "" || typology  == 0 || typology  == undefined ) typology  = '0';
+        if(from_y    == "" || from_y    == 0 || from_y    == undefined ) from_y    = '0';
+        if(from_m    == "" || from_m    == 0 || from_m    == undefined ) from_m    = '0';
+        if(from_d    == "" || from_d    == 0 || from_d    == undefined ) from_d    = '0';
+        if(to_y      == "" || to_y      == 0 || to_y      == undefined ) to_y      = '0';
+        if(to_m      == "" || to_m      == 0 || to_m      == undefined ) to_m      = '0';
+        if(to_d      == "" || to_d      == 0 || to_d      == undefined ) to_d      = '0';
 
         var route  = 'doExcel';
         var locale = $(document).find("#data_locale").val();
-        var url    = Routing.generate(route, {_locale: locale, type: 'workshop', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport });
+        var url    = Routing.generate(route, {_locale: locale, type: 'undefined', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport, code_zone: code_zone });
 
         window.open(url, "_self");
     });

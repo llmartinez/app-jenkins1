@@ -89,7 +89,8 @@ class UserController extends Controller {
 
                         foreach ($popups as $popup) {
                             $flash .= '
-                            '.$popup['name'].': '.$popup['description'].' ';
+                            - '.$popup['name'].': '.$popup['description'].'
+                            ';
                         }
                         if($flash != '') $this->get('session')->setFlash('popup', $flash);
                     }
@@ -175,7 +176,12 @@ class UserController extends Controller {
             }
         }
 
-        return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+        $em = $this->getDoctrine()->getEntityManager();
+        $inactive = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'inactive'))->getId();
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => $inactive));
+        $t_inactive = sizeof($tickets);
+
+        return $this->render('UserBundle:User:index.html.twig', array('length' => $length, 't_inactive' => $t_inactive));
     }
 
     /**
@@ -428,8 +434,8 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
             $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
         }
-        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
-
+        elseif (!$security->isGranted('ROLE_SUPER_ADMIN'))
+        {
             $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
@@ -455,7 +461,7 @@ class UserController extends Controller {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
-
+            
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
             $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
@@ -496,7 +502,9 @@ class UserController extends Controller {
         $form->bindRequest($request);
 
         if ($request->getMethod() == 'POST') {
-
+            if($user->getRegion() == null){
+                $user->setRegion('-');
+            }
             // SLUGIFY USERNAME TO MAKE IT UNREPEATED
             $name = $user->getUsername();
 
@@ -916,7 +924,7 @@ class UserController extends Controller {
             $request->setLocale($locale);
         }
 
-        $flash =  $this->get('translator')->trans('change_password.correct');
+        $flash =  $this->get('translator')->trans('change_password.correct').' - '.$this->get('translator')->trans('mail.changePassword.password').' '.$password;
         $this->get('session')->setFlash('password', $flash);
     }
 

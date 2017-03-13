@@ -5,7 +5,7 @@
 <ol class="breadcrumb">
       <li class="active">{% trans %} home {% endtrans %}</li>
     </ol>
-
+    
     {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
                {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
@@ -54,7 +54,9 @@
                                                                                                             {% trans %} menu.list_users         {% endtrans %}</a>
             <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket") }}" >
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
-                                                                                                            {% trans %} menu.list_tickets       {% endtrans %}</a>
+                                                                                                            {% trans %} menu.list_tickets       {% endtrans %}
+                                                                                                                {% if t_inactive is defined and t_inactive > 0 %}  <div class="pending_application">{{ t_inactive }}</div>
+                                                                                                            {% endif %}</a>
             <a class="btn-menu" id="sentence_list"          href="{{ path("sentence_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_sentences.png') }}">
                                                                                                             {% trans %} menu.list_sentences    {% endtrans %}</a>

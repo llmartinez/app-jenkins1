@@ -182,12 +182,13 @@ class WorkshopController extends Controller {
                 $workshop->setRegion('-');
             }
             $partner = $workshop->getPartner();
-            $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
-            
+
+            $code = UtilController::getCodeWorkshopUnused($em, $workshop->getCodePartner(), $workshop->getCodeWorkshop());  /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
+
             $workshop->setActive(1);
             /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
-            $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(),
-                'code_workshop' => $workshop->getCodeWorkshop()));
+            $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $partner->getCodePartner(),
+                                                                                   'code_workshop' => $workshop->getCodeWorkshop()));
             $findPhone = array(0, 0, 0, 0);
             if ($workshop->getPhoneNumber1() != null) {
                 $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhone($workshop->getPhoneNumber1());
@@ -370,7 +371,8 @@ class WorkshopController extends Controller {
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editWorkshopAction($workshop) {
+    public function editWorkshopAction($workshop)
+    {
         $security = $this->get('security.context');
         $request = $this->getRequest();
 
@@ -412,7 +414,7 @@ class WorkshopController extends Controller {
 
         $actual_city = $workshop->getRegion();
         $actual_region = $workshop->getCity();
-
+        $actual_test = $workshop->getTest();
         if ($petition->getMethod() == 'POST') {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
@@ -420,7 +422,8 @@ class WorkshopController extends Controller {
             //if ($form->isValid()) {
 
                 /* CHECK CODE WORKSHOP NO SE REPITA */
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner' => $partner->getId(), 'code_workshop' => $workshop->getCodeWorkshop()));
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $partner->getCodePartner(),
+                                                                                       'code_workshop' => $workshop->getCodeWorkshop()));
 
                 //Comprobar telefono
                 $findPhone = array(0, 0, 0, 0);
@@ -459,7 +462,9 @@ class WorkshopController extends Controller {
                     if($workshop->getTest()){
                         $status = 2;
                     }
-                    UtilController::createHistorical($em, $workshop, $status);
+                    if($actual_test != $workshop->getTest()){
+                        UtilController::createHistorical($em, $workshop, $status);
+                    }
                     if ($security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('workshop_list'));
                     elseif ($security->isGranted('ROLE_ASSESSOR'))
@@ -483,7 +488,7 @@ class WorkshopController extends Controller {
                                 . ' - ' . $this->get('translator')->trans('workshop')
                                 . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2(), $workshop->getId());
                     } else {
-                        $code = UtilController::getCodeWorkshopUnused($em, $partner);        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
+                        $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
                         $flash = $this->get('translator')->trans('error.code_workshop.used') . $code . ' (valor actual ' . $last_code . ').';
                     }
                     $this->get('session')->setFlash('error', $flash);
