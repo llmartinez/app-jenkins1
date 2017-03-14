@@ -1,24 +1,24 @@
 <?php
 
-namespace Adservice\WorkshopBundle\Entity;
+namespace Adservice\OrderBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Adservice\WorkshopBundle\Entity\DiagnosisMachine
  *
- * @ORM\Table(name="workshop_diagnosis_machine")
+ * @ORM\Table(name="workshop_order_diagnosis_machine")
  * @ORM\Entity
  */
-class WorkshopDiagnosisMachine
+class WorkshopOrderDiagnosisMachine
 {
     /**
-     * @var integer $workshop_id
+     * @var integer $workshop_order_id
      *
-     * @ORM\Column(name="workshop_id", type="integer")
+     * @ORM\Column(name="workshop_order_id", type="integer")
      * @ORM\Id
      */
-    private $workshop_id;
+    private $workshop_order_id;
 
     /**
      * @var integer $diagnosis_machine_id
@@ -30,21 +30,21 @@ class WorkshopDiagnosisMachine
 
 
     /**
-     * Set workshop_id
+     * Set workshop_order_id
      *
-     * @param string $workshop_id
+     * @param string $workshop_order_id
      */
-    public function setWorkshopId($workshop_id) {
-        $this->workshop_id = $workshop_id;
+    public function setWorkshopOrderId($workshop_order_id) {
+        $this->workshop_order_id = $workshop_order_id;
     }
 
     /**
-     * Get workshop_id
+     * Get workshop_order_id
      *
      * @return string
      */
-    public function getWorkshopId() {
-        return $this->workshop_id;
+    public function getWorkshopOrderId() {
+        return $this->workshop_order_id;
     }
 
     /**

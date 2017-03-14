@@ -31,6 +31,19 @@ class WorkshopNewOrderType extends AbstractType
                                                           ->orderBy('t.name', 'ASC')
                                                           ->where('t.active = 1')
                                                           ->andWhere('t.category_service'.$id_catserv); }))
+            ->add('diagnosis_machines', 'entity', array(
+                  'required' => false,
+                  'multiple' => true,
+                  'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
+                  'property' => 'name',
+                  'empty_value' => '',
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv)
+                                                          // ->andWhere('s.country'.$id_country)
+                                                          ; }))
             ->add('contact', 'text', array('required' => true))
             ->add('test', 'checkbox', array('required' => false))
             ->add('haschecks', 'checkbox', array('required' => false))
