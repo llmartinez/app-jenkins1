@@ -1,4 +1,4 @@
-
+    
     {% if id_version  is defined %}
         <input type="hidden" id="ticket_version" value="{{id_version }}">
     {% else %}
@@ -14,20 +14,23 @@
     {% else %}
         <input type="hidden" id="ticket_subsystem" value="0">
     {% endif %}
-
+     <div class="grid-full w100">
+        <legend>{% trans %} ticket_info {% endtrans %}</legend>
+        <div class="grid-33 form-group">
+        <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
+        {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+    </div>
+    <input type="hidden" id='textarea_text_default' value="{{ 'einatech_textarea_default' | trans  }}">
     {% if (is_granted('ROLE_ASSESSOR')) %}
-        <div class="grid-full w100">
-            <legend>{% trans %} ticket_info {% endtrans %}</legend>
+       
+           
 
             <input id="error_ticket" type="hidden" value="{{'error.bad_introduction.ticket'|trans}}">
 
             {% if app.session.hasFlash('error_ticket') %}
                 <p class="grid-full w100 error">{{ app.session.getFlash('error_ticket') }}</p>
             {% endif %}
-            <div class="grid-33 form-group">
-                <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
-                {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
-            </div>
+           
 
             <div class="grid-33 form-group">
                 <label for="id_system">{% trans %} system {% endtrans %} *</label>
@@ -43,12 +46,13 @@
                 <label for="new_ticket_form_subsystem">{% trans %} subsystem {% endtrans %} *</label>
                 {{ form_widget(form.subsystem, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
             </div>
-        </div>
+        
 
     {% endif %}
+    </div>
         <div class="grid-full w100">
             <label for="new_ticket_form_description">{% trans %} description {% endtrans %} *</label>
-            {{ form_widget(form.description, { 'attr': {'class': 'form-control asr_form-textarea', 'rows': '5', 'placeholder': "description" | trans  } }) }}
+            {{ form_widget(form.description, { 'value': textarea_content  , 'attr': {'class': 'form-control asr_form-textarea', 'rows': '5', 'placeholder': "description" | trans  } }) }}
         </div>
 
         <div class="grid-full w100">
