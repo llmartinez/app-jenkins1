@@ -389,6 +389,12 @@ class TicketController extends Controller {
             'adsplus' => $adsplus, 'inactive' => $inactive, 't_inactive' => $t_inactive, 'importances' => $importances,
             'advisers' => $advisers, 'adviser_id' => $adviser_id, 'workshop_id' => $workshop_id
         );
+        if($security->getToken()->getUser()->getCategoryService() != null){
+            $array['id_catserv'] = $security->getToken()->getUser()->getCategoryService()->getId();
+        }else{
+            $array['id_catserv'] = 0;
+        }
+            
 
         if ($security->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -402,7 +408,8 @@ class TicketController extends Controller {
      * Crea un ticket abierto con sus respectivos post y car
      * @return url
      */
-    public function newTicketAction($id_workshop = null) {
+    public function newTicketAction($id_workshop = null, $einatech = 0) {
+        
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
@@ -410,7 +417,15 @@ class TicketController extends Controller {
         $ticket = new Ticket();
         $car = new Car();
         $document = new Document();
-
+        $_SESSION['einatech'] = $einatech;
+        
+        $id_catserv = 0;
+        if($security->getToken()->getUser()->getCategoryService() != null){
+            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        }
+        if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
+            $_SESSION['einatech'] = 2;
+        }
         if ($id_workshop != null) {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
         } else {
@@ -894,7 +909,11 @@ class TicketController extends Controller {
             $id_system = '';
             $id_subsystem = '';
         }
-
+        
+        $textarea_content = "";
+        if($einatech == 1){
+            $textarea_content = $this->get('translator')->trans('einatech_textarea_default');
+        }
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
             'car' => $car,
@@ -908,7 +927,9 @@ class TicketController extends Controller {
             'systems' => $systems,
             'adsplus' => $adsplus,
             'workshop' => $workshop,
-            'form_name' => $form->getName(),
+            'textarea_content' => $textarea_content,
+            'id_catserv' => $id_catserv,
+            'form_name' => $form->getName()
         );
         // if(isset($subsystem)) { $array[] = 'subsystem' => $subsystem; }
 
