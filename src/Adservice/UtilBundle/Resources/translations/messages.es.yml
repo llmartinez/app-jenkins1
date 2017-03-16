@@ -807,3 +807,7 @@ back_app:  "Volver a la aplicación"
 termsConditions:	" "
 _termsConditions: 	'Al hacer uso de la aplicación acepta los siguientes <a href="">términos y condiciones</a>.'
 footerText: 	 	"© Grup Eina Digital · Centro de Innovación y Recursos"
+
+
+einatech: "Reparación de módulo electrónico"
+einatech_textarea_default : "-Tipo elemento: \n-Referencia: \n-Descripción de la avería: \n-Máquina de diagnosis utilizada: \n-Códigos de avería y descripción: \n-Kilómetros del vehículo: "
