@@ -186,6 +186,15 @@
                                                                                                                 {% else %}{% trans %}no{% endtrans %}
                                                                                                                 {% endif %}</td></tr>
                                                     {% endif %}
+                                                    <tr><td>{% trans %} diagnosis_machine {% endtrans %}</td><td>
+                                                                                                                {% for dm in orderBefore.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                            </td>
+                                                                                                            <td>{% for dm in workshopOrder.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                        </td></tr>
                                                 {% else %}
                                                     <tr><th>                                          </th><th>{% trans %}values{% endtrans %}</th></tr>
                                                     <tr><td>{% trans %} name             {% endtrans %}</td><td>{{ workshopOrder.name          }}</td></tr>
@@ -238,6 +247,11 @@
                                                                                                                 {% else %}{% trans %}no{% endtrans %}
                                                                                                                 {% endif %}</td></tr>
                                                     {% endif %}
+                                                    <tr><td>{% trans %} diagnosis_machine {% endtrans %}</td>
+                                                                                                            <td>{% for dm in workshopOrder.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                        </td></tr>
                                                 {% endif %}
                                                 </table>
                                             </div>

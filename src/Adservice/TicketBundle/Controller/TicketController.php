@@ -878,7 +878,7 @@ class TicketController extends Controller {
                     $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket'));
                 }
             } else {
-                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length') . ' ' . $max_len . ' ' . $this->get('translator')->trans('error.txt_chars') . '.');
+                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
             }
         }
         // else {
@@ -988,7 +988,7 @@ class TicketController extends Controller {
                             $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                         }
                     } else {
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length') . ' ' . $max_len . ' ' . $this->get('translator')->trans('error.txt_chars') . '.');
+                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                     }
                 }
 
@@ -1368,7 +1368,7 @@ class TicketController extends Controller {
                                     }
                                 } else {
                                     $request->getSession()->set('message', $post->getMessage());
-                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length') . ' ' . $max_len . ' ' . $this->get('translator')->trans('error.txt_chars') . '.');
+                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                                 }
                             } else {
                                 // ERROR tamaño
@@ -1551,7 +1551,7 @@ class TicketController extends Controller {
                    }
                }else{
                    $request->getSession()->set('message', $message);
-                   $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length').' '.$max_len.' '.$this->get('translator')->trans('error.txt_chars').'.');
+                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
 
                }
            }
@@ -1609,7 +1609,7 @@ class TicketController extends Controller {
                         $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
                 } else {
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length') . ' ' . $max_len . ' ' . $this->get('translator')->trans('error.txt_chars') . '.');
+                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                 }
             }
 
