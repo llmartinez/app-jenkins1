@@ -87,6 +87,7 @@ error.same_vin:					"El bastidor introducido coincide con otro coche registrado 
 error.same_platenumber:			"La matrícula introducida coincide con otro coche registrado en la aplicación"
 error.vin_platenumber_not_match: "La matrícula y el bastidor introducidos no pertenecen a un mismo coche"
 error.plate_number_not_found:  "No tenemos registrado ningun coche con esta matrícula. Inserta los datos manualmente."
+error.vin_not_found:  "No tenemos registrado ningun coche con este bastidor. Inserta los datos manualmente."
 isNaN:							"Los campos de teléfono deben contener solo numeros"
 Bad credentials: 				"Credenciales incorrectas"
 The presented password is invalid.: "La contraseña introducida no es correcta"
