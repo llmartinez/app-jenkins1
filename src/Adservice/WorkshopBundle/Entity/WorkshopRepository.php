@@ -11,6 +11,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class WorkshopRepository extends EntityRepository
 {
+    /**
+     * Devuelve el ultimo ID almacenado en DB
+     * @return integer
+     */
+    public function getLastId()
+    {
+        $em = $this->getEntityManager();
+
+        $query = 'SELECT MAX(w) FROM WorkshopBundle:Workshop w';
+        $consulta = $em->createQuery($query);
+
+        $id = $consulta->getSingleResult()[1];
+
+        return (int)$id;
+    }
+
     public function findWorkshopInfo($request, $security=null)
     {
         $em = $this->getEntityManager();

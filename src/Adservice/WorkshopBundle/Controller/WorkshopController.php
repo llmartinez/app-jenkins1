@@ -610,19 +610,26 @@ class WorkshopController extends Controller {
                     'form' => $form->createView()));
     }
 
-    public function deactivateActivateWorkshopAction($workshop_id){
+    public function deactivateActivateWorkshopAction($workshop_id)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
-        if($workshop){
+        if($workshop)
+        {
             $workshop->setActive(!$workshop->getActive());
+            $workshop->getUsers()[0]->setActive($workshop->getActive());
             $new_date = new \DateTime(\date("Y-m-d H:i:s"));
-            if($workshop->getActive() == true) {
+            if($workshop->getActive() == true)
+            {
                 $workshop->setUpdateAt($new_date);
                 $status = 1;
-            }else{
+            }
+            else
+            {
                 $workshop->setLowdateAt($new_date);
                 
-                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) ){
+                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
+                {
                     $workshop->setEndTestAt($new_date);
                     $workshop->setTest(0);
                 }
@@ -653,7 +660,8 @@ class WorkshopController extends Controller {
         $locale = $this->getRequest()->getLocale();
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setSubject($this->get('translator')->trans('mail.deactivateWorkshop.subject').$workshop->getName());
-        if($workshop->getActive()== true){
+        if($workshop->getActive()== true)
+        {
             $action = 'activate';
             $mailerUser->setSubject($this->get('translator')->trans('mail.activateWorkshop.subject').$workshop->getName());
         }
@@ -665,7 +673,6 @@ class WorkshopController extends Controller {
         //Mail to Report
         $mailerUser->setTo($this->container->getParameter('mail_report'));
         $mailerUser->sendMailToSpool();
-
 
         return $this->redirect($this->generateUrl('workshop_list'));
     }
