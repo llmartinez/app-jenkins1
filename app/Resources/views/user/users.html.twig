@@ -2,8 +2,9 @@
 {% set locale = app.request.locale %}
 
 {% block breadcrumbs %}
-    <li><a href="{{path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
-    <li><a href="{{path("users")}}">{{ 'users'|trans }}</a></li>
+    <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
+    <li><a href="{{ path("users", { 'role_id': role_id }) }}">{{ 'users'|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
@@ -12,10 +13,10 @@
 
             <h2>{{ 'users'|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
             <ul>
-                <li><a href="{{ path("selectRole") }}">{{ 'user_new'|trans }}</a></li>
+                <li><a href="{{ path("userNew", { 'role_id': role_id }) }}">{{ 'user_new'|trans }}</a></li>
                 <li>
                     <input type="text" id="searchId" name="id" placeholder="{{ "searchId" | trans }}">
-                    <button type="submit" onclick="window.location.href ='{{ path("searchId") }}/'+$('#searchId').val(); ">{{ "Submit" | trans }}</button>
+                    <button type="submit" onclick="window.location.href ='{{ path("searchId", { 'role_id': role_id }) }}/'+$('#searchId').val(); ">{{ "Submit" | trans }}</button>
                 </li>
             </ul>
             <div>
@@ -46,8 +47,8 @@
                             <td>{{ row.address }}</td>
                             <td>{{ row.postalCode }}</td>
                             <td>
-                                <a href="{{ path("userEdit", {id: row.id})}}">Edit</a>
-                                <a href="{{ path("userDelete", {id: row.id})}}">Delete</a>
+                                <a href="{{ path("userEdit",   { id: row.id, 'role_id': role_id })}}">Edit</a>
+                                <a href="{{ path("userDelete", { id: row.id, 'role_id': role_id })}}">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}

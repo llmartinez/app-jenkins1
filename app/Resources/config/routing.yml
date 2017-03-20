@@ -30,27 +30,27 @@ selectRole:
 
 userNew:
     path:  /users/user-new/{role_id}/{id}
-    defaults: { _controller: AppBundle:User:userNew, role_id: null, id: null }
+    defaults: { _controller: AppBundle:User:userNew, id: null, role_id: null }
 
 userEdit:
-    path:  /users/user-edit/{id}
-    defaults: { _controller: AppBundle:User:userEdit, id: null }
+    path:  /users/user-edit/{role_id}/{id}
+    defaults: { _controller: AppBundle:User:userEdit, id: null, role_id: null }
 
 userDelete:
-    path:  /users/user-delete/{id}
-    defaults: { _controller: AppBundle:User:userDelete, id: null }
+    path:  /users/user-delete/{role_id}/{id}
+    defaults: { _controller: AppBundle:User:userDelete, id: null, role_id: null }
 
 userView:
-    path:  /users/user-view/{id}
-    defaults: { _controller: AppBundle:User:userView, id: null }
+    path:  /users/user-view/{role_id}/{id}
+    defaults: { _controller: AppBundle:User:userView, id: null, role_id: null }
 
 searchId:
-    path:  /users/search-id/{id}
-    defaults: { _controller: AppBundle:User:searchId, id: null }
+    path:  /users/search-id/{role_id}/{id}
+    defaults: { _controller: AppBundle:User:searchId, id: null, role_id: null }
 
 users:
-    path:  /users/{page}/{filter}/{value}
-    defaults: { _controller: AppBundle:User:users, page: 1, filter: 0, value: 0 }
+    path:  /users/{role_id}/{page}/{filter}/{value}
+    defaults: { _controller: AppBundle:User:users, role_id: null, page: 1, filter: 0, value: 0 }
 
 # TICKET
 tickets:

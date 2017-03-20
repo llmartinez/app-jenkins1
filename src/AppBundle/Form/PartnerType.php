@@ -12,7 +12,7 @@ class PartnerType extends AbstractType
     {
 
         $builder
-            ->add('codePartner' , 'integer', array('required'=> 'required'))
+            ->add('codePartner' , 'integer', array('required'=> 'required', 'attr' => array('min' => 1)))
             ->add('name' 		, 'text'   , array('required'=> 'required'))
         ;
     }

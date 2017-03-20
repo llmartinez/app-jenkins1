@@ -17,21 +17,28 @@ class UserNewType extends AbstractType
             ->add('username', 'text', array('required' => 'required'))
             ->add('plainPassword', 'repeated', array(
                                                     'type' => 'password',
-                                                    'first_options'  => array('label' => 'password_insert'),
+                                                    'first_options' => array('label' => 'password_insert'),
                                                     'second_options' => array('label' => 'password_repeat'),
                                                     'invalid_message' => 'error_passwords_not_match',
                                                     'required' => 'required'
             ))
 
             ->add('service' , 'choice'  , array('choices' => Utils::getFormServices($options['attr']),
-                                                'required'=>'required',
-                                                'expanded'=> 'true',
-                                                'multiple'=> 'true'
+                                                'required' =>'required',
+                                                'expanded' => 'true',
+                                                'multiple' => 'true'
+                                                )
+            )
+
+            ->add('restriction' , 'choice'  , array('choices' => Utils::getRestrictions(),
+                                                    'required' => false,
+                                                    'expanded' => 'true',
+                                                    'multiple' => 'true'
                                                 )
             )
 
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
-                                                'required'=> 'required',
+                                                'required' => 'required',
                                                 'empty_value' => 'SelectValue' ))
 
             ->add('language' , 'choice'  , array('choices' => Utils::getLanguages(),
@@ -39,7 +46,7 @@ class UserNewType extends AbstractType
                                                  'empty_value' => 'SelectValue'))
 
             ->add('status' , 'choice'  , array('choices' => UtilsUser::getStatus(),
-                                               'required'=> 'required',
+                                               'required' => 'required',
                                                'empty_value' => 'SelectValue' ))
 
             ->add('email1', 'email', array('required' => 'required' ))
