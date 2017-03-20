@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Doctrine\ORM\EntityRepository;
 
 class WorkshopType extends AbstractType
 {
@@ -13,13 +14,31 @@ class WorkshopType extends AbstractType
 
         $builder
             ->add('name'         , 'text'   , array('required'=> 'required', 'attr' => array('class' => 'required')))
-            ->add('Partner'      , 'entity' , array('class' => 'AppBundle:Partner', 'empty_value' => 'SelectValue', 'attr' => array('class' => 'required')))
+            ->add('Partner'      , 'entity' , array(
+                                                    'class' => 'AppBundle:Partner',
+                                                    'query_builder' => 
+                                                        function (EntityRepository $er) {
+                                                                return $er->createQueryBuilder('p')
+                                                                    ->orderBy('p.codePartner, p.name', 'ASC');
+                                                        },
+                                                    'empty_value' => 'SelectValue',
+                                                    'attr' => array('class' => 'required'))
+                                                    )
             ->add('codeWorkshop' , 'integer', array('required'=> 'required', 'attr' => array('min' => 1)))
         ;
 
+    
+    }
+
+    public function getQueryBuilder()
+    {
+        $er = new EntityRepository();
+
+        return $er->createQueryBuilder('p')->orderBy('p.codePartner', 'ASC');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
     }
+
 }

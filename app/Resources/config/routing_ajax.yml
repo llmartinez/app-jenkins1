@@ -1,8 +1,15 @@
 
+# PARTNER
+getMaxCodePartner:
+    path:  /getMaxCodePartner
+    defaults: { _controller: AppBundle:Ajax:getMaxCodePartner }
+    options:
+        expose: true
+
 # WORKSHOP
-getMaxIdWorkshopByPartner:
-    path:  /getMaxIdWorkshopByPartner/{partner}
-    defaults: { _controller: AppBundle:Ajax:getMaxIdWorkshopByPartner, partner: partner }
+getMaxCodeWorkshopByPartner:
+    path:  /getMaxCodeWorkshopByPartner/{partner}
+    defaults: { _controller: AppBundle:Ajax:getMaxCodeWorkshopByPartner, partner: partner }
     options:
         expose: true
     

@@ -39,9 +39,13 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\Column(name="service", type="json_array", nullable=true)
-     * @Assert\NotBlank()
      */
     private $service;
+
+    /**
+     * @ORM\Column(name="restriction", type="json_array", nullable=true)
+     */
+    private $restriction;
 
     /**
      * @ORM\Column(name="language", type="integer")
@@ -276,6 +280,18 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     public function getService()
     {
         return $this->service;
+    }
+    
+    public function setRestriction($restriction)
+    {
+        $this->restriction = $restriction;
+
+        return $this;
+    }
+
+    public function getRestriction()
+    {
+        return $this->restriction;
     }
     
     public function setCountry($country)

@@ -3,7 +3,6 @@
 
 {% block breadcrumbs %}
     <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
-    <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
 {% endblock %}
 
@@ -11,7 +10,7 @@
 	<h2>{{ 'selectRole'|trans }}</h2>
 	<ul>
 	    {% for key, role in roles %}
-	    	<li><a href="{{ path("userNew", { 'role_id': key }) }}">{{ role|trans }}</a></li>
+	    	<li><a href="{{ path("users", { 'role_id': key }) }}">{{ role|trans }}</a></li>
 	    {% endfor %}
     </ul>
 {% endblock %}

@@ -1,11 +1,11 @@
 <ul>
-	<li>RAPORTS</li>
-	<li>ORDERS</li>
-	<li>POPUPS</li>
-	<li>PARTNERS</li>
-	<li>WORKSHOPS</li>
-	<li>SHOPS</li>
-	<li><a href="{{ path('users') }}">USERS</a></li>
-	<li>SENTENCES</li>
-	<li>TICKETS</li>
+	{% if not is_granted('ROLE_HIDE_REPORT') %}<li>REPORTS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_ORDER') %}<li>ORDERS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_POPUP') %}<li>POPUPS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li>PARTNERS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li>WORKSHOPS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li>SHOPS	</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('users') }}">USERS</a></li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>SENTENCES</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>TICKETS</li>{% endif %}
 </ul>

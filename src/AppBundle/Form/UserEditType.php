@@ -21,6 +21,11 @@ class UserEditType extends AbstractType
                                                 'expanded'=> 'true',
                                                 'multiple'=> 'true'))
 
+            ->add('restriction' , 'choice'  , array('choices' => Utils::getRestrictions(),
+                                                    'required' => false,
+                                                    'expanded' => 'true',
+                                                    'multiple' => 'true'))
+
             ->add('country' , 'choice'  , array('choices' => Utils::getCountries(),
                                                 'required'=> 'required',
                                                 'empty_value' => 'SelectValue' ))

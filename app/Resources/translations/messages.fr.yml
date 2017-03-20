@@ -21,17 +21,27 @@ ROLE_ADMIN: "Administrateur"
 ROLE_SUPER_ADMIN: "Super Admin"
 ROLE_GOD: "Dieu"
 
+# RESTRICTIONS
+Restriction: "Restriction"
+ROLE_HIDE_LIST: "Masquer les listes de données"
+ROLE_HIDE_CREATE: "Masquer les formes de création"
+ROLE_HIDE_USER: "Masquer gestion des utilisateurs"
+ROLE_HIDE_REPORT: "Masquer gestion des rapports"
+ROLE_HIDE_ORDER: "Masquer gestion des demandes"
+ROLE_HIDE_POPUP: "Masquer gestion des popups"
+ROLE_HIDE_TICKET: "Masquer gestion des tickets"
+
 # SERVICES
 Service: "Service"
-SERV_GED: "GED"
-SERV_ADSERVICE_ES: "AD Service ES"
-SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
-SERV_ADSERVICE_PT: "AD Service PT"
-SERV_PHONE_EINA_ECP: "Phone Eina ECP"
-SERV_PHONE_EINA_JS: "Phone Eina JS"
-SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
-SERV_ACTIA: "Actia"
-SERV_NEXUS: "Nexus"
+ROLE_SERV_GED: "GED"
+ROLE_SERV_ADSERVICE_ES: "AD Service ES"
+ROLE_SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+ROLE_SERV_ADSERVICE_PT: "AD Service PT"
+ROLE_SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+ROLE_SERV_PHONE_EINA_JS: "Phone Eina JS"
+ROLE_SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+ROLE_SERV_ACTIA: "Actia"
+ROLE_SERV_NEXUS: "Nexus"
 
 # COUNTRIES
 spain: "Espagne"
@@ -60,6 +70,11 @@ All: "Tous"
 SelectValue: "Sélectionner la valeur"
 searchId: "Chercher par ID"
 
+# ERRORS
+access_denied: "Vous n'avez pas accès à cette section"
+password_changed: "Mot de passe changé avec succès"
+password_old_error: "Le mot de passe précédent ne correspond pas"
+
 # DATATABLE
 loading: "Chargement..."
 dt_show: "Afficher"
@@ -73,6 +88,7 @@ dt_next: "Suivant"
 
 # USER
 user: "Utilisateur"
+id: "ID"
 Id: "ID"
 role: "Rôle"
 Status: "État"

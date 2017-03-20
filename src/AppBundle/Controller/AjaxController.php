@@ -7,20 +7,35 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AjaxController extends Controller
 {
-// WORKSHOP 
+// PARTNER 
     /*
-     * Get Max Workshop ID from a Partner
+     * Get Max Code Partner
      * @return json
      */
-    public function getMaxIdWorkshopByPartnerAction($partner)
+    public function getMaxCodePartnerAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $codePartner = $this->get('utilsUser')->getMaxCodePartner($em);
+
+        $json = array('codePartner' => $codePartner);
+        return new Response(json_encode($json), $status = 200);
+    }
+
+// WORKSHOP 
+    /*
+     * Get Max Code Workshop from a Partner
+     * @return json
+     */
+    public function getMaxCodeWorkshopByPartnerAction($partner)
     {
         $em = $this->getDoctrine()->getManager();
 
         $codePartner = $em->getRepository('AppBundle:Partner')->find($partner)->getCodePartner();
 
-        $id = $this->get('utilsUser')->getMaxIdWorkshop($em, $codePartner);
+        $codeWorkshop = $this->get('utilsUser')->getMaxCodeWorkshop($em, $codePartner);
 
-        $json = array('id' => $id);
+        $json = array('codeWorkshop' => $codeWorkshop);
         return new Response(json_encode($json), $status = 200);
     }
 }

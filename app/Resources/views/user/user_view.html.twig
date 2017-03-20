@@ -3,9 +3,9 @@
 
 {% block breadcrumbs %}
     <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
-    <li><a href="{{ path("users") }}">{{ 'users'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
-    <li><a href="{{ path("userView", { 'id': user.id }) }}">{{ 'user'|trans }} {{user.username}}</a></li>
+    <li><a href="{{ path("users", { 'role_id': role_id }) }}">{{ 'users'|trans }}</a></li>
+    <li><a href="{{ path("userView", { 'id': user.id, 'role_id': role_id }) }}">{{ 'user'|trans }} {{user.username}}</a></li>
 {% endblock %}
 
 {% block body %}

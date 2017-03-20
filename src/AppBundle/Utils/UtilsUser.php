@@ -13,7 +13,7 @@ class UtilsUser
         return self::$status;
     }
 
-    public static function findUsersByRole($_this, $roles)
+    public static function findUsersByRole($_this, $role_id)
     {
         $em = $_this->getDoctrine()->getManager();
 
@@ -21,22 +21,16 @@ class UtilsUser
                     ->createQueryBuilder("u")
                     ->select("u")
                     ->join('u.user_role', 'r')
-                    ->where("u.id != 0");
+                    ->where("u.id != 0")
+                    ->orderBy("u.roleId, u.username", "ASC");
 
         if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
              $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
         else $tokenService = '0';
 
-        if($roles != '')
+        if($role_id != '')
         {
-            $roles_in = '(0';
-            foreach ($roles as $key => $role)
-            {
-                $roles_in .= ', '.$key.' ';
-            }
-            $roles_in .= ')';
-
-            $query->andWhere("u.roleId IN ".$roles_in." ");
+            $query->andWhere("u.roleId = ".$role_id." ");
         }
 
         if($tokenService != '0')
@@ -50,9 +44,6 @@ class UtilsUser
 
             $query->andWhere("r.id IN ".$services_in." ");
         }
-
-        // TODO: Get Users by filters
-        // if(isset($filter)) $query->where("u.".$filter." LIKE '%".$value."%'' ")
 
         return $query;
     }
@@ -93,25 +84,7 @@ class UtilsUser
         {
             if( $form->isValid() && (!isset($formE) || $formE->isValid()) )
             {
-                if($user->getRoleId() == null)
-                {
-                    $role = $em->getRepository('AppBundle:Role')->find($role_id);
-
-                    $user->setRoleId($role_id);
-                    $user->addRole($role);
-                }
-
-                if($user->getService() != null)
-                {
-                    foreach ($user->getService() as $service)
-                    {
-                        if($service != 0)
-                        {
-                            $role = $em->getRepository('AppBundle:Role')->find($service);
-                            $user->addRole($role);
-                        }
-                    }
-                }
+                $user = self::checkRoles($em, $user, $role_id);
 
                 if($user->getPassword() == null) $user = self::setNewPassword($_this, $user);
 
@@ -196,7 +169,8 @@ class UtilsUser
 
         $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $user->getRoleId());
         $entityName = self::getEntityName($user->getRoleId());
-        if($entityName != null){
+        if($entityName != null)
+        {
             $entity = $em->getRepository('AppBundle:'.$entityName)->findOneByUser($user->getId());
             $em->remove($entity);
         }
@@ -233,12 +207,25 @@ class UtilsUser
 
         return $user;
     }
+    
     public static function checkOldPassword($_this, $user, $oldPass)
     {
         $oldPassword = $_this->get('security.password_encoder')
                           ->encodePassword($user, $oldPass, $user->getSalt());
                           
         return ($oldPassword == $user->getPassword());
+    }
+
+    public static function getMaxCodePartner($em)
+    {
+        $query = $em->createQuery(
+            'SELECT MAX(p.id) FROM AppBundle:Partner p'
+        );
+
+        $max_code = $query->getSingleScalarResult();
+
+        if($max_code == null) return 1;
+        return $max_code+1;
     }
 
     public static function getMaxCodeWorkshop($em,$codePartner)
@@ -249,10 +236,47 @@ class UtilsUser
              WHERE p.codePartner = :codePartner'
         )->setParameter('codePartner', $codePartner);
 
-        $max_id = $query->getSingleScalarResult();
+        $max_code = $query->getSingleScalarResult();
 
-        if($max_id == null) return 1;
-        return $max_id+1;
+        if($max_code == null) return 1;
+        return $max_code+1;
+    }
+
+    public static function checkRoles($em, $user, $role_id=null)
+    {
+        // ROLES
+        if($user->getRoleId() == null && $role_id != null)
+        {
+            $role = $em->getRepository('AppBundle:Role')->find($role_id);
+
+            $user->setRoleId($role_id);
+            $user->addRole($role);
+        }
+        // RESTRICTIONS
+        if($user->getRestriction() != null)
+        {
+            foreach ($user->getRestriction() as $restriction)
+            {
+                if($restriction != 0)
+                {
+                    $role = $em->getRepository('AppBundle:Role')->find($restriction);
+                    $user->addRole($role);
+                }
+            }
+        }
+        // SERVICES
+        if($user->getService() != null)
+        {
+            foreach ($user->getService() as $service)
+            {
+                if($service != 0)
+                {
+                    $role = $em->getRepository('AppBundle:Role')->find($service);
+                    $user->addRole($role);
+                }
+            }
+        }
+        return $user;
     }
 
     public static function checkUser($_this, $user)
