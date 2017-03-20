@@ -91,7 +91,7 @@
                 <label>{% trans %} language {% endtrans %}</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
             </div>
-            <div class="col-xs-2 col-md-2 form-group">
+            <div class="col-xs-3 col-md-3 form-group">
                 {% if user.roles[0] != 'ROLE_SUPER_ADMIN' %}
                    <button class="btn btn-primary mt20" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} generate_password {% endtrans %}</button>
                 {% endif %}
