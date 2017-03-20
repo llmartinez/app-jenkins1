@@ -1324,7 +1324,7 @@ function fill_car_from_vin()
 
            }
            else {
-               alert($("#msg_plate_number_not_found").val());
+               alert($("#msg_vin_not_found").val());
            }
 
         },
