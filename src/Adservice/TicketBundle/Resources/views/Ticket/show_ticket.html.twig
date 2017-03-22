@@ -18,7 +18,7 @@
 	    <legend>{% trans %} description {% endtrans %}</legend>
 	    <p> {{ ticket.description|nl2br }} </p><br>
 
-		{% if ticket.status == 'closed' %}
+		{% if ticket.solution is defined %}
 		    <legend>{% trans %} solution {% endtrans %}</legend>
 		    <p> {{ ticket.solution|nl2br }} </p><br>
 		{% endif %}
