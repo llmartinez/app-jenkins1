@@ -557,7 +557,7 @@ class AjaxController extends Controller
         $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                     WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                     AND mt.name LIKE '%".$motor."%' ORDER BY b.name ASC";
-
+        
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 

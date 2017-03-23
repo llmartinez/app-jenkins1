@@ -633,10 +633,10 @@ function fill_version(version) {
             if ($('#year_selected').val()  == '') { filter       = 'year';
                                                     filter_value = $('#new_car_form_year').val(); }
 
-            //if ($('#motor_selected').val() == undefined) { filter       = 'motor';
-            //                                        filter_value = $('#new_car_form_motor').val();
-            //                                        id_mts       = $('#id_mts').val();
-            //                                      }
+            if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                    filter_value = $('#new_car_form_motor').val();
+                                                   // id_mts       = $('#id_mts').val();
+                                                  }
 
             $.ajax({
                 type: "POST",
