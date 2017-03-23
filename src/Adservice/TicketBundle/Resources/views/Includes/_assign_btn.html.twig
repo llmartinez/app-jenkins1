@@ -24,14 +24,14 @@
 
                 {% endif %}
 
-            {% else %}
+            {% else%}
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
             {% endif %}
 
-        {% else %}
+        {% elseif ticket.status.id == 2  %}
 
                 {# Ticket cerrado #}
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
