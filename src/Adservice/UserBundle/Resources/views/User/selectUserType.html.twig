@@ -25,6 +25,10 @@
                 <a id="type_ad"       href="{{ path('user_new', {'type':'ad'          })}}" class="btn-menu">
                                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {% trans %} ad         {% endtrans %}</a>
                 {% endif %}
+                {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN') %}
+                <a id="type_ad"       href="{{ path('partner_new')}}" class="btn-menu">
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {% trans %} ad         {% endtrans %}</a>
+                {% endif %}
                 <a id="type_commercial" href="{{ path('user_new', {'type':'commercial'})}}" class="btn-menu">
                                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/commercial.png') }}" > {% trans %} commercial {% endtrans %}</a>
             </td>

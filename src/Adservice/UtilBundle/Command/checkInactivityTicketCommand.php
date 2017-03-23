@@ -30,7 +30,7 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1));
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1, 'pending' => 1));
         $status = $em->getRepository('TicketBundle:Status')->findAll();
         $sa = $em->getRepository('UserBundle:User')->find(1);
 
