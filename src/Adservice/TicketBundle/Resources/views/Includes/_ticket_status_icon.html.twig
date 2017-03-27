@@ -40,7 +40,7 @@
 {% elseif ticket_status == 'closed' %}
 
     {% if ticket.expirationDate == null %}
-        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ 'mail.inactiveTicket.title' | trans }}" alt="{{ 'mail.inactiveTicket.title' | trans }}">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ 'ticket_closed' | trans }}" alt="{{ 'ticket_closed' | trans }}">
     {% else %}
         {% set close_inactive = 'mail.inactiveTicket.title' | trans %}
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_expired.png') }}" title="{{ close_inactive }}" alt="{{ close_inactive }}">
