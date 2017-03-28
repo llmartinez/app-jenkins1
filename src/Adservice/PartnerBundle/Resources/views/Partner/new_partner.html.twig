@@ -2,10 +2,21 @@
 
 {% block body %}
     
+    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
+               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% else %} {% set id_catserv = '0' %}
+    {% endif %}
+
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">  {% trans %} home               {% endtrans %}</a></li>
-      <li><a href="{{ path('partner_list') }}">{% trans %} menu.list_partners {% endtrans %}</a></li>
-      <li class="active">                      {% trans %} new.partner        {% endtrans %}</li>
+        <li><a href="{{ path('user_index') }}">  {% trans %} home               {% endtrans %}</a></li>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <li><a href="{{ path('partner_list') }}">{% trans %} menu.list_partners {% endtrans %}</a></li>
+        {% else %}
+            <li><a href="{{ path('user_partner_list') }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+        {% endif %}
+
+        <li class="active">                      {% trans %} new.partner        {% endtrans %}</li>
     </ol>
 
     <legend>{% trans %} new.partner {% endtrans %}</legend>
@@ -16,7 +27,16 @@
                 <label>{% trans %} name         {% endtrans %} *</label> {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} code_partner {% endtrans %} *</label> {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 1, 'value': partner.codePartner } }) }}
+                <label>{% trans %} code_partner {% endtrans %} *</label> 
+
+                {% if id_catserv == 3 %}
+                    {% if partner.codePartner < 89 or partner.codePartner > 94 %}{% set codePartner = 89 %}
+                    {% else %}                                                   {% set codePartner = partner.codePartner %}{% endif %}
+
+                    {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 89, 'max': 94, 'value': codePartner } }) }}
+                {% else %}
+                    {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 1, 'value': partner.codePartner } }) }}
+                {% endif %}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} category_service {% endtrans %} *</label>
@@ -33,7 +53,7 @@
                 <label>{% trans %} cif          {% endtrans %} *</label> {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             <div class="col-xs-4 col-md-4 form-group">
-                {% if     app.session.hasFlash('info' ) %} {{ app.session.getFlash('info' ) }}
+                {% if     app.session.hasFlash('info' ) %} {% if id_catserv != 3 %}{{ app.session.getFlash('info' ) }}{% endif %}
                 {% elseif app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
             </div>
             <div class="col-xs-2 col-md-2 form-group">

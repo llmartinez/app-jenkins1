@@ -87,6 +87,7 @@ error.same_vin:					"Le numéro de chassis introduit correspond à un autre véh
 error.same_platenumber:			"Le numéro d'immatriculation introduit correspond à un autre véhicule enregistré dans l'application"
 error.vin_platenumber_not_match: "Le numéro d'immatriculation et le numéro de chassis introduits ne correspondent pas au même véhicule"
 error.plate_number_not_found:  "Nous n'avons enregistré une voiture avec ce numéro de plaque. Entrez les données manuellement."
+error.vin_not_found:  "Nous n'avons enregistré une voiture avec ce numéro de chassis. Entrez les données manuellement."
 isNaN:							"Le champ 'Téléphone' doit contenir uniquement des chiffres"
 Bad credentials: 				"Compte d'utilisateur ou mot de passe incorrect"
 The presented password is invalid.: "Le mot de passe introduit est erroné."
@@ -770,7 +771,7 @@ mail.deactivateWorkshop.subject:        "Auto Diagnostic Service | Atelier deact
 
 mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.inactivity_warning.title: 			"Un ticket requête est sur le point d'expirer."
-mail.inactivity_warning: 				"Cette ticket est sur le point d'expirer. Si le véhicule est réparé correctement et a la solution qui appréciera l'intégration dans la vente de billets. Votre aide peut résoudre les problèmes des autres ateliers. Merci beaucoup pour votre collaboration."
+mail.inactivity_warning: 				"Cette demande d'assistance est sur le point d'expirer. Si la reparation du vehicule s'est termineé correctement, si vous avez la solution, nous vous serions gré de bien vouloir l'indiqueé dans le ticket. Votre aide peut solutionner les problèmes d'autres ateliers. Nous vous remercions de votre collaboration."
 
 mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu."
 _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu. <b>soporte@ad-service.com</b>"
