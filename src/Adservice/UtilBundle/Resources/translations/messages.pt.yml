@@ -800,3 +800,8 @@ back_app:  	"Voltar à aplicação"
 termsConditions:	" "
 _termsConditions: 	'Ao fazer uso da aplicação, está a aceitar os <a href="">termos e condições</a> que se seguem.'
 footerText: 	 	"2014 © Grup Eina Digital · Centro de Inovação e Recursos"
+
+
+
+einatech: "Reparar módulo electrónico"
+einatech_textarea_default : "-Tipo de elemento: \n-Referência: \n-Descrição da falha: \n-Máquina de diagnóstico utilizados: \n-Os códigos de falhas e descrição: \n-Quilómetros percorridos pelos veículos: "

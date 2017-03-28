@@ -771,7 +771,7 @@ mail.deactivateWorkshop.subject:        "Auto Diagnostic Service | Atelier deact
 
 mail.inactiveTicket.title:				"Un ticket inactif a été fermé"
 mail.inactivity_warning.title: 			"Un ticket requête est sur le point d'expirer."
-mail.inactivity_warning: 				"Cette ticket est sur le point d'expirer. Si le véhicule est réparé correctement et a la solution qui appréciera l'intégration dans la vente de billets. Votre aide peut résoudre les problèmes des autres ateliers. Merci beaucoup pour votre collaboration."
+mail.inactivity_warning: 				"Cette demande d'assistance est sur le point d'expirer. Si la reparation du vehicule s'est termineé correctement, si vous avez la solution, nous vous serions gré de bien vouloir l'indiqueé dans le ticket. Votre aide peut solutionner les problèmes d'autres ateliers. Nous vous remercions de votre collaboration."
 
 mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu."
 _mail.textDisclaimer: 					"DISPOSITIONS LÉGALES. L'information contenue dans ce courrier électronique ne peut être divulguée et peut revêtir un caractère confidentiel. Elle est exclusivement destinée à son destinataire. L'accès ou l'utilisation de ce message par toute personne n'y étant pas autorisée peut constituer une infraction. Si vous n'en êtes pas le destinataire, nous vous prions de bien vouloir procéder à l'élimination de son contenu. <b>soporte@ad-service.com</b>"
@@ -801,3 +801,7 @@ back_app:  "Revenir à l’application"
 termsConditions:	" "
 _termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
+
+
+einatech: "Réparation module électronique"
+einatech_textarea_default : "-Elément de type: \n-Référence: \n-Description du défaut: \n-Machine de diagnostic utilisé: \n-Codes et description de défaut: \n-Kilomètres de véhicules: "

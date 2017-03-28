@@ -61,10 +61,9 @@
                 <label>{% trans %} typology {% endtrans %} *</label> {{ form_widget(form.typology, { 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="col-xs-3 col-md-3">
-                <label>{% trans %} cif {% endtrans %} * </label>
+                <label>{% trans %} cif {% endtrans %}</label>
                 {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'cif' | trans,
-                                                     'required':'required' } }) }}
+                                                     'placeholder': 'cif' | trans } }) }}
             </div>
         </div>
         <div class="col-xs-2 col-md-2 form-group fr">
