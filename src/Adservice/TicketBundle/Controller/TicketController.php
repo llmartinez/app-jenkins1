@@ -2325,7 +2325,7 @@ class TicketController extends Controller {
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
-
+        $advisers = array();
         
         if($security->isGranted('ROLE_ASSESSOR')) {
             if($user->getCategoryService() != NULL) {
