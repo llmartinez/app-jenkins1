@@ -31,6 +31,24 @@ class UserController extends Controller
         //if($filter != 0) $query->where("u.".$filter." LIKE '%".$value."%'' ")
         // Deberiamos filtrar con un FORM para gestionar todos los campos simultaneamente
 
+
+        /**********************************************************************************/
+        /**********************************************************************************/
+        /**********************************************************************************/
+
+        // TODO: hacer un formulario por cada rol para los filtros de los listados
+
+
+
+
+
+
+
+
+        /**********************************************************************************/
+        /**********************************************************************************/
+        /**********************************************************************************/
+
         $pagination = $this->get('knp_paginator')->paginate($query->getQuery(), $page, 10);
 
         return $this->render('user/users.html.twig', array('pagination' => $pagination, 'role_id' => $role_id));

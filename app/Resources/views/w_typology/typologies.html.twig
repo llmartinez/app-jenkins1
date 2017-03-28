@@ -1,0 +1,55 @@
+{% extends '::layout.html.twig' %}
+{% set locale = app.request.locale %}
+
+{% block breadcrumbs %}
+    <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("typologies") }}">{{ 'typologies'|trans }}</a></li>
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+
+            <h2>{{ 'typologies'|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
+            <ul>
+                <li><a href="{{ path("typology") }}">{{ 'typology_new'|trans }}</a></li>
+            </ul>
+            <div>
+                <table>
+                    <thead><tr>
+                    {# sorting of properties based on query components #}
+                       <th{% if pagination.isSorted('t.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 't.id') }}</th>
+                       <th{% if pagination.isSorted('t.active')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'active'|trans, 't.active') }}</th>
+                       <th{% if pagination.isSorted('t.service')  %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Service'|trans,'t.service')}}</th>
+                       <th{% if pagination.isSorted('t.name')     %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Name'|trans,'t.name') }}</th>
+                    </tr></thead>
+                    <tbody>
+                        {% for row in pagination %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.active }}</td>
+                            <td>{% for service in row.service %}
+
+                                    {{ services[service]|trans }}
+
+                                    {% if loop.index != row.service|length %},{% endif %} 
+
+                                {% endfor %}
+                            </td>
+                            <td>{{ row.name }}</td>
+                            <td>
+                                <a href="{{ path("typology", { id: row.id })}}">Edit</a>
+                                <a href="{{ path("typologyDelete", { id: row.id })}}">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div>
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

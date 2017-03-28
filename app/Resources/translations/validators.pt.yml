@@ -1,3 +1,10 @@
+# ALERTS
+password_changed: "Palavra-passe alterada com sucesso"
+password_old_error: "A palavra-passe antiga não corresponde"
+
 # ERRORS
+access_denied: "Você não tem acesso a esta seção"
+
+# VALIDATORS
 error_username_repeated: "O nome de usuário já está sendo usado"
 error_passwords_not_match: "As senhas não correspondem"

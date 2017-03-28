@@ -41,6 +41,24 @@ class Workshop
      * @Assert\NotBlank()
      */
     private $name;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Typology")
+     * @ORM\JoinColumn(name="typology_id", referencedColumnName="id")
+     */
+    private $typology;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    private $shop;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="DiagnosisMachine")
+     * @ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")
+     */
+    private $diagnosisMachine;
  
 
     /* Construct */
@@ -49,31 +67,9 @@ class Workshop
         $this->partner = $partner;
     }
 
-    public function getCodeWorkshop()
-    {
-        return $this->codeWorkshop;
-    }
-
-    public function setCodeWorkshop($codeWorkshop)
-    {
-        $this->codeWorkshop = $codeWorkshop;
-    }
-
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
     }
 
     public function setPartner($partner)
@@ -88,6 +84,28 @@ class Workshop
         return $this->partner;
     }
 
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getCodeWorkshop()
+    {
+        return $this->codeWorkshop;
+    }
+
+    public function setCodeWorkshop($codeWorkshop)
+    {
+        $this->codeWorkshop = $codeWorkshop;
+    }
+
     public function setName($name)
     {
         $this->name = $name;
@@ -100,9 +118,45 @@ class Workshop
         return $this->name;
     }
 
+    public function setTypology($typology)
+    {
+        $this->typology = $typology;
+
+        return $this;
+    }
+
+    public function getTypology()
+    {
+        return $this->typology;
+    }
+
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
+
+        return $this;
+    }
+
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    public function setDiagnosisMachine($diagnosisMachine)
+    {
+        $this->diagnosisMachine = $diagnosisMachine;
+
+        return $this;
+    }
+
+    public function getDiagnosisMachine()
+    {
+        return $this->diagnosisMachine;
+    }
+
     public function __toString()
     {
-        return $this->getId();
+        return $this->getPartner()->getCodePartner().' - '.$this->getCodeWorkshop().' '.$this->getName();
     }
 
 }

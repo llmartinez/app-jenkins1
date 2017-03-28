@@ -1,8 +1,8 @@
 <ul>
-	{% if not is_granted('ROLE_HIDE_REPORT') %}<li>REPORTS</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_ORDER') %}<li>ORDERS</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_USER') %}<li>PARTNERS</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_USER') %}<li>WORKSHOPS</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_USER') %}<li>SHOPS</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('users') }}">USERS</a></li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_REPORT') %}<li>{{'reports'|trans}}</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_ORDER') %}<li>{{'orders'|trans}}</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('typologies') }}">{{'typologies'|trans}}</a></li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('shops') }}">{{'shops'|trans}}</a></li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('diagnosisMachines') }}">{{'diagnosisMachines'|trans}}</a></li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_USER') %}<li><a href="{{ path('users') }}">{{'users'|trans}}</a></li>{% endif %}
 </ul>

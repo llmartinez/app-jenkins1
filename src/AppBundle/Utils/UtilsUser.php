@@ -16,6 +16,8 @@ class UtilsUser
     public static function findUsersByRole($_this, $role_id)
     {
         $em = $_this->getDoctrine()->getManager();
+        $tokenUser = $_this->get('security.token_storage')->getToken()->getUser();
+        $tokenService = $_this->get('utils')->getTokenServices($tokenUser);
 
         $query = $em->getRepository("AppBundle:User")
                     ->createQueryBuilder("u")
@@ -23,10 +25,6 @@ class UtilsUser
                     ->join('u.user_role', 'r')
                     ->where("u.id != 0")
                     ->orderBy("u.roleId, u.username", "ASC");
-
-        if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
-             $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
-        else $tokenService = '0';
 
         if($role_id != '')
         {
@@ -50,12 +48,10 @@ class UtilsUser
 
     public static function newUser($_this, $request, $role_id)
     {
-        if($_this->get('security.token_storage')->getToken()->getUser()->getService() != null)
-             $tokenService = $_this->get('security.token_storage')->getToken()->getUser()->getService();
-        else $tokenService = '0';
-        
         $em = $_this->getDoctrine()->getManager();
-
+        $tokenUser = $_this->get('security.token_storage')->getToken()->getUser();
+        $tokenService = $_this->get('utils')->getTokenServices($tokenUser);
+        
         $user = new User();
 
         $form = $_this->createForm(new UserNewType(), $user, array('attr' => array('tokenService' => $tokenService,
@@ -73,7 +69,7 @@ class UtilsUser
             $entity = New $entityName();
             $entity->setUser($user);
 
-            $formE = $_this->createForm(new $entityType(), $entity);
+            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => array('em' => $em, 'tokenService' => $tokenService)));
             $return['formE'] = $formE->createView();
             $formE->handleRequest($request);
         }
@@ -120,10 +116,12 @@ class UtilsUser
     public static function editUser($_this, $request, $user)
     {
         $em = $_this->getDoctrine()->getManager();
+        $tokenUser = $_this->get('security.token_storage')->getToken()->getUser();
+        $tokenService = $_this->get('utils')->getTokenServices($tokenUser);
 
         $role_id = $user->getRoleId();
 
-        $form = $_this->createForm(new UserEditType(), $user, array('attr' => array('tokenService' => '0',
+        $form = $_this->createForm(new UserEditType(), $user, array('attr' => array('tokenService' => $tokenService,
                                                                                     'role' => $role_id )));
         $form->handleRequest($request);
         $return = array('_locale' => $_this->get('locale'), 'user' => $user->getId(), 'role_id' => $role_id, 'form' => $form->createView());
@@ -133,7 +131,7 @@ class UtilsUser
         {
             $entityType = 'AppBundle\Form\\'.$entityName.'Type';
             $entity = $em->getRepository('AppBundle:'.$entityName)->findOneByUser($user);
-            $formE = $_this->createForm(new $entityType(), $entity);
+            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => array('em' => $em, 'tokenService' => $tokenService)));
             $formE->handleRequest($request);
 
             $return['formE'] = $formE->createView();
