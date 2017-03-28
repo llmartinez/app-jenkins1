@@ -86,7 +86,7 @@ class PartnerController extends Controller {
      */
     public function newPartnerAction() {
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false){
+        if ($security->isGranted('ROLE_TOP_AD') === false){
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getEntityManager();
@@ -122,6 +122,9 @@ class PartnerController extends Controller {
                 //{
                     $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
                     $partner = UtilController::settersContact($partner, $partner);
+
+                    if ($security->isGranted('ROLE_TOP_AD'))
+                        $partner->setRegion('-');
 
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
                     $username = UtilController::getUsernameUnused($em, $partner->getName());
@@ -171,6 +174,9 @@ class PartnerController extends Controller {
 
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
                     $this->get('session')->setFlash('alert', $flash);
+
+                    if ($security->isGranted('ROLE_TOP_AD'))
+                        return $this->redirect($this->generateUrl('user_partner_list', array('0','3','0','0','0')));
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 //}

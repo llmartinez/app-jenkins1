@@ -635,7 +635,7 @@ function fill_version(version) {
 
             if ($('#motor_selected').val() == '') { filter       = 'motor';
                                                     filter_value = $('#new_car_form_motor').val();
-                                                    // id_mts       = $('#id_mts').val();
+                                                   // id_mts       = $('#id_mts').val();
                                                   }
 
             $.ajax({
@@ -655,7 +655,7 @@ function fill_version(version) {
                     if(flt_year == undefined || flt_year == '' || flt_year == '0') $('#new_car_form_year').val('');
 
                     var flt_motor = $('#flt_motor').val();
-                    if(flt_motor == undefined || flt_motor == '' || flt_motor == '0') $('#new_car_form_motor').val('');
+                    if($('#motor_selected').val() == undefined && (flt_motor == undefined || flt_motor == '' || flt_motor == '0')) $('#new_car_form_motor').val('');
 
                     $('#new_car_form_kW').val('');
                     $('#new_car_form_displacement').val('');
@@ -745,14 +745,16 @@ function fill_car_data() {
                         var year_setted = $('form[id=contact]').find('#new_car_form_year').attr('value');
 
                         if(year_setted != undefined && year_setted != ''){
-                            $('form[id=contact]').find('#new_car_form_year'    ).val(year_setted);
+                            $('form[id=contact]').find('#new_car_form_year').val(year_setted);
                             $('form[id=contact]').find('#new_car_form_year').attr('value', '');
                         }else{
                             if(year == undefined) {
                                 $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
                             }
                         }
-                        $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+
+                        if ($('#motor_selected').val() == undefined) $('form[id=contact]').find('#new_car_form_motor').val(elm.motor);
+
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                         $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                         var dis_url = $( "#dis-url" ).val();
@@ -868,11 +870,14 @@ function fill_car_by_motor() {
                     //$('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
                     //$('#filter_motor').empty();
-                    //if(motor != ''){
-                    //    $('#filter_motor').append('<input type="hidden" id="flt_motor" name="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-                    //}else{
-                    //    $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
-                    //}
+                    if(motor != '')
+                    {
+                        $('#filter_motor').append('<input type="hidden" id="motor_selected">');
+                    }
+                    else if(motor == '')
+                    {
+                        $( "#motor_selected" ).remove();
+                    }
                 }
             }else{
                 msg_bad_filter = $('#msg_bad_filter').val();

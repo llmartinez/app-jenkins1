@@ -38,7 +38,7 @@ security:
       - { path: ^/(es|en|fr|pt)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr|pt)/privacy,                    roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD]                    }
-      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_AD]                    }
+      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_TOP_AD]                    }
       - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD]        }
       - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_COMMERCIAL]}
       - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN]                 }
