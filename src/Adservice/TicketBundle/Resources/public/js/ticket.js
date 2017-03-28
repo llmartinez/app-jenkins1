@@ -206,7 +206,15 @@ function search_by_bmv() {
     $('.img_icon.open').click(function(){
         $(this).data('clicked', true);
     });
-
+    
+    $(document).on('change','#ticket_form_importance',function(){
+       var importance = $(document).find("#ticket_form_importance").val();
+       var textarea_text_default  = $(document).find("#textarea_text_default").val();
+       if(importance == 5){
+           $(document).find("#ticket_form_description").val(textarea_text_default);
+       }
+    });
+    
     $('.ticketRow').click( function() {
 
         var is_clicked = $(this).find('.img_icon.open').data('clicked');

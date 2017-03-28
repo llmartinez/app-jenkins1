@@ -804,3 +804,7 @@ back_app:  	"Back to the application"
 termsConditions: 	" "
 _termsConditions: 	'By using the application you accept the following <a href="">terms and conditions</a>.'
 footerText: 	 	"© Grup Eina International · Center of Innovation and Resources"
+
+
+einatech: "Electronic module repair"
+einatech_textarea_default : "-Type element: \n-Reference: \n-Description of the fault: \n-Diagnostic machine used: \n-Fault codes and description: \n-Kilometers of the vehicle: "
