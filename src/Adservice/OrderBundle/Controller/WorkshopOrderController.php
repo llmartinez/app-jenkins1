@@ -493,7 +493,7 @@ class WorkshopOrderController extends Controller {
             }else{
                 $shop = 0;
             }
-            if( $request->request->get('workshopOrder_editOrder')['diagnosis_machines'] != null)
+            if( isset($request->request->get('workshopOrder_editOrder')['diagnosis_machines']))
             {
                 $workshopOrder->setDiagnosisMachines(array());
                 $id_diagmachines = $request->request->get('workshopOrder_editOrder')['diagnosis_machines'];
