@@ -17,15 +17,18 @@
      <div class="grid-full w100">
         <legend>{% trans %} ticket_info {% endtrans %}</legend>
         <div class="grid-33 form-group">
-        <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
-        {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
-    </div>
+            <label for="new_ticket_form_importance">{% trans %} importance {% endtrans %} *</label>
+            {{ form_widget(form.importance, { 'attr': {'class': 'form-control asr_form-control', 'required': 'required' } }) }}
+        </div>
+        {% if einatech == 1 and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_ASSESSOR') %}
+            <div class="grid-66 form-group">
+                <label for="new_ticket_form_importance">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut ex odio. Nam accumsan mauris nec scelerisque pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut ex odio. Nam accumsan mauris nec scelerisque pulvinar. </label>
+            </div>
+        {% endif %}
     <input type="hidden" id='textarea_text_default' value="{{ 'einatech_textarea_default' | trans  }}">
     {% if (is_granted('ROLE_ASSESSOR')) %}
        
-           
-
-            <input id="error_ticket" type="hidden" value="{{'error.bad_introduction.ticket'|trans}}">
+        <input id="error_ticket" type="hidden" value="{{'error.bad_introduction.ticket'|trans}}">
 
             {% if app.session.hasFlash('error_ticket') %}
                 <p class="grid-full w100 error">{{ app.session.getFlash('error_ticket') }}</p>
