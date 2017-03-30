@@ -426,6 +426,9 @@ class TicketController extends Controller {
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
+        if ($security->isGranted('ROLE_USER') and !$security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_ASSESSOR') and $einatech == 0 ){
+            $_SESSION['einatech'] = 2;
+        }
         if ($id_workshop != null) {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
         } else {
@@ -529,16 +532,20 @@ class TicketController extends Controller {
         $form = $this->createForm(new NewTicketType(), $ticket);
         $formC = $this->createForm(new CarType(), $car);
         $formD = $this->createForm(new DocumentType(), $document);
-
+        $textarea_content = "";
+        if($einatech == 1){
+             $textarea_content = $this->get('translator')->trans('einatech_textarea_default');
+         }
         if (isset($open_newTicket) and $open_newTicket == '1' and $request->getMethod() == 'POST') {
             //campos comunes
             $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
             $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-
+            
             $form->bindRequest($request);
             $formC->bindRequest($request);
             $formD->bindRequest($request);
-
+           
+            }
             if ($ticket->getDescription() != null and $car->getBrand() != null and ($car->getBrand()->getId() == 0 || $car->getBrand()->getId() != null)
                     and $car->getModel() != null and ($car->getModel()->getId() == 0 || $car->getModel()->getId() != null) and $car->getVin() != null and $car->getPlateNumber() != null) {
                 $array = array('ticket' => $ticket,
@@ -547,13 +554,15 @@ class TicketController extends Controller {
                     'formD' => $formD->createView(),
                     'brands' => $brands,
                     'systems' => $systems,
+                    'einatech' => $einatech,
+                    'textarea_content' => $textarea_content,
+                    'id_catserv' => $id_catserv,
                     'adsplus' => $adsplus,
                     'workshop' => $workshop,
                     'form_name' => $form->getName());
 
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
                     if ($formC->isValid() && $formD->isValid()) {
-
                         $id_brand = $request->request->get('new_car_form_brand');
                         $id_model = $request->request->get('new_car_form_model');
                         $id_version = $request->request->get('new_car_form_version');
@@ -764,7 +773,8 @@ class TicketController extends Controller {
                                                 }
 
                                                 UtilController::saveEntity($em, $car, $user);
-
+                                                
+                                                
                                                 //Define TICKET
                                                 $ticket = UtilController::newEntity($ticket, $user);
                                                 if ($security->isGranted('ROLE_ASSESSOR')) {
@@ -785,11 +795,16 @@ class TicketController extends Controller {
                                                     $ticket->setIsPhoneCall(0);
                                                     if($security->isGranted('ROLE_ADMIN')) {
                                                          $ticket->setIsPhoneCall(1);
-                                                    }                                                       
+                                                    }     
+                                                 
                                                 }
-                                                
+                                                if(isset($request->request->get('ticket_form')['importance'])){
+                                                    $imp = $em->getRepository('TicketBundle:Importance')->find($request->request->get('ticket_form')['importance']);
+                                                    $ticket->setImportance($imp);
+                                                }
                                                 $ticket->setStatus($status);
                                                 $ticket->setCar($car);
+
 
                                                 UtilController::saveEntity($em, $ticket, $user);
 
@@ -848,6 +863,7 @@ class TicketController extends Controller {
 
                         $mail = $ticket->getWorkshop()->getEmail1();
                         $pos = strpos($mail, '@');
+                        
                         if ($pos != 0) {
 
                             // Cambiamos el locale para enviar el mail en el idioma del taller
@@ -866,10 +882,17 @@ class TicketController extends Controller {
                             // echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale));die;
 
                             if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER')) {
-                                $mail_centralita = $this->container->getParameter('mail_centralita');
+                                if($ticket->getImportance()->getId() == 5){
+                                    $mail_centralita = $this->container->getParameter('mail_einatech');
+                                    $mailer->setSubject('ticket: ' . $ticket->getId());
+                                }
+                                else {
+                                    $mail_centralita = $this->container->getParameter('mail_centralita');
+                                    $mailer->setSubject('ticket: ' . $ticket->getId());
+                                }
                                 //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
                                 $mailer->setTo($this->get('translator')->trans($mail_centralita));
-                                $mailer->setSubject('ticket: ' . $ticket->getId());
+                                
                                 $date = date("Y-m-d H:i:s");
                                 $mailer->setBody('ticket: ' . $ticket->getId() . ' - ' . $date);
                                 $mailer->sendMailToSpool();
@@ -892,10 +915,16 @@ class TicketController extends Controller {
                 } else {
                     $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket'));
                 }
-            } else {
-                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
-            }
-        }
+            } 
+//            else {
+//                if ($security->isGranted('ROLE_ASSESSOR')) {
+//                    $max_len = 10000;
+//                } else {
+//                    $max_len = 500;
+//                }
+//                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
+//            }
+        
         // else {
         //     $flash = $this->get('translator')->trans('error.bad_introduction');
         //     $this->get('session')->setFlash('error', $flash);
@@ -910,10 +939,7 @@ class TicketController extends Controller {
             $id_subsystem = '';
         }
         
-        $textarea_content = "";
-        if($einatech == 1){
-            $textarea_content = $this->get('translator')->trans('einatech_textarea_default');
-        }
+      
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
             'car' => $car,
@@ -921,6 +947,7 @@ class TicketController extends Controller {
             'formC' => $formC->createView(),
             'formD' => $formD->createView(),
             'brands' => $brands,
+            'einatech' => $einatech,
             'id_version' => $id_version,
             'id_system' => $id_system,
             'id_subsystem' => $id_subsystem,
@@ -948,6 +975,17 @@ class TicketController extends Controller {
     public function editTicketAction($id, $ticket) {
 
         $security = $this->get('security.context');
+        $id_catserv = 0;
+        if($security->getToken()->getUser()->getCategoryService() != null){
+            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        }
+        $_SESSION['einatech'] = 0;
+        if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
+            $_SESSION['einatech'] = 2;
+        }
+        if($ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+            $_SESSION['einatech'] = 1;
+        }
         if ($security->isGranted('ROLE_SUPER_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
@@ -1127,11 +1165,23 @@ class TicketController extends Controller {
     public function showTicketAction($ticket) {
         $security = $this->get('security.context');
         $user = $this->get('security.context')->getToken()->getUser();
-
+        
         if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
 
         $user = $security->getToken()->getUser();
-
+        
+         $id_catserv = 0;
+        if($security->getToken()->getUser()->getCategoryService() != null){
+            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        }
+        $_SESSION['einatech'] = 0;
+        if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
+            $_SESSION['einatech'] = 2;
+        }
+        if($ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+            $_SESSION['einatech'] = 1;
+        }
+        
         if (
             ($security->isGranted('ROLE_ADMIN')
                 or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
