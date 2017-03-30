@@ -901,6 +901,12 @@ fieldset[disabled] .asr_form-control {
     float: left;
 }
 
+.grid-66  {
+    width:  60%!important;
+    margin-right: 3.3%;
+    float: left;
+}
+
 .grid {
     float: left;
     margin-right: 10px;
