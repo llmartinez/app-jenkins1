@@ -1,10 +1,10 @@
 <div style="text-align:center">
 
-    {% set url_logo = route_logo ~ '.png' %}
+    {% set url_logo = route_logo_mail ~ '.png' %}
     <img src="{{ asset(url_logo) }}" style="height: 60px;">
     <br>
     {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
-        {% set url_logo_catserv = route_logo ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
+        {% set url_logo_catserv = route_logo_mail ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
         <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
     {% endif %}
 
