@@ -28,6 +28,9 @@
                 <p class="alert">{% trans %} ticket.weekend_closed {% endtrans %}</p>
             {% endif %}
         {% else %}
+            {% if is_granted('ROLE_ADMIN') %}
+                 <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} Reparación de modulo electronico {% endtrans %}</a>
+            {% endif %}
             {# <a class="btn" id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
         {% endif %}
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
