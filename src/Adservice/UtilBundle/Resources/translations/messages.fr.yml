@@ -281,7 +281,12 @@ france:					 "France"
 portugal:				 "Portugal"
 ireland:				 "Irlande"
 england:				 "Royaume-Uni"
-british_isles:	 		 "Îles britanniques"
+british_isles:	 "Îles britanniques"
+panama:          "Panama"
+honduras:        "Honduras"
+guatemala:       "Guatemala"
+el salvador:     "El Salvador"
+nicaragua:       "Nicaragua"
 
 #LANGUAGE
 english:				 "Anglais"

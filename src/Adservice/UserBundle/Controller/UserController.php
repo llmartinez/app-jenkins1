@@ -326,6 +326,7 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
+        if($security->getToken()->getUser()->getCategoryService() != null)
         $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
 
         if($country != 0){
