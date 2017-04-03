@@ -282,6 +282,7 @@ portugal:				 "Portugal"
 ireland:				 "Irlande"
 england:				 "Royaume-Uni"
 british_isles:	 		 "Îles britanniques"
+panama:   "Panama"
 
 #LANGUAGE
 english:				 "Anglais"
@@ -803,5 +804,6 @@ _termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">t
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
 
 
+msg_einatech: "Procédure pour la réparation des unités électroniques, Einatech.\n\t1. Création d'un ticket pour la demande de réparation en cliquant sur « Réparation de module électronique ».\n\t2. Remplissez tous les champs requis et cliquez sur Créer.\n\t3. Une fois créé le ticket, le service Einatech communiquera avec l'atelier pour confirmer la récupération.\n\t4. ll est important de joindre une image de la carte grise au ticket ou dans l'emballage.\n\t5. Récupération a l'atelier par l'agence de transport service express 24h.\n\tTous les articles recueillis voyagent avec l'assurance obligatoire du transport selon la L.O.O.T. qui couvre dommages par une valeur 5,95 € / kg. Nous recommandons d'emballer les articles à envoyer avec du matériel de protection pour éviter tout dommage. Toute perte ou dommage dépassant cette valeur sera en charge du client.\n\t6. À la réception de l'unité défectueuse, les agents Einatech l’entreront dans le système informatique et enverront un e-mail / ticket pour informer de la réception de l’unité.\n\t7. Le budget sera envoyé en 24-48 heures de la réception du matériel par e-mail /ticket.\n\t8. Dès la réception de la conformité par-mail/ticket, l’acceptation sera traitée, un e-mail/ticket sera \n\tenvoyé confirmant sa réception et on procédera à la réalisation des travaux.\n\t9. Une fois réparé et vérifié, l'article sera retourné par l'agence de transport avec 24h contre remboursement."
 einatech: "Réparation module électronique"
 einatech_textarea_default : "-Elément de type: \n-Référence: \n-Description du défaut: \n-Machine de diagnostic utilisé: \n-Codes et description de défaut: \n-Kilomètres de véhicules: "

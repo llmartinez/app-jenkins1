@@ -282,6 +282,7 @@ portugal:				 "Portugal"
 ireland:				 "Ireland"
 england:				 "United Kingdom"
 british_isles:	 		 "British Isles"
+panama:   "Panama"
 
 #LANGUAGE
 english:				 "English"
@@ -805,6 +806,6 @@ termsConditions: 	" "
 _termsConditions: 	'By using the application you accept the following <a href="">terms and conditions</a>.'
 footerText: 	 	"© Grup Eina International · Center of Innovation and Resources"
 
-
+msg_einatech: "Procedure for the electronic unit repair, Einatech.\n\t1. Create a ticket for the repair request, by pressing on 'Electronic module repair'\n\t2. Fill in all the requested fields and click on create.\n\t3. Once the ticket has been created, the Einatech service will get in contact with the workshop in order to confirm the pickup.\n\t4. It is important to attach an image of the vehicle registration certificate to the ticket or to the package.\n\t5. The pickup at the workshop is carried out by a transport agency with 24h urgent service. \n\tAll the shipments and pickups travel with a compulsory travel insurance in accordance with the L.O.O.T. that covers damages of € 5.95/kg. We recommend you to wrap the items to be shipped with protective material in order to avoid any damage. Any loss or breakage that exceeds this value will be paid by the customer.\n\t6. Upon receipt of the faulty unit, the Einatech agents will enter it into the computer system and send an e-mail/ticket to the workshop informing about the reception of the unit. \n\t7. The budget will be sent in 24-48 hours from the reception of the package. It will be sent via e-mail/ticket.\n\t8. Once you have received the customer’s conformity via e-mail/ticket, the  acceptance process will be processed and an e-mail/ticket will be sent confirming its receipt and we will start working on your order.\n\t9. Once the item is repaired and checked, it will be returned by a transportation agency to your address with 24h service and it is paid by cash on delivery."
 einatech: "Electronic module repair"
 einatech_textarea_default : "-Type element: \n-Reference: \n-Description of the fault: \n-Diagnostic machine used: \n-Fault codes and description: \n-Kilometers of the vehicle: "
