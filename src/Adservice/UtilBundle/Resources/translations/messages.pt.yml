@@ -282,6 +282,7 @@ portugal:				 "Portugal"
 ireland:				 "Irlanda"
 england:				 "Reino Unido"
 british_isles:	 		 "Ilhas Britânicas"
+panama:   "Panamá"
 
 #LANGUAGE
 english:				 "Inglês"
@@ -802,6 +803,6 @@ _termsConditions: 	'Ao fazer uso da aplicação, está a aceitar os <a href="">t
 footerText: 	 	"2014 © Grup Eina Digital · Centro de Inovação e Recursos"
 
 
-
+msg_einatech: "Procedimento para a reparaçao de centralitas , Einatech.\n\t1. Criar um talao para um pedido de reparaçao, selecionando 'Reparaçao de módulo electrónico'.\n\t2. Preencher todos os campos solicitados e seleccionar criar.\n\t3. Uma vez criado o talão, o serviço da Einatech entrará em contacto com a oficina para confirmar a recolha.\n\t4. É importante anexar uma imagem da ficha técnica do  talão ao pacote.\n\t5. A recolha na oficina será efectuada por uma agência de transporte com serviço urgente 24h.\n\tTodos os envios e recolhas viajam com um seguro obrigatório de transporte segundo a L.O.O.T. que cobre danos até um valor de 5,95€/kg. Recomendamos que envolvam as centralitas a enviar com material protector para evitar qualquer dano. Qualquer perda ou dano que exceda  este valor irá a cargo do cliente.\n\t6. Ao receber a centralita avariada, os agentes da Einatech irao inserir no sistema informático e enviarao um e-mail/talão á oficina informando da recepção da mesma.\n\t7. Se enviará o orçamento em 24-48 horas depois da recepção da centralita. O orçamento se enviará por e-mail/talão.\n\t8. Uma vez recibida a  confirmação para avançar a reparação via e-mail/talão se enviará um e-mail/talão confirmando a recepção da mesma e se procederá á reparação.\n\t9. Uma vez reparado e comprovada a centralita, esta é devolvida pela agência de transporte á sua oficina com o serviço 24h contra reembolso."
 einatech: "Reparar módulo electrónico"
 einatech_textarea_default : "-Tipo de elemento: \n-Referência: \n-Descrição da falha: \n-Máquina de diagnóstico utilizados: \n-Os códigos de falhas e descrição: \n-Quilómetros percorridos pelos veículos: "

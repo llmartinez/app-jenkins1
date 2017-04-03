@@ -1,12 +1,18 @@
 
 $(document).ready(function() {
 
+    
+     
     var new_ticket = $('#newTicket');
     if (typeof new_ticket != 'undefined') {
         new_ticket.focus();
     }
 
     if ($('#open_newTicket').val() == 1){
+        var new_einatech = $('#new_einatech').val();
+        if(new_einatech == 1) {
+            popUpEinatech();
+        }
         var ticket_brand = $('#ticket_brand').val();
         var ticket_model = $('#ticket_model').val();
         var ticket_version = $('#ticket_version').val();
@@ -36,6 +42,10 @@ $(document).ready(function() {
         $(this).val(platenumber.toUpperCase());
     });
 });
+function popUpEinatech() {
+    var msg_einatech = $('#msg_einatech').val();
+    alert(msg_einatech);
+}
 
 function normalizeForm(str) {
     str = string_to_slug(str);
