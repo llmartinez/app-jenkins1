@@ -919,3 +919,9 @@ fieldset[disabled] .asr_form-control {
 .lbl_lgray {
     color: #838383;
 }
+
+#more_information_einatech {
+    cursor: pointer;
+    line-height: 75px;
+    padding-left: 15px;
+}
