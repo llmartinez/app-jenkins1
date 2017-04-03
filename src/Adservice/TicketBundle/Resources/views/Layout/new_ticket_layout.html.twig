@@ -33,6 +33,8 @@
 {% block content %}
     <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
     <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
+    <input type="hidden" id="msg_einatech" name="msg_einatech" value="{% trans %} msg_einatech {% endtrans %}">
+    <input type="hidden" id="new_einatech" name="new_einatech" value={{einatech}}>
     {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
 
     {% if workshop.id != "" %}
