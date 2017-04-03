@@ -22,7 +22,7 @@
         </div>
         {% if einatech == 1 and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_ASSESSOR') %}
             <div class="grid-66 form-group">
-                <label for="new_ticket_form_importance">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut ex odio. Nam accumsan mauris nec scelerisque pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut ex odio. Nam accumsan mauris nec scelerisque pulvinar. </label>
+                <a id="more_information_einatech" onclick="popUpEinatech();">{% trans %} mail.info.more {% endtrans %}</a>
             </div>
         {% endif %}
     <input type="hidden" id='textarea_text_default' value="{{ 'einatech_textarea_default' | trans  }}">
