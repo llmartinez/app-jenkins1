@@ -886,9 +886,42 @@ class TicketController extends Controller {
                                     $mail_centralita = $this->container->getParameter('mail_einatech');
                                     $mailer->setSubject('ticket: ' . $ticket->getId());
                                 }
-                                else {
-                                    $mail_centralita = $this->container->getParameter('mail_centralita');
+                                else
+                                {
                                     $mailer->setSubject('ticket: ' . $ticket->getId());
+
+                                    if( $this->container->getParameter('mail_centralita') == 'mail.centralita_test') {
+                                        $mail_centralita = 'dmaya@grupeina.com';
+                                    }
+                                    else{
+                                        switch ($ticket->getCategoryService()->getId())
+                                        {
+                                            case '1':  $mail_centralita = 'test@adserviceticketing.com';
+                                                break;
+                                            case '2':  $mail_centralita = 'ticketes@adserviceticketing.com';
+                                                break;
+                                            case '3':  $mail_centralita = 'ticketfr@adserviceticketing.com';
+                                                break;
+                                            case '4':  $mail_centralita = 'ticketpt@adserviceticketing.com';
+                                                break;
+                                            case '5':  $mail_centralita = 'ticketen@adserviceticketing.com';
+                                                break;
+                                            case '6':  $mail_centralita = 'ticketen@adserviceticketing.com';
+                                                break;
+                                            case '7':  $mail_centralita = 'ticketen@adserviceticketing.com';
+                                                break;
+                                            case '8':  $mail_centralita = 'ticketfr@adserviceticketing.com';
+                                                break;
+                                            case '9':  $mail_centralita = 'ticketfr@adserviceticketing.com';
+                                                break;
+                                            case '10': $mail_centralita = 'ticketfr@adserviceticketing.com';
+                                                break;
+                                            case '11': $mail_centralita = 'ticketkashima@adserviceticketing.com';
+                                                break;
+                                            default:   $mail_centralita = 'test@adserviceticketing.com';
+                                                break;
+                                        }
+                                    }
                                 }
                                 //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
                                 $mailer->setTo($this->get('translator')->trans($mail_centralita));
@@ -2487,6 +2520,7 @@ class TicketController extends Controller {
             'brands' => $brands,
             'systems' => $systems,
             'countries' => $countries,
+            'id_catserv' => $catserv,
             'catserv' => $catserv,
             'catservices' => $catservices,
             'languages' => $languages,
