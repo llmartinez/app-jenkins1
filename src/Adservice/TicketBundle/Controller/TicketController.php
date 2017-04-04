@@ -864,7 +864,7 @@ class TicketController extends Controller {
                         $mail = $ticket->getWorkshop()->getEmail1();
                         $pos = strpos($mail, '@');
                         
-                        if ($pos != 0) {
+                        if ($pos != 0 and $ticket->getWorkshop()->getActive()) {
 
                             // Cambiamos el locale para enviar el mail en el idioma del taller
                             $locale = $request->getLocale();
@@ -1022,7 +1022,7 @@ class TicketController extends Controller {
 
                             $mail = $ticket->getWorkshop()->getEmail1();
                             $pos = strpos($mail, '@');
-                            if ($pos != 0) {
+                            if ($pos != 0  and $ticket->getWorkshop()->getActive()) {
 
                                 // Cambiamos el locale para enviar el mail en el idioma del taller
                                 $locale = $request->getLocale();
@@ -1355,7 +1355,6 @@ class TicketController extends Controller {
                                         $pos = strpos($mail, '@');
 
                                         if ($pos != 0 and $ticket->getWorkshop()->getActive()) {
-
                                             // Cambiamos el locale para enviar el mail en el idioma del taller
                                             $locale = $request->getLocale();
                                             $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
@@ -1394,7 +1393,6 @@ class TicketController extends Controller {
                                         $mail = $ticket->getWorkshop()->getEmail1();
                                         $pos = strpos($mail, '@');
                                         if ($pos != 0 and $ticket->getWorkshop()->getActive()) {
-
                                             // Cambiamos el locale para enviar el mail en el idioma del taller
                                             $locale = $request->getLocale();
                                             $lang_w = $ticket->getWorkshop()->getCountry()->getLang();
@@ -1969,7 +1967,7 @@ class TicketController extends Controller {
         $request = $this->getRequest();
         $id = $request->get('flt_id');
         $catserv = $security->getToken()->getUser()->getCategoryService();
-
+        $user = $security->getToken()->getUser();
         if($catserv != null)
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('id' => $id, 'category_service' => $catserv->getId()));
         else
