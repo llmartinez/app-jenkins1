@@ -13,7 +13,7 @@
                         <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} Reparación de modulo electronico {% endtrans %}</a>
                     {% endif %}
                 {% elseif workshop.country == app.security.getToken().getUser().getCountry() %}
-                    <a class="btn btn-primary mb15" id="newTicket"         href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+                    <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
                     {% if id_catserv == 2 or id_catserv == 4 %}
                         <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} Reparación de modulo electronico {% endtrans %}</a>
                     {% endif %}
