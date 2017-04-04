@@ -983,7 +983,7 @@ class TicketController extends Controller {
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if($ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+        if(!$security->isGranted('ROLE_ASSERSSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
             $_SESSION['einatech'] = 1;
         }
         if ($security->isGranted('ROLE_SUPER_ADMIN')
@@ -1178,7 +1178,7 @@ class TicketController extends Controller {
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if($ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+        if(!$security->isGranted('ROLE_ASSESSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
             $_SESSION['einatech'] = 1;
         }
         
