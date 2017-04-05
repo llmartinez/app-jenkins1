@@ -55,6 +55,12 @@ class Partner {//implements EventSubscriber{
     private $cif;
 
     /**
+     * @var string $code_billing
+     * @ORM\Column(name="code_billing", type="string", length=255, nullable=true)
+     */
+    private $code_billing;
+
+    /**
      * @var string $contact
      *
      * @ORM\Column(name="contact", type="string", length=255, nullable=true)
@@ -181,6 +187,14 @@ class Partner {//implements EventSubscriber{
 
     public function setCif($cif) {
         $this->cif = $cif;
+    }
+
+    public function getCodeBilling() {
+        return $this->code_billing;
+    }
+
+    public function setCodeBilling($code_billing) {
+        $this->code_billing = $code_billing;
     }
 
     /**
