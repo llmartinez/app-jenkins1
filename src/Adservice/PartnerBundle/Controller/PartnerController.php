@@ -107,6 +107,9 @@ class PartnerController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {
@@ -233,6 +236,10 @@ class PartnerController extends Controller {
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
+
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+        
         $form = $this->createForm(new PartnerType(), $partner);
 
         $actual_city   = $partner->getRegion();
