@@ -43,7 +43,7 @@
                         <div class="col-xs-3 col-md-3 form-group">
                             <label> {% trans %} category_service {% endtrans %} </label>
                             <select  id="adservice_workshopbundle_workshoptype_category_service" name="adservice_workshopbundle_workshoptype[category_service]" class="form-control"> 
-                                <option value="0"></option>
+                                <option value></option>
                                 <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
 
                             </select>
@@ -81,6 +81,11 @@
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %} * </label>
                     {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
+                {% if is_granted('ROLE_ADMIN') and form.code_billing is defined %}
+                    <div class="col-xs-2 col-md-2 form-group">
+                        <label>{% trans %} code_billing {% endtrans %}</label> {{ form_widget(form.code_billing, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                {% endif %}
                 <div class="col-xs-3 col-md-3 form-group" {{is_hidden}}>
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
                     {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}

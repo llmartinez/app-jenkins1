@@ -110,6 +110,8 @@ class WorkshopType extends AbstractType
             ->add('email_1','email')
             ->add('email_2','email', array('required' => false))
         ;
+                                                          
+        if (isset($_SESSION['code_billing'])) $builder->add('code_billing', 'text', array('required' => false));
     }
 
     public function getName()

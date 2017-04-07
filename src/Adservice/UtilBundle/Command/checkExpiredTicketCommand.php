@@ -67,9 +67,12 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
 
             $email1 = $ticket->getWorkshop()->getEmail1();
             $lang = $ticket->getWorkshop()->getCountry()->getLang(); 
-
-            $msg_expirated = $this->getContainer()->get('translator')->trans('mail.inactivity_warning', array(), $langs[$lang]);
-            $msg_expired = $this->getContainer()->get('translator')->trans('mail.inactiveTicket.title', array(), $langs[$lang]);
+            
+            $translator = $this->getContainer()->get('translator');
+            $translator->setLocale($lang);
+            
+            $msg_expirated = $translator->trans('mail.inactivity_warning');
+            $msg_expired = $translator->trans('mail.inactiveTicket.title');
 
             // INFO_CLOSED_TICKETS 
             // - T.Información: Se cierra a los 10 días sin actividad
