@@ -41,6 +41,8 @@ class PartnerType extends AbstractType {
             ->add('contact', 'text', array('required' => false))
             ->add('observations', 'textarea', array('required' => false))
         ;
+        
+        if (isset($_SESSION['code_billing'])) $builder->add('code_billing', 'text', array('required' => false));
     }
 
     public function getName() {
