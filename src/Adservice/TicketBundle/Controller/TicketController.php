@@ -1381,7 +1381,8 @@ class TicketController extends Controller {
                                         }else{
                                             $ticket->setPending(1);
                                         }
-
+                                        
+                                        $ticket->setExpirationDate(null);
                                         UtilController::saveEntity($em, $ticket, $user);
 
                                         $mail = $ticket->getWorkshop()->getEmail1();
@@ -1421,6 +1422,7 @@ class TicketController extends Controller {
                                         $ticket->setSolution($post->getMessage());
                                         $ticket->setPending(0);
                                         $ticket->setBlockedBy(null);
+                                        $ticket->setExpirationDate(null);
                                         UtilController::saveEntity($em, $ticket, $user);
 
                                         $mail = $ticket->getWorkshop()->getEmail1();
