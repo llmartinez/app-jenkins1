@@ -172,6 +172,9 @@ class WorkshopController extends Controller {
             $_SESSION['id_partner'] = ' = ' . $partner->getId();
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
+        
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
 
         $form = $this->createForm(new WorkshopType(), $workshop);
 
@@ -410,6 +413,10 @@ class WorkshopController extends Controller {
             $_SESSION['id_partner'] = ' = ' . $partner->getId();
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
+        
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+        
         $form = $this->createForm(new WorkshopType(), $workshop);
 
         $actual_city = $workshop->getRegion();
