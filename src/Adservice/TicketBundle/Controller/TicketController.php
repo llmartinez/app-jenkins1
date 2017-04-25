@@ -426,8 +426,14 @@ class TicketController extends Controller {
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if ($security->isGranted('ROLE_USER') and !$security->isGranted('ROLE_ADMIN') and !$security->isGranted('ROLE_ASSESSOR') and $einatech == 0 ){
+        if ($security->isGranted('ROLE_USER')  && !$security->isGranted('ROLE_ASSESSOR') && $einatech == 0 ){
             $_SESSION['einatech'] = 2;
+        }
+        if ($security->isGranted('ROLE_ADMIN') && $einatech == 0 ){
+            $_SESSION['einatech'] = 2;
+        }       
+        if( $security->isGranted('ROLE_ASSESSOR') && $einatech == 0 && !$security->isGranted('ROLE_ADMIN') && $id_catserv == 2){
+            $_SESSION['einatech'] = 3;
         }
         if ($id_workshop != null) {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($id_workshop);
@@ -540,7 +546,7 @@ class TicketController extends Controller {
             //campos comunes
             $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
             $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
-            
+                        
             $form->bindRequest($request);
             $formC->bindRequest($request);
             $formD->bindRequest($request);
@@ -578,7 +584,7 @@ class TicketController extends Controller {
                         } else {
                             $id_version = null;
                         }
-
+                        
                         // Controla si ya existe el mismo ticket
                         $desc = $ticket->getDescription();
                         $desc = $this->fixWrongCharacters($desc);
@@ -588,13 +594,12 @@ class TicketController extends Controller {
                                         AND t.car IN (
                                             SELECT c FROM CarBundle:Car c
                                             WHERE c.brand = " . $id_brand . "
-                                            AND c.model = " . $id_model . " ";
+                                            AND c.model = " . $id_model . " AND c.vin LIKE  '". $car->getVin() ."' AND c.plateNumber LIKE '". $car->getPlateNumber() . "' ";
 
                         if ($id_version != null) {
                             $select .= "AND c.version = " . $id_version;
                         }
                         $select .= ')';
-
                         $query = $em->createQuery($select);
                         $existTicket = $query->getResult();
 
@@ -771,7 +776,7 @@ class TicketController extends Controller {
                                                     if ($car->getDisplacement() == null and $old_car->getDisplacement() != null)
                                                         $car->setDisplacement($old_car->getDisplacement());
                                                 }
-
+                                                $car->setVin(strtoupper($car->getVin()));
                                                 UtilController::saveEntity($em, $car, $user);
                                                 
                                                 
@@ -804,8 +809,7 @@ class TicketController extends Controller {
                                                 }
                                                 $ticket->setStatus($status);
                                                 $ticket->setCar($car);
-
-
+                                                
                                                 UtilController::saveEntity($em, $ticket, $user);
 
                                                 //Define Document
@@ -1050,7 +1054,7 @@ class TicketController extends Controller {
                     if ($str_len <= $max_len) {
                         //Define CAR
                         if ($form->isValid()) {
-
+                            
                             UtilController::saveEntity($em, $ticket, $user);
 
                             $mail = $ticket->getWorkshop()->getEmail1();

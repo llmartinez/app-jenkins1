@@ -36,8 +36,13 @@
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'workshop' | trans } }) }}
                 </div>
-                
-                
+                {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN')%}
+                    {% if form.category_service is defined %}
+                        <div class="col-xs-3 col-md-3 form-group" >
+                           <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% endif %}
+                {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     {% if not is_granted('ROLE_SUPER_ADMIN') %}
                         <div class="col-xs-3 col-md-3 form-group">
