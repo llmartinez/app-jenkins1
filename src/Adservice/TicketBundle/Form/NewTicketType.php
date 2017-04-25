@@ -11,6 +11,8 @@ class NewTicketType extends AbstractType
         if ($_SESSION['einatech'] == 1) {
             $importance =' =5'; 
         } elseif ($_SESSION['einatech'] == 2) {
+            $importance =' != 5 and s.id != 6'; 
+        } elseif ($_SESSION['einatech'] == 3) {
             $importance =' != 5'; 
         }
         else { 
