@@ -92,15 +92,15 @@ dt_of: "de"
 dt_previous: "Anterior"
 dt_next: "Siguiente"
 
-# USER
+# USER FIELDS
 user: "Usuário"
 id: "ID"
 Id: "ID"
 role: "Função"
 Status: "Estado"
-active: "Ativo"
-inactive: "Inativo"
-test: "Em testes"
+Active: "Ativo"
+Inactive: "Inativo"
+Test: "Em testes"
 Name: "Nome"
 Language: "Idioma"
 Country: "País"
@@ -123,6 +123,9 @@ ModifiedBy: "Alterado por"
 ModifiedAt: "Alterado em"
 Token: "Token"
 
+# USER
+user_update: "Usuário Alterado"
+
 # DATES
 date.day: "Dia"
 date.month: "Mês"
@@ -141,16 +144,24 @@ Code partner: "Código de Sócio"
 #WORKSHOP
 Workshop: "Oficina"
 Code workshop: "Código de Oficina"
+
+#TYPOLOGY
 Typology: "Tipologia"
 typology_new: "Nova tipologia"
 typology_deleted: "Tipologia eliminada"
+typology_update: "Tipologia alterada"
+
+#SHOP
 Shop: "Loja"
 shop_new: "Nova loja"
 shop_deleted: "Loja eliminada"
+shop_update: "Loja alterada"
+
+#DIAGNOSIS
 Diagnosis machine: "Máquina de Diagnóstico"
 diagnosisMachine_new: "Nova máquina de Diagnóstico"
 diagnosisMachine_deleted: "Máquina de Diagnóstico eliminada"
-
+diagnosisMachine_update: "Máquina de Diagnóstico alterada"
 
 #HELP
 help: "Ajuda"

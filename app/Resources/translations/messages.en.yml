@@ -76,20 +76,22 @@ password_insert: "Insert password"
 password_repeat: "Repeat password"
 password_old: "Old password"
 Submit: "Submit"
+Edit: "Edit"
+Delete: "Delete"
 search: "Search"
 All: "All"
 SelectValue: "Select value"
 searchId: "Search ID"
 
-# USER
+# USER FIELDS
 user: "User"
 id: "ID"
 Id: "ID"
 role: "Role"
 Status: "Status"
-active: "Active"
-inactive: "Inactive"
-test: "Test"
+Active: "Active"
+Inactive: "Inactive"
+Test: "Test"
 Name: "Name"
 Language: "Language"
 Country: "Country"
@@ -112,6 +114,9 @@ ModifiedBy: "Modified by"
 ModifiedAt: "Modified at"
 Token: "Token"
 
+# USER
+user_update: "User updated"
+
 # DATES
 date.day: "Day"
 date.month: "Month"
@@ -130,15 +135,24 @@ Code partner: "Partner Code"
 #WORKSHOP
 Workshop: "Workshop"
 Code workshop: "Workshop Code"
+
+#TYPOLOGY
 Typology: "Tipology"
 typology_new: "New tipology"
 typology_deleted: "Tipology deleted"
+typology_update: "Tipology updated"
+
+#SHOP
 Shop: "Shop"
 shop_new: "New shop"
 shop_deleted: "Shop deleted"
+shop_update: "Shop updated"
+
+#DIAGNOSIS
 Diagnosis machine: "Diagnosis machine"
 diagnosisMachine_new: "New diagnosis machine"
 diagnosisMachine_deleted: "Diagnosis machine deleted"
+diagnosisMachine_update: "Diagnosis machine updated"
 
 # HELP
 help: "Help"

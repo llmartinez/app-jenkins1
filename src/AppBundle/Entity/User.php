@@ -60,7 +60,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     private $country;
 
     /**
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="integer")
      * @Assert\NotBlank()
      */
     private $status;
@@ -168,6 +168,29 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
      * @ORM\JoinColumn(name="modified_by", referencedColumnName="id", nullable=true)
      */
     private $modifiedBy;
+    /**
+     *
+     * @var string $partner
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Partner", mappedBy="user")
+     */
+    private $partner;
+
+    /**
+     *
+     * @var string $workshop
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Workshop", mappedBy="user")
+     */
+    private $workshop;
+
+    /**
+     *
+     * @var string $commercial
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Commercial", mappedBy="user")
+     */
+    private $commercial;
 
     public function __construct()
     {
@@ -178,6 +201,9 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
 
     public function getRoles() {
         return $this->user_role->toArray();
+    }
+    public function getUserRoles() {
+        return $this->user_role;
     }
 
     /**
@@ -565,6 +591,42 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable
     public function getModifiedBy()
     {
         return $this->modifiedBy;
+    }
+
+    public function setPartner($partner)
+    {
+        $this->partner = $partner;
+
+        return $this;
+    }
+
+    public function getPartner()
+    {
+        return $this->partner;
+    }
+
+    public function setWorkshop($workshop)
+    {
+        $this->workshop = $workshop;
+
+        return $this;
+    }
+
+    public function getWorkshop()
+    {
+        return $this->workshop;
+    }
+
+    public function setCommercial($commercial)
+    {
+        $this->commercial = $commercial;
+
+        return $this;
+    }
+
+    public function getCommercial()
+    {
+        return $this->commercial;
     }
 
     public function to_json() {

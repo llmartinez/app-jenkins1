@@ -25,7 +25,7 @@ class Workshop
     private $partner;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\OneToOne(targetEntity="User", inversedBy="workshop")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -50,13 +50,13 @@ class Workshop
     
     /**
      * @ORM\ManyToOne(targetEntity="Shop")
-     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=true)
      */
     private $shop;
     
     /**
-     * @ORM\ManyToOne(targetEntity="DiagnosisMachine")
-     * @ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
+     * @ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id", nullable=true)
      */
     private $diagnosisMachine;
  
@@ -65,6 +65,7 @@ class Workshop
     public function __construct($partner=null)
     {
         $this->partner = $partner;
+        $this->diagnosisMachine = new ArrayCollection();
     }
 
     public function getId()

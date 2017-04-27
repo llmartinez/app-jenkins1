@@ -14,4 +14,14 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findPartner()
+    {
+        return $em->getRepository('AppBundle:Partner')->findOneByUser($this->getId());
+    }
+    
+    public function findWorkshop()
+    {
+        return $em->getRepository('AppBundle:Workshop')->findOneByUser($this->getId());
+    }
 }

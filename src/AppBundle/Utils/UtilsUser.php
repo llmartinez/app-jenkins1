@@ -7,7 +7,7 @@ use AppBundle\Form\UserEditType;
 
 class UtilsUser
 {
-    public static $status = array('0' => 'inactive', '1' => 'active', '2' => 'test');
+    public static $status = array('0' => 'Inactive', '1' => 'Active', '2' => 'Test');
 
     public static function getStatus() {
         return self::$status;
@@ -69,7 +69,13 @@ class UtilsUser
             $entity = New $entityName();
             $entity->setUser($user);
 
-            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => array('em' => $em, 'tokenService' => $tokenService)));
+            $options = array('em' => $em, 'tokenService' => $tokenService);
+            
+            // Si el usuario es un Partner filtramos las entidades por su ID
+            $role_partner = array_search('ROLE_PARTNER', $_this->get('utils')->getRoles());
+            if($tokenUser->getRoleId() == $role_partner) $options['idPartner'] = $tokenUser->getPartner()->getId();
+
+            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => $options));
             $return['formE'] = $formE->createView();
             $formE->handleRequest($request);
         }
@@ -131,7 +137,14 @@ class UtilsUser
         {
             $entityType = 'AppBundle\Form\\'.$entityName.'Type';
             $entity = $em->getRepository('AppBundle:'.$entityName)->findOneByUser($user);
-            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => array('em' => $em, 'tokenService' => $tokenService)));
+
+            $options = array('em' => $em, 'tokenService' => $tokenService);
+
+            // Si el usuario es un Partner filtramos las entidades por su ID
+            $role_partner = array_search('ROLE_PARTNER', $_this->get('utils')->getRoles());
+            if($tokenUser->getRoleId() == $role_partner) $options['idPartner'] = $tokenUser->getPartner()->getId();
+
+            $formE = $_this->createForm(new $entityType(), $entity, array('attr' => $options));
             $formE->handleRequest($request);
 
             $return['formE'] = $formE->createView();
@@ -141,7 +154,9 @@ class UtilsUser
         {
             if( $form->isValid() && (!isset($formE) || $formE->isValid()) )
             {
-                $user->setToken(self::getRandomToken());
+                $user = self::checkRoles($em, $user, $role_id);
+
+                //$user->setToken(self::getRandomToken());
                 $em->persist($user);
 
                 if($entityName != null)
@@ -191,6 +206,7 @@ class UtilsUser
     public static function getEntityName($role_id)
     {
         if($role_id == 6) $entityName = 'Partner';
+        elseif($role_id == 7) $entityName = 'Commercial';
         elseif($role_id == 9) $entityName = 'Workshop';
         else $entityName = null;
         return $entityName;
@@ -242,13 +258,21 @@ class UtilsUser
 
     public static function checkRoles($em, $user, $role_id=null)
     {
+        $roles = array();
+    
         // ROLES
-        if($user->getRoleId() == null && $role_id != null)
+        // Si tiene rol lo mantenemos, sino añadimos el que hayamos pasado a través de $role_id
+        if($user->getRoleId() != null)
+        {
+            $role = $em->getRepository('AppBundle:Role')->find($user->getRoleId());
+            $roles[] = $role;
+        }
+        elseif($user->getRoleId() == null && $role_id != null)
         {
             $role = $em->getRepository('AppBundle:Role')->find($role_id);
 
             $user->setRoleId($role_id);
-            $user->addRole($role);
+            $roles[] = $role;
         }
         // RESTRICTIONS
         if($user->getRestriction() != null)
@@ -258,7 +282,7 @@ class UtilsUser
                 if($restriction != 0)
                 {
                     $role = $em->getRepository('AppBundle:Role')->find($restriction);
-                    $user->addRole($role);
+                    $roles[] = $role;
                 }
             }
         }
@@ -270,14 +294,22 @@ class UtilsUser
                 if($service != 0)
                 {
                     $role = $em->getRepository('AppBundle:Role')->find($service);
-                    $user->addRole($role);
+                    $roles[] = $role;
                 }
             }
         }
+
+        $user->setUserRoles($roles);
+
         return $user;
     }
 
     public static function checkUser($_this, $user)
+    {
+        return true;
+    }
+
+    public static function checkPartner($em,$partner)
     {
         return true;
     }
@@ -290,7 +322,7 @@ class UtilsUser
         return true;
     }
 
-    public static function checkPartner($em,$workshop)
+    public static function checkCommercial($em,$commerical)
     {
         return true;
     }

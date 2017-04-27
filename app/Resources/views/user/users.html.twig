@@ -4,16 +4,25 @@
 {% block breadcrumbs %}
     <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
     <li><a href="{{ path("selectRole") }}">{{ 'role'|trans }}</a></li>
-    <li><a href="{{ path("users", { 'role_id': role_id }) }}">{{ 'users'|trans }}</a></li>
+    <li><a href="{{ path("users", { 'role_id': role_id }) }}">{{ 'users'|trans }} {{ roles[role_id]|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
     <div id="wrapper">
         <div id="container">
 
-            <h2>{{ 'users'|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
+            <h2>{{ 'users'|trans }} {{ roles[role_id]|trans }}{# total items count #} ({{ pagination.getTotalItemCount }})</h2>
             <ul>
-                <li><a href="{{ path("userNew", { 'role_id': role_id }) }}">{{ 'user_new'|trans }}</a></li>
+                {# En el caso de listar Talleres controlamos si el usuario lo gestiona directametne o a través de solicitud #}
+                {% if is_granted('ROLE_ADMIN') or roles[role_id] != "ROLE_WORKSHOP" %}
+                    <li>
+                        <a href="{{ path("userNew", { 'role_id': role_id }) }}">{{ 'user_new'|trans }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="#{# {{ path("orderNew", { 'role_id': role_id }) }} #}">{{ 'order_new'|trans }}</a>
+                    </li>
+                {% endif %}
                 <li>
                     <input type="text" id="searchId" name="id" placeholder="{{ "searchId" | trans }}">
                     <button type="submit" onclick="window.location.href ='{{ path("searchId", { 'role_id': role_id }) }}/'+$('#searchId').val(); ">{{ "Submit" | trans }}</button>
@@ -23,17 +32,28 @@
                 <table>
                     <thead><tr>
                     {# sorting of properties based on query components #}
-                       <th{% if pagination.isSorted('u.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 'u.id') }}</th>
-                       <th{% if pagination.isSorted('u.roleId')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'role'|trans, 'u.roleId') }}</th>
-                       <th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Username'|trans,'u.username')}}</th>
-                       <th{% if pagination.isSorted('u.email1')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Email'|trans,'u.email1') }}</th>
-                       <th{% if pagination.isSorted('u.phoneNumber1') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Phone'|trans,'u.phoneNumber1') }}</th>
+                        <th{% if pagination.isSorted('u.id')       %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'id'|trans, 'u.id') }}</th>
+                        <th{% if pagination.isSorted('u.status')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Status'|trans, 'u.status') }}</th>
+
+                        {% if roles[role_id] == 'ROLE_PARTNER' %}
+                            <th{% if pagination.isSorted('p.codePartner') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Partner'|trans, 'p.codePartner') }}</th>
+                        {% elseif roles[role_id] == 'ROLE_WORKSHOP' %}
+                            <th{% if pagination.isSorted('w.codeWorkshop') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Workshop'|trans, 'w.codeWorkshop') }}</th>
+                        {% endif %}
+
+                        <th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Username'|trans,'u.username')}}</th>
+                        <th{% if pagination.isSorted('u.email1')   %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Email'|trans,'u.email1') }}</th>
+                        <th{% if pagination.isSorted('u.phoneNumber1') %} class="sorted"{% endif %}>{{knp_pagination_sortable(pagination,'Phone'|trans,'u.phoneNumber1') }}</th>
                     </tr></thead>
                     <tbody>
                         {% for row in pagination %}
                         <tr {% if loop.index is odd %}class="color"{% endif %}>
                             <td>{{ row.id }}</td>
-                            <td>{{ roles[row.roleId]|trans }}</td>
+                            <td>{{ row.status }}</td>
+
+                            {% if     roles[role_id] == 'ROLE_PARTNER'  %} <td>{{ row.Partner  }}</td>
+                            {% elseif roles[role_id] == 'ROLE_WORKSHOP' %} <td>{{ row.Workshop }}</td> {% endif %}
+
                             <td>{{ row.username }}</td>
                             <td>{{ row.email1 }}</td>
                             <td>{{ row.email2 }}</td>
@@ -46,10 +66,19 @@
                             <td>{{ row.city }}</td>
                             <td>{{ row.address }}</td>
                             <td>{{ row.postalCode }}</td>
-                            <td>
-                                <a href="{{ path("userEdit",   { id: row.id, 'role_id': role_id })}}">Edit</a>
-                                <a href="{{ path("userDelete", { id: row.id, 'role_id': role_id })}}">Delete</a>
-                            </td>
+
+                            {# En el caso de listar Talleres controlamos si el usuario lo gestiona directametne o a través de solicitud #}
+                            {% if is_granted('ROLE_ADMIN') or roles[role_id] != "ROLE_WORKSHOP" %}
+                                <td>
+                                    <a href="{{ path("userEdit",   { id: row.id, 'role_id': role_id })}}">Edit</a>
+                                    <a href="{{ path("userDelete", { id: row.id, 'role_id': role_id })}}">Delete</a>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <a href="#{# {{ path("orderEdit",   { id: row.id, 'role_id': role_id })}} #}">Edit</a>
+                                    <a href="#{# {{ path("orderDelete", { id: row.id, 'role_id': role_id })}} #}">Delete</a>
+                                </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

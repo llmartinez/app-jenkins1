@@ -20,6 +20,13 @@ class Shop
      * @ORM\Column(name="id", type="integer")
      */
     private $id;
+
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
     
     /**
      * @ORM\ManyToOne(targetEntity="Partner")
@@ -35,13 +42,6 @@ class Shop
     private $name;
 
     /**
-     * @var boolean $active
-     *
-     * @ORM\Column(name="active", type="boolean")
-     */
-    private $active;
-
-    /**
      * @ORM\Column(name="service", type="json_array", nullable=true)
      */
     private $service;
@@ -55,6 +55,16 @@ class Shop
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
     }
 
     public function setPartner($partner)
@@ -77,16 +87,6 @@ class Shop
     public function getName()
     {
         return $this->name;
-    }
-
-    public function setActive($active)
-    {
-        $this->active = $active;
-    }
-
-    public function getActive()
-    {
-        return $this->active;
     }
     
     public function setService($service)

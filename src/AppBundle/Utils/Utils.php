@@ -38,9 +38,9 @@ class Utils
         if    (in_array($role_id, array(1))) return array_diff(self::$roles, ["ROLE_GOD"]);
         elseif(in_array($role_id, array(2))) return array_diff(self::$roles, ["ROLE_GOD","ROLE_SUPER_ADMIN", "ROLE_USER"]);
         elseif(in_array($role_id, array(3))) return array_diff(self::$roles, ["ROLE_GOD","ROLE_SUPER_ADMIN","ROLE_ADMIN", "ROLE_USER"]);
-        elseif(in_array($role_id, array(4))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_SUPER_PARTNER", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
-        elseif(in_array($role_id, array(5))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_PARTNER", "ROLE_COMMERCIAL"]));
-        elseif(in_array($role_id, array(6))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(4))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_SUPER_PARTNER", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(5))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(6))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_COMMERCIAL"]));
         else return null;
     }
 

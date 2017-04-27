@@ -6,10 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
  
 /**
- * @ORM\Table(name="partner")
+ * @ORM\Table(name="user_commercial")
  * @ORM\Entity
  */
-class Partner
+class Commercial
 {
     /**
      * @ORM\Id
@@ -19,16 +19,22 @@ class Partner
     private $id;
 
     /**
-     * @ORM\Column(type="integer", length=255)
-     * @Assert\NotBlank()
-     */
-    private $codePartner;
-
-    /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="partner")
+     * @ORM\OneToOne(targetEntity="User", inversedBy="commercial")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
+     */
+    private $partner;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    private $shop;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -69,6 +75,30 @@ class Partner
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setPartner($partner)
+    {
+        $this->partner = $partner;
+
+        return $this;
+    }
+
+    public function getPartner()
+    {
+        return $this->partner;
+    }
+
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
+
+        return $this;
+    }
+
+    public function getShop()
+    {
+        return $this->shop;
     }
 
     public function setName($name)

@@ -16,7 +16,8 @@ class TypologyType extends AbstractType
                                                'expanded'=> 'true',
                                                'multiple'=> 'true',
                                                'required'=>'required',
-                                               'translation_domain' => 'messages' ))
+                                               'translation_domain' => 'messages'
+                                              ))
 
             ->add('name'   , 'text'    , array('required'=> 'required', 'translation_domain' => 'messages' ))
             ->add('active' , 'checkbox', array('required'=> false, 'attr' => array('checked'   => 'checked'), 'translation_domain' => 'messages' ))

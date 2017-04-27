@@ -22,18 +22,18 @@ class Typology
     private $id;
 
     /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
-
-    /**
      * @var boolean $active
      *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
+
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
 
     /**
      * @ORM\Column(name="service", type="json_array", nullable=true)
@@ -50,16 +50,6 @@ class Typology
         return $this->id;
     }
 
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function setActive($active)
     {
         $this->active = $active;
@@ -68,6 +58,16 @@ class Typology
     public function getActive()
     {
         return $this->active;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
     
     public function setService($service)

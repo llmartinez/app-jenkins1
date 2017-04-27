@@ -76,6 +76,8 @@ password_insert: "Insérer le mot de passe"
 password_repeat: "Répétition du mot de passe"
 password_old: "Mot de passe précédent"
 Submit: "Envoyer"
+Edit: "Edit"
+Delete: "Delete"
 search: "Rechercher"
 All: "Tous"
 SelectValue: "Sélectionner la valeur"
@@ -92,15 +94,15 @@ dt_of: "de"
 dt_previous: "Précédent"
 dt_next: "Suivant"
 
-# USER
+# USER FIELDS
 user: "Utilisateur"
 id: "ID"
 Id: "ID"
 role: "Rôle"
 Status: "État"
-active: "Actif"
-inactive: "Inactif"
-test: "À l'essai"
+Active: "Actif"
+Inactive: "Inactif"
+Test: "À l'essai"
 Name: "Nom"
 Language: "Language"
 Country: "Pays"
@@ -123,6 +125,9 @@ ModifiedBy: "Modifié par"
 ModifiedAt: "Modifié à"
 Token: "Token"
 
+# USER
+user_update: "User modifié"
+
 # DATES
 date.day: "Jour"
 date.month: "Mois"
@@ -141,15 +146,24 @@ Code partner: "Code Distributeur"
 #WORKSHOP
 Workshop: "Atelier"
 Code workshop: "Code Atelier"
+
+#TYPOLOGY
 Typology: "Type d'atelier"
 typology_new: "Nouveau type d'atelier"
 typology_deleted: "Type d'atelier supprimé"
+typology_update: "Type d'atelier modifié"
+
+#SHOP
 Shop: "Boutique"
 shop_new: "Nouveau boutique"
 shop_deleted: "Boutique supprimé"
+shop_update: "Boutique modifié"
+
+#DIAGNOSIS
 Diagnosis machine: "Outil de diagnostic"
 diagnosisMachine_new: "Nouveau outil de diagnostic"
 diagnosisMachine_deleted: "Outil de diagnostic supprimé"
+diagnosisMachine_update: "Outil de diagnostic modifié"
 
 #HELP
 help: "Aider"

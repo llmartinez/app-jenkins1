@@ -21,13 +21,15 @@ class ShopType extends AbstractType
                                                'expanded'=> 'true',
                                                'multiple'=> 'true',
                                                'required'=>'required',
-                                               'translation_domain' => 'messages' ))
+                                               'translation_domain' => 'messages'
+                                              ))
+            
             ->add('Partner'      , 'entity' , array(
                                                     'class' => 'AppBundle:Partner',
-                                                    'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'Partner', $services),
+                                                    'query_builder' => UtilsWorkshop::getFilteredPartner($em, $services),
                                                     'empty_value' => 'SelectValue',
-                                                    'attr' => array('class' => 'required'))
-                                                    )
+                                                    'attr' => array('class' => 'required')
+                                                   ))
 
             ->add('name'   , 'text'    , array('required'=> 'required', 'translation_domain' => 'messages' ))
             ->add('active' , 'checkbox', array('required'=> false, 'attr' => array('checked'   => 'checked'), 'translation_domain' => 'messages' ))

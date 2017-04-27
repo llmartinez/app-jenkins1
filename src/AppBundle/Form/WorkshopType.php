@@ -15,12 +15,14 @@ class WorkshopType extends AbstractType
     {
         $em = $options['attr']['em'];
         $services = $options['attr']['tokenService'];
+        if(isset($options['attr']['idPartner'])) $idPartner = $options['attr']['idPartner'];
+        else $idPartner = '0';
 
         $builder
             ->add('name'         , 'text'   , array('required'=> 'required', 'attr' => array('class' => 'required')))
             ->add('Partner'      , 'entity' , array(
                                                     'class' => 'AppBundle:Partner',
-                                                    'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'Partner', $services),
+                                                    'query_builder' => UtilsWorkshop::getFilteredPartner($em, $services, $idPartner),
                                                     'empty_value' => 'SelectValue',
                                                     'attr' => array('class' => 'required'))
                                                     )
@@ -31,16 +33,17 @@ class WorkshopType extends AbstractType
                                                     'empty_value' => 'SelectValue',
                                                     'attr' => array('class' => 'required'))
                                                     )
-            ->add('Shop'     , 'entity' , array(
+            ->add('Shop'         , 'entity' , array(
                                                     'class' => 'AppBundle:Shop',
-                                                    'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'Shop', $services),
+                                                    'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'Shop', $services, $idPartner),
                                                     'empty_value' => 'SelectValue',
                                                     'attr' => array('class' => 'required'))
                                                     )
             ->add('DiagnosisMachine', 'entity' , array('required'=> false,
-                                                    'class' => 'AppBundle:DiagnosisMachine',
-                                                    'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'DiagnosisMachine', $services),
-                                                    'empty_value' => 'SelectValue')
+                                                       'multiple' => true,
+                                                       'class' => 'AppBundle:DiagnosisMachine',
+                                                       'query_builder' => UtilsWorkshop::getFilteredEntity($em, 'DiagnosisMachine', $services),
+                                                       'empty_value' => 'SelectValue')
                                                     )
         ;
     }

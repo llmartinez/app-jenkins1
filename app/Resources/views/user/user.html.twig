@@ -13,6 +13,8 @@
 
 	<form action="{{form.vars.action}}" method="{{form.vars.method}}">
 
+        {% if form.service is defined %} {{ form_row(form.service) }} {% endif %}
+
         {% if formE is defined %}{{ form_rest(formE) }}{% endif %}
 
 		{{ form_rest(form) }}

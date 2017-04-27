@@ -1,20 +1,25 @@
 {% extends '::layout.html.twig' %}
+{% set locale = app.request.locale %}
 
 {% block breadcrumbs %}
-    <li><a href="{{ path("index") }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("index", { '_locale': locale }) }}">{{ 'index'|trans }}</a></li>
+    <li><a href="{{ path("tickets") }}">{{ 'tickets'|trans }}</a></li>
     <li><a href="{{ path("ticket") }}">{{ 'ticket'|trans }}</a></li>
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_row(form.categoryService) }}
-    {{ form_row(form.country        ) }}
-    {{ form_row(form.language       ) }}
-    {{ form_row(form.status         ) }}
-    {{ form_row(form.importance     ) }}
-    {{ form_row(form.subsystem      ) }}
-    {{ form_row(form.description    ) }}
+    <h2>{{ 'ticket'|trans }}</h2>
 
-    <button type="submit">{{ 'send'|trans }}</button>
-    {{ form_end(form) }}
+    <form action="{{form.vars.action}}" method="{{form.vars.method}}">
+
+        {% if formE is defined %}{{ form_rest(formE) }}{% endif %}
+
+        {{ form_rest(form) }}
+        
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

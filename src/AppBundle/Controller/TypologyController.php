@@ -10,7 +10,7 @@ use AppBundle\Form\TypologyType;
 
 class TypologyController extends Controller
 {
-    public function typologiesAction($page=1)
+    public function typologiesAction(Request $request, $page=1)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -19,6 +19,10 @@ class TypologyController extends Controller
                     ->select("t")
                     ->where("t.id != 0")
                     ->orderBy("t.name", "ASC");
+
+        //if ($request->query->get('filterField')) {
+            $query->andWhere("t.name LIKE '%GED%'");
+        //}
 
         $pagination = $this->get('knp_paginator')->paginate($query->getQuery(), $page, 10);
 
