@@ -91,6 +91,39 @@ class WorkshopController extends Controller {
                 $params[] = array('infotech', ' = 1');
             }
         }
+        elseif ($security->isGranted('ROLE_TOP_AD') ) {
+            $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            if($catser != null)
+                $catserv = $catser->getId();
+            else
+                $catserv = 0;
+            
+            
+            $params[] = array('category_service', ' = ' . $catserv);
+
+            if ($partner != '0')
+                $params[] = array('partner', ' = ' . $partner);
+
+            if ($w_idpartner != '0' and $w_id != '0') {
+                $params[] = array('code_workshop', ' = ' . $w_id);
+                $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
+                $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = ' . $w_idpartner . ' ');
+            }
+
+            if ($status == "active") {
+                $params[] = array('active', ' = 1');
+                $params[] = array('test', ' = 0');
+            } elseif ($status == "deactive") {
+                $params[] = array('active', ' != 1');
+            } elseif ($status == "test") {
+                $params[] = array('active', ' = 1');
+                $params[] = array('test', ' = 1');
+            } elseif ($status == "check") {
+                $params[] = array('haschecks', ' = 1');
+            } elseif ($status == "infotech"){
+                $params[] = array('infotech', ' = 1');
+            }
+        }
 
         if (!isset($params))
             $params[] = array();
@@ -139,7 +172,7 @@ class WorkshopController extends Controller {
 
     public function newWorkshopAction() {
         $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+        if ($security->isGranted('ROLE_TOP_AD') === false)
             throw new AccessDeniedException();
         $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
@@ -159,6 +192,9 @@ class WorkshopController extends Controller {
             //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
         }
+        elseif ($security->isGranted('ROLE_TOP_AD')) {
+            $_SESSION['id_catserv'] = ' = 3 ';
+        }
         elseif ($security->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
@@ -168,10 +204,15 @@ class WorkshopController extends Controller {
 
             $_SESSION['id_partner'] = ' IN (' . $partner_ids . ')';
             $_SESSION['id_country'] = ' = ' . $security->getToken()->getUser()->getCountry()->getId();
-        } else {
+        }
+       
+        else {
             $_SESSION['id_partner'] = ' = ' . $partner->getId();
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
+        
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
 
         $form = $this->createForm(new WorkshopType(), $workshop);
 
@@ -314,7 +355,11 @@ class WorkshopController extends Controller {
                     $request->setLocale($locale);
                 }
 
-                $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username . ' ' . $this->get('translator')->trans('with_password') . ': ' . $pass;
+                $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
+                if ($security->isGranted('ROLE_ADMIN'))
+                {
+                    $flash = $flash . ' '. $this->get('translator')->trans('with_password') . ': ' . $pass;
+                }
                 $this->get('session')->setFlash('alert', $flash);
 
                 return $this->redirect($this->generateUrl('workshop_list'));
@@ -410,6 +455,10 @@ class WorkshopController extends Controller {
             $_SESSION['id_partner'] = ' = ' . $partner->getId();
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
+        
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+        
         $form = $this->createForm(new WorkshopType(), $workshop);
 
         $actual_city = $workshop->getRegion();

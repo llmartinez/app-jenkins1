@@ -189,8 +189,8 @@ class AjaxController extends Controller
 
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        
         $workshop = UtilController::getCodeWorkshopUnused($em,$partner->getCodePartner());
+
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);
@@ -736,8 +736,11 @@ class AjaxController extends Controller
             $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country, $catserv_id);
 
             if(count($tickets) > 0) {
-                foreach ($tickets as $ticket) {
-                    $json[] = $ticket->to_json_subsystem();
+                foreach ($tickets as $ticket) {                    
+                    if($ticket->getStatus()->getId() == 2 && $ticket->getExpirationDate() == null)
+                    {
+                        $json[] = $ticket->to_json_subsystem();
+                    }
                 }
             }else{
                 $json = array( 'error' => 'No hay coincidencias');

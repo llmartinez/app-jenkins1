@@ -17,7 +17,7 @@
     <div style="width: 90%; margin-left: 5%;">
 
         <legend>{% trans %} menu.list_workshops {% endtrans %}
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_TOP_AD') %}
                 <a id="newWorkshop" href="{{ path('workshop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.workshop {% endtrans %}</a></td>
             {% endif %}
             <span class="pull-right mr15">{% trans %}menu.list_workshops{% endtrans %}: {{length}}</span>

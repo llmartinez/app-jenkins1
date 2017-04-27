@@ -901,6 +901,12 @@ fieldset[disabled] .asr_form-control {
     float: left;
 }
 
+.grid-66  {
+    width:  60%!important;
+    margin-right: 3.3%;
+    float: left;
+}
+
 .grid {
     float: left;
     margin-right: 10px;
@@ -912,4 +918,10 @@ fieldset[disabled] .asr_form-control {
 
 .lbl_lgray {
     color: #838383;
+}
+
+#more_information_einatech {
+    cursor: pointer;
+    line-height: 75px;
+    padding-left: 15px;
 }

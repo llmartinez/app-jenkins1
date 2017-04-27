@@ -225,7 +225,7 @@ class WorkshopOrderController extends Controller {
 
             if ($workshopOrder->getName() != null and ((isset($catserv) and $catserv == 3) OR ($workshopOrder->getShop() != null and $workshopOrder->getShop()->getId() != null))
                 and $workshopOrder->getTypology() != null and $workshopOrder->getTypology()->getId() != null
-                and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getCif() != null and $workshopOrder->getContact() != null
+                and $workshopOrder->getCodeWorkshop() != null and $workshopOrder->getContact() != null
                 and $workshopOrder->getPhoneNumber1() != null and $workshopOrder->getEmail1() != null
                 and $workshopOrder->getCountry() != null and $workshopOrder->getCity() != null
                 and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
@@ -493,7 +493,7 @@ class WorkshopOrderController extends Controller {
             }else{
                 $shop = 0;
             }
-            if( $request->request->get('workshopOrder_editOrder')['diagnosis_machines'] != null)
+            if( isset($request->request->get('workshopOrder_editOrder')['diagnosis_machines']))
             {
                 $workshopOrder->setDiagnosisMachines(array());
                 $id_diagmachines = $request->request->get('workshopOrder_editOrder')['diagnosis_machines'];

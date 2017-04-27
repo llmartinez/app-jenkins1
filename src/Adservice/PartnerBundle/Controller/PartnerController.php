@@ -107,6 +107,9 @@ class PartnerController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {
@@ -175,7 +178,7 @@ class PartnerController extends Controller {
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
                     $this->get('session')->setFlash('alert', $flash);
 
-                    if ($security->isGranted('ROLE_TOP_AD'))
+                    if ($security->isGranted('ROLE_TOP_AD') and !$security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('user_partner_list', array('0','3','0','0','0')));
 
                     return $this->redirect($this->generateUrl('partner_list'));
@@ -233,6 +236,10 @@ class PartnerController extends Controller {
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
+
+        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        else unset($_SESSION['code_billing']);
+        
         $form = $this->createForm(new PartnerType(), $partner);
 
         $actual_city   = $partner->getRegion();

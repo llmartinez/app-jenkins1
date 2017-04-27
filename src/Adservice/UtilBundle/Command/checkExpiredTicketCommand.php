@@ -36,6 +36,12 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $tickets = $em->getRepository('TicketBundle:Ticket')->findByNot(array('status' => 2)); // Cualquier estado menos 2 - cerrado
 
+        $languages = $em->getRepository('UtilBundle:Language')->findAll();
+        foreach ($languages as $l)
+        {
+            $langs[$l->getLanguage()] = $l->getShortName();
+        }
+
         $status = $em->getRepository('TicketBundle:Status')->findAll();
         $sa = $em->getRepository('UserBundle:User')->find(1);
 
@@ -48,8 +54,6 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
             // $expDate = strtotime ( '+15 day' , strtotime ( $date->date ) ) ;
             // Se acaba usando DateTime de 15 dias
 
-        $msg_expirated = $this->getContainer()->get('translator')->trans('mail.inactivity_warning');
-        $msg_expired = $this->getContainer()->get('translator')->trans('mail.inactiveTicket.title');
         $count = 0;
 
         $message = \Swift_Message::newInstance()
@@ -61,11 +65,22 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
         {
             $diff = date_diff($date, $ticket->getModifiedAt());
 
+            $email1 = $ticket->getWorkshop()->getEmail1();
+            $lang = $ticket->getWorkshop()->getCountry()->getLang(); 
+            
+            $translator = $this->getContainer()->get('translator');
+            $translator->setLocale($lang);
+            
+            $msg_expirated = $translator->trans('mail.inactivity_warning');
+            $msg_expired = $translator->trans('mail.inactiveTicket.title');
+            $msg_warning = $translator->trans('mail.inactivity_warning.title');
+
             // INFO_CLOSED_TICKETS 
             // - T.Información: Se cierra a los 10 días sin actividad
 
                 if($diff->days >= 10 and $ticket->getImportance() != null and $ticket->getImportance()->getImportance() == 'information')
                 {
+
                     $ticket->setStatus($status[1]); // $status[1] = array(2 => 'closed')
                     $ticket->setSolution($msg_expired);
                     $ticket->setExpirationDate($date);
@@ -75,7 +90,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
 
                     $message
                     ->setSubject($msg_expired)
-                    ->setTo($ticket->getWorkshop()->getEmail1())
+                    ->setTo($email1)
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
@@ -106,8 +121,8 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $em->persist($ticket);
 
                     $message
-                    ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
-                    ->setTo($ticket->getWorkshop()->getEmail1())
+                    ->setSubject($msg_warning)
+                    ->setTo($email1)
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expirated.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
@@ -128,7 +143,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
    
                     $message
                     ->setSubject($msg_expired)
-                    ->setTo($ticket->getWorkshop()->getEmail1())
+                    ->setTo($email1)
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expired.html.twig', array('ticket' => $ticket)));
 
                     $this->getContainer()->get('mailer')->send($message);
@@ -137,6 +152,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                 }
         }
         $em->flush();
+
         $output->writeln('Se han modificado '.$count.' tickets por inactividad.');
     }
 }
