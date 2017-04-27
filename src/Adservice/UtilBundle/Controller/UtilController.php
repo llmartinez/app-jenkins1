@@ -57,6 +57,8 @@ class UtilController extends Controller
      * @param  string $cadena
      * @param  string $separador
      * @return string
+
+
      */
     static public function getSlug($cadena, $separador = '-')
     {
@@ -148,7 +150,7 @@ class UtilController extends Controller
     {
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
-
+        
         if($code_workshop != null )
         {
             $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
@@ -157,15 +159,13 @@ class UtilController extends Controller
                 $code   = $code_workshop;
             }
         }
-
-        while($unused != 'unused') {
-            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
-            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
-
-            if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
-            else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente
+   
+        if($unused != 'unused') 
+        {     
+            $code = $find   = $em->getRepository('WorkshopBundle:Workshop'  )->getMaxIdByCodePartner($code_partner);
+            $code++;
         }
-
+        
         return $code;
     }
 
