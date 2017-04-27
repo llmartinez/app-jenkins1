@@ -5,9 +5,18 @@ title: "Auto Diagnostic Service"
 index: "Índice"
 login: "Iniciar sesión"
 logout: "Cerrar sesión"
+reports: "Reports"
+orders: "Solicitudes"
+popups: "Popups"
+partners: "Socios"
+workshops: "Talleres"
+shops: "Tiendas"
+typologies: "Tipologías"
+diagnosisMachines: "Máquinas de diagnosis"
 users: "Usuarios"
+sentences: "Sentences"
+tickets: "Tickets"
 selectRole: "Selecciona rol"
-user_new: "Nuevo usuario"
 
 # ROLES
 ROLE_USER: Usuario
@@ -25,6 +34,7 @@ ROLE_GOD: "Dios"
 Restriction: "Restricción"
 ROLE_HIDE_LIST: "Ocultar listas de datos"
 ROLE_HIDE_CREATE: "Ocultar formularios de creación"
+ROLE_HIDE_ASSIGN: "Ocultar funciones de asignación"
 ROLE_HIDE_USER: "Ocultar gestión de usuarios"
 ROLE_HIDE_REPORT: "Ocultar gestión de reports"
 ROLE_HIDE_ORDER: "Ocultar gestión de solicitudes"
@@ -65,25 +75,22 @@ password_insert: "Insertar contraseña"
 password_repeat: "Repetir contraseña"
 password_old: "Contraseña anterior"
 Submit: "Enviar"
+Edit: "Editar"
+Delete: "Eliminar"
 search: "Buscar"
 All: "Todos"
 SelectValue: "Selecciona valor"
 searchId: "Buscar ID"
 
-# ERRORS
-access_denied: "No tienes acceso a esta sección"
-password_changed: "Contraseña modificada correctamente"
-password_old_error: "La contraseña anterior no coincide"
-
-# USER
+# USER FIELDS
 user: "Usuario"
 id: "ID"
 Id: "ID"
 role: "Rol"
 Status: "Estado"
-active: "Activo"
-inactive: "Inactivo"
-test: "Pruebas"
+Active: "Activo"
+Inactive: "Inactivo"
+Test: "Pruebas"
 Name: "Nombre"
 Language: "Idioma"
 Country: "País"
@@ -106,6 +113,10 @@ ModifiedBy: "Modificado por"
 ModifiedAt: "Modificado en"
 Token: "Token"
 
+# USER
+user_new: "Nuevo usuario"
+user_update: "Usuario actualizado"
+
 # DATES
 date.day: "Día"
 date.month: "Mes"
@@ -124,6 +135,24 @@ Code partner: "Código de Socio"
 #WORKSHOP
 Workshop: "Taller"
 Code workshop: "Código de Taller"
+
+#TYPOLOGY
+Typology: "Tipología"
+typology_new: "Nueva tipología"
+typology_deleted: "Tipología eliminada"
+typology_update: "Tipología actualizada"
+
+#SHOP
+Shop: "Tienda"
+shop_new: "Nueva tienda"
+shop_deleted: "Tienda deleted"
+shop_update: "Tienda actualizada"
+
+#DIAGNOSIS
+Diagnosis machine: "Máquina de diagnosis"
+diagnosisMachine_new: "Nueva máquina de diagnosis"
+diagnosisMachine_deleted: "Máquina de diagnosis eliminada"
+diagnosisMachine_update: "Máquina de diagnosis actualizada"
 
 # HELP
 help: "Ayuda"

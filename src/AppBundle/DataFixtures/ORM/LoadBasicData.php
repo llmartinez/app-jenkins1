@@ -73,9 +73,9 @@ class LoadBasicData implements FixtureInterface
 			$hide_create->setName('ROLE_HIDE_CREATE');
 			$manager->persist($hide_create);
 
-			$hide_18 = new Role();
-			$hide_18->setName('ROLE_HIDE_ASSIGN');
-			$manager->persist($hide_18);
+			$hide_assign = new Role();
+			$hide_assign->setName('ROLE_HIDE_ASSIGN');
+			$manager->persist($hide_assign);
 
 			$hide_user = new Role();
 			$hide_user->setName('ROLE_HIDE_USER');
@@ -325,24 +325,6 @@ class LoadBasicData implements FixtureInterface
 			$userU = new User();
 			$userU->addRole($role_user);
 			$userU->setUsername('user');
-			$userU->setPassword('$2y$13$3aa59e12fee9debecc349uGkMVuLFLmFXgT35rUYd33amUSH/vFlG');
-			$userU->setSalt('3aa59e12fee9debecc349384c0719245');
-			$userU->setService(NULL);
-			$userU->setRoleId(10);
-			$userU->setLanguage(1);
-			$userU->setCountry(1);
-			$userU->setStatus(1);
-			$userU->setEmail1('mail@mail.com');
-			$userU->setPhoneNumber1('0');
-			$userU->setCreatedAt(new \DateTime());
-
-			$manager->persist($userU);
-
-		// USER (user:test)
-
-			$userU = new User();
-			$userU->addRole($role_user);
-			$userU->setUsername('user2');
 			$userU->setPassword('$2y$13$3aa59e12fee9debecc349uGkMVuLFLmFXgT35rUYd33amUSH/vFlG');
 			$userU->setSalt('3aa59e12fee9debecc349384c0719245');
 			$userU->setService(NULL);

@@ -28,7 +28,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
     public function testEditGod()
@@ -39,12 +39,10 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals('godtest', $user->getUsername());
 
         $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserGod', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserGod', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -53,7 +51,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('godtest2');
         $this->assertEquals('godtest2', $user->getUsername());
@@ -67,8 +65,6 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals('godtest2', $user->getUsername());
 
         $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('godtest2');
@@ -91,7 +87,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
     public function testEditSuperAdmin()
@@ -101,13 +97,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superadmintest');
         $this->assertEquals('superadmintest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/2');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserSuperAdmin', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserSuperAdmin', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -116,7 +110,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superadmintest2');
         $this->assertEquals('superadmintest2', $user->getUsername());
@@ -129,9 +123,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superadmintest2');
         $this->assertEquals('superadmintest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/2');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superadmintest2');
@@ -155,7 +147,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
     public function testEditAdmin()
@@ -165,13 +157,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('admintest');
         $this->assertEquals('admintest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/3');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserAdmin', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserAdmin', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -180,7 +170,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('admintest2');
         $this->assertEquals('admintest2', $user->getUsername());
@@ -193,9 +183,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('admintest2');
         $this->assertEquals('admintest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/3');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('admintest2');
@@ -217,7 +205,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
     public function testEditTop()
@@ -227,13 +215,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('toptest');
         $this->assertEquals('toptest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/4');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserTop', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserTop', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -242,7 +228,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('toptest2');
         $this->assertEquals('toptest2', $user->getUsername());
@@ -255,9 +241,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('toptest2');
         $this->assertEquals('toptest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/4');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('toptest2');
@@ -279,7 +263,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
     public function testEditSuperPartner()
@@ -289,13 +273,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superpartnertest');
         $this->assertEquals('superpartnertest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/5');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserSuperPartner', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserSuperPartner', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -304,7 +286,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superpartnertest2');
         $this->assertEquals('superpartnertest2', $user->getUsername());
@@ -317,9 +299,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superpartnertest2');
         $this->assertEquals('superpartnertest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/5');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('superpartnertest2');
@@ -342,7 +322,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
 
@@ -353,13 +333,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('partnertest');
         $this->assertEquals('partnertest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/6');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserPartner', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserPartner', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -368,7 +346,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('partnertest2');
         $this->assertEquals('partnertest2', $user->getUsername());
@@ -381,9 +359,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('partnertest2');
         $this->assertEquals('partnertest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/6');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('partnertest2');
@@ -405,7 +381,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
     }
 
 
@@ -416,13 +392,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('commercialtest');
         $this->assertEquals('commercialtest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/7');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserCommercial', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserCommercial', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -431,7 +405,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('commercialtest2');
         $this->assertEquals('commercialtest2', $user->getUsername());
@@ -444,9 +418,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('commercialtest2');
         $this->assertEquals('commercialtest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/7');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('commercialtest2');
@@ -468,7 +440,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
     }
 
@@ -479,13 +451,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('advisertest');
         $this->assertEquals('advisertest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/8');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserAdviser', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserAdviser', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -494,7 +464,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('advisertest2');
         $this->assertEquals('advisertest2', $user->getUsername());
@@ -507,9 +477,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('advisertest2');
         $this->assertEquals('advisertest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/8');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('advisertest2');
@@ -533,7 +501,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
     }
 
@@ -545,13 +513,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('workshoptest');
         $this->assertEquals('workshoptest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/9');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserWorkshop', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserWorkshop', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -560,7 +526,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('workshoptest2');
         $this->assertEquals('workshoptest2', $user->getUsername());
@@ -573,9 +539,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('workshoptest2');
         $this->assertEquals('workshoptest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/9');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('workshoptest2');
@@ -596,7 +560,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
     }
 
@@ -608,13 +572,11 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('usertest');
         $this->assertEquals('usertest', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/10');
         $link = $crawler->filter('a:contains("Edit")')->last()->link();
         $crawler = $this->client->click($link);
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserUser', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserUser', $breadcrumbs);
         $form = $crawler->selectButton('Submit')->form();
 
         // sustituye algunos valores
@@ -623,7 +585,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $crawler = $this->client->followRedirect();
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('usertest2');
         $this->assertEquals('usertest2', $user->getUsername());
@@ -636,9 +598,7 @@ class UserControllerTest extends WebTestCase
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('usertest2');
         $this->assertEquals('usertest2', $user->getUsername());
 
-        $crawler = $this->client->request('GET', '/en/users');
-        $link = $crawler->filter('a:contains(">>")')->eq(0)->link();
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', '/en/users/10');
         $link = $crawler->filter('a:contains("Delete")')->last()->link();
         $crawler = $this->client->click($link);
         $user = $em->getRepository('AppBundle:User')->findOneByUsername('usertest2');

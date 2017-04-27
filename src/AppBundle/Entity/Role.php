@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="role")
  * @ORM\Entity
  */
-class Role implements RoleInterface {
-
+class Role implements RoleInterface
+{
     /**
      * @var integer $id
      *

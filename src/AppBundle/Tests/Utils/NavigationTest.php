@@ -51,14 +51,24 @@ class NavigationTest extends WebTestCase
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
         $this->assertEquals('Índice', $breadcrumbs);
 
-        // GO TO USERS
+        // GO TO USERS SELECT ROLE
         $crawler = $this->client->request('GET', '/en');
         $crawler = $this->client->followRedirect();
-        $link = $crawler->filter('a:contains("USERS")')->eq(0)->link();
+        $link = $crawler->filter('a:contains("Users")')->eq(0)->link();
+        $crawler = $this->client->click($link);
+        $crawler = $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
+        $this->assertEquals('IndexRole', $breadcrumbs);
+
+        // GO TO USERS ADMIN
+        $crawler = $this->client->request('GET', '/en/users');
+        $crawler = $this->client->followRedirect();
+        $link = $crawler->filter('a:contains("Top")')->eq(0)->link();
         $crawler = $this->client->click($link);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsers', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsers', $breadcrumbs);
 
         // GO TO NEW USER
 
@@ -66,15 +76,8 @@ class NavigationTest extends WebTestCase
         $crawler = $this->client->click($link);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRole', $breadcrumbs);
+        $this->assertEquals('IndexRoleUsersUserTop', $breadcrumbs);
 
-        // GO TO NEW USER ADMIN
-
-        $link = $crawler->filter('a:contains("Admin")')->eq(1)->link();
-        $crawler = $this->client->click($link);
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $breadcrumbs = Slugger::noSpaces($crawler->filter('#breadcrumbs')->text());
-        $this->assertEquals('IndexUsersRoleUserAdmin', $breadcrumbs);
 /////// FALTA HACER LOGOUT 
 
 

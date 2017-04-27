@@ -1,4 +1,4 @@
 <ul>
-	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>SENTENCES</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>TICKETS</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>{{'sentences'|trans}}</li>{% endif %}
+	{% if not is_granted('ROLE_HIDE_TICKET') %}<li>{{'tickets'|trans}}</li>{% endif %}
 </ul>

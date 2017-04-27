@@ -2,8 +2,6 @@
 changeLang:
     path:  /changeLang/{locale}
     defaults: { _controller: AppBundle:Default:changeLang, locale: locale }
-#    options:
-#        expose: true
 
 index:
     path:  /
@@ -21,7 +19,6 @@ login:
 autologin:
     path:  /autologin
     defaults: { _controller: AppBundle:Security:autologin }
-
 
 # USER
 selectRole:
@@ -52,7 +49,48 @@ users:
     path:  /users/{role_id}/{page}/{filter}/{value}
     defaults: { _controller: AppBundle:User:users, role_id: null, page: 1, filter: 0, value: 0 }
 
+# TYPOLOGY
+typology:
+    path:  /typologies/typology/{id}
+    defaults: { _controller: AppBundle:Typology:typology, id: null }
+
+typologyDelete:
+    path:  /typologies/typology-delete/{id}
+    defaults: { _controller: AppBundle:Typology:typologyDelete, id: null }
+
+typologies:
+    path:  /typologies
+    defaults: { _controller: AppBundle:Typology:typologies }
+
+# SHOP
+shop:
+    path:  /shops/shop/{id}
+    defaults: { _controller: AppBundle:Shop:shop, id: null }
+
+shopDelete:
+    path:  /shops/shop-delete/{id}
+    defaults: { _controller: AppBundle:Shop:shopDelete, id: null }
+
+shops:
+    path:  /shops
+    defaults: { _controller: AppBundle:Shop:shops }
+
+# DIAGNOSIS MACHINE
+diagnosisMachine:
+    path:  /diagnosisMachine/diagnosisMachine/{id}
+    defaults: { _controller: AppBundle:DiagnosisMachine:diagnosisMachine, id: null }
+
+diagnosisMachineDelete:
+    path:  /diagnosisMachine/diagnosisMachine-delete/{id}
+    defaults: { _controller: AppBundle:DiagnosisMachine:diagnosisMachineDelete, id: null }
+
+diagnosisMachines:
+    path:  /diagnosisMachines
+    defaults: { _controller: AppBundle:DiagnosisMachine:diagnosisMachines }
+
 # TICKET
 tickets:
     path:  /tickets
     defaults: { _controller: AppBundle:Ticket:tickets }
+
+

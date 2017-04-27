@@ -5,7 +5,17 @@ title: "Auto Diagnostic Service"
 index: "Index"
 login: "Ouvrir une session"
 logout: "Fermer la session"
+reports: "Rapports"
+orders: "Demandes"
+popups: "Popups"
+partners: "Distributeurs"
+workshops: "Ateliers"
+shops: "Boutiques"
+typologies: "Types d'atelier"
+diagnosisMachines: "Outils de diagnostic"
 users: "Utilisateurs"
+sentences: "Requêtes"
+tickets: "Tickets"
 selectRole: "Sélectionnez Rôle"
 user_new: "Nouveau utilisateur"
 
@@ -25,6 +35,7 @@ ROLE_GOD: "Dieu"
 Restriction: "Restriction"
 ROLE_HIDE_LIST: "Masquer les listes de données"
 ROLE_HIDE_CREATE: "Masquer les formes de création"
+ROLE_HIDE_ASSIGN: "Masquer les fonctions d'assigner"
 ROLE_HIDE_USER: "Masquer gestion des utilisateurs"
 ROLE_HIDE_REPORT: "Masquer gestion des rapports"
 ROLE_HIDE_ORDER: "Masquer gestion des demandes"
@@ -65,15 +76,12 @@ password_insert: "Insérer le mot de passe"
 password_repeat: "Répétition du mot de passe"
 password_old: "Mot de passe précédent"
 Submit: "Envoyer"
+Edit: "Edit"
+Delete: "Delete"
 search: "Rechercher"
 All: "Tous"
 SelectValue: "Sélectionner la valeur"
 searchId: "Chercher par ID"
-
-# ERRORS
-access_denied: "Vous n'avez pas accès à cette section"
-password_changed: "Mot de passe changé avec succès"
-password_old_error: "Le mot de passe précédent ne correspond pas"
 
 # DATATABLE
 loading: "Chargement..."
@@ -86,15 +94,15 @@ dt_of: "de"
 dt_previous: "Précédent"
 dt_next: "Suivant"
 
-# USER
+# USER FIELDS
 user: "Utilisateur"
 id: "ID"
 Id: "ID"
 role: "Rôle"
 Status: "État"
-active: "Actif"
-inactive: "Inactif"
-test: "À l'essai"
+Active: "Actif"
+Inactive: "Inactif"
+Test: "À l'essai"
 Name: "Nom"
 Language: "Language"
 Country: "Pays"
@@ -117,6 +125,9 @@ ModifiedBy: "Modifié par"
 ModifiedAt: "Modifié à"
 Token: "Token"
 
+# USER
+user_update: "User modifié"
+
 # DATES
 date.day: "Jour"
 date.month: "Mois"
@@ -135,6 +146,24 @@ Code partner: "Code Distributeur"
 #WORKSHOP
 Workshop: "Atelier"
 Code workshop: "Code Atelier"
+
+#TYPOLOGY
+Typology: "Type d'atelier"
+typology_new: "Nouveau type d'atelier"
+typology_deleted: "Type d'atelier supprimé"
+typology_update: "Type d'atelier modifié"
+
+#SHOP
+Shop: "Boutique"
+shop_new: "Nouveau boutique"
+shop_deleted: "Boutique supprimé"
+shop_update: "Boutique modifié"
+
+#DIAGNOSIS
+Diagnosis machine: "Outil de diagnostic"
+diagnosisMachine_new: "Nouveau outil de diagnostic"
+diagnosisMachine_deleted: "Outil de diagnostic supprimé"
+diagnosisMachine_update: "Outil de diagnostic modifié"
 
 #HELP
 help: "Aider"

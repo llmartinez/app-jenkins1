@@ -25,6 +25,16 @@ parameters:
         8: ROLE_ADVISER
         9: ROLE_WORKSHOP
         10: ROLE_USER
+    services :
+        21: ROLE_SERV_GED
+        22: ROLE_SERV_ADSERVICE_ES
+        23: ROLE_SERV_ADSERVICE_PT
+        24: ROLE_SERV_ASSISTANCE_DIAG_24
+        25: ROLE_SERV_PHONE_EINA_ECP
+        26: ROLE_SERV_PHONE_EINA_JS
+        27: ROLE_SERV_PHONE_EINA_TECHNODIAG
+        28: ROLE_SERV_ACTIA
+        29: ROLE_SERV_NEXUS
 
 framework:
     #esi:             ~
@@ -57,6 +67,7 @@ twig:
         url_logo: "%url_logo%"
         languages: "%languages%"
         roles: "%roles%"
+        services: "%services%"
 
 # Doctrine Configuration
 doctrine:

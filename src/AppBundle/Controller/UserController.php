@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\UserPasswordType;
@@ -26,11 +27,27 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $query = $this->get('utilsUser')->findUsersByRole($this, $role_id);
-
+        
         // TODO: Si hay filtros filtramos los resultados
         //if($filter != 0) $query->where("u.".$filter." LIKE '%".$value."%'' ")
         // Deberiamos filtrar con un FORM para gestionar todos los campos simultaneamente
+        /**********************************************************************************/
+        /**********************************************************************************/
+        /**********************************************************************************/
 
+        // TODO: hacer un formulario por cada rol para los filtros de los listados
+
+        /**********************************************************************************/
+        /**********************************************************************************/
+        /**********************************************************************************/
+
+        // Si se ha usado el filtro en Partner o Workshop se configura $pagination para que use JOIN
+        $sort = $request->query->get('sort');
+        if($sort != null)
+        {
+            if    ($sort == 'p.codePartner' ) $query->join('u.partner', 'p');
+            elseif($sort == 'w.codeWorkshop') $query->join('u.workshop', 'w');
+        }
         $pagination = $this->get('knp_paginator')->paginate($query->getQuery(), $page, 10);
 
         return $this->render('user/users.html.twig', array('pagination' => $pagination, 'role_id' => $role_id));
@@ -57,13 +74,16 @@ class UserController extends Controller
         else
             return $this->redirectToRoute('users', array('role_id' => $role_id));
     }
+
     /*
      * @ParamConverter("user", class="AppBundle:User")
      */
     public function userEditAction(Request $request, User $user, $role_id=null)
     {
+        $tokenUser = $this->get('security.token_storage')->getToken()->getUser();
+
         // Si entras en tu mismo usuario solo se te permite resetear password y mostrar tus datos
-        if ($this->get('security.token_storage')->getToken()->getUser()->getId() == $user->getId())
+        if ($tokenUser->getId() == $user->getId())
             return $this->redirectToRoute('userView', array('id' => $user->getId(), 'role_id' => $role_id));
 
         // Si entras en un rol al que no tienes permisos para acceder te devuelve al listado de usuarios
@@ -72,6 +92,24 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()->add('ko' , 'access_denied');
             return $this->redirectToRoute('users', array('role_id' => $role_id));
         }
+
+        // Si el usuario es un Partner comprobamos que el usuario a editar le pertenezca
+        $role_partner = array_search('ROLE_PARTNER', $this->get('utils')->getRoles());
+        if($tokenUser->getRoleId() == $role_partner)
+        {
+            $entityName = $this->get('utilsUser')->getEntityName($user->getRoleId());
+
+            if($entityName != null)
+            {
+                $getFunction = 'get'.$entityName;
+                if($user->$getFunction()->getPartner()->getId() != $tokenUser->getId())
+                {
+                    $this->get('session')->getFlashBag()->add('ko' , 'access_denied');
+                    return $this->redirectToRoute('users', array('role_id' => $role_id));
+                }
+            }
+        }
+
         // Editamos el usuario
         $return = $this->get('utilsUser')->editUser($this, $request, $user);
         
@@ -86,8 +124,13 @@ class UserController extends Controller
      */
     public function userViewAction(Request $request, User $user, $role_id=null)
     {
-        $form = $this->createForm(new UserPasswordType(), $user);
+        $tokenUser = $this->get('security.token_storage')->getToken()->getUser();
 
+        // Si no es el mismo usuario volvemos al listado de usuarios
+        if ($tokenUser->getId() != $user->getId())
+            return $this->redirectToRoute('users', array('role_id' => $role_id));
+
+        $form = $this->createForm(new UserPasswordType(), $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

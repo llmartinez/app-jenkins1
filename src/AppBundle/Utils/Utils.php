@@ -13,7 +13,7 @@ class Utils
                                        '14' => 'ROLE_HIDE_USER', '15' => 'ROLE_HIDE_REPORT', '16' => 'ROLE_HIDE_ORDER', '17' => 'ROLE_HIDE_POPUP', '18' => 'ROLE_HIDE_TICKET');
                                        /*'19' => 'ROLE_HIDE_19', '20' => 'ROLE_HIDE_20');*/
 
-    public static $services = array('0' => 'All', '21' => 'ROLE_SERV_GED', '22' => 'ROLE_SERV_ADSERVICE_ES', '23' => 'ROLE_SERV_ADSERVICE_PT',
+    public static $services = array('21' => 'ROLE_SERV_GED', '22' => 'ROLE_SERV_ADSERVICE_ES', '23' => 'ROLE_SERV_ADSERVICE_PT',
                                     '24' => 'ROLE_SERV_ASSISTANCE_DIAG_24', '25' => 'ROLE_SERV_PHONE_EINA_ECP', '26' => 'ROLE_SERV_PHONE_EINA_JS',
                                     '27' => 'ROLE_SERV_PHONE_EINA_TECHNODIAG', '28' => 'ROLE_SERV_ACTIA', '29' => 'ROLE_SERV_NEXUS');
 /*
@@ -38,9 +38,9 @@ class Utils
         if    (in_array($role_id, array(1))) return array_diff(self::$roles, ["ROLE_GOD"]);
         elseif(in_array($role_id, array(2))) return array_diff(self::$roles, ["ROLE_GOD","ROLE_SUPER_ADMIN", "ROLE_USER"]);
         elseif(in_array($role_id, array(3))) return array_diff(self::$roles, ["ROLE_GOD","ROLE_SUPER_ADMIN","ROLE_ADMIN", "ROLE_USER"]);
-        elseif(in_array($role_id, array(4))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_SUPER_PARTNER", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
-        elseif(in_array($role_id, array(5))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_PARTNER", "ROLE_COMMERCIAL"]));
-        elseif(in_array($role_id, array(6))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(4))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_SUPER_PARTNER", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(5))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_PARTNER", "ROLE_COMMERCIAL"]));
+        elseif(in_array($role_id, array(6))) return array_diff(self::$roles, array_diff(self::$roles, ["ROLE_WORKSHOP", "ROLE_COMMERCIAL"]));
         else return null;
     }
 
@@ -92,9 +92,9 @@ class Utils
 
     public static function getServicesForRole($role_id)
     {
-        if    (in_array($role_id, array(1, 2)))             return array('0' => self::$services[0]);
-        elseif(in_array($role_id, array(3, 4, 5, 6, 7, 9))) return array_diff(self::$services, ["All"]);
-        elseif(in_array($role_id, array(8, 10)))            return self::$services;
+        if (in_array($role_id, array(1, 2))) return array('0' => 'All');
+        // elseif(in_array($role_id, array(3, 4, 5, 6, 7, 9))) return self::$services;
+        // elseif(in_array($role_id, array(8, 10)))            return self::$services;
         else return self::$services;
     }
 
@@ -107,6 +107,17 @@ class Utils
             return Utils::getServices($attr['tokenService']);
         else
             return Utils::getServicesForRole($attr['role']);
+    }
+
+    /** Devuelve los servicios que tiene el usuario logueado o un 0 si tiene acceso a todos (ej. SA)   
+     */
+    public static function getTokenServices($tokenUser)
+    {
+        if($tokenUser->getService() != null)
+             $tokenService = $tokenUser->getService();
+        else $tokenService = '0';
+
+        return $tokenService;
     }
 
     public static function getLogos($id=null)

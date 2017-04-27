@@ -9,6 +9,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+--- PENDIENTE --- Nuevo usuario (taller) filtro Ajax de Servicios sobre Tipologia, Tienda y DiagMachine <br>
         {# Activar en caso de que la redirección al login al cerrarse sesión no funcione correctamente
             (ADService OLD): Aunque esté configurado security.yml no redirecciona al cerrarse sesión por inactividad #}
         {# Si el usuario no está logeado redirecciona al login (Para plantillas con acceso anonimo como "help" sobreescribir el bloque) #}
@@ -32,7 +33,6 @@
         </div>
 
         <div id="body">
-
             {% block flashMessages %}
                 {% for flashMessage in app.session.flashbag.get('ok') %} <div class="ok">{{ flashMessage }}</div>{% endfor %}
                 {% for flashMessage in app.session.flashbag.get('ko') %} <div class="ko">{{ flashMessage }}</div>{% endfor %}

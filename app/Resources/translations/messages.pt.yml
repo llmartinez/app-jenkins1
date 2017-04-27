@@ -5,7 +5,17 @@ title: "Auto Diagnostic Service"
 index: "Índice"
 login: "Iniciar sessão"
 logout: "Sair"
+reports: "Relatórios"
+orders: "Pedidos"
+popups: "Popups"
+partners: "Sócios"
+workshops: "Oficinas"
+shops: "Lojas"
+typologies: "Tipologias"
+diagnosisMachines: "Máquinas de Diagnóstico"
 users: "Usuários"
+sentences: "Frases"
+tickets: "Talões"
 selectRole: "Selecciona Função"
 user_new: "Novo Usuário"
 
@@ -25,6 +35,7 @@ ROLE_GOD: "Deus"
 Restriction: "Restrição"
 ROLE_HIDE_LIST: "Ocultar listas de datos"
 ROLE_HIDE_CREATE: "Ocultar formas de criação"
+ROLE_HIDE_ASSIGN: "Ocultar funções de alocação"
 ROLE_HIDE_USER: "Ocultar gestão de usuários"
 ROLE_HIDE_REPORT: "Ocultar gestão de estatísticas"
 ROLE_HIDE_ORDER: "Ocultar gestão de pedidos"
@@ -70,11 +81,6 @@ All: "Todos"
 SelectValue: "Escolha um valor"
 searchId: "Procura ID"
 
-# ERRORS
-access_denied: "Você não tem acesso a esta seção"
-password_changed: "Palavra-passe alterada com sucesso"
-password_old_error: "A palavra-passe antiga não corresponde"
-
 # DATATABLE
 loading: "Carregando..."
 dt_show: "Mostrar"
@@ -86,15 +92,15 @@ dt_of: "de"
 dt_previous: "Anterior"
 dt_next: "Siguiente"
 
-# USER
+# USER FIELDS
 user: "Usuário"
 id: "ID"
 Id: "ID"
 role: "Função"
 Status: "Estado"
-active: "Ativo"
-inactive: "Inativo"
-test: "Em testes"
+Active: "Ativo"
+Inactive: "Inativo"
+Test: "Em testes"
 Name: "Nome"
 Language: "Idioma"
 Country: "País"
@@ -117,6 +123,9 @@ ModifiedBy: "Alterado por"
 ModifiedAt: "Alterado em"
 Token: "Token"
 
+# USER
+user_update: "Usuário Alterado"
+
 # DATES
 date.day: "Dia"
 date.month: "Mês"
@@ -135,6 +144,24 @@ Code partner: "Código de Sócio"
 #WORKSHOP
 Workshop: "Oficina"
 Code workshop: "Código de Oficina"
+
+#TYPOLOGY
+Typology: "Tipologia"
+typology_new: "Nova tipologia"
+typology_deleted: "Tipologia eliminada"
+typology_update: "Tipologia alterada"
+
+#SHOP
+Shop: "Loja"
+shop_new: "Nova loja"
+shop_deleted: "Loja eliminada"
+shop_update: "Loja alterada"
+
+#DIAGNOSIS
+Diagnosis machine: "Máquina de Diagnóstico"
+diagnosisMachine_new: "Nova máquina de Diagnóstico"
+diagnosisMachine_deleted: "Máquina de Diagnóstico eliminada"
+diagnosisMachine_update: "Máquina de Diagnóstico alterada"
 
 #HELP
 help: "Ajuda"

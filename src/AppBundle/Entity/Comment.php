@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
  
 /**
- * @ORM\Table(name="comment")
+ * @ORM\Table(name="t_comment")
  * @ORM\Entity
  */
 class Comment
