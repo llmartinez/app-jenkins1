@@ -73,6 +73,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
             
             $msg_expirated = $translator->trans('mail.inactivity_warning');
             $msg_expired = $translator->trans('mail.inactiveTicket.title');
+            $msg_warning = $translator->trans('mail.inactivity_warning.title');
 
             // INFO_CLOSED_TICKETS 
             // - T.Información: Se cierra a los 10 días sin actividad
@@ -120,7 +121,7 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $em->persist($ticket);
 
                     $message
-                    ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
+                    ->setSubject($msg_warning)
                     ->setTo($email1)
                     ->setBody($this->getContainer()->get('templating')->render('UtilBundle:Mailing:cmd_ticket_expirated.html.twig', array('ticket' => $ticket)));
 

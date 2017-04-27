@@ -26,6 +26,22 @@ class WorkshopRepository extends EntityRepository
 
         return (int)$id;
     }
+    
+    /**
+     * Devuelve el ultimo ID almacenado en DB
+     * @return integer
+     */
+    public function getMaxIdByCodePartner($code_partner)
+    {
+        $em = $this->getEntityManager();
+
+        $query = 'SELECT MAX(w) FROM WorkshopBundle:Workshop w Where w.code_partner = '.$code_partner;
+        $consulta = $em->createQuery($query);
+
+        $id = $consulta->getSingleResult()[1];
+
+        return (int)$id;
+    }
 
     public function findWorkshopInfo($request, $security=null)
     {
