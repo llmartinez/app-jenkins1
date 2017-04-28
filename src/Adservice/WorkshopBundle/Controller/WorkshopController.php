@@ -343,12 +343,29 @@ class WorkshopController extends Controller {
                     //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
                     // Enviamos un mail con la solicitud a modo de backup
-                    $mail = $this->container->getParameter('mail_db');
+                    $mail = $this->container->getParameter('mail_report');
+                    
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
 
                         $mailerUser->setTo($mail);
                         $mailerUser->sendMailToSpool();
+                    }
+                    
+                    if ($security->isGranted('ROLE_TOP_AD')) {
+                        $mailAnne = $this->container->getParameter('mail_Anne');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+                            $mailerUser->setTo($mailAnne);
+                            $mailerUser->sendMailToSpool();
+                        }
+                        
+                        $mailReportAd = $this->container->getParameter('mail_report_ad');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+                            $mailerUser->setTo($mailReportAd);
+                            $mailerUser->sendMailToSpool();
+                        }
                     }
 
                     /* Dejamos el locale tal y como estaba */
