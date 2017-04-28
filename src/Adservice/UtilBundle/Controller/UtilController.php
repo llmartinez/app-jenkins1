@@ -57,6 +57,8 @@ class UtilController extends Controller
      * @param  string $cadena
      * @param  string $separador
      * @return string
+
+
      */
     static public function getSlug($cadena, $separador = '-')
     {
