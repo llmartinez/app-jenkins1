@@ -291,7 +291,7 @@ class TicketController extends Controller {
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('assigned_to', " = " . $adviser_id." ");
         }
-
+        
         if (($security->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ( $workshops[0]->getId() != null))) {
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);

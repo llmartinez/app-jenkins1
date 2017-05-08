@@ -35,7 +35,7 @@ class WorkshopRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
 
-        $query = 'SELECT MAX(w) FROM WorkshopBundle:Workshop w Where w.code_partner = '.$code_partner;
+        $query = 'SELECT MAX(w.code_workshop) FROM WorkshopBundle:Workshop w Where w.code_partner = '.$code_partner;
         $consulta = $em->createQuery($query);
 
         $id = $consulta->getSingleResult()[1];
