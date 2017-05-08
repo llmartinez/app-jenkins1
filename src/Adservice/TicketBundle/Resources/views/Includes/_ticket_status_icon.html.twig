@@ -23,7 +23,7 @@
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
                 alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
             {% else %}
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}"
                 alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
             {% endif %}
         {% else %}
@@ -31,7 +31,7 @@
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
                 alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
             {% else %}
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} "
                 alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
             {% endif %}
         {% endif %}

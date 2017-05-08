@@ -919,6 +919,12 @@ class WorkshopOrderController extends Controller {
         // create     + accepted = new workshop and delete workshopOrder
 
         $user = $security->getToken()->getUser();
+        
+        $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            if($catser != null)
+                $catserv = $catser->getId();
+            else
+                $catserv = 0;
 
         /*COMPROBAR CODE WORKSHOP NO SE REPITA*/
         $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('partner'       => $workshopOrder->getPartner()->getId(),
@@ -1039,12 +1045,32 @@ class WorkshopOrderController extends Controller {
 
             }
             // Enviamos un mail con la solicitud a modo de backup
-            $mail = $this->container->getParameter('mail_report');
-            $pos = strpos($mail, '@');
-            if ($pos != 0) {
+            if($catserv != 3){
+                $mail = $this->container->getParameter('mail_report');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
 
-                $mailerUser->setTo($mail);
-                $mailerUser->sendMailToSpool();
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
+            } else {
+                $mail = $this->container->getParameter('mail_report_ad');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
+            }
+             if ($security->isGranted('ROLE_TOP_AD')) {
+                        
+                $mailAnne = $this->container->getParameter('mail_Anne');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+                    $mailerUser->setTo($mailAnne);
+                    $mailerUser->sendMailToSpool();
+                }
+
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -1107,12 +1133,32 @@ class WorkshopOrderController extends Controller {
 
             }
             // Enviamos un mail con la solicitud a modo de backup
-            $mail = $this->container->getParameter('mail_report');
-            $pos = strpos($mail, '@');
-            if ($pos != 0) {
+            if($catserv != 3){
+                $mail = $this->container->getParameter('mail_report');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
 
-                $mailerUser->setTo($mail);
-                $mailerUser->sendMailToSpool();
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
+            } else {
+                $mail = $this->container->getParameter('mail_report_ad');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
+            }
+             if ($security->isGranted('ROLE_TOP_AD')) {
+                        
+                $mailAnne = $this->container->getParameter('mail_Anne');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+                    $mailerUser->setTo($mailAnne);
+                    $mailerUser->sendMailToSpool();
+                }
+
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -1180,7 +1226,8 @@ class WorkshopOrderController extends Controller {
             {
                 $mailerUser->setTo($mail);
                 $mailerUser->sendMailToSpool();
-            }
+            }            
+           
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
         }
@@ -1317,8 +1364,31 @@ class WorkshopOrderController extends Controller {
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
                 }
+                if ($security->isGranted('ROLE_TOP_AD')) {
+                        
+                    $mailReportAd = $this->container->getParameter('mail_report_ad');
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
+                        $mailerUser->setTo($mailReportAd);
+                        $mailerUser->sendMailToSpool();
+                    }
 
-                $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username.'  -  '.$this->get('translator')->trans('with_password').': '.$pass;
+                    $mailAnne = $this->container->getParameter('mail_Anne');
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
+                        $mailerUser->setTo($mailAnne);
+                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $user_workshop, '__locale' => $locale)));
+                        $mailerUser->sendMailToSpool();
+                    }
+
+                }
+                
+                if ($security->isGranted('ROLE_TOP_AD') and $catserv == 3){
+                    $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
+                }
+                else{
+                    $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username.'  -  '.$this->get('translator')->trans('with_password').': '.$pass;
+                }
                 $this->get('session')->setFlash('alert', $flash);
             }
             else $this->get('session')->setFlash('error', $flash);

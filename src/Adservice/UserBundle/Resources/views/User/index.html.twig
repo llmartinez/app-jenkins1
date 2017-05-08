@@ -103,15 +103,18 @@
             <a class="btn-menu" id="listStatistics-top" href="{{ path("listStatistics_top"  ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_statistics.png') }}">
                                                                                                 {% trans %} menu.list_statistics   {% endtrans %}</a>
-        {% if id_catserv != 3 %}                                                                                     
+                                                                                          
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
                                                                                                 {% trans %} menu.list_orders         {% endtrans %}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
-        {% endif %}
+        
+        
+        {% if is_granted('ROLE_TOP_AD') %}
             <a class="btn-menu" id="user_list"              href="{{ path("user_partner_list") }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
-                                                                                                {% trans %} menu.list_users         {% endtrans %}</a>
+                                                                                                   {% trans %} menu.list_users         {% endtrans %}</a>
+        {% endif %}
         {# {% if is_granted('ROLE_SUPER_AD') %}
             <a class="btn-menu" id="listPartners" href="{{ path("partnerOrder_listpartners"  ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
