@@ -350,17 +350,7 @@ class WorkshopController extends Controller {
 
                     // Enviamos un mail con la solicitud a modo de backup
                     
-                    
-                    if ($security->isGranted('ROLE_SUPER_ADMIN')){
-                        $catserv = null;
-                    }
-                    else{
-                        $catserv = $security->getToken()->getUser()->getCategoryService();
-                    }
-                    
-                    
-                    if(isset($catserv) && $catserv->getId() == 3)
-                    {
+                    if($workshop->getCategoryService()->getId() == 3) {
                         $mail = $this->container->getParameter('mail_report_ad');
 
                         $pos = strpos($mail, '@');
@@ -369,8 +359,15 @@ class WorkshopController extends Controller {
                             $mailerUser->setTo($mail);
                             $mailerUser->sendMailToSpool();
                         }
-                    } else
-                    {
+
+                        $mailAnne = $this->container->getParameter('mail_Anne');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+                            $mailerUser->setTo($mailAnne);
+                            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $newUser, '__locale' => $locale)));
+                            $mailerUser->sendMailToSpool();
+                        }
+                    } else {
                         $mailReportAd = $this->container->getParameter('mail_report');
                         
                         $pos = strpos($mail, '@');
@@ -381,18 +378,6 @@ class WorkshopController extends Controller {
                         }
                     }
                     
-                    if ($security->isGranted('ROLE_TOP_AD')) {
-                        
-                        $mailAnne = $this->container->getParameter('mail_Anne');
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-                            $mailerUser->setTo($mailAnne);
-                            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $newUser, '__locale' => $locale)));
-                            $mailerUser->sendMailToSpool();
-                        }
-                        
-                    }
-
                     /* Dejamos el locale tal y como estaba */
                     $request->setLocale($locale);
                 }
@@ -760,9 +745,45 @@ class WorkshopController extends Controller {
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
         $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
-        //Mail to Report
-        $mailerUser->setTo($this->container->getParameter('mail_report'));
-        $mailerUser->sendMailToSpool();
+        
+
+
+//        //Mail to Report
+//        if ($security->isGranted('ROLE_SUPER_ADMIN')){
+//            $catserv = null;
+//        }
+//        else{
+//            $catserv = $security->getToken()->getUser()->getCategoryService();
+//        }
+
+
+        if($workshop->getCategoryService()->getId() == 3) {
+            $mail = $this->container->getParameter('mail_report_ad');
+
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+
+                $mailerUser->setTo($mail);
+                $mailerUser->sendMailToSpool();
+            }
+            
+            $mailAnne = $this->container->getParameter('mail_Anne');
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+                $mailerUser->setTo($mailAnne);
+                $mailerUser->sendMailToSpool();
+            }
+        } else {
+            $mailReportAd = $this->container->getParameter('mail_report');
+
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+
+                $mailerUser->setTo($mailReportAd);
+                $mailerUser->sendMailToSpool();
+            }
+        }
+        
 
         return $this->redirect($this->generateUrl('workshop_list'));
     }
