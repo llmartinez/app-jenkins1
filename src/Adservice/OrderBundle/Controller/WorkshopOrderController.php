@@ -1044,33 +1044,34 @@ class WorkshopOrderController extends Controller {
                 // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
 
             }
-            // Enviamos un mail con la solicitud a modo de backup
-            if($catserv != 3){
-                $mail = $this->container->getParameter('mail_report');
-                $pos = strpos($mail, '@');
-                if ($pos != 0) {
-
-                    $mailerUser->setTo($mail);
-                    $mailerUser->sendMailToSpool();
-                }
-            } else {
+            
+            if($workshop->getCategoryService()->getId() == 3) {
                 $mail = $this->container->getParameter('mail_report_ad');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
                     $mailerUser->setTo($mail);
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $locale)));
                     $mailerUser->sendMailToSpool();
                 }
-            }
-             if ($security->isGranted('ROLE_TOP_AD')) {
-                        
+                
                 $mailAnne = $this->container->getParameter('mail_Anne');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
                     $mailerUser->setTo($mailAnne);
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $locale)));
                     $mailerUser->sendMailToSpool();
                 }
 
+            }
+            else {
+                 $mail = $this->container->getParameter('mail_report');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -1133,32 +1134,34 @@ class WorkshopOrderController extends Controller {
 
             }
             // Enviamos un mail con la solicitud a modo de backup
-            if($catserv != 3){
-                $mail = $this->container->getParameter('mail_report');
-                $pos = strpos($mail, '@');
-                if ($pos != 0) {
-
-                    $mailerUser->setTo($mail);
-                    $mailerUser->sendMailToSpool();
-                }
-            } else {
+          
+            if($workshop->getCategoryService()->getId() == 3) {
                 $mail = $this->container->getParameter('mail_report_ad');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
 
                     $mailerUser->setTo($mail);
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => "fr_FR")));
                     $mailerUser->sendMailToSpool();
                 }
-            }
-             if ($security->isGranted('ROLE_TOP_AD')) {
-                        
+                
                 $mailAnne = $this->container->getParameter('mail_Anne');
                 $pos = strpos($mail, '@');
                 if ($pos != 0) {
                     $mailerUser->setTo($mailAnne);
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => "es_ES")));
                     $mailerUser->sendMailToSpool();
                 }
 
+            }
+            else {
+                 $mail = $this->container->getParameter('mail_report');
+                $pos = strpos($mail, '@');
+                if ($pos != 0) {
+
+                    $mailerUser->setTo($mail);
+                    $mailerUser->sendMailToSpool();
+                }
             }
             // Dejamos el locale tal y como estaba
             $request->setLocale($locale);
@@ -1364,15 +1367,17 @@ class WorkshopOrderController extends Controller {
                     // Dejamos el locale tal y como estaba
                     $request->setLocale($locale);
                 }
-                if ($security->isGranted('ROLE_TOP_AD')) {
-                        
-                    $mailReportAd = $this->container->getParameter('mail_report_ad');
+                
+                if($workshop->getCategoryService()->getId() == 3) {
+                    
+                    $mail = $this->container->getParameter('mail_report_ad');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
-                        $mailerUser->setTo($mailReportAd);
+
+                        $mailerUser->setTo($mail);
                         $mailerUser->sendMailToSpool();
                     }
-
+                    
                     $mailAnne = $this->container->getParameter('mail_Anne');
                     $pos = strpos($mail, '@');
                     if ($pos != 0) {
@@ -1380,7 +1385,15 @@ class WorkshopOrderController extends Controller {
                         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $user_workshop, '__locale' => $locale)));
                         $mailerUser->sendMailToSpool();
                     }
+                }  
+                else {
+                    $mail = $this->container->getParameter('mail_report');
+                    $pos = strpos($mail, '@');
+                    if ($pos != 0) {
 
+                        $mailerUser->setTo($mail);
+                        $mailerUser->sendMailToSpool();
+                    }               
                 }
                 
                 if ($security->isGranted('ROLE_TOP_AD') and $catserv == 3){
@@ -1421,8 +1434,14 @@ class WorkshopOrderController extends Controller {
 
                 // Copia del mail de confirmacion a modo de backup
                 //
+                if($workshop->getCategoryService()->getId() == 3) {
+                    $request->setLocale('fr_FR');
+                    $mail = $this->container->getParameter('mail_report_ad');
+                } else {
+                    $request->setLocale('es_ES');
+                    $mail = $this->container->getParameter('mail_report');
+                }
                 $mail = $this->container->getParameter('mail_report');
-                $request->setLocale('es_ES');
                 $mailer->setTo($mail);
                 $mailer->sendMailToSpool();
 
