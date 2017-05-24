@@ -14,6 +14,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Form\WorkshopObservationType;
+use Adservice\WorkshopBundle\Form\WorkshopDeactivateObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
@@ -432,7 +433,7 @@ class WorkshopController extends Controller {
                     'form_name' => $form->getName(),
                     'form' => $form->createView(),
                     'catserv' => $catserv,
-                        // 'locations'          => UtilController::getLocations($em),
+                    // 'locations'          => UtilController::getLocations($em),
         ));
     }
 
@@ -685,6 +686,42 @@ class WorkshopController extends Controller {
                     'form' => $form->createView()));
     }
 
+    public function workshopDeactivateObservationAction($workshop_id)
+    {
+        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false) {
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
+        if($workshop)
+        {
+            $request = $this->getRequest();
+            $form = $this->createForm(new WorkshopDeactivateObservationType(), $workshop);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+
+                if ($form->isValid()) {
+
+                    $em->persist($workshop);
+                    $em->flush();
+
+                    $this->deactivateActivateWorkshopAction($workshop->getId());
+
+                    return $this->redirect($this->generateUrl('workshop_list'));
+                }
+            }
+            return $this->render('WorkshopBundle:Workshop:workshop_deactivate_observation.html.twig', array('workshop' => $workshop,
+                        'form_name' => $form->getName(),
+                        'form' => $form->createView()));
+        }
+        else
+        {
+            return $this->redirect($this->generateUrl('workshop_list'));
+        }
+    }
+
     public function deactivateActivateWorkshopAction($workshop_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -746,8 +783,6 @@ class WorkshopController extends Controller {
         $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
         
-
-
 //        //Mail to Report
 //        if ($security->isGranted('ROLE_SUPER_ADMIN')){
 //            $catserv = null;
@@ -755,7 +790,6 @@ class WorkshopController extends Controller {
 //        else{
 //            $catserv = $security->getToken()->getUser()->getCategoryService();
 //        }
-
 
         if($workshop->getCategoryService()->getId() == 3) {
             $mail = $this->container->getParameter('mail_report_ad');
@@ -771,6 +805,7 @@ class WorkshopController extends Controller {
             $pos = strpos($mail, '@');
             if ($pos != 0) {
                 $mailerUser->setTo($mailAnne);
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_status_mail_anne.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
                 $mailerUser->sendMailToSpool();
             }
         } else {

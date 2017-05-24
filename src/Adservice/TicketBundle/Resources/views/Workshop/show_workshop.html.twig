@@ -85,7 +85,7 @@
 	</div>
 
 	{# OBERVATIONS #}
-	{% if is_granted('ROLE_ADMIN') %}
+	{% if is_granted('ROLE_AD') %}
 		{% set observation = workshop.observationAdmin %}
 	{% elseif is_granted('ROLE_ASSESSOR') %}
 		{% set observation = workshop.observationAssessor %}
