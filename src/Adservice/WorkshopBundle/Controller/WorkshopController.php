@@ -433,7 +433,7 @@ class WorkshopController extends Controller {
                     'form_name' => $form->getName(),
                     'form' => $form->createView(),
                     'catserv' => $catserv,
-                        // 'locations'          => UtilController::getLocations($em),
+                    // 'locations'          => UtilController::getLocations($em),
         ));
     }
 
@@ -783,8 +783,6 @@ class WorkshopController extends Controller {
         $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
         
-
-
 //        //Mail to Report
 //        if ($security->isGranted('ROLE_SUPER_ADMIN')){
 //            $catserv = null;
@@ -792,7 +790,6 @@ class WorkshopController extends Controller {
 //        else{
 //            $catserv = $security->getToken()->getUser()->getCategoryService();
 //        }
-
 
         if($workshop->getCategoryService()->getId() == 3) {
             $mail = $this->container->getParameter('mail_report_ad');
@@ -808,6 +805,7 @@ class WorkshopController extends Controller {
             $pos = strpos($mail, '@');
             if ($pos != 0) {
                 $mailerUser->setTo($mailAnne);
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_status_mail_anne.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
                 $mailerUser->sendMailToSpool();
             }
         } else {
