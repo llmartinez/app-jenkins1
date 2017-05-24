@@ -70,7 +70,7 @@
             <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}update_at {% endtrans %}</b></td><td> {% if workshop.updateAt %}{{ workshop.updateAt|date("d/m/Y") }}{% endif %}</td></tr>
             <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}lowdate_at{% endtrans %}</b></td><td> {% if workshop.lowdateAt %}{{ workshop.lowdateAt|date("d/m/Y") }}{% endif %}</td></tr>
             <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} active   {% endtrans %}</b></td><td> {% if workshop.active %}{{'yes'|trans }}{% else %}{{'no'|trans }}{% endif %}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} observations {% endtrans %}</b></td><td> <b>{{workshop.observationAdmin}}</b></td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} observations {% endtrans %}</b></td><td>{{workshop.observationAdmin}}</td></tr>
         </table>
             <tr><td valign="middle" align="center" style="{{css_style}}">
                 {% if workshop.test == 1 %}
