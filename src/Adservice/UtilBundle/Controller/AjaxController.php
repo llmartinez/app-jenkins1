@@ -90,7 +90,7 @@ class AjaxController extends Controller
         $id_catserv = $petition->request->get('id_catserv');
 
         $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
-        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ";
+        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ORDER by p.name";
 
         $consulta = $em->createQuery($query);
         $partners   = $consulta->getResult();

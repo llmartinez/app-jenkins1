@@ -12,7 +12,7 @@ use Adservice\UtilBundle\Entity\Region;
  * Adservice\OrderBundle\Entity\Workshop
  *
  * @ORM\Table(name="workshop_order")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\OrderBundle\Entity\WorkshopOrderRepository")
  */
 class WorkshopOrder {
 

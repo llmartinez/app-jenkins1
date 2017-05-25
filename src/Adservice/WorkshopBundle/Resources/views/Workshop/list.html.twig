@@ -33,15 +33,16 @@
             <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} workshop {% endtrans %}">
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
-        <div class="grid w10 form-group pd0"> <label> {% trans %} country {% endtrans %} </label>
-            <select id="flt_country" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
-                {% for country in countries %}
-                    <option value="{{ country.id }}">{{ country | trans }}</option>
-                {% endfor %}
-        </select></div>
-        
+        {% if is_granted('ROLE_TOP_AD') %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="grid w10 form-group pd0"> <label> {% trans %} country {% endtrans %} </label>
+                    <select id="flt_country" class='form-control'>
+                            <option value="0">{% trans %} all {% endtrans %}</option>
+                        {% for country in countries %}
+                            <option value="{{ country.id }}">{{ country | trans }}</option>
+                        {% endfor %}
+                </select></div>
+            {% endif %}
           {% if not is_granted('ROLE_SUPER_ADMIN') %}
               <div class="grid w15 form-group pd0">
                   <label> {% trans %} category_service {% endtrans %} </label>
@@ -90,6 +91,8 @@
                         <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
                         <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
                         <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+                        <option value="postal_code"  {% if term == 'postal_code'  %}selected{% endif %}>{% trans %} postal_code   {% endtrans %}</option>
+                        <option value="city"  {% if term == 'city'  %}selected{% endif %}>{% trans %} city   {% endtrans %}</option>
                      </select>
                 </div>
                 <div class="col-xs-5 col-md-5 form-group" style="margin-top: 21px;margin-left: -25px;">
