@@ -1318,6 +1318,8 @@ class TicketController extends Controller {
 
                     if ($formP->isValid() and $formD->isValid()) {
 
+                        if($post->getMessage() == null) $post->setMessage(' ');
+
                         if ($security->isGranted('ROLE_ASSESSOR')) {
 
                             if ($id_subsystem != '0' and ( $ticket->getSubsystem() == null or $ticket->getSubsystem()->getId() != $id_subsystem)) {
