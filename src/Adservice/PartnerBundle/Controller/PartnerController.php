@@ -61,8 +61,8 @@ class PartnerController extends Controller {
         if($catserv != 0) {
             $params[] = array('category_service', ' = '.$catserv);
         }
-
-        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination);
+        $ordered = array('e.name', ' ASC');
+        $partners = $pagination->getRows($em, 'PartnerBundle', 'Partner', $params, $pagination, $ordered);
         $length   = $pagination->getRowsLength($em, 'PartnerBundle', 'Partner', $params);
 
         $pagination->setTotalPagByLength($length);

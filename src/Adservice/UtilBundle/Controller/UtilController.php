@@ -6,6 +6,7 @@ use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
+use Adservice\OrderBundle\Entity\WorkshopOrder;
 
 class UtilController extends Controller
 {
@@ -57,8 +58,6 @@ class UtilController extends Controller
      * @param  string $cadena
      * @param  string $separador
      * @return string
-
-
      */
     static public function getSlug($cadena, $separador = '-')
     {
@@ -155,17 +154,22 @@ class UtilController extends Controller
         {
             $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
             if($find == null) {
-                $unused = 'unused';
-                $code   = $code_workshop;
+                $find   = $em->getRepository('OrderBundle:WorkshopOrder'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
+                if($find == null) {
+                    $unused = 'unused';
+                    $code   = $code_workshop;
+                }
             }
         }
-   
         if($unused != 'unused') 
         {     
             $code = $find   = $em->getRepository('WorkshopBundle:Workshop'  )->getMaxIdByCodePartner($code_partner);
+            $code_order = $find = $em->getRepository('OrderBundle:WorkshopOrder'  )->getMaxIdByCodePartner($code_partner);
+            if($code_order > $code){
+                $code = $code_order;
+            }
             $code++;
         }
-        
         return $code;
     }
 

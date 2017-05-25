@@ -48,6 +48,10 @@ class WorkshopController extends Controller {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             } elseif ($term == 'cif') {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
+            } elseif ($term == 'postal_code') {
+                $params[] = array($term, " LIKE '%" . $field . "%'");
+            } elseif ($term == 'city') {
+                $params[] = array($term, " LIKE '%" . $field . "%'");
             }
         }
         if ($security->isGranted('ROLE_ADMIN')) {
