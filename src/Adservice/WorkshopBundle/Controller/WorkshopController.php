@@ -148,12 +148,12 @@ class WorkshopController extends Controller {
 
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
-            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv),array('name' => 'ASC'));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll(array('name' => 'ASC'));
         } else {
             $country_id = $security->getToken()->getUser()->getCountry()->getId();
-            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id));
-            else              $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country_id);
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id),array('name' => 'ASC'));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $country_id), array('name' => 'ASC'));
         }
 
         $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
