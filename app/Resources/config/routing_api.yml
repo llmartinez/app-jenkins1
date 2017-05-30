@@ -1,0 +1,4 @@
+# DEFAULT
+getUser:
+    path:  /get-user/{user_id}
+    defaults: { _controller: ApiBundle:Api:getUser, user_id: null }

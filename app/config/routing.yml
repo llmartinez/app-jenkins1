@@ -1,17 +1,14 @@
 app:
-    resource: "config/routing.yml"
-    prefix:   /{_locale}
+    resource: '@AppBundle/Controller/'
+    type: annotation
+    prefix: /
 
-ajax:
-    resource: "config/routing_ajax.yml"
-    prefix:   /ajax
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
 
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
-
-default:
-    path:  /
-    defaults: { _controller: AppBundle:Default:index  }
-
-logout:
-    path:   /logout
+api:
+    resource: "config/routing_api.yml"
+    prefix: /{_locale}/api
+    requirements:
+        _locale: en|fr|es|pt

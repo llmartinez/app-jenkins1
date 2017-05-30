@@ -1,4 +1,0 @@
-<ul>
-	{% if not is_granted('ROLE_HIDE_ORDER') %}<li>{{'orders'|trans}}</li>{% endif %}
-	{% if not is_granted('ROLE_HIDE_USER') %}<li>{{'workshops'|trans}}</li>{% endif %}
-</ul>

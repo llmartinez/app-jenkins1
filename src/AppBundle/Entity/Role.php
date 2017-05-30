@@ -6,19 +6,19 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AppBundle\Entity\Role
+ * AAppBundle\Entity\Role
  *
  * @ORM\Table(name="role")
  * @ORM\Entity
  */
-class Role implements RoleInterface
-{
+class Role implements RoleInterface {
+
     /**
      * @var integer $id
      *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      */
     private $id;
 
@@ -32,7 +32,7 @@ class Role implements RoleInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -50,7 +50,7 @@ class Role implements RoleInterface
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;

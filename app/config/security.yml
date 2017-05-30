@@ -2,23 +2,15 @@
 # http://symfony.com/doc/current/security.html
 security:
 
-    encoders:
-        AppBundle\Entity\User:
-            algorithm: bcrypt
-            # algorithm: sha512
-            # encode_as_base64: false
-            # iterations: 10
-
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
-        users:
+#        in_memory:
+#            memory: ~
+        user_provider:
             entity:
                 class: AppBundle:User
-                property: username
-                # if you're using multiple entity managers
-                # manager_name: customer
+                property: token
+
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -26,48 +18,26 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
-            pattern:    ^/
-            http_basic: ~
-            provider: users
+        # Api firewall, will take care of all /api/* requests via the authenticator
+        api:
+            pattern: ^/(es|en|fr)/api/*
+            security: true
+            # Need anonymus acces for the /public part of the API. If not given,
+            # authentication required message will show (which is not correct for
+            #/api/public requests)
             anonymous: ~
-            form_login:
-                login_path: login
-                check_path: login
-                default_target_path: index
-            logout:
-                path:   /logout
-                target: /
-                invalidate_session: false
+            guard:
+                authenticators:
+                    - app.token_authenticator
 
-                # csrf_token_generator: security.csrf.token_manager
-                # You can change the name of the field by setting csrf_parameter and change the token ID by setting csrf_token_id in your configuration:
-                # csrf_parameter: _csrf_security_token
-                # csrf_token_id: a_private_string
+        main:
+            anonymous: ~
+            logout: ~
+
+            # activate different ways to authenticate
+
+            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
-    role_hierarchy:
-        ROLE_GOD:           ROLE_SUPER_ADMIN
-        ROLE_SUPER_ADMIN:   ROLE_ADMIN
-        ROLE_ADMIN:         [ ROLE_ADVISER, ROLE_TOP ]
-        ROLE_TOP:           ROLE_SUPER_PARTNER
-        ROLE_SUPER_PARTNER: ROLE_PARTNER
-        ROLE_PARTNER:       ROLE_COMMERCIAL
-        ROLE_COMMERCIAL:    ROLE_USER
-        ROLE_ADVISER:       ROLE_WORKSHOP
-        ROLE_WORKSHOP:      ROLE_USER
-        
-    access_control:
-      - { path: ^/(es|en|fr|pt)/login,                    roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/autologin,                roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/changeLang,               roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/help,                     roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/(es|en|fr|pt)/users/user-new/(1|2|10),  roles: ROLE_GOD           } # 1-GOD|2-SA|10-USER  
-      - { path: ^/(es|en|fr|pt)/users/user-new/(3|4|8|9), roles: ROLE_ADMIN         } # 3-AD|4-TOP|8-ADVISER|9-WORKSHOP
-      - { path: ^/(es|en|fr|pt)/users/user-new/5,         roles: ROLE_TOP           } # 5-SP
-      - { path: ^/(es|en|fr|pt)/users/user-new/6,         roles: ROLE_SUPER_PARTNER } # 6-PARTNER
-      - { path: ^/(es|en|fr|pt)/users/user-new/7,         roles: ROLE_PARTNER       } # 7-COMM
-      - { path: ^/(es|en|fr|pt)/users,                    roles: ROLE_PARTNER  }
-      - { path: ^/(es|en|fr|pt)/ticket,                   roles: ROLE_WORKSHOP }
-      - { path: ^/(es|en|fr|pt),                          roles: ROLE_USER }
-      - { path: ^/,                                       roles: ROLE_USER }
+            #form_login: ~
