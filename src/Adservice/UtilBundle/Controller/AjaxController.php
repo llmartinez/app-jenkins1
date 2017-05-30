@@ -723,7 +723,7 @@ class AjaxController extends Controller
         $id_country  = $petition->request->get('id_country');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-
+        
         if (sizeOf($id_model) == 1 and $id_model != ""
             and sizeOf($id_subsystem) == 1 and $id_subsystem != ""
             and sizeOf($id_country) == 1 and $id_country != "") {
@@ -748,7 +748,9 @@ class AjaxController extends Controller
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
-
+        if(!isset($json)){
+            $json = array( 'error' => 'No hay coincidencias');
+        }
         return new Response(json_encode($json), $status = 200);
     }
 
