@@ -14,6 +14,7 @@ use Adservice\UserBundle\Entity\User;
 use Adservice\WorkshopBundle\Entity\Workshop;
 use Adservice\WorkshopBundle\Form\WorkshopType;
 use Adservice\WorkshopBundle\Form\WorkshopObservationType;
+use Adservice\WorkshopBundle\Form\WorkshopDeactivateObservationType;
 use Adservice\WorkshopBundle\Entity\TypologyRepository;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachineRepository;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
@@ -46,6 +47,10 @@ class WorkshopController extends Controller {
             } elseif ($term == 'name') {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             } elseif ($term == 'cif') {
+                $params[] = array($term, " LIKE '%" . $field . "%'");
+            } elseif ($term == 'postal_code') {
+                $params[] = array($term, " LIKE '%" . $field . "%'");
+            } elseif ($term == 'city') {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             }
         }
@@ -143,12 +148,12 @@ class WorkshopController extends Controller {
 
         if ($security->isGranted('ROLE_SUPER_ADMIN')) {
 
-            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
-            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv),array('name' => 'ASC'));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll(array('name' => 'ASC'));
         } else {
             $country_id = $security->getToken()->getUser()->getCountry()->getId();
-            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id));
-            else              $partners = $em->getRepository('PartnerBundle:Partner')->findByCountry($country_id);
+            if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id),array('name' => 'ASC'));
+            else              $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $country_id), array('name' => 'ASC'));
         }
 
         $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
@@ -217,18 +222,24 @@ class WorkshopController extends Controller {
         $form = $this->createForm(new WorkshopType(), $workshop);
 
         if ($request->getMethod() == 'POST') {
-
+            
             $form->bindRequest($request);
             if($workshop->getRegion() == null){
                 $workshop->setRegion('-');
             }
-            $partner = $workshop->getPartner();
-
+            $partner_id = $request->request->get('adservice_workshopbundle_workshoptype')['partner'];
+            $partner = $em->getRepository("PartnerBundle:Partner")->findOneById($partner_id);
+            
+            $code_partner = $request->request->get('code_partner');
+            $workshop->setCodePartner($code_partner);
+            $workshop->setPartner($partner);
+            
             $code = UtilController::getCodeWorkshopUnused($em, $workshop->getCodePartner(), $workshop->getCodeWorkshop());  /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
 
             $workshop->setActive(1);
             /* COMPRUEBA CODE WORKSHOP NO SE REPITA */
-            $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $partner->getCodePartner(),
+           
+            $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $workshop->getCodePartner(),
                                                                                    'code_workshop' => $workshop->getCodeWorkshop()));
             $findPhone = array(0, 0, 0, 0);
             if ($workshop->getPhoneNumber1() != null) {
@@ -268,7 +279,7 @@ class WorkshopController extends Controller {
                 //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
                 if ($workshop->getAdServicePlus()) {
                     $adsplus = new ADSPlus();
-                    $adsplus->setIdTallerADS($workshop->getID());
+                    $adsplus->setIdTallerADS($workshop->getId());
                     $dateI = new \DateTime('now');
                     $dateF = new \DateTime('+2 year');
                     $adsplus->setAltaInicial($dateI->format('Y-m-d'));
@@ -343,14 +354,35 @@ class WorkshopController extends Controller {
                     //echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $newUser, 'password' => $pass));die;
 
                     // Enviamos un mail con la solicitud a modo de backup
-                    $mail = $this->container->getParameter('mail_db');
-                    $pos = strpos($mail, '@');
-                    if ($pos != 0) {
+                    
+                    if($workshop->getCategoryService()->getId() == 3) {
+                        $mail = $this->container->getParameter('mail_report_ad');
 
-                        $mailerUser->setTo($mail);
-                        $mailerUser->sendMailToSpool();
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+
+                            $mailerUser->setTo($mail);
+                            $mailerUser->sendMailToSpool();
+                        }
+
+                        $mailAnne = $this->container->getParameter('mail_Anne');
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+                            $mailerUser->setTo($mailAnne);
+                            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $newUser, '__locale' => $locale)));
+                            $mailerUser->sendMailToSpool();
+                        }
+                    } else {
+                        $mailReportAd = $this->container->getParameter('mail_report');
+                        
+                        $pos = strpos($mail, '@');
+                        if ($pos != 0) {
+                        
+                            $mailerUser->setTo($mailReportAd);
+                            $mailerUser->sendMailToSpool();
+                        }
                     }
-
+                    
                     /* Dejamos el locale tal y como estaba */
                     $request->setLocale($locale);
                 }
@@ -405,7 +437,7 @@ class WorkshopController extends Controller {
                     'form_name' => $form->getName(),
                     'form' => $form->createView(),
                     'catserv' => $catserv,
-                        // 'locations'          => UtilController::getLocations($em),
+                    // 'locations'          => UtilController::getLocations($em),
         ));
     }
 
@@ -467,7 +499,6 @@ class WorkshopController extends Controller {
         if ($petition->getMethod() == 'POST') {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
-
             //if ($form->isValid()) {
 
                 /* CHECK CODE WORKSHOP NO SE REPITA */
@@ -514,7 +545,7 @@ class WorkshopController extends Controller {
                     if($actual_test != $workshop->getTest()){
                         UtilController::createHistorical($em, $workshop, $status);
                     }
-                    if ($security->isGranted('ROLE_ADMIN'))
+                    if ($security->isGranted('ROLE_TOP_AD'))
                         return $this->redirect($this->generateUrl('workshop_list'));
                     elseif ($security->isGranted('ROLE_ASSESSOR'))
                         return $this->redirect($this->generateUrl('listTicket'));
@@ -659,6 +690,42 @@ class WorkshopController extends Controller {
                     'form' => $form->createView()));
     }
 
+    public function workshopDeactivateObservationAction($workshop_id)
+    {
+        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false) {
+            throw new AccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
+        if($workshop)
+        {
+            $request = $this->getRequest();
+            $form = $this->createForm(new WorkshopDeactivateObservationType(), $workshop);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+
+                if ($form->isValid()) {
+
+                    $em->persist($workshop);
+                    $em->flush();
+
+                    $this->deactivateActivateWorkshopAction($workshop->getId());
+
+                    return $this->redirect($this->generateUrl('workshop_list'));
+                }
+            }
+            return $this->render('WorkshopBundle:Workshop:workshop_deactivate_observation.html.twig', array('workshop' => $workshop,
+                        'form_name' => $form->getName(),
+                        'form' => $form->createView()));
+        }
+        else
+        {
+            return $this->redirect($this->generateUrl('workshop_list'));
+        }
+    }
+
     public function deactivateActivateWorkshopAction($workshop_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -719,9 +786,43 @@ class WorkshopController extends Controller {
         $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
         $mailerUser->sendMailToSpool();
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
-        //Mail to Report
-        $mailerUser->setTo($this->container->getParameter('mail_report'));
-        $mailerUser->sendMailToSpool();
+        
+//        //Mail to Report
+//        if ($security->isGranted('ROLE_SUPER_ADMIN')){
+//            $catserv = null;
+//        }
+//        else{
+//            $catserv = $security->getToken()->getUser()->getCategoryService();
+//        }
+
+        if($workshop->getCategoryService()->getId() == 3) {
+            $mail = $this->container->getParameter('mail_report_ad');
+
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+
+                $mailerUser->setTo($mail);
+                $mailerUser->sendMailToSpool();
+            }
+            
+            $mailAnne = $this->container->getParameter('mail_Anne');
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+                $mailerUser->setTo($mailAnne);
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_status_mail_anne.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
+                $mailerUser->sendMailToSpool();
+            }
+        } else {
+            $mailReportAd = $this->container->getParameter('mail_report');
+
+            $pos = strpos($mail, '@');
+            if ($pos != 0) {
+
+                $mailerUser->setTo($mailReportAd);
+                $mailerUser->sendMailToSpool();
+            }
+        }
+        
 
         return $this->redirect($this->generateUrl('workshop_list'));
     }

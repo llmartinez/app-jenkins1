@@ -1,0 +1,87 @@
+{# empty Twig template #}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body style="color: #000000; margin: 0; font-family: Verdana, Geneva, sans-serif; background-color: #FFF;">
+<table style="width:100%; height:50; border:0; color: #FFFFFF; font-family: Verdana, Geneva, sans-serif; font-size: 20px; font-weight: bold; background-color: #428bca; text-align: center;">
+    <tr><td width="100%" height="50" valign="middle">
+
+        {% set workshop = user.workshop %}
+        {% set css_style = "color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;" %}
+        
+        {% set url_logo = route_logo_mail ~ '.png' %}
+        <img src="{{ asset(url_logo) }}" style="height: 60px;">
+        <br>
+        {% trans %} mail.newUser.title {% endtrans %}
+    </td></tr>
+</table>
+<table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
+    <tr><td height="150" valign="middle" align="center">
+{#
+        {% set url_logo = route_logo_mail ~ '.png' %}
+        <img src="{{ asset(url_logo) }}" style="height: 60px;margin-right: 20px;">
+#}
+        {% if app.security.getToken().getUser() != "anon." and user.categoryService != null %}
+            {% set url_logo_catserv = route_logo_mail ~ '_' ~ user.categoryService.slug ~ '.png' %}
+            <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
+        {% endif %}
+    </td></tr>
+
+    <tr><td valign="middle" align="center" style="{{css_style}}">
+         {% if user.modifiedBy.roles[0] == 'ROLE_ADMIN' %} {% trans %} mail.newUser.createdby {% endtrans %}{% endif %}
+    </td></tr>
+
+    <tr><td valign="middle" align="center" style="">
+        {% trans %} mail.newUser.info.id {% endtrans %}
+    </td></tr>
+    <tr><td valign="middle" align="center" style="{{css_style}}">
+        <h2>{{ workshop.codepartner }} - {{ workshop.codeworkshop }}</h2>
+    </td></tr>
+    <tr><td valign="middle" align="center" style="{{css_style}}">
+        <table>
+            <h3>{% trans %} datauser {% endtrans %}:</h3>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} username          {% endtrans %}</b></td><td>{{ user.username }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} typology          {% endtrans %}</b></td><td>{{ workshop.typology }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} address           {% endtrans %}</b></td><td>{{ user.address }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} city              {% endtrans %}</b></td><td>{{ user.city }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} region            {% endtrans %}</b></td><td>{{ user.region }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} phone_number_1    {% endtrans %}</b></td><td>{{ user.phoneNumber1 }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} phone_number_2    {% endtrans %}</b></td><td>{{ user.phoneNumber2 }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} mobile_number_1   {% endtrans %}</b></td><td>{{ user.mobileNumber1 }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} mobile_number_2   {% endtrans %}</b></td><td>{{ user.mobileNumber2 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} email_1           {% endtrans %}</b></td><td>{{ user.email1 }}</td></tr>  
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} email_2           {% endtrans %}</b></td><td>{{ user.email2 }}</td></tr>     
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} fax               {% endtrans %}</b></td><td>{{ user.fax }}</td></tr>      
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} contact  {% endtrans %}</b></td><td>{{ user.name }} {{ user.surname }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}created_at{% endtrans %}</b></td><td>{{ workshop.createdAt|date("d/m/Y") }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}update_at {% endtrans %}</b></td><td>{% if workshop.updateAt %}{{ workshop.updateAt|date("d/m/Y") }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}lowdate_at{% endtrans %}</b></td><td>{% if workshop.lowdateAt %}{{ workshop.lowdateAt|date("d/m/Y") }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} active   {% endtrans %}</b></td><td>{% if workshop.active %}{{'yes'|trans }}{% else %}{{'no'|trans }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} observations {% endtrans %}</b></td><td>{{workshop.observationAdmin}}</td></tr>
+        </table>
+    </td></tr>
+    <tr><td valign="middle" align="center" style="{{css_style}} padding-top: 20px;">
+        {% trans %} mail.newUser.info.password {% endtrans %}"<b>{% trans %} menu.profile {% endtrans %}</b>"
+    </td></tr>
+    <tr><td valign="middle" align="center" style="{{css_style}}">
+        {% trans %} mail.newUser.info {% endtrans %}{% trans %} mail.newUser.info.tel {% endtrans %}{% trans %} mail.info.tel {% endtrans %}
+    </td></tr>
+</table>
+
+<hr>
+
+</table>
+<table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} footerText {% endtrans %}
+    </td></tr>
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} termsConditions {% endtrans %}
+    </td></tr>
+    <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
+        {% trans %} mail.textDisclaimer {% endtrans %}
+    </td></tr>
+</table>
+</body>
+</html>

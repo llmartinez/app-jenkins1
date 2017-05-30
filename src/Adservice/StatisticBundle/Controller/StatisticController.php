@@ -1978,9 +1978,9 @@ class StatisticController extends Controller {
             if(isset($row['motorCar'])) $excel.=$row['motorCar'].';';
             else $excel.=' ;';
 
-            if(isset($row['system'])) $excel.=$row['system'].';';
+            if(isset($row['system'])) $excel.= $this->get('translator')->trans($row['system']).';';
             else $excel.=' ;';
-            if(isset($row['subsystem'])) $excel.=$row['subsystem'].';';
+            if(isset($row['subsystem'])) $excel.=$this->get('translator')->trans($row['subsystem']).';';
             else $excel.=' ;';
 
             if(isset($row['description'])) $description = $row['description'];

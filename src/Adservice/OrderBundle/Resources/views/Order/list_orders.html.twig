@@ -30,7 +30,7 @@
 
     {% if is_granted('ROLE_AD') %}
 
-    {### ORDER WORKSHOP ##########################}
+    {### ORDER WORKSHOP #########################}
 
         <button onclick="window.open('{{ path(route, { 'option': 'workshop_pending'  }) }}','_self')" class="btn-primary">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
@@ -45,7 +45,7 @@
 
         {% if id_catserv != 3 %}
 
-    {### ORDER SHOP ##########################}
+    {### ORDER SHOP #########################}
 
             <button onclick="window.open('{{ path(route, { 'option': 'shop_pending'      }) }}','_self')" class="btn-primary">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
@@ -62,9 +62,9 @@
 
     {% endif %}
 
-    {### PREORDER WORKSHOP ##########################}
+    {### PREORDER WORKSHOP #########################}
 
-    {% if not is_granted('ROLE_ADMIN') %}
+    {% if not is_granted('ROLE_ADMIN') and not(is_granted('ROLE_TOP_AD') and id_catserv == 3) %}
         <button onclick="window.open('{{ path(route, { 'option': 'preorder_pending'  }) }}','_self')" class="btn-primary">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop.png') }}">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/order_pending.png') }}"><br> {% trans %} preorder_pending  {% endtrans %} <br>
