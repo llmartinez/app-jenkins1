@@ -10,3 +10,10 @@ services:
 
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
+
+    slugger:
+        class: AppBundle\Utils\Slugger
+    utilsUser:
+        class: AppBundle\Utils\UtilsUser
+    utilsWorkshop:
+        class: AppBundle\Utils\UtilsWorkshop
