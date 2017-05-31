@@ -212,6 +212,57 @@ die;
     }
 
     /**
+     * Get number of tickets by user id
+     *
+     * @Security("has_role('ROLE_TOP_AD')")
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      section="TICKETS",
+     *      description="Get number of tickets by user id",
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          403="Returned when the user is not authorized",
+     *          404="Resource not found"
+     *      },
+     *      headers={
+     *          {
+     *              "name"="X-AUTH-TOKEN",
+     *              "description"="Encrypted API Key.",
+     *              "required" = "true"
+     *          }
+     *      }
+     * )
+     *
+     * @param Request $request the request object
+     * @param Integer $user_id the user id
+     *
+     * @throws createNotFoundException when make id not exist
+     *
+     * @Annotations\View()
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getNumberTicketsByUserIdAction(Request $request, $workshop_id)
+    {
+        $em = $this->getDoctrine();
+
+        $query = $em->getRepository("AppBundle:Ticket")
+            ->createQueryBuilder("t")
+            ->select("count(t)")
+            ->where("t.workshop = ".$workshop_id. " and t.pending = 1");
+        $tickets =  $query->getQuery()->getResult();
+        if (!$tickets) {
+            $data = $this->throwError("Workshop with id " . $workshop_id . " not found", 404);
+            $view = $this->view($data, 404);
+        } else {
+            $data = $this->throwConfirmation($tickets[0], 200);
+            $view = $this->view($data, 200);
+        }
+        $view->setFormat('json');
+        return $this->handleView($view);
+    }
+
+    /**
      * Generate a confirmation array
      * @param $message    Text to confirm the action
      * @param $code       code confirmation 200
@@ -234,4 +285,5 @@ die;
         $data['error']['message'] = $message_error;
         return $data;
     }
+
 }
