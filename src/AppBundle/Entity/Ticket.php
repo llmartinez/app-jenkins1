@@ -1,15 +1,16 @@
 <?php
 
-namespace Adservice\TicketBundle\Entity;
+namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Workshop;
 
 /**
- * Adservice\TicketBundle\Entity\Ticket
+ * AppBundle\Entity\Ticket
  *
+ * @ORM\Entity
  * @ORM\Table(name="ticket")
- * @ORM\Entity(repositoryClass="AppBundle\Entity\TicketRepository")
  */
 class Ticket {
 
@@ -29,6 +30,12 @@ class Ticket {
      */
     private $workshop;
 
+    /**
+     * @var integer $pending
+     *
+     * @ORM\Column(name="pending", type="integer")
+     */
+    private $pending;
 
 
     /**
@@ -50,9 +57,9 @@ class Ticket {
     /**
      * Set workshop
      *
-     * @param AppBundle\Entity\Workshop $workshop
+     * @param Workshop $workshop
      */
-    public function setWorkshop(AppBundle\Entity\Workshop $workshop) {
+    public function setWorkshop(Workshop $workshop) {
         $this->workshop = $workshop;
     }
 
@@ -63,6 +70,25 @@ class Ticket {
      */
     public function getWorkshop() {
         return $this->workshop;
+    }
+
+
+    /**
+     * Set pending
+     *
+     * @param integer $pending
+     */
+    public function setPending($pending) {
+        $this->pending = $pending;
+    }
+
+    /**
+     * Get pending
+     *
+     * @return integer
+     */
+    public function getPending() {
+        return $this->pending;
     }
 
 

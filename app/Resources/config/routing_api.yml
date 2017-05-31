@@ -1,4 +1,21 @@
-# DEFAULT
-getUser:
-    path:  /get-user/{user_id}
-    defaults: { _controller: ApiBundle:Api:getUser, user_id: null }
+# WORKSHOPS
+getWorkshops:
+    path:  /workshops
+    defaults: { _controller: ApiBundle:Api:getWorkshops }
+
+getWorkshop:
+    path:  /workshop/{id}
+    defaults: { _controller: ApiBundle:Api:getWorkshop, id: null }
+
+activateWorkshop:
+    path:  /workshop/{id}/activate
+    defaults: { _controller: ApiBundle:Api:activateWorkshop, id: null }
+
+deactivateWorkshop:
+    path:  /workshop/{id}/deactivate
+    defaults: { _controller: ApiBundle:Api:deactivateWorkshop, id: null }
+
+# TICKETS
+getNumberTicketsByUserId:
+    path:  /getNumberTickets/{workshop_id}
+    defaults: { _controller: ApiBundle:Api:getNumberTicketsByUserId, workshop_id: null }
