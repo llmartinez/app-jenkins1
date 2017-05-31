@@ -1,0 +1,185 @@
+helloworld: "Salut Monde!"
+title: "Auto Diagnostic Service"
+
+# Rutas/Breadcrumb
+index: "Index"
+login: "Ouvrir une session"
+logout: "Fermer la session"
+reports: "Rapports"
+orders: "Demandes"
+popups: "Popups"
+partners: "Distributeurs"
+workshops: "Ateliers"
+shops: "Boutiques"
+typologies: "Types d'atelier"
+diagnosisMachines: "Outils de diagnostic"
+users: "Utilisateurs"
+sentences: "Requêtes"
+tickets: "Tickets"
+selectRole: "Sélectionnez Rôle"
+user_new: "Nouveau utilisateur"
+
+# ROLES
+ROLE_USER: "Utilisateur"
+ROLE_WORKSHOP: "Atelier"
+ROLE_ADVISER: "Conseiller"
+ROLE_COMMERCIAL: "Commercial"
+ROLE_PARTNER: "Distributeur"
+ROLE_SUPER_PARTNER: "Super Distributeur"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Administrateur"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "Dieu"
+
+# RESTRICTIONS
+Restriction: "Restriction"
+ROLE_HIDE_LIST: "Masquer les listes de données"
+ROLE_HIDE_CREATE: "Masquer les formes de création"
+ROLE_HIDE_ASSIGN: "Masquer les fonctions d'assigner"
+ROLE_HIDE_USER: "Masquer gestion des utilisateurs"
+ROLE_HIDE_REPORT: "Masquer gestion des rapports"
+ROLE_HIDE_ORDER: "Masquer gestion des demandes"
+ROLE_HIDE_POPUP: "Masquer gestion des popups"
+ROLE_HIDE_TICKET: "Masquer gestion des tickets"
+
+# SERVICES
+Service: "Service"
+ROLE_SERV_GED: "GED"
+ROLE_SERV_ADSERVICE_ES: "AD Service ES"
+ROLE_SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+ROLE_SERV_ADSERVICE_PT: "AD Service PT"
+ROLE_SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+ROLE_SERV_PHONE_EINA_JS: "Phone Eina JS"
+ROLE_SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+ROLE_SERV_ACTIA: "Actia"
+ROLE_SERV_NEXUS: "Nexus"
+
+# COUNTRIES
+spain: "Espagne"
+france: "France"
+portugal: "Portugal"
+ireland: "Irlande"
+uk: "Royaume-Uni"
+# andorra: "Andorre"
+# british_isles: "Îles britanniques"
+
+# LANGUAGES
+en: "Anglais"
+es: "Espagnol"
+fr: "Français"
+pt: "Portugais"
+
+# FORMS
+Username: "Utilisateur"
+Password: "Mot de passe"
+password_insert: "Insérer le mot de passe"
+password_repeat: "Répétition du mot de passe"
+password_old: "Mot de passe précédent"
+Submit: "Envoyer"
+Edit: "Edit"
+Delete: "Delete"
+search: "Rechercher"
+All: "Tous"
+SelectValue: "Sélectionner la valeur"
+searchId: "Chercher par ID"
+
+# DATATABLE
+loading: "Chargement..."
+dt_show: "Afficher"
+dt_entries: "entrées"
+dt_search: "Recherche"
+dt_showing: "Affichage"
+dt_to: "à"
+dt_of: "de"
+dt_previous: "Précédent"
+dt_next: "Suivant"
+
+# USER FIELDS
+user: "Utilisateur"
+id: "ID"
+Id: "ID"
+role: "Rôle"
+Status: "État"
+Active: "Actif"
+Inactive: "Inactif"
+Test: "À l'essai"
+Name: "Nom"
+Language: "Language"
+Country: "Pays"
+Region: "Département"
+City: "Localité"
+Address: "Adresse"
+Postal code: "Code postal"
+Phone: "Téléphone"
+Phone number1: "Tél. fixe 1"
+Phone number2: "Tél. fixe 2"
+Mobile number1: "Tél. portable 1"
+Mobile number2: "Tél. portable 2"
+Fax: "Fax"
+Email: "E-mail"
+Email1: "E-mail 1"
+Email2: "E-mail 2"
+CreatedBy: "Créé par"
+CreatedAt: "Créé à"
+ModifiedBy: "Modifié par"
+ModifiedAt: "Modifié à"
+Token: "Token"
+
+# USER
+user_update: "User modifié"
+
+# DATES
+date.day: "Jour"
+date.month: "Mois"
+date.year: "Année"
+
+# TICKET
+ticket_list: "Liste des tickets"
+ticket_new: "Nouveau ticket"
+ticket_edit: "Éditer ticket"
+ticket_delete: "Effacer ticket"
+
+#PARTNER
+Partner: "Distributeur"
+Code partner: "Code Distributeur"
+
+#WORKSHOP
+Workshop: "Atelier"
+Code workshop: "Code Atelier"
+Workshop_activated: "Atelier activé avec succès"
+Workshop_deactivated: "Atelier désactivé avec succès"
+Workshops_not_found: "Ateliers non trouvé"
+Workshop_not_found%id%: "Atelier avec id %id% n'a pas été trouvé"
+
+#TYPOLOGY
+Typology: "Type d'atelier"
+typology_new: "Nouveau type d'atelier"
+typology_deleted: "Type d'atelier supprimé"
+typology_update: "Type d'atelier modifié"
+
+#SHOP
+Shop: "Boutique"
+shop_new: "Nouveau boutique"
+shop_deleted: "Boutique supprimé"
+shop_update: "Boutique modifié"
+
+#DIAGNOSIS
+Diagnosis machine: "Outil de diagnostic"
+diagnosisMachine_new: "Nouveau outil de diagnostic"
+diagnosisMachine_deleted: "Outil de diagnostic supprimé"
+diagnosisMachine_update: "Outil de diagnostic modifié"
+
+#HELP
+help: "Aider"
+help_title: "Aider Ticketing"
+help_check_manual: "Consultez le manuel"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-fr.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# MAIL
+mail_info: "Plus d'informations:"
+datauser: "Données de l'utilisateur"
+dataworkshop: "Données de l'atelier "
+datashop: "Données du Boutique"
+mail_workshop_activated%name%: "Inscription pour l'atelier name"
+mail_workshop_deactivated%name%: "Désinscription pour l'atelier name"

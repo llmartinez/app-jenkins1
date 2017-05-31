@@ -45,12 +45,11 @@ class ApiController extends FOSRestController
         $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service);
 
         if (!$workshops) {
-            $data = $this->throwError("Workshops not found", 404);
+            $data = $this->throwError($this->get('translator')->trans('Workshops_not_found'), 404);
             $view = $this->view($data, 404);
         } else {
             $view = $this->view($workshops, 200);
         }
-        $view->setFormat('json');
         return $this->handleView($view);
     }
 
@@ -89,16 +88,13 @@ class ApiController extends FOSRestController
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
 
         $workshop = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
-dump($workshop[0]);
-die;
 
         if (!$workshop) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($this->get('translator')->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $view = $this->view($workshop, 200);
         }
-        $view->setFormat('json');
         return $this->handleView($view);
     }
 
@@ -132,14 +128,14 @@ die;
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function ActivateWorkshopAction($id)
+    public function putWorkshopActivateAction($id)
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
-
         $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
+        $trans = $this->get('translator');
 
         if (!$workshops) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $workshop = $workshops[0];
@@ -149,11 +145,19 @@ die;
             $em->persist($workshop);
             $em->flush();
 
-            $data = $this->throwConfirmation("Workshop with id " . $id . " activated", 200);
-//throwEmail
+            //Send Mail
+            $message = new \Swift_Message('Auto Diagnostic Service | '.$trans->trans('mail_workshop_activated%name%', array("name" => $workshop->getName())));
+            $message->setFrom($this->container->getParameter('mail_noreply'))
+                ->setTo($workshop->getEmail1())
+                ->setBody($this->renderView('Emails/workshop_activate.html.twig',array('workshop' => $workshop)), 'text/html');
+            // echo $this->renderView('Emails/workshop_activate.html.twig', array('workshop' => $workshop));die;
+            $this->get('mailer')->send($message);
+
+            // $data = $this->throwConfirmation("Workshop with id " . $id . " activated", 200);
+            $data = $this->throwConfirmation($trans->trans('Workshop_activated'), 200);
             $view = $this->view($data, 200);
         }
-        $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -187,14 +191,14 @@ die;
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function DeactivateWorkshopAction($id)
+    public function putWorkshopDeactivateAction($id)
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
-
         $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
+        $trans = $this->get('translator');
 
         if (!$workshops) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $workshop = $workshops[0];
@@ -204,10 +208,18 @@ die;
             $em->persist($workshop);
             $em->flush();
 
-            $data = $this->throwConfirmation("Workshop with id " . $id . " deactivated", 200);
+            //Send Mail
+            $message = new \Swift_Message('Auto Diagnostic Service | '.$trans->trans('mail_workshop_deactivated%name%', array("name" => $workshop->getName())));
+            $message->setFrom($this->container->getParameter('mail_noreply'))
+                ->setTo($workshop->getEmail1())
+                ->setBody($this->renderView('Emails/workshop_deactivate.html.twig',array('workshop' => $workshop)), 'text/html');
+            // echo $this->renderView('Emails/workshop_deactivate.html.twig', array('workshop' => $workshop));die;
+            $this->get('mailer')->send($message);
+
+            $data = $this->throwConfirmation($trans->trans('Workshop_deactivated'), 200);
             $view = $this->view($data, 200);
         }
-        $view->setFormat('json');
+
         return $this->handleView($view);
     }
 

@@ -20,7 +20,7 @@ security:
 
         # Api firewall, will take care of all /api/* requests via the authenticator
         api:
-            pattern: ^/(es|en|fr)/api/*
+            pattern: ^/(es|en|fr|pt)/api/*
             security: true
             # Need anonymus acces for the /public part of the API. If not given,
             # authentication required message will show (which is not correct for

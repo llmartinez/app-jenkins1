@@ -1,0 +1,10 @@
+# ALERTS
+password_changed: "Contraseña modificada correctamente"
+password_old_error: "La contraseña anterior no coincide"
+
+# ERRORS
+access_denied: "No tienes acceso a esta sección"
+
+# VALIDATORS
+error_username_repeated: "El nombre de usuario ya está en uso"
+error_passwords_not_match: "Las contraseñas no coinciden"

@@ -1,0 +1,56 @@
+<html xmlns='http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml'>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+</head>
+
+{% set style_basic = 'width: 100%;border: 0;margin: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;text-align: center;' %}
+{% set style_logo = 'height: 60px;' %}
+{% set style_data = 'color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;' %}
+
+<body style="{{ style_basic }}">
+    <table style="{{ style_basic }} height:50; font-size: 20px; font-weight: bold; background-color: #428bca; color:#FFF;">
+        <tr><td width="100%" height="50" valign="middle">
+
+                {% set url_logo = route_logo_mail ~ '.png' %}
+                <img src="{{ asset(url_logo) }}" style='{{ style_logo }}'>
+                <br>
+                {{ 'mail_workshop_deactivated%name%'|trans({'%name%': workshop.name }) }}
+            </td></tr>
+    </table>
+
+    <table style="{{ style_basic }}">
+        <tr><td width="100%" height="150" valign="middle" align="center">
+
+                {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
+
+                    {% set url_logo_catserv = route_logo_mail ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
+                    <img src="{{ asset(url_logo_catserv) }}" style="{{ style_logo }}">
+
+                {% endif %}
+            </td></tr>
+    </table>
+
+    <table style="{{ style_basic }}">
+        <h3>{% trans %} dataworkshop {% endtrans %}:</h3>
+
+        <tr><td valign="middle" style="{{ style_data }}">
+                <b>{{ 'Workshop'|trans }}:</b></td><td> {{ workshop.name }}
+            </td></tr>
+
+        <tr><td valign="middle" align="center" style="{{ style_data }}">
+                <b>{{ 'Code workshop'|trans }}:</b></td><td>{{ workshop.codePartner }} - {{ workshop.codeWorkshop }}
+            </td></tr>
+
+        <tr><td valign="middle" style="{{ style_data }}">
+                <b>{{ 'Name'|trans }}:</b></td><td> {{ workshop.contact }}
+            </td></tr>
+
+        <tr><td valign="middle" style="{{ style_data }}">
+                <b>{{ 'Phone'|trans }}:</b></td><td> {{ workshop.phoneNumber1 }}
+            </td></tr>
+
+        <tr><td valign="middle" style="{{ style_data }}">
+                <b>{{ 'Email'|trans }}:</b></td><td> {{ workshop.Email1 }}
+            </td></tr>
+    </table>
+</body>
