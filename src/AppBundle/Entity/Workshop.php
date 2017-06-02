@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 //use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 
 /**
- * AppBundle\Entity\Workshop
- *
  * @ORM\Entity
  * @ORM\Table(name="workshop")
  */
@@ -93,6 +91,13 @@ class Workshop {
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="workshop")
      */
     private $users;
+
+    /**
+     * @var string $partner
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partner", inversedBy="workshops")
+     */
+    private $partner;
 
     /**
      * @var string $category_service
@@ -640,6 +645,14 @@ class Workshop {
      */
     public function getUsers() {
         return $this->users;
+    }
+
+    public function setPartner(Partner $partner) {
+        $this->partner = $partner;
+    }
+
+    public function getPartner() {
+        return $this->partner;
     }
 
     /**

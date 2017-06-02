@@ -137,8 +137,6 @@ Workshop: "Taller"
 Code workshop: "Código de Taller"
 Workshop_activated: "Taller activado correctamente"
 Workshop_deactivated: "Taller desactivado correctamente"
-Workshops_not_found: "Talleres no encontrados"
-Workshop_not_found%id%: "Taller con id %id% no encontrado"
 
 #TYPOLOGY
 Typology: "Tipología"
@@ -172,3 +170,10 @@ dataworkshop: "Datos del taller"
 datashop: "Datos de la tienda"
 mail_workshop_activated%name%: "Se ha dado de alta el taller name"
 mail_workshop_deactivated%name%: "Se ha dado de baja el taller name"
+
+# ERRORS
+Partners_not_found: "Socios no encontrados"
+Shops_not_found: "Tiendas no encontradas"
+Typologies_not_found: "Tipologías no encontradas"
+Workshops_not_found: "Talleres no encontrados"
+Workshop_not_found%id%: "Taller con id %id% no encontrado"

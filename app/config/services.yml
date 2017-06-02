@@ -13,7 +13,5 @@ services:
 
     slugger:
         class: AppBundle\Utils\Slugger
-    utilsUser:
-        class: AppBundle\Utils\UtilsUser
-    utilsWorkshop:
-        class: AppBundle\Utils\UtilsWorkshop
+    getters:
+        class: AppBundle\Utils\Getters

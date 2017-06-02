@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 //use Symfony\Component\Validator\ExecutionContext;
 //use AppBundle\Entity\Country;
 //use AppBundle\Entity\Language;
+use AppBundle\Entity\Workshop;
+
+use AppBundle\Entity\CategoryService;
 
 /**
  * @ORM\Entity
@@ -71,6 +74,13 @@ class User implements UserInterface {
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CategoryService")
      */
     private $category_service;
+
+    /**
+     * @var string $partner
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partner", inversedBy="users")
+     */
+    private $partner;
 
     /**
      *
@@ -337,7 +347,7 @@ class User implements UserInterface {
         return $this->user_role->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array
     }
 
-    public function setCategoryService(\AppBundle\Entity\CategoryService $category_service) {
+    public function setCategoryService(CategoryService $category_service) {
         $this->category_service = $category_service;
     }
 
@@ -345,11 +355,19 @@ class User implements UserInterface {
         return $this->category_service;
     }
 
+    public function setPartner(Partner $partner) {
+        $this->partner = $partner;
+    }
+
+    public function getPartner() {
+        return $this->partner;
+    }
+
     public function getWorkshop() {
         return $this->workshop;
     }
 
-    public function setWorkshop(\AppBundle\Entity\Workshop $workshop) {
+    public function setWorkshop(Workshop $workshop) {
         $this->workshop = $workshop;
     }
 
@@ -370,7 +388,7 @@ class User implements UserInterface {
         $this->surname = $surname;
     }
 
-    public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
+    public function equals(UserInterface $user) {
         return $this->getUsername() == $user->getUsername();
     }
 
@@ -744,7 +762,7 @@ class User implements UserInterface {
      *
      * @param user $created_by
      */
-    public function setCreatedBy(\AppBundle\Entity\User $user) {
+    public function setCreatedBy(User $user) {
         $this->created_by = $user;
     }
 
@@ -780,7 +798,7 @@ class User implements UserInterface {
      *
      * @param user $modified_by
      */
-    public function setModifiedBy(\AppBundle\Entity\User $user) {
+    public function setModifiedBy(User $user) {
         $this->modified_by = $user;
     }
 

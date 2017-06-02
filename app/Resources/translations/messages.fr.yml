@@ -148,8 +148,6 @@ Workshop: "Atelier"
 Code workshop: "Code Atelier"
 Workshop_activated: "Atelier activé avec succès"
 Workshop_deactivated: "Atelier désactivé avec succès"
-Workshops_not_found: "Ateliers non trouvé"
-Workshop_not_found%id%: "Atelier avec id %id% n'a pas été trouvé"
 
 #TYPOLOGY
 Typology: "Type d'atelier"
@@ -183,3 +181,10 @@ dataworkshop: "Données de l'atelier "
 datashop: "Données du Boutique"
 mail_workshop_activated%name%: "Inscription pour l'atelier name"
 mail_workshop_deactivated%name%: "Désinscription pour l'atelier name"
+
+# ERRORS
+Partners_not_found: "Distributeurs non trouvé"
+Shops_not_found: "Boutiques non trouvé"
+Typologies_not_found: "Types d'atelier non trouvé"
+Workshops_not_found: "Ateliers non trouvé"
+Workshop_not_found%id%: "Atelier avec id %id% n'a pas été trouvé"

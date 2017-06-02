@@ -137,8 +137,6 @@ Workshop: "Workshop"
 Code workshop: "Workshop Code"
 Workshop_activated: "Workshop activated correctly"
 Workshop_deactivated: "Workshop deactivated correctly"
-Workshops_not_found: "Workshops not found"
-Workshop_not_found%id%: "Workshop with id %id% not found"
 
 #TYPOLOGY
 Typology: "Tipology"
@@ -172,3 +170,10 @@ dataworkshop: "Workshop info"
 datashop: "Shop info"
 mail_workshop_activated%name%: "Subscription for the workshop name"
 mail_workshop_deactivated%name%: "Unsubscription for the workshop name"
+
+# ERRORS
+Partners_not_found: "Partners not found"
+Shops_not_found: "Shops not found"
+Typologies_not_found: "Typologies not found"
+Workshops_not_found: "Workshops not found"
+Workshop_not_found%id%: "Workshop with id %id% not found"

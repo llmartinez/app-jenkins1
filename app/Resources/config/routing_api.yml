@@ -1,4 +1,5 @@
 # WORKSHOPS
+
 #getWorkshops:
 #    path:  /workshops
 #    defaults: { _controller: ApiBundle:Api:getWorkshops }
@@ -14,3 +15,8 @@
 #deactivateWorkshop:
 #    path:  /workshop/{id}/deactivate
 #    defaults: { _controller: ApiBundle:Api:deactivateWorkshop, id: null }
+
+# TICKETS
+#getNumberTicketsByUserId:
+#    path:  /getNumberTickets/{workshop_id}
+#    defaults: { _controller: ApiBundle:Api:getNumberTicketsByUserId, workshop_id: null }

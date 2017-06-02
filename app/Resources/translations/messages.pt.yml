@@ -146,8 +146,6 @@ Workshop: "Oficina"
 Code workshop: "Código de Oficina"
 Workshop_activated: "Oficina ativado com sucesso"
 Workshop_deactivated: "Oficina desativado com sucesso"
-Workshops_not_found: "Oficina não encontrados"
-Workshop_not_found%id%: "Oficina com id %id% não encontrado"
 
 #TYPOLOGY
 Typology: "Tipologia"
@@ -181,3 +179,10 @@ dataworkshop: "Dados da Oficina"
 datashop: "Dados da Loja"
 mail_workshop_activated%name%: "Inscrição de oficina name"
 mail_workshop_deactivated%name%: "Inativação de oficina name"
+
+# ERRORS
+Partners_not_found: "Sócios não encontrados"
+Shops_not_found: "Lojas não encontradas"
+Typologies_not_found: "Tipologias não encontradas"
+Workshops_not_found: "Oficina não encontradas"
+Workshop_not_found%id%: "Oficina com id %id% não encontrado"
