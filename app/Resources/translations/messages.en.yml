@@ -1,0 +1,179 @@
+helloworld: "Hello World!"
+title: "Auto Diagnostic Service"
+
+# Rutas/Breadcrumb
+index: "Index"
+login: "Login"
+logout: "Logout"
+reports: "Reports"
+orders: "Orders"
+popups: "Popups"
+partners: "Partners"
+workshops: "Workshops"
+shops: "Shops"
+typologies: "Typology"
+diagnosisMachines: "Diagnosis machines"
+users: "Users"
+sentences: "Sentences"
+tickets: "Tickets"
+selectRole: "Select role"
+user_new: "New user"
+
+# ROLES
+ROLE_USER: User
+ROLE_WORKSHOP: Workshop
+ROLE_ADVISER: Adviser
+ROLE_COMMERCIAL: "Commercial"
+ROLE_PARTNER: "Partner"
+ROLE_SUPER_PARTNER: "Super Partner"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Admin"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "God"
+
+# RESTRICTIONS
+Restriction: "Restriction"
+ROLE_HIDE_LIST: "Hide data lists"
+ROLE_HIDE_CREATE: "Hide creation forms"
+ROLE_HIDE_ASSIGN: "Hide assign functions"
+ROLE_HIDE_USER: "Hide users management"
+ROLE_HIDE_REPORT: "Hide reports management"
+ROLE_HIDE_ORDER: "Hide orders management"
+ROLE_HIDE_POPUP: "Hide popups management"
+ROLE_HIDE_TICKET: "Hide tickets management"
+
+# SERVICES
+Service: "Service"
+ROLE_SERV_GED: "GED"
+ROLE_SERV_ADSERVICE_ES: "AD Service ES"
+ROLE_SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+ROLE_SERV_ADSERVICE_PT: "AD Service PT"
+ROLE_SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+ROLE_SERV_PHONE_EINA_JS: "Phone Eina JS"
+ROLE_SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+ROLE_SERV_ACTIA: "Actia"
+ROLE_SERV_NEXUS: "Nexus"
+
+# COUNTRIES
+spain: "Spain"
+france: "France"
+portugal: "Portugal"
+ireland: "Ireland"
+uk: "United Kingdom"
+# andorra: "Andorra"
+# british_isles: "British Isles"
+
+# LANGUAGES
+en: "English"
+es: "Spanish"
+fr: "French"
+pt: "Portuguese"
+
+# FORMS
+Username: "Username"
+Password: "Password"
+password_insert: "Insert password"
+password_repeat: "Repeat password"
+password_old: "Old password"
+Submit: "Submit"
+Edit: "Edit"
+Delete: "Delete"
+search: "Search"
+All: "All"
+SelectValue: "Select value"
+searchId: "Search ID"
+
+# USER FIELDS
+user: "User"
+id: "ID"
+Id: "ID"
+role: "Role"
+Status: "Status"
+Active: "Active"
+Inactive: "Inactive"
+Test: "Test"
+Name: "Name"
+Language: "Language"
+Country: "Country"
+Region: "Region"
+City: "City"
+Address: "Address"
+Postal code: "Post Code"
+Phone: "Phone"
+Phone number1: "Phone Number 1"
+Phone number2: "Phone Number 2"
+Mobile number1: "Mobile Number 1"
+Mobile number2: "Mobile Number 2"
+Fax: "Fax"
+Email: "Email"
+Email1: "Email 1"
+Email2: "Email 2"
+CreatedBy: "Created by"
+CreatedAt: "Created at"
+ModifiedBy: "Modified by"
+ModifiedAt: "Modified at"
+Token: "Token"
+
+# USER
+user_update: "User updated"
+
+# DATES
+date.day: "Day"
+date.month: "Month"
+date.year: "Year"
+
+# TICKET
+ticket_list: "List of Tickets"
+ticket_new: "New ticket"
+ticket_edit: "Edit ticket"
+ticket_delete: "Delete ticket"
+
+#PARTNER
+Partner: "Partner"
+Code partner: "Partner Code"
+
+#WORKSHOP
+Workshop: "Workshop"
+Code workshop: "Workshop Code"
+Workshop_activated: "Workshop activated correctly"
+Workshop_deactivated: "Workshop deactivated correctly"
+
+#TYPOLOGY
+Typology: "Tipology"
+typology_new: "New tipology"
+typology_deleted: "Tipology deleted"
+typology_update: "Tipology updated"
+
+#SHOP
+Shop: "Shop"
+shop_new: "New shop"
+shop_deleted: "Shop deleted"
+shop_update: "Shop updated"
+
+#DIAGNOSIS
+Diagnosis machine: "Diagnosis machine"
+diagnosisMachine_new: "New diagnosis machine"
+diagnosisMachine_deleted: "Diagnosis machine deleted"
+diagnosisMachine_update: "Diagnosis machine updated"
+
+# HELP
+help: "Help"
+help_title: "Help Ticketing"
+help_check_manual: "Check the manual"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# MAIL
+mail_info: "More info:"
+datauser: "User info"
+dataworkshop: "Workshop info"
+datashop: "Shop info"
+mail_workshop_activated%name%: "Subscription for the workshop name"
+mail_workshop_deactivated%name%: "Unsubscription for the workshop name"
+
+# ERRORS
+Partners_not_found: "Partners not found"
+Shops_not_found: "Shops not found"
+Typologies_not_found: "Typologies not found"
+Workshops_not_found: "Workshops not found"
+Workshop_not_found%id%: "Workshop with id %id% not found"

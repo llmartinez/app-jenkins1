@@ -11,7 +11,7 @@ parameters:
 framework:
     default_locale: en
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallback: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.root_dir%/config/routing.yml'
@@ -35,6 +35,8 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+        route_logo_mail: '%route_logo_mail%'
 
 # Doctrine Configuration
 doctrine:
@@ -64,7 +66,21 @@ swiftmailer:
     host: '%mailer_host%'
     username: '%mailer_user%'
     password: '%mailer_password%'
-    spool: { type: memory }
+    spool:
+        type: file
+        path: '%kernel.root_dir%/spool'
+
+# FostRestBundle Configuration
+fos_rest:
+    format_listener: true
+    routing_loader:
+        default_format: json
+        include_format: false
+    param_fetcher_listener: true
 
 # NelmioApiDocBundle Configuration
-nelmio_api_doc: ~
+nelmio_api_doc:
+    sandbox:
+        request_format:
+            method: accept_header
+        enabled: false

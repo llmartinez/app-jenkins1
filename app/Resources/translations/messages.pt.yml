@@ -1,0 +1,188 @@
+helloworld: "Olá Mundo!"
+title: "Auto Diagnostic Service"
+
+# Rutas/Breadcrumb
+index: "Índice"
+login: "Iniciar sessão"
+logout: "Sair"
+reports: "Relatórios"
+orders: "Pedidos"
+popups: "Popups"
+partners: "Sócios"
+workshops: "Oficinas"
+shops: "Lojas"
+typologies: "Tipologias"
+diagnosisMachines: "Máquinas de Diagnóstico"
+users: "Usuários"
+sentences: "Frases"
+tickets: "Talões"
+selectRole: "Selecciona Função"
+user_new: "Novo Usuário"
+
+# ROLES
+ROLE_USER: "Utilizador"
+ROLE_WORKSHOP: "Oficina"
+ROLE_ADVISER: "Assistente"
+ROLE_COMMERCIAL: "Comercial"
+ROLE_PARTNER: "Sócio"
+ROLE_SUPER_PARTNER: "Super-Sócio"
+ROLE_TOP: "Top"
+ROLE_ADMIN: "Administrador"
+ROLE_SUPER_ADMIN: "Super Admin"
+ROLE_GOD: "Deus"
+
+# RESTRICTIONS
+Restriction: "Restrição"
+ROLE_HIDE_LIST: "Ocultar listas de datos"
+ROLE_HIDE_CREATE: "Ocultar formas de criação"
+ROLE_HIDE_ASSIGN: "Ocultar funções de alocação"
+ROLE_HIDE_USER: "Ocultar gestão de usuários"
+ROLE_HIDE_REPORT: "Ocultar gestão de estatísticas"
+ROLE_HIDE_ORDER: "Ocultar gestão de pedidos"
+ROLE_HIDE_POPUP: "Ocultar gestão de pop-ups"
+ROLE_HIDE_TICKET: "Ocultar gestão de tickets"
+
+# SERVICES
+Service: "Serviço"
+ROLE_SERV_GED: "GED"
+ROLE_SERV_ADSERVICE_ES: "AD Service ES"
+ROLE_SERV_ASSISTANCE_DIAG_24: "Assistance Diag 24 FR"
+ROLE_SERV_ADSERVICE_PT: "AD Service PT"
+ROLE_SERV_PHONE_EINA_ECP: "Phone Eina ECP"
+ROLE_SERV_PHONE_EINA_JS: "Phone Eina JS"
+ROLE_SERV_PHONE_EINA_TECHNODIAG: "Phone Eina TecnoDiag"
+ROLE_SERV_ACTIA: "Actia"
+ROLE_SERV_NEXUS: "Nexus"
+
+# COUNTRIES
+spain: "Espanha"
+france: "França"
+portugal: "Portugal"
+ireland: "Irlanda"
+uk: "Reino Unido"
+# andorra: "Andorra"
+# british_isles: "Ilhas Britânicas"
+
+# LANGUAGES
+en: "Inglês"
+es: "Espanhol"
+fr: "Francês"
+pt: "Português"
+
+# FORMS
+Username: "Usuário"
+Password: "Palavra-passe"
+password_insert: "Insira a palavra-passe"
+password_repeat: "Repetir palavra-passe"
+password_old: "Palavra-passe anterior"
+Submit: "Enviar"
+search: "Buscar"
+All: "Todos"
+SelectValue: "Escolha um valor"
+searchId: "Procura ID"
+
+# DATATABLE
+loading: "Carregando..."
+dt_show: "Mostrar"
+dt_entries: "entradas"
+dt_search: "Pesquisar"
+dt_showing: "Mostrando"
+dt_to: "para"
+dt_of: "de"
+dt_previous: "Anterior"
+dt_next: "Siguiente"
+
+# USER FIELDS
+user: "Usuário"
+id: "ID"
+Id: "ID"
+role: "Função"
+Status: "Estado"
+Active: "Ativo"
+Inactive: "Inativo"
+Test: "Em testes"
+Name: "Nome"
+Language: "Idioma"
+Country: "País"
+Region: "Distrito"
+City: "Localidade"
+Address: "Morada"
+Postal code: "Código postal"
+Phone: "Telefone"
+Phone number1: "Tel. fixo 1"
+Phone number2: "Tel. fixo 2"
+Mobile number1: "Telemóvel 1"
+Mobile number2: "Telemóvel 2"
+Fax: "Fax"
+Email: "E-mail"
+Email1: "E-mail 1"
+Email2: "E-mail 2"
+CreatedBy: "Criado por"
+CreatedAt: "Criado em"
+ModifiedBy: "Alterado por"
+ModifiedAt: "Alterado em"
+Token: "Token"
+
+# USER
+user_update: "Usuário Alterado"
+
+# DATES
+date.day: "Dia"
+date.month: "Mês"
+date.year: "Ano"
+
+# TICKET
+ticket_list: "Lista de Talão"
+ticket_new: "Novo Talão"
+ticket_edit: "Editar Talão"
+ticket_delete: "Apagar Talão"
+
+#PARTNER
+Partner: "Sócio"
+Code partner: "Código de Sócio"
+
+#WORKSHOP
+Workshop: "Oficina"
+Code workshop: "Código de Oficina"
+Workshop_activated: "Oficina ativado com sucesso"
+Workshop_deactivated: "Oficina desativado com sucesso"
+
+#TYPOLOGY
+Typology: "Tipologia"
+typology_new: "Nova tipologia"
+typology_deleted: "Tipologia eliminada"
+typology_update: "Tipologia alterada"
+
+#SHOP
+Shop: "Loja"
+shop_new: "Nova loja"
+shop_deleted: "Loja eliminada"
+shop_update: "Loja alterada"
+
+#DIAGNOSIS
+Diagnosis machine: "Máquina de Diagnóstico"
+diagnosisMachine_new: "Nova máquina de Diagnóstico"
+diagnosisMachine_deleted: "Máquina de Diagnóstico eliminada"
+diagnosisMachine_update: "Máquina de Diagnóstico alterada"
+
+#HELP
+help: "Ajuda"
+help_title: "Ajuda Ticketing"
+help_check_manual: "Consulte o Manual"
+help_manual: 'https://adserviceticketing.com/uploads/help/manual-es.pdf'
+help_video: 'https://www.youtube.com/embed/jBnEqFbJDBE'
+
+# MAIL
+mail_info: "Plus d'informations:"
+datauser: "Dados do Utilizador"
+dataworkshop: "Dados da Oficina"
+datashop: "Dados da Loja"
+mail_workshop_activated%name%: "Inscrição de oficina name"
+mail_workshop_deactivated%name%: "Inativação de oficina name"
+
+# ERRORS
+Partners_not_found: "Sócios não encontrados"
+Shops_not_found: "Lojas não encontradas"
+Typologies_not_found: "Tipologias não encontradas"
+Workshops_not_found: "Oficina não encontradas"
+Workshop_not_found%id%: "Oficina com id %id% não encontrado"

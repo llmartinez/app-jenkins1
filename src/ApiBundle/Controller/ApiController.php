@@ -11,6 +11,126 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class ApiController extends FOSRestController
 {
+
+// SECTION PARTNERS
+
+    /**
+     * Get partners with the CategoryService from the logged user
+     *
+     * @Security("has_role('ROLE_TOP_AD')")
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      section="PARTNERS",
+     *      description="Get partners with the CategoryService from the logged user",
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          403="Returned when the user is not authorized",
+     *          404="Resource not found"
+     *      },
+     *      headers={
+     *          {
+     *              "name"="X-AUTH-TOKEN",
+     *              "description"="Encrypted API Key.",
+     *              "required" = "true"
+     *          }
+     *      }
+     * )
+     *
+     * @throws createNotFoundException when make id not exist
+     *
+     * @Annotations\View()
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getPartnersAction()
+    {
+        $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
+        $partners = $this->get('getters')->getPartners($this, $category_service);
+
+        $view = $this->getGetterView($partners,'Partners_not_found');
+        return $this->handleView($view);
+    }
+
+// SECTION SHOPS
+
+    /**
+     * Get shops with the CategoryService from the logged user
+     *
+     * @Security("has_role('ROLE_TOP_AD')")
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      section="SHOPS",
+     *      description="Get shops with the CategoryService from the logged user",
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          403="Returned when the user is not authorized",
+     *          404="Resource not found"
+     *      },
+     *      headers={
+     *          {
+     *              "name"="X-AUTH-TOKEN",
+     *              "description"="Encrypted API Key.",
+     *              "required" = "true"
+     *          }
+     *      }
+     * )
+     *
+     * @throws createNotFoundException when make id not exist
+     *
+     * @Annotations\View()
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getShopsAction()
+    {
+        $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
+        $shops = $this->get('getters')->getShops($this, $category_service);
+
+        $view = $this->getGetterView($shops,'Shops_not_found');
+        return $this->handleView($view);
+    }
+
+// SECTION TYPOLOGIES
+
+    /**
+     * Get typologies with the CategoryService from the logged user
+     *
+     * @Security("has_role('ROLE_TOP_AD')")
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      section="TYPOLOGIES",
+     *      description="Get typologies with the CategoryService from the logged user",
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          403="Returned when the user is not authorized",
+     *          404="Resource not found"
+     *      },
+     *      headers={
+     *          {
+     *              "name"="X-AUTH-TOKEN",
+     *              "description"="Encrypted API Key.",
+     *              "required" = "true"
+     *          }
+     *      }
+     * )
+     *
+     * @throws createNotFoundException when make id not exist
+     *
+     * @Annotations\View()
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getTypologiesAction()
+    {
+        $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
+        $typologies = $this->get('getters')->getTypologies($this, $category_service);
+
+        $view = $this->getGetterView($typologies,'Typologies_not_found');
+        return $this->handleView($view);
+    }
+
+// SECTION WORKSHOPS
+
     /**
      * Get workshops with the CategoryService from the logged user
      *
@@ -42,27 +162,21 @@ class ApiController extends FOSRestController
     public function getWorkshopsAction()
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
-        $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service);
+        $workshops = $this->get('getters')->getWorkshops($this, $category_service);
 
-        if (!$workshops) {
-            $data = $this->throwError("Workshops not found", 404);
-            $view = $this->view($data, 404);
-        } else {
-            $view = $this->view($workshops, 200);
-        }
-        $view->setFormat('json');
+        $view = $this->getGetterView($workshops,'Workshops_not_found');
         return $this->handleView($view);
     }
 
     /**
-     * Get workshops with the CategoryService from the logged user
+     * Get workshop by $id with the CategoryService from the logged user
      *
      * @Security("has_role('ROLE_TOP_AD')")
      *
      * @ApiDoc(
      *      resource=true,
      *      section="WORKSHOPS",
-     *      description="Get workshops with the CategoryService from the logged user",
+     *      description="GGet workshop by $id with the CategoryService from the logged user",
      *      statusCodes={
      *          200="Returned when successful",
      *          403="Returned when the user is not authorized",
@@ -88,17 +202,14 @@ class ApiController extends FOSRestController
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
 
-        $workshop = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
-dump($workshop[0]);
-die;
+        $workshop = $this->get('getters')->getWorkshops($this, $category_service, $id);
 
         if (!$workshop) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($this->get('translator')->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $view = $this->view($workshop, 200);
         }
-        $view->setFormat('json');
         return $this->handleView($view);
     }
 
@@ -132,14 +243,14 @@ die;
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function ActivateWorkshopAction($id)
+    public function putWorkshopActivateAction($id)
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
-
-        $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
+        $workshops = $this->get('getters')->getWorkshops($this, $category_service, $id);
+        $trans = $this->get('translator');
 
         if (!$workshops) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $workshop = $workshops[0];
@@ -149,11 +260,19 @@ die;
             $em->persist($workshop);
             $em->flush();
 
-            $data = $this->throwConfirmation("Workshop with id " . $id . " activated", 200);
-//throwEmail
+            //Send Mail
+            $message = new \Swift_Message('Auto Diagnostic Service | '.$trans->trans('mail_workshop_activated%name%', array("name" => $workshop->getName())));
+            $message->setFrom($this->container->getParameter('mail_noreply'))
+                ->setTo($workshop->getEmail1())
+                ->setBody($this->renderView('Emails/workshop_activate.html.twig',array('workshop' => $workshop)), 'text/html');
+            // echo $this->renderView('Emails/workshop_activate.html.twig', array('workshop' => $workshop));die;
+            $this->get('mailer')->send($message);
+
+            // $data = $this->throwConfirmation("Workshop with id " . $id . " activated", 200);
+            $data = $this->throwConfirmation($trans->trans('Workshop_activated'), 200);
             $view = $this->view($data, 200);
         }
-        $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -187,14 +306,14 @@ die;
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function DeactivateWorkshopAction($id)
+    public function putWorkshopDeactivateAction($id)
     {
         $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
-
-        $workshops = $this->get('utilsWorkshop')->getWorkshops($this, $category_service, $id);
+        $workshops = $this->get('getters')->getWorkshops($this, $category_service, $id);
+        $trans = $this->get('translator');
 
         if (!$workshops) {
-            $data = $this->throwError("Workshop with id " . $id . " not found", 404);
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
             $view = $this->view($data, 404);
         } else {
             $workshop = $workshops[0];
@@ -204,22 +323,30 @@ die;
             $em->persist($workshop);
             $em->flush();
 
-            $data = $this->throwConfirmation("Workshop with id " . $id . " deactivated", 200);
+            //Send Mail
+            $message = new \Swift_Message('Auto Diagnostic Service | '.$trans->trans('mail_workshop_deactivated%name%', array("name" => $workshop->getName())));
+            $message->setFrom($this->container->getParameter('mail_noreply'))
+                ->setTo($workshop->getEmail1())
+                ->setBody($this->renderView('Emails/workshop_deactivate.html.twig',array('workshop' => $workshop)), 'text/html');
+            // echo $this->renderView('Emails/workshop_deactivate.html.twig', array('workshop' => $workshop));die;
+            $this->get('mailer')->send($message);
+
+            $data = $this->throwConfirmation($trans->trans('Workshop_deactivated'), 200);
             $view = $this->view($data, 200);
         }
-        $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
     /**
-     * Get number of tickets by user id
+     * Get workshop's number of tickets
      *
      * @Security("has_role('ROLE_TOP_AD')")
      *
      * @ApiDoc(
      *      resource=true,
      *      section="TICKETS",
-     *      description="Get number of tickets by user id",
+     *      description="Get workshop's number of tickets",
      *      statusCodes={
      *          200="Returned when successful",
      *          403="Returned when the user is not authorized",
@@ -228,31 +355,32 @@ die;
      *      headers={
      *          {
      *              "name"="X-AUTH-TOKEN",
-     *              "description"="Encrypted API Key.",
+     *              "description"="$trans->trans('Workshop_deactivated')",
      *              "required" = "true"
      *          }
      *      }
      * )
      *
      * @param Request $request the request object
-     * @param Integer $user_id the user id
+     * @param Integer $workshop_id the workshop id
      *
      * @throws createNotFoundException when make id not exist
      *
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getNumberTicketsByUserIdAction(Request $request, $workshop_id)
+    public function getWorkshopNumberTicketsAction($workshop_id)
     {
         $em = $this->getDoctrine();
+        $trans = $this->get('translator');
 
         $query = $em->getRepository("AppBundle:Ticket")
             ->createQueryBuilder("t")
-            ->select("count(t)")
+            ->select("count(t) as ".$trans->trans('tickets'))
             ->where("t.workshop = ".$workshop_id. " and t.pending = 1");
         $tickets =  $query->getQuery()->getResult();
         if (!$tickets) {
-            $data = $this->throwError("Workshop with id " . $workshop_id . " not found", 404);
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $workshop_id)), 404);
             $view = $this->view($data, 404);
         } else {
             $data = $this->throwConfirmation($tickets[0], 200);
@@ -260,6 +388,22 @@ die;
         }
         $view->setFormat('json');
         return $this->handleView($view);
+    }
+
+    /**
+     * Check if $entities return values and generate an Error/Confirmation View
+     * @param $entities         Array of elements
+     * @param $message_error    code error 404
+     * @return view
+     */
+    private function getGetterView($entities,$message_error){
+        if (!$entities) {
+            $data = $this->throwError($this->get('translator')->trans($message_error), 404);
+            $view = $this->view($data, 404);
+        } else {
+            $view = $this->view($entities, 200);
+        }
+        return $view;
     }
 
     /**

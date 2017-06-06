@@ -76,6 +76,13 @@ class User implements UserInterface {
     private $category_service;
 
     /**
+     * @var string $partner
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partner", inversedBy="users")
+     */
+    private $partner;
+
+    /**
      *
      * @var type
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Workshop", inversedBy="workshops")
@@ -346,6 +353,14 @@ class User implements UserInterface {
 
     public function getCategoryService() {
         return $this->category_service;
+    }
+
+    public function setPartner(Partner $partner) {
+        $this->partner = $partner;
+    }
+
+    public function getPartner() {
+        return $this->partner;
     }
 
     public function getWorkshop() {

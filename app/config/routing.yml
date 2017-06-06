@@ -8,7 +8,9 @@ NelmioApiDocBundle:
     prefix:   /api/doc
 
 api:
-    resource: "config/routing_api.yml"
+    resource: "@ApiBundle/Controller/ApiController.php"
+    type: rest
     prefix: /{_locale}/api
     requirements:
         _locale: en|fr|es|pt
+    # resource: "config/routing_api.yml"
