@@ -12,8 +12,16 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+use AppBundle\Utils\Autologin as Autologin;
+
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
+    private $autologin;
+
+    public function __construct($autologin) {
+        $this->autologin = $autologin;
+    }
+
     /**
      * Called on every request. Return whatever credentials you want to
      * be passed to getUser(). Returning null will cause this authenticator
@@ -35,14 +43,15 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $apiKey = $credentials['token'];
+        if (null === $apiKey) return;
 
-        if (null === $apiKey) {
-            return;
-        }
+        // get the token by the autologin validation method
+        $token = $this->autologin->decrypt($apiKey);
+        if (null === $token) return;
 
         // if null, authentication will fail
         // if a User object, checkCredentials() is called
-        return $userProvider->loadUserByUsername($apiKey);
+        return $userProvider->loadUserByUsername($token);
     }
 
     public function checkCredentials($credentials, UserInterface $user)

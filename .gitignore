@@ -1,9 +1,10 @@
 # -- Symfony -----------------------------------------
 /web/bundles/
 /app/bootstrap.php.cache
-/app/cache/*
 /app/config/parameters.yml
+/app/cache/*
 /app/logs/*
+/app/spool/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /app/phpunit.xml

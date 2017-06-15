@@ -15,5 +15,12 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
+    mail_noreply: noreply@adserviceticketing.com
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+    secret_iv: ThisTokenIsNotSoSecretChangeIt
+
+    route_logo: /images/logo
+    route_logo_mail: http://adserviceticketing.com/logo
+
