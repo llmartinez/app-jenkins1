@@ -21,13 +21,17 @@ class ApiControllerTest extends WebTestCase
         $this->client = static::createClient(array(), array('HTTP_X_AUTH_TOKEN' => $auth_token));
     }
 
-    public function loginWorkshop()
+    public function loginSA()
     {
-        $this->login("lzdsi98rjz0Dmo4r2bwf"); // ROLE_USER - (29-1) Ganix Talleres
+        $this->login("TYDsi98rjz0D4mo19bwf"); // ROLE_SUPER_ADMIN - superadmin
     }
     public function loginTop()
     {
         $this->login("jOgQL8qnzwma1U3JzvIw"); // ROLE_TOP_AD - topad24
+    }
+    public function loginWorkshop()
+    {
+        $this->login("lzdsi98rjz0Dmo4r2bwf"); // ROLE_USER - (29-1) Ganix Talleres
     }
 
 // SECTION CHECKS
@@ -137,7 +141,6 @@ class ApiControllerTest extends WebTestCase
     {
         $this->loginTop();
 
-        //Activate workshop
         $this->client->request('PUT', '/es/api/workshops/6275/activate'); // 6275 - CLASSIC AUTO
 
         $response = $this->client->getResponse();
@@ -158,7 +161,6 @@ class ApiControllerTest extends WebTestCase
     {
         $this->loginTop();
 
-        //Activate workshop
         $this->client->request('PUT', '/es/api/workshops/6275/deactivate'); // 6275 - CLASSIC AUTO
 
         $response = $this->client->getResponse();
@@ -173,4 +175,27 @@ class ApiControllerTest extends WebTestCase
 
         $this->assertEquals($content->confirm->message, "Taller desactivado correctamente");
     }
+
+    /* Add chequiers to a workshop */
+    public function putWorkshopChequiersAction()
+    {
+        $this->loginTop();
+
+        $this->client->request('PUT', '/es/api/workshops/6275/chequiers/1'); // 6275 - CLASSIC AUTO
+
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $content = json_decode ( $response->getContent() );
+
+        $this->assertTrue(isset($content->confirm));
+
+        $this->assertTrue(isset($content->confirm->message));
+
+        $this->assertTrue(isset($content->confirm->message->Total));
+
+        $this->assertGreaterThan("0", $content->confirm->message->Total);
+    }
+
 }
