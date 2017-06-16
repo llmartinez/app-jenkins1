@@ -58,6 +58,14 @@ legend {
 
 #profile:hover {color: #428BCA;}
 
+.img_left {  
+    max-height: 20px;
+    float: left;
+}
+.img_icon_right {  
+    max-height: 20px;
+    float: right;
+}
 .img_icon {
     max-height: 20px;
 }

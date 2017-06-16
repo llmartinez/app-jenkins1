@@ -515,8 +515,9 @@ class WorkshopOrderController extends Controller {
                 {
                     $user = $security->getToken()->getUser();
 
-                    $workshopOrder = UtilController::newEntity($workshopOrder, $user);
-
+                    //$workshopOrder = UtilController::newEntity($workshopOrder, $user);
+                    $workshopOrder->setCreatedBy($workshop->getCreatedBy());
+                    $workshopOrder->setCreatedAt($workshop->getCreatedAt());
                     if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
                         $workshopOrder->setAction('re_modify');
                     }
