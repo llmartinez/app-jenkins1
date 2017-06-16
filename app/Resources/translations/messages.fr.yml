@@ -148,6 +148,7 @@ Workshop: "Atelier"
 Code workshop: "Code Atelier"
 Workshop_activated: "Atelier activé avec succès"
 Workshop_deactivated: "Atelier désactivé avec succès"
+Workshop_cheks_disabled: "Atelier chequiers désactivé avec succès"
 
 #TYPOLOGY
 Typology: "Type d'atelier"

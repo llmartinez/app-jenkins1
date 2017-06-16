@@ -440,14 +440,14 @@ class ApiController extends FOSRestController
     }
 
     /**
-     * Add chequiers to a workshop
+     * Disable the cheks option to a workshop.
      *
      * @Security("has_role('ROLE_TOP_AD')")
      *
      * @ApiDoc(
      *      resource=true,
      *      section="WORKSHOPS",
-     *      description="Add chequiers to a workshop",
+     *      description="Disable the cheks option to a workshop.",
      *      statusCodes={
      *          200="Returned when successful",
      *          403="Returned when the user is not authorized",
@@ -469,7 +469,66 @@ class ApiController extends FOSRestController
      * @Annotations\View()
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function putWorkshopChequiersAction($id, $numchecks)
+    public function putWorkshopCheksDisableAction($id)
+    {
+        $trans = $this->get('translator');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $category_service = $this->get('security.token_storage')->getToken()->getUser()->getCategoryService()->getId();
+
+        $workshop = $em->getRepository('AppBundle:Workshop')->findOneBy(array('id' => $id, 'category_service' => $category_service));
+
+        if (isset($workshop))
+        {
+            $workshop->setHasChecks(false);
+            $workshop->setNumChecks("0");
+            $em->persist($workshop);
+            $em->flush();
+
+            $data = $this->throwConfirmation($trans->trans('Workshop_cheks_disabled'), 200);
+            $view = $this->view($data, 200);
+        }
+        else
+        {
+            $data = $this->throwError($trans->trans('Workshop_not_found%id%', array('%id%' => $id)), 404);
+            $view = $this->view($data, 404);
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Add cheks to a workshop.
+     *
+     * @Security("has_role('ROLE_TOP_AD')")
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      section="WORKSHOPS",
+     *      description="Add cheks to a workshop",
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          403="Returned when the user is not authorized",
+     *          404="Resource not found"
+     *      },
+     *      headers={
+     *          {
+     *              "name"="X-AUTH-TOKEN",
+     *              "description"="Encrypted API Key.",
+     *              "required" = "true"
+     *          }
+     *      }
+     * )
+     *
+     * @param Integer $id the user id
+     *
+     * @throws createNotFoundException when make id not exist
+     *
+     * @Annotations\View()
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function putWorkshopCheksAction($id, $numchecks)
     {
         $trans = $this->get('translator');
 
@@ -482,14 +541,14 @@ class ApiController extends FOSRestController
         if (isset($workshop))
         {
             $workshop->setHasChecks(true);
-            $chequiers = $workshop->getNumChecks();
-            $chequiers = $chequiers + $numchecks;
+            $cheks = $workshop->getNumChecks();
+            $cheks = $cheks + $numchecks;
 
-            $workshop->setNumChecks($chequiers);
+            $workshop->setNumChecks($cheks);
             $em->persist($workshop);
             $em->flush();
 
-            $data = $this->throwConfirmation(array('Total' => $chequiers), 200);
+            $data = $this->throwConfirmation(array('Total' => $cheks), 200);
             $view = $this->view($data, 200);
         }
         else

@@ -176,12 +176,12 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals($content->confirm->message, "Taller desactivado correctamente");
     }
 
-    /* Add chequiers to a workshop */
-    public function putWorkshopChequiersAction()
+    /* Add cheks to a workshop */
+    public function testWorkshopCheks()
     {
         $this->loginTop();
 
-        $this->client->request('PUT', '/es/api/workshops/6275/chequiers/1'); // 6275 - CLASSIC AUTO
+        $this->client->request('PUT', '/es/api/workshops/6275/cheks/1'); // 6275 - CLASSIC AUTO
 
         $response = $this->client->getResponse();
 
@@ -197,5 +197,26 @@ class ApiControllerTest extends WebTestCase
 
         $this->assertGreaterThan("0", $content->confirm->message->Total);
     }
+
+    /* Add cheks to a workshop */
+    public function testWorkshopCheksDisable()
+    {
+        $this->loginTop();
+
+        $this->client->request('PUT', '/es/api/workshops/6275/cheks/disable'); // 6275 - CLASSIC AUTO
+
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $content = json_decode ( $response->getContent() );
+
+        $this->assertTrue(isset($content->confirm));
+
+        $this->assertTrue(isset($content->confirm->message));
+
+        $this->assertEquals($content->confirm->message, "Cheques del taller deshabilitados correctamente");
+    }
+
 
 }
