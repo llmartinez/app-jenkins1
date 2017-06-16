@@ -128,15 +128,16 @@ class WorkshopController extends Controller {
             } elseif ($status == "infotech"){
                 $params[] = array('infotech', ' = 1');
             }
+            
         }
-
+        $ordered = array('e.code_partner, e.code_workshop', 'ASC');
         if (!isset($params))
             $params[] = array();
         $pagination = new Pagination($page);
 
-        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination, null, $joins);
+        $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination, $ordered, $joins);
 
-        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params, null, $joins);
+        $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params, $ordered, $joins);
 
         $pagination->setTotalPagByLength($length);
 
@@ -500,7 +501,15 @@ class WorkshopController extends Controller {
             $last_code = $workshop->getCodeWorkshop();
             $form->bindRequest($petition);
             //if ($form->isValid()) {
-
+            if($request->request->has("btn_reset_token")) {
+                
+                $token = UtilController::getRandomToken();
+                $user = $em->getRepository("UserBundle:User")->findOneBy(array('workshop' => $workshop->getId()));
+                $user->setToken($token);
+                $em->persist($user);
+                $em->flush();
+            }
+            else {
                 /* CHECK CODE WORKSHOP NO SE REPITA */
                 $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $partner->getCodePartner(),
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
@@ -573,6 +582,7 @@ class WorkshopController extends Controller {
                     }
                     $this->get('session')->setFlash('error', $flash);
                 }
+            }
             //}
         }
 
