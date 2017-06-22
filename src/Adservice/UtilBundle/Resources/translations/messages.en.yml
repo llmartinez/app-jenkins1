@@ -162,6 +162,8 @@ date.year:				 "Year"
 
 service_country: 		 "Service Country"
 
+social_reason:      "Business name" 
+
 #FIELDS
 find_by:				 "Search by"
 number:					 "Number"
