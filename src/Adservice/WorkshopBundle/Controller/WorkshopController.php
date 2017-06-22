@@ -114,8 +114,8 @@ class WorkshopController extends Controller {
                 $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $w_id));
                 $joins[] = array('e.partner p ', 'p.id = e.partner AND p.code_partner = ' . $w_idpartner . ' ');
             }
-
-            if ($status == "active") {
+             
+            if ($status == "active")  {
                 $params[] = array('active', ' = 1');
                 $params[] = array('test', ' = 0');
             } elseif ($status == "deactive") {
