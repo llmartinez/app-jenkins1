@@ -162,6 +162,8 @@ date.year:				 "année"
 
 service_country: 		 "Service pays"
 
+social_reason:      "Raison sociale" 
+
 #FIELDS
 find_by:				 "Chercher par"
 number:				 	 "Quantité"

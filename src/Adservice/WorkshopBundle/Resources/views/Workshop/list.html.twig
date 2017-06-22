@@ -88,7 +88,11 @@
                     <label> {% trans %} find_by {% endtrans %} </label>
                     <select id="flt_search_term" name="flt_search_term" class='form-control'>
                         <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
-                        <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                        {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN') and app.security.getToken().getUser().getCategoryService().getId() is defined and app.security.getToken().getUser().getCategoryService().getId() == 3 %}
+                            <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} social_reason  {% endtrans %}</option>
+                        {% else %}
+                            <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
+                        {% endif %}
                         <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
                         <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
                         <option value="postal_code"  {% if term == 'postal_code'  %}selected{% endif %}>{% trans %} postal_code   {% endtrans %}</option>
