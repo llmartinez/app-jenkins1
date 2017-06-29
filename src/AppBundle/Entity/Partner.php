@@ -286,9 +286,9 @@ class Partner {
     /**
      * Add workshops
      *
-     * @param AppBundle\Entity\Workshop $workshops
+     * @param Workshop $workshops
      */
-    public function addWorkshop(\AppBundle\Entity\Workshop $workshops) {
+    public function addWorkshop(Workshop $workshops) {
         $this->workshops[] = $workshops;
     }
 
@@ -304,9 +304,9 @@ class Partner {
     /**
      * Add shop
      *
-     * @param AppBundle\Entity\Shop $shop
+     * @param Shop $shop
      */
-    public function addShop(\AppBundle\Entity\Shop $shop) {
+    public function addShop(Shop $shop) {
         $this->shop[] = $shop;
     }
 
@@ -340,16 +340,16 @@ class Partner {
     /**
      * Set category_service
      *
-     * @param string $category_service
+     * @param CategoryService $category_service
      */
-    public function setCategoryService(\AppBundle\Entity\CategoryService $category_service) {
+    public function setCategoryService(CategoryService $category_service) {
         $this->category_service = $category_service;
     }
 
     /**
      * Get category_service
      *
-     * @return string
+     * @return CategoryService
      */
     public function getCategoryService() {
         return $this->category_service;

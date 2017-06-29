@@ -3,14 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-//use Adservice\PartnerBundle\Entity\Partner;
-//use Adservice\PartnerBundle\Entity\Shop;
-//use Adservice\WorkshopBundle\Entity\Typology;
-//use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
+use AppBundle\Entity\Partner;
+use AppBundle\Entity\Shop;
+use AppBundle\Entity\Typology;
+use AppBundle\Entity\DiagnosisMachine;
+use AppBundle\Entity\Ticket;
 
 /**
- * @ORM\Entity
+ * AppBundle\Entity\Workshop
+ *
  * @ORM\Table(name="workshop")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\WorkshopRepository")
  */
 class Workshop {
 
@@ -85,19 +88,27 @@ class Workshop {
     private $observation_admin;
 
     /**
+     * @var string $partner
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partner", inversedBy="workshops")
+     */
+    private $partner;
+
+    /**
+     * @var string $shop
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Shop", inversedBy="workshops")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=true)
+     */
+    private $shop;
+
+    /**
      *
      * @var string $users
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="workshop")
      */
     private $users;
-
-    /**
-     * @var string $partner
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partner", inversedBy="workshops")
-     */
-    private $partner;
 
     /**
      * @var string $category_service
@@ -140,6 +151,13 @@ class Workshop {
      * @ORM\Column(name="test", type="boolean", nullable=true)
      */
     private $test;
+
+    /**
+     * @var string $typology
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Typology")
+     */
+    private $typology;
 
     /**
      * @var datetime $update_at
@@ -189,6 +207,29 @@ class Workshop {
      * @ORM\Column(name="infotech", type="boolean", nullable=true)
      */
     private $infotech;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
+     * @ORM\JoinTable(name="workshop_diagnosis_machine",
+     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
+     * )
+     */
+    private $diagnosis_machines;
+
+    /**
+     * @var string $country
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Country")
+     */
+    private $country;
+
+    /**
+     * @var string $region
+     *
+     * @ORM\Column(name="region", type="string")
+     */
+    private $region;
 
     /**
      * @var string $city
@@ -288,6 +329,15 @@ class Workshop {
      */
     private $modified_by;
 
+
+    /**
+     * @var integer $tickets
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="workshop")
+     */
+    private $tickets;
+
+
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -369,6 +419,43 @@ class Workshop {
     public function setName($name) {
         $this->name = $name;
     }
+
+    /**
+     * Set country
+     *
+     * @param Country $country
+     */
+    public function setCountry(Country $country) {
+        $this->country = $country;
+    }
+
+    /**
+     * Get country
+     *
+     * @return Country
+     */
+    public function getCountry() {
+        return $this->country;
+    }
+
+    /**
+     * Set region
+     *
+     * @param string $region
+     */
+    public function setRegion($region) {
+        $this->region = $region;
+    }
+
+    /**
+     * Get region
+     *
+     * @return string
+     */
+    public function getRegion() {
+        return $this->region;
+    }
+
 
     /**
      * Get name
@@ -504,6 +591,24 @@ class Workshop {
     }
 
     /**
+     * Set typology
+     *
+     * @param Typology $typology
+     */
+    public function setTypology(Typology $typology) {
+        $this->typology = $typology;
+    }
+
+    /**
+     * Get typology
+     *
+     * @return string
+     */
+    public function getTypology() {
+        return $this->typology;
+    }
+
+    /**
      * Set update_at
      *
      * @param datetime $updateAt
@@ -576,21 +681,21 @@ class Workshop {
     }
 
     /**
-     * Set haschecks
+     * Set hasChecks
      *
-     * @param boolean $haschecks
+     * @param boolean $hasChecks
      */
-    public function setHasChecks($haschecks) {
-        $this->haschecks = $haschecks;
+    public function setHasChecks($hasChecks) {
+        $this->hasChecks = $hasChecks;
     }
 
     /**
-     * Get haschecks
+     * Get hasChecks
      *
      * @return boolean
      */
     public function getHasChecks() {
-        return $this->haschecks;
+        return $this->hasChecks;
     }
 
     /**
@@ -632,22 +737,22 @@ class Workshop {
     /**
      * Add users
      *
-     * @param AppBundle\Entity\User $users
+     * @param User $users
      */
-    public function addUser(\AppBundle\Entity\User $users) {
+    public function addUser($users) {
         $this->users[] = $users;
     }
 
     /**
      * Get users
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getUsers() {
         return $this->users;
     }
 
-    public function setPartner(Partner $partner) {
+    public function setPartner($partner) {
         $this->partner = $partner;
     }
 
@@ -660,7 +765,7 @@ class Workshop {
      *
      * @param string $category_service
      */
-    public function setCategoryService(\AppBundle\Entity\CategoryService $category_service) {
+    public function setCategoryService($category_service) {
         $this->category_service = $category_service;
     }
 
@@ -920,8 +1025,8 @@ class Workshop {
      *
      * @param user $created_by
      */
-    public function setCreatedBy(\AppBundle\Entity\User $user) {
-        $this->created_by = $user;
+    public function setCreatedBy(User $created_by) {
+        $this->created_by = $created_by;
     }
 
     /**
@@ -956,8 +1061,8 @@ class Workshop {
      *
      * @param user $modified_by
      */
-    public function setModifiedBy(\AppBundle\Entity\User $user) {
-        $this->modified_by = $user;
+    public function setModifiedBy(User $modified_by) {
+        $this->modified_by = $modified_by;
     }
 
     /**
@@ -973,4 +1078,36 @@ class Workshop {
     public function __toString() {
         return $this->getName();
     }
+
+
+    /**
+     * Add tickets
+     *
+     * @param Ticket $tickets
+     */
+    public function addTicket(Ticket $tickets) {
+        $this->tickets[] = $tickets;
+    }
+
+    /**
+     * Get tickets
+     *
+     * @return Collection
+     */
+    public function getTickets() {
+        return $this->tickets;
+    }
+
+    public function addDiagnosisMachine(DiagnosisMachine $diagnosis_machine) {
+        $this->diagnosis_machines[] = $diagnosis_machine;
+    }
+
+    public function setDiagnosisMachines($diagnosis_machines) {
+        $this->diagnosis_machines = $diagnosis_machines;
+    }
+
+    public function getDiagnosisMachines() {
+        return $this->diagnosis_machines;
+    }
+
 }
