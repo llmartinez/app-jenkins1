@@ -10,8 +10,16 @@ services:
 
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
+        arguments: [@autologin]
 
-    slugger:
-        class: AppBundle\Utils\Slugger
+    autologin:
+        class: AppBundle\Utils\Autologin
+        arguments: ["%secret_iv%"]
+    export:
+        class: AppBundle\Utils\Export
     getters:
         class: AppBundle\Utils\Getters
+    locale:
+        class: AppBundle\Utils\Locale
+    slugger:
+        class: AppBundle\Utils\Slugger
