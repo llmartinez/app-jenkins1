@@ -162,6 +162,8 @@ date.year:				 "año"
 
 service_country: 		 "País de servicio"
 
+social_reason:      "Rázon social" 
+
 #FIELDS
 find_by:				 "Buscar por"
 number:					 "Cantidad"
@@ -822,3 +824,4 @@ footerText: 	 	"© Grup Eina Digital · Centro de Innovación y Recursos"
 msg_einatech: "Procedimiento para la reparación de unidades electrónicas, Einatech. \n\r\t1. Crear un ticket para la solicitud de reparación, pulsando en 'Reparación de modulo electrónico'.\n\t2. Cumplimentar todos los campos solicitados y pulsar en crear.\n\t3. Una vez creado el ticket, el servicio de Einatech se pondrá en contacto con el taller para confirmar la recogida.\n\t4. Es importante adjuntar una imagen de la ficha técnica al ticket o al paquete.\n\t5. Recogida al taller mediante agencia de transporte con servicio urgente 24h.\n\tTodos los envíos o recogidas viajan con el seguro obligatorio de transporte según la L.O.O.T. que cubre desperfectos por un valor de 5,95€/kg. Les recomendamos que envuelvan los elementos a enviar con material protector para evitar cualquier desperfecto. Cualquier pérdida o rotura que exceda de este valor irá a cargo del cliente.\n\t6. Al recibir la unidad averiada, los agentes de Einatech la entrarán al sistema informático y enviarán un e-mail/ticket al taller informando de la recepción de la unidad.\n\t7. El presupuesto se enviará en 24-48 horas desde la recepción del material. Éste se pasará vía e-mail/ticket.\n\t8. Una vez recibida su conformidad vía e-mail/ticket se tramitará la aceptación, se enviará un e-mail/ticket confirmando la recepción de la misma y se procederá efectuar el trabajo.\n\t9. Una vez reparado y comprobado el elemento, éste es devuelto por agencia de transporte a su domicilio con un servicio 24h contra reembolso."
 einatech: "Reparación de módulo electrónico"
 einatech_textarea_default : "-Tipo elemento: \n-Referencia: \n-Descripción de la avería: \n-Máquina de diagnosis utilizada: \n-Códigos de avería y descripción: \n-Kilómetros del vehículo: "
+valoration: "Valoración de mantenimiento"

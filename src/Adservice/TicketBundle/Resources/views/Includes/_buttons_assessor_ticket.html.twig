@@ -53,7 +53,7 @@
                 <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
         {% endif  %}
 
-        {% if is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCategoryService() == null%}
+        {% if is_granted('ROLE_ASSESSOR') %}
         <div class="grid-33 mt5">
             <form action="{{ path('findTicketById') }}" id="findTicketById" role="form" method="post" enctype="multipart/form-data">
 

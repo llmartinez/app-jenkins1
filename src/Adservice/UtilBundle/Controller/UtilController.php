@@ -6,6 +6,7 @@ use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
+use Adservice\OrderBundle\Entity\WorkshopOrder;
 
 class UtilController extends Controller
 {
@@ -148,24 +149,27 @@ class UtilController extends Controller
     {
         $code   = 1; //Si no hay codigo por parametro se asigna 1
         $unused = 1;
-
+        
         if($code_workshop != null )
         {
             $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
             if($find == null) {
-                $unused = 'unused';
-                $code   = $code_workshop;
+                $find   = $em->getRepository('OrderBundle:WorkshopOrder'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code_workshop));
+                if($find == null) {
+                    $unused = 'unused';
+                    $code   = $code_workshop;
+                }
             }
         }
-
-        while($unused != 'unused') {
-            $find   = $em->getRepository('WorkshopBundle:Workshop'  )->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
-            $find_O = $em->getRepository('OrderBundle:WorkshopOrder')->findOneBy(array('code_partner' => $code_partner, 'code_workshop' => $code));
-
-            if($find == null and $find_O == null) $unused = 'unused'; // Si no encuentra el codigo significa que esta disponible y se devuelve
-            else $code ++;                                            // Si el codigo esta en uso, se busca el siguiente
+        if($unused != 'unused') 
+        {     
+            $code = $find   = $em->getRepository('WorkshopBundle:Workshop'  )->getMaxIdByCodePartner($code_partner);
+            $code_order = $find = $em->getRepository('OrderBundle:WorkshopOrder'  )->getMaxIdByCodePartner($code_partner);
+            if($code_order > $code){
+                $code = $code_order;
+            }
+            $code++;
         }
-
         return $code;
     }
 
