@@ -525,7 +525,6 @@ class ApiController extends FOSRestController
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $workshop->setCreatedBy($security->getToken()->getUser());
-
             $em->persist($workshop);
             $em->flush();
 
@@ -1034,22 +1033,19 @@ class ApiController extends FOSRestController
         }
         else {
             $tmp_typology = $em->getRepository("AppBundle:Typology")->find($parsedHeaders['typology']);
-            if ($tmp_typology == null) {
+            if ($tmp_typology == null || $tmp_typology->getCategoryService()->getId() != $security->getToken()->getUser()->getCategoryService()->getId()) {
                 $data[] = $this->throwError($trans->trans('typology_not_valid%typology%', array('%typology%' => $parsedHeaders['typology'])), 404);
             }
         }
         //Comprobacion DiagMachine
-        if($parsedHeaders['diag_machine'] == null) {
-            $data[] = $this->throwError($trans->trans('diag_machine_not_null%diag_machine%', array('%diag_machine%' => $parsedHeaders['diag_machine'])), 404);
-        }
-        else {
-
+        if($parsedHeaders['diag_machine'] != null) {
             $tmp_diag = $em->getRepository("AppBundle:DiagnosisMachine")->find($parsedHeaders['diag_machine']);
 
-            if ($tmp_diag == null) {
+            if ($tmp_diag == null || $tmp_diag->getCategoryService()->getId() != $security->getToken()->getUser()->getCategoryService()->getId()) {
                 $data[] = $this->throwError($trans->trans('diag_machine_not_valid%diag_machine%', array('%diag_machine%' => $parsedHeaders['diag_machine'])), 404);
             }
         }
+
         if ($parsedHeaders['ad_service_plus'] > 1 || $parsedHeaders['ad_service_plus'] < 0){
             $data[] = $this->throwError($trans->trans('Ad_service_plus_not_valid%ad_service_plus%', array('%ad_service_plus%' => $parsedHeaders['ad_service_plus'])), 404);
         }

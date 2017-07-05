@@ -20,7 +20,7 @@ use AppBundle\Entity\Region;
  * Adservice\UserBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ * @ORM\Entity
  */
 class User implements UserInterface, AdvancedUserInterface, \Serializable {
 
