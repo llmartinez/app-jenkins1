@@ -601,6 +601,7 @@ statistic.num_tickets_tel:	  "Nombre de tickets créés par téléphone (conseil
 statistic.num_tickets_app:	  "Nombre de tickets créé à partir de l'atelier"
 statistic.num_tickets.open:	  "Nombre de tickets ouverts"
 statistic.num_tickets.closed: "Nombre de tickets fermés"
+statistic.num_posts:              "Nombre de messages"
 statistic.last_tickets:		  "Derniers tickets des ateliers"
 statistic.no_ticket:		  "Ateliers sans ticket"
 

@@ -599,6 +599,7 @@ statistic.num_tickets_tel:	  "Number of Tickets by phone (Technical adviser)"
 statistic.num_tickets_app:	  "Number of Tickets created by the workshop"
 statistic.num_tickets.open:	  "Number of Open Tickets"
 statistic.num_tickets.closed: "Number of Closed Tickets"
+statistic.num_posts:              "Number of posts"
 statistic.last_tickets:		  "Latest workshop tickets"
 statistic.no_ticket:		  "Workshops without tickets"
 
