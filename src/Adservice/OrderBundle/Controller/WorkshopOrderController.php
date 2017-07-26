@@ -309,6 +309,12 @@ class WorkshopOrderController extends Controller {
 
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
+                        
+                        if ($user->getCategoryService()->getId() == 3) {
+                            $mailAnne = $this->container->getParameter('mail_Anne');
+                            $mailer->setTo($mailAnne);                            
+                            $mailer->sendMailToSpool();
+                        }
                     }
 
                     if ($security->isGranted('ROLE_AD'))

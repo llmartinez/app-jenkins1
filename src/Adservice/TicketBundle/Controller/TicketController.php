@@ -70,6 +70,8 @@ class TicketController extends Controller {
         $security = $this->get('security.context');
         $user = $security->getToken()->getUser();
         $catservId = $catserv ;
+       
+        
         if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
 
         $id_user = $user->getId();
@@ -408,7 +410,11 @@ class TicketController extends Controller {
      * Crea un ticket abierto con sus respectivos post y car
      * @return url
      */
-    public function newTicketAction($id_workshop = null, $einatech = 0) {
+    public function newTicketAction($id_workshop = null, $einatech = 0, $reset = 0) {
+        
+        if($reset == 1) {
+            $this->deleteSessionCar();
+        }
         
         $em = $this->getDoctrine()->getEntityManager();
         $security = $this->get('security.context');
@@ -440,7 +446,7 @@ class TicketController extends Controller {
         } else {
             $workshop = new Workshop();
         }
-
+        
         // TODO
         // Ha aparecido un error en el formulario que no recoge los datos de Marca, Modelo, Gama y Subsistema.
         // Al no encontrar solucion aparente cargaremos los datos desde $request
@@ -479,9 +485,10 @@ class TicketController extends Controller {
         $id_subsystem = $request->request->get('n_id_subsystem');
         $id_importance = $request->request->get('n_id_importance');
         $id_displacement = $request->request->get('n_id_displacement');
-        $id_vin = $request->request->get('n_id_vin');
-        $id_plateNumber = $request->request->get('n_id_plateNumber');
-
+        if(!isset($_SESSION['version']) or $_SESSION['version'] == null) {
+            $id_vin = $request->request->get('n_id_vin');
+            $id_plateNumber = $request->request->get('n_id_plateNumber');
+        }
         if (isset($id_brand) and $id_brand != '' and $id_brand != '0') {
             $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
             $car->setBrand($brand);
@@ -811,7 +818,7 @@ class TicketController extends Controller {
                                                 $ticket->setCar($car);
                                                 
                                                 UtilController::saveEntity($em, $ticket, $user);
-
+                                                $this->deleteSessionCar();
                                                 //Define Document
                                                 if ($file != "") {
                                                     //Define Post
@@ -975,8 +982,22 @@ class TicketController extends Controller {
             $id_system = '';
             $id_subsystem = '';
         }
+        $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = null; 
         
-      
+        if(isset($_SESSION['version'])) {
+            $marca_session = $_SESSION['marca'];
+            $modelo_session = $_SESSION['modelo'];
+            $version_session = $_SESSION['version'];    
+            if($einatech != 1)
+                $description_session = $_SESSION['description'];           
+            $plateNumber_session = $_SESSION['plateNumber']; 
+            $id_vin = null;
+            $car->setVin($id_vin);       
+            $id_plateNumber = null;
+            $car->setPlateNumber($id_plateNumber);       
+        }
+  
+        
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
             'car' => $car,
@@ -993,7 +1014,13 @@ class TicketController extends Controller {
             'workshop' => $workshop,
             'textarea_content' => $textarea_content,
             'id_catserv' => $id_catserv,
-            'form_name' => $form->getName()
+            'form_name' => $form->getName(),             
+            'marca_session' => $marca_session,             
+            'modelo_session' => $modelo_session,             
+            'version_session' => $version_session,
+            'description_session' => $description_session,             
+            'plateNumber_session' => $plateNumber_session    
+                
         );
         // if(isset($subsystem)) { $array[] = 'subsystem' => $subsystem; }
 
@@ -2610,6 +2637,11 @@ class TicketController extends Controller {
         return $str;
     }
 
+    private function deleteSessionCar(){
+        $_SESSION['marca'] = null;
+        $_SESSION['modelo'] = null;
+        $_SESSION['version'] = null;
+    }
 // /**
     //  * Devuelve todos los tickets realizados
     //  * @return url
