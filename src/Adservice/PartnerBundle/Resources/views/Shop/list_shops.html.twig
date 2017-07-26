@@ -79,7 +79,7 @@
             {% for shop in shops %}
             <tr>
                 <td>{{ shop.id           }}</td>
-                <td>{{ shop.codeShop}} - {{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
+                <td title="{{ shop.codeShop}} - {{ shop.name}}">{{ shop.codeShop}} - {{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
                 <td>{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ shop.partner.codePartner }} - {{ shop.partner.name|length > 15 ? shop.partner.name|slice(0, 15) ~ '...' : shop.partner.name  }}</td>
                 <td>{{ shop.categoryService }}</td>

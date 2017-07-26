@@ -193,7 +193,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech, u.token, count(t.id) as total')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech, w.ad_service_plus, u.token, count(t.id) as total')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -257,9 +257,10 @@ class StatisticController extends Controller {
                                         'lowdate_at'     => $res['lowdate_at'],
                                         'endtest_at'     => $res['endtest_at'],
                                         'status'         => $res['active'],
-                                        'test'           => $res['test'],
+                                        'is_test'        => $res['test'],
                                         'numchecks'      => $res['numchecks'],
                                         'infotech'       => $res['infotech'],
+                                        'ad_service_plus'=> $res['ad_service_plus'],
                                         'token'          => $res['token'],
                                         'update'         => '0',
                                         'lowdate'        => '0',
@@ -456,7 +457,9 @@ class StatisticController extends Controller {
                         $cont = array('update' => '0', 'lowdate' => '0', 'test' => '0');
                     }
                 }
-
+                
+            
+            
                 $data = $results;
                 unset($results);
             }  
@@ -528,8 +531,8 @@ class StatisticController extends Controller {
               if ($type == 'ticket'  )
               {
                   //Realizamos una query deshydratada con los datos ya montados
-                  $qb = $em->getRepository('TicketBundle:Ticket')
-                      ->createQueryBuilder('e')
+                  $qb = $em->getRepository('TicketBundle:Post')
+                      ->createQueryBuilder('po')
                       ->select(
                           'e.id',
                           'e.created_at',
@@ -554,9 +557,12 @@ class StatisticController extends Controller {
                           'c.year as yearCar',
                           'c.vin as vinCar',
                           'c.motor as motorCar',
-                          'im.importance'
+                          'im.importance',
+                          'count(DISTINCT po.id) as NumPosts',
+                          'e.is_phone_call as Is_phone_call'
                       )
                       ->addSelect("concat(concat(ass.name,' '), ass.surname) as assignedTo")//Concatenamos nombre y apellido
+                      ->leftJoin('po.ticket', 'e')
                       ->leftJoin('e.workshop', 'w')
                       ->leftJoin('w.category_service', 'cs')
                       ->leftJoin('e.status', 's')
@@ -570,9 +576,9 @@ class StatisticController extends Controller {
                       ->leftJoin('w.partner', 'p')
                       ->leftJoin('w.shop', 'sh')
                       ->leftJoin('w.typology', 'ty')
-                      ->leftJoin('ss.system', 'sy')
+                      ->leftJoin('ss.system', 'sy')   
                       ->groupBy('e.id')
-                      ->orderBy('e.id');
+                      ->orderBy('e.id');  
 
                   if (isset($from_date)) {
 
@@ -1836,9 +1842,11 @@ class StatisticController extends Controller {
         $excel .=
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
-            $trans->trans('endtest').';'.
+            $trans->trans('endtest').';'.                
+            $trans->trans('test').';'.
             $trans->trans('haschecks').';'.
             $trans->trans('infotech').';'.
+            $trans->trans('ad_service_plus').';'.
             $trans->trans('token').';'.
             "\n";
 
@@ -1881,9 +1889,11 @@ class StatisticController extends Controller {
             }
             if(isset($row['update_at'  ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
             if(isset($row['lowdate_at' ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
-            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';       
+            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['is_test']) && $row['is_test'] == 1) $excel.= $this->get('translator')->trans('yes').';';else $excel.=' ;';
             if(isset($row['numchecks'  ]) and $row['numchecks'] != null ) $excel.=$row['numchecks'].';'; else $excel.=' ;';
             if(isset($row['infotech'   ])) $excel.=$row['infotech'].';'; else $excel.=' ;';     
+            if(isset($row['ad_service_plus'])  && $row['ad_service_plus'] == 1) $excel.=$trans->trans('yes').';'; else $excel.=' ;';                 
             if(isset($row['token'      ])) $excel.=$row['token'].';'; else $excel.=' ;';       
             $excel.="\n";
         }
@@ -1928,9 +1938,10 @@ class StatisticController extends Controller {
             $trans->trans('status').';'.
             $trans->trans('date').';'.
             $trans->trans('assessor').';'.
-            $trans->trans('importance').';';
+            $trans->trans('importance').';'.            
+            $trans->trans('statistic.num_posts').';'.
+            $trans->trans('ticket.call').';';
         $excel.="\n";
-
         foreach ($results as $row) {
 
             //Recorremos el array deshidratado, revisando casos que esten vacios
@@ -2014,6 +2025,8 @@ class StatisticController extends Controller {
             $excel.=$this->get('translator')->trans($importance).';';
             if(isset($importance)) unset($importance);
 
+            $excel.=$row['NumPosts'].';';
+            if(isset($row['Is_phone_call'])  && $row['Is_phone_call'] == 1) $excel.=$trans->trans('yes').';'; else $excel.=' ;'; 
             $excel.="\n";
         }
         $excel = nl2br($excel);

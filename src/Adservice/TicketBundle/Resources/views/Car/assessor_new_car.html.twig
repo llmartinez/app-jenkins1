@@ -1,5 +1,11 @@
 
-<legend>{% trans %} car {% endtrans %}: <span id='car'></span></legend>
+<legend>
+   
+    <a href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0, 'reset' : 1  }) }}" class="btn btn-primary asr_form-control asr_btn">
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
+    </a>
+    {% trans %} car {% endtrans %}: <span id='car'></span>
+</legend>
 
 <div class="grid-full">
 
@@ -9,7 +15,13 @@
     <input type="hidden" id="msg_bad_year"    value="{% trans %} error.bad_introduction.ticket {% endtrans %} ({% trans %} year {% endtrans %}: 4 {% trans %} values {% endtrans %})">
     <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
     <input type="hidden" id="msg_vin_not_found"  value="{% trans %} error.vin_not_found {% endtrans %}">
-
+    
+    <input type="hidden" id="ticket_brand"   value="{{marca_session}}">
+    <input type="hidden" id="ticket_model"   value="{{modelo_session}}">
+    <input type="hidden" id="ticket_version"   value="{{version_session}}">
+    <input type="hidden" id="ticket_description"   value="{{description_session}}">
+    <input type="hidden" id="ticket_plateNumber"   value="{{plateNumber_session}}">
+    
     <div class="grid-full w100">
 
         <div class="grid-33">
