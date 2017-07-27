@@ -122,7 +122,7 @@ class SecurityController extends Controller{
      */
     public function autologinAccessAction(){
         $request = $this->getRequest();
-        $login = $request->get("login");
+        $login = $request->get("user");
         $password = $request->get("password");
         
         if($login != null && $password != null)
