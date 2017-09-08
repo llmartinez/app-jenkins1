@@ -40,7 +40,7 @@
             <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
 
             {% set today = "now"|date('l')  %}
-             {% if (today != "Saturday" and today != "Sunday" and today != "Monday") or env == "demo"  %}
+             {% if (today != "Saturday" and today != "Sunday") or env == "demo"  %}
                 {% if ticket.workshop.active != 0 %}
                 
                     <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
