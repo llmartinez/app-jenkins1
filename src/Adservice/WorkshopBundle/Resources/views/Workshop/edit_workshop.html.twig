@@ -22,12 +22,13 @@
         {% endif %}
     </ol>
 
-    <h1>
-        <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class="">
-            <img class="img_left" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
-        </a>
-    </h1>
-
+    
+    <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class="">
+        <img class="" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}"> 
+        <label >{% trans %} print {% endtrans %} </label>
+    </a>
+    
+ 
     <input type="hidden" id="bad_introduction" value="{% trans %}error.bad_introduction{% endtrans %} ">
     <form action="{{ path("workshop_edit", { 'id':workshop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         {% if is_granted('ROLE_SUPER_ADMIN') %}

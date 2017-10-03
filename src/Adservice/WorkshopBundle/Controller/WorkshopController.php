@@ -754,11 +754,12 @@ class WorkshopController extends Controller {
             {
                 $workshop->setLowdateAt($new_date);
                 
-                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
-                {
-                    $workshop->setEndTestAt($new_date);
-                    $workshop->setTest(0);
-                }
+                if($workshop->getEndTestAt()!=null && strtotime($new_date->format("Y-m-d H:i:s"))< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
+                    {
+                        $workshop->setEndTestAt($new_date);
+                        $workshop->setTest(0);
+                    }
+                
                 $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
                     //$tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
