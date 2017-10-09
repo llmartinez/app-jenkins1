@@ -3,8 +3,8 @@
 ################################
 
 newTicket:
-    pattern:  /ticket/new/{id_workshop}/{einatech}
-    defaults: { _controller: TicketBundle:Ticket:newTicket, id_workshop: null, einatech: 0 }
+    pattern:  /ticket/new/{id_workshop}/{einatech}/{reset}
+    defaults: { _controller: TicketBundle:Ticket:newTicket, id_workshop: null, einatech: 0, reset: 0 }
 editTicket:
     pattern:  /ticket/edit/{id}
     defaults: { _controller: TicketBundle:Ticket:editTicket }

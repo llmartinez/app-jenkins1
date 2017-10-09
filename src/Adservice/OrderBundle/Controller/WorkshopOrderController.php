@@ -278,7 +278,9 @@ class WorkshopOrderController extends Controller {
 
                     if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
                     if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
-
+                    if($workshopOrder->getNumChecks() > 5){
+                        $workshopOrder->setNumChecks(5);
+                    }
                     UtilController::saveEntity($em, $workshopOrder, $user);
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -309,6 +311,12 @@ class WorkshopOrderController extends Controller {
 
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
+                        
+                        if ($user->getCategoryService()->getId() == 3) {
+                            $mailAnne = $this->container->getParameter('mail_Anne');
+                            $mailer->setTo($mailAnne);                            
+                            $mailer->sendMailToSpool();
+                        }
                     }
 
                     if ($security->isGranted('ROLE_AD'))
@@ -537,7 +545,9 @@ class WorkshopOrderController extends Controller {
 
                     if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
                     if($workshopOrder->getHasChecks() == true and $workshopOrder->getNumChecks() == '') $workshopOrder->setNumChecks(0);
-
+                    if($workshopOrder->getNumChecks() > 5){
+                        $workshopOrder->setNumChecks(5);
+                    }
                     UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();

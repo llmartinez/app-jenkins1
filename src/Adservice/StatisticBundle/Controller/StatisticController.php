@@ -193,7 +193,7 @@ class StatisticController extends Controller {
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
-                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech, u.token, count(t.id) as total')
+                ->select('w.id, w.code_partner, w.code_workshop, w.name as wname, p.name as pname, ty.name as tyname, s.name as sname, w.email_1, w.phone_number_1, w.update_at, w.lowdate_at,w.endtest_at, w.active, w.test, w.numchecks, w.infotech, w.ad_service_plus, w.created_at, w.modified_at, u.token, count(t.id) as total')
                 ->leftJoin('w.country', 'c')
                 ->leftJoin('w.category_service', 'cs')
                 ->leftJoin('w.partner', 'p')
@@ -256,10 +256,13 @@ class StatisticController extends Controller {
                                         'update_at'      => $res['update_at'],
                                         'lowdate_at'     => $res['lowdate_at'],
                                         'endtest_at'     => $res['endtest_at'],
+                                        'created_at'     => $res['created_at'],
+                                        'modified_at'    => $res['modified_at'],
                                         'status'         => $res['active'],
-                                        'test'           => $res['test'],
+                                        'is_test'        => $res['test'],
                                         'numchecks'      => $res['numchecks'],
                                         'infotech'       => $res['infotech'],
+                                        'ad_service_plus'=> $res['ad_service_plus'],
                                         'token'          => $res['token'],
                                         'update'         => '0',
                                         'lowdate'        => '0',
@@ -275,10 +278,10 @@ class StatisticController extends Controller {
                 ->select('h')
                 ->where('h.workshopId IN ('.$in.')');
 
-            if (isset($from_date)) $qb->andWhere("h.dateOrder >= '".$from_date."' ");
+//            if (isset($from_date)) $qb->andWhere("h.dateOrder >= '".$from_date."' ");
             if (isset($to_date  )) $qb->andWhere("h.dateOrder <= '".$to_date."' ");
             
-            $qb->orderBy('h.workshopId, h.dateOrder');
+            $qb->orderBy('h.workshopId, h.id, h.dateOrder');
 
             $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             unset($qb);
@@ -322,83 +325,65 @@ class StatisticController extends Controller {
                             $rows[$w_id][] = array('stat' => $stat, 'date' => $date);
                         }
                         unset($resH);
-
-                        $now = new \DateTime('now');
-
                         foreach ($rows as $w_id => $workshop)
                         {
+                            
                             $len = sizeof($workshop);
-
-                            //SET DATES
-                            if (isset($from_date)) $start = new \DateTime($from_date);
-                            else                   $start = $workshop[0]['date'];
-                            if (isset($to_date))   $end = new \DateTime($to_date);
-                            else                   $end =$workshop[$len-1]['date'];
-
-                            foreach ($workshop as $key => $reg)
-                            {
-                                $low_date = null;
-                                $date = $reg['date'];
+                            $before_date_start = null;
+                            $before_date_end = null;
+                            $current_date = null;
+                            $before_state = -1;
+                            $current_state = null;
+                           //SET DATES
+                            if (isset($from_date)) $start = new \DateTime($from_date);                                  /*****************/
+                            else                   $start = $workshop[0]['date'];                                       /*     STAT      */
+                            if (isset($to_date))   $end = new \DateTime($to_date);                                      /*****************/
+                            else                   $end =$workshop[$len-1]['date'];                                     /* 0-Desactivado */                    
+                                                                                                                        /* 1-Activado    */ 
+                            foreach ($workshop as $key => $reg)                                                         /* 2-En pruebas  */
+                            {                                                                                           /* 3-Creado      */
+                                $date = $reg['date'];                                                                   /*****************/
                                 $stat = $reg['stat'];
-                                // Si es el primer registro(stat 3) no se puede sumar de una fecha anterior hasta el mismo (ya que en teoria no existía antes)
-                                if($stat != 3 )
-                                {
-                                    if($key == 0 && $results[$w_id]['endtest_at']!= null && isset($from_date))
-                                    {
-                                        $end_test = strtotime($results[$w_id]['endtest_at']->format('Y-m-d H:i:s'));
-                                        $start_date = strtotime($from_date);
-                                        $end_date =  strtotime($to_date);
-                                        $date_date = strtotime($date->format('Y-m-d H:i:s'));
-                                        if($results[$w_id]['update_at'] != null)
-                                            $up_date =  strtotime($results[$w_id]['update_at']->format('Y-m-d H:i:s'));
-                                        else
-                                            $up_date = null;
-                                        if($results[$w_id]['lowdate_at'] != null){
-                                            $low_date = strtotime($results[$w_id]['lowdate_at']->format('Y-m-d H:i:s'));
-                                            
-                                            if($low_date < $end_test && $end_test == $date_date ){
-                                                $end_test = $low_date;
-                                            }  
-                                        }
-                                        
-                                        if($end_test >= $start_date){
-                                            if($end_test < $end_date){
-                                                
-                                                if($end_test != $low_date) {
-                                                $stat = 2;
-                                                $diff = date_diff($start, $results[$w_id]['endtest_at']);
-                                                
-                                                $cont = $this->sumStatus($diff, $stat, $cont);
-                                                }
-                                                $start = $results[$w_id]['endtest_at'];
-                                                
-                                                if($results[$w_id]['lowdate_at']!=null){
-                                                    $stat = 0;
-                                                }
-                                                else {
-                                                    $stat = 1;
-                                                }
-                                            }
+                                if (isset($from_date) && strtotime($from_date) > strtotime($date->format('Y-m-d H:i:s')))
+                                {              
+                                    $before_state = $stat;
+                                    if($key == $len-1){
+                                        $diff = date_diff($start, $end);
+                                        $cont = $this->sumStatus($diff, $before_state, $cont);        
+                                    }
+                                }
+                                elseif (isset($to_date) && strtotime($from_date) <= strtotime($date->format('Y-m-d H:i:s')) && strtotime($to_date) >= strtotime($date->format('Y-m-d H:i:s')))
+                                {        
+                                    //Si solo hay un registro, solo hay que conseguir el estado anterior, a no ser que el estado sea 3 (recien creado)
+                                    $current_date = $date;
+                                    $current_state = $stat;
+                                    if($before_date_start != null && (date_diff($before_date_start,$date)->days == 0)){
+                                        $diff = date_diff($before_date_end, $before_date_start);
+                                        $cont = $this->sumStatus($diff, $before_state, $cont); 
+                                    }
+                                    
+                                    if($before_state < 0 && $key == $len-1 ){                                        
+                                        $diff = date_diff($date, $end);
+                                        $before_date_start = $date;
+                                        $before_date_end = $end;
+                                        $before_state = $current_state;
+                                        $cont = $this->sumStatus($diff, $stat, $cont);  
+                                        $start = $date;
+                                    }
+                                    else {
+                                        $diff = date_diff($start, $date);
+                                        $cont = $this->sumStatus($diff, $before_state, $cont);   
+                                        $before_date_start = $start;
+                                        $before_date_end = $date;
+                                        $before_state = $current_state;
+                                        $start = $date;
+                                        if($key == $len-1){
+                                            $diff = date_diff($current_date, $end);
+                                            $cont = $this->sumStatus($diff, $current_state, $cont);        
                                         }
                                     }
-                                    if($low_date != null ) {
-                                        if ( $end_test == $low_date) {
-                                            $stat = 2;
-                                        }
-                                    }
-                                    $diff = date_diff($start, $date);
-                                    $cont = $this->sumStatus($diff, $stat, $cont);
                                 }
-                                if($key != $len-1) $start = $date;
-                                else {
-                                    $diff = date_diff($date, $end);
-                                    if    ($stat == 0) $stat = 1;
-                                    elseif($stat == 1) $stat = 0;
-                                    $cont = $this->sumStatus($diff, $stat, $cont);
-                                }
-
                             }
-                           
                             $results[$w_id]['update' ] = $cont['update' ];
                             $results[$w_id]['lowdate'] = $cont['lowdate'];
                             $results[$w_id]['test'   ] = $cont['test'   ]; 
@@ -407,56 +392,7 @@ class StatisticController extends Controller {
                         unset($rows);
                     }
                 }
-
-                // Tratamiento de talleres que no tienen ningun registro en el historico dentro de un rango de fechas
-                if(isset($from_date) and isset($to_date))
-                {
-                    $start = new \DateTime($from_date);
-                    $end   = new \DateTime($to_date);
-                    $diff  = date_diff($start, $end);
-                    $in = '0';
-
-                    foreach ($results as $key => $res)
-                    {
-                        if ($res['update' ] == '0' and $res['lowdate'] == '0' and $res['test'   ] == '0' )
-                        {
-                            $in .= ', '.$key;
-                        }
-                    }
-                    $qb = $em->getRepository('WorkshopBundle:Historical')
-                    ->createQueryBuilder('h')
-                    ->select('h.workshopId, h.status')
-                    ->where('h.workshopId IN ('.$in.')')
-                    ->andWhere("h.dateOrder < '".$from_date."' ")
-                    ->orderBy('h.workshopId, h.dateOrder', 'ASC')
-                    ->groupBy('h.workshopId');
-
-                    $resH = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                    foreach ($resH as $row)
-                    {
-                        $w_id = $row['workshopId'];
-
-                        if($results[$w_id]['update_at']  != null) $ini = strtotime($results[$w_id]['update_at']->format('Y-m-d H:i:s'));
-                        else $ini = null;
-                        if($results[$w_id]['lowdate_at'] != null) $fin = strtotime($results[$w_id]['lowdate_at']->format('Y-m-d H:i:s'));
-                        else $fin = null;
-
-                        if ($results[$w_id]['test'] == 1) $stat = 2;
-                        elseif ($ini != null and $fin != null and $ini-$fin <= 0)
-                        {
-                          $stat = !$results[$w_id]['status'];
-                        }
-                        else $stat = $row['status'];
-                        $cont = $this->sumStatus($diff, $stat, $cont);
-
-                        $results[$w_id]['update' ] = $cont['update' ];
-                        $results[$w_id]['lowdate'] = $cont['lowdate'];
-                        $results[$w_id]['test'   ] = $cont['test'   ]; 
-
-                        $cont = array('update' => '0', 'lowdate' => '0', 'test' => '0');
-                    }
-                }
-
+      
                 $data = $results;
                 unset($results);
             }  
@@ -528,8 +464,8 @@ class StatisticController extends Controller {
               if ($type == 'ticket'  )
               {
                   //Realizamos una query deshydratada con los datos ya montados
-                  $qb = $em->getRepository('TicketBundle:Ticket')
-                      ->createQueryBuilder('e')
+                  $qb = $em->getRepository('TicketBundle:Post')
+                      ->createQueryBuilder('po')
                       ->select(
                           'e.id',
                           'e.created_at',
@@ -554,9 +490,12 @@ class StatisticController extends Controller {
                           'c.year as yearCar',
                           'c.vin as vinCar',
                           'c.motor as motorCar',
-                          'im.importance'
+                          'im.importance',
+                          'count(DISTINCT po.id) as NumPosts',
+                          'e.is_phone_call as Is_phone_call'
                       )
                       ->addSelect("concat(concat(ass.name,' '), ass.surname) as assignedTo")//Concatenamos nombre y apellido
+                      ->leftJoin('po.ticket', 'e')
                       ->leftJoin('e.workshop', 'w')
                       ->leftJoin('w.category_service', 'cs')
                       ->leftJoin('e.status', 's')
@@ -570,9 +509,9 @@ class StatisticController extends Controller {
                       ->leftJoin('w.partner', 'p')
                       ->leftJoin('w.shop', 'sh')
                       ->leftJoin('w.typology', 'ty')
-                      ->leftJoin('ss.system', 'sy')
+                      ->leftJoin('ss.system', 'sy')   
                       ->groupBy('e.id')
-                      ->orderBy('e.id');
+                      ->orderBy('e.id');  
 
                   if (isset($from_date)) {
 
@@ -1836,9 +1775,11 @@ class StatisticController extends Controller {
         $excel .=
             $trans->trans('last_update').';'.
             $trans->trans('last_lowdate').';'.
-            $trans->trans('endtest').';'.
+            $trans->trans('endtest').';'.                
+            $trans->trans('test').';'.
             $trans->trans('haschecks').';'.
             $trans->trans('infotech').';'.
+            $trans->trans('ad_service_plus').';'.
             $trans->trans('token').';'.
             "\n";
 
@@ -1881,9 +1822,11 @@ class StatisticController extends Controller {
             }
             if(isset($row['update_at'  ])) $excel.=$row['update_at' ]->format('Y-m-d H:i:s').';'; else $excel.='-;';
             if(isset($row['lowdate_at' ])) $excel.=$row['lowdate_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';            
-            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';       
+            if(isset($row['endtest_at' ])) $excel.=$row['endtest_at']->format('Y-m-d H:i:s').';'; else $excel.='-;';
+            if(isset($row['is_test']) && $row['is_test'] == 1) $excel.= $this->get('translator')->trans('yes').';';else $excel.=' ;';
             if(isset($row['numchecks'  ]) and $row['numchecks'] != null ) $excel.=$row['numchecks'].';'; else $excel.=' ;';
             if(isset($row['infotech'   ])) $excel.=$row['infotech'].';'; else $excel.=' ;';     
+            if(isset($row['ad_service_plus'])  && $row['ad_service_plus'] == 1) $excel.=$trans->trans('yes').';'; else $excel.=' ;';                 
             if(isset($row['token'      ])) $excel.=$row['token'].';'; else $excel.=' ;';       
             $excel.="\n";
         }
@@ -1928,9 +1871,10 @@ class StatisticController extends Controller {
             $trans->trans('status').';'.
             $trans->trans('date').';'.
             $trans->trans('assessor').';'.
-            $trans->trans('importance').';';
+            $trans->trans('importance').';'.            
+            $trans->trans('statistic.num_posts').';'.
+            $trans->trans('ticket.call').';';
         $excel.="\n";
-
         foreach ($results as $row) {
 
             //Recorremos el array deshidratado, revisando casos que esten vacios
@@ -2014,6 +1958,8 @@ class StatisticController extends Controller {
             $excel.=$this->get('translator')->trans($importance).';';
             if(isset($importance)) unset($importance);
 
+            $excel.=$row['NumPosts'].';';
+            if(isset($row['Is_phone_call'])  && $row['Is_phone_call'] == 1) $excel.=$trans->trans('yes').';'; else $excel.=' ;'; 
             $excel.="\n";
         }
         $excel = nl2br($excel);
@@ -2432,22 +2378,66 @@ class StatisticController extends Controller {
 
             switch ($status) {
               case '0':
-                $update = $update + $diff->days;
+                $lowdate = $lowdate + $diff->days;
+                  if($diff->h > 20){
+                      $lowdate +=1;
+                  }
                 break;
               case '1':
-                $lowdate = $lowdate + $diff->days;
+                $update = $update + $diff->days;
+                  if($diff->h > 20){
+                      $update +=1;
+                  }
                 break;
               case '2':
                 $test = $test + $diff->days;
+                  if($diff->h > 20){
+                      $test +=1;
+                  }
                 break;
               case '3':
                 $update = $update + $diff->days;
+                   if($diff->h > 20){
+                      $update +=1;
+                  }
+                break;
+              default:
+                break;
+            }
+        }
+        else{
+           
+            switch ($status) {
+              case '0':
+                $lowdate = $lowdate - $diff->days;
+                  if($diff->h > 20){
+                      $lowdate -=1;
+                  }
+                break;
+              case '1':
+                $update = $update - $diff->days;
+                  if($diff->h > 20){
+                      $update -=1;
+                  }
+                break;
+              case '2':
+                $test = $test - $diff->days;
+                  if($diff->h > 20){
+                      $test -=1;
+                  }
+                break;
+              case '3':
+                $update = $update - $diff->days;
+                   if($diff->h > 20){
+                      $update -=1;
+                  }
                 break;
               default:
                 break;
             }
         }
         $cont = array('update' => $update, 'lowdate' => $lowdate, 'test' => $test);
+        
         return $cont;
     } 
 }

@@ -33,7 +33,7 @@
 
             <div class="w70 fl">
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
+                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop_name {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'workshop' | trans } }) }}
                 </div>
                 {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN')%}
@@ -153,7 +153,7 @@
                     </div>
                     <div class="grid w45 fl">
                         <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
-                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' | trans }}) }}
                     </div>
                 </div>
                 <div class="grid w45 fl mt20" {{is_hidden}}>

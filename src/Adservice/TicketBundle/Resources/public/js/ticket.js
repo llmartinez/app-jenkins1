@@ -19,6 +19,8 @@ $(document).ready(function() {
         var ticket_system  = $('#ticket_system').val();
         var ticket_subsystem  = $('#ticket_subsystem').val();
         var ticket_importance = $('#ticket_importance').val();
+        var ticket_description  = $('#ticket_description').val();
+        var ticket_plateNumber = $('#ticket_plateNumber').val();
 
         if(ticket_brand != '')
             $('#new_car_form_brand').val(ticket_brand);
@@ -28,6 +30,13 @@ $(document).ready(function() {
 
         if(ticket_importance != '')
             $('#new_car_form_importance').val(ticket_importance);
+        
+        if(ticket_description != '')
+            $('#ticket_form_description').val(ticket_description);
+        
+        if(ticket_plateNumber != '')
+            $('#new_car_form_plateNumber').val(ticket_plateNumber);
+
     }
 
     //UPPER VIN & PLATENUMBER

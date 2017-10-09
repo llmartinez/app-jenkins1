@@ -276,6 +276,9 @@ class WorkshopController extends Controller {
                 if($workshop->getTest()){
                     $status = 2;
                 }
+                if($workshop->getNumChecks() > 5){
+                    $workshop->setNumChecks(5);
+                }
                 UtilController::createHistorical($em, $workshop, $status);
                 //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
                 if ($workshop->getAdServicePlus()) {
@@ -545,7 +548,9 @@ class WorkshopController extends Controller {
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
-
+                    if($workshop->getNumChecks() > 5){
+                        $workshop->setNumChecks(5);
+                    }
                     $this->saveWorkshop($em, $workshop);
                     $status = 1;
                     if($workshop->getTest()){
@@ -754,11 +759,12 @@ class WorkshopController extends Controller {
             {
                 $workshop->setLowdateAt($new_date);
                 
-                if($workshop->getEndTestAt()!=null && strtotime($new_date)< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
-                {
-                    $workshop->setEndTestAt($new_date);
-                    $workshop->setTest(0);
-                }
+                if($workshop->getEndTestAt()!=null && strtotime($new_date->format("Y-m-d H:i:s"))< strtotime($workshop->getEndTestAt()->format("Y-m-d H:i:s")) )
+                    {
+                        $workshop->setEndTestAt($new_date);
+                        $workshop->setTest(0);
+                    }
+                
                 $status = 0;
                 // Cerramos todos los tickets del taller deshabilitado
                     //$tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('workshop' => $workshop->getId()));
