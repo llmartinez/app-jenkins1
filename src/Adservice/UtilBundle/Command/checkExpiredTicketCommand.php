@@ -66,10 +66,10 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
             $diff = date_diff($date, $ticket->getModifiedAt());
 
             $email1 = $ticket->getWorkshop()->getEmail1();
-            $lang = $ticket->getWorkshop()->getCountry()->getLang(); 
+            $lang = $ticket->getWorkshop()->getCountry()->getShortName(); 
             
             $translator = $this->getContainer()->get('translator');
-            $translator->setLocale($lang);
+            $translator->setLocale(strtolower($lang));
             
             $msg_expirated = $translator->trans('mail.inactivity_warning');
             $msg_expired = $translator->trans('mail.inactiveTicket.title');
@@ -110,7 +110,6 @@ class checkExpiredTicketCommand extends ContainerAwareCommand
                     $post->setModifiedBy($sa);
                     $post->setCreatedAt($date);
                     $post->setModifiedAt($date);
-
                     $ticket->setStatus($status[3]); // $status[3] = array(4 => 'expirated')
                     $ticket->setModifiedAt($date);
                     $ticket->setModifiedBy($sa);

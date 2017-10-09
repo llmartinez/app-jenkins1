@@ -90,7 +90,7 @@ class AjaxController extends Controller
         $id_catserv = $petition->request->get('id_catserv');
 
         $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
-        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ";
+        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ORDER by p.name";
 
         $consulta = $em->createQuery($query);
         $partners   = $consulta->getResult();
@@ -723,7 +723,7 @@ class AjaxController extends Controller
         $id_country  = $petition->request->get('id_country');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-
+        
         if (sizeOf($id_model) == 1 and $id_model != ""
             and sizeOf($id_subsystem) == 1 and $id_subsystem != ""
             and sizeOf($id_country) == 1 and $id_country != "") {
@@ -748,7 +748,9 @@ class AjaxController extends Controller
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
-
+        if(!isset($json)){
+            $json = array( 'error' => 'No hay coincidencias');
+        }
         return new Response(json_encode($json), $status = 200);
     }
 
