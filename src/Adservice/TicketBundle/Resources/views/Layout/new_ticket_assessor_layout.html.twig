@@ -49,14 +49,22 @@
           <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
 
               <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
-            {% if car is defined %}
-              {% if car.brand.id is defined %} <input type="hidden" id="ticket_brand"   value="{{car.brand.id}}">{% endif %}
-              {% if car.model.id is defined %} <input type="hidden" id="ticket_model"   value="{{car.model.id}}">{% endif %}
-              {% if car.version.id is defined %} <input type="hidden" id="ticket_version" value="{{car.version.id}}">{% endif %}
-              {% if car.year is defined %} <input type="hidden" id="ticket_year" value="{{car.year}}">{% endif %}
-              {% if ticket.subsystem.system.id is defined %} <input type="hidden" id="ticket_system"  value="{{ticket.subsystem.system.id}}">{% endif %}
-              {% if ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem" value="{{ticket.subsystem.id}}">{% endif %}
-              {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id}}">{% endif %}
+              
+              {% if car is defined or marca_session != null %}                
+                {% if marca_session != null %}
+                    <input type="hidden" id="ticket_brand"   value="{{marca_session}}">
+                    <input type="hidden" id="ticket_model"   value="{{modelo_session}}">
+                    <input type="hidden" id="ticket_version"   value="{{version_session}}">
+                {% else %}
+                    {% if car.brand.id is defined %} <input type="hidden" id="ticket_brand"   value="{{car.brand.id}}">{% endif %}
+                    {% if car.model.id is defined %} <input type="hidden" id="ticket_model"   value="{{car.model.id}}">{% endif %}
+                    {% if car.version.id is defined %} <input type="hidden" id="ticket_version" value="{{car.version.id}}">{% endif %}
+                    {% if car.year is defined %} <input type="hidden" id="ticket_year" value="{{car.year}}">{% endif %}
+                    {% if ticket.subsystem.system.id is defined %} <input type="hidden" id="ticket_system"  value="{{ticket.subsystem.system.id}}">{% endif %}
+                    {% if ticket.subsystem.id is defined %} <input type="hidden" id="ticket_subsystem" value="{{ticket.subsystem.id}}">{% endif %}
+                    {% if ticket.importance.id is defined %} <input type="hidden" id="ticket_importance" value="{{ticket.importance.id}}">{% endif %}
+                {% endif %}
+              
             {% endif %}
 
             <div class="tblContainer">
