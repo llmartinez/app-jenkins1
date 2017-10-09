@@ -24,7 +24,7 @@
 
     
     <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class="">
-        <img class="" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}"> 
+        <img class="img_icon_left" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}"> 
         <label >{% trans %} print {% endtrans %} </label>
     </a>
     
@@ -51,7 +51,7 @@
 
             <div class="w70 fl">
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
+                    <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop_name {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
                 </div>
                  <div class="col-xs-3 col-md-3 form-group">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="grid w45 fl">
                         <label for="adservice_workshopbundle_workshoptype_numchecks">{% trans %} numchecks {% endtrans %}</label>
-                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' | trans }}) }}
                     </div>
                 </div>
                 <div class="grid w45 fl mt20" {{is_hidden}}>

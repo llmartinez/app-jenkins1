@@ -276,6 +276,9 @@ class WorkshopController extends Controller {
                 if($workshop->getTest()){
                     $status = 2;
                 }
+                if($workshop->getNumChecks() > 5){
+                    $workshop->setNumChecks(5);
+                }
                 UtilController::createHistorical($em, $workshop, $status);
                 //Si ha seleccionado AD-Service + lo añadimos a la BBDD correspondiente
                 if ($workshop->getAdServicePlus()) {
@@ -545,7 +548,9 @@ class WorkshopController extends Controller {
 
                     if($workshop->getHasChecks() == false and $workshop->getNumChecks() != null) $workshop->setNumChecks(null);
                     if($workshop->getHasChecks() == true and $workshop->getNumChecks() == '') $workshop->setNumChecks(0);
-
+                    if($workshop->getNumChecks() > 5){
+                        $workshop->setNumChecks(5);
+                    }
                     $this->saveWorkshop($em, $workshop);
                     $status = 1;
                     if($workshop->getTest()){
