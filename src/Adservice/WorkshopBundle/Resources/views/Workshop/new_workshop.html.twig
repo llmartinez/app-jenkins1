@@ -36,14 +36,19 @@
                     <label for="adservice_workshopbundle_workshoptype_name">{% trans %} workshop {% endtrans %} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'workshop' | trans } }) }}
                 </div>
-                
-                
+                {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN')%}
+                    {% if form.category_service is defined %}
+                        <div class="col-xs-3 col-md-3 form-group" >
+                           <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% endif %}
+                {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     {% if not is_granted('ROLE_SUPER_ADMIN') %}
                         <div class="col-xs-3 col-md-3 form-group">
                             <label> {% trans %} category_service {% endtrans %} </label>
                             <select  id="adservice_workshopbundle_workshoptype_category_service" name="adservice_workshopbundle_workshoptype[category_service]" class="form-control"> 
-                                <option value="0"></option>
+                                <option value></option>
                                 <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
 
                             </select>
@@ -69,7 +74,7 @@
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} code_partner {% endtrans %}</label>
-                    <input id="code_partner" type="text" class="form-control" value="" placeholder="{% trans %} code_partner {% endtrans %}">
+                    <input name="code_partner" id="code_partner" type="text" class="form-control" value="" placeholder="{% trans %} code_partner {% endtrans %}">
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="new_car_form_vin">{% trans %} code_workshop {% endtrans %} *</label>
@@ -81,6 +86,11 @@
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %} * </label>
                     {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
+                {% if is_granted('ROLE_ADMIN') and form.code_billing is defined %}
+                    <div class="col-xs-2 col-md-2 form-group">
+                        <label>{% trans %} code_billing {% endtrans %}</label> {{ form_widget(form.code_billing, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                {% endif %}
                 <div class="col-xs-3 col-md-3 form-group" {{is_hidden}}>
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
                     {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}

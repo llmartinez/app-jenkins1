@@ -58,6 +58,14 @@ legend {
 
 #profile:hover {color: #428BCA;}
 
+.img_left {  
+    max-height: 20px;
+    float: left;
+}
+.img_icon_right {  
+    max-height: 20px;
+    float: right;
+}
 .img_icon {
     max-height: 20px;
 }
@@ -880,7 +888,6 @@ fieldset[disabled] .asr_form-control {
 .w95  { width:  95%!important; }
 .w100 { width: 100%!important; }
 
-
 .grid-15  {
     width:  14%!important;
     margin-right: 1%;
@@ -891,8 +898,19 @@ fieldset[disabled] .asr_form-control {
     margin-right: 1%;
     float: left;
 }
+.grid-25  {
+    width:  24%!important;
+    margin-right: 1%;
+    float: left;
+}
 .grid-33  {
     width:  30%!important;
+    margin-right: 3.3%;
+    float: left;
+}
+
+.grid-66  {
+    width:  60%!important;
     margin-right: 3.3%;
     float: left;
 }
@@ -908,4 +926,10 @@ fieldset[disabled] .asr_form-control {
 
 .lbl_lgray {
     color: #838383;
+}
+
+#more_information_einatech {
+    cursor: pointer;
+    line-height: 75px;
+    padding-left: 15px;
 }

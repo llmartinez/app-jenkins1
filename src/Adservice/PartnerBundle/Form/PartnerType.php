@@ -27,7 +27,7 @@ class PartnerType extends AbstractType {
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
-            ->add('region', 'text')
+            ->add('region', 'text', array('required' => false))
             ->add('city', 'text')
             ->add('address')
             ->add('postal_code')
@@ -41,6 +41,8 @@ class PartnerType extends AbstractType {
             ->add('contact', 'text', array('required' => false))
             ->add('observations', 'textarea', array('required' => false))
         ;
+        
+        if (isset($_SESSION['code_billing'])) $builder->add('code_billing', 'text', array('required' => false));
     }
 
     public function getName() {

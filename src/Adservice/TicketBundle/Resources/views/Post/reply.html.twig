@@ -39,26 +39,32 @@
 
             <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
 
-            {% if ticket.workshop.active != 0 %}
-                <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
+            {% set today = "now"|date('l')  %}
+             {% if (today != "Saturday" and today != "Sunday") or env == "demo"  %}
+                {% if ticket.workshop.active != 0 %}
+                
+                    <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
-                {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
-                <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}10Mb</label>
+                    {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
+                    <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}10Mb</label>
 
-                <button class="btn btn-primary pull-right btn100 sendTicket" name="sendTicket" type="submit">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
-                {% if app.session.hasFlash('error') %}
+                    <button class="btn btn-primary pull-right btn100 sendTicket" name="sendTicket" type="submit">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+                    {% if app.session.hasFlash('error') %}
+                    {% endif %}
+                    {{ form_rest(formP) }}
+                    {{ form_rest(formD) }}
+
+                    {#<a class="btn btn-primary pull-right btn100 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}">
+                        {% trans %} ticket.close {% endtrans %}</a>#}
+                     <button class="btn btn-primary pull-right btn100 closeTicket" name="closeTicket" type="submit">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}</button>
+                {% else %}
+                    {% trans %} reply_inactive {% endtrans %}
                 {% endif %}
-                {{ form_rest(formP) }}
-                {{ form_rest(formD) }}
-
-                {#<a class="btn btn-primary pull-right btn100 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}">
-                    {% trans %} ticket.close {% endtrans %}</a>#}
-                 <button class="btn btn-primary pull-right btn100 closeTicket" name="closeTicket" type="submit">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}</button>
             {% else %}
-                {% trans %} reply_inactive {% endtrans %}
+                <p class="alert">{% trans %} ticket.weekend_closed {% endtrans %}</p>
             {% endif %}
 
         {% endif %}

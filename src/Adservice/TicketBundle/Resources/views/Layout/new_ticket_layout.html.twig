@@ -33,10 +33,12 @@
 {% block content %}
     <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
     <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
+    <input type="hidden" id="msg_einatech" name="msg_einatech" value="{% trans %} msg_einatech {% endtrans %}">
+    <input type="hidden" id="new_einatech" name="new_einatech" value={{einatech}}>
     {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
 
     {% if workshop.id != "" %}
-        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
+        <form action="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech': einatech }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
             <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
               <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
               {% trans %} ticket_return {% endtrans %}

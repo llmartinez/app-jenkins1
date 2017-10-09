@@ -17,13 +17,22 @@
 
         {% set token = workshop.users[0].token %}
         {% if is_granted('ROLE_ADMIN') and token is defined and token != null and token != '' %}
+            
             <p class="pull-right">Token: <b>{{token}}</b></p>
         {% endif %}
     </ol>
 
+    <h1>
+        <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class="">
+            <img class="img_left" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
+        </a>
+    </h1>
 
     <input type="hidden" id="bad_introduction" value="{% trans %}error.bad_introduction{% endtrans %} ">
     <form action="{{ path("workshop_edit", { 'id':workshop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <button class="btn btn-primary pull-right" name = "btn_reset_token" id="btn_reset_token" type="submit"><img class="img_icon"> Reset token</button>
+        {% endif %}
         <input type="hidden" id="workshop_cif" value="{{workshop.cif}}">
         <div class="container">
             <legend>{% trans %} workshop {% endtrans %}
@@ -66,6 +75,11 @@
                     <label for="adservice_workshopbundle_workshoptype_cif">{% trans %} cif {% endtrans %} * </label>
                     {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
                 </div>
+                {% if is_granted('ROLE_ADMIN') and form.code_billing is defined %}
+                    <div class="col-xs-2 col-md-2 form-group">
+                        <label>{% trans %} code_billing {% endtrans %}</label> {{ form_widget(form.code_billing, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                {% endif %}
                 <div class="col-xs-3 col-md-3 form-group" {{is_hidden}}>
                     <label for="adservice_workshopbundle_workshoptype_shop">{% trans %} shop {% endtrans %}</label>
                     {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}

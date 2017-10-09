@@ -89,7 +89,8 @@ class UserController extends Controller {
 
                         foreach ($popups as $popup) {
                             $flash .= '
-                            '.$popup['name'].': '.$popup['description'].' ';
+                            - '.$popup['name'].': '.$popup['description'].'
+                            ';
                         }
                         if($flash != '') $this->get('session')->setFlash('popup', $flash);
                     }
@@ -175,7 +176,12 @@ class UserController extends Controller {
             }
         }
 
-        return $this->render('UserBundle:User:index.html.twig', array('length' => $length));
+        $em = $this->getDoctrine()->getEntityManager();
+        $inactive = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'inactive'))->getId();
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => $inactive));
+        $t_inactive = sizeof($tickets);
+
+        return $this->render('UserBundle:User:index.html.twig', array('length' => $length, 't_inactive' => $t_inactive));
     }
 
     /**
@@ -320,6 +326,7 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
+        if($security->getToken()->getUser()->getCategoryService() != null)
         $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
 
         if($country != 0){

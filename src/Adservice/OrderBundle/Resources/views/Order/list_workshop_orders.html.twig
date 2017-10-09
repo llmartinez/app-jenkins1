@@ -186,6 +186,15 @@
                                                                                                                 {% else %}{% trans %}no{% endtrans %}
                                                                                                                 {% endif %}</td></tr>
                                                     {% endif %}
+                                                    <tr><td>{% trans %} diagnosis_machine {% endtrans %}</td><td>
+                                                                                                                {% for dm in orderBefore.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                            </td>
+                                                                                                            <td>{% for dm in workshopOrder.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                        </td></tr>
                                                 {% else %}
                                                     <tr><th>                                          </th><th>{% trans %}values{% endtrans %}</th></tr>
                                                     <tr><td>{% trans %} name             {% endtrans %}</td><td>{{ workshopOrder.name          }}</td></tr>
@@ -238,6 +247,11 @@
                                                                                                                 {% else %}{% trans %}no{% endtrans %}
                                                                                                                 {% endif %}</td></tr>
                                                     {% endif %}
+                                                    <tr><td>{% trans %} diagnosis_machine {% endtrans %}</td>
+                                                                                                            <td>{% for dm in workshopOrder.diagnosisMachines %}
+                                                                                                                    {{ dm.name }}{% if loop.index != workshopOrder.diagnosisMachines|length %}, {% endif %}
+                                                                                                                {% endfor %}
+                                                                                                        </td></tr>
                                                 {% endif %}
                                                 </table>
                                             </div>
@@ -272,7 +286,12 @@
                                 <td>
                                     <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick_.png') }}"> </a>
                                     <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> </a>
-                                </td>
+                                
+                            {% elseif is_granted('ROLE_TOP_AD') and id_catserv == 3 %}
+                                <td>
+                                    <a title="{% trans %} accept {% endtrans %}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick_.png') }}"> </a>
+                                    <a title="{% trans %} reject {% endtrans %}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> </a>                                    
+                                </td> 
                             {% elseif is_granted('ROLE_AD') %}
                                 <td>
                                     <a title="{% trans %} cancel {% endtrans %}" href="{{ path('workshopOrder_remove', {'id' : workshopOrder.id}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"></a>

@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="workshop_diagnosis_machine")
  * @ORM\Entity
  */
-class WorkshopDiagnosisMachine {
-
+class WorkshopDiagnosisMachine
+{
     /**
      * @var integer $workshop_id
      *

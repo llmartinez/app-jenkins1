@@ -1,0 +1,49 @@
+
+{% set ticket_status = ticket.status %}
+
+{% if ticket_status == 'inactive'%}
+
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_inactive.png') }}" title="{{'ticket.inactive'|trans }}" alt="{{ 'ticket.inactive' | trans }}">
+    {% else %}
+        {% set ticket_status = 'open' %}
+    {% endif %}
+{% endif %}
+
+{% if ticket_status == 'expirated' %}
+    <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_expirated.png') }}" title="{{'ticket.expirated'|trans }}" alt="{{ 'ticket.expirated' | trans }}">
+
+{% elseif ticket_status == 'open' %}
+
+    {% if ticket.assignedTo == null %}
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_pending.png') }}" title="{{'ticket_assign_not'|trans }}" alt="{{ ticket.status | trans }}">
+    {% else %}
+        {% if ticket.pending == 1 %}
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
+            {% else %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }}"
+                alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
+            {% endif %}
+        {% else %}
+            {% if is_granted('ROLE_ASSESSOR') %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_answered.png') }}" title="{{'ticket.opt.answered'|trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}"
+                alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
+            {% else %}
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_assigned.png') }}" title="{{'ticket.opt.pending'|trans }} "
+                alt="{{ ticket.status | trans }} - {{'assigned_to'|trans}} {{ticket.assignedTo}}">
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+{% elseif ticket_status == 'closed' %}
+
+    {% if ticket.expirationDate == null %}
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_closed.png') }}" title="{{ 'ticket_closed' | trans }}" alt="{{ 'ticket_closed' | trans }}">
+    {% else %}
+        {% set close_inactive = 'mail.inactiveTicket.title' | trans %}
+        <img class="img_icon" src="{{ asset('bundles/util/images/icon/icon_expired.png') }}" title="{{ close_inactive }}" alt="{{ close_inactive }}">
+    {% endif %}
+
+{% endif %}

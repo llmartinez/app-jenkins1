@@ -90,7 +90,7 @@ class AjaxController extends Controller
         $id_catserv = $petition->request->get('id_catserv');
 
         $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
-        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ";
+        if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ORDER by p.name";
 
         $consulta = $em->createQuery($query);
         $partners   = $consulta->getResult();
@@ -189,8 +189,8 @@ class AjaxController extends Controller
 
         $id_partner = $petition->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
-        
         $workshop = UtilController::getCodeWorkshopUnused($em,$partner->getCodePartner());
+
         $json = array('code' => $workshop);
 
         return new Response(json_encode($json), $status = 200);
@@ -557,7 +557,7 @@ class AjaxController extends Controller
         $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                     WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                     AND mt.name LIKE '%".$motor."%' ORDER BY b.name ASC";
-
+        
         $consulta = $em->createQuery($query);
         $brands   = $consulta->getResult();
 
@@ -601,6 +601,24 @@ class AjaxController extends Controller
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
+        if($car == null){
+            $json = array( 'error' => 'No hay coincidencias');
+        }
+        else{
+            $json = $car->to_json();
+
+            $version = null;
+            if($car->getVersion() != null){
+                $version = $car->getVersion()->getId();
+            }
+        }
+        return new Response(json_encode($json), $status = 200);
+    }
+    
+    public function getCarFromVinAction($vin){
+        $em = $this->getDoctrine();
+
+        $car = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $vin));
         if($car == null){
             $json = array( 'error' => 'No hay coincidencias');
         }
@@ -705,7 +723,7 @@ class AjaxController extends Controller
         $id_country  = $petition->request->get('id_country');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-
+        
         if (sizeOf($id_model) == 1 and $id_model != ""
             and sizeOf($id_subsystem) == 1 and $id_subsystem != ""
             and sizeOf($id_country) == 1 and $id_country != "") {
@@ -718,8 +736,11 @@ class AjaxController extends Controller
             $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country, $catserv_id);
 
             if(count($tickets) > 0) {
-                foreach ($tickets as $ticket) {
-                    $json[] = $ticket->to_json_subsystem();
+                foreach ($tickets as $ticket) {                    
+                    if($ticket->getStatus()->getId() == 2 && $ticket->getExpirationDate() == null)
+                    {
+                        $json[] = $ticket->to_json_subsystem();
+                    }
                 }
             }else{
                 $json = array( 'error' => 'No hay coincidencias');
@@ -727,7 +748,9 @@ class AjaxController extends Controller
         }else{
             $json = array( 'error' => 'No hay coincidencias');
         }
-
+        if(!isset($json)){
+            $json = array( 'error' => 'No hay coincidencias');
+        }
         return new Response(json_encode($json), $status = 200);
     }
 

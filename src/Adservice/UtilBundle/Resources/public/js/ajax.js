@@ -1,5 +1,6 @@
 
     $.ajaxSetup({ cache: false });
+
 /**
  * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
  * @param {url de tipo {{ path('mi_path') }}} route
@@ -121,6 +122,7 @@ function populate_partner(){
         });
     }
 }
+
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -165,6 +167,7 @@ function populate_partner2(partner){
         });
     }
 }
+
 function populate_partner3(){
     var id_catserv = $('select[name*=category_service]').val();
     if (id_catserv == undefined) { id_catserv = $('#id_catserv').val(); }
@@ -325,6 +328,7 @@ function populate_typology3(typology){
         }
     });
 }
+
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -396,8 +400,6 @@ function populate_diagmachine2(diag_machine){
             console.log("Error al cargar las maquinas de diagnosis...");
         }
     });
-
-
 }
 
 /**
@@ -437,6 +439,7 @@ function populate_shop(id_shop){
         }
     });
 }
+
 /**
  * Funcion que rellena (populate) el combo de los talleres segun el socio seleccionado por el usuario
  */
@@ -632,7 +635,7 @@ function fill_version(version) {
 
             if ($('#motor_selected').val() == '') { filter       = 'motor';
                                                     filter_value = $('#new_car_form_motor').val();
-                                                    // id_mts       = $('#id_mts').val();
+                                                   // id_mts       = $('#id_mts').val();
                                                   }
 
             $.ajax({
@@ -652,7 +655,7 @@ function fill_version(version) {
                     if(flt_year == undefined || flt_year == '' || flt_year == '0') $('#new_car_form_year').val('');
 
                     var flt_motor = $('#flt_motor').val();
-                    if(flt_motor == undefined || flt_motor == '' || flt_motor == '0') $('#new_car_form_motor').val('');
+                    if($('#motor_selected').val() == undefined && (flt_motor == undefined || flt_motor == '' || flt_motor == '0')) $('#new_car_form_motor').val('');
 
                     $('#new_car_form_kW').val('');
                     $('#new_car_form_displacement').val('');
@@ -742,14 +745,16 @@ function fill_car_data() {
                         var year_setted = $('form[id=contact]').find('#new_car_form_year').attr('value');
 
                         if(year_setted != undefined && year_setted != ''){
-                            $('form[id=contact]').find('#new_car_form_year'    ).val(year_setted);
+                            $('form[id=contact]').find('#new_car_form_year').val(year_setted);
                             $('form[id=contact]').find('#new_car_form_year').attr('value', '');
                         }else{
                             if(year == undefined) {
                                 $('form[id=contact]').find('#new_car_form_year'    ).val(fecha);
                             }
                         }
-                        $('form[id=contact]').find('#new_car_form_motor'       ).val(elm.motor  );
+
+                        if ($('#motor_selected').val() == undefined) $('form[id=contact]').find('#new_car_form_motor').val(elm.motor);
+
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                         $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                         var dis_url = $( "#dis-url" ).val();
@@ -802,15 +807,15 @@ function fill_car_by_year() {
                         $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
-                    $('#filter_motor').empty();
-                    $('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
+                    //$('#filter_motor').empty();
+                    //$('#filter_motor').append('<a id="flt_motor" value="'+year+'"><img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-                    $('#filter_year').empty();
-                    if(year != ''){
-                        $('#filter_year').append('<input type="hidden" id="flt_year" name="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
-                    }else{
-                        $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
-                    }
+                    //$('#filter_year').empty();
+                    //if(year != ''){
+                    //   $('#filter_year').append('<input type="hidden" id="flt_year" name="flt_year" value="'+year+'"><img class="img_icon" id="year_selected" src='+$('#funnel_filtered').val()+'></a>');
+                    //}else{
+                    //    $('#filter_year').append('<img class="img_icon" id="year_selected" src='+$('#funnel').val()+'></a>');
+                    //}
                 }
             }
         },
@@ -861,14 +866,17 @@ function fill_car_by_motor() {
                             $('form[id=contact]').find('select[id=new_car_form_brand]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                     //Cambiamos el icono para indicar que se esta filtrando por motor
-                    $('#filter_year').empty();
-                    $('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
+                    //$('#filter_year').empty();
+                    //$('#filter_year').append('<img class="img_icon" src='+$('#funnel').val()+'></a>');
 
-                    $('#filter_motor').empty();
-                    if(motor != ''){
-                        $('#filter_motor').append('<input type="hidden" id="flt_motor" name="flt_motor" value="'+motor+'"><img class="img_icon" id="motor_selected" src='+$('#funnel_filtered').val()+'></a>');
-                    }else{
-                        $('#filter_motor').append('<img class="img_icon" id="motor_selected" src='+$('#funnel').val()+'></a>');
+                    //$('#filter_motor').empty();
+                    if(motor != '')
+                    {
+                        $('#filter_motor').append('<input type="hidden" id="motor_selected">');
+                    }
+                    else if(motor == '')
+                    {
+                        $( "#motor_selected" ).remove();
                     }
                 }
             }else{
@@ -1098,8 +1106,8 @@ function get_country_partner(id_partner){
     });
 }
 
-$("#filter_plate_number").on('click', function ()
-{
+function fill_car_from_plate_number() {
+
     var route     = 'get_car_from_plate_number';
 
     var idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
@@ -1130,7 +1138,7 @@ $("#filter_plate_number").on('click', function ()
             console.log("Error loading models...");
         }
     });
-});
+}
 
 /**
  * Rellena el combo de los modelos segun la matricula
@@ -1288,6 +1296,202 @@ function fill_model_by_PlateNumber(dataPN) {
                     $("#new_car_form_kW").val(dataPN.kw);
                     $("#new_car_form_displacement").val(dataPN.cm3);
                     $("#new_car_form_vin").val(dataPN.vin);
+                }
+            },
+            error: function() {
+                console.log("Error al cargar modelos...");
+            }
+        });
+    }
+}
+
+function fill_car_from_vin()
+{
+    var route     = 'get_car_from_vin';
+
+    var vin = $(document).find('#new_car_form_vin').val();
+    var locale    = $(document).find("#data_locale").val();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate(route, {_locale: locale, vin: vin}),
+        dataType: "json",
+        beforeSend: function () {
+            $("body").css("cursor", "progress");
+        },
+        complete: function () {
+            $("body").css("cursor", "default");
+        },
+        success: function (data) {
+           if (data['error'] !== "No hay coincidencias") {
+               var versionId = data.versionId;
+               fill_model_by_Vin(data);
+
+           }
+           else {
+               alert($("#msg_vin_not_found").val());
+           }
+
+        },
+        error: function () {
+            console.log("Error loading models...");
+        }
+    });
+}
+
+function fill_model_by_Vin(dataV) {
+
+    $('#car').text($('select[id=new_car_form_brand] option:selected').text());
+    $('select#new_car_form_brand' ).val(dataV.brandId);
+    $("#ticket_model").val(dataV.modelId);
+    $("#ticket_version").val(dataV.versionId);
+
+    var id_brand = $('form[id=contact]').find('select[id=new_car_form_brand]').val();
+    var model = dataV.modelId;
+    var motor = dataV.motor;
+    if (id_brand != undefined && id_brand != "") {
+
+        var route  = 'car_model';
+        var locale = $(document).find("#data_locale").val();
+        var filter = '';
+        var filter_value = '';
+        // var id_mts = '';
+        // var motor = '';
+
+        if ($('#year_selected').val()  == '') { filter       = 'year';
+                                                filter_value = $('#new_car_form_year').val(); }
+
+        if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                filter_value = $('#new_car_form_motor').val();
+                                                // id_mts       = $('#id_mts').val();
+                                                // motor        = $('form[id=contact]').find('#new_car_form_motor').val();
+                                              }
+
+        $.ajax({
+            type: "POST",
+            url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
+            data: {id_brand: id_brand, filter: filter, filter_value: filter_value}, //, id_mts: id_mts, motor: motor},
+            dataType: "json",
+            beforeSend: function(){ $("body").css("cursor", "progress"); },
+            complete: function(){ $("body").css("cursor", "default"); },
+            success: function(data) {
+                // Limpiamos y llenamos el combo con las opciones del json
+                $('#new_car_form_model').empty();
+                $('#new_car_form_version').empty();
+                $('#new_car_form_version').append("<option></option>");
+
+
+                if (data['error'] != "No hay coincidencias") {
+                    //Primer campo vacío
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
+                    $.each(data, function(idx, elm) {
+                        // if (idx == 'id_mts') $('#id_mts').val(elm);
+                        // else {
+                            if(model == elm.id )
+                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                            else
+                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                        // }
+                    });
+                }
+                if(id_brand == 0){
+                    $('#new_car_form_model').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
+                    $('#new_car_form_version').empty();
+                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
+
+                    $("#new_car_form_plateNumber").val("");
+                   // var version = $("#ticket_version").val();
+                   // if(version != undefined && version != ""){
+                   //     fill_version(version);
+                   // }
+                }
+                if(model != undefined && model != '' ) {
+                    var version = $("#ticket_version").val();
+                    if(version != undefined && version != ""){
+
+                        $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
+                        if (motor == undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
+
+                        if (model != undefined && model != "") {
+                            var route  = 'car_version';
+                            var locale = $(document).find("#data_locale").val();
+                            var filter = '';
+                            var filter_value = '';
+                            // var id_mts = '';
+
+                            if ($('#year_selected').val()  == '') { filter       = 'year';
+                                                                    filter_value = $('#new_car_form_year').val(); }
+
+                            if ($('#motor_selected').val() == '') { filter       = 'motor';
+                                                                    filter_value = $('#new_car_form_motor').val();
+                                                                    // id_mts       = $('#id_mts').val();
+                                                                  }
+
+                            $.ajax({
+                                type: "POST",
+                                url: Routing.generate(route, {_locale: locale, id_model: model, filter: filter, filter_value: filter_value}),
+                                data: {id_model: model, filter: filter, filter_value: filter_value}, //, id_mts: id_mts},
+                                dataType: "json",
+                                beforeSend: function(){ $("body").css("cursor", "progress"); },
+                                complete: function(){ $("body").css("cursor", "default"); },
+                                success: function(data) {
+                                    // Limpiamos y llenamos el combo con las opciones del json
+                                    $('#new_car_form_version').empty();
+
+
+                                    if (data['error'] != "No hay coincidencias") {
+
+                                        var dis_url = $( "#dis-url" ).val();
+                                        var vts_url = $( "#vts-url" ).val();
+
+                                        //Primer campo vacío
+                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
+
+                                        $.each(data, function(idx, elm) {
+                                            // if (idx == 'id_mts') $('#id_mts').val(elm);
+                                            // else {
+                                                if(version == elm.id ){
+                                                    var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
+
+                                                   // if(motor == undefined || (motor == mt))
+
+                                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                                                }
+                                                else
+                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+
+                                                $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
+                                                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
+                                            // }
+                                        });
+                                    }
+                                    if(version != undefined && version != '' ) {
+
+                                        var system = $('#id_system').val();
+                                        if(system == '' ) { system = $("#ticket_system").val(); }
+
+                                        if(system != '' ) {
+                                            $('#id_system').val(system);
+                                            var subsystem = $("#ticket_subsystem").val();
+                                            if (subsystem != undefined)
+                                               fill_subsystem(subsystem);
+                                        }
+
+                                    }
+
+                                },
+                                error: function() {
+                                    console.log("Error al cargar versiones...");
+                                }
+                            });
+                        }
+                    }
+                    $("#new_car_form_year").val(dataV.year);
+                    $("#new_car_form_motor").val(dataV.motor);
+                    $("#new_car_form_kW").val(dataV.kw);
+                    $("#new_car_form_displacement").val(dataV.cm3);
+                    $("#new_car_form_plateNumber").val(dataV.plateNumber);
                 }
             },
             error: function() {

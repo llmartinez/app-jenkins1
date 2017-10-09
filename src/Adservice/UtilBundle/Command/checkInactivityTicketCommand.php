@@ -21,8 +21,8 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
 
     /**
      * Comando que comprueba el tiempo que lleva inactivo un ticket
-     *     - Diagnosis: Se cierra a los 2 meses
-     *     - Información: Se cierra a los 10 días
+     *      - INACTIVO: +2h sin actividad
+     *        Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
      *
      * @param  InputInterface  $input  An InputInterface instance
      * @param  OutputInterface $output An OutputInterface instance
@@ -30,96 +30,30 @@ class checkInactivityTicketCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1));
-        $closed_tickets = array();
-        $pending_tickets = array();
-        $warning_tickets = array();
+        $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => 1, 'pending' => 1));
+        $status = $em->getRepository('TicketBundle:Status')->findAll();
+        $sa = $em->getRepository('UserBundle:User')->find(1);
+
         $count = 0;
-        $count_closed = 0;
-        $count_pending = 0;
-        $count_warning = 0;
 
-        foreach ($tickets as $ticket) {
+        foreach ($tickets as $ticket)
+        {
+            $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
 
-            if($ticket->getImportance() != NULL)
+            // INACTIVO: +2h sin actividad
+            //           - Se marca como inactivo y se actualiza la fecha de modificación para mostrar primero en el listado
+            if($diff->h >= 2 or $diff->days >= 1)
             {
-                $importance = $ticket->getImportance()->getImportance();
-                $diff = date_diff(new \DateTime(), $ticket->getModifiedAt());
-                $close = false;
-                $closed = $em->getRepository('TicketBundle:Status')->find(2);
+                $ticket->setStatus($status[2]);
+                $ticket->setModifiedBy($sa);
+                $ticket->setModifiedAt(new \DateTime());
 
-                if( $importance == 'information' and $diff->days > 10)
-                {
-                    $closed_tickets[] = $ticket->getId();
-                    $count++;
-                    $count_closed++;
+                $em->persist($ticket);
 
-                    $ticket->setStatus($closed);
-                    $ticket->setModifiedAt(new \DateTime());
-                    $em->persist($ticket);
-                }
-                elseif ($importance == 'advanced_diagnostics' and $diff->m >= 2)
-                {
-                    $pending_tickets[] = $ticket->getId();
-                    $count++;
-                    $count_pending++;
-    
-                    $sol = $this->getContainer()->get('translator')->trans('mail.inactiveTicket.title');
-                    $ticket->setSolution($sol);
-                    $ticket->setStatus($closed);
-                    $ticket->setModifiedAt(new \DateTime());
-                    $em->persist($ticket);
-                }
-                elseif ($importance == 'advanced_diagnostics' and ($diff->days == 30 or $diff->days == 57) and $diff->m < 2)
-                {
-                    $workshop = $ticket->getWorkshop();
-                    $warning_tickets[] = $ticket->getId();
-
-                    if($diff->days == 57)
-                    {
-                        $ticket->setInactive(1);
-                        $em->persist($ticket);
-                        $em->flush();
-                    }
-
-                    $count_warning++;
-
-                    $mailW    = $workshop->getEmail1();
-                    $messageW = \Swift_Message::newInstance()
-                        ->setSubject($this->getContainer()->get('translator')->trans('mail.inactivity_warning.title'))
-                        ->setFrom('noreply@adserviceticketing.com')
-                        ->setTo($mailW)
-                        ->setCharset('UTF-8')
-                        ->setContentType('text/html')
-                        ->setBody($this->getContainer()->get('templating')
-                                    ->render('UtilBundle:Mailing:workshop_inactivity_tickets.html.twig', array('ticket' => $ticket)));
-                    $this->getContainer()->get('mailer')->send($messageW);
-
-                }
+                $count++;
             }
         }
         $em->flush();
-
-        if($count > 0) {
-            $mail   = $this->getContainer()->getParameter('mail_info');
-
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Se han modificado '.$count.' tickets por inactividad.')
-                ->setFrom('noreply@adserviceticketing.com')
-                ->setTo($mail)
-                ->setCharset('UTF-8')
-                ->setContentType('text/html')
-                ->setBody($this->getContainer()->get('templating')
-                            ->render('UtilBundle:Mailing:admin_inactivity_tickets.html.twig', array('count' => $count,
-                                                                                                    'count_closed' => $count_closed,
-                                                                                                    'count_pending' => $count_pending,
-                                                                                                    'count_warning' => $count_warning,
-                                                                                                    'closed_tickets' => $closed_tickets,
-                                                                                                    'pending_tickets' => $pending_tickets,
-                                                                                                    'warning_tickets' => $warning_tickets,
-                                                                                                    )));
-            $this->getContainer()->get('mailer')->send($message);
-        }
 
         $output->writeln('Se han modificado '.$count.' tickets por inactividad.');
     }

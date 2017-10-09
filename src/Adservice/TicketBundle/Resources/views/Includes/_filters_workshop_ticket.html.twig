@@ -5,6 +5,7 @@
             <input type="hidden" id='ticket_model' name='ticket_model' value="">
             <input type="hidden" id='ticket_version' name='ticket_version' value="">
             <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
+            <input type="hidden" id="msg_vin_not_found"  value="{% trans %} error.vin_not_found {% endtrans %}">
 
             <div class="grid w15">
                 <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
@@ -31,7 +32,7 @@
             </div>
             <div class="grid w15">
                 <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
-                <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
+                <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
                 <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
                        {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %}>
                 </input>

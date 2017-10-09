@@ -17,21 +17,21 @@
                     {# Ticket asignado a otro assessor #}
                     <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
 
-                    <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{{ ticket.blockedBy }}</strong> {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+                    <a style="font-size: 15px;color: gray;">{% trans with {'%user%': ticket.blockedBy, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')} %} ticket_blocked_by%user%%date% {% endtrans %}</a>
 
                     <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}">
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket_reassign {% endtrans %}"></a>
 
                 {% endif %}
 
-            {% else %}
+            {% else%}
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
             {% endif %}
 
-        {% else %}
+        {% elseif ticket.status.id == 2  %}
 
                 {# Ticket cerrado #}
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
@@ -48,9 +48,8 @@
         {% if ticket.status == 'open' and ticket.blockedBy is not null %}
 
             <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
-
-            <a style="font-size: 15px;color: gray;">{% trans %} ticket_blocked_by {% endtrans %} <strong>{% trans %} assessor {% endtrans %} </strong>
-                                                    {% trans %} ticket_at {% endtrans %} <strong>{{ ticket.modifiedAt|date('Y-m-d H:i:s') }}</strong></a>
+            {% set assessor = 'assessor'|trans %}
+            <a style="font-size: 15px;color: gray;">{% trans with {'%user%': assessor, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')} %} ticket_blocked_by%user%%date% {% endtrans %}
         {% endif %}
     {% endif %}
 

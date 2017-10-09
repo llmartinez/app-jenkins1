@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Adservice\UtilBundle\Controller\UtilController;
+
 class checkTestWorkshopsCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -54,7 +56,6 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
                     $workshop->setTest(0);
                     $em->persist($workshop);
                     $em->flush();
-
 
                     UtilController::createHistorical($em, $workshop, 0);
                     $count++;

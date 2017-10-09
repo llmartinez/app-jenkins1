@@ -5,13 +5,14 @@ namespace Adservice\OrderBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
+use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 use Adservice\UtilBundle\Entity\Region;
 
 /**
  * Adservice\OrderBundle\Entity\Workshop
  *
  * @ORM\Table(name="workshop_order")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\OrderBundle\Entity\WorkshopOrderRepository")
  */
 class WorkshopOrder {
 
@@ -149,6 +150,15 @@ class WorkshopOrder {
      * @ORM\ManyToOne(targetEntity="Adservice\UserBundle\Entity\CategoryService")
      */
     private $category_service;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Adservice\WorkshopBundle\Entity\DiagnosisMachine")
+     * @ORM\JoinTable(name="workshop_order_diagnosis_machine",
+     *     joinColumns={@ORM\JoinColumn(name="workshop_order_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
+     * )
+     */
+    private $diagnosis_machines;
 
     /**
      * @var boolean $active
@@ -690,7 +700,7 @@ class WorkshopOrder {
         $this->diagnosis_machines[] = $diagnosis_machine;
     }
 
-    public function setDiagnosisMachine($diagnosis_machines) {
+    public function setDiagnosisMachines($diagnosis_machines) {
         $this->diagnosis_machines = $diagnosis_machines;
     }
 
