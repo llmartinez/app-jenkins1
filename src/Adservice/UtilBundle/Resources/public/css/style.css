@@ -69,6 +69,10 @@ legend {
 .img_icon {
     max-height: 20px;
 }
+.img_icon_left {
+    max-height: 40px;
+    margin-right: 5px;
+}
 .margined {
     margin-right: 40px;
 }

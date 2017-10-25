@@ -23,11 +23,12 @@
 
     <h1>
         {% trans %} edit.order.workshop {% endtrans %} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b>
-
+</h1>
         <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class='pull-right'>
-            <img class="img_icon" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
+            <img class="img_icon_left" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
+            <label >{% trans %} print {% endtrans %} </label>
         </a>
-    </h1>
+    
 
     <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
@@ -94,7 +95,7 @@
                 <label for="workshopOrder_newOrder_numchecks">{% trans %} numchecks {% endtrans %}</label>
             </div>
             <div class="w35 fr mb15">
-                {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0'}}) }}
+                {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' | trans }}) }}
             </div>
             {% if id_catserv != 3 %}
             <div class="w65 fl {{is_hidden}}">
