@@ -454,6 +454,7 @@ class TicketController extends Controller {
         $id_brand = $request->request->get('new_car_form_brand');
         $id_model = $request->request->get('new_car_form_model');
         $id_version = $request->request->get('new_car_form_version');
+        
         if(isset($request->request->get('ticket_form')['subsystem'])){
             $id_subsystem = $request->request->get('ticket_form')['subsystem'];
         }
@@ -467,7 +468,7 @@ class TicketController extends Controller {
         }
         if (isset($id_version) and $id_version != '') {
 
-            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
+            $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
             $car->setVersion($version);
         }
         if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
@@ -495,13 +496,25 @@ class TicketController extends Controller {
         }
         if (isset($id_model) and $id_model != '' and $id_model != '0') {
             $model = $em->getRepository('CarBundle:Model')->find($id_model);
+            
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '' and $id_version != '0') {
-
-            $version = $em->getRepository('CarBundle:Version')->findById($id_version);
+            $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
+            if(sizeof($version)>1){ 
+                if(isset($id_motor) && $id_motor != '' && $id_motor != '0'){
+                    $v_query   = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor m WHERE v.id= ".$id_version." AND m.name = '".$id_motor."' AND m.id = v.motor");
+                   
+                    $version = $v_query->getSingleResult();
+                }
+                else{
+                    $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
+                }
+                
+            }
             $car->setVersion($version);
         }
+        
         if (isset($id_year) and $id_year != '' and $id_year != '0') {
             $car->setYear($id_year);
         }
@@ -530,7 +543,7 @@ class TicketController extends Controller {
             $id_plateNumber = strtoupper($id_plateNumber);
             $car->setPlateNumber($id_plateNumber);
         }
-
+        
         $systems = $em->getRepository('TicketBundle:System')->findAll();
         if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
             $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
@@ -572,7 +585,13 @@ class TicketController extends Controller {
                     'id_catserv' => $id_catserv,
                     'adsplus' => $adsplus,
                     'workshop' => $workshop,
-                    'form_name' => $form->getName());
+                    'form_name' => $form->getName(),
+                    'marca_session' => null,
+                    'modelo_session' => null,
+                    'version_session' => null,
+                    'description_session' => null,
+                    'plateNumber_session' => null
+                    );
 
                 if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
                     if ($formC->isValid() && $formD->isValid()) {
@@ -997,7 +1016,6 @@ class TicketController extends Controller {
             $car->setPlateNumber($id_plateNumber);       
         }
   
-        
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
             'car' => $car,

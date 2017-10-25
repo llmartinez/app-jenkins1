@@ -637,7 +637,7 @@ function fill_version(version) {
                                                     filter_value = $('#new_car_form_motor').val();
                                                    // id_mts       = $('#id_mts').val();
                                                   }
-
+                                                  
             $.ajax({
                 type: "POST",
                 url: Routing.generate(route, {_locale: locale, id_model: id_model, filter: filter, filter_value: filter_value}),
@@ -831,7 +831,6 @@ function fill_car_by_year() {
 function fill_car_by_motor() {
 
     var motor = $('form[id=contact]').find('#new_car_form_motor').val();
-
     var route  = 'car_by_motor';
     var locale = $(document).find("#data_locale").val();
 
