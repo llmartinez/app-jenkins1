@@ -25,8 +25,15 @@ $(document).ready(function() {
         if(ticket_brand != '')
             $('#new_car_form_brand').val(ticket_brand);
 
-        if(ticket_model != '')
-            fill_model(ticket_model);
+        if(ticket_model != ''){
+            var plateNumber = $('#new_car_form_plateNumber').val();
+            if( plateNumber != null && plateNumber != ''){
+                fill_car_from_plate_number();
+            }
+            else {
+                fill_model(ticket_model);
+            }
+        }
 
         if(ticket_importance != '')
             $('#new_car_form_importance').val(ticket_importance);
