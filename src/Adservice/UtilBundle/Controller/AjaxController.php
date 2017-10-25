@@ -308,10 +308,10 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de modelos filtrados a partir de la marca ($brand)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carModelAction($id_brand, $filter='', $filter_value='') {
+    public function carModelAction($id_brand, $filter='') {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-
+        $filter_value = $petition->request->get('filter_value');
         // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
@@ -319,6 +319,7 @@ class AjaxController extends Controller
                           WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor AND b.id = ".$id_brand."
                           AND mt.name like '%".$filter_value."%'
                           ORDER BY m.name";
+            
             elseif($filter == 'year')
                 $query = "SELECT m FROM CarBundle:Brand b, CarBundle:Model m
                           WHERE b.id = m.brand AND b.id = ".$id_brand." AND m.brand IS NOT NULL
@@ -378,10 +379,10 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de versiones filtrados a partir del modelo ($model)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carVersionAction($id_model, $filter='', $filter_value='') {
+    public function carVersionAction($id_model, $filter='') {
         $em = $this->getDoctrine()->getEntityManager();
         $petition = $this->getRequest();
-
+        $filter_value = $petition->request->get('filter_value');
         // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
@@ -553,7 +554,7 @@ class AjaxController extends Controller
         $petition = $this->getRequest();
 
         $motor = $petition->request->get('motor');
-
+        
         $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                     WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
                     AND mt.name LIKE '%".$motor."%' ORDER BY b.name ASC";

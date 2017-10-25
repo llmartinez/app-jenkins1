@@ -19,7 +19,6 @@ class SecurityController extends Controller{
      * @return url
      */
     public function autologinAction(){
-
         $request = $this->getRequest();
         $token = $request->get("token");
 
@@ -39,18 +38,44 @@ class SecurityController extends Controller{
 
         if($token != null)
         {
+            $em = $this->getDoctrine()->getEntityManager();
             $valid_hashes = $this->decryptADS($token);
-
+            
+            if($request->get('techdocIdVersion') != null){           
+                $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
+                if($version != null){
+                    $_SESSION['marca'] = $version->getMarca()->getId();
+                    $_SESSION['modelo'] = $version->getModel()->getId();
+                    $_SESSION['version'] = $request->get('techdocIdVersion');
+                }
+                else {
+                    $_SESSION['marca'] = null;
+                    $_SESSION['modelo'] = null;
+                    $_SESSION['version'] = null;
+                }
+                
+                if($request->get('plateNumber') != null){
+                    $_SESSION['plateNumber'] = $request->get('plateNumber');
+                }
+                else {
+                    $_SESSION['plateNumber'] = null;
+                }
+                if($request->get('description') != null){
+                    $_SESSION['description'] = $request->get('description');
+                }
+                else {
+                    $_SESSION['description'] = null;
+                }
+            }
             foreach ($valid_hashes as $valid_hash) {
                 if($valid_hash != "") $hash = $valid_hash;
             }
-
             if(isset($hash) and $hash != null and $hash != "")
             {
-                $em = $this->getDoctrine()->getEntityManager();
-    			$user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
+                $user = $em->getRepository('UserBundle:User')->findOneByToken($hash);
 
                 if($user != null) {
+                  
     				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
     				$this->get("security.context")->setToken($key);
 
@@ -90,6 +115,105 @@ class SecurityController extends Controller{
         return $this->render('UserBundle:Default:login.html.twig');
     }
 
+    /**
+     * Autologin del taller a través de un user y password
+     * @throws AccessDeniedException
+     * @return url
+     */
+    public function autologinAccessAction(){
+        $request = $this->getRequest();
+        $login = $request->get("user");
+        $password = $request->get("password");
+        
+        if($login != null && $password != null)
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $valid_hashes_login = $this->decryptADS($login);
+            $valid_hashes_password = $this->decryptADS($password);
+            
+            if($request->get('techdocIdVersion') != null){           
+                $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
+                if($version != null){
+                    $_SESSION['marca'] = $version->getMarca()->getId();
+                    $_SESSION['modelo'] = $version->getModel()->getId();
+                    $_SESSION['version'] = $request->get('techdocIdVersion');
+                }
+                else {
+                    $_SESSION['marca'] = null;
+                    $_SESSION['modelo'] = null;
+                    $_SESSION['version'] = null;
+                }
+                
+                if($request->get('plateNumber') != null){
+                    $_SESSION['plateNumber'] = $request->get('plateNumber');
+                }
+                else {
+                    $_SESSION['plateNumber'] = null;
+                }
+                if($request->get('description') != null){
+                    $_SESSION['description'] = $request->get('description');
+                }
+                else {
+                    $_SESSION['description'] = null;
+                }
+            }
+            foreach ($valid_hashes_login as $valid_hash) {
+                if($valid_hash != "") $hash_login = $valid_hash;
+            }
+            foreach ($valid_hashes_password as $valid_hash) {
+                if($valid_hash != "") $hash_password = $valid_hash;
+            }
+            if((isset($hash_login) && $hash_login != null && $hash_login != "") && (isset($hash_password) && $hash_password != null && $hash_password != ""))
+            {                
+                $user = $em->getRepository('UserBundle:User')->findOneByUsername($hash_login);
+                if($user != null) {
+                    $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
+                    $pass     = $encoder->encodePassword( $hash_password, $user->getSalt());
+
+                    if($user->getPassword() == $pass) {
+
+                        $key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+                        $this->get("security.context")->setToken($key);
+
+                        // Fire the login event
+                        $event = new InteractiveLoginEvent($request, $key);
+                        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+
+                        return $this->redirect($this->generateUrl('_login'));
+                    }
+                    else return $this->redirect($this->generateUrl('_login'));
+                }
+                else return $this->redirect($this->generateUrl('_login'));
+            }
+            else return $this->redirect($this->generateUrl('_login'));
+    	}
+        else{
+            return $this->redirect($this->generateUrl('_login'));
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // Mostrar Token encriptado para test
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // $em = $this->getDoctrine()->getEntityManager();
+            // $user = $em->getRepository('UserBundle:User')->findOneById(48); //ganixtalleres
+            // $tok = $user->getToken();
+            // $enc = $this->encryptADS($tok);
+            // $dec = $this->decryptADS($enc);
+            // var_dump('Token: '.$tok);
+            // var_dump('Encript: '.$enc);
+            // var_dump('Decript => ');
+            // var_dump($dec);
+
+            // echo "
+            //     <form action='".$this->generateUrl('autologin')."' method='GET'>
+            //         <input id='token' name='token' type='text' value='".$tok."'><input type='submit'>
+            //     </form>";
+            // die;
+            ///////////////////////////////////////////////////////////////////////////////////////
+        }
+        return $this->render('UserBundle:Default:login.html.twig');
+    }
+    
+    
     /**
      * Method to encrypt a plain text string
      * initialization vector(IV) has to be the same when encrypting and decrypting

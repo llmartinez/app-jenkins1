@@ -26,6 +26,10 @@ autologin:
     pattern: /autologin/
     defaults: { _controller: UtilBundle:Security:autologin }
 
+autologinaccess:
+    pattern: /autologinaccess/
+    defaults: { _controller: UtilBundle:Security:autologinAccess }
+
 #############################
 #   APDO. FILE              #
 #############################
@@ -117,14 +121,14 @@ get_car_from_vin:
         expose: true
 
 car_model:
-    pattern: /carModel/{id_brand}/{filter}/{filter_value}
-    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: '', filter_value: ''}
+    pattern: /carModel/{id_brand}/{filter}
+    defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: ''}
     options:
         expose: true
 
 car_version:
-    pattern: /carVersion/{id_model}/{filter}/{filter_value}
-    defaults: { _controller: UtilBundle:Ajax:carVersion, id_model: 0, filter: '', filter_value: '' }
+    pattern: /carVersion/{id_model}/{filter}
+    defaults: { _controller: UtilBundle:Ajax:carVersion, id_model: 0, filter: ''}
     options:
         expose: true
 
