@@ -919,17 +919,10 @@ class TicketController extends Controller {
                                 else
                                 {
                                     $mailer->setSubject('ticket: ' . $ticket->getId());
-
-                                    if( $this->container->getParameter('mail_centralita') == 'mail.centralita_test') {
-                                        $mail_centralita = 'lmartinez@grupeina.com';
-                                    }
-                                    else{
-                                        $mail_centralita = $this->container->getParameter('mail_centralita_default');
-                                        if($ticket->getCategoryService()->getEmail() != null){
-                                            $mail_centralita = $ticket->getCategoryService()->getEmail();
-                                        }
-                                        
-                                    }
+                                    $mail_centralita = $this->container->getParameter('mail_centralita_default');
+                                    if($ticket->getCategoryService()->getEmail() != null || $ticket->getCategoryService()->getEmail() != ''){
+                                        $mail_centralita = $ticket->getCategoryService()->getEmail();
+                                    }   
                                 }
                                 //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
                                 $mailer->setTo($this->get('translator')->trans($mail_centralita));
