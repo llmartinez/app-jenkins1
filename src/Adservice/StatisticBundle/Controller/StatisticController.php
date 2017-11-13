@@ -444,6 +444,21 @@ class StatisticController extends Controller {
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$raport.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelBilling($data, $raport);
         }
+        elseif($raport == 'partner'){
+            $qb = $em->getRepository('PartnerBundle:Partner')
+                    ->createQueryBuilder('e')
+                    ->select('e.id','e.name', 'e.cif', 'e.active', 'e.phone_number_1', 'e.phone_number_2', 'e.mobile_number_1', 'e.mobile_number_2', 'e.fax', 'e.email_1', 'e.email_2', 'c.country', 'e.region', 'e.city', 'e.address', 'e.postal_code', 'e.created_at', 'e.modified_at')
+                    ->leftJoin('e.country', 'c')
+                    ->orderBy('e.id');
+                    if($catserv != 0)
+                       $qb = $qb->where('e.category_service = :category_service')->setParameter('category_service', $catserv);
+                    
+            
+            $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+            $excel = $this->createExcelPartner($resultsDehydrated);
+            
+        }
         else{
 
           if ($raport != '0'){
@@ -2238,6 +2253,36 @@ class StatisticController extends Controller {
                     $res['Outildediagnostic'] = substr($res['Outildediagnostic'], 0, -3);
                 }
 
+                foreach ($res as $key => $value)
+                {
+                    if($firstKey == $key) $excel.="\n";
+
+                    if ($value instanceof \DateTime) { $value = $value->format('Y-m-d H:i:s'); }
+
+                    $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $reemplazar=array('', "", "", "", "", "", "");
+                    $text=str_ireplace($buscar,$reemplazar,$value);
+                    $excel.=$text.';';
+                }
+            }
+        }
+        return($excel);
+    }
+    
+    public function createExcelPartner($results)
+    {
+        $excel = '';
+        $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
+
+        if (isset($results[0])) {
+            //Bucle para las cabeceras
+            foreach ($results[0] as $key => $value) {
+                if($firstKey == '') { $firstKey = $key; }
+                $excel.=$key.';';
+            }
+
+            foreach ($results as $res)
+            {
                 foreach ($res as $key => $value)
                 {
                     if($firstKey == $key) $excel.="\n";
