@@ -920,7 +920,7 @@ class TicketController extends Controller {
                                 {
                                     $mailer->setSubject('ticket: ' . $ticket->getId());
                                     $mail_centralita = $this->container->getParameter('mail_centralita_default');
-                                    if($ticket->getCategoryService()->getEmail() != null){
+                                    if($ticket->getCategoryService()->getEmail() != null || $ticket->getCategoryService()->getEmail() != ''){
                                         $mail_centralita = $ticket->getCategoryService()->getEmail();
                                     }   
                                 }
