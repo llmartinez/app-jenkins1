@@ -49,7 +49,13 @@ class CategoryService
      */
     private $vts;
 
-
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email", type="string", length=255)
+     */
+    private $email;
+    
     /**
      * Get id
      *
@@ -139,7 +145,27 @@ class CategoryService
     {
         return $this->vts;
     }
+    
+    /**
+     * Set email
+     *
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
 
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    
     public function __toString() {
         return $this->getCategoryService();
     }
