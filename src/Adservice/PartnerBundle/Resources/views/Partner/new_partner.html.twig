@@ -23,21 +23,27 @@
 
     <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
         <div class="col-xs-12 col-md-12 form-group">
-            <div class="col-xs-4 col-md-4 form-group">
-                <label>{% trans %} name         {% endtrans %} *</label> {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
-            </div>
-            <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} code_partner {% endtrans %} *</label> 
-
-                {% if id_catserv == 3 %}
+            {% if id_catserv == 3 %}
+                <div class="col-xs-4 col-md-4 form-group">
+                    <label>{% trans %} social_reason {% endtrans %} *</label> {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} code_partner {% endtrans %} *</label>                 
                     {% if partner.codePartner < 89 or partner.codePartner > 94 %}{% set codePartner = 89 %}
                     {% else %}                                                   {% set codePartner = partner.codePartner %}{% endif %}
 
                     {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 89, 'max': 94, 'value': codePartner } }) }}
-                {% else %}
+                </div>
+            {% else %}
+                <div class="col-xs-4 col-md-4 form-group">
+                    <label>{% trans %} name         {% endtrans %} *</label> {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                </div>
+                <div class="col-xs-2 col-md-2 form-group">
+                    <label>{% trans %} code_partner {% endtrans %} *</label> 
                     {{ form_widget(form.code_partner, { 'attr': {'class': 'form-control', 'min': 1, 'value': partner.codePartner } }) }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+                
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{% trans %} category_service {% endtrans %} *</label>
                 <select class="form-control" id="id_catserv" name="id_catserv" required>
