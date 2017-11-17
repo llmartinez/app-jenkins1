@@ -40,8 +40,9 @@ class SecurityController extends Controller{
         {
             $em = $this->getDoctrine()->getEntityManager();
             $valid_hashes = $this->decryptADS($token);
-            
-            if($request->get('techdocIdVersion') != null){           
+            $_SESSION['autologin'] = false;
+            if($request->get('techdocIdVersion') != null){ 
+                $_SESSION['autologin'] = true;
                 $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
                 if($version != null){
                     $_SESSION['marca'] = $version->getMarca()->getId();
@@ -124,13 +125,14 @@ class SecurityController extends Controller{
         $request = $this->getRequest();
         $login = $request->get("user");
         $password = $request->get("password");
-        
+        $_SESSION['autologin'] = false;
         if($login != null && $password != null)
         {
             $em = $this->getDoctrine()->getEntityManager();
             $valid_hashes_login = $this->decryptADS($login);
             $valid_hashes_password = $this->decryptADS($password);
             
+            $_SESSION['autologin'] = true;
             if($request->get('techdocIdVersion') != null){           
                 $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
                 if($version != null){
@@ -164,7 +166,7 @@ class SecurityController extends Controller{
                 if($valid_hash != "") $hash_password = $valid_hash;
             }
             if((isset($hash_login) && $hash_login != null && $hash_login != "") && (isset($hash_password) && $hash_password != null && $hash_password != ""))
-            {                
+            {           
                 $user = $em->getRepository('UserBundle:User')->findOneByUsername($hash_login);
                 if($user != null) {
                     $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
@@ -257,8 +259,8 @@ class SecurityController extends Controller{
 
         // valid keys...
         $keys[0] = hash('sha256', date_format(date_create('now'), 'Ymd'));          //today
-        $keys[1] = hash('sha256', date_format(date_create('now -1day'), 'Ymd'));    //yesterday
-        $keys[2] = hash('sha256', date_format(date_create('now +1day'), 'Ymd'));    //tomorrow
+//        $keys[1] = hash('sha256', date_format(date_create('now -1day'), 'Ymd'));    //yesterday
+//        $keys[2] = hash('sha256', date_format(date_create('now +1day'), 'Ymd'));    //tomorrow
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);

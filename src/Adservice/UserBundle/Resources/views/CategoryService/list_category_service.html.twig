@@ -1,0 +1,54 @@
+{% extends '::layout.html.twig' %}
+
+{% block body %}
+    {# Definicion de la ruta al listado para usar en paginacion #}
+    {% set route = 'category_service_list' %}
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li class="active">{% trans %} menu.list_categories {% endtrans %}</li>
+    </ol>
+
+    <div style="width: 90%; margin-left: 5%;">
+        <legend>{% trans %} menu.list_categories {% endtrans %}
+            <a id="newCategoryService" href="{{ path('category_service_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.category_service {% endtrans %}</a></td>
+        </legend>
+    </div>
+    {% if categories|length > 0  %}
+
+        <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+            <thead>
+                <tr>
+                    <th>{% trans %} id    {% endtrans %}</th>
+                    <th>{% trans %} category_service    {% endtrans %}</th>
+                    <th>{% trans %} email        {% endtrans %}</th>                    
+                    <th>{% trans %} actions {% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.id       }}</td>
+                    <td>{{ category.categoryService     }}</td>
+                    <td>{{ category.email    }}</td>
+                    <td>
+                        <a href="{{ path("category_service_edit", { 'id':category.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'UtilBundle:Pagination:pagination.html.twig' %}
+    {% else %}
+        {% trans %} any.category_service {% endtrans %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
+
+{% endblock %}
