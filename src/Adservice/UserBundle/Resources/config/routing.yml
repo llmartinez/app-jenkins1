@@ -78,8 +78,19 @@ user_partner_list:
         expose: true
 
 ##############################
-#       RUTAS AJAX           #
+#       RUTAS CATEGORIAS     #
 ##############################
-#user_provinces:
-#    pattern: /provincesFromRegion
-#    defaults: { _controller: UtilBundle:User:provincesFromRegion }
+
+category_service_list:
+    pattern: /categories/list/{page}/{country}
+    defaults: { _controller: UserBundle:Category:listCategories, page: 1, country: 0 }
+    
+category_service_new:
+    pattern: /categories/new
+    defaults: { _controller: UserBundle:Category:newCategoryService }    
+    
+
+category_service_edit:
+    pattern: /categories/edit/{id}
+    defaults: { _controller: UserBundle:Category:editCategoryService }
+    

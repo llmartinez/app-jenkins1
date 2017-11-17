@@ -174,8 +174,11 @@ class StatisticController extends Controller {
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $where = 'e.id != 0 ';
-        $join  = '';
-
+        $join  = '';        
+        if($user == 'anon.')
+        { 
+            return $this->redirect($this->generateUrl('user_login'));
+        }
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
         // $response->headers->set('Content-Type', 'application/vnd.ms-excel');
@@ -187,7 +190,6 @@ class StatisticController extends Controller {
         $response->headers->set('Pragma', 'public');
         $date = new \DateTime();
         $response->setLastModified($date);
-        
         if ($raport == 'billing' or $raport == 'historical')
         {
           //Recojemos los IDs de talleres del raport de facturación
@@ -205,9 +207,11 @@ class StatisticController extends Controller {
                 ->orderBy('w.id');
             
 
-            if     ($status == "open"  ) $qb = $qb->andWhere('w.active = 1');
-            elseif ($status == "closed") $qb = $qb->andWhere('s.name = 0');
-            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks IS NOT NULL');
+            if ($status == "active") $qb = $qb->andWhere('w.active = 1');
+            elseif ($status == "deactive") $qb = $qb->andWhere('w.active = 0');
+            elseif ($status == "test") $qb = $qb->andWhere('w.test = 1');
+            elseif ($status == "adsplus") $qb = $qb->andWhere('w.adsplus = 1');
+            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks = 1');
             elseif ($status == "infotech") $qb = $qb->andWhere('w.infotech IS NOT NULL');
 
             if ($partner  != "0") $qb = $qb->andWhere('w.id != 0')->andWhere('p.id = :partner')->setParameter('partner', $partner);
@@ -274,7 +278,6 @@ class StatisticController extends Controller {
                                       );
             }
             unset($resultsDehydrated);
-
             $qb = $em->getRepository('WorkshopBundle:Historical')
                 ->createQueryBuilder('h')
                 ->select('h')
@@ -460,7 +463,7 @@ class StatisticController extends Controller {
             
         }
         else{
-
+           
           if ($raport != '0'){
               $type = $raport;
               if ($raport == 'last-tickets') { $type = '0'; }
@@ -823,7 +826,6 @@ class StatisticController extends Controller {
                   }
 
                   $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                  
                   $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.csv"');
                   $excel = $this->createExcelWorkshop($resultsDehydrated);
               }
@@ -2120,11 +2122,11 @@ class StatisticController extends Controller {
             else $adsplus = '';
             $excel.=strtoupper($adsplus).';';
 
-            if(isset($row['has_checks']) && $row['has_checks'] == 1) $hasChecks = $this->get('translator')->trans('yes');
+            if(isset($row['haschecks']) && $row['haschecks'] == 1) $hasChecks = $this->get('translator')->trans('yes');
             else $hasChecks = '';
             $excel.=strtoupper($hasChecks).';';
 
-            if(isset($row['num_checks'])) $excel.= $row['num_checks'].';';
+            if(isset($row['numchecks'])) $excel.= $row['numchecks'].';';
             else $excel.= '0;';
 
             if(isset($row['infotech']) && $row['infotech'] == 1) $infotech = $this->get('translator')->trans('yes');

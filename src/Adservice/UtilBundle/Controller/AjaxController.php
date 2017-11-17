@@ -597,7 +597,23 @@ class AjaxController extends Controller
 
         return new Response(json_encode($json), $status = 200);
     }
+    
+     /**
+     * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function carMotorsAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $qb = $em->getRepository('CarBundle:Motor')
+                ->createQueryBuilder('m')
+                ->select('m.name')
+                ->orderBy('m.name');
+        $motors = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $motors = array_column($motors, "name");
 
+        return new Response(json_encode($motors), $status = 200);
+    }
+    
     public function getCarFromPlateNumberAction($idPlateNumber){
         $em = $this->getDoctrine();
 

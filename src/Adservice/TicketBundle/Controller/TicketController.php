@@ -740,23 +740,11 @@ class TicketController extends Controller {
                                                 $exist_vin->getBrand()->getId() != $car->getBrand()->getId()
                                                 OR
                                                 $exist_vin->getModel()->getId() != $car->getModel()->getId()
-                                                // OR (
-                                                //     ($exist_vin->getVersion() != null AND $car->getVersion() == null)
-                                                //     OR
-                                                //     ($exist_vin->getVersion() == null AND $car->getVersion() != null)
-                                                //     )
                                                 OR (
                                                 $exist_vin->getVersion() != null
                                                 AND
                                                 $car->getVersion() != null
                                                 AND
-
-                                                // $exist_vin->getVersion()->getName() != null
-                                                // AND
-                                                // $car->getVersion()->getName() != null
-                                                // AND
-                                                // $exist_vin->getVersion()->getName() != $car->getVersion()->getName()
-
                                                 $exist_vin->getVersion()->getId() != $car->getVersion()->getId()
                                                 )
                                         ) {
@@ -920,7 +908,6 @@ class TicketController extends Controller {
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                         }
                     } else {
-                        var_dump($array);die;
                         // ERROR tipo de fichero
                         $this->get('session')->setFlash('error', $trans->trans('error.same_ticket')
                                 . ' (' . $trans->trans('ticket') . ' #' . $existTicket[0]->getId() . ')');
@@ -956,39 +943,10 @@ class TicketController extends Controller {
                             else
                             {
                                 $mailer->setSubject('ticket: ' . $ticket->getId());
-
-                                if( $this->container->getParameter('mail_centralita') == 'mail.centralita_test') {
-                                    $mail_centralita = 'dmaya@grupeina.com';
-                                }
-                                else{
-                                    switch ($ticket->getCategoryService()->getId())
-                                    {
-                                        case '1':  $mail_centralita = 'test@adserviceticketing.com';
-                                            break;
-                                        case '2':  $mail_centralita = 'ticketes@adserviceticketing.com';
-                                            break;
-                                        case '3':  $mail_centralita = 'ticketfr@adserviceticketing.com';
-                                            break;
-                                        case '4':  $mail_centralita = 'ticketpt@adserviceticketing.com';
-                                            break;
-                                        case '5':  $mail_centralita = 'ticketen@adserviceticketing.com';
-                                            break;
-                                        case '6':  $mail_centralita = 'ticketen@adserviceticketing.com';
-                                            break;
-                                        case '7':  $mail_centralita = 'ticketen@adserviceticketing.com';
-                                            break;
-                                        case '8':  $mail_centralita = 'ticketfr@adserviceticketing.com';
-                                            break;
-                                        case '9':  $mail_centralita = 'ticketfr@adserviceticketing.com';
-                                            break;
-                                        case '10': $mail_centralita = 'ticketfr@adserviceticketing.com';
-                                            break;
-                                        case '11': $mail_centralita = 'ticketkashima@adserviceticketing.com';
-                                            break;
-                                        default:   $mail_centralita = 'test@adserviceticketing.com';
-                                            break;
-                                    }
-                                }
+                                $mail_centralita = $this->container->getParameter('mail_centralita_default');
+                                if($ticket->getCategoryService()->getEmail() != null || $ticket->getCategoryService()->getEmail() != ''){
+                                    $mail_centralita = $ticket->getCategoryService()->getEmail();
+                                }   
                             }
                             //Hay un email diferente por cada pais en funcion del idioma que tenga asignado el taller.
                             $mailer->setTo($this->get('translator')->trans($mail_centralita));

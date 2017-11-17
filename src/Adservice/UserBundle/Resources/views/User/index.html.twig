@@ -60,9 +60,11 @@
             <a class="btn-menu" id="sentence_list"          href="{{ path("sentence_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_sentences.png') }}">
                                                                                                             {% trans %} menu.list_sentences    {% endtrans %}</a>
-           {#  <a class="btn-menu" id="ticketWorkshopList"     href="{{ path("ticketWorkshopList"     ) }}">
-                                                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_ticket_assign.png') }}">
-                                                                                                            {% trans %} menu.asign_user_to_ticket  {% endtrans %}</a> #}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a class="btn-menu" id="category_service_list"     href="{{ path("category_service_list"     ) }}">
+                                                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/location_.png') }}">
+                                                                                                            {% trans %} menu.list_categories {% endtrans %}</a>
+            {% endif %}
         </div>
 {#    {% endif %}#}
 
