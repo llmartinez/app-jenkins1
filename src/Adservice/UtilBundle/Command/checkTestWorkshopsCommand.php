@@ -57,7 +57,7 @@ class checkTestWorkshopsCommand extends ContainerAwareCommand
                     $em->persist($workshop);
                     $em->flush();
 
-                    UtilController::createHistorical($em, $workshop, 0);
+                    UtilController::createHistorical($em, $workshop, $workshop->getActive());
                     $count++;
                 }
             }
