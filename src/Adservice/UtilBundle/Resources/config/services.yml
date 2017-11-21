@@ -18,6 +18,13 @@ services:
     instant_mailer:
         class: %swiftmailer.class%
         arguments: ["@?swiftmailer.transport.real"]
+        
+    util_controller:
+        class: Adservice\UtilBundle\Controller\UtilController
+        scope: request
+        strict: false
+        public: true
+        arguments: [@request, @doctrine.orm.entity_manager, @security.context]
 
 #    my.listener:
 #        class: Adservice\UtilBundle\Listener\EntityUtilListener

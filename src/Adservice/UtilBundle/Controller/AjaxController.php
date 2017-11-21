@@ -609,8 +609,10 @@ class AjaxController extends Controller
                 ->select('m.name')
                 ->orderBy('m.name');
         $motors = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $motors = array_column($motors, "name");
-
+        //A partir de la version de PHP 5.5 se puede usar la siguiente funcion
+        //$motors = array_column($motors, "name");
+        //Pero para la 5.4 no es valida
+        $motors = $this->get('util_controller')->array_column($motors, "name");
         return new Response(json_encode($motors), $status = 200);
     }
     
