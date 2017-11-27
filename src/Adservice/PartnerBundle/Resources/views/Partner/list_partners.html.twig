@@ -61,26 +61,27 @@
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
             <tr>
-                <th>#</th>
-                <th>{% trans %} name            {% endtrans %}</th>
-                <th>{% trans %}                 {% endtrans %}</th>
-                <th>{% trans %} phone_number_1  {% endtrans %}</th>
-                <th>{% trans %} email_1         {% endtrans %}</th>
-                <th>{% trans %} region          {% endtrans %}</th>
-                <th>{% trans %} city            {% endtrans %}</th>
-                <th>{% trans %} actions         {% endtrans %}</th>
+                <th width="5%">#</th>
+                <th width="40%">{% trans %} name            {% endtrans %}</th>
+                <th width="20%">{% trans %}                 {% endtrans %}</th>
+                <th width="10%">{% trans %} phone_number_1  {% endtrans %}</th>
+                <th width="20%">{% trans %} email_1         {% endtrans %}</th>
+                {#<th>{% trans %} region          {% endtrans %}</th>
+                <th>{% trans %} city            {% endtrans %}</th>#}
+                <th width="5%">{% trans %} actions         {% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
                 {% for partner in all_partners %}
             <tr>
                 <td>{{ partner.codePartner }}</td>
-                <td title="{{partner.name}}">{{ partner.name|length > 15 ? partner.name|slice(0, 15) ~ '...' : partner.name  }}</td>
+{#                <td title="{{partner.name}}">{{ partner.name|length > 15 ? partner.name|slice(0, 15) ~ '...' : partner.name  }}</td>#}
+                <td title="{{partner.name}}">{{ partner.name  }}</td>
                 <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
-                <td>{{ partner.region|length > 15 ? partner.region|slice(0, 15) ~ '...' : partner.region  }}</td>
-                <td>{{ partner.city|length > 15 ? partner.city|slice(0, 15) ~ '...' : partner.city  }}</td>
+               {# <td>{{ partner.region|length > 15 ? partner.region|slice(0, 15) ~ '...' : partner.region  }}</td>
+                <td>{{ partner.city|length > 15 ? partner.city|slice(0, 15) ~ '...' : partner.city  }}</td>#}
                 <td>
                     <a title="{% trans %} edit.partner {% endtrans %}" id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                 </td>

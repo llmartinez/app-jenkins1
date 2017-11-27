@@ -275,7 +275,7 @@ class Pagination
         else{
              $order = '';
         }
-
+        
         if($pagination != null){
             $consulta = $em ->createQuery($query.$from.$where.$group_by.$order)
                             ->setMaxResults($pagination->getMaxRows())
@@ -283,7 +283,7 @@ class Pagination
         }else{
             $consulta = $em->createQuery($query.$from.$where.$group_by.$order);
         }
-
+        
         /* PARA DEBUG */
             // echo $query.$from.$where.$group_by.$order.'<br>';
             //
@@ -301,7 +301,7 @@ class Pagination
         $query = 'SELECT COUNT(e) '.$add;
         $from  = 'FROM '.$bundle.':'.$entity.' e ';
         $where = 'WHERE e.id > 0 ';
-
+       
         if($joins != null and $joins[0] != null) {
             foreach ($joins as $join) {
                                         if(isset($join[2])){

@@ -18,7 +18,7 @@
             <table style="margin: 0 auto;">
             <tr>
                 <td><label> {% trans %} date.start {% endtrans %} </label></td>
-                <td><label style="margin-left: 15px;"> {% trans %} date.end   {% endtrans %} </label></td>
+                <td><label style="margin-left: 30px;"> {% trans %} date.end   {% endtrans %} </label></td>
             </tr>
             <tr><td>
                 <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;">
@@ -184,6 +184,12 @@
                 <button class="btn btn-primary btn100" id="btn_search_workshop" style="margin-top: 4px;">
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.workshop {% endtrans %}</button>
             </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div class="col-xs-12 col-md-12 form-group">
+                    <button class="btn btn-primary btn100" id="btn_search_partner" style="margin-top: 4px;">
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.partner {% endtrans %}</button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

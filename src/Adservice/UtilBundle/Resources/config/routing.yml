@@ -150,6 +150,12 @@ car_by_motor:
     options:
         expose: true
 
+car_motors:
+    pattern: /carMotors
+    defaults: { _controller: UtilBundle:Ajax:carMotors }
+    options:
+        expose: true
+
 showTicketReadonly:
     pattern:  /show_ticket_readonly/{id}
     defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }

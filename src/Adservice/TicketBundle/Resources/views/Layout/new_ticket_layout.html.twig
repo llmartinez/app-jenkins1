@@ -35,6 +35,7 @@
     <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
     <input type="hidden" id="msg_einatech" name="msg_einatech" value="{% trans %} msg_einatech {% endtrans %}">
     <input type="hidden" id="new_einatech" name="new_einatech" value={{einatech}}>
+    <input type="hidden" id="autologin"   value="{{autologin_session}}">
     {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
 
     {% if workshop.id != "" %}
@@ -46,6 +47,13 @@
 
           <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
 
+          {% if importance_session != null %}
+            <input type="hidden" id="ticket_importance"   value="{{importance_session}}">
+          {% endif %}
+          {% if is_granted('ROLE_ADMIN') and subsystem_session != null %}
+                <input type="hidden" id="ticket_system"   value="{{system_session}}">
+                <input type="hidden" id="ticket_subsystem"   value="{{subsystem_session}}">
+          {% endif %}
           {% include 'TicketBundle:Car:new_car.html.twig'        %}
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}

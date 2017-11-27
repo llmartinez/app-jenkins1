@@ -45,6 +45,7 @@ class WorkshopController extends Controller {
             } elseif ($term == 'mail') {
                 $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
             } elseif ($term == 'name') {
+                $field = str_replace("'","''",$field);
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             } elseif ($term == 'cif') {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
@@ -134,7 +135,7 @@ class WorkshopController extends Controller {
         if (!isset($params))
             $params[] = array();
         $pagination = new Pagination($page);
-
+        
         $workshops = $pagination->getRows($em, 'WorkshopBundle', 'Workshop', $params, $pagination, $ordered, $joins);
 
         $length = $pagination->getRowsLength($em, 'WorkshopBundle', 'Workshop', $params, $ordered, $joins);
@@ -158,7 +159,7 @@ class WorkshopController extends Controller {
         }
 
         $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
-
+        $field = str_replace("''","'",$field);
         return $this->render('WorkshopBundle:Workshop:list.html.twig', array('workshops' => $workshops,
                     'pagination'    => $pagination,
                     'w_idpartner'   => $w_idpartner,
