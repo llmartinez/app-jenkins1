@@ -599,8 +599,8 @@ class UserController extends Controller {
         }
         //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
-
-
+        
+        
         if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
             $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
         }
@@ -712,7 +712,7 @@ class UserController extends Controller {
                     $workshop_user= $em->getRepository('WorkshopBundle:Workshop')->findOneById($user->getWorkshop()->getId());
                     $workshop_user = UtilController::saveUserFromWorkshop($user, $workshop_user );
        
-                    
+                    $old_staus = $workshop_user->getActive();
                     $workshop_user->setPartner($user->getWorkshop()->getPartner());
                     $workshop_user->setContact($user->getName());
                     $workshop_user->setActive($user->getActive());
@@ -721,7 +721,9 @@ class UserController extends Controller {
                     if($workshop_user->getActive()){
                         $status = 1;
                     }
-                    UtilController::createHistorical($em, $workshop_user, $status);
+                    if($old_staus != $workshop_user->getActive()){
+                        UtilController::createHistorical($em, $workshop_user, $status);
+                    }
                     $em->flush();
                  }
                  elseif($user->getPartner() !== null){

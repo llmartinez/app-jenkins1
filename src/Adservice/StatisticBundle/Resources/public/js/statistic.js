@@ -159,7 +159,40 @@ $(document).ready(function() {
 
         window.open(url, "_self");
     });
+    
+    $('#btn_search_partner').click(function() {
+        var raport  = "partner";
+        
+         var from_y  = $('#from_y').val();
+        var from_m  = $('#from_m').val();
+        var from_d  = $('#from_d').val();
+        var to_y    = $('#to_y').val();
+        var to_m    = $('#to_m').val();
+        var to_d    = $('#to_d').val();
+        var partner = $('#flt_partner').val();
+        var country = $('#flt_country').val();
+        var catserv = $('#flt_catserv').val();
+        var shop    = $("#flt_wks_shop").val();
+        var typology= $("#flt_wks_typology").val();
+        var status  = $('#flt_wks_status').val();
+        var workshop= '0';
+        var assessor= '0';
+        var created_by= '0';
 
+         if(from_y  == "" || from_y  == 0 ) from_y  = '0';
+        if(from_m  == "" || from_m  == 0 ) from_m  = '0';
+        if(from_d  == "" || from_d  == 0 ) from_d  = '0';
+        if(to_y    == "" || to_y    == 0 ) to_y    = '0';
+        if(to_m    == "" || to_m    == 0 ) to_m    = '0';
+        if(to_d    == "" || to_d    == 0 ) to_d    = '0';
+        
+        
+        var route  = 'doExcel';
+        var locale = $(document).find("#data_locale").val();
+        var url    = Routing.generate(route, {_locale: locale, type: 'undefined', page: 1, from_y: from_y, from_m: from_m, from_d: from_d, to_y: to_y, to_m: to_m, to_d: to_d, partner: partner, shop: shop, workshop: workshop, typology: typology, status: status, country: country, catserv: catserv, assessor: assessor, created_by: created_by, raport: raport });
+
+        window.open(url, "_self");
+    });
     //REDIRIGE A LA PAGINA EN LA QUE SE HAYA HECHO CLICK
     $('#btn_raport_partner').click(function() {
 

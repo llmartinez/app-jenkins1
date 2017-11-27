@@ -174,8 +174,11 @@ class StatisticController extends Controller {
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $where = 'e.id != 0 ';
-        $join  = '';
-
+        $join  = '';        
+        if($user == 'anon.')
+        { 
+            return $this->redirect($this->generateUrl('user_login'));
+        }
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
         // $response->headers->set('Content-Type', 'application/vnd.ms-excel');
@@ -187,7 +190,6 @@ class StatisticController extends Controller {
         $response->headers->set('Pragma', 'public');
         $date = new \DateTime();
         $response->setLastModified($date);
-        
         if ($raport == 'billing' or $raport == 'historical')
         {
           //Recojemos los IDs de talleres del raport de facturación
@@ -205,9 +207,11 @@ class StatisticController extends Controller {
                 ->orderBy('w.id');
             
 
-            if     ($status == "open"  ) $qb = $qb->andWhere('w.active = 1');
-            elseif ($status == "closed") $qb = $qb->andWhere('s.name = 0');
-            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks IS NOT NULL');
+            if ($status == "active") $qb = $qb->andWhere('w.active = 1');
+            elseif ($status == "deactive") $qb = $qb->andWhere('w.active = 0');
+            elseif ($status == "test") $qb = $qb->andWhere('w.test = 1');
+            elseif ($status == "adsplus") $qb = $qb->andWhere('w.adsplus = 1');
+            elseif ($status == "check") $qb = $qb->andWhere('w.haschecks = 1');
             elseif ($status == "infotech") $qb = $qb->andWhere('w.infotech IS NOT NULL');
 
             if ($partner  != "0") $qb = $qb->andWhere('w.id != 0')->andWhere('p.id = :partner')->setParameter('partner', $partner);
@@ -274,7 +278,6 @@ class StatisticController extends Controller {
                                       );
             }
             unset($resultsDehydrated);
-
             $qb = $em->getRepository('WorkshopBundle:Historical')
                 ->createQueryBuilder('h')
                 ->select('h')
@@ -444,8 +447,23 @@ class StatisticController extends Controller {
             $response->headers->set('Content-Disposition', 'attachment;filename="'.$raport.'_'.date("dmY").'.csv"');
             $excel = $this->createExcelBilling($data, $raport);
         }
+        elseif($raport == 'partner'){
+            $qb = $em->getRepository('PartnerBundle:Partner')
+                    ->createQueryBuilder('e')
+                    ->select('e.id','e.name', 'e.cif', 'e.active', 'e.phone_number_1', 'e.phone_number_2', 'e.mobile_number_1', 'e.mobile_number_2', 'e.fax', 'e.email_1', 'e.email_2', 'c.country', 'e.region', 'e.city', 'e.address', 'e.postal_code', 'e.created_at', 'e.modified_at')
+                    ->leftJoin('e.country', 'c')
+                    ->orderBy('e.id');
+                    if($catserv != 0)
+                       $qb = $qb->where('e.category_service = :category_service')->setParameter('category_service', $catserv);
+                    
+            
+            $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
+            $excel = $this->createExcelPartner($resultsDehydrated);
+            
+        }
         else{
-
+           
           if ($raport != '0'){
               $type = $raport;
               if ($raport == 'last-tickets') { $type = '0'; }
@@ -808,7 +826,6 @@ class StatisticController extends Controller {
                   }
 
                   $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                  
                   $response->headers->set('Content-Disposition', 'attachment;filename="informeTalleres_'.date("dmY").'.csv"');
                   $excel = $this->createExcelWorkshop($resultsDehydrated);
               }
@@ -2105,11 +2122,11 @@ class StatisticController extends Controller {
             else $adsplus = '';
             $excel.=strtoupper($adsplus).';';
 
-            if(isset($row['has_checks']) && $row['has_checks'] == 1) $hasChecks = $this->get('translator')->trans('yes');
+            if(isset($row['haschecks']) && $row['haschecks'] == 1) $hasChecks = $this->get('translator')->trans('yes');
             else $hasChecks = '';
             $excel.=strtoupper($hasChecks).';';
 
-            if(isset($row['num_checks'])) $excel.= $row['num_checks'].';';
+            if(isset($row['numchecks'])) $excel.= $row['numchecks'].';';
             else $excel.= '0;';
 
             if(isset($row['infotech']) && $row['infotech'] == 1) $infotech = $this->get('translator')->trans('yes');
@@ -2238,6 +2255,36 @@ class StatisticController extends Controller {
                     $res['Outildediagnostic'] = substr($res['Outildediagnostic'], 0, -3);
                 }
 
+                foreach ($res as $key => $value)
+                {
+                    if($firstKey == $key) $excel.="\n";
+
+                    if ($value instanceof \DateTime) { $value = $value->format('Y-m-d H:i:s'); }
+
+                    $buscar=array('"', ',', ';', chr(13).chr(10), "\r\n", "\n", "\r");
+                    $reemplazar=array('', "", "", "", "", "", "");
+                    $text=str_ireplace($buscar,$reemplazar,$value);
+                    $excel.=$text.';';
+                }
+            }
+        }
+        return($excel);
+    }
+    
+    public function createExcelPartner($results)
+    {
+        $excel = '';
+        $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
+
+        if (isset($results[0])) {
+            //Bucle para las cabeceras
+            foreach ($results[0] as $key => $value) {
+                if($firstKey == '') { $firstKey = $key; }
+                $excel.=$key.';';
+            }
+
+            foreach ($results as $res)
+            {
                 foreach ($res as $key => $value)
                 {
                     if($firstKey == $key) $excel.="\n";

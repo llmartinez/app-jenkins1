@@ -547,17 +547,16 @@ function fill_model(model) {
         var locale = $(document).find("#data_locale").val();
         var filter = '';
         var filter_value = '';
-        // var id_mts = '';
-        // var motor = '';
 
-        if ($('#year_selected').val()  == '') { filter       = 'year';
-                                                filter_value = $('#new_car_form_year').val(); }
+        if ($('#year_selected').val()  == '') { 
+            filter       = 'year';
+            filter_value = $('#new_car_form_year').val(); 
+        }
 
-        if ($('#motor_selected').val() == '') { filter       = 'motor';
-                                                filter_value = $('#new_car_form_motor').val();
-                                                // id_mts       = $('#id_mts').val();
-                                                // motor        = $('form[id=contact]').find('#new_car_form_motor').val();
-                                              }
+        if ($('#motor_selected').val() == '') { 
+            filter       = 'motor';
+            filter_value = $('#new_car_form_motor').val();
+        }
 
         $.ajax({
             type: "POST",
@@ -578,13 +577,10 @@ function fill_model(model) {
                     //Primer campo vacío
                     $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
                     $.each(data, function(idx, elm) {
-                        // if (idx == 'id_mts') $('#id_mts').val(elm);
-                        // else {
-                            if(model == elm.id )
-                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                            else
-                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                        // }
+                        if(model == elm.id )
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                        else
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                 }
                 if(id_brand == 0){
@@ -592,11 +588,6 @@ function fill_model(model) {
                     $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=0 selected>OTHER</option>");
                     $('#new_car_form_version').empty();
                     $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
-
-                   // var version = $("#ticket_version").val();
-                   // if(version != undefined && version != ""){
-                   //     fill_version(version);
-                   // }
                 }
                 else if(model != undefined && model != '' ) {
                     var version = $("#ticket_version").val();
@@ -628,15 +619,16 @@ function fill_version(version) {
             var locale = $(document).find("#data_locale").val();
             var filter = '';
             var filter_value = '';
-            // var id_mts = '';
 
-            if ($('#year_selected').val()  == '') { filter       = 'year';
-                                                    filter_value = $('#new_car_form_year').val(); }
+            if ($('#year_selected').val()  == '') { 
+                filter       = 'year';
+                filter_value = $('#new_car_form_year').val(); 
+            }
 
-            if ($('#motor_selected').val() == '') { filter       = 'motor';
-                                                    filter_value = $('#new_car_form_motor').val();
-                                                   // id_mts       = $('#id_mts').val();
-                                                  }
+            if ($('#motor_selected').val() == '') { 
+                filter       = 'motor';
+                filter_value = $('#new_car_form_motor').val();
+            }
                                                   
             $.ajax({
                 type: "POST",
@@ -648,18 +640,15 @@ function fill_version(version) {
                 success: function(data) {
                     // Limpiamos y llenamos el combo con las opciones del json
                     $('#new_car_form_version').empty();
-                    $('#id_system').val("");
-                    $('#ticket_form_subsystem').empty();
-
                     var flt_year = $('#flt_year').val();
-                    if(flt_year == undefined || flt_year == '' || flt_year == '0') $('#new_car_form_year').val('');
-
+                    if(flt_year == undefined || flt_year == '' || flt_year == '0') 
+                        $('#new_car_form_year').val('');
                     var flt_motor = $('#flt_motor').val();
                     if($('#motor_selected').val() == undefined && (flt_motor == undefined || flt_motor == '' || flt_motor == '0')) $('#new_car_form_motor').val('');
 
                     $('#new_car_form_kW').val('');
                     $('#new_car_form_displacement').val('');
-
+                    var autologin = $('#autologin').val();
                     if (data['error'] != "No hay coincidencias") {
 
                         var dis_url = $( "#dis-url" ).val();
@@ -669,20 +658,18 @@ function fill_version(version) {
                         $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
 
                         $.each(data, function(idx, elm) {
-                            // if (idx == 'id_mts') $('#id_mts').val(elm);
-                            // else {
-                                if(version == elm.id ){
-                                    var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
+                            if(version == elm.id ){
+                                var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
 
-                                    if(motor == undefined || (motor == mt))
-                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                                }
-                                else
-                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                                //if(motor == undefined || motor == ""  || motor == mt)
+                                if(autologin != true)
+                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + " [" + elm.kw + "]" + "</option>");
+                            }
+                            else
+                                $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name  + " [" + elm.kw + "]" +  "</option>");
 
-                                $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
-                                $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
-                            // }
+                            $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
+                            $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
                         });
                     }
                     if(version != undefined && version != '' ) {
@@ -714,7 +701,7 @@ function fill_car_data() {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
-    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[')[1].slice(0, -1);
+    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[', 2)[1].slice(0,-2);
 
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
     if (motor = undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
@@ -879,8 +866,8 @@ function fill_car_by_motor() {
                     }
                 }
             }else{
-                msg_bad_filter = $('#msg_bad_filter').val();
-                alert(msg_bad_filter);
+                msg_motor_not_found = $('#msg_motor_not_found').val();
+                alert(msg_motor_not_found);
             }
         },
         error: function() {
@@ -1110,6 +1097,9 @@ function fill_car_from_plate_number() {
     var route     = 'get_car_from_plate_number';
 
     var idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
+    if(idPlateNumber == ''){
+        idPlateNumber = $(document).find('#ticket_plateNumber').val();
+    }
     var locale    = $(document).find("#data_locale").val();
 
     $.ajax({
@@ -1144,7 +1134,6 @@ function fill_car_from_plate_number() {
  */
 function fill_model_by_PlateNumber(dataPN) {
 
-    $('#car').text($('select[id=new_car_form_brand] option:selected').text());
     $('select#new_car_form_brand' ).val(dataPN.brandId);
     $("#ticket_model").val(dataPN.modelId);
     $("#ticket_version").val(dataPN.versionId);
@@ -1158,22 +1147,18 @@ function fill_model_by_PlateNumber(dataPN) {
         var locale = $(document).find("#data_locale").val();
         var filter = '';
         var filter_value = '';
-        // var id_mts = '';
-        // var motor = '';
 
         if ($('#year_selected').val()  == '') { filter       = 'year';
                                                 filter_value = $('#new_car_form_year').val(); }
 
         if ($('#motor_selected').val() == '') { filter       = 'motor';
                                                 filter_value = $('#new_car_form_motor').val();
-                                                // id_mts       = $('#id_mts').val();
-                                                // motor        = $('form[id=contact]').find('#new_car_form_motor').val();
                                               }
 
         $.ajax({
             type: "POST",
             url: Routing.generate(route, {_locale: locale, id_brand: id_brand, filter: filter, filter_value: filter_value}),
-            data: {id_brand: id_brand, filter: filter, filter_value: filter_value}, //, id_mts: id_mts, motor: motor},
+            data: {id_brand: id_brand, filter: filter, filter_value: filter_value},
             dataType: "json",
             beforeSend: function(){ $("body").css("cursor", "progress"); },
             complete: function(){ $("body").css("cursor", "default"); },
@@ -1188,13 +1173,10 @@ function fill_model_by_PlateNumber(dataPN) {
                     //Primer campo vacío
                     $('form[id=contact]').find('select[id=new_car_form_model]').append("<option></option>");
                     $.each(data, function(idx, elm) {
-                        // if (idx == 'id_mts') $('#id_mts').val(elm);
-                        // else {
-                            if(model == elm.id )
-                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
-                            else
-                                $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-                        // }
+                        if(model == elm.id )
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                        else
+                            $('form[id=contact]').find('select[id=new_car_form_model]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
                     });
                 }
                 if(id_brand == 0){
@@ -1204,16 +1186,12 @@ function fill_model_by_PlateNumber(dataPN) {
                     $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=0>OTHER</option>");
 
                     $("#new_car_form_plateNumber").val("");
-                   // var version = $("#ticket_version").val();
-                   // if(version != undefined && version != ""){
-                   //     fill_version(version);
-                   // }
+                   
                 }
                 if(model != undefined && model != '' ) {
                     var version = $("#ticket_version").val();
                     if(version != undefined && version != ""){
 
-                        $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text());
                         if (motor == undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
 
                         if (model != undefined && model != "") {
@@ -1228,45 +1206,35 @@ function fill_model_by_PlateNumber(dataPN) {
 
                             if ($('#motor_selected').val() == '') { filter       = 'motor';
                                                                     filter_value = $('#new_car_form_motor').val();
-                                                                    // id_mts       = $('#id_mts').val();
                                                                   }
 
                             $.ajax({
                                 type: "POST",
                                 url: Routing.generate(route, {_locale: locale, id_model: model, filter: filter, filter_value: filter_value}),
-                                data: {id_model: model, filter: filter, filter_value: filter_value}, //, id_mts: id_mts},
+                                data: {id_model: model, filter: filter, filter_value: filter_value},
                                 dataType: "json",
                                 beforeSend: function(){ $("body").css("cursor", "progress"); },
                                 complete: function(){ $("body").css("cursor", "default"); },
                                 success: function(data) {
                                     // Limpiamos y llenamos el combo con las opciones del json
                                     $('#new_car_form_version').empty();
-
-
                                     if (data['error'] != "No hay coincidencias") {
-
                                         var dis_url = $( "#dis-url" ).val();
                                         var vts_url = $( "#vts-url" ).val();
-
                                         //Primer campo vacío
                                         $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
 
                                         $.each(data, function(idx, elm) {
-                                            // if (idx == 'id_mts') $('#id_mts').val(elm);
-                                            // else {
                                                 if(version == elm.id ){
                                                     var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
-
-                                                   // if(motor == undefined || (motor == mt))
-
-                                                        $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
                                                 }
                                                 else
                                                     $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
-
+                                                
+                                                $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
                                                 $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
                                                 $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
-                                            // }
                                         });
                                     }
                                     if(version != undefined && version != '' ) {
@@ -1295,6 +1263,7 @@ function fill_model_by_PlateNumber(dataPN) {
                     $("#new_car_form_kW").val(dataPN.kw);
                     $("#new_car_form_displacement").val(dataPN.cm3);
                     $("#new_car_form_vin").val(dataPN.vin);
+
                 }
             },
             error: function() {

@@ -16,6 +16,7 @@ $(document).ready(function() {
         var ticket_brand = $('#ticket_brand').val();
         var ticket_model = $('#ticket_model').val();
         var ticket_version = $('#ticket_version').val();
+        var ticket_vin = $('#ticket_vin').val();
         var ticket_system  = $('#ticket_system').val();
         var ticket_subsystem  = $('#ticket_subsystem').val();
         var ticket_importance = $('#ticket_importance').val();
@@ -25,24 +26,27 @@ $(document).ready(function() {
         if(ticket_brand != '')
             $('#new_car_form_brand').val(ticket_brand);
 
-        if(ticket_model != ''){
-            var plateNumber = $('#new_car_form_plateNumber').val();
-            if( plateNumber != null && plateNumber != ''){
-                fill_car_from_plate_number();
-            }
-            else {
-                fill_model(ticket_model);
-            }
+        if(ticket_model != ''){            
+            fill_model(ticket_model);
         }
 
         if(ticket_importance != '')
-            $('#new_car_form_importance').val(ticket_importance);
+            $('#ticket_form_importance').val(ticket_importance);
         
         if(ticket_description != '')
             $('#ticket_form_description').val(ticket_description);
         
+        if(ticket_vin != '')
+            $('#new_car_form_vin').val(ticket_vin);
+        
         if(ticket_plateNumber != '')
             $('#new_car_form_plateNumber').val(ticket_plateNumber);
+        
+        if(ticket_system != '')
+            $('#id_system').val(ticket_system);
+                
+        if(ticket_subsystem != '')
+            $('#ticket_form_subsystem').val(ticket_subsystem);
 
     }
 
@@ -56,6 +60,7 @@ $(document).ready(function() {
         var platenumber = $(this).val();
         platenumber = normalizeForm(platenumber);
         $(this).val(platenumber.toUpperCase());
+        fill_car_from_plate_number();
     });
 });
 function popUpEinatech() {
