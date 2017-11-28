@@ -475,7 +475,7 @@ class TicketController extends Controller {
         }
         
         // TODO
-        // Ha aparecido un error en el formulario que no recoge los datos de Marca, Modelo, Gama y Subsistema.
+        // Ha aparecido un error en el formulario que no recoge los datos de Marca, Modelo, Gama, Subsistema y Importancia.
         // Al no encontrar solucion aparente cargaremos los datos desde $request
         //
         $id_brand = $request->request->get('new_car_form_brand');
@@ -484,6 +484,11 @@ class TicketController extends Controller {
         
         if(isset($request->request->get('ticket_form')['subsystem'])){
             $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+        }
+        if(isset($request->request->get('ticket_form')['importance'])){
+            $id_importance = $request->request->get('ticket_form')['importance'];
+            $importance= $em->getRepository('TicketBundle:Ticket')->find($id_importance);
+            $ticket->setImportance($importance);
         }
         if (isset($id_brand) and $id_brand != '') {
             $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
@@ -502,7 +507,7 @@ class TicketController extends Controller {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
             $ticket->setSubsystem($subsystem);
         }
-
+        
         $open_newTicket = $request->request->get('open_newTicket');
         $id_brand = $request->request->get('n_id_brand');
         $id_model = $request->request->get('n_id_model');
