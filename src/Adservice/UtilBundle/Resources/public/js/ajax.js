@@ -726,7 +726,11 @@ function fill_car_data() {
                     $.each(data, function(idx, elm) {
 
                         var inicio = elm.inicio.slice(0,4);
-                        var fin    = elm.fin.slice(0,4);
+                        var fin = '';
+                        if(elm.fin != null){
+                            fin    = elm.fin.slice(0,4);
+                        }
+                         
                         var fecha  = inicio+' - '+fin;
 
                         var year_setted = $('form[id=contact]').find('#new_car_form_year').attr('value');

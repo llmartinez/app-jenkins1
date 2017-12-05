@@ -60,7 +60,9 @@ $(document).ready(function() {
         var platenumber = $(this).val();
         platenumber = normalizeForm(platenumber);
         $(this).val(platenumber.toUpperCase());
-        fill_car_from_plate_number();
+        if(platenumber != ''){
+            fill_car_from_plate_number();
+        }
     });
 });
 function popUpEinatech() {
