@@ -362,30 +362,25 @@ class WorkshopController extends Controller {
                     
                     if($workshop->getCategoryService()->getId() == 3) {
                         $mail = $this->container->getParameter('mail_report_ad');
+                        $mailCC1 = $this->container->getParameter('mail_admin_1');
+                        $mailCC2 = $this->container->getParameter('mail_admin_2');   
+                        $mailerUser->setTo($mail);
+                        $mailerUser->setCc(array($mailCC1,$mailCC2)); 
+                        $mailerUser->sendMailToSpool();
 
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-
-                            $mailerUser->setTo($mail);
-                            $mailerUser->sendMailToSpool();
-                        }
-
-                        $mailAnne = $this->container->getParameter('mail_Anne');
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
-                            $mailerUser->setTo($mailAnne);
-                            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_anne.html.twig', array('user' => $newUser, '__locale' => $locale)));
-                            $mailerUser->sendMailToSpool();
-                        }
+                        $mailTopFr = $this->container->getParameter('mail_top_fr');
+                        
+                        $mailerUser->setTo($mailTopFr);                        
+                        $mailerUser->setCc(null); 
+                        $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_top_fr.html.twig', array('user' => $newUser, '__locale' => $locale)));
+                        $mailerUser->sendMailToSpool();
+                        
                     } else {
                         $mailReportAd = $this->container->getParameter('mail_report');
                         
-                        $pos = strpos($mail, '@');
-                        if ($pos != 0) {
+                        $mailerUser->setTo($mailReportAd);
+                        $mailerUser->sendMailToSpool();
                         
-                            $mailerUser->setTo($mailReportAd);
-                            $mailerUser->sendMailToSpool();
-                        }
                     }
                     
                     /* Dejamos el locale tal y como estaba */
@@ -814,30 +809,26 @@ class WorkshopController extends Controller {
 
         if($workshop->getCategoryService()->getId() == 3) {
             $mail = $this->container->getParameter('mail_report_ad');
-
-            $pos = strpos($mail, '@');
-            if ($pos != 0) {
-
-                $mailerUser->setTo($mail);
-                $mailerUser->sendMailToSpool();
-            }
+            $mailCC1 = $this->container->getParameter('mail_admin_1');
+            $mailCC2 = $this->container->getParameter('mail_admin_2'); 
             
-            $mailAnne = $this->container->getParameter('mail_Anne');
-            $pos = strpos($mail, '@');
-            if ($pos != 0) {
-                $mailerUser->setTo($mailAnne);
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_status_mail_anne.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
-                $mailerUser->sendMailToSpool();
-            }
+            $mailerUser->setTo($mail);
+            $mailerUser->setCc(array($mailCC1,$mailCC2));   
+            $mailerUser->sendMailToSpool();
+            
+            $mailTopFr = $this->container->getParameter('mail_top_fr');
+            
+            $mailerUser->setTo($mailTopFr);
+            $mailerUser->setCc(null); 
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_status_mail_top_fr.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale)));
+            $mailerUser->sendMailToSpool();
+            
         } else {
             $mailReportAd = $this->container->getParameter('mail_report');
 
-            $pos = strpos($mail, '@');
-            if ($pos != 0) {
-
-                $mailerUser->setTo($mailReportAd);
-                $mailerUser->sendMailToSpool();
-            }
+            $mailerUser->setTo($mailReportAd);
+            $mailerUser->sendMailToSpool();
+            
         }
         
 

@@ -604,6 +604,7 @@ class TicketController extends Controller {
             $formD->bindRequest($request);
            
         }
+        
         if ($ticket->getDescription() != null and $car->getBrand() != null and ($car->getBrand()->getId() == 0 || $car->getBrand()->getId() != null)
                 and $car->getModel() != null and ($car->getModel()->getId() == 0 || $car->getModel()->getId() != null) and $car->getVin() != null and $car->getPlateNumber() != null) {
             $array = array('ticket' => $ticket,
@@ -621,7 +622,7 @@ class TicketController extends Controller {
                 'autologin_session' => $autologin_session,
                 'marca_session' => $car->getBrand()->getId(),
                 'modelo_session' => $car->getModel()->getId(),
-                'version_session' => $car->getVersion()->getId(),
+                'version_session' => null,
                 'description_session' => $ticket->getDescription(),
                 'plateNumber_session' => $car->getPlateNumber(),
                 'vin_session' => $car->getVin(),
@@ -631,6 +632,9 @@ class TicketController extends Controller {
                 );
 
             if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
+                if($car->getVersion() != null){
+                    $array['version_session'] = $car->getVersion()->getId();
+                }
                 if( $ticket->getSubsystem() != ""){
                     $array['system_session']= $ticket->getSubsystem()->getSystem()->getId();
                     $array['subsystem_session']= $ticket->getSubsystem()->getId();
