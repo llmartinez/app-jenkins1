@@ -205,7 +205,7 @@ $(document).ready(function() {
         var to_y    = $('#to_y').val();
         var to_m    = $('#to_m').val();
         var to_d    = $('#to_d').val();
-        var partner = $('#flt_partner').val();
+        var partner = $('#type_partner').val();
         var catserv = $('#id_catserv').val();
         var country = $('#id_country').val();
         var shop    = $("#flt_wks_shop").val();
@@ -214,6 +214,10 @@ $(document).ready(function() {
         var workshop= '0';
         var assessor= '0';
         var created_by= '0';
+
+        if ($('#flt_partner').length != 0) {
+            partner = $('#flt_partner').val();
+        }
 
         if(code_zone == "" || code_zone == 0 || code_zone == undefined ) code_zone = '0';
         if(partner   == "" || partner   == 0 || partner   == undefined ) partner   = '0';
