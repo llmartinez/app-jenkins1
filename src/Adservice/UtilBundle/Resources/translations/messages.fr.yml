@@ -665,7 +665,7 @@ page.last:						"Dernière page"
 #MAIL
 mail.welcome:							"Bienvenue sur la plate-forme Auto Diagnostic Service!!"
 mail.image:				   				"https://adserviceticketing.com/logo_adservice.png"
-mail.info.tel:							"+34 97 267 77 70"
+mail.info.tel:							"0810 125 245"
 mail.info.more:							"Plus d'informations:"
 mail.testing:		                	"En phase d'essai jusqu’au"
 mail.goto_ticket:						"Aller au ticket"
