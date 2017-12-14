@@ -62,8 +62,8 @@ generate_password:
         expose: true
 
 change_password:
-    pattern: /user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}
-    defaults: { _controller: UserBundle:User:changePassword, new_pass: 'none', rep_pass: 'none', old_pass: 'none' }
+    pattern: /user/changePassword/{id}
+    defaults: { _controller: UserBundle:User:changePassword }
     options:
         expose: true
 
