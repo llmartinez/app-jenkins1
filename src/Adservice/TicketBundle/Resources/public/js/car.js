@@ -4,15 +4,18 @@
     /*
         FILTERS FUNNEL NEW/EDIT TICKET
     */
-    function checkEnterInFilterFields(e, id)
+    function checkEnterInFilterFields(event, id)
     {
-        if(e.keyCode == 13)
+
+        if(event.keyCode == 13)
         {
             if (id.endsWith("_plateNumber")) {
-                fill_car_from_plate_number();
+                $('#'+id).blur();
+                //fill_car_from_plate_number();
                 event.preventDefault();
             }
             else if (id.endsWith("_vin")) {
+                $('#'+id).blur();
                 fill_car_from_vin();
                 event.preventDefault();
             }
