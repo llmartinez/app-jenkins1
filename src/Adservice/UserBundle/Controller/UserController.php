@@ -69,7 +69,7 @@ class UserController extends Controller {
                      return $this->redirect($currentPath);
                 }
                 // POPUP: Mostramos por flash los popups para el usuario logeado
-                    $em   = $this->getDoctrine()->getEntityManager();
+                    $em   = $this->getDoctrine()->getManager();
                     $now  = new \DateTime('now');
                     $now  = $now->format("Y-m-d H:i:s");
 
@@ -94,7 +94,7 @@ class UserController extends Controller {
                             - '.$popup['name'].': '.$popup['description'].'
                             ';
                         }
-                        if($flash != '') $this->get('session')->setFlash('popup', $flash);
+                        if($flash != '') $this->get('session')->getFlashBag()->add('popup', $flash);
                     }
                 //END POPUP
             }
@@ -178,7 +178,7 @@ class UserController extends Controller {
             }
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $inactive = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'inactive'))->getId();
         $tickets = $em->getRepository('TicketBundle:Ticket')->findBy(array('status' => $inactive));
         $t_inactive = sizeof($tickets);
@@ -190,7 +190,7 @@ class UserController extends Controller {
      * Obtener los datos del usuario logueado para verlos
      */
     public function profileAction() {
-        $em             = $this->getDoctrine()->getEntityManager();
+        $em             = $this->getDoctrine()->getManager();
         $logged_user = $this->get('security.context')->getToken()->getUser();
         if($logged_user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
         $user           = $em->getRepository('UserBundle:User')->find($logged_user->getId());
@@ -216,7 +216,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $users_role_super_admin = array();
         $users_role_admin       = array();
@@ -265,7 +265,7 @@ class UserController extends Controller {
         //separamos los tipos de usuario...
         foreach ($users as $user) {
             // $role = $user->getRoles();
-            if ($option == null or $option == 'all' or $option == 'none') {
+            if ($option == null or $option == 'all' or $option == 'none' || $option == '0') {
                 $role     = $user->getRoles();
                 $role     = $role[0];
                 $role     = $role->getName();
@@ -319,7 +319,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $users_role_super_ad    = array();
         $users_role_top_ad      = array();
@@ -431,7 +431,7 @@ class UserController extends Controller {
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = new User();
 
         if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
@@ -502,7 +502,7 @@ class UserController extends Controller {
 
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($request->getMethod() == 'POST') {
             if($user->getRegion() == null){
@@ -553,7 +553,7 @@ class UserController extends Controller {
             $this->saveUser($em, $user);
 
             $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
-            $this->get('session')->setFlash('alert', $flash);
+            $this->get('session')->getFlashBag()->add('alert', $flash);
 
             if ($security->isGranted('ROLE_ADMIN')) return $this->redirect($this->generateUrl('user_list'));
             else                                    return $this->redirect($this->generateUrl('user_partner_list'));
@@ -587,7 +587,7 @@ class UserController extends Controller {
         if ($user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $trans = $this->get('translator');
 
         $petition = $this->getRequest();
@@ -595,7 +595,7 @@ class UserController extends Controller {
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
             $result= $em->createQuery($sql)->getResult();
             $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
-            $this->get('session')->setFlash('alert', $flash);
+            $this->get('session')->getFlashBag()->add('alert', $flash);
 
             return $this->redirect($this->generateUrl('user_list'));
         }
@@ -685,13 +685,13 @@ class UserController extends Controller {
 
             if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
                 $flash =  $trans->trans('error.bad_introduction').' ('.$trans->trans('category_service').')';
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
             else {
 
                 if($user->getShop() != null) $old_shop = $user->getShop()->getId();
 
-                $form->bindRequest($petition);
+                $form->bind($petition);
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -759,7 +759,7 @@ class UserController extends Controller {
 
                 $this->saveUser($em, $user, $original_password);
                 $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
 
                 if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
                     return $this->redirect($this->generateUrl('user_list'));
@@ -790,7 +790,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         $user->setActive(!$user->getActive());
         $em->persist($user);
@@ -814,7 +814,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         $em->remove($user);
         $em->flush();
@@ -834,7 +834,7 @@ class UserController extends Controller {
      */
     public function generatePasswordAction($id, $user)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
         if (!$user)
             throw $this->createNotFoundException('Usuario no encontrado en la BBDD');
@@ -854,7 +854,7 @@ class UserController extends Controller {
      */
     public function changePasswordAction($user)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
 
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
         $pass = $encoder->encodePassword($this->getRequest()->get('old_pass'), $user->getSalt());
@@ -893,7 +893,7 @@ class UserController extends Controller {
         }
 
         if (isset($flash)) {
-            $this->get('session')->setFlash('password', $flash);
+            $this->get('session')->getFlashBag()->add('password', $flash);
         }
 
         return new Response(json_encode($response));
@@ -942,7 +942,7 @@ class UserController extends Controller {
         }
 
         $flash =  $this->get('translator')->trans('change_password.correct').' - '.$this->get('translator')->trans('mail.changePassword.password').' '.$password;
-        $this->get('session')->setFlash('password', $flash);
+        $this->get('session')->getFlashBag()->add('password', $flash);
 
         return true;
     }
@@ -958,7 +958,7 @@ class UserController extends Controller {
         if ($security->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $security->getToken()->getUser();
         $role = $user->getRoles();
         $role = $role[0];
@@ -1066,7 +1066,7 @@ class UserController extends Controller {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             if ($request->request->has('Accept')) {
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
                 $user->setPrivacy(1);
                 $em->persist($user);
                 $em->flush();

@@ -18,21 +18,21 @@ class Document {
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
 
     private $name;
 
     /**
      * @var string $post
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Post")
+     * @ORM\OneToOne(targetEntity="\Adservice\TicketBundle\Entity\Post", inversedBy="document")
      */
-    public $post;
+    private $post;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    private $path;
 
     /**
      * El tamaño maximo también está definido en TicketBundle: Controller(New y Show) y public/js/ticket.js

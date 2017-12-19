@@ -14,12 +14,12 @@
             
             
             {% if is_granted('ROLE_ASSESSOR') %}
-                <legend> {% trans %} reply {% endtrans %}:
+                <legend> {{ 'reply'|trans }}:
                     
                     <div class="grid-33 prl0 fr">                   
                         <select class="form-control asr_form-control" id="default_sentences">
-                            <option value="0">{% trans %} sentence.default {% endtrans %}</option>
-                            <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
+                            <option value="0">{{ 'sentence.default'|trans }}</option>
+                            <option value="{{ 'gas_table'|trans }}">{{ 'insert_gas_table'|trans }}</option>
 
                             {% for sentence in sentences %}
                                 <option value="{{sentence.name}}">{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
@@ -29,25 +29,26 @@
                 </legend>
                 <label>
                     
-                    <input type="checkbox" id="is_phone_call" name="is_phone_call" value="Llamada" unchecked>   {% trans %} ticket.call {% endtrans %}
+                    <input type="checkbox" id="is_phone_call" name="is_phone_call" value="Llamada" unchecked>   {{ 'ticket.call'|trans }}
                 </label>
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
             {% else %}
-                    <legend> {% trans %} reply {% endtrans %}:</legend>
+                    <legend> {{ 'reply'|trans }}:</legend>
             {% endif %}
            
 
             {% if ticket.workshop.active == 0 %}
-                <div class="grid100"> <p class="error">{% trans %} workshop_inactive {% endtrans %}</p></div>
+                <div class="grid100"> <p class="error">{{ 'workshop_inactive'|trans }}</p></div>
             {% endif %}
 
             <div class="grid-full w100">{{ form_widget(formP.message, { 'attr': {'class': 'ac-message asr_form-textarea pd_txt', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
             {{ form_widget(formD.file, { 'attr': {'class': 'ac-message asr_form-textarea'} })  }}
-            <label class="grid-full w100 error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}10Mb</label>
+            <label class="grid-full w100 error" style="display: none;" id='alertFileSize'>{{ 'error.file_size'|trans }}10Mb</label>
 
-            {% if app.session.hasFlash('error') %}
-            {% endif %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                {{ flashMessage }}
+            {% endfor %}
             {{ form_rest(formP) }}
             {{ form_rest(formD) }}
 
@@ -57,20 +58,20 @@
             {% else %}
                 <a class="btn btn-primary fr grid-33 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
             {% endif %}
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {{ 'ticket.close'|trans }}
                 </a>#}
                 
                 <button class="btn btn-primary fr grid-33 closeTicket" name="closeTicket" type="submit">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {{ 'ticket.close'|trans }}
                 </button>
                 <button class="btn btn-primary fr grid-33 sendTicket" name="sendTicket" type="submit">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}
                 </button>
             </div>
 
         {% endif %}
 
     {% else %}
-       <div class="grid-full w100 btn-disabled alert"> {% trans %} ticket.closed {% endtrans %} </div>
+       <div class="grid-full w100 btn-disabled alert"> {{ 'ticket.closed'|trans }} </div>
     {% endif %}
 </div>

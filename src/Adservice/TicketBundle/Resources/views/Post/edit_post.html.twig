@@ -3,30 +3,30 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        <li><a href="{{ path('showTicket', { 'id': ticket.id }) }}">{% trans %} ticket.show {% endtrans %}</a></li>
-        <li class="active">{% trans %} post {% endtrans %}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        <li><a href="{{ path('showTicket', { 'id': ticket.id }) }}">{{ 'ticket.show'|trans }}</a></li>
+        <li class="active">{{ 'post'|trans }}</li>
     </ol>
 
     <form action="{{ path("post_edit", { 'id': post.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
         <div class="container">
-            <legend>{% trans %} post {% endtrans %}</legend>
+            <legend>{{ 'post'|trans }}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
-                {% if app.session.hasFlash('error') %}
-                    <p class="error">{{ app.session.getFlash('error') }}</p>
-                {% endif %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <p class="error">{{ flashMessage }}</p>
+                {% endfor %}
             </div>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="post_form">{% trans %} post {% endtrans %}</label>
+                    <label for="post_form">{{ 'post'|trans }}</label>
                     {{ form_widget(form.message, { 'attr': {'class': 'form-control' } }) }}
                 </div>
             {{ form_rest(form) }}
 
-            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
     </form>
 

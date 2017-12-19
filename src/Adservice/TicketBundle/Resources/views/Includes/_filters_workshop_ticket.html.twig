@@ -4,11 +4,11 @@
             <input type="hidden" id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value={{ workshop.codeworkshop }}>
             <input type="hidden" id='ticket_model' name='ticket_model' value="">
             <input type="hidden" id='ticket_version' name='ticket_version' value="">
-            <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
-            <input type="hidden" id="msg_vin_not_found"  value="{% trans %} error.vin_not_found {% endtrans %}">
+            <input type="hidden" id="msg_plate_number_not_found"  value="{{ 'error.plate_number_not_found'|trans }}">
+            <input type="hidden" id="msg_vin_not_found"  value="{{ 'error.vin_not_found'|trans }}">
 
             <div class="grid w15">
-                <label for="new_car_form_brand">{% trans %} brand {% endtrans %}</label>
+                <label for="new_car_form_brand">{{ 'brand'|trans }}</label>
                 <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# required #}>
                     <option></option>
                     {% for _brand in brands %}
@@ -18,35 +18,35 @@
             </div>
 
             <div class="grid w15">
-                <label for="new_car_form_model">{% trans %} model {% endtrans %}</label>
+                <label for="new_car_form_model">{{ 'model'|trans }}</label>
                 <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# required #}>
                     {% if model.id is defined %}<option value="{{model.id}}">{{model.name}}</option>{% endif %}
                 </select>
             </div>
 
             <div class="grid w15">
-                <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
+                <label for="new_car_form_version">{{ 'version'|trans }}</label>
                 <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" >
                     {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
                 </select>
             </div>
             <div class="grid w15">
-                <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %}</label>
-                <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+                <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }}</label>
+                <a class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
                 <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
                        {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %}>
                 </input>
             </div>
             <div class="grid w15">
                 <label class="w100">
-                    <input type="hidden" id="alert" value="{% trans %} error.bad_introduction {% endtrans %}">
+                    <input type="hidden" id="alert" value="{{ 'error.bad_introduction'|trans }}">
                 </label>
                 <button type="submit" class="btn btn-primary asr_form-control asr_btn" id="btn_search_by_bmv" name="btn_search_by_bmv">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">{% trans %} btn.search {% endtrans %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">{{ 'btn.search'|trans }}
                 </button>
 
                 <a href="{{ path("listTicket") }}" class="btn btn-primary asr_form-control asr_btn">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{{ 'btn.clear'|trans }}" alt="{{ 'btn.clear'|trans }}">
                 </a>
             </div>
 
@@ -55,10 +55,10 @@
 
             <div class="w15 fr">
                 <div class="w100 pdl0">
-                    <label>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</label>
+                    <label>{{ 'ticket.flt.searchBy.id'|trans }}:</label>
                 </div>
                 <div class="w70 fl pdl0">
-                    <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                    <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{{ 'id'|trans }}'>
                 </div>
                 <div class="w30 fl form-group pdl0">
                     <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">

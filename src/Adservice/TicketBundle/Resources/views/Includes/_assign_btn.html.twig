@@ -1,7 +1,7 @@
 {# muestra los botones de editar y bloquear/desbloquear del asesor #}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="pull-right" href="{{ path('assignTicket', {'id':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket.assign {% endtrans %}"></span></a>
+        <a class="pull-right" href="{{ path('assignTicket', {'id':ticket.id})}}"   ><img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{{ 'ticket.assign'|trans }}"></span></a>
     {% endif %}
     {% if is_granted('ROLE_ASSESSOR') %}
         {% if ticket.status == 'open' %}
@@ -11,16 +11,16 @@
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': 0 }) }}">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/unlock.png') }}" title="{% trans %} ticket.unlock {% endtrans %}" style="color:red"></a>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/unlock.png') }}" title="{{ 'ticket.unlock'|trans }}" style="color:red"></a>
                 {% else %}
 
                     {# Ticket asignado a otro assessor #}
-                    <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+                    <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{{ 'ticket.blocked'|trans }}"></span></a>
 
-                    <a style="font-size: 15px;color: gray;">{% trans with {'%user%': ticket.blockedBy, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')} %} ticket_blocked_by%user%%date% {% endtrans %}</a>
+                    <a style="font-size: 15px;color: gray;">{{ 'ticket_blocked_by%user%%date%'|transchoice(2, {'%user%': ticket.blockedBy, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')}) }}</a>
 
                     <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{% trans %} ticket_reassign {% endtrans %}"></a>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{{ 'ticket_reassign'|trans }}"></a>
 
                 {% endif %}
 
@@ -28,17 +28,17 @@
 
                 {# bloquear Ticket #}
                 <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{% trans %} ticket.block {% endtrans %}"></span></a>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{{ 'ticket.block'|trans }}"></span></a>
             {% endif %}
 
         {% elseif ticket.status.id == 2  %}
 
                 {# Ticket cerrado #}
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{% trans %} ticket.closed {% endtrans %}"></span>
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}" title="{{ 'ticket.closed'|trans }}"></span>
 
                 {# reabrir Ticket #}
                 <a href="{{ path('reopenTicket', { 'id': ticket.id }) }}" >
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}" title="{% trans %} ticket.reopen {% endtrans %}"></span></a>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}" title="{{ 'ticket.reopen'|trans }}"></span></a>
 
         {% endif %}
 
@@ -47,9 +47,9 @@
         {# Ticket asignado a otro assessor #}
         {% if ticket.status == 'open' and ticket.blockedBy is not null %}
 
-            <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{% trans %} ticket.blocked {% endtrans %}"></span></a>
+            <a><img class="img_icon" src="{{ asset('bundles/util/images/icon/blocked.png') }}" title="{{ 'ticket.blocked'|trans }}"></span></a>
             {% set assessor = 'assessor'|trans %}
-            <a style="font-size: 15px;color: gray;">{% trans with {'%user%': assessor, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')} %} ticket_blocked_by%user%%date% {% endtrans %}
+            <a style="font-size: 15px;color: gray;">{{ 'ticket_blocked_by%user%%date%'|transchoice(2, {'%user%': assessor, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')}) }}
         {% endif %}
     {% endif %}
 
@@ -57,7 +57,7 @@
 {#     {% if ticket.posts | length <= 1 %} #}
         {# puede borrarlo el usuario si el ticket no esta assignado aun #}
 {#        {% if not is_granted('ROLE_ASSESSOR') and ticket.assignedTo == null %}
-            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{% trans %} ticket.delete {% endtrans %}"></span></a>
+            <a href="#"><span class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal" data-id="{{ ticket.id }}" title="{{ 'ticket.delete'|trans }}"></span></a>
         {% endif %}
     {% endif %}
  #}
@@ -67,14 +67,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{% trans %} ticket.delete {% endtrans %}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ 'ticket.delete'|trans }}</h4>
             </div>
             <div class="modal-body">
-                {% trans %} ticket.delete.confirm {% endtrans %}
+                {{ 'ticket.delete.confirm'|trans }}
             </div>
             <div class="modal-footer">
-                <a href="{{ path('deleteTicket', {'id': ticket.id}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} yes {% endtrans %}</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> {% trans %} no {% endtrans %}</button>
+                <a href="{{ path('deleteTicket', {'id': ticket.id}) }}" class="btn btn-default" role="button"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'yes'|trans }}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> {{ 'no'|trans }}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

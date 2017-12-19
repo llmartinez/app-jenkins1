@@ -11,16 +11,16 @@
         {% set is_hidden = '' %}
     {% endif %}
 <ol class="breadcrumb">
-    <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-    <li class="active">{% trans %} menu.profile {% endtrans %}</li>
+    <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+    <li class="active">{{ 'menu.profile'|trans }}</li>
 </ol>
 
-<h1>{% trans %} profile_of {% endtrans %}: {% if user.workshop is defined %}{{user.workshop}}{% else %}{{ app.user }}{% endif %}
+<h1>{{ 'profile_of'|trans }}: {% if user.workshop is defined %}{{user.workshop}}{% else %}{{ app.user }}{% endif %}
 
     <button class="btn btn-primary pull-right ml15" data-toggle="modal" data-target="#myModal" data-id="{{ user.id }}">
-    <img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} change_password {% endtrans %}</button>
-    <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
-    <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
+    <img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {{ 'change_password'|trans }}</button>
+    <input type="hidden" id="isNaN" value="{{ 'isNaN'|trans }}">
+    <input type="hidden" id="badpass" value="{{ 'error.bad_password'|trans }}">
     <input type="hidden" id="samepass" value="{{ 'error.same_password'|trans() }}">
     <input type="hidden" id="forbiddenchars" value="{{ 'error.forbidden_password'|trans() }}">
 
@@ -28,58 +28,60 @@
     {#
     {% if not is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_AD') %}
         <button class="btn btn-primary pull-right">
-            <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil_.png') }}"> {% trans %} order_edit {% endtrans %}</button>
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil_.png') }}"> {{ 'order_edit'|trans }}</button>
     {% endif %}
     #}
 </h1>
 
-{% if app.session.hasFlash('password' ) %} <p class="alert label-danger">{{ app.session.getFlash('password') }}</p> {% endif %}
+{% for flashMessage in app.session.flashbag.get('password') %}
+    <p class="alert label-danger">{{ flashMessage }}</p>
+{% endfor %}
 
 <table class="table" style="width: 90%; margin-left: 5%;">
     <tbody>
         {% if user.workshop is defined and user.workshop.codePartner is defined and user.workshop.codeWorkshop is defined %}
         <tr>
-            <td><b>{% trans %} code {% endtrans %}</b></td><td>{{ user.workshop.codePartner}} - {{user.workshop.codeWorkshop}}</td>
+            <td><b>{{ 'code'|trans }}</b></td><td>{{ user.workshop.codePartner}} - {{user.workshop.codeWorkshop}}</td>
         </tr>
         {# <tr>
-            <td><b>{% trans %} workshop {% endtrans %}</b></td><td>{{user.workshop    }}</td>
+            <td><b>{{ 'workshop'|trans }}</b></td><td>{{user.workshop    }}</td>
         </tr> #}
         {% endif %}
         <tr>
-            <td><b>{% trans %} username {% endtrans %}</b></td><td>{{ user.username    }}</td>
+            <td><b>{{ 'username'|trans }}</b></td><td>{{ user.username    }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} name     {% endtrans %}</b></td><td>{{ user.name        }}</td>
+            <td><b>{{ 'name'|trans }}</b></td><td>{{ user.name        }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} surname  {% endtrans %}</b></td><td>{{ user.surname     }}</td>
+            <td><b>{{ 'surname'|trans }}</b></td><td>{{ user.surname     }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} tel      {% endtrans %}</b></td><td>{{ user.phoneNumber1  }} / {{ user.phoneNumber2  }}</td>
+            <td><b>{{ 'tel'|trans }}</b></td><td>{{ user.phoneNumber1  }} / {{ user.phoneNumber2  }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} mobile   {% endtrans %}</b></td><td>{{ user.mobileNumber1 }} / {{ user.mobileNumber2 }}</td>
+            <td><b>{{ 'mobile'|trans }}</b></td><td>{{ user.mobileNumber1 }} / {{ user.mobileNumber2 }}</td>
         </tr>
 {#         <tr>
-            <td><b>{% trans %} fax      {% endtrans %}</b></td><td>{{ user.fax         }}</td>
+            <td><b>{{ 'fax'|trans }}</b></td><td>{{ user.fax         }}</td>
         </tr> #}
         <tr>
-            <td><b>{% trans %} email_1  {% endtrans %}</b></td><td>{{ user.email1      }}</td>
+            <td><b>{{ 'email_1'|trans }}</b></td><td>{{ user.email1      }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} email_2  {% endtrans %}</b></td><td>{{ user.email2      }}</td>
+            <td><b>{{ 'email_2'|trans }}</b></td><td>{{ user.email2      }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} active   {% endtrans %}</b></td><td>{{ user.active      }}</td>
+            <td><b>{{ 'active'|trans }}</b></td><td>{{ user.active      }}</td>
         </tr>
         <tr {{is_hidden}}>
-            <td><b>{% trans %} region   {% endtrans %}</b></td><td>{{ user.region      }}</td>
+            <td><b>{{ 'region'|trans }}</b></td><td>{{ user.region      }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} country  {% endtrans %}</b></td><td>{{ user.country     }}</td>
+            <td><b>{{ 'country'|trans }}</b></td><td>{{ user.country     }}</td>
         </tr>
         <tr>
-            <td><b>{% trans %} city     {% endtrans %}</b></td><td>{{ user.city        }}</td>
+            <td><b>{{ 'city'|trans }}</b></td><td>{{ user.city        }}</td>
         </tr>
     </tbody>
 </table>
@@ -90,22 +92,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{% trans %} change_password {% endtrans %}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ 'change_password'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <table>
-                    <tr><td><label>{% trans %} old_password    {% endtrans %}</label></td>
-                        <td><input id="old_password"  name="old_password"  type="password" placeholder="{% trans %} old_password {% endtrans %}" required></td></tr>
-                    <tr><td><label>{% trans %} new_password    {% endtrans %}</label></td>
-                        <td><input id="new_password1" name="new_password1" type="password" placeholder="{% trans %} new_password {% endtrans %}" required></td></tr>
-                    <tr><td><label>{% trans %} repeat_password {% endtrans %}</label></td>
-                        <td><input id="new_password2" name="new_password2" type="password" placeholder="{% trans %} new_password {% endtrans %}" required></td></tr>
+                    <tr><td><label>{{ 'old_password'|trans }}</label></td>
+                        <td><input id="old_password"  name="old_password"  type="password" placeholder="{{ 'old_password'|trans }}" required></td></tr>
+                    <tr><td><label>{{ 'new_password'|trans }}</label></td>
+                        <td><input id="new_password1" name="new_password1" type="password" placeholder="{{ 'new_password'|trans }}" required></td></tr>
+                    <tr><td><label>{{ 'repeat_password'|trans }}</label></td>
+                        <td><input id="new_password2" name="new_password2" type="password" placeholder="{{ 'new_password'|trans }}" required></td></tr>
                 </table>
             </div>
             <div class="modal-footer">
                 <input id="user_id" type="hidden" value="{{ user.id }}">
-                <button id="confirm_password" type="button" class="btn btn-default" role="button">{% trans %} yes {% endtrans %}</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} no  {% endtrans %}</button>
+                <button id="confirm_password" type="button" class="btn btn-default" role="button">{{ 'yes'|trans }}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'no'|trans }}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

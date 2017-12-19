@@ -5,20 +5,20 @@
     {% set route = 'sentence_list' %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_sentences {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_sentences'|trans }}</li>
     </ol>
 
     <div style="width: 90%; margin-left: 5%;">
 
-        <legend>{% trans %} menu.list_sentences {% endtrans %}
-            <a id="newSentence" href="{{ path('sentence_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.sentence {% endtrans %}</a></td>
+        <legend>{{ 'menu.list_sentences'|trans }}
+            <a id="newSentence" href="{{ path('sentence_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.sentence'|trans }}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>
             <select id="flt_country" class='form-control'>
-                    <option value="none">{% trans %} all {% endtrans %}</option>
+                    <option value="none">{{ 'all'|trans }}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}

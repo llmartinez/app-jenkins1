@@ -1,5 +1,5 @@
 
-    <legend>{% trans %} list.preorder.rejected {% endtrans %}</legend>
+    <legend>{{ 'list.preorder.rejected'|trans }}</legend>
 
     {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
                {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
@@ -12,14 +12,14 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{% trans %} workshop         {% endtrans %}</th>
-                        <th>{% trans %} category_service          {% endtrans %}</th>
-                        <th>{% trans %} partner          {% endtrans %}</th>
-                        {% if id_catserv != 3 %} <th>{% trans %} shop {% endtrans %}</th>{% endif %}
-                        <th>{% trans %} tel              {% endtrans %}</th>
-                        {% if id_catserv != 3 %}<th>{% trans %} region           {% endtrans %}</th>{% endif %}
-                        <th>{% trans %} preorder         {% endtrans %}</th>
-                        <th>{% trans %} actions          {% endtrans %}</th>
+                        <th>{{ 'workshop'|trans }}</th>
+                        <th>{{ 'category_service'|trans }}</th>
+                        <th>{{ 'partner'|trans }}</th>
+                        {% if id_catserv != 3 %} <th>{{ 'shop'|trans }}</th>{% endif %}
+                        <th>{{ 'tel'|trans }}</th>
+                        {% if id_catserv != 3 %}<th>{{ 'region'|trans }}</th>{% endif %}
+                        <th>{{ 'preorder'|trans }}</th>
+                        <th>{{ 'actions'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                             <td>{{ workshopOrder.phoneNumber1    }}</td>
                             <td>{{ workshopOrder.region          }}</td>
                             <td>
-                                <a title="{% trans %} order_details {% endtrans %}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{ workshopOrder.id }}" ></a>
+                                <a title="{{ 'order_details'|trans }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}" data-toggle="modal" data-target="#myModal_rejected_edit{{ workshopOrder.id }}" ></a>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="myModal_rejected_edit{{ workshopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -41,73 +41,73 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title" id="myModalLabel">{% trans %} order.details {% endtrans %}</h4>
+                                                <h4 class="modal-title" id="myModalLabel">{{ 'order.details'|trans }}</h4>
                                             </div>
                                             <div class="modal-body">
                                                 <table class="table table-hover">
-                                                    <tr><th>                                          </th><th>{% trans %}values{% endtrans %}</th></tr>
-                                                    <tr><td>{% trans %} name            {% endtrans %}</td><td>{{ workshopOrder.name            }}</td></tr>
-                                                    <tr><td>{% trans %} code_workshop   {% endtrans %}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
-                                                    <tr><td>{% trans %} category_service{% endtrans %}</td><td>{{ workshopOrder.categoryService }}</td></tr>
-                                                    <tr><td>{% trans %} partner         {% endtrans %}</td><td>{{ workshopOrder.partner         }}</td></tr>
+                                                    <tr><th>                                          </th><th>{{ 'values'|trans }}</th></tr>
+                                                    <tr><td>{{ 'name'|trans }}</td><td>{{ workshopOrder.name            }}</td></tr>
+                                                    <tr><td>{{ 'code_workshop'|trans }}</td><td>{{ workshopOrder.codeWorkshop    }}</td></tr>
+                                                    <tr><td>{{ 'category_service'|trans }}</td><td>{{ workshopOrder.categoryService }}</td></tr>
+                                                    <tr><td>{{ 'partner'|trans }}</td><td>{{ workshopOrder.partner         }}</td></tr>
                                                     {% if id_catserv != 3 %}
-                                                        <tr><td>{% trans %} shop        {% endtrans %}</td><td>{{ workshopOrder.shop            }}</td></tr>
+                                                        <tr><td>{{ 'shop'|trans }}</td><td>{{ workshopOrder.shop            }}</td></tr>
                                                     {% endif %}
-                                                    <tr><td>{% trans %} cif             {% endtrans %}</td><td>{{ workshopOrder.cif             }}</td></tr>
-                                                    <tr><td>{% trans %} internal_code   {% endtrans %}</td><td>{{ workshopOrder.internalCode    }}</td></tr>
-                                                    {% if id_catserv != 3 %}    <tr><td>{% trans %} commercial_code {% endtrans %}</td><td>{{ workshopOrder.commercialCode  }}</td></tr>{% endif %}
-                                                    <tr><td>{% trans %} typology        {% endtrans %}</td><td>{{ workshopOrder.typology        }}</td></tr>
-                                                    <tr><td>{% trans %} contact         {% endtrans %}</td><td>{{ workshopOrder.contact         }}</td></tr>
-                                                    <tr><td>{% trans %} phone_number_1  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
-                                                    <tr><td>{% trans %} phone_number_2  {% endtrans %}</td><td>{{ workshopOrder.phoneNumber2    }}</td></tr>
-                                                    <tr><td>{% trans %} mobile_number_1 {% endtrans %}</td><td>{{ workshopOrder.mobileNumber1   }}</td></tr>
-                                                    <tr><td>{% trans %} mobile_number_2 {% endtrans %}</td><td>{{ workshopOrder.mobileNumber2   }}</td></tr>
-                                                    <tr><td>{% trans %} fax             {% endtrans %}</td><td>{{ workshopOrder.fax             }}</td></tr>
-                                                    <tr><td>{% trans %} email_1         {% endtrans %}</td><td>{{ workshopOrder.email1          }}</td></tr>
-                                                    <tr><td>{% trans %} email_2         {% endtrans %}</td><td>{{ workshopOrder.email2          }}</td></tr>
-                                                    <tr><td>{% trans %} country         {% endtrans %}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
-                                                    {% if id_catserv != 3 %}<tr><td>{% trans %} region          {% endtrans %}</td><td>{{ workshopOrder.region          }}</td></tr>{% endif %}
-                                                    <tr><td>{% trans %} city            {% endtrans %}</td><td>{{ workshopOrder.city            }}</td></tr>
-                                                    <tr><td>{% trans %} address         {% endtrans %}</td><td>{{ workshopOrder.address         }}</td></tr>
-                                                    <tr><td>{% trans %} postal_code     {% endtrans %}</td><td>{{ workshopOrder.postalCode      }}</td></tr>
+                                                    <tr><td>{{ 'cif'|trans }}</td><td>{{ workshopOrder.cif             }}</td></tr>
+                                                    <tr><td>{{ 'internal_code'|trans }}</td><td>{{ workshopOrder.internalCode    }}</td></tr>
+                                                    {% if id_catserv != 3 %}    <tr><td>{{ 'commercial_code'|trans }}</td><td>{{ workshopOrder.commercialCode  }}</td></tr>{% endif %}
+                                                    <tr><td>{{ 'typology'|trans }}</td><td>{{ workshopOrder.typology        }}</td></tr>
+                                                    <tr><td>{{ 'contact'|trans }}</td><td>{{ workshopOrder.contact         }}</td></tr>
+                                                    <tr><td>{{ 'phone_number_1'|trans }}</td><td>{{ workshopOrder.phoneNumber1    }}</td></tr>
+                                                    <tr><td>{{ 'phone_number_2'|trans }}</td><td>{{ workshopOrder.phoneNumber2    }}</td></tr>
+                                                    <tr><td>{{ 'mobile_number_1'|trans }}</td><td>{{ workshopOrder.mobileNumber1   }}</td></tr>
+                                                    <tr><td>{{ 'mobile_number_2'|trans }}</td><td>{{ workshopOrder.mobileNumber2   }}</td></tr>
+                                                    <tr><td>{{ 'fax'|trans }}</td><td>{{ workshopOrder.fax             }}</td></tr>
+                                                    <tr><td>{{ 'email_1'|trans }}</td><td>{{ workshopOrder.email1          }}</td></tr>
+                                                    <tr><td>{{ 'email_2'|trans }}</td><td>{{ workshopOrder.email2          }}</td></tr>
+                                                    <tr><td>{{ 'country'|trans }}</td><td>{{ workshopOrder.country|trans   }}</td></tr>
+                                                    {% if id_catserv != 3 %}<tr><td>{{ 'region'|trans }}</td><td>{{ workshopOrder.region          }}</td></tr>{% endif %}
+                                                    <tr><td>{{ 'city'|trans }}</td><td>{{ workshopOrder.city            }}</td></tr>
+                                                    <tr><td>{{ 'address'|trans }}</td><td>{{ workshopOrder.address         }}</td></tr>
+                                                    <tr><td>{{ 'postal_code'|trans }}</td><td>{{ workshopOrder.postalCode      }}</td></tr>
                                                 </table>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'btn.close'|trans }}</button>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
 
                                 {% if ((workshopOrder.action == 'modify') or (workshopOrder.action == 're_modify')) %}
-                                    <span class="label label-warning"> {% trans %} action.modify {% endtrans %}</span>
+                                    <span class="label label-warning"> {{ 'action.modify'|trans }}</span>
                                 {% elseif workshopOrder.action == 'activate' %}
-                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {{ 'inactive'|trans }}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
-                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
+                                    <span class="label label-success"> {{ 'active'|trans }}</span>
                                 {% elseif workshopOrder.action == 'deactivate' %}
-                                    <span class="label label-success"> {% trans %} active   {% endtrans %}</span>
+                                    <span class="label label-success"> {{ 'active'|trans }}</span>
                                     <span class="glyphicon glyphicon-arrow-right"></span>
-                                    <span class="label label-danger">  {% trans %} inactive {% endtrans %}</span>
+                                    <span class="label label-danger">  {{ 'inactive'|trans }}</span>
                                 {% elseif workshopOrder.action == 'create' %}
-                                    <span class="label label-info">    {% trans %} create   {% endtrans %}</span>
+                                    <span class="label label-info">    {{ 'create'|trans }}</span>
                                 {% elseif workshopOrder.action == 'rejected' %}
-                                    <span class="label label-danger">  {% trans %} rejected {% endtrans %}</span>
+                                    <span class="label label-danger">  {{ 'rejected'|trans }}</span>
                                 {% endif %}
-                                <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/reject_reason.png') }}">{% trans %} reject.reason {% endtrans %}</span></a>
+                                <a title="{{ workshopOrder.rejectionReason }}" href="#"><span data-toggle="modal" data-target="#myModal_rejected_reason{{ workshopOrder.id }}" ><img class="img_icon" src="{{ asset('bundles/util/images/icon/reject_reason.png') }}">{{ 'reject.reason'|trans }}</span></a>
                                 <!-- Modal -->
                                 <div class="modal fade" id="myModal_rejected_reason{{ workshopOrder.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title" id="myModalLabel">{% trans %} reject.reason {% endtrans %}</h4>
+                                                <h4 class="modal-title" id="myModalLabel">{{ 'reject.reason'|trans }}</h4>
                                             </div>
                                             <div class="modal-body">
                                                 {{ workshopOrder.rejectionReason|nl2br }}
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} btn.close {% endtrans %}</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'btn.close'|trans }}</button>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
@@ -117,13 +117,13 @@
                             {% if not is_granted('ROLE_ADMIN') %}
 
                                 {% if workshopOrder.wantedAction != 'create' and workshopOrder.wantedAction != 'preorder' %}
-                                    <a title="{% trans %} edit.workshop {% endtrans %}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.idWorkshop }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                                    <a title="{{ 'edit.workshop'|trans }}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.idWorkshop }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
 
-                                    <a title="{% trans %} order.resend {% endtrans %}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}"></a>
+                                    <a title="{{ 'order.resend'|trans }}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}"></a>
                                 {% else %}
-                                    <a title="{% trans %} order.recreate {% endtrans %}"  onclick="alert('{% trans %} order.recreate {% endtrans %}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/exclamation.png') }}"></a>
+                                    <a title="{{ 'order.recreate'|trans }}"  onclick="alert('{{ 'order.recreate'|trans }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/exclamation.png') }}"></a>
                                 {% endif %}
-                                <a title="{% trans %} order.cancel {% endtrans %}"  href="{{ path('workshopOrder_remove', {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"></a>
+                                <a title="{{ 'order.cancel'|trans }}"  href="{{ path('workshopOrder_remove', {'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/closed.png') }}"></a>
                             {% endif %}
                             </td>
                         </tr>
@@ -135,11 +135,11 @@
 
         {% else %}
             <div class="grid w100">
-            <p class="alert">{% trans %} not_found {% endtrans %}</p>
+            <p class="alert">{{ 'not_found'|trans }}</p>
             </div>
         {% endif %}
     {% else %}
         <div class="grid w100">
-        <p class="alert">{% trans %} not_found {% endtrans %}</p>
+        <p class="alert">{{ 'not_found'|trans }}</p>
         </div>
     {% endif %}

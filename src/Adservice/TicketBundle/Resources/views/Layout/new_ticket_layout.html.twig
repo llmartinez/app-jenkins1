@@ -3,10 +3,10 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
-                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active">{% trans %} new.ticket {% endtrans %}</li>
+                   {% else %}{{ path('listTicket') }}{% endif %}">{{ 'menu.list_tickets'|trans }}</a></li>
+      <li class="active">{{ 'new.ticket'|trans }}</li>
     </ol>
 
 {% endblock  %}
@@ -31,9 +31,9 @@
 {% endblock  %}
 
 {% block content %}
-    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
-    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
-    <input type="hidden" id="msg_einatech" name="msg_einatech" value="{% trans %} msg_einatech {% endtrans %}">
+    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {{ 'ticket_vin_error_length'|trans }}">
+    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{{ 'ticket_vin_error_o'|trans }}">
+    <input type="hidden" id="msg_einatech" name="msg_einatech" value="{{ 'msg_einatech'|trans }}">
     <input type="hidden" id="new_einatech" name="new_einatech" value={{einatech}}>
     <input type="hidden" id="autologin"   value="{{autologin_session}}">
     {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
@@ -41,8 +41,8 @@
     {% if workshop.id != "" %}
         <form action="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech': einatech }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
             <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
-              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
-              {% trans %} ticket_return {% endtrans %}
+              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{{ 'ticket_return'|trans }}" alt="{{ 'ticket_return'|trans }}">
+              {{ 'ticket_return'|trans }}
             </a>
 
           <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
@@ -58,17 +58,17 @@
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
+          <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.create'|trans }}</button>
 
-          {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.create_close {% endtrans %}</button>{% endif %}
+          {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {{ 'btn.create_close'|trans }}</button>{% endif %}
               {% if workshop.haschecks == true %}
                 <div class="grid w20 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
-                    <h4>{% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}</h4>
+                    <h4>{{ 'numchecks'|trans }}: {{ workshop.numchecks }}</h4>
                 </div>
               {% endif %}
               {% if workshop.infotech == true %}
                 <div class="grid w50 pull-right error">
-                    <h4 class="pull-right">{% trans %}infotech_only{% endtrans %}</h4>
+                    <h4 class="pull-right">{{ 'infotech_only'|trans }}</h4>
                 </div>
               {% endif %}
             </div>

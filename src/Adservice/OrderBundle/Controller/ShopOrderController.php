@@ -35,7 +35,7 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $security->getToken()->getUser();
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
@@ -102,7 +102,7 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $shopOrder = new ShopOrder();
@@ -141,7 +141,7 @@ class ShopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
@@ -212,7 +212,7 @@ class ShopOrderController extends Controller {
     public function editAction($id) {
         $security = $this->get('security.context');
         $user = $security->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
@@ -262,7 +262,7 @@ class ShopOrderController extends Controller {
         $form = $this->createForm(new ShopEditOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
 
@@ -345,7 +345,7 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la shopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -423,13 +423,13 @@ class ShopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $form = $this->createForm(new ShopRejectOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
 
@@ -495,7 +495,7 @@ class ShopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
@@ -563,7 +563,7 @@ class ShopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $action = $shopOrder->getWantedAction();
 
@@ -628,7 +628,7 @@ class ShopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $shopOrder = $this->shop_to_shopOrder($shop);
         $action = $shopOrder->setWantedAction('delete');
         $action = $shopOrder->setAction('delete');
@@ -692,7 +692,7 @@ class ShopOrderController extends Controller {
         $request = $this->getRequest();
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         // activate   + accepted = setActive a TRUE  and delete shopOrder
         // deactivate + accepted = setActive a FALSE and delete shopOrder

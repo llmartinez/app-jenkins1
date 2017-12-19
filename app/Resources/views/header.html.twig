@@ -11,7 +11,7 @@
                             {% if env is defined and env != 'prod' %}<a class="env">{{env|upper}}</a>{% endif %}
                         {#  
                             <h2 style="width: 322px;float: left;margin: 5px;color: white;">
-                                {% trans %} header.welcome {% endtrans %}
+                                {{ 'header.welcome'|trans }}
                             </h2>
                         #}
                             {% set url_logo = route_logo ~ '.png' %}
@@ -45,20 +45,20 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a class="btn pull-left" href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
 
-                                        {# <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{% trans %} help {% endtrans %}</a></li> #}
+                                        {# <li><a class="btn pull-left" href="{{ path('help') }}" target="_blank">{{ 'help'|trans }}</a></li> #}
 
-                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {{ 'menu.profile'|trans }}</a></li>
                                         {% if  is_granted('ROLE_SUPER_AD')== FALSE and is_granted('ROLE_AD')== FALSE and is_granted('ROLE_COMMERCIAL')== FALSE %}
-                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{{ 'menu.list_tickets'|trans }}</a></li>
                                         {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or workshop.id == "" ) %}
-                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{% trans %} new.ticket {% endtrans %}</a></li>
+                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{{ 'new.ticket'|trans }}</a></li>
                                         {% endif %}
                                         <li><a href="#"></a></li>
                                         <li class="divider"></li>
-                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}logout       {% endtrans %}</a></li>
+                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {{ 'logout'|trans }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -71,19 +71,19 @@
                             #}
                             <!-- Split button -->
                             <div class="language">
-                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
+                                <input type="hidden" id="data_locale" value="{{ app.request.locale }}" data-locale="{{ app.request.locale }}">
                                 <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default" >{{ app.session.locale | trans }}</button>
+                                    <button type="button" class="btn btn-default" >{{ app.request.locale | trans }}</button>
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu" >
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"> {% trans %} english {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"> {% trans %} spanish {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}"> {{ 'english'|trans }}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}"> {{ 'spanish'|trans }}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{{ 'french'|trans }}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{{ 'portuguese'|trans }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -109,22 +109,22 @@
 * OPCIONES DESPLEGABLE
 *************************
     {% if is_granted('ROLE_ADMIN') %}
-        <li><a class="btn pull-left"  href="{{ path("listStatistics"              ) }}">{% trans %} menu.list_statistics      {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders          {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("popup_list"                  ) }}">{% trans %} menu.list_popups          {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("partner_list"                ) }}">{% trans %} menu.list_partners        {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shop_list"                   ) }}">{% trans %} menu.list_shops           {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshop_list"               ) }}">{% trans %} menu.list_workshops       {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("user_list"                   ) }}">{% trans %} menu.list_users           {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("ticketWorkshopList"          ) }}">{% trans %} menu.asign_user_to_ticket {% endtrans %}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("listStatistics"              ) }}">{{ 'menu.list_statistics'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{{ 'menu.list_orders'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("popup_list"                  ) }}">{{ 'menu.list_popups'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("partner_list"                ) }}">{{ 'menu.list_partners'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("shop_list"                   ) }}">{{ 'menu.list_shops'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("workshop_list"               ) }}">{{ 'menu.list_workshops'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("user_list"                   ) }}">{{ 'menu.list_users'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("ticketWorkshopList"          ) }}">{{ 'menu.asign_user_to_ticket'|trans }}</a></li>
     {% elseif is_granted('ROLE_AD') %}
-        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile            {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{% trans %} menu.list_orders        {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shopOrder_listShops"         ) }}">{% trans %} menu.list_shops         {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshopOrder_listWorkshops" ) }}">{% trans %} menu.list_workshops     {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("shopOrder_new"               ) }}">{% trans %} menu.new_shop_order     {% endtrans %}</a></li>
-        <li><a class="btn pull-left"  href="{{ path("workshopOrder_new"           ) }}">{% trans %} menu.new_workshop_order {% endtrans %}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{{ 'menu.profile'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("list_orders"                 ) }}">{{ 'menu.list_orders'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("shopOrder_listShops"         ) }}">{{ 'menu.list_shops'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("workshopOrder_listWorkshops" ) }}">{{ 'menu.list_workshops'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("shopOrder_new"               ) }}">{{ 'menu.new_shop_order'|trans }}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("workshopOrder_new"           ) }}">{{ 'menu.new_workshop_order'|trans }}</a></li>
     {% else %}
-        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{% trans %} menu.profile      {% endtrans %}</a></li>
+        <li><a class="btn pull-left"  href="{{ path("user_profile"                ) }}">{{ 'menu.profile'|trans }}</a></li>
     {% endif %}
 #}

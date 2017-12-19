@@ -18,7 +18,7 @@ class TypologyController extends Controller {
      * @throws AccessDeniedException
      */
     public function listTypologyAction($page=1, $country='none', $catserv=0) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         if (! $security->isGranted('ROLE_ADMIN')) {
@@ -69,7 +69,7 @@ class TypologyController extends Controller {
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $typology = new Typology();
         $catserv = $security->getToken()->getUser()->getCategoryService();
         $petition = $this->getRequest();
@@ -93,7 +93,7 @@ class TypologyController extends Controller {
         $form = $this->createForm(new TypologyType(), $typology);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
                 if($typology->getCategoryService() == null){

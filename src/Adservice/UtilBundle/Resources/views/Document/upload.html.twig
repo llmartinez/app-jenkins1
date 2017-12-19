@@ -6,7 +6,7 @@
 
         {{ form_widget(form.file, { 'attr': {'class': 'ac-message'} })  }}
 
-        <button class="btn btn-primary pull-right btn100" type="submit">{% trans %} btn.send {% endtrans %}</button>
+        <button class="btn btn-primary pull-right btn100" type="submit">{{ 'btn.send'|trans }}</button>
     </form>
 
 {% endblock %}

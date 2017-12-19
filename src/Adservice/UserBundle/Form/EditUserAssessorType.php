@@ -3,13 +3,13 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class EditUserAssessorType extends AbstractType {
 
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}

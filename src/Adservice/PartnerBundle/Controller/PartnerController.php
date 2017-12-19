@@ -29,7 +29,7 @@ class PartnerController extends Controller {
         if ($security->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params = array();
         if ($term != '0' and $field != '0'){
 
@@ -89,7 +89,7 @@ class PartnerController extends Controller {
         if ($security->isGranted('ROLE_TOP_AD') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $partner = new Partner();
         $request = $this->getRequest();
         $cat_services = array();
@@ -114,7 +114,7 @@ class PartnerController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            $form->bindRequest($request);
+            $form->bind($request);
             $code = UtilController::getCodePartnerUnused($em);
 
             if ($form->isValid())
@@ -176,7 +176,7 @@ class PartnerController extends Controller {
                     UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
 
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
-                    $this->get('session')->setFlash('alert', $flash);
+                    $this->get('session')->getFlashBag()->add('alert', $flash);
 
                     if ($security->isGranted('ROLE_TOP_AD') and !$security->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('user_partner_list', array('0','3','0','0','0')));
@@ -185,14 +185,14 @@ class PartnerController extends Controller {
                 //}
                 //else{
                 //    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
-                //    $this->get('session')->setFlash('error', $flash);
+                //    $this->get('session')->getFlashBag()->add('error', $flash);
                 //}
             }
         }
         else{
             $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
             $flash = $this->get('translator')->trans('error.first_number').$partner->getCodePartner();
-            $this->get('session')->setFlash('info', $flash);
+            $this->get('session')->getFlashBag()->add('info', $flash);
         }
 
         $regions      = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
@@ -222,7 +222,7 @@ class PartnerController extends Controller {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $petition = $this->getRequest();
         // Creamos variables de sesion para fitlrar los resultados del formulario
@@ -248,7 +248,7 @@ class PartnerController extends Controller {
         if ($petition->getMethod() == 'POST') {
 
             $last_code = $partner->getCodePartner();
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
 
@@ -257,7 +257,7 @@ class PartnerController extends Controller {
                 if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())
                 {
                     $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$last_code.').';
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
                 else{
                     $partner = UtilController::settersContact($partner, $partner, $actual_region, $actual_city);
@@ -293,7 +293,7 @@ class PartnerController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($partner);
         $em->flush();
 
@@ -310,7 +310,7 @@ class PartnerController extends Controller {
     //     if ($security->isGranted('ROLE_TOP_AD') === false) {
     //         throw new AccessDeniedException();
     //     }
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $params = array();
     //     if ($term != '0' and $field != '0'){
 
@@ -361,7 +361,7 @@ class PartnerController extends Controller {
     //     if ($security->isGranted('ROLE_TOP_AD') === false) {
     //         throw new AccessDeniedException();
     //     }
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $params = array();
     //     if ($term != '0' and $field != '0'){
 
@@ -409,7 +409,7 @@ class PartnerController extends Controller {
     // }
 
     public function activeDeactiveListAction($user_id, $permission, $page, $country, $option, $term, $field){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->findOneById($user_id);
 
         if($user){

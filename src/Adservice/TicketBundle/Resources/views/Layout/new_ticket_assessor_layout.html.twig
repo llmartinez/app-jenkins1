@@ -7,16 +7,16 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
-                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active">{% trans %} new.ticket {% endtrans %}</li>
+                   {% else %}{{ path('listTicket') }}{% endif %}">{{ 'menu.list_tickets'|trans }}</a></li>
+      <li class="active">{{ 'new.ticket'|trans }}</li>
     </ol>
 
 {% endblock  %}
 {% block main %}
-<input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
-<input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
+<input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {{ 'ticket_vin_error_length'|trans }}">
+<input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{{ 'ticket_vin_error_o'|trans }}">
 {% if car.brand.id is defined %} {% set brand = car.brand.id %}{% endif %}
 {% if car.model.id is defined %} {% set model = car.model.id %}{% endif %}
 {% if car.version.id is defined %} {% set version = car.version.id %}{% endif %}
@@ -80,16 +80,16 @@
 
               {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}
 
-              <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.create {% endtrans %}</button>
-              {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %}btn.create_close{% endtrans %}</button>{% endif %}
+              <button id="btn_create" name="btn_create" class="btn btn-primary pull-right ml15 sendTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.create'|trans }}</button>
+              {% if is_granted('ROLE_ASSESSOR') %}<button id="save_close" name="save_close" class="btn btn-primary pull-right closeTicket" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {{ 'btn.create_close'|trans }}</button>{% endif %}
               {% if workshop.haschecks == true %}
                 <div class="grid w20 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
-                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                    {{ 'numchecks'|trans }}: {{ workshop.numchecks }}
                 </div>
               {% endif %}
               {% if workshop.infotech == true %}
                 <div class="grid grid-33 pull-right error">
-                    {% trans %}infotech_only{% endtrans %}
+                    {{ 'infotech_only'|trans }}
                 </div>
               {% endif %}
             </div>

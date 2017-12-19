@@ -17,7 +17,7 @@ class StatisticController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
         $statistic = new Statistic();
@@ -102,7 +102,7 @@ class StatisticController extends Controller {
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request  = $this->getRequest();
         $statistic = new Statistic();
@@ -168,7 +168,7 @@ class StatisticController extends Controller {
 
     public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0', $code_zone='0'){
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $user = $security->getToken()->getUser();
         $statistic = new Statistic();
@@ -2161,7 +2161,7 @@ class StatisticController extends Controller {
                 $trans->trans('date').';';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($results as $row) {
 
@@ -2229,7 +2229,7 @@ class StatisticController extends Controller {
             }
 
             if($workshopdiagnosismachine != null) {
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
                 $diagmachines = $em->getRepository('WorkshopBundle:DiagnosisMachine')->findAll();
             }
 

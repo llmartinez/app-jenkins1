@@ -11,7 +11,7 @@
 {% if id is defined and id != "" %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %} #}>
                 <br>
-                <legend>{% trans %} app {% endtrans %}</legend>
+                <legend>{{ 'app'|trans }}</legend>
 
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/{{id}}" target="_blank">{{'dis'|trans}}</a>
@@ -24,7 +24,7 @@
 {% elseif model is defined %}
         <div{# {% if not is_granted('ROLE_ASSESSOR') %} style="display:none" {% endif %}#}>
                 <br>
-                <legend>{% trans %} app {% endtrans %}</legend>
+                <legend>{{ 'app'|trans }}</legend>
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/model-{{model}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
@@ -36,7 +36,7 @@
 {% else %}
         <div {# {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
-                <legend>{% trans %} app {% endtrans %}</legend>
+                <legend>{{ 'app'|trans }}</legend>
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}

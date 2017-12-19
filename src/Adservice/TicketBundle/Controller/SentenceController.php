@@ -17,7 +17,7 @@ class SentenceController extends Controller
      * Devuelve la lista de sentencias
      */
     public function listSentenceAction($page=1, $country='none') {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         if (! $security->isGranted('ROLE_ADMIN')) {
@@ -58,7 +58,7 @@ class SentenceController extends Controller
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $sentence = new Sentence();
 
         $petition = $this->getRequest();
@@ -80,7 +80,7 @@ class SentenceController extends Controller
         $form = $this->createForm(new SentenceType(), $sentence);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
 

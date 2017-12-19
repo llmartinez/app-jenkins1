@@ -1,5 +1,5 @@
 
-    <legend>{% trans %} ticket.history.title {% endtrans %}</legend>
+    <legend>{{ 'ticket.history.title'|trans }}</legend>
     <div class="col-xs-3 col-md-3 form-group">
 
         <input type="hidden" id="route"    value= {{ route    }}>
@@ -9,45 +9,45 @@
         <input type="hidden" id="href_tickets" value="{{ path(route, {'page': '1', 'country': 'plc_country', 'catserv': 'plc_catserv', 'num_rows': 'plc_rows', 'option': 'plc_option' }) }}">
 
 
-        <label>{% trans %} filter_by_type {% endtrans %}</label>
+        <label>{{ 'filter_by_type'|trans }}</label>
         <select id="slct_historyTickets" class="form-control">
 
             {% if is_granted('ROLE_ADMIN') %}
-                    <option value="all" selected="selected" >{% trans %} ticket.opt.all               {% endtrans %}</option>
-                    <option value="opened"                  >{% trans %} ticket.opt.open              {% endtrans %}</option>
-                    <option value="closed"                  >{% trans %} ticket.opt.closed            {% endtrans %}</option>
-                    <option value="free"                    >{% trans %} ticket.opt.free              {% endtrans %}</option>
-                    <option value="pending"                 >{% trans %} ticket.opt.pending           {% endtrans %}</option>
-                    <option value="answered"                >{% trans %} ticket.opt.answered          {% endtrans %}</option>
-                    <option value="inactive"                >{% trans %} ticket.inactive              {% endtrans %}</option>
-                    <option value="expirated"               >{% trans %} ticket.expirated             {% endtrans %}</option>
+                    <option value="all" selected="selected" >{{ 'ticket.opt.all'|trans }}</option>
+                    <option value="opened"                  >{{ 'ticket.opt.open'|trans }}</option>
+                    <option value="closed"                  >{{ 'ticket.opt.closed'|trans }}</option>
+                    <option value="free"                    >{{ 'ticket.opt.free'|trans }}</option>
+                    <option value="pending"                 >{{ 'ticket.opt.pending'|trans }}</option>
+                    <option value="answered"                >{{ 'ticket.opt.answered'|trans }}</option>
+                    <option value="inactive"                >{{ 'ticket.inactive'|trans }}</option>
+                    <option value="expirated"               >{{ 'ticket.expirated'|trans }}</option>
             {% else %}
                 {% if is_granted('ROLE_ASSESSOR') %}
-                    <option value="free" selected="selected">{% trans %} ticket.opt.free              {% endtrans %}</option>
-                    <option value="all_mine"                >{% trans %} ticket.opt.all_mine          {% endtrans %}</option>
-                    <option value="assessor_pending"        >{% trans %} ticket.opt.assessor.pending  {% endtrans %}</option>
-                    <option value="assessor_answered"       >{% trans %} ticket.opt.assessor.answered {% endtrans %}</option>
-                    <option value="assessor_closed"         >{% trans %} ticket.opt.assessor.closed   {% endtrans %}</option>
-                    <option value="other_pending"           >{% trans %} ticket.opt.other.pending     {% endtrans %}</option>
-                    <option value="other_answered"          >{% trans %} ticket.opt.other.answered    {% endtrans %}</option>
-                    <option value="other_closed"            >{% trans %} ticket.opt.other.closed      {% endtrans %}</option>
-                    <option value="inactive"                >{% trans %} ticket.inactive              {% endtrans %}</option>
-                    <option value="expirated"               >{% trans %} ticket.expirated             {% endtrans %}</option>
-                    <option value="all"                     >{% trans %} ticket.opt.all               {% endtrans %}</option>
+                    <option value="free" selected="selected">{{ 'ticket.opt.free'|trans }}</option>
+                    <option value="all_mine"                >{{ 'ticket.opt.all_mine'|trans }}</option>
+                    <option value="assessor_pending"        >{{ 'ticket.opt.assessor.pending'|trans }}</option>
+                    <option value="assessor_answered"       >{{ 'ticket.opt.assessor.answered'|trans }}</option>
+                    <option value="assessor_closed"         >{{ 'ticket.opt.assessor.closed'|trans }}</option>
+                    <option value="other_pending"           >{{ 'ticket.opt.other.pending'|trans }}</option>
+                    <option value="other_answered"          >{{ 'ticket.opt.other.answered'|trans }}</option>
+                    <option value="other_closed"            >{{ 'ticket.opt.other.closed'|trans }}</option>
+                    <option value="inactive"                >{{ 'ticket.inactive'|trans }}</option>
+                    <option value="expirated"               >{{ 'ticket.expirated'|trans }}</option>
+                    <option value="all"                     >{{ 'ticket.opt.all'|trans }}</option>
                 {% endif %}
             {% endif %}
         </select>
     </div>
     <div class="col-xs-3 col-md-3 form-group">
-        <label>{% trans %} category_service {% endtrans %}</label>
+        <label>{{ 'category_service'|trans }}</label>
         <select id="flt_catserv" class='form-control' {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
-                <option value="0">{% trans %} category_service {% endtrans %}</option>
+                <option value="0">{{ 'category_service'|trans }}</option>
             {% for _catserv in catservices %}
                 <option value="{{ _catserv.id }}" {% if catserv.id is defined and catserv.id == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
             {% endfor %}
     </select></div>
     <div class="col-xs-3 col-md-3 form-group">
-        <label>{% trans %} filter_by_rows {% endtrans %}</label>
+        <label>{{ 'filter_by_rows'|trans }}</label>
         <select id="slct_numRows" class="form-control">
             <option value="10" selected="selected" >10</option>
             <option value="20" >20</option>
@@ -55,9 +55,9 @@
         </select>
     </div>
     <div class="col-xs-3 col-md-3 form-group">
-        <label>{% trans %} filter_by_country {% endtrans %}</label>
+        <label>{{ 'filter_by_country'|trans }}</label>
         <select id="flt_country" class='form-control'>
-                <option value="none">{% trans %} country {% endtrans %}</option>
+                <option value="none">{{ 'country'|trans }}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %}>{{ _country | trans }}</option>
             {% endfor %}
@@ -75,11 +75,11 @@
                     <tr>
                         <th> #                                    </th>
                         <th>                                      </th>
-                        <th>{% trans %} workshop    {% endtrans %}</th>
-                        <th>{% trans %} car         {% endtrans %}</th>
-                        <th>{% trans %} description {% endtrans %}</th>
+                        <th>{{ 'workshop'|trans }}</th>
+                        <th>{{ 'car'|trans }}</th>
+                        <th>{{ 'description'|trans }}</th>
                         <th></th>
-                        <th>{% trans %} date        {% endtrans %}</th>
+                        <th>{{ 'date'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody id="ticketBody">
@@ -100,7 +100,7 @@
                             </td>
                             <td>{{ ticket.workshop.name|length > 15 ? ticket.workshop.name|slice(0, 15) ~ '...' : ticket.workshop.name  }}</td>
 
-                        {% if ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
+                        {% if ticket.car is defined and ticket.car.model.id  is defined and ticket.car.version.id  is defined %}
                             {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model ~ ' ' ~ ticket.car.version %}
                         {% elseif ticket.car.model.id  is defined %}
                             {% set car = ticket.car.brand ~ ' ' ~ ticket.car.model %}
@@ -110,10 +110,10 @@
                             <td>{{ car|length > 15 ? car|slice(0, 15) ~ '...' : car  }}</td>
                             <td>{{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description  }}</td>
                             <td>
-                                <a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a>
+                                <a href="{{ path('showTicket', { 'id': ticket.id }) }}" target="_blank" title="{{ 'ticket.show'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a>
 
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{% trans %}ticket.delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                                    <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{{ 'ticket.delete.confirm'|trans }}');" title="{{ 'ticket.delete'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
                                 {% endif %}
                             </td>
                             <td>{{ ticket.createdAt | date("d/m/y")}}</td>
@@ -126,7 +126,7 @@
             {% endif %}
 
         {% else %}
-            <legend class="padded" align="center">{% trans %} error404.ticket {% endtrans %}</legend>
+            <legend class="padded" align="center">{{ 'error404.ticket'|trans }}</legend>
         {% endif %}
 
         </div>

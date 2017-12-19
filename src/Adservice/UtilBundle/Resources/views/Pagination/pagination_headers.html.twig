@@ -17,8 +17,8 @@
     {% if order_by == 'name' %} {% set class = 'active' %} {% else %} {% set class = '' %} {% endif %}
     <th width="288"><a class="{{ class }}" href="{{ url }}"> Usuario <img src="{{ src }}"> </a></th>
 
-    <th>{% trans %} car         {% endtrans %}</th>
-    <th>{% trans %} description {% endtrans %}</th>
+    <th>{{ 'car'|trans }}</th>
+    <th>{{ 'description'|trans }}</th>
     <th></th>
-    <th>{% trans %} date        {% endtrans %}</th>
+    <th>{{ 'date'|trans }}</th>
 </tr>

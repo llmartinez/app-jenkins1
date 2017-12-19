@@ -3,17 +3,17 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb" id="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_tickets {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_tickets'|trans }}</li>
     </ol>
 
 {% endblock  %}
 
 {% block main %}
 
-{% if app.session.hasFlash('popup') %}
-     <p class="alert">{{ app.session.getFlash('popup')|nl2br }}</p>
-{% endif %}
+{% for flashMessage in app.session.flashbag.get('popup') %}
+     <p class="alert">{{ flashMessage|nl2br }}</p>
+{% endfor %}
 
 <div>
     {% if is_granted('ROLE_ASSESSOR') %}
@@ -29,7 +29,7 @@
     {% endif %}
 
     {# BANNER ALERTA - Mantenimiento #}
-    {# <p class="alert" style="background-color:#DF0101">{% trans %} error.maintenance {% endtrans %}</p> #}
+    {# <p class="alert" style="background-color:#DF0101">{{ 'error.maintenance'|trans }}</p> #}
 
     {# Mostrar un acceso a VTS de clientes de Phone Eina #}
     {% if user_catserv is defined and user_catserv != '' %}

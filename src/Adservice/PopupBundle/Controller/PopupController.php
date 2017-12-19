@@ -20,7 +20,7 @@ class PopupController extends Controller {
      */
     public function getPopupAction() {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $date_today = new \DateTime(\date("Y-m-d H:i:s"));
         $user = $this->get('security.context')->getToken()->getUser();
         $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, $user);
@@ -44,7 +44,7 @@ class PopupController extends Controller {
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if($security->isGranted('ROLE_SUPER_ADMIN')) {
             if($country != 'none' OR $category_service != 'none')
@@ -109,11 +109,11 @@ class PopupController extends Controller {
         }
         $form = $this->createForm(new PopupType(), $popup);
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $popup->setCreatedBy($security->getToken()->getUser());
             $this->savePopup($em, $popup);
@@ -138,7 +138,7 @@ class PopupController extends Controller {
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $petition = $this->getRequest();
         // Creamos variables de sesion para fitlrar los resultados del formulario
@@ -162,7 +162,7 @@ class PopupController extends Controller {
         $form = $this->createForm(new PopupType(), $popup);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
                 $this->savePopup($em, $popup); }
@@ -186,7 +186,7 @@ class PopupController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($popup);
         $em->flush();
 

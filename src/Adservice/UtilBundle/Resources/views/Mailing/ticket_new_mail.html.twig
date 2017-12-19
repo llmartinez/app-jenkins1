@@ -9,7 +9,7 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;">
         <br>
-        {% trans %} mail.newTicket.title {% endtrans %}
+        {{ 'mail.newTicket.title'|trans }}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
@@ -22,39 +22,39 @@
 
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
-        {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.newTicket.createdby {% endtrans %}
-        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {% trans %} mail.newTicket.createdby {% endtrans %}
-        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {% trans %} mail.newTicket.createdby.user  {% endtrans %}
+        {% if     ticket.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {{ 'mail.newTicket.createdby'|trans }}
+        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_ASSESSOR' %} {{ 'mail.newTicket.createdby'|trans }}
+        {% elseif ticket.modifiedBy.roles[0] == 'ROLE_USER'     %} {{ 'mail.newTicket.createdby.user'|trans }}
         {% endif %}
     </td></tr>
     
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newTicket.info {% endtrans %}"<b>{% trans %} menu.list_tickets {% endtrans %}</b>".
+        {{ 'mail.newTicket.info'|trans|raw }}"<b>{{ 'menu.list_tickets'|trans }}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newTicket.info.id {% endtrans %}
+        {{ 'mail.newTicket.info.id'|trans }}
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ ticket.id }}</h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2><a href="https://adserviceticketing.com/es/ticket/show/{{ticket.id}}">
-            {% trans %} mail.goto_ticket {% endtrans %}</a>
+            {{ 'mail.goto_ticket'|trans }}</a>
         </h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
             <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} car {% endtrans %}:</b> {{ ticket.car }}
+                <b>{{ 'car'|trans }}:</b> {{ ticket.car }}
             </td></tr>
             <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} description {% endtrans %}:</b> {{ ticket.description|nl2br }}
+                <b>{{ 'description'|trans }}:</b> {{ ticket.description|nl2br }}
             </td></tr>
         </table>
     </td></tr>
     {#<tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %}
-        <a href="https://adserviceticketing.com/{{__locale}}/help">{% trans %}adserviceticketing.com{% endtrans %}/{{__locale}}/help</a>
+        {{ 'mail.info.more'|trans }}
+        <a href="https://adserviceticketing.com/{{__locale}}/help">{{ 'adserviceticketing.com'|trans }}/{{__locale}}/help</a>
     </td></tr>#}
 </table>
 
@@ -63,13 +63,13 @@
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} termsConditions {% endtrans %}
+        {{ 'termsConditions'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} mail.textDisclaimer {% endtrans %}
+        {{ 'mail.textDisclaimer'|trans }}
     </td></tr>
 </table>
 </body>

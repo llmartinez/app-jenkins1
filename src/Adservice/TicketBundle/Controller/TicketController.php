@@ -45,7 +45,7 @@ class TicketController extends Controller {
         if (!$security->isGranted('ROLE_ASSESSOR'))
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $array = array();
 
         if ($code_partner != 0 and $code_workshop != 0) {
@@ -65,7 +65,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function listTicketAction($page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null, $adviser_id = null) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $security = $this->get('security.context');
         $user = $security->getToken()->getUser();
@@ -90,7 +90,7 @@ class TicketController extends Controller {
             $workshops = array('0' => new Workshop());
 
         /* TRATAMIENTO DE LAS OPCIONES DE slct_historyTickets */
-        $this->get('session')->setFlash('error', null);
+        $this->get('session')->getFlashBag()->add('error', null);
         if ($option == null) {
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
@@ -99,7 +99,7 @@ class TicketController extends Controller {
                 if (!empty($workshops)) {
                     if ($workshops[0]->getActive() == 0) {
                         $error = $this->get('translator')->trans('workshop_inactive');
-                        $this->get('session')->setFlash('error', '¡Error! ' . $error);
+                        $this->get('session')->getFlashBag()->add('error', '¡Error! ' . $error);
                     }
 
                     if (isset($workshops[0]) and $workshops[0]->getId() != "") {
@@ -107,13 +107,13 @@ class TicketController extends Controller {
                         $option = $workshops[0]->getId();
                     } elseif (isset($workshops['error'])) {
                         $error = $this->get('translator')->trans('workshop_inactive');
-                        $this->get('session')->setFlash('error', '¡Error! ' . $error);
+                        $this->get('session')->getFlashBag()->add('error', '¡Error! ' . $error);
                     } else {
                         $joins[] = array();
                     }
                 } else {
                     $error = $this->get('translator')->trans('workshop_inactive');
-                    $this->get('session')->setFlash('error', '¡Error! ' . $error);
+                    $this->get('session')->getFlashBag()->add('error', '¡Error! ' . $error);
                 }
             } elseif (!$security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_COMMERCIAL')) {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $user->getWorkshop()->getId()));
@@ -347,7 +347,7 @@ class TicketController extends Controller {
         if ($size > 1) {
             $error = $this->get('translator')->trans('workshop_confirm');
             $error .='(' . $size . ')';
-            $this->get('session')->setFlash('error', $error);
+            $this->get('session')->getFlashBag()->add('error', $error);
         }
 
         if ($option == null)
@@ -416,7 +416,7 @@ class TicketController extends Controller {
             $this->deleteSessionCar();
         }
        
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
         $trans = $this->get('translator');
@@ -599,9 +599,9 @@ class TicketController extends Controller {
             $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
             $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
                         
-            $form->bindRequest($request);
-            $formC->bindRequest($request);
-            $formD->bindRequest($request);
+            $form->bind($request);
+            $formC->bind($request);
+            $formD->bind($request);
            
         }
         
@@ -890,35 +890,35 @@ class TicketController extends Controller {
                                                 $em->flush();
                                             }
                                         } else {
-                                            $this->get('session')->setFlash('error', $exist_car);
+                                            $this->get('session')->getFlashBag()->add('error', $exist_car);
 
                                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                         }
                                     } else {
-                                        $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_o'));
+                                        $this->get('session')->getFlashBag()->add('error', $trans->trans('ticket_vin_error_o'));
 
                                         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                     }
                                 } else {
-                                    $this->get('session')->setFlash('error', $trans->trans('ticket_vin_error_length'));
+                                    $this->get('session')->getFlashBag()->add('error', $trans->trans('ticket_vin_error_length'));
 
                                     return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                                 }
                             } else {
                                 // ERROR tamaño
-                                $this->get('session')->setFlash('error', $trans->trans('error.file_size'));
+                                $this->get('session')->getFlashBag()->add('error', $trans->trans('error.file_size'));
 
                                 return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                             }
                         } else {
                             // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $trans->trans('error.file'));
+                            $this->get('session')->getFlashBag()->add('error', $trans->trans('error.file'));
 
                             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
                         }
                     } else {
                         // ERROR tipo de fichero
-                        $this->get('session')->setFlash('error', $trans->trans('error.same_ticket')
+                        $this->get('session')->getFlashBag()->add('error', $trans->trans('error.same_ticket')
                                 . ' (' . $trans->trans('ticket') . ' #' . $existTicket[0]->getId() . ')');
 
                         return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
@@ -968,7 +968,7 @@ class TicketController extends Controller {
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
 
-                        $this->get('session')->setFlash('ticket_created', $this->get('translator')->trans('ticket_created'));
+                        $this->get('session')->getFlashBag()->add('ticket_created', $this->get('translator')->trans('ticket_created'));
                     }
 
                     if (isset($_POST['save_close'])) {
@@ -977,10 +977,10 @@ class TicketController extends Controller {
                         return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
                     }
                 } else {
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                 }
             } else {
-                $this->get('session')->setFlash('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket'));
+                $this->get('session')->getFlashBag()->add('error_ticket', $this->get('translator')->trans('error.bad_introduction.ticket'));
             }
         } 
 
@@ -1078,7 +1078,7 @@ class TicketController extends Controller {
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
         ) {
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $request = $this->getRequest();
 
             $form = $this->createForm(new EditTicketType(), $ticket);
@@ -1087,7 +1087,7 @@ class TicketController extends Controller {
 
                 $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
 
-                $form->bindRequest($request);
+                $form->bind($request);
 
                 $car = $ticket->getCar();
 
@@ -1131,10 +1131,10 @@ class TicketController extends Controller {
 
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
                         } else {
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                         }
                     } else {
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
+                        $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                     }
                 }
 
@@ -1150,7 +1150,7 @@ class TicketController extends Controller {
                 );
             } else {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
             if ($security->isGranted('ROLE_ASSESSOR'))
                 return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
@@ -1178,7 +1178,7 @@ class TicketController extends Controller {
             if ($security->isGranted('ROLE_USER') === false) {
                 throw new AccessDeniedException();
             }
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             //se borrara solo si hay un post sin respuesta, si hay mas de uno se deniega
             $posts = $ticket->getPosts(); //echo count($posts);
@@ -1276,7 +1276,7 @@ class TicketController extends Controller {
                 or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
             ) and ($user->getCategoryService() == null OR $user->getCategoryService() == $ticket->getCategoryService())
         ) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $request = $this->getRequest();
             $car = $ticket->getCar();
             $version = $car->getVersion();
@@ -1358,13 +1358,13 @@ class TicketController extends Controller {
                 //Define Ticket
                 if ($security->isGranted('ROLE_ASSESSOR')) {
 
-                    $form->bindRequest($request);
+                    $form->bind($request);
                 }
 
                 if (!$security->isGranted('ROLE_ASSESSOR') or ( $security->isGranted('ROLE_ASSESSOR') /* and $form->isValid() */)) {
 
-                    $formP->bindRequest($request);
-                    $formD->bindRequest($request);
+                    $formP->bind($request);
+                    $formD->bind($request);
 
                     if ($formP->isValid() and $formD->isValid()) {
 
@@ -1528,17 +1528,17 @@ class TicketController extends Controller {
                                     }
                                 } else {
                                     $request->getSession()->set('message', $post->getMessage());
-                                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
+                                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                                 }
                             } else {
                                 // ERROR tamaño
-                                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file_size'));
+                                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.file_size'));
 
                                 return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
                             }
                         } else {
                             // ERROR tipo de fichero
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.file'));
+                            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.file'));
 
                             return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
                         }
@@ -1575,14 +1575,14 @@ class TicketController extends Controller {
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $ticket = $post->getTicket();
 
         $petition = $this->getRequest();
         $form = $this->createForm(new PostType(), $post);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
 
@@ -1613,14 +1613,14 @@ class TicketController extends Controller {
        or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
        or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
        ){
-           $em = $this->getDoctrine()->getEntityManager();
+           $em = $this->getDoctrine()->getManager();
            $request  = $this->getRequest();
 
            if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
            if ($request->getMethod() == 'POST') {
-               $form->bindRequest($request);
+               $form->bind($request);
                if($request->request->get('sol_other_txt') != ''){
                    $message = $request->request->get('sol_other_txt');
                }
@@ -1704,14 +1704,14 @@ class TicketController extends Controller {
                            return $this->redirect($this->generateUrl('showTicket', array('id' => $id) ));
                        }
                        else{
-                           $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                           $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.msg_solution'));
                        }
                    }else{
-                       $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                       $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                    }
                }else{
                    $request->getSession()->set('message', $message);
-                $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
 
                }
            }
@@ -1739,13 +1739,13 @@ class TicketController extends Controller {
     public function editDescriptionAction($id, $ticket) {
         $security = $this->get('security.context');
         if ($security->isGranted('ROLE_ASSESSOR')) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $request = $this->getRequest();
 
             $form = $this->createForm(new EditDescriptionType(), $ticket);
 
             if ($request->getMethod() == 'POST') {
-                $form->bindRequest($request);
+                $form->bind($request);
 
                 /* Validacion Ticket */
                 $str_len = strlen($ticket->getSolution());
@@ -1763,13 +1763,13 @@ class TicketController extends Controller {
 
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
                         } else {
-                            $this->get('session')->setFlash('error', $this->get('translator')->trans('error.msg_solution'));
+                            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.msg_solution'));
                         }
                     } else {
-                        $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                        $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
                 } else {
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.txt_length_%numchars%', array('%numchars%' => $max_len)));
                 }
             }
 
@@ -1786,7 +1786,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function listMotorsAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
 
         $query = $em->createQuery('SELECT m FROM CarBundle:Version v, CarBundle:Motor m
@@ -1807,7 +1807,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function reopenTicketAction($id, $ticket) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
 
@@ -1847,7 +1847,7 @@ class TicketController extends Controller {
      * Obtiene todos los talleres del usuario logeado
      */
     public function workshopListAction($page = 1, $option = null) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $params[] = array();
 
@@ -1869,7 +1869,7 @@ class TicketController extends Controller {
      * @return type
      */
     public function getTicketsFromWorkshopAction($id_workshop, $page = 1) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $params = array();
         $params[] = array('workshop', ' = ' . $id_workshop);
@@ -1893,7 +1893,7 @@ class TicketController extends Controller {
      * @param Int $id_user
      */
     public function assignUserToTicketAction($ticket, $id_user = null) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         //id_user puede venir por parametro o por post
         if ($id_user == null) {
@@ -1921,7 +1921,7 @@ class TicketController extends Controller {
      * @return type
      */
     public function assignTicketSelectUserAction($ticket) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $users = $this->getUsersToAssingFromTicket($ticket);
 
         return $this->render('TicketBundle:Ticket:assign_ticket.html.twig', array('ticket' => $ticket,
@@ -1938,7 +1938,7 @@ class TicketController extends Controller {
      */
     public function blockTicketAction($ticket, $id_user = null) {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->find($id_user);
 
         if ($user != null and $id_user != 0) {
@@ -1968,7 +1968,7 @@ class TicketController extends Controller {
      * @return array
      */
     public function getTicketsByOption($option) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $security = $this->get('security.context');
 
@@ -2053,7 +2053,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function findTicketByIdAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
         $id = $request->get('flt_id');
@@ -2115,7 +2115,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function findTicketByIdAndWorkshopAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
         $id = $request->get('flt_id');
@@ -2139,7 +2139,7 @@ class TicketController extends Controller {
      * @return url
      */
     public function findTicketByBMVAction($page = 1, $brand = 0, $model = 0, $version = 0, $system = 0, $subsystem = 0, $importance = 0, $year = 0, $motor = 0, $kw = 0, $num_rows = 10) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $params = array();
         if ($brand != '0' and $brand != '')
@@ -2251,7 +2251,7 @@ class TicketController extends Controller {
          *       a fin de evitar registros que no se mostraban al estar en una segunda página de $pagination.
          *
          * ********************************************************************************************************************* */
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         $request = $this->getRequest();
 
@@ -2603,7 +2603,7 @@ class TicketController extends Controller {
      * @param type $id_ticket
      */
     private function getUsersToAssingFromTicket($ticket=null) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $query = "SELECT u FROM UserBundle:User u INNER JOIN u.user_role r WHERE r.name = 'ROLE_ASSESSOR' AND u.active = 1";
 
@@ -2623,7 +2623,7 @@ class TicketController extends Controller {
      * @param User $user
      */
     private function assignTicket($ticket, $user = null) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         ($user != null) ? $ticket->setAssignedTo($user) : $ticket->setAssignedTo(null);
 
@@ -2682,7 +2682,7 @@ class TicketController extends Controller {
     //  */
     // public function listTicketFilteredAction($page=1, $id_workshop='none', $id_ticket='none', $status='all', $option='all')
     // {
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $request  = $this->getRequest();
     //     $workshop = new Workshop();
     //     $tickets  = array();

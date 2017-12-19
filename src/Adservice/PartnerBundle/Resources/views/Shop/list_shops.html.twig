@@ -6,37 +6,37 @@
     <input type="hidden" id="route" name="route" value="{{ route }}">
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active"> {% trans %} menu.list_shops {% endtrans %} </li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active"> {{ 'menu.list_shops'|trans }} </li>
     </ol>
 
 <legend>
-    {% trans %} menu.list_shops {% endtrans %}
+    {{ 'menu.list_shops'|trans }}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.shop {% endtrans %}</a>
+        <a href="{{ path('shop_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.shop'|trans }}</a>
     {% endif %}
 </legend>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} country {% endtrans %} </label>
+    <div class="col-xs-2 col-md-2 form-group"> <label> {{ 'country'|trans }} </label>
         <select id="flt_country" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
-                <option value="0">{% trans %} all {% endtrans %}</option>
+                <option value="0">{{ 'all'|trans }}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %} selected {% endif %} >{{ _country | trans }}</option>
             {% endfor %}
     </select></div>
 
-    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} category_service {% endtrans %} </label>
+    <div class="col-xs-2 col-md-2 form-group"> <label> {{ 'category_service'|trans }} </label>
         <select id="flt_catserv" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
-                <option value="0">{% trans %} all {% endtrans %}</option>
+                <option value="0">{{ 'all'|trans }}</option>
             {% for _catserv in cat_services %}
                 <option value="{{ _catserv.id }}" {% if catserv == _catserv.id %} selected {% endif %} >{{ _catserv }}</option>
             {% endfor %}
     </select></div>
 
-    <div class="col-xs-2 col-md-2 form-group"> <label> {% trans %} partner {% endtrans %} </label>
+    <div class="col-xs-2 col-md-2 form-group"> <label> {{ 'partner'|trans }} </label>
         <select id="flt_partner" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
-                <option value="0">{% trans %} all {% endtrans %}</option>
+                <option value="0">{{ 'all'|trans }}</option>
             {% for _partner in partners %}
                 <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner.codePartner }} - {{ _partner | trans }}</option>
             {% endfor %}
@@ -45,16 +45,16 @@
 
     <div class="col-xs-4 col-md-4 form-group">
         <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
-            <label> {% trans %} find_by {% endtrans %} </label>
+            <label> {{ 'find_by'|trans }} </label>
             <select id="flt_search_term" name="flt_search_term" class='form-control'>
-                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
-                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
-                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
-                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{{ 'tel'|trans }}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{{ 'name'|trans }}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{{ 'email'|trans }}</option>
+                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{{ 'cif'|trans }}</option>
              </select>
         </div>
         <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
-            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{{ 'value'|trans }}" value="{% if field != '0' %}{{ field }}{% endif %}">
         </div>
         <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
             <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
@@ -66,13 +66,13 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} shop    {% endtrans %}</th>
-                <th>{% trans %}         {% endtrans %}</th>
-                <th>{% trans %} partner {% endtrans %}</th>
-                <th>{% trans %} category_service {% endtrans %}</th>
-                <th>{% trans %} tel     {% endtrans %}</th>
-                <th>{% trans %} region  {% endtrans %}</th>
-                <th>{% trans %} actions {% endtrans %}</th>
+                <th>{{ 'shop'|trans }}</th>
+                <th></th>
+                <th>{{ 'partner'|trans }}</th>
+                <th>{{ 'category_service'|trans }}</th>
+                <th>{{ 'tel'|trans }}</th>
+                <th>{{ 'region'|trans }}</th>
+                <th>{{ 'actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -80,18 +80,18 @@
             <tr>
                 <td>{{ shop.id           }}</td>
                 <td title="{{ shop.codeShop}} - {{ shop.name}}">{{ shop.codeShop}} - {{ shop.name|length > 15 ? shop.name|slice(0, 15) ~ '...' : shop.name  }}</td>
-                <td>{% if shop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{% if shop.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}</td>
                 <td>{{ shop.partner.codePartner }} - {{ shop.partner.name|length > 15 ? shop.partner.name|slice(0, 15) ~ '...' : shop.partner.name  }}</td>
                 <td>{{ shop.categoryService }}</td>
                 <td>{{ shop.phoneNumber1 }}</td>
                 <td>{{ shop.region|length > 15 ? shop.region|slice(0, 15) ~ '...' : shop.region  }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a title="{% trans %} edit.shop {% endtrans %}" id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                        <a title="{{ 'edit.shop'|trans }}" id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                     </td>
                 {% elseif is_granted('ROLE_AD') %}
                     <td>
-                        <a title="{% trans %} edit.shop {% endtrans %}" id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                        <a title="{{ 'edit.shop'|trans }}" id="edit{{ shop.name }}" href="{{ path("shopOrder_edit", { 'id':shop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                     </td>
                 {% endif %}
             </tr>
@@ -100,7 +100,7 @@
     </table>
     {% include 'UtilBundle:Pagination:pagination_shop.html.twig' %}
 {% else %}
-    <p class="alert"> {% trans %} any.shop {% endtrans %} </p>
+    <p class="alert"> {{ 'any.shop'|trans }} </p>
 {% endif %}
 
 

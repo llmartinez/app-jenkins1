@@ -5,20 +5,22 @@
     {% set route = 'user_super_partner_list' %}
     <input type="hidden" id="route" name="route" value="{{ route }}">
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} super_ad  {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'super_ad'|trans }}</li>
     </ol>
 
 <legend>
-    {% trans %} super_ad  {% endtrans %}
+    {{ 'super_ad'|trans }}
 </legend>
 
-    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+    {% for flashMessage in app.session.flashbag.get('alert') %}
+        <p class="alert">{{ flashMessage }}</p>
+    {% endfor %}
 
     
-    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+    <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>
         <select id="top_flt_country" class='form-control'>
-            <option value="0">{% trans %} all {% endtrans %}</option>
+            <option value="0">{{ 'all'|trans }}</option>
             {% for _country in countries %}
                 <option value="{{ _country.id }}" {% if country == _country.id %}selected{%endif %}>{{ _country | trans }}</option>
             {% endfor %}
@@ -27,15 +29,15 @@
     
     <div class="col-xs-4 col-md-4 form-group">
         <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
-            <label> {% trans %} find_by {% endtrans %} </label>
+            <label> {{ 'find_by'|trans }} </label>
             <select id="flt_search_term" name="flt_search_term" class='form-control'>
-                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
-                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
-                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{{ 'tel'|trans }}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{{ 'name'|trans }}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{{ 'email'|trans }}</option>
              </select>
         </div>
         <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
-            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{{ 'value'|trans }}" value="{% if field != '0' %}{{ field }}{% endif %}">
         </div>
         <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
             <a type="button" id="top_btn_search_field" name="top_btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
@@ -46,13 +48,13 @@
     <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
         <thead>
             <tr>
-                <th>{% trans %} username            {% endtrans %}</th>
-                <th>{% trans %}                 {% endtrans %}</th>
-                <th>{% trans %} phone_number_1  {% endtrans %}</th>
-                <th>{% trans %} email_1         {% endtrans %}</th>                
-                <th>{% trans %} list            {% endtrans %}</th>
-                <th>{% trans %} create            {% endtrans %}</th>
-                <th>{% trans %} order            {% endtrans %}</th>
+                <th>{{ 'username'|trans }}</th>
+                <th></th>
+                <th>{{ 'phone_number_1'|trans }}</th>
+                <th>{{ 'email_1'|trans }}</th>
+                <th>{{ 'list'|trans }}</th>
+                <th>{{ 'create'|trans }}</th>
+                <th>{{ 'order'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -60,30 +62,30 @@
             <tr>
                
                 <td>{{ partner.username}}</td>
-                <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{% if partner.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
                 
                 
                 <td>
                     {% if partner.allowList == 1 %}
-                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                        <a title="{{ 'workshop.activate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
                     {% else %}
-                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                        <a title="{{ 'workshop.deactivate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'list', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
                     {% endif %}
                 </td>
                  <td>
                     {% if partner.allowCreate == 1 %}
-                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                        <a title="{{ 'workshop.activate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
                     {% else %}
-                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                        <a title="{{ 'workshop.deactivate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'create', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
                     {% endif %}
                 </td>
                  <td>
                     {% if partner.allowOrder == 1 %}
-                        <a title="{% trans %} workshop.activate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
+                        <a title="{{ 'workshop.activate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_black.png') }}"></a>
                     {% else %}
-                        <a title="{% trans %} workshop.deactivate {% endtrans %}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
+                        <a title="{{ 'workshop.deactivate'|trans }}" href="{{ path("active_deactive_permission", { 'user_id': partner.id ,option: 'order', role: role}) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/checkbox_blank_black.png') }}"></a>
                     {% endif %}
                 </td>
             </tr>
@@ -94,7 +96,7 @@
     {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 
     {% else %}
-        <p class="alert"> {% trans %} any.partner {% endtrans %}</p>
+        <p class="alert"> {{ 'any.partner'|trans }}</p>
     {% endif %}
 
 {% endblock %}

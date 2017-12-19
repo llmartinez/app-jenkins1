@@ -11,7 +11,7 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;">
         <br>
-        {% trans %} mail.acceptOrder.title {% endtrans %}
+        {{ 'mail.acceptOrder.title'|trans }}
         {% if action == 'create'     %}{{'action.create'|trans|lower}}{% endif %}
         {% if action == 'activate'   %}{{'action.active'|trans|lower}}{% endif %}
         {% if action == 'deactivate' %}{{'action.inactive'|trans|lower}}{% endif %}
@@ -28,16 +28,16 @@
     </td></tr>
 
     <tr><td valign="middle" align="center" style="{{css_style}}">
-        {% trans %} mail.acceptOrder.info {% endtrans %}"<b>{% trans %} menu.list_workshops {% endtrans %}</b>".
+        {{ 'mail.acceptOrder.info'|trans|raw }}"<b>{{ 'menu.list_workshops'|trans }}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="{{css_style}}">
-        {% trans %} mail.acceptOrder.info.id {% endtrans %}
+        {{ 'mail.acceptOrder.info.id'|trans }}
     </td></tr>
     <tr><td valign="middle" align="center" style="{{css_style}}">
         <h2>{{ workshop.codePartner }} - {{ workshop.codeWorkshop }}</h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="{{css_style}}">
-        {% trans %} action {% endtrans %} {{'action.accepted'|trans|lower}}:
+        {{ 'action'|trans }} {{'action.accepted'|trans|lower}}:
     </td></tr>
     <tr><td valign="middle" align="center" style="{{css_style}}">
         <h2>
@@ -50,37 +50,37 @@
     </td></tr>
     <tr><td valign="middle" align="center" style="{{css_style}}">
         <table>
-            <h3>{% trans %} dataworkshop {% endtrans %}:</h3>
+            <h3>{{ 'dataworkshop'|trans }}:</h3>
 
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} workshop {% endtrans %}:</b></td><td> {{ workshop.name }}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} code {% endtrans %}:</b></td><td> {{ workshop.codepartner }} - {{ workshop.codeworkshop }}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} typology          {% endtrans %}</b></td><td> {{ workshop.typology }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} address           {% endtrans %}</b></td><td> {{ workshop.address }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} city              {% endtrans %}</b></td><td> {{ workshop.city }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} region            {% endtrans %}</b></td><td> {{ workshop.region }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} phone_number_1    {% endtrans %}</b></td><td> {{ workshop.phoneNumber1 }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} phone_number_2    {% endtrans %}</b></td><td> {{ workshop.phoneNumber2 }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} mobile_number_1   {% endtrans %}</b></td><td> {{ workshop.mobileNumber1 }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} mobile_number_2   {% endtrans %}</b></td><td> {{ workshop.mobileNumber2 }}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} email_1           {% endtrans %}</b></td><td> {{ workshop.email1 }}</td></tr>  
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} email_2           {% endtrans %}</b></td><td> {{ workshop.email2 }}</td></tr>     
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} fax               {% endtrans %}</b></td><td> {{ workshop.fax }}</td></tr>      
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} contact  {% endtrans %}</b></td><td> {{ workshop.contact }}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}created_at{% endtrans %}</b></td><td> {{ workshop.createdAt|date("d/m/Y") }}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}update_at {% endtrans %}</b></td><td> {% if workshop.updateAt %}{{ workshop.updateAt|date("d/m/Y") }}{% endif %}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %}lowdate_at{% endtrans %}</b></td><td> {% if workshop.lowdateAt %}{{ workshop.lowdateAt|date("d/m/Y") }}{% endif %}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} active   {% endtrans %}</b></td><td> {% if workshop.active %}{{'yes'|trans }}{% else %}{{'no'|trans }}{% endif %}</td></tr>
-            <tr><td valign="middle" style="{{css_style}}"><b>{% trans %} observations {% endtrans %}</b></td><td>{{workshop.observationAdmin}}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'workshop'|trans }}:</b></td><td> {{ workshop.name }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'code'|trans }}:</b></td><td> {{ workshop.codepartner }} - {{ workshop.codeworkshop }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'typology'|trans }}</b></td><td> {{ workshop.typology }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'address'|trans }}</b></td><td> {{ workshop.address }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'city'|trans }}</b></td><td> {{ workshop.city }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'region'|trans }}</b></td><td> {{ workshop.region }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'phone_number_1'|trans }}</b></td><td> {{ workshop.phoneNumber1 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'phone_number_2'|trans }}</b></td><td> {{ workshop.phoneNumber2 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'mobile_number_1'|trans }}</b></td><td> {{ workshop.mobileNumber1 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'mobile_number_2'|trans }}</b></td><td> {{ workshop.mobileNumber2 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'email_1'|trans }}</b></td><td> {{ workshop.email1 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'email_2'|trans }}</b></td><td> {{ workshop.email2 }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'fax'|trans }}</b></td><td> {{ workshop.fax }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'contact'|trans }}</b></td><td> {{ workshop.contact }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'created_at'|trans }}</b></td><td> {{ workshop.createdAt|date("d/m/Y") }}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'update_at'|trans }}</b></td><td> {% if workshop.updateAt %}{{ workshop.updateAt|date("d/m/Y") }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'lowdate_at'|trans }}</b></td><td> {% if workshop.lowdateAt %}{{ workshop.lowdateAt|date("d/m/Y") }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'active'|trans }}</b></td><td> {% if workshop.active %}{{'yes'|trans }}{% else %}{{'no'|trans }}{% endif %}</td></tr>
+            <tr><td valign="middle" style="{{css_style}}"><b>{{ 'observations'|trans }}</b></td><td>{{workshop.observationAdmin}}</td></tr>
         </table>
             <tr><td valign="middle" align="center" style="{{css_style}}">
                 {% if workshop.test == 1 %}
-                    <b>{% trans %} testing {% endtrans %}</b>
+                    <b>{{ 'testing'|trans }}</b>
                 {% endif %}
             </td></tr>
     </td></tr>
     {#<tr><td valign="middle" align="center" style="{{css_style}} padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %}
-        <a href="https://adserviceticketing.com/{{__locale}}/help">{% trans %}adserviceticketing.com{% endtrans %}/{{__locale}}/help</a>
+        {{ 'mail.info.more'|trans }}
+        <a href="https://adserviceticketing.com/{{__locale}}/help">{{ 'adserviceticketing.com'|trans }}/{{__locale}}/help</a>
     </td></tr>#}
 </table>
 
@@ -89,13 +89,13 @@
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} termsConditions {% endtrans %}
+        {{ 'termsConditions'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} mail.textDisclaimer {% endtrans %}
+        {{ 'mail.textDisclaimer'|trans }}
     </td></tr>
 </table>
 </body>

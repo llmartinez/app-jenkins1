@@ -19,7 +19,7 @@ class CarController extends Controller {
      * @return url
      */
     public function editCarAction($id, $ticket) {
-        $em        = $this->getDoctrine()->getEntityManager();
+        $em        = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $security   = $this->get('security.context');
         $car = $ticket->getCar();
@@ -31,7 +31,7 @@ class CarController extends Controller {
 
             $user = $em->getRepository('UserBundle:User')->find($this->get('security.context')->getToken()->getUser()->getId());
 
-            $formC->bindRequest($request);
+            $formC->bind($request);
 
             //Define CAR
             if ($formC->isValid()) {
@@ -43,7 +43,7 @@ class CarController extends Controller {
                 $id_model = $request->request->get('new_car_form_model');
                 $model = $em->getRepository('CarBundle:Model')->find($id_model);
                 if(empty($model)){
-                    $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction'));
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                 }
                 else {
                     $car->setBrand($brand);
@@ -74,7 +74,7 @@ class CarController extends Controller {
                 }
 
 
-            }else{ $this->get('session')->setFlash('error', $this->get('translator')->trans('error.bad_introduction')); }
+            }else{ $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction')); }
         }
         if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');

@@ -22,7 +22,7 @@ class ImportWorkshopController extends Controller {
         if ($security->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
 		$form = $this->createFormBuilder()
@@ -31,7 +31,7 @@ class ImportWorkshopController extends Controller {
 
 		if ($request->getMethod('post') == 'POST') {
 
-		    $form->bindRequest($request);
+		    $form->bind($request);
 
 		    if ($form->isValid()) {
 

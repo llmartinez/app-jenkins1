@@ -40,7 +40,7 @@ class WorkshopOrderController extends Controller {
         if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowList() == false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params   = array();
 
         if($user->getCategoryService() != null) {
@@ -158,7 +158,7 @@ class WorkshopOrderController extends Controller {
         if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowOrder() == false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $workshopOrder = new WorkshopOrder();
@@ -218,7 +218,7 @@ class WorkshopOrderController extends Controller {
         $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->bind($request);
             // $id_partner = $request->request->get('partner');
             // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
             if($workshopOrder->getRegion() == null){
@@ -343,12 +343,12 @@ class WorkshopOrderController extends Controller {
                     else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
                     }
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
             }else
                 {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
 
         }
@@ -386,7 +386,7 @@ class WorkshopOrderController extends Controller {
     public function editAction($id)
     {
         $security = $this->get('security.context');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $user = $security->getToken()->getUser();
 
@@ -491,7 +491,7 @@ class WorkshopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST')
         {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if( $request->request->has('workshopOrder_editOrder')['shop'])
             {
@@ -588,7 +588,7 @@ class WorkshopOrderController extends Controller {
                 }else
                 {
                     $flash = $this->get('translator')->trans('error.bad_introduction');
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
 
                 return $this->redirect($this->generateUrl('list_orders'));
@@ -637,7 +637,7 @@ class WorkshopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
@@ -718,13 +718,13 @@ class WorkshopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $form = $this->createForm(new WorkshopRejectOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
 
@@ -790,7 +790,7 @@ class WorkshopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
@@ -858,7 +858,7 @@ class WorkshopOrderController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $action = $workshopOrder->getWantedAction();
@@ -924,7 +924,7 @@ class WorkshopOrderController extends Controller {
         if ($security->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         // activate   + accepted = setActive a TRUE  and delete workshopOrder
@@ -978,7 +978,7 @@ class WorkshopOrderController extends Controller {
             $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
         }
 
-        //  else $this->get('session')->setFlash('error', $flash);
+        //  else $this->get('session')->getFlashBag()->add('error', $flash);
 
         if (($workshopOrder->getWantedAction() == 'preorder')  && $status == 'accepted'){
 
@@ -1013,9 +1013,9 @@ class WorkshopOrderController extends Controller {
                 // }
 
                 $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted').': '.$this->get('translator')->trans('create').' '.$this->get('translator')->trans('new.order.workshop');
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
             }
-            else $this->get('session')->setFlash('error', $flash);
+            else $this->get('session')->getFlashBag()->add('error', $flash);
         }
         elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted')
         {
@@ -1409,9 +1409,9 @@ class WorkshopOrderController extends Controller {
                 else{
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username.'  -  '.$this->get('translator')->trans('with_password').': '.$pass;
                 }
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
             }
-            else $this->get('session')->setFlash('error', $flash);
+            else $this->get('session')->getFlashBag()->add('error', $flash);
         }
 
         if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
@@ -1653,7 +1653,7 @@ class WorkshopOrderController extends Controller {
     }
 
     public function findCifAction($cif) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
         $find = false;
         if($workshop){

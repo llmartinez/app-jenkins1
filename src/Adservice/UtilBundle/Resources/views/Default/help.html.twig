@@ -3,11 +3,11 @@
 {% block body %}
 
 	<ol class="breadcrumb">
-		<li class="active"><a href="{{ path("_login")}}">{% trans %} home {% endtrans %}</a></li>
-		<li class="active">{% trans %} help {% endtrans %}</li>
+		<li class="active"><a href="{{ path("_login")}}">{{ 'home'|trans }}</a></li>
+		<li class="active">{{ 'help'|trans }}</li>
 	</ol>
 
-	<h1 class="tc">{% trans %}help.adservice{% endtrans %}</h1>
+	<h1 class="tc">{{ 'help.adservice'|trans }}</h1>
 
 	<br>
 	<div class="tc">
@@ -19,7 +19,7 @@
 
 	<div class="tc">
     	<h2>
-    		<a href="{% trans %}help.manual{% endtrans %}" target="_blank">{% trans %}help.check_manual{% endtrans %}</a>
+    		<a href="{{ 'help.manual'|trans }}" target="_blank">{{ 'help.check_manual'|trans }}</a>
     	</h2>
     </div>
 	<br>
@@ -27,7 +27,7 @@
 	<br>
 	<br>
 
-    <div class="tc">{% trans %}help.video{% endtrans %}</div>
+    <div class="tc">{{ 'help.video'|trans|raw }}</div>
 
 {% endblock %}
 

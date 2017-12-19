@@ -9,7 +9,7 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;">
         <br>
-        {% trans %} mail.newUser.title {% endtrans %}
+        {{ 'mail.newUser.title'|trans }}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
@@ -25,31 +25,31 @@
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-         {% if user.modifiedBy.roles[0] == 'ROLE_ADMIN' %} {% trans %} mail.newUser.createdby {% endtrans %}{% endif %}
+         {% if user.modifiedBy.roles[0] == 'ROLE_ADMIN' %} {{ 'mail.newUser.createdby'|trans }}{% endif %}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newUser.info.id {% endtrans %}
+        {{ 'mail.newUser.info.id'|trans }}
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ user.workshop.codepartner }} - {{ user.workshop.codeworkshop }}</h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
-            <h3>{% trans %} datauser {% endtrans %}:</h3>
+            <h3>{{ 'datauser'|trans }}:</h3>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} mail.newUser.user     {% endtrans %}</b></td><td> <b>{{ user.username }}</b>
+                <b>{{ 'mail.newUser.user'|trans }}</b></td><td> <b>{{ user.username }}</b>
             </td></tr>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} mail.newUser.password {% endtrans %}</b></td><td> <b>{{ password }}</b>
+                <b>{{ 'mail.newUser.password'|trans }}</b></td><td> <b>{{ password }}</b>
             </td></tr>
         </table>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.newUser.info.password {% endtrans %}"<b>{% trans %} menu.profile {% endtrans %}</b>"
+        {{ 'mail.newUser.info.password'|trans|raw }}"<b>{{ 'menu.profile'|trans }}</b>"
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.newUser.info {% endtrans %}{% trans %} mail.newUser.info.tel {% endtrans %}{% trans %} mail.info.tel {% endtrans %}
+        {{ 'mail.newUser.info'|trans|raw }}{{ 'mail.newUser.info.tel'|trans }}{{ 'mail.info.tel'|trans }}
     </td></tr>
 </table>
 
@@ -58,13 +58,13 @@
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} termsConditions {% endtrans %}
+        {{ 'termsConditions'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} mail.textDisclaimer {% endtrans %}
+        {{ 'mail.textDisclaimer'|trans }}
     </td></tr>
 </table>
 </body>

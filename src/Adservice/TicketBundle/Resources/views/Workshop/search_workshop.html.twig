@@ -1,29 +1,31 @@
 
-<legend> {% trans %} workshop.search {% endtrans %} </legend>
+<legend> {{ 'workshop.search'|trans }} </legend>
 <form action="{{ path('listTicket') }}" id="form_workshop_info" class="form" role="form" method="post" enctype="multipart/form-data">
-    <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
-    <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
+    <input type="hidden" id="code_numeric" name="code_numeric" value="{{ 'code_numeric'|trans }}">
+    <input type="hidden" id="code_partner" name="code_partner" value="{{ 'code_partner'|trans }}">
     <div class="form-group">
 
-    	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
+    	{% for flashMessage in app.session.flashbag.get('error') %}
+            <p class="error">{{ flashMessage }}</p>
+        {% endfor %}
 
-        <label style="width: 100%;">    {% trans %} code  {% endtrans %} <a id="lbl_code" style="color:red"></a></label>
-        <input type="text" id="w_idpartner" name="w_idpartner" class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} partner  {% endtrans %}">
-        <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="{% trans %} workshop {% endtrans %}">
-        <label style="width: 100%;">    {% trans %} workshop_name  {% endtrans %}</label>
-        <input type="text" id="w_name"      name="w_name"      class="form-control" placeholder="{% trans %} name     {% endtrans %}">
-        <label style="width: 100%;">    {% trans %} cif   {% endtrans %}</label>
-        <input type="text" id="w_cif"       name="w_cif"       class="form-control" placeholder="{% trans %} cif      {% endtrans %}">
-        <label style="width: 100%;">    {% trans %} email {% endtrans %}</label>
-        <input type="text" id="w_email"     name="w_email"     class="form-control" placeholder="{% trans %} email    {% endtrans %}">
-        <label style="width: 100%;">    {% trans %} tel   {% endtrans %}</label>
-        <input type="text" id="w_tel"       name="w_tel"       class="form-control" placeholder="{% trans %} tel      {% endtrans %}">
-        <label style="width: 100%;">    {% trans %} region{% endtrans %}</label>
-        <input type="text" id="w_region"    name="w_region"    class="form-control" placeholder="{% trans %} region   {% endtrans %}">
+        <label style="width: 100%;">    {{ 'code'|trans }} <a id="lbl_code" style="color:red"></a></label>
+        <input type="text" id="w_idpartner" name="w_idpartner" class="btn50 floating form-control" style="width: 50%;" placeholder="{{ 'partner'|trans }}">
+        <input type="text" id="w_id"        name="w_id"        class="btn50 floating form-control" style="width: 50%;" placeholder="{{ 'workshop'|trans }}">
+        <label style="width: 100%;">    {{ 'workshop_name'|trans }}</label>
+        <input type="text" id="w_name"      name="w_name"      class="form-control" placeholder="{{ 'name'|trans }}">
+        <label style="width: 100%;">    {{ 'cif'|trans }}</label>
+        <input type="text" id="w_cif"       name="w_cif"       class="form-control" placeholder="{{ 'cif'|trans }}">
+        <label style="width: 100%;">    {{ 'email'|trans }}</label>
+        <input type="text" id="w_email"     name="w_email"     class="form-control" placeholder="{{ 'email'|trans }}">
+        <label style="width: 100%;">    {{ 'tel'|trans }}</label>
+        <input type="text" id="w_tel"       name="w_tel"       class="form-control" placeholder="{{ 'tel'|trans }}">
+        <label style="width: 100%;">    {{ 'region'|trans }}</label>
+        <input type="text" id="w_region"    name="w_region"    class="form-control" placeholder="{{ 'region'|trans }}">
         <br>
         <div class="col-xs-12 col-md-12 form-group pdl0">
         <button type="submit" class="btn btn-primary fr" id="btn_check" name="btn_search">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {{ 'btn.search'|trans }}</button>
         </div>
     </div>
 </form>

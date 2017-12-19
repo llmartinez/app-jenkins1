@@ -8,15 +8,18 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+
             new Adservice\UtilBundle\UtilBundle(),
             new Adservice\UserBundle\UserBundle(),
             new Adservice\TicketBundle\TicketBundle(),
@@ -25,18 +28,16 @@ class AppKernel extends Kernel
             new Adservice\CarBundle\CarBundle(),
             new Adservice\PopupBundle\PopupBundle(),
             new Adservice\StatisticBundle\StatisticBundle(),
-            new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Adservice\OrderBundle\OrderBundle(),
             new Adservice\ImportBundle\ImportBundle(),
-            new Adservice\LockBundle\LockBundle(),
-            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-            new FOS\JsRoutingBundle\FOSJsRoutingBundle()
+            new Adservice\LockBundle\LockBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
         }
 
         return $bundles;

@@ -2,40 +2,40 @@
                    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
         {% else %} {% set id_catserv = '0' %}
         {% endif %}
-            <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
-            <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
+            <input type="hidden" id="isNaN" value="{{ 'isNaN'|trans }}">
+            <input type="hidden" id="badpass" value="{{ 'error.bad_password'|trans }}">
 
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} phone_number_1  {% endtrans %} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_1' | trans } }) }}
+                <label> {{ 'phone_number_1'|trans }} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_1' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} phone_number_2  {% endtrans %}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_2' | trans } }) }}
+                <label> {{ 'phone_number_2'|trans }}  </label> {{ form_widget(form.phone_number_2,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_2' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} mobile_number_1 {% endtrans %}  </label> {{ form_widget(form.mobile_number_1,  { 'attr': {'class': 'form-control', 'placeholder': 'mobile_number_1' | trans } }) }}
+                <label> {{ 'mobile_number_1'|trans }}  </label> {{ form_widget(form.mobile_number_1,  { 'attr': {'class': 'form-control', 'placeholder': 'mobile_number_1' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} mobile_number_2 {% endtrans %}  </label> {{ form_widget(form.mobile_number_2,  { 'attr': {'class': 'form-control', 'placeholder': 'mobile_number_2' | trans } }) }}
+                <label> {{ 'mobile_number_2'|trans }}  </label> {{ form_widget(form.mobile_number_2,  { 'attr': {'class': 'form-control', 'placeholder': 'mobile_number_2' | trans } }) }}
             </div>
             <div class="col-xs-2 col-md-2 form-group">
-                <label> {% trans %} fax             {% endtrans %}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control', 'placeholder': 'fax' | trans } }) }}
+                <label> {{ 'fax'|trans }}  </label> {{ form_widget(form.fax,              { 'attr': {'class': 'form-control', 'placeholder': 'fax' | trans } }) }}
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-6 col-md-6 form-group">
-                <label> {% trans %} email_1         {% endtrans %} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control', 'placeholder': 'email_1' | trans } }) }}
+                <label> {{ 'email_1'|trans }} *</label> {{ form_widget(form.email_1,          { 'attr': {'class': 'form-control', 'placeholder': 'email_1' | trans } }) }}
             </div>
             <div class="col-xs-6 col-md-6 form-group">
-                <label> {% trans %} email_2         {% endtrans %}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control', 'placeholder': 'email_2' | trans } }) }}
+                <label> {{ 'email_2'|trans }}  </label> {{ form_widget(form.email_2,          { 'attr': {'class': 'form-control', 'placeholder': 'email_2' | trans } }) }}
             </div>
         </div>
         <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label> {% trans %} country         {% endtrans %} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
+                    <label> {{ 'country'|trans }} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
                 </div>
 
                 <div class="col-xs-2 col-md-2 form-group" {% if id_catserv == 3 %} hidden {% endif %}>
-                    <label> {% trans %} region          {% endtrans %} *</label>
+                    <label> {{ 'region'|trans }} *</label>
 
                     {% if id_catserv != 3 %}
                         <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'required' } }) }} </div>
@@ -43,7 +43,7 @@
                         <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control' } }) }} </div>
                     {% endif %}
                     {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
-                    <input type='hidden' id='no-region' value='{% trans %} no-region {% endtrans %}'>
+                    <input type='hidden' id='no-region' value='{{ 'no-region'|trans }}'>
                     <div id="region_autocomplete">
                         <select hidden='hidden' id="data_regions"></select>
                         <div id="div_regions">
@@ -52,10 +52,10 @@
                     </div> #}
                 </div>
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label> {% trans %} city            {% endtrans %} *</label>
+                    <label> {{ 'city'|trans }} *</label>
                     <div> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
                     {# <div hidden='hidden'> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
-                    <input type='hidden' id='no-city' value='{% trans %} no-city {% endtrans %}'>
+                    <input type='hidden' id='no-city' value='{{ 'no-city'|trans }}'>
                     <div id="city_autocomplete">
                         <select hidden='hidden' id="data_cities"></select>
                         <div id="div_cities">
@@ -64,12 +64,12 @@
                     </div> #}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label> {% trans %} address         {% endtrans %} *</label> {{ form_widget(form.address,          { 'attr': {'class'      : 'form-control',
+                    <label> {{ 'address'|trans }} *</label> {{ form_widget(form.address,          { 'attr': {'class'      : 'form-control',
                                                                                                                                   'required'   : 'required' ,
                                                                                                                                   'placeholder': 'address' | trans } }) }}
                 </div>
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label> {% trans %} postal_code     {% endtrans %} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
+                    <label> {{ 'postal_code'|trans }} *</label> {{ form_widget(form.postal_code,      { 'attr': {'class': 'form-control',
                                                                                                                                   'min': 0,
                                                                                                                                   'required': 'required' } }) }}
                 </div>

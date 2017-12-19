@@ -1,17 +1,17 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    <h1>{% trans %} reject.reason {% endtrans %}</h1>
+    <h1>{{ 'reject.reason'|trans }}</h1>
 
      <form action="{{ path('workshopOrder_reject', { 'id': workshopOrder.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
 
-        <label for="rejection_reason">{# {% trans %} reject.reason {% endtrans %} #}</label>
+        <label for="rejection_reason">{# {{ 'reject.reason'|trans }} #}</label>
         <div class="col-xs-12 col-md-12 margined">
         	{{ form_widget(form.rejection_reason, { 'attr': {'class': 'form-control', 'rows': '4', 'required': 'required' } }) }}
         </div>
         {{ form_rest(form) }}
         <div class="col-xs-12 col-md-12 margined">
-	        <button type="submit" class="btn btn-primary ">{% trans %} btn.send {% endtrans %}</button>
+	        <button type="submit" class="btn btn-primary ">{{ 'btn.send'|trans }}</button>
 	 	</div>
      </form>
 {% endblock %}

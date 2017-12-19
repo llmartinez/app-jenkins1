@@ -15,7 +15,7 @@ class CategoryController extends Controller
      * Devuelve la lista de categorias de servicio
      */
     public function listCategoriesAction($page=1) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         if (! $security->isGranted('ROLE_SUPER_ADMIN')) {
              throw new AccessDeniedException();
@@ -43,7 +43,7 @@ class CategoryController extends Controller
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $category = new CategoryService();
 
         $petition = $this->getRequest();
@@ -52,7 +52,7 @@ class CategoryController extends Controller
         $form = $this->createForm(new CategoryServiceType(), $category);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
                 $category->setSlug(str_replace(" ", "-", strtolower($category->getSlug())));
@@ -77,7 +77,7 @@ class CategoryController extends Controller
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository("UserBundle:CategoryService")->find($id);
         if (!$category) throw $this->createNotFoundException('Categoría de servicio no encontrado en la BBDD');
 
@@ -87,7 +87,7 @@ class CategoryController extends Controller
         $form = $this->createForm(new CategoryServiceType(), $category);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
                 $category->setSlug(str_replace(" ", "-", strtolower($category->getSlug())));

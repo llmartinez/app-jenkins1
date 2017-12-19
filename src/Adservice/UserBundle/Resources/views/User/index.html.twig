@@ -3,7 +3,7 @@
 {% block body %}
 
 <ol class="breadcrumb">
-      <li class="active">{% trans %} home {% endtrans %}</li>
+      <li class="active">{{ 'home'|trans }}</li>
     </ol>
     
     {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
@@ -11,152 +11,152 @@
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
 
-    {% if app.session.hasFlash('popup') %}
-         <p class="alert">{{ app.session.getFlash('popup')|nl2br }}</p>
-    {% endif %}
+    {% for flashMessage in app.session.flashbag.get('popup') %}
+         <p class="alert">{{ flashMessage|nl2br }}</p>
+    {% endfor %}
     
     {% if is_granted('ROLE_ADMIN') %}
         <div name="tbl_admin" align="center">
-            <legend>{% trans %} menu.title_admin {% endtrans %}</legend>
+            <legend>{{ 'menu.title_admin'|trans }}</legend>
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                            {% trans %} menu.profile           {% endtrans %}</a>
+                                                                                                            {{ 'menu.profile'|trans }}</a>
             <a class="btn-menu" id="listStatistics"         href="{{ path("listStatistics"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_statistics.png') }}">
-                                                                                                            {% trans %} menu.list_statistics   {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_statistics'|trans }}</a>
             <a class="btn-menu" id="workshopOrdersList"     href="{{ path("list_orders"             ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
-                                                                                                            {% trans %} menu.list_orders       {% endtrans %}
+                                                                                                            {{ 'menu.list_orders'|trans }}
                                                                                                             {% if length is defined and length > 0 %}  <div class="pending_application">{{ length }}</div>
                                                                                                             {% endif %}</a>
             <a class="btn-menu" id="popup_list"             href="{{ path("popup_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_popup.png') }}">
-                                                                                                            {% trans %} menu.list_popups        {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_popups'|trans }}</a>
             <a class="btn-menu" id="partner_list"           href="{{ path("partner_list"            ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
-                                                                                                            {% trans %} menu.list_partners      {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_partners'|trans }}</a>
             {% if id_catserv != 3 %}
                 <a class="btn-menu" id="shop_list"          href="{{ path("shop_list"               ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
-                                                                                                            {% trans %} menu.list_shops        {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_shops'|trans }}</a>
             {% endif %}
             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
-                                                                                                            {% trans %} menu.list_workshops     {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_workshops'|trans }}</a>
             <a class="btn-menu" id="diagnosis_machine_list" href="{{ path("diagnosis_machine_list"  ) }}">
                                                                                                            <img class="img_icon" src="{{ asset('bundles/util/images/icon/diagnostic_machines.png') }}">
-                                                                                                           {% trans %} menu.list_diagnosis_machines {% endtrans %}</a>
+                                                                                                           {{ 'menu.list_diagnosis_machines'|trans }}</a>
             <a class="btn-menu" id="typology_list"          href="{{ path("typology_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_typology.png') }}">
-                                                                                                            {% trans %} menu.list_typologies    {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_typologies'|trans }}</a>
             <a class="btn-menu" id="user_list"              href="{{ path("user_list"              ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
-                                                                                                            {% trans %} menu.list_users         {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_users'|trans }}</a>
             <a class="btn-menu" id="ticket_list"            href="{{ path("listTicket") }}" >
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
-                                                                                                            {% trans %} menu.list_tickets       {% endtrans %}
+                                                                                                            {{ 'menu.list_tickets'|trans }}
                                                                                                                 {% if t_inactive is defined and t_inactive > 0 %}  <div class="pending_application">{{ t_inactive }}</div>
                                                                                                             {% endif %}</a>
             <a class="btn-menu" id="sentence_list"          href="{{ path("sentence_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_sentences.png') }}">
-                                                                                                            {% trans %} menu.list_sentences    {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_sentences'|trans }}</a>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             <a class="btn-menu" id="category_service_list"     href="{{ path("category_service_list"     ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/location_.png') }}">
-                                                                                                            {% trans %} menu.list_categories {% endtrans %}</a>
+                                                                                                            {{ 'menu.list_categories'|trans }}</a>
             {% endif %}
         </div>
 {#    {% endif %}#}
 
     {% elseif is_granted('ROLE_ASSESSOR') %}
          <div name="tbl_asesor" align="center">
-            <legend>{% trans %} menu.title_assessor {% endtrans %}</legend>
+            <legend>{{ 'menu.title_assessor'|trans }}</legend>
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                {% trans %} menu.profile              {% endtrans %}</a>
+                                                                                                {{ 'menu.profile'|trans }}</a>
             <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket", { 'option': 'assessor_pending'}) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
-                                                                                                {% trans %} menu.list_tickets         {% endtrans %}</a>
+                                                                                                {{ 'menu.list_tickets'|trans }}</a>
 {#             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
-                                                                                                            {% trans %} menu.list_workshops     {% endtrans %}</a> #}
+                                                                                                            {{ 'menu.list_workshops'|trans }}</a> #}
         </div>
 {#    {% endif %}#}
 
     {% elseif is_granted('ROLE_USER') %}
         <div name="tbl_user" align="center">
-            <legend>{% trans %} menu.title_user {% endtrans %}</legend>
+            <legend>{{ 'menu.title_user'|trans }}</legend>
             <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                {% trans %} menu.profile      {% endtrans %}</a>
+                                                                                                {{ 'menu.profile'|trans }}</a>
             <a class="btn-menu" id="ticket_list"        href="{{ path("listTicket") }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_tickets.png') }}">
-                                                                                                {% trans %} menu.list_tickets         {% endtrans %}</a>
+                                                                                                {{ 'menu.list_tickets'|trans }}</a>
         </div>
 {#    {% endif %}#}
 
     {% elseif is_granted('ROLE_AD') %}
          <div name="tbl_user" align="center">
-            <legend>{% trans %} menu.title_ad {% endtrans %}</legend>
+            <legend>{{ 'menu.title_ad'|trans }}</legend>
             {# <a class="btn-menu" id="profile"            href="{{ path("user_profile"       ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_user.png') }}">
-                                                                                                {% trans %} menu.profile              {% endtrans %}</a> #}
+                                                                                                {{ 'menu.profile'|trans }}</a> #}
 
             <a class="btn-menu" id="listStatistics-top" href="{{ path("listStatistics_top"  ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_statistics.png') }}">
-                                                                                                {% trans %} menu.list_statistics   {% endtrans %}</a>
+                                                                                                {{ 'menu.list_statistics'|trans }}</a>
                                                                                           
             <a class="btn-menu"                         href="{{ path("list_orders"         ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
-                                                                                                {% trans %} menu.list_orders         {% endtrans %}
+                                                                                                {{ 'menu.list_orders'|trans }}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
         
         
         {% if is_granted('ROLE_TOP_AD') %}
             <a class="btn-menu" id="user_list"              href="{{ path("user_partner_list") }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_users.png') }}">
-                                                                                                   {% trans %} menu.list_users         {% endtrans %}</a>
+                                                                                                   {{ 'menu.list_users'|trans }}</a>
         {% endif %}
         {# {% if is_granted('ROLE_SUPER_AD') %}
             <a class="btn-menu" id="listPartners" href="{{ path("partnerOrder_listpartners"  ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_partner.png') }}">
-                                                                                                {% trans %} menu.list_partners   {% endtrans %}</a>
+                                                                                                {{ 'menu.list_partners'|trans }}</a>
         {% endif %} #}
         
         
         {% if id_catserv != 3 %}
             <a class="btn-menu"                         href="{{ path("shopOrder_listShops" ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop.png') }}">
-                                                                                                {% trans %} menu.list_shops         {% endtrans %}</a>
+                                                                                                {{ 'menu.list_shops'|trans }}</a>
         {% endif %}
         
         {% if is_granted('ROLE_TOP_AD') and app.security.getToken().getUser().getCategoryService().getId() is defined  and app.security.getToken().getUser().getCategoryService().getId() == 3 %}
             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
-                {% trans %} menu.list_workshops     {% endtrans %}
+                {{ 'menu.list_workshops'|trans }}
             </a>                            
         {% else %}
             <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
-                {% trans %} menu.list_workshops         {% endtrans %}
+                {{ 'menu.list_workshops'|trans }}
             </a>
         {% endif %} 
         </div>
     {% elseif is_granted('ROLE_COMMERCIAL') %}
         <div name="tbl_user" align="center">
-            <legend>{% trans %} menu.title_commercial {% endtrans %}</legend>
+            <legend>{{ 'menu.title_commercial'|trans }}</legend>
             <a class="btn-menu"                         href="{{ path("list_orders" , {'option': 'preorder_pending'}) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_orders.png') }}">
-                                                                                                {% trans %} menu.list_orders         {% endtrans %}
+                                                                                                {{ 'menu.list_orders'|trans }}
                                                                                                 {% if length is defined and length > 0 %}<div class="pending_application">{{ length }}</div>{% endif %}</a>
             {% if app.security.getToken().getUser().getAllowList() == true %}
             <a class="btn-menu"                         href="{{ path("workshopOrder_listWorkshops", {'page':1, 'w_idpartner':0, 'w_id': 0, 'country': 0, 'partner': '0', 'status': none, 'term':0, 'field':0    } ) }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
-                                                                                                {% trans %} menu.list_workshops         {% endtrans %}</a>
+                                                                                                {{ 'menu.list_workshops'|trans }}</a>
             {% elseif app.security.getToken().getUser().getAllowOrder() == true %}
             <a class="btn-menu"                         href="{{ path("workshopOrder_new") }}">
                                                                                                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
-                                                                                                {% trans %} menu.new_workshop_order         {% endtrans %}</a>
+                                                                                                {{ 'menu.new_workshop_order'|trans }}</a>
             {% endif %}
         </div>
     {% endif %}

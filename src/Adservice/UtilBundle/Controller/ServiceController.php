@@ -15,7 +15,7 @@ class ServiceController {
     public function setDefaultLanguage(Event $event){
         $request = $event->getRequest();
         //obtenemos el defaultLocale que tenemos en Parameters.ini
-        $defaultLocale = $this->container->getParameter('session.default_locale');
+        $defaultLocale = $this->container->getParameter('locale');
         //seteamos el idioma
         //$request->setLocale($defaultLocale);
 

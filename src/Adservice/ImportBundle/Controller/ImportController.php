@@ -28,8 +28,8 @@ class ImportController extends Controller
     public function importAction($bbdd=null)
     {
     	$session = $this->get('session');
-		$em 	 = $this->getDoctrine()->getEntityManager('default');
-		$em_old  = $this->getDoctrine()->getEntityManager('em_old');
+		$em 	 = $this->getDoctrine()->getManager('default');
+		$em_old  = $this->getDoctrine()->getManager('em_old');
 		$sa 	 = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
 
 //  ____   _    ____ _____ _   _ _____ ____
@@ -385,8 +385,8 @@ class ImportController extends Controller
     public function importLockCarsAction($bbdd=null, $num=0)
     {
     	$session = $this->get('session');
-		$em_old  = $this->getDoctrine()->getEntityManager('em_old' );
-		$em_lock = $this->getDoctrine()->getEntityManager('em_lock');
+		$em_old  = $this->getDoctrine()->getManager('em_old' );
+		$em_lock = $this->getDoctrine()->getManager('em_lock');
 		$max_rows = 1000;
  		$consulta = $em_old ->createQuery('SELECT oc FROM ImportBundle:old_Coche oc')
                         	->setFirstResult($num)
@@ -436,8 +436,8 @@ class ImportController extends Controller
  	public function importLockIncidencesAction($bbdd=null, $num=0)
     {
     	$session = $this->get('session');
-		$em_old   = $this->getDoctrine()->getEntityManager('em_old' );
-		$em_lock  = $this->getDoctrine()->getEntityManager('em_lock');
+		$em_old   = $this->getDoctrine()->getManager('em_old' );
+		$em_lock  = $this->getDoctrine()->getManager('em_lock');
 		$max_rows = 1000;
 
  		$consulta = $em_old ->createQuery('SELECT oi FROM ImportBundle:old_Incidencia oi')
@@ -510,7 +510,7 @@ class ImportController extends Controller
 
     public function importWorkshopFRAction()
     {
-        $em      = $this->getDoctrine()->getEntityManager();
+        $em      = $this->getDoctrine()->getManager();
     	$session = $this->get('session');
 
 		$sa 	 = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
@@ -882,7 +882,7 @@ class ImportController extends Controller
 	}
 
     private function doExcelAction($users_email_log){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         $response = new Response();
@@ -903,7 +903,7 @@ class ImportController extends Controller
     }
 
     private function doExcelPartnerAction($partner_users){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         $response = new Response();
@@ -924,7 +924,7 @@ class ImportController extends Controller
     }
 
     private function doExcelAssessorAction($assessor_users){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         $response = new Response();
@@ -949,7 +949,7 @@ class ImportController extends Controller
         $excel ='id;Código Socio;Código Taller;Taller;Usuario;Contraseña;Contacto;Email 1; Email 2;Fijo 1;Fijo 2;Movil 1;Movil 2;Población;Provincia;Dirección;error;';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($users_email_log as $row) {
             $excel.=$row[0]->getId().';';
@@ -987,7 +987,7 @@ class ImportController extends Controller
         $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Activo;Error;';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($partner_users as $row) {
             $excel.=$row[0]->getId().';';
@@ -1017,7 +1017,7 @@ class ImportController extends Controller
         $excel ='id;Usuario;Contraseña;Contacto;Email;Password;Salt;Activo;Error;';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($assessor_users as $row) {
             $excel.=$row[0]->getId().';';
@@ -1046,7 +1046,7 @@ class ImportController extends Controller
     
     public function testMailingAction()
     {
-      	$em = $this->getDoctrine()->getEntityManager();
+      	$em = $this->getDoctrine()->getManager();
     	$historical = $em->getRepository('WorkshopBundle:Historical')->findBy(array(), array('partnerId' => 'ASC', 'workshopId' => 'ASC', 'dateOrder' => 'ASC'));
 
     	$last_row = null;
@@ -1114,7 +1114,7 @@ class ImportController extends Controller
  /*
       $sql = "INSERT INTO historical VALUES ";
       $id = 1;
-      $em = $this->getDoctrine()->getEntityManager();
+      $em = $this->getDoctrine()->getManager();
         $workshops = $em->getRepository('WorkshopBundle:Workshop')->findAll();
         foreach ($workshops as $workshop) {
             if ($workshop->getLowdateAt() == null && $workshop->getEndtestAt()== null){
@@ -1185,7 +1185,7 @@ class ImportController extends Controller
         echo $sql;
 */
 
-    /*    $em      = $this->getDoctrine()->getEntityManager();
+    /*    $em      = $this->getDoctrine()->getManager();
         $admin   = $em->getRepository('UserBundle:User')->find(1);
         $role    = $em->getRepository('UserBundle:Role'  )->find(1);
         $partner = $em->getRepository('PartnerBundle:Partner')->find(1);
@@ -1438,7 +1438,7 @@ class ImportController extends Controller
 
     public function sendUserCredentialsAction($type)
     {
-        $em      = $this->getDoctrine()->getEntityManager();
+        $em      = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $users = $em->createQuery('SELECT u FROM UserBundle:User u WHERE u.'.$type.' IS NOT NULL' )->getResult();
@@ -1507,7 +1507,7 @@ class ImportController extends Controller
     }
 
     private function doExcelCredentialsAction($type, $array) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
 
         $response = new Response();
@@ -1534,7 +1534,7 @@ class ImportController extends Controller
     	elseif($type == 'country_service') $excel ='Asesor;Usuario;Password;Email;';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($array as $row) {
             if(isset($row['Codigo_Socio'])) $excel.=$row['Codigo_Socio'].';';

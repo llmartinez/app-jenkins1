@@ -1,5 +1,5 @@
     <legend>
-    	{% trans %} car {% endtrans %}
+    	{{ 'car'|trans }}
         {% if 
             (app.security.getToken().getUser().getWorkshop() != null and app.security.getToken().getUser().getWorkshop().getActive() == 1)
             or 
@@ -11,7 +11,7 @@
             {# editar Ticket #}
             {% if is_granted('ROLE_ASSESSOR') %}                         
                 <a href="{{ path('editCar', { 'id': ticket.id }) }}">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{% trans %} edit.car {% endtrans %}"></span>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
                 </a>
             {% endif %}    
         {% endif %}
@@ -23,16 +23,16 @@
 	<table>
 		<tr><td><img class="img_icon" src="{{ asset('bundles/util/images/icon/car.png') }}"></td><td>{% if brand is defined and brand != "" %}{{ brand    }}</td>{% endif %}</tr>
 
-		{% if car.model        != "" %}<tr><td><b>{% trans %} model        {% endtrans %}:</b> </td><td>{{ car.model   }}</td></tr>{% endif %}
-		{% if car.version      != "" %}<tr><td><b>{% trans %} version      {% endtrans %}:</b> </td><td>{{ car.version }}</td></tr>{% endif %}
+		{% if car.model        != "" %}<tr><td><b>{{ 'model'|trans }}:</b> </td><td>{{ car.model   }}</td></tr>{% endif %}
+		{% if car.version      != "" %}<tr><td><b>{{ 'version'|trans }}:</b> </td><td>{{ car.version }}</td></tr>{% endif %}
 
-		{% if car.year         != "" %}<tr><td><b>{% trans %} year         {% endtrans %}</b><td>{{ car.year         }}</td></tr>{% endif %}
-		{% if car.motor        != "" %}<tr><td><b>{% trans %} motor        {% endtrans %}</b><td>{{ car.motor        }}</td></tr>{% endif %}
-		{% if car.kW           != "" %}<tr><td><b>{% trans %} kW           {% endtrans %}</b><td>{{ car.kW           }}</td></tr>{% endif %}
-		{% if car.displacement != "" %}<tr><td><b>{% trans %} displacement {% endtrans %}</b><td>{{ car.displacement }}</td></tr>{% endif %}
-		{% if car.vin          != "" %}<tr><td><b>{% trans %} vin          {% endtrans %}</b><td>{{ car.vin          }}</td></tr>{% endif %}
+		{% if car.year         != "" %}<tr><td><b>{{ 'year'|trans }}</b><td>{{ car.year         }}</td></tr>{% endif %}
+		{% if car.motor        != "" %}<tr><td><b>{{ 'motor'|trans }}</b><td>{{ car.motor        }}</td></tr>{% endif %}
+		{% if car.kW           != "" %}<tr><td><b>{{ 'kW'|trans }}</b><td>{{ car.kW           }}</td></tr>{% endif %}
+		{% if car.displacement != "" %}<tr><td><b>{{ 'displacement'|trans }}</b><td>{{ car.displacement }}</td></tr>{% endif %}
+		{% if car.vin          != "" %}<tr><td><b>{{ 'vin'|trans }}</b><td>{{ car.vin          }}</td></tr>{% endif %}
 
-		{% if car.plateNumber  != "" %}<tr><td><b>{% trans %} plate_number {% endtrans %}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
+		{% if car.plateNumber  != "" %}<tr><td><b>{{ 'plate_number'|trans }}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
 	</table>
 
     {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}

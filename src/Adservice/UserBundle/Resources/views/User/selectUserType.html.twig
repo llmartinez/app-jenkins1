@@ -2,34 +2,34 @@
 
 {% block body %}
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       {% if is_granted('ROLE_ADMIN') %}
-        <li><a href="{{ path('user_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+        <li><a href="{{ path('user_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
       {% else %}
-        <li><a href="{{ path('user_partner_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+        <li><a href="{{ path('user_partner_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
       {% endif %}
-      <li class="active">{% trans %} new.user {% endtrans %}</li>
+      <li class="active">{{ 'new.user'|trans }}</li>
     </ol>
 
-    <legend>{% trans %} select_user_type {% endtrans %}</legend>
+    <legend>{{ 'select_user_type'|trans }}</legend>
     <table style="width: 90%; margin-left: 5%;">
         <tr>
             <td align="center">
                 {% if is_granted('ROLE_ADMIN') %}
                 <a id="type_admin"    href="{{ path('user_new', {'type':'admin'       })}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/admin.png') }}"      > {% trans %} admin      {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/admin.png') }}"      > {{ 'admin'|trans }}</a>
                 <a id="type_assessor" href="{{ path('user_new', {'type':'assessor'    })}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/assessor.png') }}"   > {% trans %} assessor   {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/assessor.png') }}"   > {{ 'assessor'|trans }}</a>
                 <a id="type_super_ad" href="{{ path('user_new', {'type':'super_ad'    })}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {% trans %} super_ad   {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {{ 'super_ad'|trans }}</a>
                 <a id="type_ad"       href="{{ path('user_new', {'type':'ad'          })}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {% trans %} ad         {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {{ 'ad'|trans }}</a>
                 <a id="type_commercial" href="{{ path('user_new', {'type':'commercial'})}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/commercial.png') }}" > {% trans %} commercial {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/commercial.png') }}" > {{ 'commercial'|trans }}</a>
                 {% endif %}
                 {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN') %}
                 <a id="type_ad"       href="{{ path('partner_new')}}" class="btn-menu">
-                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {% trans %} ad         {% endtrans %}</a>
+                                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/ad.png') }}"         > {{ 'ad'|trans }}</a>
                 {% endif %}
             </td>
         </tr>

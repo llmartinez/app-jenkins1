@@ -2,17 +2,17 @@
 
     <legend>
          <a href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0, 'reset' : 1  }) }}" class="btn btn-primary asr_form-control asr_btn">
-            <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{% trans %} btn.clear {% endtrans %}" alt="{% trans %} btn.clear {% endtrans %}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{{ 'btn.clear'|trans }}" alt="{{ 'btn.clear'|trans }}">
         </a>
-        {% trans %} car {% endtrans %}: <span id='car'></span>
+        {{ 'car'|trans }}: <span id='car'></span>
     </legend>
 
     <input type="hidden" id="funnel"          value="{{ asset('bundles/util/images/icon/funnel.png') }}">
     <input type="hidden" id="funnel_filtered" value="{{ asset('bundles/util/images/icon/funnel_filtered.png') }}">
-    <input type="hidden" id="msg_bad_filter"  value="{% trans %} msg_bad_filter {% endtrans %}">
-    <input type="hidden" id="msg_motor_not_found"  value="{% trans %} msg_motor_not_found {% endtrans %}">
-    <input type="hidden" id="msg_plate_number_not_found"  value="{% trans %} error.plate_number_not_found {% endtrans %}">
-    <input type="hidden" id="msg_vin_not_found"  value="{% trans %} error.vin_not_found {% endtrans %}">
+    <input type="hidden" id="msg_bad_filter"  value="{{ 'msg_bad_filter'|trans }}">
+    <input type="hidden" id="msg_motor_not_found"  value="{{ 'msg_motor_not_found'|trans }}">
+    <input type="hidden" id="msg_plate_number_not_found"  value="{{ 'error.plate_number_not_found'|trans }}">
+    <input type="hidden" id="msg_vin_not_found"  value="{{ 'error.vin_not_found'|trans }}">
 
     <input type="hidden" id="ticket_brand"   value="{{marca_session}}">
     <input type="hidden" id="ticket_model"   value="{{modelo_session}}">
@@ -23,21 +23,21 @@
     <div class="grid-full w100">
         
         <div class="grid-33">
-            <label for="new_car_form_plateNumber">{% trans %} plate_number {% endtrans %} *<a id="txt_plateNumber"></a></label>
-            <a class="pull-right" id="filter_plate_number" title="{% trans %} filter_by_plate_number {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+            <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }} *<a id="txt_plateNumber"></a></label>
+            <a class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
             {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number' | trans } }) }}
         </div>
 
         <div class="grid-33">
-            <label for="new_car_form_vin">{% trans %} vin {% endtrans %} *</label>
-            <a class="pull-right" id="filter_vin" title="{% trans %} filter_by_vin {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+            <label for="new_car_form_vin">{{ 'vin'|trans }} *</label>
+            <a class="pull-right" id="filter_vin" title="{{ 'filter_by_vin'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
             {{ form_widget(formC.vin, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'vin' | trans } }) }}
         </div>
 
         <div class="grid-33">
-            <label for="new_car_form_motor">{% trans %} motor {% endtrans %}</label>
-            <a class="pull-right" id="filter_motor" title="{% trans %} filter_by_motor {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-            {# <a class="pull-right" id="list_motor" title="{% trans %} motor {% endtrans %}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
+            <label for="new_car_form_motor">{{ 'motor'|trans }}</label>
+            <a class="pull-right" id="filter_motor" title="{{ 'filter_by_motor'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+            {# <a class="pull-right" id="list_motor" title="{{ 'motor'|trans }}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
             {{ form_widget(formC.motor, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'motor' | trans } }) }}
             <input type="hidden" id="id_mts" value="">
         </div>
@@ -45,7 +45,7 @@
     <div class="grid-full w100">
         {{ marca_session == 1 }}
         <div class="grid-33">
-            <label for="new_car_form_brand">{% trans %} brand {% endtrans %} *</label>
+            <label for="new_car_form_brand">{{ 'brand'|trans }} *</label>
             <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# multiple="multiple" #}, required>
                 <option ></option>
                 {% for brand in brands %}
@@ -59,12 +59,12 @@
         </div>
 
         <div class="grid-33">
-            <label for="new_car_form_model">{% trans %} model {% endtrans %} *</label>
+            <label for="new_car_form_model">{{ 'model'|trans }} *</label>
             <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# multiple="multiple" #} required></select>
         </div>
 
         <div class="grid-33">
-            <label for="new_car_form_version">{% trans %} version {% endtrans %}</label>
+            <label for="new_car_form_version">{{ 'version'|trans }}</label>
             <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" {# multiple="multiple" #} >
             </select>
         </div>
@@ -72,18 +72,18 @@
     <div class="grid-full w100">
 
         <div class="grid-33">
-            <label for="new_car_form_year">{% trans %} year {% endtrans %}</label>
-            <a class="pull-right" id="filter_year" title="{% trans %} filter_by_year {% endtrans %}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+            <label for="new_car_form_year">{{ 'year'|trans }}</label>
+            <a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
             {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'year' | trans } }) }}
         </div>
         
         <div class="grid-33">
-            <label for="new_car_form_kW">{% trans %} kw {% endtrans %}</label>
+            <label for="new_car_form_kW">{{ 'kw'|trans }}</label>
             {{ form_widget(formC.kW, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'kw' | trans } }) }}
         </div>
         
         <div class="grid-33">
-            <label for="new_car_form_displacement">{% trans %} displacement {% endtrans %}</label>
+            <label for="new_car_form_displacement">{{ 'displacement'|trans }}</label>
             {{ form_widget(formC.displacement, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'displacement' | trans } }) }}
         </div>
     </div>

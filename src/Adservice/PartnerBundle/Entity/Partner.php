@@ -76,14 +76,6 @@ class Partner {//implements EventSubscriber{
 
     /**
      *
-     * @var string $shops
-     *
-     * @ORM\OneToMany(targetEntity="Adservice\PartnerBundle\Entity\Shop", mappedBy="partner")
-     */
-    private $shops;
-
-    /**
-     *
      * @var string $workshops
      *
      * @ORM\OneToMany(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", mappedBy="partner")

@@ -2,16 +2,16 @@
 
 {% block body %}
     <ol class="breadcrumb">
-      <li class="active">{% trans %} lock.list_incidences {% endtrans %}</li>
+      <li class="active">{{ 'lock.list_incidences'|trans }}</li>
     </ol>
 
-<legend>{% trans %} lock.list_incidences {% endtrans %}
-        {% if id_socio != 'none' %} {% trans %} workshop {% endtrans %} <a>#{{ id_socio }},{{ id_taller }}{% endif %}</a></legend>
+<legend>{{ 'lock.list_incidences'|trans }}
+        {% if id_socio != 'none' %} {{ 'workshop'|trans }} <a>#{{ id_socio }},{{ id_taller }}{% endif %}</a></legend>
 
    {#  {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+    <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>
         <select id="flt_country" class='form-control'>
-                <option value="none">{% trans %} all {% endtrans %}</option>
+                <option value="none">{{ 'all'|trans }}</option>
             {% for country in countries %}
                 <option value="{{ country }}">{{ country }}</option>
             {% endfor %}
@@ -20,14 +20,14 @@
 
     {% if is_granted('ROLE_ASSESSOR') %}
         <div class="col-xs-6 col-md-6 form-group">
-            <div class="col-xs-2 col-md-2"><label> {% trans %} code {% endtrans %} </label></div>
-            <input type="hidden" id="code_partner" name="code_partner" value="{% trans %} code_partner {% endtrans %}">
-            <input type="hidden" id="code_numeric" name="code_numeric" value="{% trans %} code_numeric {% endtrans %}">
+            <div class="col-xs-2 col-md-2"><label> {{ 'code'|trans }} </label></div>
+            <input type="hidden" id="code_partner" name="code_partner" value="{{ 'code_partner'|trans }}">
+            <input type="hidden" id="code_numeric" name="code_numeric" value="{{ 'code_numeric'|trans }}">
           {# data-url="{{ path('list_incidences', { 'page': 'plc_page', 'id_taller' : 'plc_taller', 'id_socio' : 'plc_socio' }) }}" #}
 
-            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{% trans %} partner  {% endtrans %}"></div>
-            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{% trans %} workshop {% endtrans %}"></div>
-            <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{% trans %} btn.search {% endtrans %}"></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_socio"  class='form-control' placeholder="{{ 'partner'|trans }}"></div>
+            <div class="col-xs-3 col-md-3"><input type="text"   id="flt_taller" class='form-control' placeholder="{{ 'workshop'|trans }}"></div>
+            <div class="col-xs-3 col-md-3"><input type="submit" id="btn_search" class="btn btn-primary"  value="{{ 'btn.search'|trans }}"></div>
         </div>
 
         <input type="hidden" id="id_socio"  name="id_socio"  value="{{ id_socio  }}">
@@ -40,10 +40,10 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} date        {% endtrans %}</th>
-                <th>{% trans %} system      {% endtrans %}</th>
-                <th>{% trans %} car         {% endtrans %}</th>
-                <th>{% trans %} assigned_to {% endtrans %}</th>
+                <th>{{ 'date'|trans }}</th>
+                <th>{{ 'system'|trans }}</th>
+                <th>{{ 'car'|trans }}</th>
+                <th>{{ 'assigned_to'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -63,7 +63,7 @@
     {% include 'UtilBundle:Pagination:pagination_incidence.html.twig' %}
 
     {% else %}
-        {% trans %} any.incidence {% endtrans %}
+        {{ 'any.incidence'|trans }}
     {% endif %}
 
 {% endblock %}

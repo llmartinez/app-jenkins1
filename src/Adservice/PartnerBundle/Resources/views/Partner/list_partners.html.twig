@@ -6,21 +6,23 @@
     <input type="hidden" id="route" name="route" value="{{ route }}">
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_partners {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_partners'|trans }}</li>
     </ol>
 
 <legend>
-    {% trans %} menu.list_partners {% endtrans %}
-    <a href="{{ path('partner_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.partner {% endtrans %} </a>
+    {{ 'menu.list_partners'|trans }}
+    <a href="{{ path('partner_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.partner'|trans }} </a>
 </legend>
 
-    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+    {% for flashMessage in app.session.flashbag.get('alert') %}
+        <p class="alert">{{ flashMessage }}</p>
+    {% endfor %}
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+    <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>
         <select id="flt_country" class='form-control'>
-                <option value="0">{% trans %} all {% endtrans %}</option>
+                <option value="0">{{ 'all'|trans }}</option>
             {% for country in countries %}
                 <option value="{{ country.id }}">{{ country | trans }}</option>
             {% endfor %}
@@ -28,7 +30,7 @@
     {% endif %}
 
     <div class="col-xs-2 col-md-2 form-group">
-        <label> {% trans %} category_service {% endtrans %} </label>
+        <label> {{ 'category_service'|trans }} </label>
         <select id="slct_catserv" class="form-control"> 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <option value="0">...</option>
@@ -41,16 +43,16 @@
 
     <div class="col-xs-4 col-md-4 form-group">
         <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
-            <label> {% trans %} find_by {% endtrans %} </label>
+            <label> {{ 'find_by'|trans }} </label>
             <select id="flt_search_term" name="flt_search_term" class='form-control'>
-                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
-                <option value="name" {% if term == 'name' %}selected{% endif %}>{% trans %} name  {% endtrans %}</option>
-                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
-                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{% trans %} cif   {% endtrans %}</option>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{{ 'tel'|trans }}</option>
+                <option value="name" {% if term == 'name' %}selected{% endif %}>{{ 'name'|trans }}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{{ 'email'|trans }}</option>
+                <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{{ 'cif'|trans }}</option>
              </select>
         </div>
         <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
-            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{{ 'value'|trans }}" value="{% if field != '0' %}{{ field }}{% endif %}">
         </div>
         <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
             <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
@@ -62,13 +64,13 @@
         <thead>
             <tr>
                 <th width="5%">#</th>
-                <th width="40%">{% trans %} name            {% endtrans %}</th>
-                <th width="20%">{% trans %}                 {% endtrans %}</th>
-                <th width="10%">{% trans %} phone_number_1  {% endtrans %}</th>
-                <th width="20%">{% trans %} email_1         {% endtrans %}</th>
-                {#<th>{% trans %} region          {% endtrans %}</th>
-                <th>{% trans %} city            {% endtrans %}</th>#}
-                <th width="5%">{% trans %} actions         {% endtrans %}</th>
+                <th width="40%">{{ 'name'|trans }}</th>
+                <th width="20%"></th>
+                <th width="10%">{{ 'phone_number_1'|trans }}</th>
+                <th width="20%">{{ 'email_1'|trans }}</th>
+                {#<th>{{ 'region'|trans }}</th>
+                <th>{{ 'city'|trans }}</th>#}
+                <th width="5%">{{ 'actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -77,13 +79,13 @@
                 <td>{{ partner.codePartner }}</td>
 {#                <td title="{{partner.name}}">{{ partner.name|length > 15 ? partner.name|slice(0, 15) ~ '...' : partner.name  }}</td>#}
                 <td title="{{partner.name}}">{{ partner.name  }}</td>
-                <td>{% if partner.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                <td>{% if partner.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}</td>
                 <td>{{ partner.phoneNumber1}}</td>
                 <td>{{ partner.email1  }}</td>
                {# <td>{{ partner.region|length > 15 ? partner.region|slice(0, 15) ~ '...' : partner.region  }}</td>
                 <td>{{ partner.city|length > 15 ? partner.city|slice(0, 15) ~ '...' : partner.city  }}</td>#}
                 <td>
-                    <a title="{% trans %} edit.partner {% endtrans %}" id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
+                    <a title="{{ 'edit.partner'|trans }}" id="edit{{ partner.name }}" href="{{ path("partner_edit", { 'id':partner.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
                 </td>
             </tr>
                 {% endfor %}
@@ -93,7 +95,7 @@
     {% include 'UtilBundle:Pagination:pagination_order.html.twig' %}
 
     {% else %}
-        <p class="alert"> {% trans %} any.partner {% endtrans %}</p>
+        <p class="alert"> {{ 'any.partner'|trans }}</p>
     {% endif %}
 
 {% endblock %}

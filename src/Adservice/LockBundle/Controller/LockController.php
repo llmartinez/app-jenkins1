@@ -9,8 +9,8 @@ class LockController extends Controller
 {
     public function listIncidencesAction($page=1, $id_taller='none', $id_socio='none') #, $country='none') #$texto=null, $brand=null, $model=null, $version=null)
     {
-        //$em         = $this->getDoctrine()->getEntityManager('default');
-        $em_lock    = $this->getDoctrine()->getEntityManager('em_lock');
+        //$em         = $this->getDoctrine()->getManager('default');
+        $em_lock    = $this->getDoctrine()->getManager('em_lock');
         $security   = $this->get('security.context');
 
         $pagination = new Pagination($page);
@@ -68,7 +68,7 @@ class LockController extends Controller
 
     public function showIncidenceAction($page=1, $id_incidence=null)
     {
-    	$em_lock   = $this->getDoctrine()->getEntityManager('em_lock');
+    	$em_lock   = $this->getDoctrine()->getManager('em_lock');
         $incidence = $em_lock->getRepository('LockBundle:LockIncidence')->find($id_incidence);
 
         return $this->render('LockBundle:Lock:show_incidence.html.twig', array('incidence' => $incidence));

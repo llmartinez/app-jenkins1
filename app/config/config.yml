@@ -1,20 +1,26 @@
 imports:
-    - { resource: parameters.ini }
+    - { resource: parameters.yml }
     - { resource: security.yml }
+
+parameters:
+    adservice.post.uploadpath: 'web/uploads/tickets'
 
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
     secret:          %secret%
-    charset:         UTF-8
+    #charset:         UTF-8
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
-    session:
-        default_locale: %locale%
-        auto_start:     true
+    default_locale: %locale%
+    trusted_proxies: ~
+    session: ~
+    fragments: ~
+    http_method_override: true
+
 
 # Twig Configuration
 twig:
@@ -108,23 +114,12 @@ swiftmailer:
     spool:
         type:                 file
         path:                 "%kernel.root_dir%/spool"
-jms_security_extra:
-    secure_controllers:  true
-    secure_all_services: false
 
 services:
-    twig.extension.text:
-        class: Twig_Extensions_Extension_Text
-        tags:
-            - { name: twig.extension }
-
-    twig.extension.debug:
-        class: Twig_Extensions_Extension_Debug
-        tags:
-            - { name: twig.extension }
-
-parameters:
-    adservice.post.uploadpath: 'web/uploads/tickets'
+    #twig.extension.text:
+    #    class: Twig_Extensions_Extension_Text
+    #    tags:
+    #        - { name: twig.extension }
 
 knp_snappy:
     pdf:

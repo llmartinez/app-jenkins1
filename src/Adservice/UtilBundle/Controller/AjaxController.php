@@ -29,7 +29,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function regionsFromCountryAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $id_country = $petition->request->get('id_country');
 
@@ -56,7 +56,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function citiesFromRegionAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $id_region = $petition->request->get('id_region');
 
@@ -85,7 +85,7 @@ class AjaxController extends Controller
      */
     public function partnersFromCatServAction() {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition   = $this->getRequest();
         $id_catserv = $petition->request->get('id_catserv');
 
@@ -110,7 +110,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function typologiesFromCatServAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition   = $this->getRequest();
         $id_catserv = $petition->request->get('id_catserv');
 
@@ -135,7 +135,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function diagMachinesFromCatServAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition   = $this->getRequest();
         $id_catserv = $petition->request->get('id_catserv');
 
@@ -168,7 +168,7 @@ class AjaxController extends Controller
      */
     public function codePartnerFromPartnerAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
@@ -184,7 +184,7 @@ class AjaxController extends Controller
 
     public function codeWorkshopFromPartnerAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $id_partner = $petition->request->get('id_partner');
@@ -198,7 +198,7 @@ class AjaxController extends Controller
 
     public function getIdFromCodePartnerAction($code)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $code = $petition->request->get('code');
 
@@ -217,7 +217,7 @@ class AjaxController extends Controller
 
     public function getCountryPartnerAction($id_partner)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
@@ -245,7 +245,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function shopsFromPartnerAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
@@ -277,7 +277,7 @@ class AjaxController extends Controller
      * @return json
      */
     public function workshopsFromPartnerAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $id_partner = $petition->request->get('id_partner');
 
@@ -309,7 +309,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carModelAction($id_brand, $filter='') {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $filter_value = $petition->request->get('filter_value');
         // $id_mts = '';
@@ -380,7 +380,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carVersionAction($id_model, $filter='') {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         $filter_value = $petition->request->get('filter_value');
         // $id_mts = '';
@@ -467,7 +467,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carDataAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $id_version    = $petition->request->get('id_version');
@@ -516,7 +516,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carByYearAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $year = $petition->request->get('year');
@@ -550,7 +550,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carByMotorAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $motor = $petition->request->get('motor');
@@ -603,7 +603,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carMotorsAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->getRepository('CarBundle:Motor')
                 ->createQueryBuilder('m')
                 ->select('m.name')
@@ -687,7 +687,7 @@ class AjaxController extends Controller
      */
     public function showTicketReadonlyAction($ticket) {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
@@ -702,7 +702,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ticketSystemAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $id_system = $petition->request->get('id_system');
@@ -734,7 +734,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function tblSimilarAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $id_model     = $petition->request->get('id_model');
@@ -778,7 +778,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function tblRepeatedAction() {
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $petition = $this->getRequest();
 
     //     $id_model     = $petition->request->get('id_model');
@@ -811,7 +811,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function fill_ticketsFromWorkshopAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
 
         $id_workshop = $petition->request->get('id_workshop');

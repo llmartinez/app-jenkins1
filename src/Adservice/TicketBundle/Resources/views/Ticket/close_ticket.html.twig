@@ -1,22 +1,22 @@
 
-    <legend>{% trans %} ticket_info {% endtrans %}</legend>
+    <legend>{{ 'ticket_info'|trans }}</legend>
 
-    <legend>{% trans %} description {% endtrans %}</legend>
+    <legend>{{ 'description'|trans }}</legend>
         <p> {{ ticket.description|nl2br }} </p>
 
         {% if is_granted('ROLE_ASSESSOR') %}
-        {% if ticket.assignedTo != "" %}    <p><b>{% trans %} assigned_to {% endtrans %}: </b> {{ ticket.assignedTo }} </p>{% endif %}
+        {% if ticket.assignedTo != "" %}    <p><b>{{ 'assigned_to'|trans }}: </b> {{ ticket.assignedTo }} </p>{% endif %}
 
             {% include 'TicketBundle:Ticket:edit_ticket_info.html.twig' %}
 
             <div class="col-xs-12 col-md-12 margined"> {% else %} <div> {% endif %}
 
-            <legend>{% trans %} solution {% endtrans %}</legend>
+            <legend>{{ 'solution'|trans }}</legend>
             {{ form_widget(form.solution, { 'attr': {'class': 'form-control'} }) }}
 
         {% if not is_granted('ROLE_ASSESSOR') %}
             <div id="sol_other">
-                <label> {% trans %} description {% endtrans %} </label>
+                <label> {{ 'description'|trans }} </label>
                  <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
                 <input type="text" id="sol_other_txt" name="sol_other_txt" class="form-control" value="{{message}}">
             </div>
@@ -25,4 +25,4 @@
 
         {{ form_rest(form) }}
 
-        <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {% trans %} btn.close {% endtrans %} </button>
+        <button class="btn btn-primary pull-right btn100" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_send.png') }}"> {{ 'btn.close'|trans }} </button>

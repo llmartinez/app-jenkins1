@@ -21,7 +21,7 @@ class OrderController extends Controller
         if ($security->isGranted('ROLE_COMMERCIAL') === false)
             return $this->redirect($this->generateUrl('user_login'));
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $security->getToken()->getUser();
         $role = $user->getRoles();
         $role = $role[0];

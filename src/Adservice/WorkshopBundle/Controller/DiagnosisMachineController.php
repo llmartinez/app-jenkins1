@@ -18,7 +18,7 @@ class DiagnosisMachineController extends Controller {
      * @throws AccessDeniedException
      */
     public function listDiagnosisMachineAction($page=1, $country='none', $catserv=0) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $security = $this->get('security.context');
         if (! $security->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
@@ -70,7 +70,7 @@ class DiagnosisMachineController extends Controller {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $diagnosis_machine = new DiagnosisMachine();
         $catserv = $security->getToken()->getUser()->getCategoryService();
         $petition = $this->getRequest();
@@ -94,7 +94,7 @@ class DiagnosisMachineController extends Controller {
         $form = $this->createForm(new DiagnosisMachineType(), $diagnosis_machine);
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
             if ($diagnosis_machine->getName() != '...'){
 
                 if ($form->isValid()) {
@@ -108,7 +108,7 @@ class DiagnosisMachineController extends Controller {
             }else
             {
                 $flash = $this->get('translator')->trans('error.bad_introduction.name');
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
         }
 

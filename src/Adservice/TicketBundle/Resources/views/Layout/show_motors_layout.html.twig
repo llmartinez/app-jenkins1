@@ -7,7 +7,7 @@
         <table id="tbl_motors_from_workshop" class="table table-hover table-list-search">
             <thead>
                 <tr>
-                    <th>{% trans %} motor {% endtrans %}</th>
+                    <th>{{ 'motor'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="ticketBody">
@@ -22,7 +22,7 @@
 
 
         {% else %}
-            <p class="alert padded" align="center">{% trans %} not_found {% endtrans %}</p>
+            <p class="alert padded" align="center">{{ 'not_found'|trans }}</p>
         {% endif %}
 
 {% endblock  %}

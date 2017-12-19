@@ -32,7 +32,7 @@ class ShopController extends Controller {
         if($user = $this->get('security.context')->getToken()->getUser()->getCategoryService() != null)
              $catser = $user = $this->get('security.context')->getToken()->getUser()->getCategoryService()->getId();
         else $catser = '0';
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
         if ($term != '0' and $field != '0'){
@@ -109,7 +109,7 @@ class ShopController extends Controller {
         if ($security->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em      = $this->getDoctrine()->getEntityManager();
+        $em      = $this->getDoctrine()->getManager();
         $shop    = new Shop();
         $request = $this->getRequest();
 
@@ -144,7 +144,7 @@ class ShopController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             
-            $form->bindRequest($request);
+            $form->bind($request);
           
             if ($form->isValid()) {
                 if($shop->getCategoryService() == null){
@@ -185,7 +185,7 @@ class ShopController extends Controller {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $petition = $this->getRequest();
         if ($security->isGranted('ROLE_SUPER_AD')) {
 
@@ -217,7 +217,7 @@ class ShopController extends Controller {
         $actual_region = $shop->getCity();
 
         if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+            $form->bind($petition);
 
             if ($form->isValid()) {
 
@@ -245,7 +245,7 @@ class ShopController extends Controller {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($shop);
         $em->flush();
 
