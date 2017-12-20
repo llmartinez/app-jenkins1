@@ -76,6 +76,15 @@ class Document {
     public function getName() {
         return $this->name;
     }
+
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath() {
+        return $this->path;
+    }
     /**
      * Set path
      *
