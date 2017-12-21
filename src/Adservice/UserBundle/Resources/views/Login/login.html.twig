@@ -12,7 +12,7 @@
 {#                    <form accept-charset="UTF-8" role="form">#}
                     <form id="login_form" name="login_form" action="{{ path('user_login_check') }}" method="post">
                         {% if error %}
-                            <div>{{ error.message|trans }}</div>
+                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
                         <fieldset>
                             <div class="form-group">

@@ -21,16 +21,16 @@ class PopupType extends AbstractType {
                 ->add('role', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\Role',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($role) {
                                                 return $er->createQueryBuilder('r')
                                                           ->where('r.name'.$role); }))
                 ->add('category_service', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => '',
+                  'choice_label' => 'category_service',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.category_service', 'ASC')
@@ -38,8 +38,8 @@ class PopupType extends AbstractType {
                 ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')

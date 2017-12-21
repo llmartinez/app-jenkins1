@@ -3,6 +3,7 @@ namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\UtilBundle\Entity\Pagination;
@@ -17,20 +18,20 @@ class DiagnosisMachineController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listDiagnosisMachineAction($page=1, $country='none', $catserv=0) {
+    public function listDiagnosisMachineAction(Request $request, $page=1, $country='none', $catserv=0) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_ADMIN')) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
 
-//        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+//        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 //            if ($country != 'none') $params[] = array('country', ' = '.$country);
 //            else                    $params[] = array();
 //        }
-//        else $params[] = array('country', ' = '.$this->get('security.context')->getToken()->getUser()->getCountry()->getId());
-        if(!$security->isGranted('ROLE_SUPER_ADMIN'))
-            $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+//        else $params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+            $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
         if ($catserv != 0) $params[] = array('category_service', ' = '.$catserv);
 
         if(!isset($params)) $params = array();
@@ -43,13 +44,13 @@ class DiagnosisMachineController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-//        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+//        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
 //        else $countries = array();
 
-       if($security->isGranted('ROLE_SUPER_ADMIN'))
+       if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
             $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         else
-            $catservices[] = $security->getToken()->getUser()->getCategoryService();
+            $catservices[] = $this->getUser()->getCategoryService();
 
         return $this->render('WorkshopBundle:DiagnosisMachine:list_diagnosis_machine.html.twig', array('diagnosis_machines' => $diagnosis_machines,
                                                                                                         'pagination'  => $pagination,
@@ -64,28 +65,27 @@ class DiagnosisMachineController extends Controller {
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editDiagnosisMachineAction($id) {
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_ADMIN')){
+    public function editDiagnosisMachineAction(Request $request, $id) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         $em = $this->getDoctrine()->getManager();
         $diagnosis_machine = new DiagnosisMachine();
-        $catserv = $security->getToken()->getUser()->getCategoryService();
-        $petition = $this->getRequest();
+        $catserv = $this->getUser()->getCategoryService();
         if ($id != null) {
                           $diagnosis_machine = $em->getRepository("WorkshopBundle:DiagnosisMachine")->find($id);
                           if (!$diagnosis_machine) throw $this->createNotFoundException('Maquina no encontrado en la BBDD');
         }
         
         // Creamos variables de sesion para fitlrar los resultados del formulario
-//        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 //
 //            $_SESSION['id_country'] = ' != 0 ';
 //
-//        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-//            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+//        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+//            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
 //
 //        }else {
 //            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
@@ -93,8 +93,8 @@ class DiagnosisMachineController extends Controller {
 
         $form = $this->createForm(new DiagnosisMachineType(), $diagnosis_machine);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bind($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
             if ($diagnosis_machine->getName() != '...'){
 
                 if ($form->isValid()) {

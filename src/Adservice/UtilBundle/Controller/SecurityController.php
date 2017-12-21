@@ -18,8 +18,8 @@ class SecurityController extends Controller{
      * @throws AccessDeniedException
      * @return url
      */
-    public function autologinAction(){
-        $request = $this->getRequest();
+    public function autologinAction(Request $request){
+
         $token = $request->get("token");
 
         ///////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ class SecurityController extends Controller{
                 if($user != null) {
                   
     				$key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
-    				$this->get("security.context")->setToken($key);
+    				$this->get("security.token_storage")->setToken($key);
 
     				// Fire the login event
     				$event = new InteractiveLoginEvent($request, $key);
@@ -121,8 +121,8 @@ class SecurityController extends Controller{
      * @throws AccessDeniedException
      * @return url
      */
-    public function autologinAccessAction(){
-        $request = $this->getRequest();
+    public function autologinAccessAction(Request $request){
+
         $login = $request->get("user");
         $password = $request->get("password");
         $_SESSION['autologin'] = false;
@@ -175,7 +175,7 @@ class SecurityController extends Controller{
                     if($user->getPassword() == $pass) {
 
                         $key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
-                        $this->get("security.context")->setToken($key);
+                        $this->get("security.token_storage")->setToken($key);
 
                         // Fire the login event
                         $event = new InteractiveLoginEvent($request, $key);

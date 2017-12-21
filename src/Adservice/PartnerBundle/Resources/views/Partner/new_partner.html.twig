@@ -2,8 +2,8 @@
 
 {% block body %}
     
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
 
@@ -21,7 +21,7 @@
 
     <legend>{{ 'new.partner'|trans }}</legend>
 
-    <form action="{{ path('partner_new') }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path('partner_new')}) }}
         <div class="col-xs-12 col-md-12 form-group">
             {% if id_catserv == 3 %}
                 <div class="col-xs-4 col-md-4 form-group">
@@ -98,7 +98,7 @@
                 <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.create'|trans }}</button>
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}
 

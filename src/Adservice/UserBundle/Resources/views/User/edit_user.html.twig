@@ -1,8 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
     {% if id_catserv ==  3 %}
@@ -32,7 +32,7 @@
         {% endfor %}
     </div>
 
-    <form action="{{ path("user_edit", { 'id':user.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("user_edit", { 'id':user.id })}) }}
         <div class="col-xs-12 col-md-12 form-group">
 
              <div class="col-xs-2 col-md-2 form-group">
@@ -136,7 +136,7 @@
             {{ form_rest(form) }}
         </div>
             <button class="btn btn-primary pull-right" id="btn_save" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.edit'|trans }}</button>
-    </form>
+    {{ form_end(form) }}
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

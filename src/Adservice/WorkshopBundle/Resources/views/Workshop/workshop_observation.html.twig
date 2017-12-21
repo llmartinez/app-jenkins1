@@ -15,8 +15,7 @@
 
 {% block content %}
 
-    <form action="{{ path("workshop_observation", { 'id':workshop.id, 'id_ticket':id_ticket }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("workshop_observation", { 'id':workshop.id, 'id_ticket':id_ticket })}) }}
         <div class="container">
 
         <legend>{{ 'workshop_observation'|trans }}</legend>
@@ -32,6 +31,6 @@
                 {{ form_rest(form) }}
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

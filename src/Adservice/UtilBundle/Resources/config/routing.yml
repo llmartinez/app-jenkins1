@@ -3,31 +3,31 @@
 #############################
 
 changeLanguage:
-    pattern: /lang/{lang}/
+    path: /lang/{lang}/
     defaults: { _controller: UtilBundle:Language:changeLanguage }
 
 # help:
-#     pattern: /help/
+#     path: /help/
 #     defaults: { _controller: UtilBundle:Default:help }
 
 # ayuda:
-#     pattern: /ayuda/
+#     path: /ayuda/
 #     defaults: { _controller: UtilBundle:Default:help }
 
 accept_privacy:
-    pattern: /acceptPrivacy/
+    path: /acceptPrivacy/
     defaults: { _controller: UserBundle:User:acceptPrivacy }
 
 privacy:
-    pattern: /privacy/
+    path: /privacy/
     defaults: { _controller: UtilBundle:Default:privacy }
 
 autologin:
-    pattern: /autologin/
+    path: /autologin/
     defaults: { _controller: UtilBundle:Security:autologin }
 
 autologinaccess:
-    pattern: /autologinaccess/
+    path: /autologinaccess/
     defaults: { _controller: UtilBundle:Security:autologinAccess }
 
 #############################
@@ -35,7 +35,7 @@ autologinaccess:
 #############################
 
 upload:
-    pattern: /upload
+    path: /upload
     defaults: { _controller: UtilBundle:Document:upload }
 
 ###########################
@@ -43,145 +43,145 @@ upload:
 ###########################
 
 regions_from_country:
-    pattern: /regionsFromCountry
+    path: /regionsFromCountry
     defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
     options:
         expose: true
 
 cities_from_region:
-    pattern: /citiesFromRegion
+    path: /citiesFromRegion
     defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
     options:
         expose: true
 
 partners_from_catserv:
-    pattern: /partnersFromCatServ
+    path: /partnersFromCatServ
     defaults: { _controller: UtilBundle:Ajax:partnersFromCatServ }
     options:
         expose: true
 
 typologies_from_catserv:
-    pattern: /typologiesFromCatServ
+    path: /typologiesFromCatServ
     defaults: { _controller: UtilBundle:Ajax:typologiesFromCatServ }
     options:
         expose: true
 
 diag_machines_from_catserv:
-    pattern: /diagMachinesFromCatServ
+    path: /diagMachinesFromCatServ
     defaults: { _controller: UtilBundle:Ajax:diagMachinesFromCatServ }
     options:
         expose: true
 
 shops_from_partner:
-    pattern: /shopsFromPartner
+    path: /shopsFromPartner
     defaults: { _controller: UtilBundle:Ajax:shopsFromPartner }
     options:
         expose: true
 
 workshops_from_partner:
-    pattern: /workshopsFromPartner
+    path: /workshopsFromPartner
     defaults: { _controller: UtilBundle:Ajax:workshopsFromPartner }
     options:
         expose: true
 
 get_code_partner:
-    pattern: /codePartnerFromPartner
+    path: /codePartnerFromPartner
     defaults: { _controller: UtilBundle:Ajax:codePartnerFromPartner }
     options:
         expose: true
 
 get_code_workshop:
-    pattern: /codeWorkshopFromPartner
+    path: /codeWorkshopFromPartner
     defaults: { _controller: UtilBundle:Ajax:codeWorkshopFromPartner }
     options:
         expose: true
 
 get_id_from_code_partner:
-    pattern: /getIdFromCodePartner/{code}
+    path: /getIdFromCodePartner/{code}
     defaults: { _controller: UtilBundle:Ajax:getIdFromCodePartner, code: 0 }
     options:
         expose: true
 
 get_country_partner:
-    pattern: /getCountryPartner/{id_partner}
+    path: /getCountryPartner/{id_partner}
     defaults: { _controller: UtilBundle:Ajax:getCountryPartner, id_partner: 0 }
     options:
         expose: true
 
 get_car_from_plate_number:
-    pattern: /getCarFromPlateNumber/{idPlateNumber}
+    path: /getCarFromPlateNumber/{idPlateNumber}
     defaults: {_controller: UtilBundle:Ajax:getCarFromPlateNumber, idPlateNumber: 0}
     options:
         expose: true
 
 get_car_from_vin:
-    pattern: /getCarFromVin/{vin}
+    path: /getCarFromVin/{vin}
     defaults: {_controller: UtilBundle:Ajax:getCarFromVin, vin: 0}
     options:
         expose: true
 
 car_model:
-    pattern: /carModel/{id_brand}/{filter}
+    path: /carModel/{id_brand}/{filter}
     defaults: { _controller: UtilBundle:Ajax:carModel, id_brand: 0, filter: ''}
     options:
         expose: true
 
 car_version:
-    pattern: /carVersion/{id_model}/{filter}
+    path: /carVersion/{id_model}/{filter}
     defaults: { _controller: UtilBundle:Ajax:carVersion, id_model: 0, filter: ''}
     options:
         expose: true
 
 car_data:
-    pattern: /carData
+    path: /carData
     defaults: { _controller: UtilBundle:Ajax:carData }
     options:
         expose: true
 
 car_by_year:
-    pattern: /carByYear
+    path: /carByYear
     defaults: { _controller: UtilBundle:Ajax:carByYear }
     options:
         expose: true
 
 car_by_motor:
-    pattern: /carByMotor
+    path: /carByMotor
     defaults: { _controller: UtilBundle:Ajax:carByMotor }
     options:
         expose: true
 
 car_motors:
-    pattern: /carMotors
+    path: /carMotors
     defaults: { _controller: UtilBundle:Ajax:carMotors }
     options:
         expose: true
 
 showTicketReadonly:
-    pattern:  /show_ticket_readonly/{id}
+    path:  /show_ticket_readonly/{id}
     defaults: { _controller: UtilBundle:Ajax:showTicketReadonly }
     options:
         expose: true
 
 ticket_system:
-    pattern: /ticketSystem
+    path: /ticketSystem
     defaults: { _controller: UtilBundle:Ajax:ticketSystem }
     options:
         expose: true
 
 tickets_from_workshop:
-    pattern: /ticket/tickets_from_workshop
+    path: /ticket/tickets_from_workshop
     defaults: { _controller: UtilBundle:Ajax:fill_ticketsFromWorkshop }
     options:
         expose: true
 
 tbl_similar:
-    pattern: /tbl_similar
+    path: /tbl_similar
     defaults: { _controller: UtilBundle:Ajax:tblSimilar }
     options:
         expose: true
 
 tbl_repeated:
-    pattern: /tbl_repeated
+    path: /tbl_repeated
     defaults: { _controller: UtilBundle:Ajax:tblRepeated }
     options:
         expose: true

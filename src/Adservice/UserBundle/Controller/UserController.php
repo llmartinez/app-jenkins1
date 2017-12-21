@@ -7,8 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -37,18 +37,17 @@ class UserController extends Controller {
     /**
      * Welcome function, redirige al html del menu de usuario
      */
-    public function indexAction() {
-        //  $id_logged_user = $this->get('security.context')->getToken()->getUser()->getId();
-        //  $session = $this->getRequest()->getSession();
+    public function indexAction(Request $request) {
+        //  $id_logged_user = $this->getUser()->getId();
+        //  $session = $request->getSession();
         //  $session->set('id_logged_user', $id_logged_user);
-        $request  = $this->getRequest();
         $locale = $request->getLocale();
         $currentLocale = $request->getLocale();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        if(!$user) return $this->redirect($this->generateUrl('user_login'));
 
-        if ($this->get('security.context')->isGranted('ROLE_COMMERCIAL')) $length = $this->getPendingOrders();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL')) $length = $this->getPendingOrders();
         else $length = 0;
         // Se pondrá por defecto el idioma del usuario en el primer login
 
@@ -101,9 +100,9 @@ class UserController extends Controller {
 
 
             if (isset($length) and $length != 0) $currentPath = $this->generateUrl('user_index', array('length' => $length));
-            elseif (!$this->get('security.context')->isGranted('ROLE_ADMIN') AND !$this->get('security.context')->isGranted('ROLE_COMMERCIAL')){
+            elseif (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND !$this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL')){
 
-                if ($this->get('security.context')->isGranted('ROLE_ASSESSOR')) {
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
 
                     if($user->getCountryService() != null)
                         $country = $user->getCountryService()->getId();
@@ -114,7 +113,7 @@ class UserController extends Controller {
                                                                           'country'  => $country,
                                                                           'option'   => 'assessor_pending'));
                 }
-                elseif($this->get('security.context')->isGranted('ROLE_USER')){
+                elseif($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
 
                     $country = $user->getCountry()->getId();
 
@@ -144,7 +143,7 @@ class UserController extends Controller {
             $_SESSION['lang'] = $lang;
 
             return $this->redirect($currentPath);
-        }elseif($this->get('security.context')->isGranted('ROLE_USER')){
+        }elseif($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
 
             $country= $user->getCountry()->getId();
 
@@ -189,10 +188,10 @@ class UserController extends Controller {
     /**
      * Obtener los datos del usuario logueado para verlos
      */
-    public function profileAction() {
+    public function profileAction(Request $request) {
         $em             = $this->getDoctrine()->getManager();
-        $logged_user = $this->get('security.context')->getToken()->getUser();
-        if($logged_user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        $logged_user = $this->getUser();
+        if(!$logged_user) return $this->redirect($this->generateUrl('user_login'));
         $user           = $em->getRepository('UserBundle:User')->find($logged_user->getId());
 
         if (!$user)
@@ -203,17 +202,17 @@ class UserController extends Controller {
     /**
      * Muestra una pantalla para elegir el tipo de user
      */
-    public function selectNewUserAction() {
+    public function selectNewUserAction(Request $request) {
         return $this->render('UserBundle:User:selectUserType.html.twig');
     }
 
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
+    public function userListAction(Request $request, $page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getManager();
@@ -229,11 +228,11 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if($catserv != 0){
                 $params[] = array('category_service', ' = '.$catserv);
             }
-        }else $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+        }else $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
 
          if($country != 0){
                 $params[] = array('country', ' = '.$country);
@@ -313,10 +312,10 @@ class UserController extends Controller {
     /**
      * Recupera los usuarios del socio segun el usuario logeado y tambien recupera todos los usuarios de los talleres del socio
      */
-    public function userPartnerListAction($page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
+    public function userPartnerListAction(Request $request, $page=1, $country=0, $catserv=0, $option='0', $term='0', $field='0') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getManager();
@@ -328,8 +327,8 @@ class UserController extends Controller {
 
         $pagination = new Pagination($page);
 
-        if($security->getToken()->getUser()->getCategoryService() != null)
-        $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+        if($this->getUser()->getCategoryService() != null)
+        $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
 
         if($country != 0){
             $params[] = array('country', ' = '.$country);
@@ -349,9 +348,9 @@ class UserController extends Controller {
         if(!isset($params)) $params[] = array();
 
         $roles_allowed = "'0'";
-        if($security->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
-        if($security->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
-        if($security->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
 
         if($option == null or $option == 'all' or $option == 'none' or $option == '0'){
                 $role_id  = 'none';
@@ -386,9 +385,9 @@ class UserController extends Controller {
         $roles = $em->getRepository("UserBundle:Role")->findAll();
 
         $roles_allowed = "'0'";
-        if($security->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
-        if($security->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
-        if($security->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) $roles_allowed .= ", 'ROLE_SUPER_AD' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) $roles_allowed .= ", 'ROLE_AD' ";
+        if($this->get('security.authorization_checker')->isGranted('ROLE_AD')) $roles_allowed .= ", 'ROLE_COMMERCIAL' ";
 
         $roles = $em->createQuery("SELECT r FROM UserBundle:Role r WHERE r.name IN (".$roles_allowed.")")->getResult();
 
@@ -418,61 +417,61 @@ class UserController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function newUserAction($type) {
+    public function newUserAction(Request $request, $type) {
 
-        $security = $this->get('security.context');
-        $user_logged = $this->get('security.context')->getToken()->getUser();
-        if($user_logged == 'anon.') return $this->redirect($this->generateUrl('user_login'));
-        if($security->getToken()->getUser()) {
+
+        $user_logged = $this->getUser();
+        if(!$user_logged) return $this->redirect($this->generateUrl('user_login'));
+        if($this->getUser()) {
 
         }
-        $catserv = $security->getToken()->getUser()->getCategoryService();
-        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
+        $catserv = $this->getUser()->getCategoryService();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getManager();
         $user = new User();
 
-        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
-            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') and !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($this->getUser()->getPartner()->getId());
         }
-        elseif (!$security->isGranted('ROLE_SUPER_ADMIN'))
+        elseif (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
         {
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $this->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
         else $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' != 0 ';
-            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
+            $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
 
-        }elseif ($security->isGranted('ROLE_ADMIN')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
-            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD') or $security->isGranted('ROLE_TOP_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') or $this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
             
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
-            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partners->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
-            $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
+            $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
         }
 
 
@@ -500,9 +499,9 @@ class UserController extends Controller {
             $form = $this->createForm(new UserAssessorType(), $user);
         }
 
-        $request = $this->getRequest();
 
-        $form->bind($request);
+
+        $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST') {
             if($user->getRegion() == null){
@@ -530,8 +529,8 @@ class UserController extends Controller {
             }
 
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $user->setCreatedBy($security->getToken()->getUser());
-            if($user->getCategoryService() == null && !$security->isGranted('ROLE_SUPER_ADMIN')){
+            $user->setCreatedBy($this->getUser());
+            if($user->getCategoryService() == null && !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
                 $user->setCategoryService($catserv);
             }
 
@@ -555,7 +554,7 @@ class UserController extends Controller {
             $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
             $this->get('session')->getFlashBag()->add('alert', $flash);
 
-            if ($security->isGranted('ROLE_ADMIN')) return $this->redirect($this->generateUrl('user_list'));
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) return $this->redirect($this->generateUrl('user_list'));
             else                                    return $this->redirect($this->generateUrl('user_partner_list'));
         }
 
@@ -576,22 +575,21 @@ class UserController extends Controller {
      * @Route("/user/edit/{id}")
      * @ParamConverter("user", class="UserBundle:User")
      */
-    public function editUserAction($user) {
+    public function editUserAction(Request $request, $user) {
 
-        $security = $this->get('security.context');
-        if (($security->isGranted('ROLE_AD') === false)
-        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
+
+        if (($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
+        and (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-        $user_logged = $this->get('security.context')->getToken()->getUser();
+        $user_logged = $this->getUser();
         if ($user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
         $em = $this->getDoctrine()->getManager();
         $trans = $this->get('translator');
 
-        $petition = $this->getRequest();
-        if($petition->request->has('assign_all')){
+        if($request->request->has('assign_all')){
             $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
             $result= $em->createQuery($sql)->getResult();
             $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
@@ -603,12 +601,12 @@ class UserController extends Controller {
         $original_password = $user->getPassword();
         
         
-        if ($security->isGranted('ROLE_AD') and !$security->isGranted('ROLE_SUPER_AD')) {
-            $partners = $em->getRepository("PartnerBundle:Partner")->find($security->getToken()->getUser()->getPartner()->getId());
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') and !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $partners = $em->getRepository("PartnerBundle:Partner")->find($this->getUser()->getPartner()->getId());
         }
-        elseif (!$security->isGranted('ROLE_SUPER_ADMIN')) {
+        elseif (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $security->getToken()->getUser()->getCategoryService()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('category_service' => $this->getUser()->getCategoryService()->getId(),
                                                                                   'active'  => '1'));
         }
         else $partners = '0';
@@ -618,7 +616,7 @@ class UserController extends Controller {
     	$role = $role[0];
     	$role = $role->getRole();
         $partner_id = null;
-        if ($security->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             if ($role == "ROLE_USER")
                 $partner_id = $user->getWorkshop()->getPartner()->getId();
             elseif($role == "ROLE_AD")
@@ -630,7 +628,7 @@ class UserController extends Controller {
 
         $user_role_id = 0;
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             if ($role == "ROLE_USER") {
 
@@ -651,7 +649,7 @@ class UserController extends Controller {
                 $user_role_id = 2;
             }
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -662,7 +660,7 @@ class UserController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partners->getId();
         }
 
-        $_SESSION['role'] = $security->getToken()->getUser()->getRoles()[0]->getName();
+        $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
         elseif ($role == "ROLE_ASSESSOR"){
@@ -681,9 +679,9 @@ class UserController extends Controller {
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
 
-        if ($petition->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
 
-            if($user->getCategoryService() != null and $petition->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
+            if($user->getCategoryService() != null and $request->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
                 $flash =  $trans->trans('error.bad_introduction').' ('.$trans->trans('category_service').')';
                 $this->get('session')->getFlashBag()->add('error', $flash);
             }
@@ -691,7 +689,7 @@ class UserController extends Controller {
 
                 if($user->getShop() != null) $old_shop = $user->getShop()->getId();
 
-                $form->bind($petition);
+                $form->handleRequest($request);
 
                 // SLUGIFY USERNAME TO MAKE IT UNREPEATED
                 $name = $user->getUsername();
@@ -761,7 +759,7 @@ class UserController extends Controller {
                 $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
                 $this->get('session')->getFlashBag()->add('alert', $flash);
 
-                if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                     return $this->redirect($this->generateUrl('user_list'));
                 }else{
                     return $this->redirect($this->generateUrl('user_partner_list'));
@@ -784,10 +782,10 @@ class UserController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function disableUserAction($id) {
-        $security = $this->get('security.context');
-        $user_logged = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
+    public function disableUserAction(Request $request, $id) {
+
+        $user_logged = $this->getUser();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
         $em   = $this->getDoctrine()->getManager();
@@ -796,7 +794,7 @@ class UserController extends Controller {
         $em->persist($user);
         $em->flush();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirect($this->generateUrl('user_list'));
         }else{
             return $this->redirect($this->generateUrl('user_partner_list'));
@@ -808,10 +806,10 @@ class UserController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteUserAction($id) {
-        $security = $this->get('security.context');
-        $user_logged = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
+    public function deleteUserAction(Request $request, $id) {
+
+        $user_logged = $this->getUser();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false OR $user_logged->getAllowCreate() == false) {
             throw new AccessDeniedException();
         }
         $em   = $this->getDoctrine()->getManager();
@@ -819,7 +817,7 @@ class UserController extends Controller {
         $em->remove($user);
         $em->flush();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirect($this->generateUrl('user_list'));
         }else{
             return $this->redirect($this->generateUrl('user_partner_list'));
@@ -832,7 +830,7 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      * @return RedirectResponse
      */
-    public function generatePasswordAction($id, $user)
+    public function generatePasswordAction(Request $request, $id, $user)
     {
         $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository("UserBundle:User")->find($id);
@@ -852,31 +850,31 @@ class UserController extends Controller {
      * @ParamConverter("user", class="UserBundle:User")
      * @return Response
      */
-    public function changePasswordAction($user)
+    public function changePasswordAction(Request $request, $user)
     {
         $em   = $this->getDoctrine()->getManager();
 
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-        $pass = $encoder->encodePassword($this->getRequest()->get('old_pass'), $user->getSalt());
+        $pass = $encoder->encodePassword($request->get('old_pass'), $user->getSalt());
         $forbiddenChars = array("\"", "'");
         $response = false;
 
         if ($pass == $user->getPassword())
         {
-            if ($this->getRequest()->get('new_pass') == $this->getRequest()->get('rep_pass'))
+            if ($request->get('new_pass') == $request->get('rep_pass'))
             {
-                if (strlen($this->getRequest()->get('new_pass')) >= 8)
+                if (strlen($request->get('new_pass')) >= 8)
                 {
                     $valid = true;
 
                     foreach ($forbiddenChars as $char) {
-                        if (strpos($this->getRequest()->get('new_pass'), $char) !== false) {
+                        if (strpos($request->get('new_pass'), $char) !== false) {
                             $valid = false;
                         }
                     }
 
                     if ($valid == true) {
-                        $response = $this->savePassword($em, $user, $this->getRequest()->get('new_pass'));
+                        $response = $this->savePassword($em, $user, $request->get('new_pass'));
                     } else {
                         $flash =  $this->get('translator')
                                 ->trans('error.forbidden_password').' ('. implode(",", $forbiddenChars).')';
@@ -910,7 +908,7 @@ class UserController extends Controller {
 
         $user->setPassword($password);
         $this->saveUser($em, $user);
-        $request = $this->getRequest();
+
 
         $mail = $user->getEmail1();
         $pos = strpos($mail, '@');
@@ -954,12 +952,12 @@ class UserController extends Controller {
      */
     public function getPendingOrders(){
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_COMMERCIAL') === false)
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getManager();
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         $role = $user->getRoles();
         $role = $role[0];
         $role = $role->getRole();
@@ -1055,15 +1053,15 @@ class UserController extends Controller {
             $user->setSalt($salt);
         }
         $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
+        $user->setModifiedBy($this->getUser());
 
         $em->persist($user);
         $em->flush();
     }
 
-    public function acceptPrivacyAction() {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $request = $this->getRequest();
+    public function acceptPrivacyAction(Request $request) {
+        $user = $this->getUser();
+
         if ($request->getMethod() == 'POST') {
             if ($request->request->has('Accept')) {
                 $em = $this->getDoctrine()->getManager();

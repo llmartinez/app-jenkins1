@@ -1,7 +1,7 @@
 
 	{# DATOS POST #}
 	<legend
-        {% if post.createdBy == app.security.getToken().getUser() %}
+        {% if post.createdBy == app.user %}
                     style="background: azure;">
                     {% if post.isPhoneCall == 1 %}
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
@@ -29,7 +29,7 @@
                     {% endif %}
         {% endif %}
 
-         {% if (is_granted('ROLE_ADMIN')) or post.id == last_post.id and post.createdBy == app.security.getToken().getUser() and ticket.status != 'closed' %}
+         {% if (is_granted('ROLE_ADMIN')) or post.id == last_post.id and post.createdBy == app.user and ticket.status != 'closed' %}
             <a href="{{ path("post_edit", { 'id': post.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
         {% endif %}
         <a style="color:gray; float:right; text-decoration:none;"> {{ post.created_at | date("H:i (d/m/y) ") }} </a>

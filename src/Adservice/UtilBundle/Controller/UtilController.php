@@ -4,6 +4,7 @@ namespace Adservice\UtilBundle\Controller;
 
 use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Entity\Region;
 use Adservice\OrderBundle\Entity\WorkshopOrder;

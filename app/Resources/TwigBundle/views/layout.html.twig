@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% if app.security.getToken().getUser() is defined and app.security.getToken().getUser() == 'anon.' %}
+{% if app.user is not defined %}
     <script>window.open('{{ path("_login") }}', '_self'); </script>
 {% else %}
     <head>
@@ -30,8 +30,8 @@
                                         {% set url_logo = route_logo ~ '.png' %}
                                         <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
 
-                                        {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
-                                            {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                                        {% if app.user != "anon." and app.user.getCategoryService() != null %}
+                                            {% set url_logo_catserv = route_logo ~ '_' ~ app.user.getCategoryService().getSlug() ~ '.png' %}
                                             <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
                                         {% endif %}
                                     </td>

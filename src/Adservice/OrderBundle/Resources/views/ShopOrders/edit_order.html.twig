@@ -9,8 +9,7 @@
 
     <h1>{{ 'edit.order.shop'|trans }} <b>{{ shop.id }}</b></h1>
 
-    <form action="#" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': '#'}) }}
         <div class="col-xs-12 col-md-12 form-group">
 
             <div class="col-xs-12 col-md-12 form-group">
@@ -64,7 +63,7 @@
             </div>
         </div>
 
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}
 

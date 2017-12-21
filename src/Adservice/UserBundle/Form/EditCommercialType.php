@@ -29,7 +29,7 @@ class EditCommercialType extends AbstractType {
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
+                  'choice_label' => 'name',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -42,7 +42,7 @@ class EditCommercialType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
+                  'choice_label' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -67,8 +67,8 @@ class EditCommercialType extends AbstractType {
           $builder->add('shop', 'entity', array(
                     'required' => false,
                     'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                    'property' => 'name',
-                    'empty_value' => false,
+                    'choice_label' => 'name',
+                    'placeholder' => false,
                     'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                   return $er->createQueryBuilder('s')
                                                             ->orderBy('s.name', 'ASC')

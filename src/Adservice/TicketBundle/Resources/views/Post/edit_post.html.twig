@@ -8,8 +8,7 @@
         <li class="active">{{ 'post'|trans }}</li>
     </ol>
 
-    <form action="{{ path("post_edit", { 'id': post.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("post_edit", { 'id': post.id })}) }}
         <div class="container">
             <legend>{{ 'post'|trans }}</legend>
 
@@ -26,8 +25,10 @@
                 </div>
             {{ form_rest(form) }}
 
-            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}
+            </button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

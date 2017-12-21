@@ -10,7 +10,7 @@
     </ol>
 
     <legend>{{ 'menu.list_users'|trans }}
-        {% if app.security.getToken().getUser().getAllowCreate() == true %}
+        {% if app.user.getAllowCreate() == true %}
             <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.user'|trans }}</a>
         {% endif %}
     </legend>
@@ -63,7 +63,7 @@
                 <th></th>
                 <th>{{ 'phone_number_1'|trans }}</th>
                 <th>{{ 'email_1'|trans }}</th>
-                {% if app.security.getToken().getUser().getAllowCreate() == true %}
+                {% if app.user.getAllowCreate() == true %}
                     <th>{{ 'allow_list'|trans }}</th>
                     <th>{% if is_granted('ROLE_SUPER_AD') %}{{ 'allow_create'|trans }}{% endif %}</th>
                     <th>{{ 'allow_order'|trans }}</th>

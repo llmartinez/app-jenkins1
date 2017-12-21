@@ -10,7 +10,7 @@
 
     <legend>{{ 'edit.popup'|trans }}</legend>
 
-    <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("popup_edit")}) }}
         <div class="col-xs-3 col-md-3 form-group">
             <label>{{ 'name'|trans }}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
         </div>
@@ -39,7 +39,7 @@
         <p>
             <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </p>
-    </form>
+    {{ form_end(form) }}
     <script>
         $(document).ready(function() {
             $('select[id*=_at_date_').addClass('btn-date');

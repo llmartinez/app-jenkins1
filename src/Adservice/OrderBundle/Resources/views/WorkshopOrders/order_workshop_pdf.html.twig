@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-           {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% if app.user.getCategoryService().getId() is defined %}
+           {% set id_catserv = app.user.getCategoryService().getId() %}
 {% else %} {% set id_catserv = '0' %}
 {% endif %}
 
@@ -15,7 +15,7 @@
         <h1 style="color:#fff;background-color:#428bca;padding: 10px 15px;">
             <a style="width: 35%;">{{ 'workshop'|trans }} {{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</a>
 
-            {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
+            {% if app.user and workshop.categoryService != null %}
                 {% set url_logo_catserv = route_logo ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
                 <img src="{{ asset(url_logo_catserv) }}" style="height: 40px;float:right;">
             {% endif %}

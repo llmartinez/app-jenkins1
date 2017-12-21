@@ -25,7 +25,7 @@
         {% endif %}
 
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
     {% endif %}
 
     {# BANNER ALERTA - Mantenimiento #}
@@ -34,7 +34,7 @@
     {# Mostrar un acceso a VTS de clientes de Phone Eina #}
     {% if user_catserv is defined and user_catserv != '' %}
         <div id="ged_btns_min">
-            {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
+            {% set user_catserv = app.user.getCategoryService() %}
             {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
             {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
 
@@ -58,7 +58,7 @@
         {% if workshop is defined and workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
         {% else %}                                          {% include 'TicketBundle:Ticket:history_ticket.html.twig' %}  {% endif %}
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
         {% include 'TicketBundle:Ticket:list_ticket.html.twig' %}
     {% endif %}
 

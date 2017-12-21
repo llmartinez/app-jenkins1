@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% set id_catserv = app.user.getCategoryService().getId() %}
 
     <input type="hidden" id="route" value="workshopOrder_listWorkshops">
     <ol class="breadcrumb">
@@ -11,7 +11,7 @@
     </ol>
 
 <legend> {{ 'menu.list_workshops'|trans }}
-    {% if app.security.getToken().getUser().getAllowOrder() == true %}
+    {% if app.user.getAllowOrder() == true %}
         <a class="btn btn-primary" href="{{ path("workshopOrder_new") }}">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/workshop_new.png') }}">
         {{ 'menu.new_workshop_order'|trans }}</a>
@@ -76,7 +76,7 @@
                 {% endif %}
                 {# <th>{{ 'active'|trans }}</th> #}
                 {# <th>{{ 'numTickets'|trans }}</th> #}
-                {% if app.security.getToken().getUser().getAllowOrder() == true and is_granted('ROLE_AD') %}
+                {% if app.user.getAllowOrder() == true and is_granted('ROLE_AD') %}
                 <th>{{ 'actions'|trans }}</th>
                 {% endif %}
             </tr>
@@ -98,7 +98,7 @@
                 {% endif %}
                 {# <td>{{ workshop.active }}       </td> #}
                 {# <td>{{ numTickets[workshop.id]}}</td> #}
-                {% if app.security.getToken().getUser().getAllowOrder() == true %}
+                {% if app.user.getAllowOrder() == true %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
                             <a href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>

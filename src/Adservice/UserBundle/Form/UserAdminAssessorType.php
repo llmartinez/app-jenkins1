@@ -29,8 +29,8 @@ class UserAdminAssessorType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -40,8 +40,8 @@ class UserAdminAssessorType extends AbstractType {
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => '',
+                  'choice_label' => 'category_service',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
@@ -59,9 +59,9 @@ class UserAdminAssessorType extends AbstractType {
             ->add('email_2','email', array('required' => false))
             ->add('language','entity', array(
                   'class' => 'Adservice\UtilBundle\Entity\Language',
-                  'property' => 'language',
+                  'choice_label' => 'language',
                   'required' => true,
-                  'empty_value' => ''))
+                  'placeholder' => ''))
         ;
 
         return $builder;

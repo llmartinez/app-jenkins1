@@ -33,7 +33,7 @@
 
       {% else %}
 
-          {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+          {% set workshop = app.user.getWorkshop() %}
           {% include 'TicketBundle:Workshop:show_workshop.html.twig' %}
 
       {% endif %}
@@ -43,7 +43,7 @@
 </div>
 <div class="content">
 
-      {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
+      {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.user.getWorkshop() %} {% endif %}
 
       {% if workshop.id != "" %}
           <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">

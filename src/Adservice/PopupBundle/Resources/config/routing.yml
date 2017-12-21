@@ -2,28 +2,28 @@
 #   APDO. RUTAS GENÉRICAS   #
 #############################
 popup_list:
-    pattern: /list/{page}/{category_service}/{country}
+    path: /list/{page}/{category_service}/{country}
     defaults: { _controller: PopupBundle:Popup:popupList, page: 1 , category_service: 'none' , country: 'none'  }
     options:
         expose: true
 
 popup_edit:
-    pattern: /edit/{id}
+    path: /edit/{id}
     defaults: { _controller: PopupBundle:Popup:editPopup }
 
 popup_delete:
-    pattern: /delete/{id}
+    path: /delete/{id}
     defaults: { _controller: PopupBundle:Popup:deletePopup }
 
 popup_new:
-    pattern: /new
+    path: /new
     defaults: { _controller: PopupBundle:Popup:newPopup }
 
 ###########################
 #   APDO. AJAX   #
 ###########################
 popup_get:
-    pattern:  /get
+    path:  /get
     defaults: { _controller: PopupBundle:Popup:getPopup }
     options:
         expose: true

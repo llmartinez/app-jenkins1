@@ -1,7 +1,7 @@
 {# integración con otras plataformas #}
 
 
-    {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
+    {% set user_catserv = app.user.getCategoryService() %}
 
     {% if user_catserv is defined and user_catserv != '' and user_catserv != null %}
         {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
@@ -34,7 +34,7 @@
         </div>
 
 {% else %}
-        <div {# {% if not is_granted('ROLE_ASSESSOR') and app.security.getToken().getUser().getCountry() != '1' %} style="display:none" {% endif %}#}>
+        <div {# {% if not is_granted('ROLE_ASSESSOR') and app.user.getCountry() != '1' %} style="display:none" {% endif %}#}>
                 <br>
                 <legend>{{ 'app'|trans }}</legend>
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getDis() != null %}

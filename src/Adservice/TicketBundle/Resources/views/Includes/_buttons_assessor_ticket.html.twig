@@ -24,7 +24,7 @@
             {% if workshop.active == 1 %}
                 {% if workshop.haschecks == false or (workshop.haschecks == true and workshop.numchecks > 0) %}
                     <div class="grid-33">
-                    {% if is_granted('ROLE_ASSESSOR') or workshop.country == app.security.getToken().getUser().getCountry() %}
+                    {% if is_granted('ROLE_ASSESSOR') or workshop.country == app.user.getCountry() %}
                         <form action="{{ path('newTicket', { 'id_workshop' : workshop.id }) }}" id="form-newTicket" role="form" method="post">
                             <input type="hidden" id="open_newTicket" name="open_newTicket" value="0">
                             <input type="hidden" id="n_id_brand" name="n_id_brand">

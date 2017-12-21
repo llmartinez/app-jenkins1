@@ -3,66 +3,66 @@
 ##############################
 
 _user_login:
-    pattern:  /
+    path:  /
     defaults: { _controller: UserBundle:Login:goToLogin }
 
 user_login:
-    pattern:  /login
+    path:  /login
     defaults: { _controller: UserBundle:Login:login }
 
 
 user_login_check:
-    pattern:  /login_check
+    path:  /login_check
     defaults: { _controller: UserBundle:Login:login }
 
 user_logout:
-    pattern:  /logout
+    path:  /logout
 
 ##############################
 #   APDO. RUTAS USER         #
 ##############################
 user_index:
-    pattern: /user/index
+    path: /user/index
     defaults: { _controller: UserBundle:User:index }
 
 user_profile:
-    pattern: /user/profile
+    path: /user/profile
     defaults: { _controller: UserBundle:User:profile }
 
 user_list:
-    pattern: /user/list/{page}/{country}/{catserv}/{option}/{term}/{field}
+    path: /user/list/{page}/{country}/{catserv}/{option}/{term}/{field}
     defaults: { _controller: UserBundle:User:userList, page: 1, country: 0, catserv: 0, option: 0, term: 0, field: 0  }
     options:
         expose: true
 
 user_edit:
-    pattern: /user/edit/{id}
+    path: /user/edit/{id}
     defaults: { _controller: UserBundle:User:editUser }
 
 user_disable:
-    pattern: /user/disable/{id}
+    path: /user/disable/{id}
     defaults: { _controller: UserBundle:User:disableUser }
 
 user_delete:
-    pattern: /user/delete/{id}
+    path: /user/delete/{id}
     defaults: { _controller: UserBundle:User:deleteUser }
 
 user_new:
-    pattern: /user/new/{type}
+    path: /user/new/{type}
     defaults: { _controller: UserBundle:User:newUser }
 
 user_select_new:
-    pattern: /user/selectNewUser
+    path: /user/selectNewUser
     defaults: { _controller: UserBundle:User:selectNewUser }
 
 generate_password:
-    pattern: /user/generatePassword/{id}
+    path: /user/generatePassword/{id}
     defaults: { _controller: UserBundle:User:generatePassword }
     options:
         expose: true
 
 change_password:
-    pattern: /user/changePassword/{id}
+    path: /user/changePassword/{id}
     defaults: { _controller: UserBundle:User:changePassword }
     options:
         expose: true
@@ -72,7 +72,7 @@ change_password:
 ##############################
 
 user_partner_list:
-    pattern: /user/partner-list/{page}/{country}/{option}/{term}/{field}
+    path: /user/partner-list/{page}/{country}/{option}/{term}/{field}
     defaults: { _controller: UserBundle:User:userPartnerList, page: 1, country: 0, option: 0, term: 0, field: 0  }
     options:
         expose: true
@@ -82,15 +82,15 @@ user_partner_list:
 ##############################
 
 category_service_list:
-    pattern: /categories/list/{page}/{country}
+    path: /categories/list/{page}/{country}
     defaults: { _controller: UserBundle:Category:listCategories, page: 1, country: 0 }
     
 category_service_new:
-    pattern: /categories/new
+    path: /categories/new
     defaults: { _controller: UserBundle:Category:newCategoryService }    
     
 
 category_service_edit:
-    pattern: /categories/edit/{id}
+    path: /categories/edit/{id}
     defaults: { _controller: UserBundle:Category:editCategoryService }
     

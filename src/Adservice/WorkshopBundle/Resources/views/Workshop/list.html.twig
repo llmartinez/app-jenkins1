@@ -3,8 +3,8 @@
 {% block body %}
     {# Definicion de la ruta al listado para usar en paginacion #}
     {% set route = 'workshop_list' %}
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
     <input type="hidden" id="route" name="route" value="{{ route }}">
@@ -90,7 +90,7 @@
                     <label> {{ 'find_by'|trans }} </label>
                     <select id="flt_search_term" name="flt_search_term" class='form-control'>
                         <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{{ 'tel'|trans }}</option>
-                        {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN') and app.security.getToken().getUser().getCategoryService().getId() is defined and app.security.getToken().getUser().getCategoryService().getId() == 3 %}
+                        {% if is_granted('ROLE_TOP_AD') and not is_granted('ROLE_ADMIN') and app.user.getCategoryService().getId() is defined and app.user.getCategoryService().getId() == 3 %}
                             <option value="name" {% if term == 'name' %}selected{% endif %}>{{ 'social_reason'|trans }}</option>
                         {% else %}
                             <option value="name" {% if term == 'name' %}selected{% endif %}>{{ 'workshop_name'|trans }}</option>

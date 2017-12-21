@@ -7,7 +7,7 @@
         {% if ticket.status == 'open' %}
             {% if ticket.blockedBy is not null %}
 
-                {% if ticket.blockedBy == app.security.getToken().getUser() %}
+                {% if ticket.blockedBy == app.user %}
 
                     {# desbloquear Ticket #}
                     <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': 0 }) }}">
@@ -19,7 +19,7 @@
 
                     <a style="font-size: 15px;color: gray;">{{ 'ticket_blocked_by%user%%date%'|transchoice(2, {'%user%': ticket.blockedBy, '%date%': ticket.modifiedAt|date('Y-m-d H:i:s')}) }}</a>
 
-                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}">
+                    <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.user.getId() }) }}">
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_to_user.png') }}" title="{{ 'ticket_reassign'|trans }}"></a>
 
                 {% endif %}
@@ -27,7 +27,7 @@
             {% else%}
 
                 {# bloquear Ticket #}
-                <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.security.getToken().getUser().getId() }) }}" >
+                <a href="{{ path('blockTicket', { 'id': ticket.id, 'id_user': app.user.getId() }) }}" >
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/assign.png') }}" title="{{ 'ticket.block'|trans }}"></span></a>
             {% endif %}
 

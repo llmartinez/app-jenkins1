@@ -1,13 +1,13 @@
 {% extends '::layout.html.twig' %}
-{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% if app.user.getCategoryService().getId() is defined %}
+    {% set id_catserv = app.user.getCategoryService().getId() %}
 {% else %} 
     {% set id_catserv = '0' %}
 {% endif %}
 {% block body %}
 
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
 
@@ -22,7 +22,7 @@
         <legend>{{ 'filter_general'|trans }}</legend>
 
         <input type="hidden" id="id_catserv" value="{{ id_catserv }}">
-        <input type="hidden" id="id_country" value="{{ app.security.getToken().getUser().getCountry().getId() }}">
+        <input type="hidden" id="id_country" value="{{ app.user.getCountry().getId() }}">
 
     {% if is_granted('ROLE_TOP_AD') %}
         <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'partner'|trans }}</label>

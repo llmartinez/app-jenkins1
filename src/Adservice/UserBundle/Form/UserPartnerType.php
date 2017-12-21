@@ -33,8 +33,8 @@ class UserPartnerType extends AbstractType {
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => $cserv_empty,
+                  'choice_label' => 'category_service',
+                  'placeholder' => $cserv_empty,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
@@ -43,8 +43,8 @@ class UserPartnerType extends AbstractType {
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -56,8 +56,8 @@ class UserPartnerType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -74,9 +74,9 @@ class UserPartnerType extends AbstractType {
             ->add('email_2','email', array('required' => false))
             ->add('language','entity', array(
                   'class' => 'Adservice\UtilBundle\Entity\Language',
-                  'property' => 'language',
+                  'choice_label' => 'language',
                   'required' => true,
-                  'empty_value' => ''))
+                  'placeholder' => ''))
             ->add('allow_create','checkbox', array('required' => false))
             ->add('allow_order','checkbox', array('required' => false))
         ;

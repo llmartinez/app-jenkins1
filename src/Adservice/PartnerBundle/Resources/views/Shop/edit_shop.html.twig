@@ -10,7 +10,8 @@
 
     <legend>{{ 'edit.shop'|trans }}</legend>
     <input id="id_catserv" type="text" style="display:none">
-    <form action="{{ path("shop_edit", { 'id':shop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+
+    {{ form_start(form, {'action': path("shop_edit", { 'id':shop.id })}) }}
         {% for flashMessage in app.session.flashbag.get('info') %}
             <div class="col-xs-12 col-md-12 form-group">{{ flashMessage }}</div>
         {% endfor %}
@@ -62,7 +63,7 @@
                 <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.edit'|trans }}</button>
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {#    WORKSHOPS ZONE#}
     {# {% include 'WorkshopBundle:Partner:_list.html.twig' with {'workshops' : partner.workshops} %} #}

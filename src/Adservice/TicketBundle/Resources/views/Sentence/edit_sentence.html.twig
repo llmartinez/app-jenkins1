@@ -9,8 +9,7 @@
                            {% else                   %}{{ 'new.sentence'|trans }} {% endif %}</li>
     </ol>
 
-    <form action="{{ path("sentence_edit", { 'id':sentence.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("sentence_edit", { 'id':sentence.id })}) }}
         <div class="container">
             <legend>{{ 'sentence'|trans }}</legend>
 
@@ -40,6 +39,6 @@
 
             <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

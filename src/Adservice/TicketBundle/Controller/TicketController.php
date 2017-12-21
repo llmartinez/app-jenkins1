@@ -40,9 +40,9 @@ class TicketController extends Controller {
      * @throws AccessDeniedException
      * @return url
      */
-    public function callTicketAction($code_partner = 0, $code_workshop = 0) {
-        $security = $this->get('security.context');
-        if (!$security->isGranted('ROLE_ASSESSOR'))
+    public function callTicketAction(Request $request, $code_partner = 0, $code_workshop = 0) {
+
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getManager();
@@ -64,15 +64,15 @@ class TicketController extends Controller {
      * Devuelve el listado de tickets segunla pagina y la opcion escogida
      * @return url
      */
-    public function listTicketAction($page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null, $adviser_id = null) {
+    public function listTicketAction(Request $request, $page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null, $adviser_id = null) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $security = $this->get('security.context');
-        $user = $security->getToken()->getUser();
+
+
+        $user = $this->getUser();
         $catservId = $catserv ;
        
         
-        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+        if(!$user) return $this->redirect($this->generateUrl('user_login'));
 
         $id_user = $user->getId();
         $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
@@ -83,7 +83,7 @@ class TicketController extends Controller {
         $joins = array();
 
         /* Entrada desde Centralita al listado con el taller seleccionado */
-        if ($security->isGranted('ROLE_ASSESSOR') and $workshop_id != null) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $workshop_id != null) {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($workshop_id);
             $workshops = array('0' => $workshop);
         } else
@@ -115,7 +115,7 @@ class TicketController extends Controller {
                     $error = $this->get('translator')->trans('workshop_inactive');
                     $this->get('session')->getFlashBag()->add('error', '¡Error! ' . $error);
                 }
-            } elseif (!$security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_COMMERCIAL')) {
+            } elseif (!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and !$this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL')) {
                 $workshops = $em->getRepository('WorkshopBundle:Workshop')->findBy(array('id' => $user->getWorkshop()->getId()));
 
                 if ($workshops[0]->getId() != "") {
@@ -185,7 +185,7 @@ class TicketController extends Controller {
             $params[] = array('workshop', ' = ' . $option);
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
                 if ($country == '7')
                     $joins[0][1] = $joins[0][1] . ' AND w.country IN (5,6) ';
@@ -203,7 +203,7 @@ class TicketController extends Controller {
                     $joins[] = array('e.workshop w ', 'w.country != 0');
             }
         }
-        elseif ($security->isGranted('ROLE_ADMIN') and ! $security->isGranted('ROLE_SUPER_ADMIN')) {
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') and ! $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if($country != 'none' && $country != '0') {
 
                 if (isset($joins[0][0]) and $joins[0][0] == 'e.workshop w ') {
@@ -241,7 +241,7 @@ class TicketController extends Controller {
                             $joins[] = array('e.workshop w ', 'w.country = ' . $country);
                     }
                 }else {
-                    if ($security->isGranted('ROLE_ASSESSOR'))
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
                         $country = '0'; //$user->getCountryService()->getId();
                     else
                         $country = $user->getCountry()->getId();
@@ -275,7 +275,7 @@ class TicketController extends Controller {
         if ($pagination->getMaxRows() != $num_rows)
             $pagination = $pagination->changeMaxRows($page, $num_rows);
 
-        if($security->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') AND $user->getCategoryService() != NULL) {
             $catserv = $user->getCategoryService();
             if($params == null or ($params != null and $params[0] == null)) $params = null;
             $params[] = array('category_service', " = " . $catserv->getId()." ");
@@ -294,7 +294,7 @@ class TicketController extends Controller {
             $params[] = array('assigned_to', " = " . $adviser_id." ");
         }
         
-        if (($security->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ( $workshops[0]->getId() != null))) {
+        if (($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) or ( isset($workshops[0]) and ( $workshops[0]->getId() != null))) {
             $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
             $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
         } elseif (($option == 'assessor_pending') or ( $option == 'assessor_answered') or ( $option == 'other_pending') or ( $option == 'other_answered')) {
@@ -319,7 +319,7 @@ class TicketController extends Controller {
                 //$joins[] = array('e.workshop w', ' w.country = '.$user->getCountry()->getId());
                 $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
                 $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
-            } elseif ($security->isGranted('ROLE_USER') and ! $security->isGranted('ROLE_ASSESSOR')) {
+            } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_USER') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                 $user = $em->getRepository('UserBundle:User')->findOneBy(array('id' => $id_user));
                 $workshop = $user->getWorkshop();
 
@@ -356,12 +356,12 @@ class TicketController extends Controller {
         $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands = $b_query->getResult();
         $systems = $em->getRepository('TicketBundle:System')->findBy(array(), array('name' => 'ASC'));
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             $countries = $em->getRepository('UtilBundle:CountryService')->findAll();
         else
             $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
-        if($security->isGranted('ROLE_ASSESSOR')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
             if($user->getCategoryService() != NULL) {
                 $catservices[0] = $em->getRepository('UserBundle:CategoryService')->find($user->getCategoryService());
                 $advisers = $em->getRepository("UserBundle:User")->findByRole($em, $country, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
@@ -391,16 +391,16 @@ class TicketController extends Controller {
             'adsplus' => $adsplus, 'inactive' => $inactive, 't_inactive' => $t_inactive, 'importances' => $importances,
             'advisers' => $advisers, 'adviser_id' => $adviser_id, 'workshop_id' => $workshop_id
         );
-        if($security->getToken()->getUser()->getCategoryService() != null){
-            $array['id_catserv'] = $security->getToken()->getUser()->getCategoryService()->getId();
+        if($this->getUser()->getCategoryService() != null){
+            $array['id_catserv'] = $this->getUser()->getCategoryService()->getId();
         }else{
             $array['id_catserv'] = 0;
         }
             
 
-        if ($security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
-        elseif ($security->isGranted('ROLE_ASSESSOR')) {
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         } else
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -410,15 +410,15 @@ class TicketController extends Controller {
      * Crea un ticket abierto con sus respectivos post y car
      * @return url
      */
-    public function newTicketAction($id_workshop = null, $einatech = 0, $reset = 0) {
+    public function newTicketAction(Request $request, $id_workshop = null, $einatech = 0, $reset = 0) {
         
         if($reset == 1) {
             $this->deleteSessionCar();
         }
        
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
+
+
         $trans = $this->get('translator');
         $ticket = new Ticket();
         $car = new Car();
@@ -430,8 +430,8 @@ class TicketController extends Controller {
         else{
             $autologin_session = false;
         }
-        $user = $security->getToken()->getUser();
-        if($user == 'anon.')
+        $user = $this->getUser();
+        if(!$user)
         { 
             if( $request->request->get('new_car_form_version') != null){
                 $_SESSION['marca'] = $request->request->get('new_car_form_brand');
@@ -453,19 +453,19 @@ class TicketController extends Controller {
         }
         
         $id_catserv = 0;
-        if($security->getToken()->getUser()->getCategoryService() != null){
-            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        if($this->getUser()->getCategoryService() != null){
+            $id_catserv = $this->getUser()->getCategoryService()->getId();
         }
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if ($security->isGranted('ROLE_USER')  && !$security->isGranted('ROLE_ASSESSOR') && $einatech == 0 ){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')  && !$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') && $einatech == 0 ){
             $_SESSION['einatech'] = 2;
         }
-        if ($security->isGranted('ROLE_ADMIN') && $einatech == 0 ){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $einatech == 0 ){
             $_SESSION['einatech'] = 2;
         }       
-        if( $security->isGranted('ROLE_ASSESSOR') && $einatech == 0 && !$security->isGranted('ROLE_ADMIN') && $id_catserv == 2){
+        if( $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') && $einatech == 0 && !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $id_catserv == 2){
             $_SESSION['einatech'] = 3;
         }
         if ($id_workshop != null) {
@@ -577,7 +577,7 @@ class TicketController extends Controller {
         }
         
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         }
         else{
@@ -596,12 +596,12 @@ class TicketController extends Controller {
          }
         if (isset($open_newTicket) and $open_newTicket == '1' and $request->getMethod() == 'POST') {
             //campos comunes
-            $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
+            $user = $em->getRepository('UserBundle:User')->find($this->getUser()->getId());
             $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
                         
-            $form->bind($request);
-            $formC->bind($request);
-            $formD->bind($request);
+            $form->handleRequest($request);
+            $formC->handleRequest($request);
+            $formD->handleRequest($request);
            
         }
         
@@ -631,7 +631,7 @@ class TicketController extends Controller {
                 'importance_session' => $ticket->getImportance()->getId()
                 );
 
-            if ($ticket->getSubsystem() != "" or $security->isGranted('ROLE_ASSESSOR') == 0) {
+            if ($ticket->getSubsystem() != "" or $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') == 0) {
                 if($car->getVersion() != null){
                     $array['version_session'] = $car->getVersion()->getId();
                 }
@@ -691,7 +691,7 @@ class TicketController extends Controller {
 
                         if ($extension == "application/pdf" or $extension == "application/x-pdf" or $extension == "image/bmp" or $extension == "image/jpeg"
                                 or $extension == "image/png" or $extension == "image/gif" or $extension == "application/mspowerpoint" or $extension == "0") {
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000) {
+                            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') or $size <= 10240000) {
                                 //Define CAR
                                 $car = UtilController::newEntity($car, $user);
 
@@ -841,7 +841,7 @@ class TicketController extends Controller {
 
                                             //Define TICKET
                                             $ticket = UtilController::newEntity($ticket, $user);
-                                            if ($security->isGranted('ROLE_ASSESSOR')) {
+                                            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                                                 $ticket->setWorkshop($workshop);
                                                 $ticket->setCategoryService($workshop->getCategoryService());
                                                 $ticket->setCountry($workshop->getCountry());
@@ -857,7 +857,7 @@ class TicketController extends Controller {
                                                 $ticket->setLanguage($user->getLanguage());
                                                 $ticket->setPending(1);
                                                 $ticket->setIsPhoneCall(0);
-                                                if($security->isGranted('ROLE_ADMIN')) {
+                                                if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                                                      $ticket->setIsPhoneCall(1);
                                                 }     
 
@@ -944,7 +944,7 @@ class TicketController extends Controller {
                         $mailer->sendMailToSpool();
                         // echo $this->renderView('UtilBundle:Mailing:ticket_new_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale));die;
 
-                        if (!$security->isGranted('ROLE_ASSESSOR') and $security->isGranted('ROLE_USER')) {
+                        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
                             if($ticket->getImportance()->getId() == 5){
                                 $mail_centralita = $this->container->getParameter('mail_einatech');
                                 $mailer->setSubject('ticket: ' . $ticket->getId());
@@ -1047,7 +1047,7 @@ class TicketController extends Controller {
                 
         );
 
-        if ($security->isGranted('ROLE_ASSESSOR'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
             return $this->render('TicketBundle:Layout:new_ticket_assessor_layout.html.twig', $array);
         else
             return $this->render('TicketBundle:Layout:new_ticket_layout.html.twig', $array);
@@ -1059,35 +1059,35 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function editTicketAction($id, $ticket) {
+    public function editTicketAction(Request $request, $id, $ticket) {
 
-        $security = $this->get('security.context');
+
         $id_catserv = 0;
-        if($security->getToken()->getUser()->getCategoryService() != null){
-            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        if($this->getUser()->getCategoryService() != null){
+            $id_catserv = $this->getUser()->getCategoryService()->getId();
         }
         $_SESSION['einatech'] = 0;
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if(!$security->isGranted('ROLE_ASSERSSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ASSERSSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
             $_SESSION['einatech'] = 1;
         }
-        if ($security->isGranted('ROLE_SUPER_ADMIN')
-                or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')
+                or ( !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId())
+                or ( $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
         ) {
 
             $em = $this->getDoctrine()->getManager();
-            $request = $this->getRequest();
+
 
             $form = $this->createForm(new EditTicketType(), $ticket);
 
             if ($request->getMethod() == 'POST') {
 
-                $user = $em->getRepository('UserBundle:User')->find($security->getToken()->getUser()->getId());
+                $user = $em->getRepository('UserBundle:User')->find($this->getUser()->getId());
 
-                $form->bind($request);
+                $form->handleRequest($request);
 
                 $car = $ticket->getCar();
 
@@ -1095,7 +1095,7 @@ class TicketController extends Controller {
                         and $car->getModel() != null and $car->getModel()->getId() != null and $car->getVin() != null and $car->getPlateNumber() != null) {
                     /* Validacion Ticket */
                     $str_len = strlen($ticket->getDescription());
-                    if ($security->isGranted('ROLE_ASSESSOR')) {
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                         $max_len = 10000;
                     } else {
                         $max_len = 500;
@@ -1152,7 +1152,7 @@ class TicketController extends Controller {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
                 $this->get('session')->getFlashBag()->add('error', $flash);
             }
-            if ($security->isGranted('ROLE_ASSESSOR'))
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
                 return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
             else
                 return $this->render('TicketBundle:Layout:show_ticket_layout.html.twig', $array);
@@ -1168,14 +1168,14 @@ class TicketController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteTicketAction($id, $ticket) {
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
-        if ($security->isGranted('ROLE_SUPER_ADMIN')
-                or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+    public function deleteTicketAction(Request $request, $id, $ticket) {
+
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')
+                or ( !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId())
+                or ( $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
         ) {
-            if ($security->isGranted('ROLE_USER') === false) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') === false) {
                 throw new AccessDeniedException();
             }
             $em = $this->getDoctrine()->getManager();
@@ -1184,7 +1184,7 @@ class TicketController extends Controller {
             $posts = $ticket->getPosts(); //echo count($posts);
             // if (count($posts)>1) throw $this->createNotFoundException('Este Ticket no puede borrarse, ya esta respondido');
             //puede borrarlo el assessor o el usuario si el ticket no esta assignado aun
-            if ((!$security->isGranted('ROLE_ASSESSOR') and ( $ticket->getAssignedTo() != null))) {
+            if ((!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ( $ticket->getAssignedTo() != null))) {
                 throw $this->createNotFoundException('Este ticket solo puede ser borrado por un asesor');
             }
 
@@ -1249,35 +1249,35 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketAction($ticket) {
-        $security = $this->get('security.context');
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+    public function showTicketAction(Request $request, $ticket) {
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
+        
+        if(!$user) return $this->redirect($this->generateUrl('user_login'));
+
+        $user = $this->getUser();
         
          $id_catserv = 0;
-        if($security->getToken()->getUser()->getCategoryService() != null){
-            $id_catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+        if($this->getUser()->getCategoryService() != null){
+            $id_catserv = $this->getUser()->getCategoryService()->getId();
         }
         $_SESSION['einatech'] = 0;
         if($id_catserv != 0 && $id_catserv != 2 && $id_catserv != 4){
             $_SESSION['einatech'] = 2;
         }
-        if(!$security->isGranted('ROLE_ASSESSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $ticket->getImportance() != null && $ticket->getImportance()->getId() == 5){
             $_SESSION['einatech'] = 1;
         }
         
         if (
-            ($security->isGranted('ROLE_ADMIN')
-                or ( !$security->isGranted('ROLE_SUPER_ADMIN') and $security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-                or ( !$security->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
-                or ( $security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+            ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
+                or ( !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') and $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId())
+                or ( !$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $ticket->getWorkshop() == $user->getWorkshop())
+                or ( $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             ) and ($user->getCategoryService() == null OR $user->getCategoryService() == $ticket->getCategoryService())
         ) {
             $em = $this->getDoctrine()->getManager();
-            $request = $this->getRequest();
+
             $car = $ticket->getCar();
             $version = $car->getVersion();
             $model = $car->getModel();
@@ -1349,28 +1349,28 @@ class TicketController extends Controller {
                 'version' => $version,
                 'id' => $id);
 
-            if ($security->isGranted('ROLE_ASSESSOR')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                 $form = $this->createForm(new EditTicketType(), $ticket);
                 $array['form'] = $form->createView();
             }
             if ($request->getMethod() == 'POST') {
 
                 //Define Ticket
-                if ($security->isGranted('ROLE_ASSESSOR')) {
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
                 }
 
-                if (!$security->isGranted('ROLE_ASSESSOR') or ( $security->isGranted('ROLE_ASSESSOR') /* and $form->isValid() */)) {
+                if (!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') or ( $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') /* and $form->isValid() */)) {
 
-                    $formP->bind($request);
-                    $formD->bind($request);
+                    $formP->handleRequest($request);
+                    $formD->handleRequest($request);
 
                     if ($formP->isValid() and $formD->isValid()) {
 
                         if($post->getMessage() == null) $post->setMessage(' ');
 
-                        if ($security->isGranted('ROLE_ASSESSOR')) {
+                        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
 
                             if ($id_subsystem != '0' and ( $ticket->getSubsystem() == null or $ticket->getSubsystem()->getId() != $id_subsystem)) {
                                 $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
@@ -1396,9 +1396,9 @@ class TicketController extends Controller {
                         if ($extension == "application/pdf" or $extension == "application/x-pdf" or $extension == "image/bmp" or $extension == "image/jpeg"
                                 or $extension == "image/png" or $extension == "image/gif" or $extension == "application/mspowerpoint" or $extension == "0") {
 
-                            if ($security->isGranted('ROLE_ASSESSOR') or $size <= 10240000) {
+                            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') or $size <= 10240000) {
                                 $str_len = strlen($post->getMessage());
-                                if ($security->isGranted('ROLE_ASSESSOR')) {
+                                if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                                     $max_len = 10000;
                                 } else {
                                     $max_len = 500;
@@ -1431,7 +1431,7 @@ class TicketController extends Controller {
                                         }
 
                                         // Si assessor responde se le asigna y se marca como respondido, si es el taller se marca como pendiente
-                                        if ($security->isGranted('ROLE_ASSESSOR')) {
+                                        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                                             $ticket->setAssignedTo($user);
                                             $ticket->setPending(0);
                                         }else{
@@ -1459,7 +1459,7 @@ class TicketController extends Controller {
                                             $mailer->setBody($this->renderView('UtilBundle:Mailing:ticket_answer_mail.html.twig', array('ticket' => $ticket, '__locale' => $locale)));
                                             $mailer->sendMailToSpool();
 
-                                            // if (!$security->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
+                                            // if (!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and $ticket->getAssignedTo() != null) {
                                             //     $mailer->setTo($ticket->getAssignedTo()->getEmail1());
                                             //     $mailer->sendMailToSpool();
                                             // }
@@ -1555,7 +1555,7 @@ class TicketController extends Controller {
                                     'version' => $version)));
             }
 
-            if ($security->isGranted('ROLE_ASSESSOR')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
                 $array['form'] = ($form->createView());
                 return $this->render('TicketBundle:Layout:show_ticket_assessor_layout.html.twig', $array);
             } else
@@ -1570,26 +1570,25 @@ class TicketController extends Controller {
      * @Route("/post_edit/{id}")
      * @ParamConverter("post", class="TicketBundle:Post")
      */
-    public function editPostAction($post) {
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+    public function editPostAction(Request $request, $post) {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw new AccessDeniedException();
         }
 
         $em = $this->getDoctrine()->getManager();
         $ticket = $post->getTicket();
 
-        $petition = $this->getRequest();
         $form = $this->createForm(new PostType(), $post);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bind($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
                 $em->persist($post);
                 $em->flush();
                 return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
-                //return $this->showTicketAction($ticket);
+                //return $this->showTicketAction($request, $ticket);
             }
         }
 
@@ -1605,22 +1604,21 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-   public function closeTicketAction($id, $ticket, $close='1')
+   public function closeTicketAction(Request $request, $id, $ticket, $close='1')
    {
        $message = '';
-       $security = $this->get('security.context');
-       if ($security->isGranted('ROLE_SUPER_ADMIN')
-       or (!$security->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId())
-       or ($security->isGranted('ROLE_ASSESSOR') and !$security->isGranted('ROLE_ADMIN'))
+
+       if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')
+       or (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') and $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId())
+       or ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
        ){
            $em = $this->getDoctrine()->getManager();
-           $request  = $this->getRequest();
 
-           if ($security->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+           if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
            if ($request->getMethod() == 'POST') {
-               $form->bind($request);
+               $form->handleRequest($request);
                if($request->request->get('sol_other_txt') != ''){
                    $message = $request->request->get('sol_other_txt');
                }
@@ -1630,14 +1628,14 @@ class TicketController extends Controller {
 
                /*Validacion Ticket*/
                $str_len = strlen($message);
-               if($security->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
+               if($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) { $max_len = 10000; }
                else { $max_len = 500; }
 
                if ($str_len <= $max_len ) {
 
                    if ($form->isValid()) {
 
-                       if ($security->isGranted('ROLE_ASSESSOR') === false) {
+                       if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false) {
                            if     ($ticket->getSolution() == "0") $ticket->setSolution($this->get('translator')->trans('ticket.close_as_instructions'));
                            elseif ($ticket->getSolution() == "1") $ticket->setSolution($this->get('translator')->trans('ticket.close_irreparable_car'));
                            elseif ($ticket->getSolution() == "2") $ticket->setSolution($this->get('translator')->trans('ticket.close_other').': '.$message);
@@ -1646,7 +1644,7 @@ class TicketController extends Controller {
                        if($ticket->getSolution() != ""){
 
                             $closed = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
-                            $user   = $security->getToken()->getUser();
+                            $user   = $this->getUser();
                             $ticket->setStatus($closed);
                             $ticket->setPending(0);
                             $ticket->setBlockedBy(null);
@@ -1736,16 +1734,16 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function editDescriptionAction($id, $ticket) {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ASSESSOR')) {
+    public function editDescriptionAction(Request $request, $id, $ticket) {
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
             $em = $this->getDoctrine()->getManager();
-            $request = $this->getRequest();
+
 
             $form = $this->createForm(new EditDescriptionType(), $ticket);
 
             if ($request->getMethod() == 'POST') {
-                $form->bind($request);
+                $form->handleRequest($request);
 
                 /* Validacion Ticket */
                 $str_len = strlen($ticket->getSolution());
@@ -1757,7 +1755,7 @@ class TicketController extends Controller {
 
                         if ($ticket->getDescription() != "") {
 
-                            $user = $security->getToken()->getUser();
+                            $user = $this->getUser();
 
                             UtilController::saveEntity($em, $ticket, $user);
 
@@ -1785,7 +1783,7 @@ class TicketController extends Controller {
      * Muestra una lista de motores
      * @return url
      */
-    public function listMotorsAction() {
+    public function listMotorsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $motors = $em->getRepository('CarBundle:Motor')->findBy(array(), array('name' => 'ASC'));
 
@@ -1806,12 +1804,12 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function reopenTicketAction($id, $ticket) {
+    public function reopenTicketAction(Request $request, $id, $ticket) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
 
-        $user = $security->getToken()->getUser();
+
+
+        $user = $this->getUser();
         $status = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
         $ticket->setStatus($status);
@@ -1846,7 +1844,7 @@ class TicketController extends Controller {
     /**
      * Obtiene todos los talleres del usuario logeado
      */
-    public function workshopListAction($page = 1, $option = null) {
+    public function workshopListAction(Request $request, $page = 1, $option = null) {
         $em = $this->getDoctrine()->getManager();
 
         $params[] = array();
@@ -1868,7 +1866,7 @@ class TicketController extends Controller {
      * @param Int $id_workshop
      * @return type
      */
-    public function getTicketsFromWorkshopAction($id_workshop, $page = 1) {
+    public function getTicketsFromWorkshopAction(Request $request, $id_workshop, $page = 1) {
         $em = $this->getDoctrine()->getManager();
 
         $params = array();
@@ -1892,13 +1890,12 @@ class TicketController extends Controller {
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function assignUserToTicketAction($ticket, $id_user = null) {
+    public function assignUserToTicketAction(Request $request, $ticket, $id_user = null) {
         $em = $this->getDoctrine()->getManager();
 
         //id_user puede venir por parametro o por post
         if ($id_user == null) {
-            $petition = $this->getRequest();
-            $id_user = $petition->get('id_user');
+            $id_user = $request->get('id_user');
         }
 
         //si $id_user != null ---> viene de parametro de la funcion o de POST y queremos asignar
@@ -1920,7 +1917,7 @@ class TicketController extends Controller {
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return type
      */
-    public function assignTicketSelectUserAction($ticket) {
+    public function assignTicketSelectUserAction(Request $request, $ticket) {
         $em = $this->getDoctrine()->getManager();
         $users = $this->getUsersToAssingFromTicket($ticket);
 
@@ -1936,7 +1933,7 @@ class TicketController extends Controller {
      * @param Int $id puede venir por POST o por parametro de la funcion
      * @param Int $id_user
      */
-    public function blockTicketAction($ticket, $id_user = null) {
+    public function blockTicketAction(Request $request, $ticket, $id_user = null) {
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->find($id_user);
@@ -1960,26 +1957,25 @@ class TicketController extends Controller {
             $em->flush();
         }
 
-        return $this->showTicketAction($ticket);
+        return $this->showTicketAction($request, $ticket);
     }
 
     /**
      * Funcion que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
      * @return array
      */
-    public function getTicketsByOption($option) {
+    public function getTicketsByOption(Request $request, $option) {
+
         $em = $this->getDoctrine()->getManager();
-        $petition = $this->getRequest();
-        $security = $this->get('security.context');
 
         $tickets = array();
-        $check_id = $petition->request->get('filter_id');
-        $user = $security->getToken()->getUser();
+        $check_id = $request->request->get('filter_id');
+        $user = $this->getUser();
         $repoTicket = $em->getRepository('TicketBundle:Ticket');
         $open = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'));
         $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
-        if ($security->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             //Admin
             if ($option == 'all') {
                 $tickets = $repoTicket->findAll();
@@ -1998,7 +1994,7 @@ class TicketController extends Controller {
             if ($check_id != 'all') {
                 $tickets = $this->filterTickets($tickets, $check_id);
             }
-        } elseif ($security->isGranted('ROLE_ASSESSOR')) {
+        } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
             //Assessor
             if ($option == 'free') {
                 $tickets = $repoTicket->findAllFree($em, $open);
@@ -2025,7 +2021,7 @@ class TicketController extends Controller {
 
             if ($check_id == 'all') {
 
-                $check_status = $petition->request->get('status');
+                $check_status = $request->request->get('status');
 
                 if ($check_status == 'all') {
                     $status = 'all';
@@ -2052,13 +2048,13 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByIdAction() {
+    public function findTicketByIdAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
+
+
         $id = $request->get('flt_id');
-        $catserv = $security->getToken()->getUser()->getCategoryService();
-        $user = $security->getToken()->getUser();
+        $catserv = $this->getUser()->getCategoryService();
+        $user = $this->getUser();
         if($catserv != null)
             $ticket = $em->getRepository('TicketBundle:Ticket')->findOneBy(array('id' => $id, 'category_service' => $catserv->getId()));
         else
@@ -2069,7 +2065,7 @@ class TicketController extends Controller {
         else
             $tickets = array();
         $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
-//        if($security->isGranted('ROLE_SUPER_ADMIN') || $security->isGranted('ROLE_ADMIN')){
+//        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
 //           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
 //        }
 //        else{
@@ -2081,7 +2077,7 @@ class TicketController extends Controller {
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
         $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         $languages = $em->getRepository('UtilBundle:Language')->findAll();
-        if($security->getToken()->getUser()->getCategoryService() != NULL) {
+        if($this->getUser()->getCategoryService() != NULL) {
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
         }else{
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
@@ -2104,7 +2100,7 @@ class TicketController extends Controller {
             'disablePag' => 0,
             'advisers' => $advisers);
 
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -2114,20 +2110,20 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro y el taller
      * @return url
      */
-    public function findTicketByIdAndWorkshopAction() {
+    public function findTicketByIdAndWorkshopAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
+
+
         $id = $request->get('flt_id');
-        $workshop = $security->getToken()->getUser()->getWorkshop();
+        $workshop = $this->getUser()->getWorkshop();
         $ticket = $em->getRepository('TicketBundle:Ticket')->find($id);
         if ($workshop != null and $ticket) {
             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
         } else {
-            if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId()))
+            if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId()))
                 return $this->redirect($this->generateUrl('showTicket', array('id' => $ticket->getId())));
         }
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirect($this->generateUrl('listTicket', array('option' => "assessor_pending")));
         else {
             return $this->redirect($this->generateUrl('listTicket'));
@@ -2138,9 +2134,9 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findTicketByBMVAction($page = 1, $brand = 0, $model = 0, $version = 0, $system = 0, $subsystem = 0, $importance = 0, $year = 0, $motor = 0, $kw = 0, $num_rows = 10) {
+    public function findTicketByBMVAction(Request $request, $page = 1, $brand = 0, $model = 0, $version = 0, $system = 0, $subsystem = 0, $importance = 0, $year = 0, $motor = 0, $kw = 0, $num_rows = 10) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
+
         $params = array();
         if ($brand != '0' and $brand != '')
             $params[] = array('brand', ' = ' . $brand);
@@ -2155,7 +2151,7 @@ class TicketController extends Controller {
             $params[] = array('motor', " LIKE '%" . $motor . "%' ");
         if ($kw != '0' and $kw != '')
             $params[] = array('kw', ' = ' . $kw);
-        if($user->getCategoryService() != NULL) {
+        if($this->getUser()->getCategoryService() != NULL) {
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
         }else{
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
@@ -2192,12 +2188,12 @@ class TicketController extends Controller {
         }
         if (sizeof($ticket) >= 1) {
             foreach ($ticket as $tck) {
-                if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))) {
+                if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))) {
                     $tickets[] = $tck;
                 }
             }
         } else {
-            if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $security->getToken()->getUser()->getCountry()->getId() or $security->isGranted('ROLE_SUPER_ADMIN'))) {
+            if ($ticket and ( $ticket->getWorkshop()->getCountry()->getId() == $this->getUser()->getCountry()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))) {
                 $tickets[] = $ticket;
             }
         }
@@ -2230,7 +2226,7 @@ class TicketController extends Controller {
             'inactive' => 0,
             'disablePag' => 0,
             'advisers' => $advisers);
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -2240,7 +2236,7 @@ class TicketController extends Controller {
      * Devuelve un ticket segun la id enviada por parametro
      * @return url
      */
-    public function findAssessorTicketByBMVAction($page = null) {
+    public function findAssessorTicketByBMVAction(Request $request, $page = null) {
         /*         * *********************************************************************************************************************
          * TODO:
          * En una nueva version (2.8) habría que separar esta funcion en otras 2,
@@ -2252,11 +2248,11 @@ class TicketController extends Controller {
          *
          * ********************************************************************************************************************* */
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
 
-        $user = $security->getToken()->getUser();
-        if($user == 'anon.') return $this->redirect($this->generateUrl('user_login'));
+
+
+        $user = $this->getUser();
+        if(!$user) return $this->redirect($this->generateUrl('user_login'));
 
         $params = array();
 
@@ -2294,7 +2290,7 @@ class TicketController extends Controller {
 
         $workshop = new Workshop();
 
-        if(!$security->isGranted('ROLE_ASSESSOR'))
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
             $workshop = $user->getWorkshop();
 
         elseif (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != '')
@@ -2335,7 +2331,7 @@ class TicketController extends Controller {
             else
                 $more_results = 0;
 
-            if(!$security->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
+            if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
                 $catserv = $user->getCategoryService()->getId();
             }
             else{
@@ -2358,7 +2354,7 @@ class TicketController extends Controller {
 
                     if (sizeof($ticket) >= 1) {
                         foreach ($ticket as $tck) {
-                            if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $security->isGranted('ROLE_ASSESSOR'))) {
+                            if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))) {
                                 if($workshop != null){
                                     $w_id = $workshop->getId();
                                 }
@@ -2381,7 +2377,7 @@ class TicketController extends Controller {
             }
         }else{
 
-            if(!$security->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
+            if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
                 $catserv = $user->getCategoryService()->getId();
             }
             else $catserv = null;
@@ -2487,7 +2483,7 @@ class TicketController extends Controller {
         $importances = $em->getRepository('TicketBundle:Importance')->findAll();
         $advisers = array();
         
-        if($security->isGranted('ROLE_ASSESSOR')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
             if($user->getCategoryService() != NULL) {
                 $catservices[0] = $em->getRepository('UserBundle:CategoryService')->find($user->getCategoryService());
                 $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
@@ -2592,7 +2588,7 @@ class TicketController extends Controller {
             'inactive' => 0,
             'disablePag' => 0,
             'advisers' => $advisers);
-        if ($security->isGranted('ROLE_ASSESSOR') and ! $security->isGranted('ROLE_ADMIN'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') and ! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_assessor_layout.html.twig', $array);
         else
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
@@ -2680,10 +2676,9 @@ class TicketController extends Controller {
     //  * Devuelve todos los tickets realizados
     //  * @return url
     //  */
-    // public function listTicketFilteredAction($page=1, $id_workshop='none', $id_ticket='none', $status='all', $option='all')
+    // public function listTicketFilteredAction(Request $request, $page=1, $id_workshop='none', $id_ticket='none', $status='all', $option='all')
     // {
     //     $em = $this->getDoctrine()->getManager();
-    //     $request  = $this->getRequest();
     //     $workshop = new Workshop();
     //     $tickets  = array();
     //     $params   = array();

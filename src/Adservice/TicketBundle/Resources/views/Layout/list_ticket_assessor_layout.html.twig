@@ -27,7 +27,7 @@
         {% include 'TicketBundle:Workshop:assessor_workshop.html.twig' %}
 
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
     {% endif %}
 
     {% include 'TicketBundle:Includes:_filters_assessor_ticket.html.twig' %}
@@ -153,7 +153,7 @@
     {% if is_granted('ROLE_ASSESSOR') %}
         {% include 'TicketBundle:Ticket:list_assessor_ticket.html.twig'    %}
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
         {% include 'TicketBundle:Ticket:list_assessor_ticket.html.twig' %}
     {% endif %}
 </div>

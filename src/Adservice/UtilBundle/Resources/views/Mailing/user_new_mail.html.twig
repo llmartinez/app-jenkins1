@@ -18,7 +18,7 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;margin-right: 20px;">
 #}
-        {% if app.security.getToken().getUser() != "anon." and user.categoryService != null %}
+        {% if app.user and user.categoryService != null %}
             {% set url_logo_catserv = route_logo_mail ~ '_' ~ user.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
         {% endif %}

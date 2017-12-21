@@ -7,7 +7,7 @@
     {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
         {% if ( bloqued_by_assessor == 0 )
            or ( not is_granted('ROLE_ASSESSOR')
-                and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+                and app.user.getWorkshop() == ticket.workshop) %}
 
         {# formulario de respuesta de POST #}
 

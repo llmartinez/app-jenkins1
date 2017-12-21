@@ -33,11 +33,10 @@
             <p class="error">{{ flashMessage }}</p>
         {% endfor %}
 
-        <form action="" method="post" {{ form_enctype(form) }}>
+        {{ form_start(form, {'action': ''}) }}
             {{ form_widget(form) }}
-
             <input type="submit" />
-        </form>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
 

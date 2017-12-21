@@ -1,11 +1,11 @@
 list_incidences:
-    pattern:  /lock/list/{page}/{id_taller}/{id_socio} #/{country} #/{texto}/{brand}/{model}/{version}
+    path:  /lock/list/{page}/{id_taller}/{id_socio} #/{country} #/{texto}/{brand}/{model}/{version}
     defaults: { _controller: LockBundle:Lock:listIncidences, page: 1, id_taller: 'none', id_socio: 'none' } #, country: 'none' }#, texto: null, brand: null, model: null, version: null }
     options:
         expose: true
 
 show_incidence:
-    pattern:  /lock/{id_incidence}
+    path:  /lock/{id_incidence}
     defaults: { _controller: LockBundle:Lock:showIncidence, id_incidence: null }
     options:
         expose: true

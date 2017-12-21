@@ -10,7 +10,7 @@
       <li class="active">{{ 'menu.list_shops'|trans }}</li>
     </ol>
 <legend>{{ 'menu.list_shops'|trans }}
-        {% if app.security.getToken().getUser().getAllowOrder() == true %}
+        {% if app.user.getAllowOrder() == true %}
             <a class="btn btn-primary" href="{{ path("shopOrder_new") }}">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/shop_new.png') }}">
             {{ 'menu.new_shop_order'|trans }}</a>
@@ -37,7 +37,7 @@
                 <th>{{ 'tel'|trans }}</th>
                 <th>{{ 'email'|trans }}</th>
                 <th>{{ 'address'|trans }}</th>
-                {% if app.security.getToken().getUser().getAllowOrder() == true %}
+                {% if app.user.getAllowOrder() == true %}
                     <th>{{ 'actions'|trans }}</th>
                 {% endif %}
             </tr>
@@ -51,7 +51,7 @@
                     <td>{{ shop.phoneNumber1 }}</td>
                     <td>{{ shop.email1       }}</td>
                     <td>{{ shop.address      }}</td>
-                    {% if app.security.getToken().getUser().getAllowOrder() == true %}
+                    {% if app.user.getAllowOrder() == true %}
                         {% if is_granted('ROLE_ADMIN') %}
                             <td>
                                 <a id="edit{{ shop.name }}" href="{{ path("shop_edit", { 'id':shop.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>

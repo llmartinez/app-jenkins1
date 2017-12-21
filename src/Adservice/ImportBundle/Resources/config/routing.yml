@@ -1,23 +1,23 @@
 lock_cars:
-    pattern:  /cars/{bbdd}/{num}
+    path:  /cars/{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:importLockCars, bbdd: 'old_cars', num: 0 }
 
 incidences:
-    pattern:  /incidences/{bbdd}/{num}
+    path:  /incidences/{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:importLockIncidences, bbdd: 'incidences', num: 0 }
 
 test_mail:
-    pattern:  /mail
+    path:  /mail
     defaults: { _controller: ImportBundle:Import:testMailing }
 
 user_credentials:
-    pattern:  /user-credentials/{type}
+    path:  /user-credentials/{type}
     defaults: { _controller: ImportBundle:Import:sendUserCredentials }
 
 import_workshop_fr:
-    pattern:  /importWorkshopFR
+    path:  /importWorkshopFR
     defaults: { _controller: ImportBundle:Import:importWorkshopFR }
 
 import:
-    pattern:  /{bbdd}/{num}
+    path:  /{bbdd}/{num}
     defaults: { _controller: ImportBundle:Import:import, bbdd: null, num: 0 }

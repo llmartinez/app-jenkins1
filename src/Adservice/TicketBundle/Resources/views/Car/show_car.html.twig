@@ -1,10 +1,10 @@
     <legend>
     	{{ 'car'|trans }}
         {% if 
-            (app.security.getToken().getUser().getWorkshop() != null and app.security.getToken().getUser().getWorkshop().getActive() == 1)
+            (app.user.getWorkshop() != null and app.user.getWorkshop().getActive() == 1)
             or 
-            (app.security.getToken().getUser().getWorkshop() == null and (is_granted('ROLE_ADMIN') or ticket.blockedBy == app.security.getToken().getUser() or 
-                (ticket.workshop == app.security.getToken().getUser().getWorkshop() and ticket.assignedTo == NULL and ticket.pending == 1 ) and ticket.status != 'closed')) 
+            (app.user.getWorkshop() == null and (is_granted('ROLE_ADMIN') or ticket.blockedBy == app.user or
+                (ticket.workshop == app.user.getWorkshop() and ticket.assignedTo == NULL and ticket.pending == 1 ) and ticket.status != 'closed'))
             or 
             (is_granted('ROLE_ASSESSOR') and ticket.status == 'inactive') %}
         

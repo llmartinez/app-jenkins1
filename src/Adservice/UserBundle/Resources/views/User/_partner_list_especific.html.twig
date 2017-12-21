@@ -16,7 +16,7 @@
         </td>
         <td>{{ user.phoneNumber1}}</td>
         <td>{{ user.email1  }}</td>
-        {% if app.security.getToken().getUser().getAllowCreate() == true %}
+        {% if app.user.getAllowCreate() == true %}
             <td>
                 {% if role == 'commercial'  %}
                     <a title="{{ 'allow_list'|trans }}" href="{{ path("active_deactive_permission",
@@ -50,7 +50,7 @@
             </td>
             <td>
                 {% if role == 'top_ad' or role == 'super_ad' or role == 'ad' %}
-                    {% if is_granted('ROLE_TOP_AD') and app.security.getToken().getUser().getCategoryService() != null and app.security.getToken().getUser().getCategoryService().getId() == 3 %}
+                    {% if is_granted('ROLE_TOP_AD') and app.user.getCategoryService() != null and app.user.getCategoryService().getId() == 3 %}
                         <a id="btn_edit{{ user.username }}" href="{{ path("user_edit", { 'id': user.id }) }}">
                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
                     {% endif %}

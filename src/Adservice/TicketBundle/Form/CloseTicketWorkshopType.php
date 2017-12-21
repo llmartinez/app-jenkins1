@@ -9,7 +9,7 @@ class CloseTicketWorkshopType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('solution', 'choice', array('choices'  => $this->getSolutions() , 'required' => false, 'empty_value' => false));
+                ->add('solution', 'choice', array('choices'  => $this->getSolutions() , 'required' => false, 'placeholder' => false));
                 ;
     }
 

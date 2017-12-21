@@ -24,15 +24,15 @@ class NewTicketType extends AbstractType
                 ->add('importance', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Importance',
-                  'property' => 'importance',
+                  'choice_label' => 'importance',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($importance){
                                                 return $er->createQueryBuilder('s')
                   ->where('s.id'.$importance);}))
                 ->add('subsystem', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Subsystem',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
                                                 return $er->createQueryBuilder('s')
                                                           ->where('s.id = 0'); }))

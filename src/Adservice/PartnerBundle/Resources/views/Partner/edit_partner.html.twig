@@ -10,7 +10,7 @@
 
     <legend>{{ 'edit.partner'|trans }}</legend>
 
-    <form action="{{ path("partner_edit", { 'id':partner.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("partner_edit", { 'id':partner.id })}) }}
 
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-4 col-md-4 form-group">
@@ -73,10 +73,7 @@
             </div>
         </div>
 
-
-
-
-    </form>
+    {{ form_end(form) }}
 
 {#    WORKSHOPS ZONE#}
     {# {% include 'WorkshopBundle:Partner:_list.html.twig' with {'workshops' : partner.workshops} %} #}

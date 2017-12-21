@@ -21,7 +21,7 @@
 
     {% else %}
 
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
         {% include 'TicketBundle:Workshop:show_workshop.html.twig' %}
 
     {% endif %}
@@ -36,7 +36,7 @@
     <input type="hidden" id="msg_einatech" name="msg_einatech" value="{{ 'msg_einatech'|trans }}">
     <input type="hidden" id="new_einatech" name="new_einatech" value={{einatech}}>
     <input type="hidden" id="autologin"   value="{{autologin_session}}">
-    {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.security.getToken().getUser().getWorkshop() %} {% endif %}
+    {% if not is_granted('ROLE_ASSESSOR') %} {% set workshop = app.user.getWorkshop() %} {% endif %}
 
     {% if workshop.id != "" %}
         <form action="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech': einatech }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">

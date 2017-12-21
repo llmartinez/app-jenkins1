@@ -16,8 +16,8 @@
                             {% set url_logo = route_logo ~ '.png' %}
                             <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
                             
-                            {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
-                                {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                            {% if app.user and app.user.getCategoryService() != null %}
+                                {% set url_logo_catserv = route_logo ~ '_' ~ app.user.getCategoryService().getSlug() ~ '.png' %}
                                 <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
                             {% endif %}
                         </td>
@@ -49,7 +49,7 @@
                             <div class="user fl">
                                 <img src="{{ asset('bundles/util/images/icon/user_icon.png') }}">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default asr_slct-default">{{ app.security.getToken().getUser().getUsername() }}</button>
+                                    <button type="button" class="btn btn-default asr_slct-default">{{ app.user.getUsername() }}</button>
                                     <button type="button" class="btn btn-default asr_btn-default dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>

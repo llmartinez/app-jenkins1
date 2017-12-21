@@ -2,6 +2,7 @@
 namespace Adservice\ImportBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Controller\UtilController;
 use Adservice\UserBundle\Entity\User;
@@ -25,7 +26,7 @@ use Adservice\OrderBundle\Entity\WorkshopOrder;
 
 class ImportController extends Controller
 {
-    public function importAction($bbdd=null)
+    public function importAction(Request $request, $bbdd=null)
     {
     	$session = $this->get('session');
 		$em 	 = $this->getDoctrine()->getManager('default');
@@ -162,7 +163,7 @@ class ImportController extends Controller
 //				$session->set('next',  	'assessor');
 //
 //				// Generarando excel ususarios
-//				$response = $this->doExcelPartnerAction($partner_users);
+//				$response = $this->doExcelPartnerAction($request, $partner_users);
 //				$session->set('response' ,	$response);
 //
 //	 			if(isset($response)) {
@@ -209,7 +210,7 @@ class ImportController extends Controller
 //				$session->set('next',  	'workshop');
 //
 //				// Generarando excel ususarios
-//				$response = $this->doExcelAssessorAction($assessor_users);
+//				$response = $this->doExcelAssessorAction($request, $assessor_users);
 //				$session->set('response' ,	$response);
 //
 //	 			if(isset($response)) {
@@ -351,7 +352,7 @@ class ImportController extends Controller
 //				$session->set('next',  	'user_log');
 //
 //				// Generarando excel ususarios
-//				$response = $this->doExcelAction($users_email_log);
+//				$response = $this->doExcelAction($request, $users_email_log);
 //				$session->set('response' ,	$response);
 // 			}
 //			return $this->render('ImportBundle:Import:import.html.twig', array('bbdd' => 'imported'));
@@ -382,7 +383,7 @@ class ImportController extends Controller
 // | |__| |_| | |___| . \  | |___ / ___ \|  _ < ___) |
 // |_____\___/ \____|_|\_\  \____/_/   \_\_| \_\____/
 /*
-    public function importLockCarsAction($bbdd=null, $num=0)
+    public function importLockCarsAction(Request $request, $bbdd=null, $num=0)
     {
     	$session = $this->get('session');
 		$em_old  = $this->getDoctrine()->getManager('em_old' );
@@ -433,7 +434,7 @@ class ImportController extends Controller
 //  | || |\  | |___ | || |_| | |___| |\  | |___| |___ ___) |
 // |___|_| \_|\____|___|____/|_____|_| \_|\____|_____|____/
 
- 	public function importLockIncidencesAction($bbdd=null, $num=0)
+ 	public function importLockIncidencesAction(Request $request, $bbdd=null, $num=0)
     {
     	$session = $this->get('session');
 		$em_old   = $this->getDoctrine()->getManager('em_old' );
@@ -508,7 +509,7 @@ class ImportController extends Controller
 		}
 	}
 
-    public function importWorkshopFRAction()
+    public function importWorkshopFRAction(Request $request)
     {
         $em      = $this->getDoctrine()->getManager();
     	$session = $this->get('session');
@@ -881,9 +882,9 @@ class ImportController extends Controller
 		return $locations;
 	}
 
-    private function doExcelAction($users_email_log){
+    private function doExcelAction($request, $users_email_log){
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
@@ -902,9 +903,9 @@ class ImportController extends Controller
         return $response;
     }
 
-    private function doExcelPartnerAction($partner_users){
+    private function doExcelPartnerAction(Request $request, $partner_users){
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
@@ -923,9 +924,9 @@ class ImportController extends Controller
         return $response;
     }
 
-    private function doExcelAssessorAction($assessor_users){
+    private function doExcelAssessorAction(Request $request, $assessor_users){
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');
@@ -1044,7 +1045,7 @@ class ImportController extends Controller
 */
     
     
-    public function testMailingAction()
+    public function testMailingAction(Request $request)
     {
       	$em = $this->getDoctrine()->getManager();
     	$historical = $em->getRepository('WorkshopBundle:Historical')->findBy(array(), array('partnerId' => 'ASC', 'workshopId' => 'ASC', 'dateOrder' => 'ASC'));
@@ -1436,10 +1437,10 @@ class ImportController extends Controller
         return $this->render('ImportBundle:Import:import.html.twig');
     }
 
-    public function sendUserCredentialsAction($type)
+    public function sendUserCredentialsAction(Request $request, $type)
     {
         $em      = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+
 
         $users = $em->createQuery('SELECT u FROM UserBundle:User u WHERE u.'.$type.' IS NOT NULL' )->getResult();
         $array = array();
@@ -1506,9 +1507,9 @@ class ImportController extends Controller
 		return $this->render('ImportBundle:Import:import.html.twig');
     }
 
-    private function doExcelCredentialsAction($type, $array) {
+    private function doExcelCredentialsAction(Request $request, $type, $array) {
         $em = $this->getDoctrine()->getManager();
-        $security = $this->get('security.context');
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/csv');

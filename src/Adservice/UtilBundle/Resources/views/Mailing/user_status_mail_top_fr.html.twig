@@ -21,7 +21,7 @@
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
     <tr><td height="150" valign="middle" align="center">
-        {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
+        {% if app.user and workshop.categoryService != null %}
             {% set url_logo_catserv = route_logo_mail ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
         {% endif %}

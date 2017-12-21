@@ -4,11 +4,11 @@
 			<p> <b>{{'created_at'|trans}}:</b> {{ticket.createdat|date("d/m/Y (H:i)")}} </p>
 	    	{% if ticket.assignedTo != "" %}<p><b>{{ 'ticket.assigned_to'|trans }}:</b> {{ ticket.assignedTo }} </p>{% endif %}
 
-    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %} #}
+    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.user %} #}
 
 				{# {% include 'TicketBundle:Ticket:edit_ticket_info.html.twig'	%} #}
 
-			{# {% elseif ticket.blockedBy == app.security.getToken().getUser() %} #}
+			{# {% elseif ticket.blockedBy == app.user %} #}
 
 				{% include 'TicketBundle:Ticket:edit_ticket_info.html.twig'	%}
 				{{ form_rest(form) }}
@@ -27,11 +27,11 @@
 
     		<input type="hidden" id="role" value="ROLE_ASSESSOR">
 
-    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.security.getToken().getUser() %} #}
+    		{# {% if ticket.blockedBy  == null  or ticket.blockedBy != app.user %} #}
 
             	{% include 'TicketBundle:Post:show_posts.html.twig'     	%}
 
-			{# {% elseif ticket.blockedBy == app.security.getToken().getUser() %} #}
+			{# {% elseif ticket.blockedBy == app.user %} #}
 
 				{# {% include 'TicketBundle:Post:show_last_post.html.twig'   	%} #}
 

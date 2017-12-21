@@ -1,8 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
     {% if id_catserv ==  3 %}
@@ -23,8 +23,7 @@
 
     {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
 
-    <form action="{{ path('user_new',{ 'type':user_type}) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path('user_new',{ 'type':user_type})}) }}
         <div class="col-xs-12 col-md-12 form-group">
              <div class="col-xs-4 col-md-4 form-group">
                 <label>{{ 'username'|trans }}</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
@@ -132,7 +131,7 @@
                 <button class="btn btn-primary pull-right" id="btn_create" type="submit" style="display:none;"></button>
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}
 

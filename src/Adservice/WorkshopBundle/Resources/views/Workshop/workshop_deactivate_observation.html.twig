@@ -15,7 +15,7 @@
 
 {% block content %}
 
-    <form action="{{ path("workshop_deactivate_observation", { 'workshop_id':workshop.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("workshop_deactivate_observation", { 'workshop_id':workshop.id })}) }}
 
         <div class="container">
 
@@ -32,6 +32,6 @@
                 {{ form_rest(form) }}
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

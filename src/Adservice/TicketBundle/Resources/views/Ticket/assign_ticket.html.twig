@@ -31,7 +31,7 @@
                         <select class="combobox btn-date" id="id_user" name="id_user">
                             <option value="null">{{ 'assign_not'|trans }}</option>
                             {% for user in users %}
-                                {% if is_granted('ROLE_SUPER_ADMIN') or user.country == app.security.getToken().getUser().getCountry() %} 
+                                {% if is_granted('ROLE_SUPER_ADMIN') or user.country == app.user.getCountry() %}
                                     {% if ticket.assignedTo == user %}
                                         <option selected="selected" value={{ user.id }} >{{ user }}</option>
                                     {% else %}

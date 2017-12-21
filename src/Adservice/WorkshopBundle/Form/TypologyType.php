@@ -17,7 +17,7 @@ class TypologyType extends AbstractType
 //            ->add('country', 'entity', array(
 //                  'required' => true,
 //                  'class' => 'Adservice\UtilBundle\Entity\Country',
-//                  'property' => 'country',
+//                  'choice_label' => 'country',
 //                  'empty_value' => '',
 //                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
 //                                                return $er->createQueryBuilder('c')
@@ -26,8 +26,8 @@ class TypologyType extends AbstractType
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => '',
+                  'choice_label' => 'category_service',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')

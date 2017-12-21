@@ -9,8 +9,7 @@
                            {% else                   %}{{ 'new.typology'|trans }} {% endif %}</li>
     </ol>
 
-    <form action="{{ path("typology_edit", { 'id':typology.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("typology_edit", { 'id':typology.id })}) }}
         <div class="container">
             <legend>{{ 'typology'|trans }}</legend>
 
@@ -59,6 +58,6 @@
 
             <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

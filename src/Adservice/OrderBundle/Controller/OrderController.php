@@ -3,6 +3,7 @@
 namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Adservice\OrderBundle\Controller\WorkshopOrderController;
 use Adservice\OrderBundle\Controller\ShopOrderController;
 use Adservice\UtilBundle\Entity\Pagination;
@@ -15,14 +16,13 @@ class OrderController extends Controller
      * @return type
      * @throws AccessDeniedException
      */
-    public function listOrdersAction($page=1, $option='workshop_pending', $country='0', $w_idpartner='0', $w_id='0', $partner='0', $status='0', $term='0', $field='0'){
+    public function listOrdersAction(Request $request, $page=1, $option='workshop_pending', $country='0', $w_idpartner='0', $w_id='0', $partner='0', $status='0', $term='0', $field='0'){
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_COMMERCIAL') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false)
             return $this->redirect($this->generateUrl('user_login'));
 
         $em = $this->getDoctrine()->getManager();
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         $role = $user->getRoles();
         $role = $role[0];
         $role = $role->getRole();

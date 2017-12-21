@@ -17,7 +17,16 @@
         {% if not is_granted('ROLE_ASSESSOR') %}
             <div id="sol_other">
                 <label> {{ 'description'|trans }} </label>
-                 <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
+                 <div class="error">
+                     {% for flashMessage in app.session.flashbag.get('error') %}
+                         {{ flashMessage }}
+                     {% endfor %}
+                     <span>
+                         {% for flashMessage in app.session.flashbag.get('span') %}
+                             {{ flashMessage }}
+                         {% endfor %}
+                     </span>
+                 </div>
                 <input type="text" id="sol_other_txt" name="sol_other_txt" class="form-control" value="{{message}}">
             </div>
         {% endif %}

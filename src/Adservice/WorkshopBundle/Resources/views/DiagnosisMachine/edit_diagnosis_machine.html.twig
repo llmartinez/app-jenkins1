@@ -9,7 +9,7 @@
                            {% else                            %}{{ 'new.diagnosis_machine'|trans }} {% endif %}</li>
     </ol>
 
-    <form action="{{ path("diagnosis_machine_edit", { 'id':diagnosis_machine.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("diagnosis_machine_edit", { 'id':diagnosis_machine.id })}) }}
         <div class="container">
             <legend>{{ 'diagnosis_machine'|trans }}</legend>
 
@@ -60,7 +60,7 @@
 
             <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}
 
