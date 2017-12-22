@@ -18,7 +18,7 @@ class CategoryServiceType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_userbundle_categoryservicetype';
     }

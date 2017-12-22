@@ -11,7 +11,7 @@ class IdTicketType extends AbstractType
         $builder->add('id', 'integer')
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'id_ticket_form';
     }

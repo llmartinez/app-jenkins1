@@ -14,7 +14,7 @@ class ShopRejectOrderType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'shop_rejected_reason';
     }

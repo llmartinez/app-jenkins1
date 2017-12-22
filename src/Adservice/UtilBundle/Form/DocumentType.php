@@ -14,7 +14,7 @@ class DocumentType extends AbstractType
         ;
 
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'new_file_form';
     }

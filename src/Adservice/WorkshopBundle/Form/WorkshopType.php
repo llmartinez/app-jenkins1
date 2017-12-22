@@ -115,7 +115,7 @@ class WorkshopType extends AbstractType
         if (isset($_SESSION['code_billing'])) $builder->add('code_billing', 'text', array('required' => false));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_workshoptype';
     }

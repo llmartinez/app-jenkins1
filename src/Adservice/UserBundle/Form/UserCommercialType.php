@@ -103,7 +103,7 @@ class UserCommercialType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
         return 'commercial_type';
     }
 

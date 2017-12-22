@@ -23,13 +23,13 @@
 
     <h1>
         {{ 'edit.order.workshop'|trans }} <b>{{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</b>
-</h1>
+    </h1>
         <a href="{{ path('doPdfWorkshop', { id: workshop.id }) }}" type="button" id="btn_pdf" name="btn_pdf" class='pull-right'>
             <img class="img_icon_left" src="{{ asset('bundles/util/images/icon/export_pdf.png') }}">
             <label >{{ 'print'|trans }} </label>
         </a>
 
-    {{ form_start(form, {'action': '#')}) }}
+    {{ form_start(form, {'action': '#'}) }}
 
         <div class="col-xs-12 col-md-12 form-group">
             <input type="hidden" id="exist_cif" value="{{ 'workshop.cif_exist'|trans }} ">

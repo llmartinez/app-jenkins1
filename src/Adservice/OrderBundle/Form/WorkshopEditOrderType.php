@@ -98,7 +98,7 @@ class WorkshopEditOrderType extends AbstractType
         }   
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'workshopOrder_editOrder';
     }

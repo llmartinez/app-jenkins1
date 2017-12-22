@@ -13,7 +13,7 @@ class CloseTicketWorkshopType extends AbstractType
                 ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'close_ticket_form';
     }

@@ -12,7 +12,7 @@ class WorkshopDeactivateObservationType extends AbstractType
         $builder->add('observationAdmin', 'textarea', array('required' => true));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_workshop_deactivate_observation_type';
     }

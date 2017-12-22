@@ -11,7 +11,7 @@ class EditDescriptionType extends AbstractType
         $builder
                 ->add('description', 'textarea');
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'edit_description_form';
     }

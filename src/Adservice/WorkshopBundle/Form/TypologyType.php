@@ -39,7 +39,7 @@ class TypologyType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_typologytype';
     }

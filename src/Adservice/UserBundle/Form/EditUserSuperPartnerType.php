@@ -50,7 +50,7 @@ class EditUserSuperPartnerType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'super_partner_type';
     }

@@ -14,7 +14,7 @@ class WorkshopRejectOrderType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'workshop_rejected_reason';
     }

@@ -43,7 +43,7 @@ class EditTicketType extends AbstractType
                                                           ->where('s.id = 0'); }))
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'edit_ticket_form';
     }

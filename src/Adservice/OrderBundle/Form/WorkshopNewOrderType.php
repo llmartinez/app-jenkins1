@@ -94,7 +94,7 @@ class WorkshopNewOrderType extends AbstractType
         }
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'workshopOrder_newOrder';
     }

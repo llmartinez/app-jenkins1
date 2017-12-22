@@ -22,7 +22,7 @@ class CarType extends AbstractType
                 ->add('plateNumber', 'text', array('required'=>'true'))                
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'new_car_form';
     }

@@ -10,7 +10,7 @@
 
     <legend>{{ 'edit.popup'|trans }}</legend>
 
-    {{ form_start(form, {'action': path("popup_edit")}) }}
+    {{ form_start(form, {'action': path("popup_edit", {'id':popup.id })}) }}
         <div class="col-xs-3 col-md-3 form-group">
             <label>{{ 'name'|trans }}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
         </div>

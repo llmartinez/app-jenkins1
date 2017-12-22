@@ -79,7 +79,7 @@ class EditCommercialType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
         return 'commercial_type';
     }
 

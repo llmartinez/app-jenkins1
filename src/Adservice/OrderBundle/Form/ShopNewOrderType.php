@@ -58,7 +58,7 @@ class ShopNewOrderType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'shopOrder_newOrder';
     }

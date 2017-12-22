@@ -50,7 +50,7 @@ class PopupType extends AbstractType {
         ;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
         return 'adservice_popupbundle_popuptype';
     }
 

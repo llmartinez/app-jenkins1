@@ -26,7 +26,7 @@ class SentenceType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_ticketbundle_sentencetype';
     }

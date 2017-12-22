@@ -38,7 +38,7 @@ class NewTicketType extends AbstractType
                                                           ->where('s.id = 0'); }))
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'ticket_form';
     }

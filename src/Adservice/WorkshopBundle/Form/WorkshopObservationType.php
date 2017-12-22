@@ -12,7 +12,7 @@ class WorkshopObservationType extends AbstractType
         $builder->add('observationAssessor', 'textarea', array('required' => true));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_workshop_observation_type';
     }

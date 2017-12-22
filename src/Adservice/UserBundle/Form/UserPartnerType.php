@@ -83,7 +83,7 @@ class UserPartnerType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'partner_type';
     }

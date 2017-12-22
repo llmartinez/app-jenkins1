@@ -11,7 +11,7 @@ class PostType extends AbstractType
         $builder->add('message', 'textarea')
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'post_form';
     }
