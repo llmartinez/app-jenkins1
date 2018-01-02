@@ -60,6 +60,9 @@ class WorkshopOrderController extends Controller {
             elseif($term == 'cif'){
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
+            elseif ($term == 'postal_code') {
+                $params[] = array($term, " LIKE '%".$field."%'");
+            }
         }
         if ($country != '0') $params[] = array('country', ' = '.$country);
 

@@ -2,7 +2,9 @@
 
 namespace Adservice\UserBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -828,7 +830,7 @@ class UserController extends Controller {
      * Genera el password para un usuario
      * @Route("/user/generatePassword/{id}")
      * @ParamConverter("user", class="UserBundle:User")
-     * @return type
+     * @return RedirectResponse
      */
     public function generatePasswordAction($id, $user)
     {
@@ -847,50 +849,62 @@ class UserController extends Controller {
 
     /**
      * Cambia el password de un ususario
-     * @Route("/user/changePassword/{id}/{new_pass}/{rep_pass}/{old_pass}")
      * @ParamConverter("user", class="UserBundle:User")
-     * @param  string $new_pass
-     * @param  string $rep_pass
-     * @param  string $old_pass
-     * @return type
+     * @return Response
      */
-    public function changePasswordAction($user, $new_pass='none', $rep_pass='none', $old_pass='none')
+    public function changePasswordAction($user)
     {
         $em   = $this->getDoctrine()->getEntityManager();
 
-        /*CREAR PASSWORD MANUALMENTE*/
-        $encoder  = $this->container->get('security.encoder_factory')->getEncoder($user);
-        $pass     = $encoder->encodePassword( $old_pass, $user->getSalt());
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+        $pass = $encoder->encodePassword($this->getRequest()->get('old_pass'), $user->getSalt());
+        $forbiddenChars = array("\"", "'");
+        $response = false;
 
         if ($pass == $user->getPassword())
         {
-            if($new_pass == $rep_pass)
+            if ($this->getRequest()->get('new_pass') == $this->getRequest()->get('rep_pass'))
             {
-                if(strlen($new_pass) >= 8)
+                if (strlen($this->getRequest()->get('new_pass')) >= 8)
                 {
-                    $this->savePassword($em, $user, $new_pass);
-                }else{
+                    $valid = true;
+
+                    foreach ($forbiddenChars as $char) {
+                        if (strpos($this->getRequest()->get('new_pass'), $char) !== false) {
+                            $valid = false;
+                        }
+                    }
+
+                    if ($valid == true) {
+                        $response = $this->savePassword($em, $user, $this->getRequest()->get('new_pass'));
+                    } else {
+                        $flash =  $this->get('translator')
+                                ->trans('error.forbidden_password').' ('. implode(",", $forbiddenChars).')';
+                    }
+
+                } else {
                     $flash =  $this->get('translator')->trans('error.length_password');
-                    $this->get('session')->setFlash('password', $flash);
                 }
-            }else{
+            } else {
                 $flash =  $this->get('translator')->trans('error.same_password');
-                $this->get('session')->setFlash('password', $flash);
             }
-        }
-        else{
+        } else{
             $flash =  $this->get('translator')->trans('change_password.error');
+        }
+
+        if (isset($flash)) {
             $this->get('session')->setFlash('password', $flash);
         }
-        return $this->render('UserBundle:User:profile.html.twig', array('user' => $user));
+
+        return new Response(json_encode($response));
     }
 
     /**
      * Guarda el password del usuario y envia mail con credenciales
      * @param  EntityManager $em
-     * @param  Entity $user
+     * @param  User $user
      * @param  string $password
-     * @return type
+     * @return boolean
      */
     private function savePassword($em, $user, $password){
 
@@ -929,6 +943,8 @@ class UserController extends Controller {
 
         $flash =  $this->get('translator')->trans('change_password.correct').' - '.$this->get('translator')->trans('mail.changePassword.password').' '.$password;
         $this->get('session')->setFlash('password', $flash);
+
+        return true;
     }
 
     /**
